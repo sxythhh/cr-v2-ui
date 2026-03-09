@@ -13,7 +13,7 @@ export function MainNav({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex h-dvh flex-col bg-page-bg md:bg-page-outer-bg">
-      <div className="min-h-0 flex-1 md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
+      <div className="flex min-h-0 flex-1 flex-col md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
         {/* Side nav backdrop — desktop only */}
         <div
           className={cn(
@@ -43,7 +43,7 @@ export function MainNav({ children }: { children: ReactNode }) {
         {/* Main content — on mobile the outer div is the scroll container so sticky works */}
         <div className="scrollbar-hide relative flex min-h-0 flex-1 flex-col overflow-y-auto bg-page-bg pb-[calc(60px+max(8px,env(safe-area-inset-bottom)))] md:overflow-hidden md:pb-0 md:[contain:layout_style_paint]">
           <MobileHeader />
-          <div className="scrollbar-hide flex min-h-0 flex-1 flex-col md:overflow-y-auto md:will-change-transform">
+          <div className="scrollbar-hide flex min-h-0 flex-col md:flex-1 md:overflow-y-auto md:will-change-transform">
             {children}
           </div>
         </div>
