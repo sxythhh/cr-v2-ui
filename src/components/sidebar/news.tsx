@@ -18,21 +18,21 @@ const OPACITY_FACTOR = 0.1;
 
 const DEMO_ARTICLES: NewsArticle[] = [
   {
-    href: "#",
+    href: "#smart-folders",
     title: "Introducing Smart Folders",
     summary:
       "Automatically organize your links with rule-based smart folders.",
     image: "/placeholder.png",
   },
   {
-    href: "#",
+    href: "#partner-payouts",
     title: "Partner Payouts v2",
     summary:
       "Streamlined payouts with auto-approval, multi-currency, and instant transfers.",
     image: "/placeholder.png",
   },
   {
-    href: "#",
+    href: "#conversion-tracking",
     title: "Conversion Tracking",
     summary:
       "Track leads, signups, and purchases across every short link you create.",

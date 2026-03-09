@@ -1,13 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { useProximityHover } from "@/hooks/use-proximity-hover";
-import { springs } from "@/lib/springs";
-import {
-  AnalyticsPocPlatformIcon,
-} from "@/components/analytics-poc/AnalyticsPocPlatformIcon";
+import { PlatformIcon } from "@/components/icons/PlatformIcon";
 
 const TIME_FILTERS = ["This week", "This month", "All Time"];
 
@@ -25,7 +20,7 @@ type PayoutStatus = "pending" | "paid" | "blocked" | "upcoming";
 interface PayoutRow {
   id: string;
   name: string;
-  platforms: ("tiktok" | "instagram" | "youtube" | "facebook")[];
+  platforms: ("tiktok" | "instagram" | "youtube" | "x")[];
   campaign: string;
   views: string;
   estPayout: string;
@@ -85,12 +80,12 @@ const STATUS_CONFIG: Record<
 };
 
 const PAYOUT_ROWS: PayoutRow[] = [
-  { id: "1", name: "xKaizen", platforms: ["tiktok", "instagram", "youtube", "facebook"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "pending" },
+  { id: "1", name: "xKaizen", platforms: ["tiktok", "instagram", "youtube", "x"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "pending" },
   { id: "2", name: "Cryptoclipz", platforms: ["tiktok", "instagram"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "paid" },
   { id: "3", name: "ViralVince", platforms: ["tiktok", "instagram"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "pending" },
   { id: "4", name: "TechnoTrade", platforms: ["tiktok"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "blocked", flagged: true },
   { id: "5", name: "GamingGrace", platforms: ["tiktok", "instagram", "youtube"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "upcoming" },
-  { id: "6", name: "BetBoss", platforms: ["tiktok", "instagram", "youtube", "facebook"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "paid" },
+  { id: "6", name: "BetBoss", platforms: ["tiktok", "instagram", "youtube", "x"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "paid" },
   { id: "7", name: "ClipKingJr", platforms: ["tiktok", "instagram"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "pending" },
   { id: "8", name: "NeonEdits", platforms: ["tiktok", "instagram"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "paid" },
   { id: "9", name: "ReelMaster", platforms: ["tiktok", "instagram"], campaign: "Caffeine AI", views: "337.4K", estPayout: "$139.75", net: "$129.32", status: "pending" },
@@ -101,10 +96,10 @@ const AVATAR_COLORS = [
   "#8B5CF6", "#EF4444", "#14B8A6", "#F97316",
 ];
 
-function PlatformPill({ platform }: { platform: "tiktok" | "instagram" | "youtube" | "facebook" }) {
+function PlatformBadge({ platform }: { platform: string }) {
   return (
-    <div className="flex h-6 w-6 items-center justify-center rounded-full border border-foreground/[0.08] bg-foreground/[0.04] backdrop-blur-[12px]">
-      <AnalyticsPocPlatformIcon platform={platform} size={14} tone="inherit" className="text-foreground/70" />
+    <div className="flex size-6 items-center justify-center rounded-full bg-accent text-page-text-subtle">
+      <PlatformIcon platform={platform} size={12} />
     </div>
   );
 }
@@ -141,33 +136,21 @@ function PayoutTableRow({
   index,
   isLast,
   isSelected,
-  isActive,
   onToggle,
-  registerItem,
 }: {
   row: PayoutRow;
   index: number;
   isLast: boolean;
   isSelected: boolean;
-  isActive: boolean;
   onToggle: () => void;
-  registerItem: (index: number, element: HTMLElement | null) => void;
 }) {
-  const rowRef = useRef<HTMLDivElement>(null);
   const status = STATUS_CONFIG[row.status];
   const isFlagged = row.flagged;
 
-  useEffect(() => {
-    registerItem(index, rowRef.current);
-    return () => registerItem(index, null);
-  }, [index, registerItem]);
-
   return (
     <div
-      ref={rowRef}
-      data-proximity-index={index}
       className={cn(
-        "relative z-10 flex w-full cursor-pointer items-center px-1",
+        "group relative z-10 flex w-full cursor-pointer items-center px-1 transition-colors hover:bg-foreground/[0.04]",
         isFlagged && "bg-[rgba(255,37,37,0.03)] dark:bg-[rgba(255,37,37,0.06)]",
         isSelected && !isFlagged && "bg-foreground/[0.02]",
       )}
@@ -178,7 +161,7 @@ function PayoutTableRow({
       <div
         className={cn(
           "flex flex-1 items-center transition-[border-color] duration-75",
-          !isLast && (isActive ? "border-b border-transparent" : "border-b border-foreground/[0.03]"),
+          !isLast && "border-b border-foreground/[0.03] group-hover:border-transparent",
         )}
       >
         {/* Creator */}
@@ -203,7 +186,7 @@ function PayoutTableRow({
         <div className="flex h-14 w-[132px] items-center justify-end py-3 pl-5 pr-3">
           <div className="flex items-center gap-1">
             {row.platforms.map((p) => (
-              <PlatformPill key={p} platform={p} />
+              <PlatformBadge key={p} platform={p} />
             ))}
           </div>
         </div>
@@ -274,10 +257,7 @@ function PayoutTableRow({
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className={cn(
-              "transition-opacity duration-150",
-              isActive ? "opacity-100" : "opacity-0",
-            )}
+            className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
           >
             <path d="M6 3L11 8L6 13" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -290,20 +270,6 @@ function PayoutTableRow({
 export default function PayoutsPage() {
   const [activeFilter, setActiveFilter] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const {
-    activeIndex,
-    itemRects,
-    sessionRef,
-    handlers,
-    registerItem,
-    measureItems,
-  } = useProximityHover(containerRef);
-
-  useEffect(() => {
-    measureItems();
-  }, [measureItems]);
 
   const allIds = PAYOUT_ROWS.map((r) => r.id);
   const allSelected = allIds.length > 0 && allIds.every((id) => selectedIds.has(id));
@@ -324,8 +290,6 @@ export default function PayoutsPage() {
       return next;
     });
   }, []);
-
-  const activeRect = activeIndex !== null ? itemRects[activeIndex] : null;
 
   return (
     <div>
@@ -410,42 +374,8 @@ export default function PayoutsPage() {
             </div>
           </div>
 
-          {/* Data rows with proximity hover */}
-          <div
-            ref={containerRef}
-            className="relative w-full"
-            onMouseEnter={handlers.onMouseEnter}
-            onMouseMove={handlers.onMouseMove}
-            onMouseLeave={handlers.onMouseLeave}
-          >
-            <AnimatePresence>
-              {activeRect && (
-                <motion.div
-                  key={sessionRef.current}
-                  className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
-                  initial={{
-                    opacity: 0,
-                    top: activeRect.top,
-                    left: activeRect.left,
-                    width: activeRect.width,
-                    height: activeRect.height,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    top: activeRect.top,
-                    left: activeRect.left,
-                    width: activeRect.width,
-                    height: activeRect.height,
-                  }}
-                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
-                  transition={{
-                    ...springs.moderate,
-                    opacity: { duration: 0.16 },
-                  }}
-                />
-              )}
-            </AnimatePresence>
-
+          {/* Data rows */}
+          <div className="relative w-full">
             {PAYOUT_ROWS.map((row, i) => (
               <PayoutTableRow
                 key={row.id}
@@ -453,9 +383,7 @@ export default function PayoutsPage() {
                 index={i}
                 isLast={i === PAYOUT_ROWS.length - 1}
                 isSelected={selectedIds.has(row.id)}
-                isActive={activeIndex === i}
                 onToggle={() => toggleRow(row.id)}
-                registerItem={registerItem}
               />
             ))}
           </div>

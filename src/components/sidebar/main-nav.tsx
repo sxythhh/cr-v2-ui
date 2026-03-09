@@ -52,8 +52,8 @@ export function MainNav({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <MobileBottomNav />
 
-      {/* Floating onboarding */}
-      <OnboardingButton />
+      {/* Floating onboarding — hidden for now */}
+      {/* <OnboardingButton /> */}
     </div>
   );
 }
