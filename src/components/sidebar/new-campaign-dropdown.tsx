@@ -59,28 +59,27 @@ function NewCampaignDropdown({
         style={floatingStyles}
         className="z-[200]"
       >
-        <div className="w-[240px] overflow-hidden rounded-xl bg-dropdown-bg shadow-lg ring-1 ring-dropdown-border">
+        <div className="w-[256px] overflow-hidden rounded-2xl border border-dropdown-border bg-dropdown-bg shadow-lg">
           <div className="flex flex-col p-1">
             <button
               type="button"
-              className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-dropdown-text-muted transition-colors hover:bg-dropdown-hover"
+              className="flex h-9 w-full cursor-pointer items-center gap-1.5 rounded-xl px-3 font-inter text-sm font-medium tracking-[-0.09px] text-dropdown-text transition-colors hover:bg-dropdown-hover"
               onClick={() => {
                 onFromScratch();
                 onClose();
               }}
             >
-              <Scratch className="text-dropdown-text-muted" />
+              <Scratch className="size-4 text-dropdown-text-muted" />
               From scratch...
             </button>
             <button
               type="button"
-              disabled
-              className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-muted-foreground"
+              className="flex h-9 w-full cursor-pointer items-center gap-1.5 rounded-xl px-3 font-inter text-sm font-medium tracking-[-0.09px] text-dropdown-text transition-colors hover:bg-dropdown-hover"
             >
-              <Template className="text-muted-foreground" />
+              <Template className="size-4 text-dropdown-text-muted" />
               <span className="flex-1 text-left">Choose a template...</span>
-              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                Soon
+              <span className="font-inter text-sm font-normal tracking-[-0.09px] text-dropdown-text-muted">
+                (0)
               </span>
             </button>
           </div>
@@ -113,7 +112,7 @@ export function NewCampaignButton() {
       <RichButton
         size="sm"
         onClick={() => setOpen((v) => !v)}
-        className="rounded-2xl"
+        className="rounded-full"
       >
         <span>New campaign</span>
         <IconChevronDown

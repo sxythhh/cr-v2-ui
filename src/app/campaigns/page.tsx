@@ -18,18 +18,24 @@ import { fontWeights } from "@/lib/font-weight";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
-import {
-  Scissors,
-  ArrowRight,
-  Users,
-  Video,
-  Archive,
-  Pencil,
-  Pause,
-  Music,
-  Swords,
-  User,
-} from "lucide-react";
+import { RichButton } from "@/components/rich-button";
+import { GamepadIcon } from "@/components/sidebar/icons/gamepad";
+import { MusicNoteIcon } from "@/components/sidebar/icons/music-note";
+
+function ArrowRightIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M7.33329 0.666016L11.3333 4.666L7.33329 8.66602M10.6666 4.666H0.666626" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+import { ScissorsIcon } from "@/components/sidebar/icons/scissors";
+import { PersonIcon } from "@/components/sidebar/icons/person";
+import { VideoLibraryIcon } from "@/components/sidebar/icons/video-library";
+import { ArchiveIcon } from "@/components/sidebar/icons/archive";
+import { PencilIcon } from "@/components/sidebar/icons/pencil";
+import { PauseIcon, PlayIcon } from "@/components/sidebar/icons/pause";
+import { UsersIcon } from "@/components/sidebar/icons/users";
 
 // ── Subtle Tab primitives (same as creators) ─────────────────────
 
@@ -360,11 +366,12 @@ const CAMPAIGNS: Campaign[] = [
 ];
 
 const FILTER_TABS = [
-  { label: "All", count: 4 },
-  { label: "Active", count: 2 },
-  { label: "Pending budget", count: 0 },
-  { label: "Ended", count: 1 },
-  { label: "Archived", count: 0 },
+  { label: "All Campaigns", count: 21 },
+  { label: "CPM", count: 8 },
+  { label: "Retainer", count: 8 },
+  { label: "Per Video", count: 8 },
+  { label: "Blended", count: 8 },
+  { label: "Featured", count: 8 },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -372,22 +379,22 @@ const FILTER_TABS = [
 function TypeIcon({ type }: { type: "scissors" | "music" | "swords" }) {
   switch (type) {
     case "scissors":
-      return <Scissors className="size-3 text-page-text" strokeWidth={2} />;
+      return <ScissorsIcon className="size-3 text-page-text" />;
     case "music":
-      return <Music className="size-3 text-page-text" strokeWidth={2} />;
+      return <MusicNoteIcon className="size-3 text-page-text" />;
     case "swords":
-      return <Swords className="size-3 text-page-text" strokeWidth={2} />;
+      return <GamepadIcon className="size-3 text-page-text" />;
   }
 }
 
 function CategoryIcon({ type }: { type: "user" | "swords" | "music" }) {
   switch (type) {
     case "user":
-      return <User className="size-3 text-page-text" strokeWidth={2} />;
+      return <PersonIcon className="size-3 text-page-text" />;
     case "swords":
-      return <Swords className="size-3 text-page-text" strokeWidth={2} />;
+      return <GamepadIcon className="size-3 text-page-text" />;
     case "music":
-      return <Music className="size-3 text-page-text" strokeWidth={2} />;
+      return <MusicNoteIcon className="size-3 text-page-text" />;
   }
 }
 
@@ -395,19 +402,19 @@ function CategoryIcon({ type }: { type: "user" | "swords" | "music" }) {
 
 function ActiveCampaignCard({ campaign }: { campaign: Campaign }) {
   return (
-    <div className="flex items-center gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.06] dark:bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),var(--card-bg)]">
+    <div className="group relative flex h-[189px] cursor-pointer items-center gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.06] dark:bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),var(--card-bg)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03]">
       {/* Left section: thumbnail + info */}
-      <div className="flex min-w-0 flex-1 items-center gap-4 pr-8">
+      <div className="flex min-w-0 flex-1 items-center gap-4 self-stretch pr-8">
         {/* Thumbnail */}
         <div className="relative shrink-0 self-stretch p-1">
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-full w-[307px] rounded-2xl object-cover"
+            className="h-full w-[307px] rounded-[18px] object-cover"
           />
           {/* CPM badge */}
-          <div className="absolute left-4 top-4 flex items-center rounded-full bg-blue-500/40 px-2.5 py-1.5 backdrop-blur-[8px]">
-            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-blue-100">
+          <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
+            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#DBEAFE]">
               {campaign.cpm}
             </span>
           </div>
@@ -423,16 +430,16 @@ function ActiveCampaignCard({ campaign }: { campaign: Campaign }) {
                 Active
               </span>
             </div>
-            <button className="flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2 py-1.5">
+            <button className="group/btn flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
                 View on Discover
               </span>
-              <ArrowRight className="size-3 text-page-text/70" strokeWidth={2} />
+              <ArrowRightIcon className="size-3 shrink-0 text-page-text/70 transition-transform duration-200 ease-out group-hover/btn:translate-x-[3px]" />
             </button>
           </div>
 
           {/* Title */}
-          <h3 className="truncate font-inter text-base font-semibold tracking-[-0.02em] text-page-text">
+          <h3 className="truncate font-inter text-base leading-[1.3] font-semibold tracking-[-0.02em] text-page-text">
             {campaign.title}
           </h3>
 
@@ -454,7 +461,7 @@ function ActiveCampaignCard({ campaign }: { campaign: Campaign }) {
                   <PlatformIcon platform={p} size={12} />
                 </div>
               ))}
-              <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2.5 backdrop-blur-[12px]">
+              <div className="flex h-6 items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2 pr-2.5 backdrop-blur-[12px]">
                 <CategoryIcon type={campaign.categoryIcon} />
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                   {campaign.category}
@@ -484,19 +491,19 @@ function ActiveCampaignCard({ campaign }: { campaign: Campaign }) {
         <div className="flex flex-1 flex-col items-end gap-4">
           {/* Stat pills */}
           <div className="flex items-start gap-1">
-            <div className="flex items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 py-1.5 dark:border-foreground/[0.06] dark:bg-card-bg">
-              <Users className="size-3 text-page-text" strokeWidth={2} />
+            <div className="flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-foreground/[0.06] dark:bg-card-bg">
+              <UsersIcon className="size-3 text-page-text" />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                 {campaign.creators}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 py-1.5 dark:border-foreground/[0.06] dark:bg-card-bg">
-              <Video className="size-3 text-page-text" strokeWidth={2} />
+            <div className="flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-foreground/[0.06] dark:bg-card-bg">
+              <VideoLibraryIcon className="size-3 text-page-text" />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                 {campaign.videos}
               </span>
             </div>
-            <div className="flex items-center gap-[1px] rounded-full bg-blue-500/[0.12] px-2.5 py-1.5">
+            <div className="flex h-6 items-center gap-[1px] rounded-full bg-blue-500/[0.12] px-2.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-blue-500">
                 {campaign.cpmRate}
               </span>
@@ -517,19 +524,18 @@ function ActiveCampaignCard({ campaign }: { campaign: Campaign }) {
         <div className="flex items-center gap-2">
           <button className="flex h-8 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
             Archive
-            <Archive className="size-3" strokeWidth={2} />
+            <ArchiveIcon className="size-3" />
           </button>
           <button className="flex h-8 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
             Edit
-            <Pencil className="size-3" strokeWidth={2} />
+            <PencilIcon className="size-3" />
           </button>
-          <button className="flex h-8 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
-            Pause
-            <Pause className="size-3" strokeWidth={2} />
+          <button className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.1]">
+            <PauseIcon className="size-4" />
           </button>
-          <button className="flex h-8 cursor-pointer items-center gap-2 rounded-full bg-foreground px-3 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90">
+          <RichButton size="sm" className="rounded-full px-3 font-inter text-xs tracking-[-0.02em]">
             Top up
-          </button>
+          </RichButton>
         </div>
       </div>
     </div>
@@ -544,142 +550,148 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.06] ${
+      className={`group relative flex h-[189px] cursor-pointer items-center gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] shadow-[0_1px_2px_rgba(0,0,0,0.03)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03] dark:border-foreground/[0.06] ${
         isCompleted
           ? "bg-white opacity-70 dark:bg-card-bg"
           : "bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] dark:bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),var(--card-bg)]"
       }`}
     >
       {/* Left: thumbnail + info */}
-      <div className="flex min-w-0 flex-1 items-center gap-4 pr-8">
+      <div className="flex min-w-0 flex-1 items-center gap-4 self-stretch pr-8">
         {/* Thumbnail */}
         <div className="relative shrink-0 self-stretch p-1">
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-full w-[307px] rounded-2xl object-cover"
+            className="h-full w-[307px] rounded-[18px] object-cover"
           />
-          <div className="absolute left-4 top-4 flex items-center rounded-full bg-blue-500/40 px-2.5 py-1.5 backdrop-blur-[8px]">
-            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-blue-100">
+          <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
+            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#DBEAFE]">
               {campaign.cpm}
             </span>
           </div>
         </div>
 
         {/* Info */}
-        <div className="flex min-w-0 flex-1 flex-col gap-4 self-stretch py-4">
-          {/* Status badges */}
-          <div className="flex items-start gap-1">
-            {isPaused && (
-              <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2 py-1.5">
-                <div className="size-1.5 rounded-full bg-page-text/70" />
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
-                  Paused
-                </span>
-              </div>
-            )}
-            {isCompleted && campaign.brandAvatar && (
-              <div className="flex items-center gap-1.5">
-                <img src={campaign.brandAvatar} alt="" className="size-5 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.4)]" />
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                  {campaign.brandName}
-                </span>
-              </div>
-            )}
-            {isCompleted && (
-              <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2 py-1.5">
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
-                  View on Discover
-                </span>
-                <ArrowRight className="size-3 text-page-text/70" strokeWidth={2} />
-              </div>
-            )}
-          </div>
-
-          {/* Title */}
-          <h3 className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-            {campaign.title}
-          </h3>
-
-          {/* Meta row */}
-          <div className="flex items-center gap-1.5">
+        <div className="flex min-w-0 flex-1 flex-col self-stretch py-3">
+          {/* Top section: badges + title */}
+          <div className="flex flex-col gap-2">
+            {/* Status badges */}
             <div className="flex items-center gap-1">
-              <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2.5">
-                <Users className="size-3 text-page-text" strokeWidth={2} />
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                  {campaign.creators}
-                </span>
-              </div>
-              <div className="flex items-center gap-[1px] rounded-full bg-blue-500/[0.12] px-2.5 py-1.5">
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-blue-500">
-                  {campaign.cpmRate}
-                </span>
-                <span className="font-inter text-xs tracking-[-0.02em] text-blue-500/70">/</span>
-                <span className="font-inter text-xs tracking-[-0.02em] text-blue-500/70">
-                  {campaign.cpmUnit}
-                </span>
-              </div>
-            </div>
-            <span className="font-inter text-xs text-foreground/20">·</span>
-            <div className="flex items-center gap-1">
-              {campaign.platforms.map((p) => (
-                <div
-                  key={p}
-                  className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] backdrop-blur-[12px]"
-                >
-                  <PlatformIcon platform={p} size={12} />
+              {isPaused && (
+                <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2 py-1.5">
+                  <div className="size-1.5 rounded-full bg-page-text/70" />
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
+                    Paused
+                  </span>
                 </div>
-              ))}
-              <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2.5 backdrop-blur-[12px]">
-                <CategoryIcon type={campaign.categoryIcon} />
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                  {campaign.category}
-                </span>
-              </div>
+              )}
+              {isCompleted && campaign.brandAvatar && (
+                <div className="flex items-center gap-1.5">
+                  <img src={campaign.brandAvatar} alt="" className="size-5 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.4)]" />
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
+                    {campaign.brandName}
+                  </span>
+                </div>
+              )}
+              {isCompleted && (
+                <button className="group/btn ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
+                    View on Discover
+                  </span>
+                  <ArrowRightIcon className="size-3 shrink-0 text-page-text/70 transition-transform duration-200 ease-out group-hover/btn:translate-x-[3px]" />
+                </button>
+              )}
             </div>
+
+            {/* Title */}
+            <h3 className="truncate font-inter text-sm font-medium leading-[1.3] tracking-[-0.02em] text-page-text">
+              {campaign.title}
+            </h3>
           </div>
 
-          {/* Stat cards row */}
-          <div className="flex gap-2">
-            <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                {campaign.earned}
-              </span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
-                Earned
-              </span>
+          {/* Bottom section: meta + stats */}
+          <div className="mt-auto flex flex-col gap-2">
+            {/* Meta row */}
+            <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
+                <div className="flex h-6 items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2 pr-2.5">
+                  <UsersIcon className="size-3 text-page-text" />
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
+                    {campaign.creators}
+                  </span>
+                </div>
+                <div className="flex h-6 items-center gap-[1px] rounded-full bg-blue-500/[0.12] px-2.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-blue-500">
+                    {campaign.cpmRate}
+                  </span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-blue-500/70">/</span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-blue-500/70">
+                    {campaign.cpmUnit}
+                  </span>
+                </div>
+              </div>
+              <span className="font-inter text-xs text-foreground/20">·</span>
+              <div className="flex items-center gap-1">
+                {campaign.platforms.map((p) => (
+                  <div
+                    key={p}
+                    className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] backdrop-blur-[12px]"
+                  >
+                    <PlatformIcon platform={p} size={12} />
+                  </div>
+                ))}
+                <div className="flex h-6 items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2 pr-2.5 backdrop-blur-[12px]">
+                  <CategoryIcon type={campaign.categoryIcon} />
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
+                    {campaign.category}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className={`flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] p-3 dark:border-foreground/[0.06] ${
-              campaign.pending && campaign.pending !== "$0"
-                ? "bg-[rgba(255,144,37,0.1)]"
-                : "bg-white dark:bg-card-bg"
-            }`}>
-              <span className={`font-inter text-sm font-medium tracking-[-0.02em] ${
+
+            {/* Stat cards row */}
+            <div className="flex gap-2">
+              <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+                  {campaign.earned}
+                </span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
+                  Earned
+                </span>
+              </div>
+              <div className={`flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] p-3 dark:border-foreground/[0.06] ${
                 campaign.pending && campaign.pending !== "$0"
-                  ? "text-[#FF9025]"
-                  : "text-page-text/50"
+                  ? "bg-[rgba(255,144,37,0.1)]"
+                  : "bg-white dark:bg-card-bg"
               }`}>
-                {campaign.pending}
-              </span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
-                Pending
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                {campaign.videosSubmitted}
-              </span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
-                Videos submitted
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                {campaign.views}
-              </span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
-                Views
-              </span>
+                <span className={`font-inter text-sm font-medium tracking-[-0.02em] ${
+                  campaign.pending && campaign.pending !== "$0"
+                    ? "text-[#FF9025]"
+                    : "text-page-text/50"
+                }`}>
+                  {campaign.pending}
+                </span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
+                  Pending
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+                  {campaign.videosSubmitted}
+                </span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
+                  Videos submitted
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-foreground/[0.06] dark:bg-card-bg">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+                  {campaign.views}
+                </span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
+                  Views
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -691,7 +703,7 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
       </div>
 
       {/* Right section */}
-      <div className="flex shrink-0 flex-col items-end gap-4 self-stretch p-4 pl-8">
+      <div className="flex shrink-0 flex-col items-end justify-end gap-4 self-stretch p-4 pl-8">
         <div className="flex flex-1 flex-col items-end gap-2">
           {isCompleted && (
             <div className="flex items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 py-1.5 dark:border-foreground/[0.06] dark:bg-card-bg">
@@ -708,13 +720,13 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <button className="flex h-8 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
+          <button className="group/btn flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-[18px]">
             View payouts
-            <ArrowRight className="size-3" strokeWidth={2} />
+            <ArrowRightIcon className="size-3 shrink-0 transition-transform duration-200 ease-out group-hover/btn:translate-x-[3px]" />
           </button>
           {isPaused && (
-            <button className="flex h-8 cursor-pointer items-center rounded-full bg-foreground px-3 font-inter text-xs font-medium tracking-[-0.02em] text-white opacity-30">
-              Submit content
+            <button className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.1]">
+              <PlayIcon className="size-4" />
             </button>
           )}
         </div>
@@ -734,12 +746,21 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
 
 // ── Page ───────────────────────────────────────────────────────────
 
-const FILTER_STATUS_MAP = ["all", "active", "pending", "completed", "archived"] as const;
+const STATUS_FILTER_TABS = [
+  { label: "All", count: 4 },
+  { label: "Active", count: 2 },
+  { label: "Pending budget", count: 0 },
+  { label: "Ended", count: 1 },
+  { label: "Archived", count: 0 },
+];
+
+const STATUS_FILTER_MAP = ["all", "active", "pending", "completed", "archived"] as const;
 
 export default function CampaignsPage() {
+  const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState(0);
 
-  const filterStatus = FILTER_STATUS_MAP[selectedFilter];
+  const filterStatus = STATUS_FILTER_MAP[selectedFilter];
   const filtered = CAMPAIGNS.filter((c) => {
     if (filterStatus === "all") return true;
     return c.status === filterStatus;
@@ -747,18 +768,42 @@ export default function CampaignsPage() {
 
   return (
     <div className="min-h-full bg-page-bg">
-      {/* Header */}
-      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
-        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-          Campaigns
-        </span>
+      {/* Header with underline tabs */}
+      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+        <div className="flex h-14 items-stretch">
+          {FILTER_TABS.map((tab, i) => {
+            const isSelected = selectedHeaderTab === i;
+            return (
+              <button
+                key={tab.label}
+                onClick={() => setSelectedHeaderTab(i)}
+                className={cn(
+                  "relative flex cursor-pointer items-center justify-center gap-2 px-5 font-inter text-sm tracking-[-0.02em] transition-colors",
+                  isSelected
+                    ? "text-page-text"
+                    : "text-page-text/70 hover:text-page-text/90",
+                )}
+              >
+                <span className="font-medium">{tab.label}</span>
+                <span className="font-normal text-page-text/50">{tab.count}</span>
+                {isSelected && (
+                  <motion.div
+                    className="absolute inset-x-0 bottom-0 h-px bg-page-text"
+                    layoutId="campaign-tab-underline"
+                    transition={{ type: "spring", duration: 0.3, bounce: 0.1 }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
         <NewCampaignButton />
       </div>
 
-      {/* Filter tabs */}
+      {/* Status filter tabs */}
       <div className="px-4 pt-[21px] sm:px-5">
         <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter}>
-          {FILTER_TABS.map((tab, i) => (
+          {STATUS_FILTER_TABS.map((tab, i) => (
             <TabItem
               key={tab.label}
               label={tab.label}

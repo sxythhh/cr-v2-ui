@@ -1,6 +1,13 @@
+"use client";
+
+import { useState, useCallback, type SVGProps } from "react";
 import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
-import { type SVGProps } from "react";
 import { WorkspaceAvatar } from "@/components/sidebar/workspace-avatar";
+import { cn } from "@/lib/utils";
+import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
+import { RichButton } from "@/components/rich-button";
+
+// ── Icons ──────────────────────────────────────────────────────────
 
 function CheckCircleIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -44,14 +51,133 @@ function StarIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-const steps = [
+function SparkleIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M8 1.333L9.79 6.21 14.667 8 9.79 9.79 8 14.667 6.21 9.79 1.333 8 6.21 6.21 8 1.333z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function ChevronLeftIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M10.276 2.668L5.724 8l4.552 5.332" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  );
+}
+
+function ChevronRightIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M5.724 2.668L10.276 8l-4.552 5.332" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  );
+}
+
+function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M7.33329 0.666016L11.3333 4.666L7.33329 8.66602M10.6666 4.666H0.666626" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function PlusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  );
+}
+
+function HistoryIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M2 3.333V6h2.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <path d="M2.34 10A6 6 0 1 0 2 8" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" fill="none"/>
+      <path d="M8 5.333V8l2 1.333" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  );
+}
+
+function VideoIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M1 0.5C1 0.223858 1.22386 0 1.5 0H8.5C8.77614 0 9 0.223858 9 0.5C9 0.776142 8.77614 1 8.5 1H1.5C1.22386 1 1 0.776142 1 0.5ZM0 3C0 2.17157 0.671573 1.5 1.5 1.5H8.5C9.32843 1.5 10 2.17157 10 3V7.5C10 8.32843 9.32843 9 8.5 9H1.5C0.671573 9 0 8.32843 0 7.5V3ZM4.28341 3.79935C4.45664 3.71609 4.66226 3.7395 4.81235 3.85957L6.06235 4.85957C6.18095 4.95445 6.25 5.09811 6.25 5.25C6.25 5.40189 6.18095 5.54555 6.06235 5.64043L4.81235 6.64043C4.66226 6.7605 4.45664 6.78391 4.28341 6.70065C4.11017 6.61739 4 6.4422 4 6.25V4.25C4 4.0578 4.11017 3.88261 4.28341 3.79935Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function UserAddIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M4.17578 0C2.93314 0 1.92578 1.00736 1.92578 2.25C1.92578 3.49264 2.93314 4.5 4.17578 4.5C5.41842 4.5 6.42578 3.49264 6.42578 2.25C6.42578 1.00736 5.41842 0 4.17578 0Z" fill="currentColor"/>
+      <path d="M7.17578 6C7.45192 6 7.67578 6.22386 7.67578 6.5V7.5H8.67578C8.95192 7.5 9.17578 7.72386 9.17578 8C9.17578 8.27614 8.95192 8.5 8.67578 8.5H7.67578V9.5C7.67578 9.77614 7.45192 10 7.17578 10C6.89964 10 6.67578 9.77614 6.67578 9.5V8.5H5.67578C5.39964 8.5 5.17578 8.27614 5.17578 8C5.17578 7.72386 5.39964 7.5 5.67578 7.5H6.67578V6.5C6.67578 6.22386 6.89964 6 7.17578 6Z" fill="currentColor"/>
+      <path d="M0.0242348 8.34822C0.452672 6.44183 2.02669 5 4.17629 5C4.89216 5 5.5442 5.15991 6.11134 5.44363C5.84241 5.71473 5.67627 6.08796 5.67627 6.5C4.84784 6.5 4.17627 7.17157 4.17627 8C4.17627 8.82843 4.84784 9.5 5.67627 9.5H0.9755C0.407924 9.5 -0.120653 8.99292 0.0242348 8.34822Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function ThumbUpIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M5.55904 0.0118772C5.34084 -0.0410324 5.1252 0.0880534 5.03864 0.295224C4.5 2.23792 3 3.26542 3 4.62287V7.85053C3 8.42375 3.33181 8.98816 3.9178 9.20155C5.24322 9.68419 6.11676 9.7824 7.47978 9.66428C8.5252 9.57368 9.31106 8.77216 9.52885 7.8042L9.95122 5.92697C10.2326 4.67657 9.28167 3.48795 8 3.48795L6.5 3.48792C6.73464 2.08008 7.30751 0.435851 5.55904 0.0118772Z" fill="currentColor"/>
+      <path d="M0 4.48792C0 4.0737 0.335787 3.73792 0.75 3.73792H1.75C2.16421 3.73792 2.5 4.0737 2.5 4.48792V8.48792C2.5 8.90213 2.16421 9.23792 1.75 9.23792H0.75C0.335787 9.23792 0 8.90213 0 8.48792V4.48792Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function DollarIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM5 1.75C5.27614 1.75 5.5 1.97386 5.5 2.25V2.56183C5.90202 2.66355 6.25675 2.88729 6.48795 3.20702C6.64975 3.4308 6.59952 3.74337 6.37575 3.90517C6.15198 4.06698 5.83941 4.01675 5.6776 3.79298C5.56897 3.64274 5.32671 3.5 5 3.5H4.86111C4.41372 3.5 4.25 3.77246 4.25 3.88889V3.92705C4.25 4.02568 4.32456 4.19131 4.57627 4.29199L5.79512 4.77953C6.32859 4.99292 6.75 5.4693 6.75 6.07295C6.75 6.80947 6.1615 7.3072 5.5 7.45453V7.75C5.5 8.02614 5.27614 8.25 5 8.25C4.72386 8.25 4.5 8.02614 4.5 7.75V7.43817C4.09798 7.33645 3.74325 7.11271 3.51205 6.79298C3.35025 6.56921 3.40048 6.25663 3.62425 6.09483C3.84802 5.93302 4.1606 5.98325 4.3224 6.20703C4.43103 6.35726 4.67329 6.5 5 6.5H5.09119C5.56492 6.5 5.75 6.21045 5.75 6.07295C5.75 5.97432 5.67544 5.80869 5.42373 5.70801L4.20488 5.22047C3.67141 5.00708 3.25 4.5307 3.25 3.92705V3.88889C3.25 3.15689 3.84468 2.66952 4.5 2.53666V2.25C4.5 1.97386 4.72386 1.75 5 1.75Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function MegaphoneSmallIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M7.19674 0.0478081C7.8417 -0.157446 8.5 0.323887 8.5 1.00072V2.37989C9.36261 2.60191 10 3.38496 10 4.31688C10 5.2488 9.36261 6.03185 8.5 6.25388V7.63305C8.5 8.30988 7.8417 8.79122 7.19674 8.58596L5.81965 8.14771C5.50442 8.83703 4.8088 9.31688 4 9.31688C2.89543 9.31688 2 8.42145 2 7.31688V6.92743L0.696048 6.51141C0.28145 6.37913 0 5.99391 0 5.55872V3.07505C0 2.63986 0.28145 2.25464 0.696048 2.12236L2.28791 1.61448C2.31115 1.60351 2.33537 1.59428 2.3604 1.58695L7.19674 0.0478081ZM3 7.25037V7.31688C3 7.86917 3.44772 8.31688 4 8.31688C4.36001 8.31688 4.67642 8.12645 4.85261 7.83995L3 7.25037ZM9 4.31688C9 4.68702 8.7989 5.0102 8.5 5.1831V3.45067C8.7989 3.62357 9 3.94674 9 4.31688ZM2.0011 2.75565V5.87812L1 5.55872V3.07505L2.0011 2.75565Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function CrownIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M7.88806 0.296867C7.76441 0.111401 7.55626 0 7.33336 0C7.11045 0 6.9023 0.111401 6.77866 0.296867L4.43844 3.80719L0.964832 2.07038C0.73623 1.95608 0.462404 1.98254 0.259911 2.13849C0.0574187 2.29443 -0.0380915 2.55242 0.014036 2.80264L1.45958 9.74124C1.6528 10.6687 2.47019 11.3333 3.41754 11.3333H11.2492C12.1965 11.3333 13.0139 10.6687 13.2071 9.74124L14.6527 2.80264C14.7048 2.55242 14.6093 2.29443 14.4068 2.13849C14.2043 1.98254 13.9305 1.95608 13.7019 2.07038L10.2283 3.80719L7.88806 0.296867Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function RobotIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M12 2C10.895 2 10 2.895 10 4H8C6.895 4 6 4.895 6 6V10C6 13.314 8.686 16 12 16C15.314 16 18 13.314 18 10V6C18 4.895 17.105 4 16 4H14C14 2.895 13.105 2 12 2ZM9.5 8C10.328 8 11 8.672 11 9.5C11 10.328 10.328 11 9.5 11C8.672 11 8 10.328 8 9.5C8 8.672 8.672 8 9.5 8ZM14.5 8C15.328 8 16 8.672 16 9.5C16 10.328 15.328 11 14.5 11C13.672 11 13 10.328 13 9.5C13 8.672 13.672 8 14.5 8ZM6 17C4.343 17 3 18.343 3 20V22H21V20C21 18.343 19.657 17 18 17H6Z" fill="url(#robotGrad)"/>
+      <defs>
+        <linearGradient id="robotGrad" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FF3FD5"/>
+          <stop offset="1" stopColor="#FF9025"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// ── Onboarding Steps ───────────────────────────────────────────────
+
+const STEPS = [
   {
+    key: "account",
     title: "Create agency account",
     description: "You're all set!",
     completed: true,
     icon: null,
   },
   {
+    key: "profile",
     title: "Complete your agency profile",
     description: "Add logo, description, team members and portfolio",
     completed: false,
@@ -59,6 +185,7 @@ const steps = [
     action: "Complete profile",
   },
   {
+    key: "brand",
     title: "Add your first brand client",
     description: "Connect a brand to start managing their campaigns",
     completed: false,
@@ -66,14 +193,15 @@ const steps = [
     action: "Add clients",
   },
   {
+    key: "campaign",
     title: "Launch first campaign",
-    description:
-      "Create a CPM, retainer, or per-video campaign for your brand",
+    description: "Create a CPM, retainer, or per-video campaign for your brand",
     completed: false,
     icon: MegaphoneIcon,
     action: "Launch campaign",
   },
   {
+    key: "recruit",
     title: "Recruit creators",
     description: "Upload content and start earning",
     completed: false,
@@ -82,29 +210,104 @@ const steps = [
   },
 ];
 
-export default function Home() {
-  return (
-    <div className="relative flex flex-col items-start gap-2 self-stretch p-4 sm:flex-1 sm:p-8">
-      {/* Radial gradient background */}
-      <div
-        className="absolute inset-0 bottom-0"
-        style={{
-          background: [
-            "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255, 63, 213, 0.24) 0%, rgba(255, 63, 213, 0) 100%)",
-            "radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255, 144, 37, 0.24) 0%, rgba(255, 144, 37, 0) 100%)",
-          ].join(", "),
-        }}
-      />
+// ── Dashboard Data ─────────────────────────────────────────────────
 
-      {/* Welcome banner */}
-      <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-4 sm:py-8 sm:flex-1">
-        {/* Centered content */}
+const CAMPAIGNS = [
+  { name: "Call of Duty BO7 Clipping", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
+  { name: "Caffeine AI Exclusive", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
+  { name: "G Fuel Summer Promo", meta: "CPM · 121k views · 31 creators", pct: 94, color: "#FF2525" },
+  { name: "Apex Legends Season 20", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
+  { name: "Fortnite Festival Clips", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
+];
+
+const ATTENTION_ITEMS = [
+  { icon: VideoIcon, iconBg: "rgba(255,144,37,0.1)", iconDotBg: "rgba(255,144,37,0.06)", iconColor: "#FF9025", title: "24 submissions", subtitle: "Awaiting review" },
+  { icon: UserAddIcon, iconBg: "rgba(174,78,238,0.1)", iconDotBg: "rgba(174,78,238,0.06)", iconColor: "#AE4EEE", title: "2 applications", subtitle: "Awaiting review" },
+  { icon: UserAddIcon, iconBg: "rgba(0,178,89,0.1)", iconDotBg: "rgba(0,178,89,0.06)", iconColor: "#00B259", title: "1 contract pending", subtitle: "Awaiting review" },
+  { icon: UserAddIcon, iconBg: "rgba(238,78,81,0.1)", iconDotBg: "rgba(238,78,81,0.06)", iconColor: "#EE4E51", title: "2 budget warnings", subtitle: "G Fuel Critical, Caffeine AI low" },
+];
+
+const ACTIVITY_ITEMS = [
+  { icon: UserAddIcon, title: "New clipper", subtitle: "Clip_Nova_23 joined", time: "2h ago" },
+  { icon: ThumbUpIcon, title: "Clips approved", subtitle: "3 clips from NightOwlEdits", time: "4h ago" },
+  { icon: DollarIcon, title: "Earnings credited", subtitle: "+ $42.50 from approved clips", time: "4h ago" },
+  { icon: MegaphoneSmallIcon, title: "Campaign joined", subtitle: "Referral joined 'Spring Clips 2026'", time: "8h ago" },
+  { icon: UserAddIcon, title: "New clipper", subtitle: "edit_wizard_99 joined", time: "1d ago" },
+  { icon: UserAddIcon, title: "New clipper", subtitle: "edit_wizard_99 joined", time: "1d ago" },
+];
+
+const TOP_CREATORS = [
+  { name: "ClipMaster_Jay", earned: "$4,280" },
+  { name: "NightOwlEdits", earned: "$4,280" },
+  { name: "Clip_Nova_23", earned: "$4,280" },
+];
+
+const PENDING_DRAFTS = [
+  { name: "Lila Bennett", campaign: "NFL UGC · Revision 2 uploaded", tag: "V2", tagColor: "#FF9025", bg: "rgba(255,144,37,0.1)" },
+  { name: "Marcus Cole", campaign: "Caffeine Exclusive - New draft", tag: "New", tagColor: "#3B82F6", bg: "rgba(59,130,246,0.1)" },
+];
+
+// ── Sparkline ──────────────────────────────────────────────────────
+
+let sparklineIdCounter = 0;
+function MiniSparkline({ color = "#34D399" }: { color?: string }) {
+  const [gradId] = useState(() => `spark-grad-${++sparklineIdCounter}`);
+  return (
+    <svg width="75" height="21" viewBox="0 0 75 21" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <defs>
+        <linearGradient id={gradId} x1="37.037" y1="0" x2="37.037" y2="20.3704" gradientUnits="userSpaceOnUse">
+          <stop stopColor={color} stopOpacity="0.2"/>
+          <stop offset="1" stopColor={color} stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="M0.823045 19.7398L0 20.3704L74.0741 16.5286L73.251 13.7963L73.251 13.7962C72.4279 11.0639 70.7819 5.59932 69.1358 2.72906C67.4897 -0.141227 65.8436 -0.417165 64.1975 0.40033C62.5514 1.21783 60.9053 3.12875 59.2593 4.81876C57.6132 6.50877 55.9671 7.97785 54.321 7.99406C52.6749 8.01028 51.0288 6.57362 49.3827 6.5874C47.7366 6.60119 46.0905 8.06542 44.4444 9.54757L44.3656 9.61859C42.7458 11.0774 41.126 12.5361 39.5062 12.9249C37.8601 13.32 36.214 12.61 34.5679 12.7767C32.9218 12.9435 31.2757 13.9868 29.6296 12.4432C27.9835 10.8995 26.3375 6.76874 24.6914 5.1633C23.0453 3.55785 21.3992 4.47771 19.7531 4.50747C18.107 4.53724 16.4609 3.67691 14.8148 2.68805C13.1687 1.69919 11.5226 0.581794 9.87654 2.87689C8.23045 5.17199 6.58436 10.8796 4.93827 14.3639C3.29218 17.8482 1.64609 19.1093 0.823045 19.7398Z" fill={`url(#${gradId})`}/>
+      <path d="M0.274902 20.0888L1.09795 19.4813C1.92099 18.8738 3.56708 17.6588 5.21317 14.3019C6.85926 10.9449 8.50535 5.44586 10.1514 3.23464C11.7975 1.02342 13.4436 2.09998 15.0897 3.05271C16.7358 4.00543 18.3819 4.83431 20.028 4.80564C21.6741 4.77696 23.3202 3.89072 24.9663 5.43749C26.6123 6.98426 28.2584 10.964 29.9045 12.4513C31.5506 13.9386 33.1967 12.9333 34.8428 12.7727C36.4889 12.6121 38.135 13.2961 39.7811 12.9154C41.4272 12.5348 43.0733 11.0895 44.7193 9.66154C46.3654 8.23355 48.0115 6.82283 49.6576 6.80955C51.3037 6.79627 52.9498 8.18043 54.5959 8.1648C56.242 8.14918 57.8881 6.73379 59.5342 5.10555C61.1802 3.4773 62.8263 1.63621 64.4724 0.848591C66.1185 0.0609715 67.7646 0.326825 69.4107 3.09222C71.0568 5.85761 72.7029 11.1225 73.5259 13.755L74.349 16.3875" stroke={color} strokeWidth="0.925926"/>
+    </svg>
+  );
+}
+
+// ── Progress bar ───────────────────────────────────────────────────
+
+function BudgetBar({ pct, color }: { pct: number; color: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative h-1 w-20 rounded-full bg-foreground/10">
+        <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
+      </div>
+      <span className="font-inter text-xs tracking-[-0.02em]" style={{ color }}>{pct}%</span>
+    </div>
+  );
+}
+
+// ── Onboarding View ────────────────────────────────────────────────
+
+function OnboardingView({ completed, onToggle }: { completed: Record<string, boolean>; onToggle: (key: string) => void }) {
+  return (
+    <div className="relative flex flex-col items-start gap-2 self-stretch p-4 sm:flex-1 sm:px-8 sm:py-4">
+      {/* Radial gradient background with noise to prevent banding */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 blur-[80px] dark:blur-[120px]"
+          style={{
+            background: [
+              "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255, 63, 213, 0.24) 0%, rgba(255, 63, 213, 0) 100%)",
+              "radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255, 144, 37, 0.24) 0%, rgba(255, 144, 37, 0) 100%)",
+            ].join(", "),
+          }}
+        />
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.03]" style={{ mixBlendMode: "overlay" }} aria-hidden>
+          <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noise)" />
+        </svg>
+      </div>
+
+      <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-2 sm:py-4 sm:flex-1">
         <div className="flex flex-col items-center sm:flex-1 sm:justify-center">
-          {/* Header section */}
+          {/* Header */}
           <div className="flex w-full max-w-[720px] flex-col items-center gap-4 pb-6">
-            {/* Overlapping avatars */}
             <div className="flex items-center drop-shadow-[0_-1px_3px_rgba(0,0,0,0.06)]">
-              {/* Dub logo orb */}
               <div
                 className="-mr-2 flex size-14 items-center justify-center rounded-full border border-[rgba(37,37,37,0.1)]"
                 style={{
@@ -114,81 +317,374 @@ export default function Home() {
                     "radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255,144,37,0.32) 0%, rgba(255,144,37,0) 100%)",
                     "#FF9025",
                   ].join(", "),
-                  boxShadow:
-                    "inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 0.972px 0px rgba(255,255,255,0.36)",
+                  boxShadow: "inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 0.972px 0px rgba(255,255,255,0.36)",
                 }}
               >
                 <StarsLogo className="size-7 text-white" />
               </div>
-
-              {/* Workspace avatar */}
               <WorkspaceAvatar />
             </div>
-
-            {/* Text */}
             <div className="flex flex-col items-center gap-1.5 px-5">
               <h1 className="text-center text-lg font-medium tracking-[-0.02em] text-page-text sm:text-xl">
                 Manage brands, creators and campaigns
               </h1>
               <p className="max-w-[457px] text-center text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle sm:text-base">
-                Your agency dashboard lets you run multiple brand campaigns from
-                one place. Add your first brand client to get started.
+                Your agency dashboard lets you run multiple brand campaigns from one place. Add your first brand client to get started.
               </p>
             </div>
           </div>
 
           {/* Checklist card */}
-          <div className="flex w-full max-w-[720px] flex-col items-center gap-4 rounded-[20px] border border-page-border bg-card-bg p-4 sm:p-6">
-            {steps.map((step, i) => (
-              <div key={step.title} className="w-full">
-                {/* Divider (indented, between items) */}
-                {i > 0 && (
-                  <div className="pb-4 pl-[52px]">
-                    <div className="h-px w-full bg-page-border" />
-                  </div>
-                )}
-
-                {/* Step row */}
-                <div className="flex items-center gap-3">
-                  {/* Icon circle */}
-                  {step.completed ? (
-                    <div className="flex size-10 items-center justify-center">
-                      <div className="flex size-10 items-center justify-center rounded-full bg-[#00B36E] shadow-[0px_0px_0px_2px_var(--card-bg)]">
-                        <CheckCircleIcon className="size-[17px] text-white" />
+          <div className="flex w-full max-w-[720px] flex-col items-center gap-4 rounded-2xl border border-page-border bg-card-bg p-4 sm:p-6">
+            {STEPS.map((step, i) => {
+              const isComplete = step.completed || completed[step.key];
+              return (
+                <div key={step.key} className="w-full">
+                  {i > 0 && (
+                    <div className="pb-4 pl-[52px]">
+                      <div className="h-px w-full bg-page-border" />
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3">
+                    {isComplete ? (
+                      <div className="flex size-10 items-center justify-center">
+                        <div className="flex size-10 items-center justify-center rounded-full bg-[#00B36E] shadow-[0px_0px_0px_2px_var(--card-bg)]">
+                          <CheckCircleIcon className="size-[17px] text-white" />
+                        </div>
                       </div>
+                    ) : (
+                      <div className="flex size-10 items-center justify-center rounded-full border border-page-border bg-card-bg shadow-[0px_0px_0px_2px_var(--card-bg)]">
+                        {step.icon && <step.icon className="size-5 text-page-text-subtle" />}
+                      </div>
+                    )}
+                    <div className={`flex flex-1 flex-col justify-center gap-1 ${isComplete ? "opacity-50" : ""}`}>
+                      <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{step.title}</span>
+                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">{step.description}</span>
                     </div>
-                  ) : (
-                    <div className="flex size-10 items-center justify-center rounded-full border border-page-border bg-card-bg shadow-[0px_0px_0px_2px_var(--card-bg)]">
-                      {step.icon && (
-                        <step.icon className="size-5 text-page-text-subtle" />
-                      )}
-                    </div>
-                  )}
-
-                  {/* Text */}
-                  <div
-                    className={`flex flex-1 flex-col justify-center gap-1 ${step.completed ? "opacity-50" : ""}`}
-                  >
-                    <span className="text-sm font-medium tracking-[-0.02em] text-page-text">
-                      {step.title}
-                    </span>
-                    <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">
-                      {step.description}
-                    </span>
+                    {step.action && !isComplete && (
+                      <button
+                        onClick={() => onToggle(step.key)}
+                        className="cursor-pointer rounded-full bg-[rgba(37,37,37,0.06)] px-4 py-2 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors duration-150 hover:bg-[rgba(37,37,37,0.12)] active:bg-[rgba(37,37,37,0.16)] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.12)] dark:active:bg-[rgba(255,255,255,0.16)]"
+                      >
+                        {step.action}
+                      </button>
+                    )}
                   </div>
-
-                  {/* Action button */}
-                  {step.action && (
-                    <button className="cursor-pointer rounded-full bg-[rgba(37,37,37,0.06)] px-4 py-2 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors duration-150 hover:bg-[rgba(37,37,37,0.12)] active:bg-[rgba(37,37,37,0.16)] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.12)] dark:active:bg-[rgba(255,255,255,0.16)]">
-                      {step.action}
-                    </button>
-                  )}
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Dashboard View ─────────────────────────────────────────────────
+
+function DashboardView() {
+  return (
+    <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-6">
+      {/* AI Tip Banner */}
+      <div className="flex items-center gap-4 rounded-2xl border border-border bg-card-bg p-4">
+        <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
+        <div className="flex flex-1 items-center justify-center gap-3">
+          <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
+            You&apos;ve spent <span className="font-semibold text-[#FF9025]">78%</span> of your budget in the <span className="font-semibold text-page-text">Caffeine AI</span> campaign, with <span className="font-semibold text-page-text">4 days left.</span>
+          </span>
+          <RichButton size="sm" className="shrink-0 rounded-full">
+            Top up
+          </RichButton>
+        </div>
+        <div className="flex items-center gap-0 opacity-70">
+          <ChevronLeftIcon className="size-4 text-page-text" />
+          <ChevronRightIcon className="size-4 text-page-text" />
+        </div>
+      </div>
+
+      {/* KPI Cards Row */}
+      <div className="flex gap-2">
+        {/* Balance card - wider */}
+        <div className="flex w-[320px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4">
+          <div className="flex flex-1 flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Balance</span>
+            <div className="flex items-baseline gap-3">
+              <span className="font-inter text-xl font-semibold tracking-[-0.02em] text-page-text">$14,200</span>
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$2,880 unallocated</span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <RichButton size="sm" className="flex-1 rounded-full">
+              <PlusIcon className="size-4" />
+              Deposit
+            </RichButton>
+            <button className="flex h-8 flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+              <HistoryIcon className="size-4" />
+              History
+            </button>
+          </div>
+        </div>
+
+        {/* Active */}
+        <div className="flex flex-1 flex-col justify-between rounded-2xl border border-border bg-card-bg p-4">
+          <div className="flex items-start justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
+            <MiniSparkline />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="font-inter text-xl font-semibold tracking-[-0.02em] text-page-text">24</span>
+            <div className="flex gap-1">
+              <span className="flex h-6 items-center rounded-full bg-[rgba(59,130,246,0.12)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#3B82F6]">3 CPM</span>
+              <span className="flex h-6 items-center rounded-full bg-[#FFF2E5] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF9025] dark:bg-[rgba(255,144,37,0.15)]">2 Retainer</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Views */}
+        <div className="flex flex-1 flex-col justify-between rounded-2xl border border-border bg-card-bg p-4">
+          <div className="flex items-start justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
+            <MiniSparkline />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="font-inter text-xl font-semibold tracking-[-0.02em] text-page-text">10</span>
+            <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">+31% this week</span>
+          </div>
+        </div>
+
+        {/* Avg CPM */}
+        <div className="flex flex-1 flex-col justify-between rounded-2xl border border-border bg-card-bg p-4">
+          <div className="flex items-start justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
+            <MiniSparkline />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="font-inter text-xl font-semibold tracking-[-0.02em] text-page-text">$0.67</span>
+            <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">-$0.05 (better)</span>
+          </div>
+        </div>
+
+        {/* Paid Out */}
+        <div className="flex flex-1 flex-col justify-between rounded-2xl border border-border bg-card-bg p-4">
+          <div className="flex items-start justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
+            <MiniSparkline />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="font-inter text-xl font-semibold tracking-[-0.02em] text-page-text">$18.4k</span>
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$10.7k spend this period</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Active Campaigns + Needs Attention Row */}
+      <div className="flex gap-2">
+        {/* Active Campaigns Table */}
+        <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-border px-6 py-2.5">
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Active Campaigns</span>
+            <button className="group flex cursor-pointer items-center gap-1.5">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+            </button>
+          </div>
+          {/* Rows */}
+          {CAMPAIGNS.map((c, i) => (
+            <div key={i} className="flex cursor-pointer items-center px-6 transition-colors duration-150 hover:bg-foreground/[0.03]">
+              <div className={cn("flex flex-1 items-center justify-between py-3", i < CAMPAIGNS.length - 1 && "border-b border-foreground/[0.03]")}>
+                <div className="flex items-center gap-3">
+                  <div className="size-8 shrink-0 rounded bg-foreground/[0.06]" />
+                  <div className="flex flex-col gap-1.5">
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.meta}</span>
+                  </div>
+                </div>
+                <BudgetBar pct={c.pct} color={c.color} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Needs Attention */}
+        <div className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs Attention</span>
+          <div className="flex flex-col gap-2">
+            {ATTENTION_ITEMS.map((item, i) => (
+              <button
+                key={i}
+                className="group flex cursor-pointer items-center gap-2 rounded-xl p-2 text-left transition-all duration-200"
+                style={{ background: item.iconBg }}
+                onMouseEnter={(e) => e.currentTarget.style.background = item.iconColor + "18"}
+                onMouseLeave={(e) => e.currentTarget.style.background = item.iconBg}
+              >
+                <div className="flex size-6 items-center justify-center rounded-full" style={{ background: item.iconDotBg }}>
+                  <item.icon className="size-3" style={{ color: item.iconColor }} />
+                </div>
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
+                </div>
+                <ChevronRightIcon className="size-4 text-page-text-muted transition-transform duration-200 ease-out group-hover:translate-x-0.5" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* AI Weekly Insight */}
+      <div
+        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4"
+      >
+        <div
+          className="pointer-events-none absolute inset-0 dark:blur-[40px]"
+          style={{
+            background: [
+              "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255, 63, 213, 0.24) 0%, rgba(255, 63, 213, 0) 100%)",
+              "radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255, 144, 37, 0.24) 0%, rgba(255, 144, 37, 0) 100%)",
+            ].join(", "),
+          }}
+        />
+        <div className="relative flex items-center gap-4">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_var(--card-bg)]">
+            <RobotIcon />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">AI Weekly Insight</span>
+            <span className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">
+              Your COD BO7 campaign is outperforming by 2.4x - consider increasing budget by $500 to capture momentum. 3 creators are consistently hitting 90%+ approval, ideal candidates for retainer contracts.
+            </span>
+          </div>
+        </div>
+        <ChevronRightIcon className="relative size-4 shrink-0 text-page-text opacity-70" />
+      </div>
+
+      {/* Bottom Row: Recent Activity + Top Creators + Pending Drafts */}
+      <div className="flex gap-4">
+        {/* Recent Activity */}
+        <div className="relative flex flex-1 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
+            <button className="group flex cursor-pointer items-center gap-1.5">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+            </button>
+          </div>
+          <div className="flex flex-col gap-2">
+            {ACTIVITY_ITEMS.map((item, i) => (
+              <div key={i} className="flex cursor-pointer items-center gap-2 rounded-xl px-2 py-1.5 transition-colors duration-150 hover:bg-foreground/[0.03]">
+                <div className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06]">
+                  <item.icon className="size-3 text-page-text" />
+                </div>
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
+                </div>
+                <span className="font-inter text-[10px] tracking-[-0.02em] text-page-text-muted">{item.time}</span>
+              </div>
+            ))}
+          </div>
+          {/* Fade out bottom */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+        </div>
+
+        {/* Top Creators This Week */}
+        <div className="relative flex flex-1 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators this week</span>
+            <button className="group flex cursor-pointer items-center gap-1.5">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+            </button>
+          </div>
+          <div className="flex flex-col gap-2">
+            {/* #1 — featured card */}
+            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg p-4">
+              {/* Badge */}
+              <div className="absolute left-4 top-4 flex h-10 items-center gap-2 rounded-full bg-[#FF9025] px-3">
+                <CrownIcon className="size-4 text-white" />
+                <span className="font-inter text-base font-medium tracking-[-0.02em] text-white">1</span>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="size-10 rounded-full bg-foreground/10" />
+                <div className="flex flex-col items-center gap-2">
+                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{TOP_CREATORS[0].name}</span>
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{TOP_CREATORS[0].earned}</span>
+                </div>
+              </div>
+            </div>
+            {/* #2 and #3 */}
+            <div className="flex gap-2">
+              {TOP_CREATORS.slice(1).map((creator, i) => (
+                <div key={i} className="flex flex-1 flex-col items-center justify-between gap-3 rounded-2xl border border-border p-4">
+                  <div className="flex size-10 items-center justify-center rounded-full border" style={{ borderColor: i === 0 ? "#839FB9" : "#9E5200" }}>
+                    <span className="font-inter text-base font-medium tracking-[-0.02em]" style={{ color: i === 0 ? "#839FB9" : "#9E5200" }}>{i + 2}</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="size-10 rounded-full bg-foreground/10" />
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{creator.name}</span>
+                      <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{creator.earned}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+        </div>
+
+        {/* Pending Drafts */}
+        <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
+            <button className="group flex cursor-pointer items-center gap-1.5">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+            </button>
+          </div>
+          <div className="flex flex-col gap-2">
+            {PENDING_DRAFTS.map((draft, i) => (
+              <div key={i} className="flex items-center gap-2 rounded-xl p-2" style={{ background: draft.bg }}>
+                <div className="flex size-6 items-center justify-center rounded-full" style={{ background: `${draft.tagColor}10` }}>
+                  <VideoIcon className="size-3" style={{ color: draft.tagColor }} />
+                </div>
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.campaign}</span>
+                </div>
+                <span className="font-inter text-[10px] tracking-[-0.02em]" style={{ color: draft.tagColor }}>{draft.tag}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Page ───────────────────────────────────────────────────────────
+
+export default function Home() {
+  const [completed, setCompleted] = useState<Record<string, boolean>>({});
+
+  const onToggle = useCallback((key: string) => {
+    setCompleted((prev) => ({ ...prev, [key]: true }));
+  }, []);
+
+  const allDone = STEPS.every((s) => s.completed || completed[s.key]);
+
+  return (
+    <div className={allDone ? "" : "flex min-h-full flex-col"}>
+      {/* Top nav header — hidden during onboarding */}
+      {allDone && (
+        <div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-border bg-page-bg px-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
+          <NewCampaignButton />
+        </div>
+      )}
+
+      {allDone ? <DashboardView /> : <OnboardingView completed={completed} onToggle={onToggle} />}
     </div>
   );
 }

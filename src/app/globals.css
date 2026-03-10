@@ -30,12 +30,17 @@
 @keyframes star-pop {
   0% {
     opacity: 0;
-    transform: scale(0) rotate(-30deg);
+    transform: scale(0.3) rotate(-30deg);
   }
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
   }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 300% 0; }
+  100% { background-position: -300% 0; }
 }
 
 /* Active nav item icons: override SVG fill-opacity (scoped to sidebar nav) */
@@ -189,6 +194,13 @@ nav [data-active="true"] svg path {
     0px 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* Suppress focus ring on Recharts chart elements */
+.chart-no-focus-ring *:focus,
+.chart-no-focus-ring *:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Apple-style smooth corners (superellipse/squircle) */
 .rounded-xl,
 .rounded-2xl,
@@ -210,6 +222,20 @@ nav [data-active="true"] svg path {
   background-image: linear-gradient(to bottom, #fff, #e5e5e5);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rich-button-destructive {
+  color: #fff;
+  background-image: linear-gradient(to bottom, rgba(220, 38, 38, 0.85), rgb(185, 28, 28));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(153, 27, 27, 0.5);
+}
+
+.dark .rich-button-destructive {
+  color: #fff;
+  background-image: linear-gradient(to bottom, rgb(239, 68, 68), rgb(220, 38, 38));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 :root {
@@ -258,6 +284,7 @@ nav [data-active="true"] svg path {
   --page-text: #1E1E1E;
   --page-text-muted: rgba(37, 37, 37, 0.5);
   --page-text-subtle: rgba(37, 37, 37, 0.7);
+  --changelog-dim: rgba(37, 37, 37, 0.08);
 
   /* Card tokens */
   --card-bg: #ffffff;
@@ -267,13 +294,40 @@ nav [data-active="true"] svg path {
   --dropdown-bg: #ffffff;
   --dropdown-border: #e5e5e5;
   --dropdown-hover: rgba(0, 0, 0, 0.03);
-  --dropdown-text: #171717;
-  --dropdown-text-muted: #737373;
+  --dropdown-text: #404040;
+  --dropdown-text-muted: #8a8a8a;
 
   /* Tooltip */
   --tooltip-bg: #212121;
   --tooltip-text: #ffffff;
   --tooltip-text-muted: #a3a3a3;
+
+  /* Affiliate dashboard tokens */
+  --af-bg: #eae8e6;
+  --af-bg-page: #ffffff;
+  --af-bg-card-color: rgba(234, 232, 230, 0.3);
+  --af-bg-card-blend: normal;
+  --af-bg-input: rgba(0, 0, 0, 0.04);
+  --af-bg-dropdown: #ffffff;
+  --af-text: #000000;
+  --af-text-secondary: rgba(0, 0, 0, 0.72);
+  --af-text-muted: rgba(0, 0, 0, 0.56);
+  --af-text-faint: rgba(0, 0, 0, 0.4);
+  --af-border: rgba(0, 0, 0, 0.15);
+  --af-border-subtle: rgba(0, 0, 0, 0.08);
+  --af-divider: rgba(0, 0, 0, 0.06);
+  --af-hover: rgba(0, 0, 0, 0.04);
+  --af-shadow-card: 0px 4px 4px rgba(0, 0, 0, 0.07), 0px 1px 2px rgba(0, 0, 0, 0.08);
+  --af-bg-card-image: none;
+  --af-skeleton: rgba(0, 0, 0, 0.08);
+  --af-skeleton-subtle: rgba(0, 0, 0, 0.04);
+  --af-podium-radial: radial-gradient(50% 50% at 50% 50%, rgba(241, 166, 36, 0.08) 0%, transparent 100%);
+  --af-podium-silver-grad: linear-gradient(179.9deg, rgba(165, 185, 204, 0.16) 0.08%, rgba(165, 185, 204, 0) 99.92%), radial-gradient(50% 50% at 50% 50%, rgba(165, 185, 204, 0.08) 0%, transparent 100%);
+  --af-podium-silver-text: #7C8B99;
+  --af-podium-bronze-grad: linear-gradient(179.9deg, rgba(125, 76, 24, 0.16) 0.08%, rgba(125, 76, 24, 0) 99.92%), radial-gradient(50% 50% at 50% 50%, rgba(125, 76, 24, 0.08) 0%, transparent 100%);
+  --af-podium-bronze-text: #7D4C18;
+  --af-watermark-opacity: 0.04;
+  --af-watermark-opacity-end: 0.01;
 }
 
 .dark {
@@ -313,6 +367,7 @@ nav [data-active="true"] svg path {
   --page-text: #e5e5e5;
   --page-text-muted: rgba(255, 255, 255, 0.45);
   --page-text-subtle: rgba(255, 255, 255, 0.6);
+  --changelog-dim: rgba(255, 255, 255, 0.06);
 
   /* Card tokens */
   --card-bg: #1d1b19;
@@ -329,6 +384,33 @@ nav [data-active="true"] svg path {
   --tooltip-bg: #2c2c2c;
   --tooltip-text: #ffffff;
   --tooltip-text-muted: #a3a3a3;
+
+  /* Affiliate dashboard tokens */
+  --af-bg: #151515;
+  --af-bg-page: #151515;
+  --af-bg-card-color: #1e1e1e;
+  --af-bg-card-blend: normal;
+  --af-bg-input: rgba(255, 255, 255, 0.06);
+  --af-bg-dropdown: #1f1d1b;
+  --af-text: #ffffff;
+  --af-text-secondary: rgba(255, 255, 255, 0.72);
+  --af-text-muted: rgba(255, 255, 255, 0.56);
+  --af-text-faint: rgba(255, 255, 255, 0.4);
+  --af-border: rgba(255, 255, 255, 0.15);
+  --af-border-subtle: rgba(255, 255, 255, 0.08);
+  --af-divider: rgba(255, 255, 255, 0.06);
+  --af-hover: rgba(255, 255, 255, 0.05);
+  --af-shadow-card: none;
+  --af-bg-card-image: none;
+  --af-skeleton: rgba(255, 255, 255, 0.08);
+  --af-skeleton-subtle: rgba(255, 255, 255, 0.04);
+  --af-podium-radial: radial-gradient(50% 50% at 50% 50%, rgba(241, 166, 36, 0.12) 0%, transparent 100%);
+  --af-podium-silver-grad: linear-gradient(179.9deg, rgba(165, 185, 204, 0.2) 0.08%, rgba(165, 185, 204, 0) 99.92%), radial-gradient(50% 50% at 50% 50%, rgba(165, 185, 204, 0.1) 0%, transparent 100%);
+  --af-podium-silver-text: #A5B9CC;
+  --af-podium-bronze-grad: linear-gradient(179.9deg, rgba(125, 76, 24, 0.2) 0.08%, rgba(125, 76, 24, 0) 99.92%), radial-gradient(50% 50% at 50% 50%, rgba(125, 76, 24, 0.1) 0%, transparent 100%);
+  --af-podium-bronze-text: #DB9447;
+  --af-watermark-opacity: 0.06;
+  --af-watermark-opacity-end: 0.02;
 }
 
 @theme inline {
