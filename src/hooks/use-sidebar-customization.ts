@@ -59,9 +59,18 @@ export function applyCustomization(
 
     // Build items from the override's itemOrder, looking up from the global pool
     const items: NavSection["items"] = [];
+    const seen = new Set<string>();
     for (const name of override.itemOrder) {
+      seen.add(name);
       const item = allItems.get(name);
       if (item && !hiddenSet.has(name)) {
+        items.push(item);
+      }
+    }
+
+    // Append any new items from static content that aren't in the saved order yet
+    for (const item of section.items) {
+      if (!seen.has(item.name) && !hiddenSet.has(item.name)) {
         items.push(item);
       }
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
@@ -50,20 +50,18 @@ const STATUS_CONFIG: Record<
     color: "#FF9025",
     bg: "rgba(255, 144, 37, 0.1)",
     icon: (
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <circle cx="6" cy="6" r="5" stroke="#FF9025" strokeWidth="1.2" fill="none" />
-        <path d="M6 3V6L8 7" stroke="#FF9025" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FF9025"/>
       </svg>
     ),
   },
   paid: {
     label: "Paid",
-    color: "#00B26E",
-    bg: "rgba(0, 178, 110, 0.1)",
+    color: "#00B259",
+    bg: "rgba(0, 178, 89, 0.1)",
     icon: (
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <circle cx="6" cy="6" r="5" stroke="#00B26E" strokeWidth="1.2" />
-        <path d="M4 6L5.5 7.5L8 4.5" stroke="#00B26E" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM6.88698 4.06663C7.06184 3.85291 7.03034 3.5379 6.81662 3.36304C6.6029 3.18817 6.28789 3.21967 6.11302 3.4334L4.21288 5.75579L3.60355 5.14646C3.40829 4.9512 3.09171 4.9512 2.89645 5.14646C2.70118 5.34172 2.70118 5.65831 2.89645 5.85357L3.89645 6.85357C3.99634 6.95346 4.13382 7.00643 4.27491 6.9994C4.416 6.99236 4.54752 6.92597 4.63698 6.81663L6.88698 4.06663Z" fill="#00B259"/>
       </svg>
     ),
   },
@@ -72,9 +70,8 @@ const STATUS_CONFIG: Record<
     color: "#FF2525",
     bg: "rgba(255, 37, 37, 0.1)",
     icon: (
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <circle cx="6" cy="6" r="5" stroke="#FF2525" strokeWidth="1.2" />
-        <path d="M4 4L8 8M8 4L4 8" stroke="#FF2525" strokeWidth="1.2" strokeLinecap="round" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM3.85355 3.14645C3.65829 2.95118 3.34171 2.95118 3.14645 3.14645C2.95118 3.34171 2.95118 3.65829 3.14645 3.85355L4.29289 5L3.14645 6.14645C2.95118 6.34171 2.95118 6.65829 3.14645 6.85355C3.34171 7.04882 3.65829 7.04882 3.85355 6.85355L5 5.70711L6.14645 6.85355C6.34171 7.04882 6.65829 7.04882 6.85355 6.85355C7.04882 6.65829 7.04882 6.34171 6.85355 6.14645L5.70711 5L6.85355 3.85355C7.04882 3.65829 7.04882 3.34171 6.85355 3.14645C6.65829 2.95118 6.34171 2.95118 6.14645 3.14645L5 4.29289L3.85355 3.14645Z" fill="#FF2525"/>
       </svg>
     ),
   },
@@ -83,9 +80,8 @@ const STATUS_CONFIG: Record<
     color: "#3B82F6",
     bg: "rgba(59, 130, 246, 0.1)",
     icon: (
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <circle cx="6" cy="6" r="5" stroke="#3B82F6" strokeWidth="1.2" fill="none" />
-        <path d="M6 3V6L8 7" stroke="#3B82F6" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#3B82F6"/>
       </svg>
     ),
   },
@@ -108,9 +104,43 @@ const AVATAR_COLORS = [
   "#8B5CF6", "#EF4444", "#14B8A6", "#F97316",
 ];
 
+type PayoutSortKey = "creator" | "platforms" | "campaign" | "views" | "estPayout" | "net" | "status";
+type SortDir = "asc" | "desc";
+
+const PAYOUT_STATUS_ORDER: Record<PayoutStatus, number> = { paid: 0, pending: 1, upcoming: 2, blocked: 3 };
+
+function parsePayoutNumeric(val: string): number {
+  const cleaned = val.replace(/[$,%]/g, "").replace(/,/g, "");
+  if (cleaned.endsWith("K")) return parseFloat(cleaned) * 1000;
+  if (cleaned.endsWith("M")) return parseFloat(cleaned) * 1_000_000;
+  return parseFloat(cleaned) || 0;
+}
+
+function getPayoutSortValue(row: PayoutRow, key: PayoutSortKey): number | string {
+  switch (key) {
+    case "creator": return row.name.toLowerCase();
+    case "platforms": return row.platforms.length;
+    case "campaign": return row.campaign.toLowerCase();
+    case "views": return parsePayoutNumeric(row.views);
+    case "estPayout": return parsePayoutNumeric(row.estPayout);
+    case "net": return parsePayoutNumeric(row.net);
+    case "status": return PAYOUT_STATUS_ORDER[row.status];
+  }
+}
+
+const PAYOUT_COLUMNS: { label: string; sortKey: PayoutSortKey | null }[] = [
+  { label: "Creator", sortKey: "creator" },
+  { label: "Platforms", sortKey: "platforms" },
+  { label: "Campaign", sortKey: "campaign" },
+  { label: "Views", sortKey: "views" },
+  { label: "Est. payout", sortKey: "estPayout" },
+  { label: "Net", sortKey: "net" },
+  { label: "Status", sortKey: "status" },
+];
+
 function PlatformBadge({ platform }: { platform: string }) {
   return (
-    <div className="flex size-6 items-center justify-center rounded-full bg-accent text-page-text-subtle">
+    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent text-page-text-subtle">
       <PlatformIcon platform={platform} size={12} />
     </div>
   );
@@ -443,7 +473,6 @@ function PayoutTableRow({
   onToggle,
   onRowClick,
   registerItem,
-  activeIndex,
 }: {
   row: PayoutRow;
   index: number;
@@ -452,7 +481,6 @@ function PayoutTableRow({
   onToggle: () => void;
   onRowClick: () => void;
   registerItem: (index: number, element: HTMLElement | null) => void;
-  activeIndex: number | null;
 }) {
   const status = STATUS_CONFIG[row.status];
   const isFlagged = row.flagged;
@@ -462,8 +490,6 @@ function PayoutTableRow({
     registerItem(index, rowRef.current);
     return () => registerItem(index, null);
   }, [index, registerItem]);
-
-  const hideBorder = activeIndex !== null && (index === activeIndex || index === activeIndex - 1);
 
   return (
     <div
@@ -480,8 +506,8 @@ function PayoutTableRow({
       </div>
       <div
         className={cn(
-          "flex flex-1 items-center transition-[border-color] duration-75",
-          !isLast && cn("border-b", hideBorder ? "border-transparent" : "border-foreground/[0.03]"),
+          "flex flex-1 items-center",
+          !isLast && "border-b border-foreground/[0.03]",
         )}
       >
         {/* Creator */}
@@ -503,7 +529,7 @@ function PayoutTableRow({
         </div>
 
         {/* Platforms */}
-        <div className="flex h-14 w-[110px] shrink-0 items-center justify-end py-3 pl-5 pr-3 lg:w-[132px]">
+        <div className="flex h-14 w-[140px] shrink-0 items-center justify-end py-3 pl-5 pr-3">
           <div className="flex items-center gap-1">
             {row.platforms.map((p) => (
               <PlatformBadge key={p} platform={p} />
@@ -592,6 +618,29 @@ export default function PayoutsPage() {
   const [activeStatusFilter, setActiveStatusFilter] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [detailRow, setDetailRow] = useState<{ row: PayoutRow; index: number } | null>(null);
+  const [sortKey, setSortKey] = useState<PayoutSortKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const handleSort = useCallback((key: PayoutSortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "desc" ? "asc" : "desc"));
+    } else {
+      setSortKey(key);
+      setSortDir("desc");
+    }
+  }, [sortKey]);
+
+  const sortedRows = useMemo(() => {
+    if (!sortKey) return PAYOUT_ROWS;
+    return [...PAYOUT_ROWS].sort((a, b) => {
+      const aVal = getPayoutSortValue(a, sortKey);
+      const bVal = getPayoutSortValue(b, sortKey);
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortDir === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      }
+      return sortDir === "asc" ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
+    });
+  }, [sortKey, sortDir]);
 
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const { activeIndex, itemRects, sessionRef, handlers, registerItem, measureItems } = useProximityHover(tableContainerRef);
@@ -662,7 +711,7 @@ export default function PayoutsPage() {
         </div>
 
         {/* Status filter tabs */}
-        <div className="flex justify-center">
+        <div className="flex">
           <Tabs selectedIndex={activeStatusFilter} onSelect={setActiveStatusFilter}>
             {STATUS_FILTERS.map((filter, i) => (
               <TabItem key={filter.label} label={`${filter.label} (${filter.count})`} index={i} />
@@ -683,19 +732,43 @@ export default function PayoutsPage() {
               />
             </div>
             <div className="flex flex-1 items-center">
-              {["Creator", "Platforms", "Campaign", "Views", "Est. payout", "Net", "Status"].map((col, idx) => (
-                <div
-                  key={col}
-                  className={cn(
-                    "flex h-9 items-center py-3 pl-5 pr-3",
-                    idx === 0 ? "w-[180px] shrink-0 pl-0 lg:w-[240px]" : idx === 1 ? "w-[110px] shrink-0 justify-end lg:w-[132px]" : "min-w-0 flex-1 justify-end",
-                  )}
-                >
-                  <span className="font-[family-name:var(--font-inter)] text-xs font-medium leading-none tracking-[-0.02em] text-page-text-muted">
-                    {col}
-                  </span>
-                </div>
-              ))}
+              {PAYOUT_COLUMNS.map((col, idx) => {
+                const isSorted = col.sortKey !== null && sortKey === col.sortKey;
+                return (
+                  <div
+                    key={col.label}
+                    className={cn(
+                      "flex h-9 items-center py-3 pl-5 pr-3",
+                      idx === 0 ? "w-[180px] shrink-0 pl-0 lg:w-[240px]" : idx === 1 ? "w-[140px] shrink-0 justify-end" : "min-w-0 flex-1 justify-end",
+                    )}
+                  >
+                    {col.sortKey ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSort(col.sortKey!)}
+                        className={cn(
+                          "flex cursor-pointer items-center gap-1 whitespace-nowrap font-[family-name:var(--font-inter)] text-xs font-medium leading-none tracking-[-0.02em] transition-colors",
+                          isSorted ? "text-page-text" : "text-page-text-muted hover:text-page-text",
+                        )}
+                      >
+                        {col.label}
+                        {isSorted && (
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="shrink-0">
+                            <path
+                              d={sortDir === "asc" ? "M2.5 6.5L5 3.5L7.5 6.5" : "M2.5 3.5L5 6.5L7.5 3.5"}
+                              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                            />
+                          </svg>
+                        )}
+                      </button>
+                    ) : (
+                      <span className="font-[family-name:var(--font-inter)] text-xs font-medium leading-none tracking-[-0.02em] text-page-text-muted">
+                        {col.label}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
               <div className="flex h-9 w-20 items-center justify-end py-3 pl-5 pr-4">
                 <span className="text-page-text-muted opacity-0">Status</span>
               </div>
@@ -704,7 +777,7 @@ export default function PayoutsPage() {
 
           {/* Data rows */}
           <div
-            className="relative w-full min-w-[800px]"
+            className="relative w-full min-w-[800px] overflow-hidden"
             ref={tableContainerRef}
             onMouseEnter={handlers.onMouseEnter}
             onMouseMove={handlers.onMouseMove}
@@ -722,17 +795,16 @@ export default function PayoutsPage() {
                 />
               )}
             </AnimatePresence>
-            {PAYOUT_ROWS.map((row, i) => (
+            {sortedRows.map((row, i) => (
               <PayoutTableRow
                 key={row.id}
                 row={row}
                 index={i}
-                isLast={i === PAYOUT_ROWS.length - 1}
+                isLast={i === sortedRows.length - 1}
                 isSelected={selectedIds.has(row.id)}
                 onToggle={() => toggleRow(row.id)}
                 onRowClick={() => setDetailRow({ row, index: i })}
                 registerItem={registerItem}
-                activeIndex={activeIndex}
               />
             ))}
           </div>

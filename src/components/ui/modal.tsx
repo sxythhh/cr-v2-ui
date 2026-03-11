@@ -13,14 +13,17 @@ import { cn } from "@/lib/utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
-const MODAL_SPRING = {
+const EASE_OUT_QUINT = [0.23, 1, 0.32, 1] as const;
+
+const ENTER_SPRING = {
   type: "spring" as const,
   stiffness: 500,
   damping: 30,
   mass: 0.8,
 };
 
-const OVERLAY_TRANSITION = { duration: 0.18, ease: "easeOut" as const };
+const EXIT_TRANSITION = { duration: 0.15, ease: EASE_OUT_QUINT };
+const OVERLAY_TRANSITION = { duration: 0.18, ease: EASE_OUT_QUINT };
 
 // ── Size presets ─────────────────────────────────────────────────────
 
@@ -138,21 +141,16 @@ export function Modal({
   return createPortal(
     <AnimatePresence>
       {open && (
-        <motion.div
+        <div
           className="fixed inset-0 z-50 flex items-end sm:items-center sm:justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={OVERLAY_TRANSITION}
         >
           {/* Overlay */}
           <motion.div
             className="absolute inset-0 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50"
             onClick={onClose}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={OVERLAY_TRANSITION}
+            animate={{ opacity: 1, transition: OVERLAY_TRANSITION }}
+            exit={{ opacity: 0, transition: EXIT_TRANSITION }}
           />
 
           {/* Card */}
@@ -164,10 +162,10 @@ export function Modal({
               maxWidth ?? sizeClasses[size],
               className,
             )}
+            style={{ willChange: "transform, opacity" }}
             initial={{ opacity: 0, scale: 0.96, y: 16, filter: "blur(4px)" }}
-            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 0.98, y: 6, filter: "blur(2px)" }}
-            transition={MODAL_SPRING}
+            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", transition: ENTER_SPRING }}
+            exit={{ opacity: 0, scale: 0.97, y: 10, transition: EXIT_TRANSITION }}
             onClick={(e) => e.stopPropagation()}
           >
             {showClose && (
@@ -188,7 +186,7 @@ export function Modal({
             )}
             {children}
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>,
     document.body,

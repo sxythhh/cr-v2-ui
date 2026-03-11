@@ -111,8 +111,8 @@ const NAV_AREAS: SidebarNavAreas = {
         items: [
           { name: "Submissions", icon: Submissions, href: "/submissions", description: "Review and manage creator content submissions." },
           { name: "Creators", icon: Creators, href: "/creators", description: "Browse and manage your creator network." },
-          { name: "Contracts", icon: Contracts, href: "/contracts", description: "Manage creator contracts and agreements." },
           { name: "Payouts", icon: Payouts, href: "/payouts", description: "Track earnings and process creator payments." },
+          { name: "Contracts", icon: Contracts, href: "/contracts", description: "Manage creator contracts and agreements." },
           { name: "Analytics", icon: PieChart, href: "/analytics", description: "Performance metrics across all campaigns." },
           { name: "Applications", icon: Paperclip, href: "/applications", description: "Manage incoming creator applications." },
         ],

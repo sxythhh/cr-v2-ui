@@ -1039,12 +1039,14 @@ function DashboardView() {
   );
 }
 
+// ease-out-quint
+const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1];
+
 // ── Page ───────────────────────────────────────────────────────────
 
 export default function Home() {
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [skipped, setSkipped] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
 
   const onToggle = useCallback((key: string) => {
     setCompleted((prev) => ({ ...prev, [key]: true }));
@@ -1052,16 +1054,6 @@ export default function Home() {
 
   const allDone = STEPS.every((s) => s.completed || completed[s.key]);
   const showOnboarding = !allDone && !skipped;
-
-  // Trigger the reveal animation when all steps complete or user skips
-  useEffect(() => {
-    if (!showOnboarding && !showDashboard) {
-      const timer = setTimeout(() => setShowDashboard(true), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [showOnboarding, showDashboard]);
-
-  // Show floating checklist when skipped (not all done)
   const showFloatingChecklist = skipped && !allDone;
 
   return (
@@ -1071,11 +1063,11 @@ export default function Home() {
           <motion.div
             key="onboarding"
             className="flex min-h-full flex-1 flex-col"
+            style={{ willChange: "transform, opacity" }}
             exit={{
               opacity: 0,
-              scale: 0.97,
-              filter: "blur(8px)",
-              transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+              x: -30,
+              transition: { duration: 0.2, ease: EASE_OUT },
             }}
           >
             <OnboardingView
@@ -1084,30 +1076,26 @@ export default function Home() {
               onSkip={() => setSkipped(true)}
             />
           </motion.div>
-        ) : showDashboard ? (
+        ) : (
           <motion.div
             key="dashboard"
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{
-              duration: 0.6,
-              ease: [0.16, 1, 0.3, 1],
-              opacity: { duration: 0.4 },
-            }}
+            style={{ willChange: "transform, opacity" }}
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25, ease: EASE_OUT }}
           >
-            {/* Top nav header */}
             <motion.div
               className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, delay: 0.08, ease: EASE_OUT }}
             >
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
               <NewCampaignButton />
             </motion.div>
             <DashboardView />
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
 
       {/* Floating checklist for skipped users — portaled to body to escape contain:layout */}

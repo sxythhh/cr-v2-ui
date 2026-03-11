@@ -8,12 +8,10 @@ import {
   useMemo,
 } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { springs } from "@/lib/springs";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
-import Dropdown from "@/components/ui/dropdown";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import { FilterSelect, type Filter, type ActiveFilter } from "@/components/ui/dub-filter";
 
@@ -43,7 +41,7 @@ function FilterIcon({ className }: { className?: string }) {
 
 function PlatformBadge({ platform }: { platform: string }) {
   return (
-    <div className="flex size-6 items-center justify-center rounded-full bg-accent text-page-text-subtle">
+    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent text-page-text-subtle">
       <PlatformIcon platform={platform} size={12} />
     </div>
   );
@@ -138,7 +136,7 @@ interface Column {
 
 const ALL_COLUMNS: Column[] = [
   { key: "creator", label: "Creator", align: "left", width: "minmax(160px, 1fr)" },
-  { key: "platforms", label: "Platforms", align: "right", width: "110px" },
+  { key: "platforms", label: "Platforms", align: "right", width: "140px" },
   { key: "earned", label: "Earned", align: "right", width: "80px" },
   { key: "views", label: "Views", align: "right", width: "68px" },
   { key: "match", label: "Match", align: "right", width: "72px" },
@@ -149,8 +147,6 @@ const ALL_COLUMNS: Column[] = [
   { key: "submissions", label: "Submissions", align: "right", width: "92px" },
 ];
 
-const DEFAULT_COLUMN_ORDER: ColumnKey[] = ALL_COLUMNS.map((c) => c.key);
-const COLUMN_MAP = Object.fromEntries(ALL_COLUMNS.map((c) => [c.key, c])) as Record<ColumnKey, Column>;
 
 function CellContent({ colKey, creator }: { colKey: ColumnKey; creator: Creator }) {
   switch (colKey) {
@@ -276,7 +272,7 @@ function CreatorsTable({
             type="button"
             onClick={() => onSort(col.key)}
             className={cn(
-              "flex cursor-pointer items-center gap-1 py-3 text-xs font-medium tracking-[-0.02em] transition-colors",
+              "flex cursor-pointer items-center gap-1 whitespace-nowrap py-3 text-xs font-medium tracking-[-0.02em] transition-colors",
               col.align === "right" ? "justify-end pl-3 pr-3" : "pr-3",
               sortKey === col.key ? "text-page-text" : "text-page-text-muted hover:text-page-text",
             )}
@@ -327,102 +323,6 @@ function CreatorsTable({
       ))}
       </div>
     </div>
-  );
-}
-
-// ── Column Settings Dropdown ─────────────────────────────────────────
-
-const COLUMNS_DROPDOWN_EASING = [0.16, 1, 0.3, 1] as const;
-
-function ColumnsDropdown({
-  columnOrder,
-  hiddenColumns,
-  onToggleColumn,
-  onReorder,
-  onClose,
-}: {
-  columnOrder: ColumnKey[];
-  hiddenColumns: Set<ColumnKey>;
-  onToggleColumn: (key: ColumnKey) => void;
-  onReorder: (from: number, to: number) => void;
-  onClose: () => void;
-}) {
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const dragItem = useRef<number | null>(null);
-
-  useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (dropdownRef.current?.contains(target)) return;
-      onClose();
-    };
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, [onClose]);
-
-  return (
-    <motion.div
-      ref={dropdownRef}
-      className="absolute right-0 top-full z-50 mt-1 w-[220px] overflow-hidden rounded-xl border border-border bg-card-bg p-1 shadow-lg"
-      initial={{ opacity: 0, y: -2, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -2, scale: 0.98 }}
-      transition={{ duration: 0.2, ease: COLUMNS_DROPDOWN_EASING }}
-    >
-      <div className="px-2.5 py-2">
-        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Columns</span>
-      </div>
-      <Dropdown>
-        {columnOrder.map((key, idx) => {
-          const col = COLUMN_MAP[key];
-          const isCreator = key === "creator";
-          const isHidden = hiddenColumns.has(key);
-          return (
-            <div
-              key={key}
-              data-proximity-index={idx}
-              draggable={!isCreator}
-              onDragStart={() => { dragItem.current = idx; }}
-              onDragEnter={(e) => {
-                e.preventDefault();
-                if (dragItem.current !== null && dragItem.current !== idx) {
-                  onReorder(dragItem.current, idx);
-                  dragItem.current = idx;
-                }
-              }}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnd={() => { dragItem.current = null; }}
-              className={cn(
-                "relative z-10 flex items-center gap-2 rounded-lg px-2.5 py-2",
-                !isCreator && "cursor-grab active:cursor-grabbing",
-                isCreator && "opacity-50",
-              )}
-            >
-              {/* Drag handle */}
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className={cn("shrink-0 text-page-text-muted", isCreator && "invisible")}>
-                <circle cx="4" cy="3" r="1" fill="currentColor" />
-                <circle cx="8" cy="3" r="1" fill="currentColor" />
-                <circle cx="4" cy="6" r="1" fill="currentColor" />
-                <circle cx="8" cy="6" r="1" fill="currentColor" />
-                <circle cx="4" cy="9" r="1" fill="currentColor" />
-                <circle cx="8" cy="9" r="1" fill="currentColor" />
-              </svg>
-              <span className="flex-1 font-inter text-sm tracking-[-0.02em] text-page-text">{col.label}</span>
-              {/* Checkmark toggle */}
-              <button
-                type="button"
-                disabled={isCreator}
-                onClick={() => onToggleColumn(key)}
-                className="flex size-5 shrink-0 items-center justify-center"
-              >
-                {!isHidden && <Check className="size-4 text-page-text" strokeWidth={2.5} />}
-              </button>
-            </div>
-          );
-        })}
-      </Dropdown>
-    </motion.div>
   );
 }
 
@@ -634,9 +534,6 @@ const FILTER_TABS = [
 export default function CreatorsPage() {
   const [activeNavTab, setActiveNavTab] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState(0);
-  const [columnOrder, setColumnOrder] = useState<ColumnKey[]>(DEFAULT_COLUMN_ORDER);
-  const [hiddenColumns, setHiddenColumns] = useState<Set<ColumnKey>>(new Set());
-  const [columnsOpen, setColumnsOpen] = useState(false);
   const [sortKey, setSortKey] = useState<ColumnKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [dubActiveFilters, setDubActiveFilters] = useState<ActiveFilter[]>([]);
@@ -663,28 +560,7 @@ export default function CreatorsPage() {
     }
   }, [sortKey]);
 
-  const toggleColumn = useCallback((key: ColumnKey) => {
-    setHiddenColumns((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  }, []);
-
-  const reorderColumns = useCallback((from: number, to: number) => {
-    setColumnOrder((prev) => {
-      const next = [...prev];
-      const [item] = next.splice(from, 1);
-      next.splice(to, 0, item);
-      return next;
-    });
-  }, []);
-
-  const visibleColumns = useMemo(
-    () => columnOrder.filter((k) => !hiddenColumns.has(k)).map((k) => COLUMN_MAP[k]),
-    [columnOrder, hiddenColumns],
-  );
+  const visibleColumns = ALL_COLUMNS;
 
   return (
     <div>
@@ -769,7 +645,6 @@ export default function CreatorsPage() {
                   searchPlaceholder="Sort & filter..."
                 >
                   <button
-                    onClick={() => setColumnsOpen(false)}
                     className={cn(
                       "flex cursor-pointer items-center gap-0.5 transition-colors",
                       hasActive
@@ -795,32 +670,6 @@ export default function CreatorsPage() {
               );
             })()}
 
-            {/* Columns toggle */}
-            <div className="relative">
-              <button
-                onClick={() => setColumnsOpen((v) => !v)}
-                className={cn(
-                  "flex size-9 items-center justify-center rounded-2xl transition-colors",
-                  columnsOpen ? "bg-foreground text-page-bg" : "bg-accent text-page-text hover:bg-accent",
-                )}
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <rect x="1" y="1" width="4" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" fill="none" />
-                  <rect x="9" y="1" width="4" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" fill="none" />
-                </svg>
-              </button>
-              <AnimatePresence>
-                {columnsOpen && (
-                  <ColumnsDropdown
-                    columnOrder={columnOrder}
-                    hiddenColumns={hiddenColumns}
-                    onToggleColumn={toggleColumn}
-                    onReorder={reorderColumns}
-                    onClose={() => setColumnsOpen(false)}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
           </div>
         </div>
 
