@@ -14,6 +14,8 @@ import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import { FilterSelect, type Filter, type ActiveFilter } from "@/components/ui/dub-filter";
+import { Modal } from "@/components/ui/modal";
+import { CreatorDetailsPopup, type CreatorDetailsData } from "@/components/creators/CreatorDetailsPopup";
 
 // ── Filter Icon ─────────────────────────────────────────────────────
 
@@ -203,11 +205,13 @@ function CreatorsTable({
   sortKey,
   sortDir,
   onSort,
+  onCreatorClick,
 }: {
   columns: Column[];
   sortKey: ColumnKey | null;
   sortDir: SortDir;
   onSort: (key: ColumnKey) => void;
+  onCreatorClick?: (creator: Creator) => void;
 }) {
   const tableRef = useRef<HTMLDivElement>(null);
   const {
@@ -303,6 +307,7 @@ function CreatorsTable({
           data-proximity-index={i}
           className="relative z-10 grid cursor-pointer px-1 font-[family-name:var(--font-inter)]"
           style={{ gridTemplateColumns: gridTemplate }}
+          onClick={() => onCreatorClick?.(creator)}
         >
           <div className="flex items-center justify-center py-3 pr-3 pl-2">
             <span className="w-full text-right text-xs font-medium tracking-[-0.02em] text-page-text-muted">{i + 1}</span>
@@ -518,6 +523,109 @@ function MobileCreatorsTable() {
   );
 }
 
+// ── Generate performance chart data ──────────────────────────────────
+
+import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
+
+function generatePerformanceData(): AnalyticsPocPerformanceLineChartData {
+  const points = [];
+  const base = new Date(2026, 0, 5);
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(base);
+    d.setDate(base.getDate() + i);
+    const label = `${d.toLocaleString("en", { month: "short" })} ${d.getDate()}`;
+    points.push({
+      index: i,
+      label,
+      views: Math.floor(30000 + Math.random() * 70000),
+      engagement: Math.round((2 + Math.random() * 6) * 10) / 10,
+      likes: Math.floor(5000 + Math.random() * 20000),
+      comments: Math.floor(500 + Math.random() * 5000),
+      shares: Math.floor(200 + Math.random() * 2000),
+    });
+  }
+
+  const xTicks = points.filter((_, i) => i % 5 === 0).map((p) => ({ index: p.index, label: p.label }));
+
+  return {
+    datasets: { daily: points, cumulative: points },
+    leftDomain: [0, 100000],
+    rightDomain: [0, 8],
+    rightYLabels: ["8%", "6%", "4%", "2%", "0%"],
+    yLabels: ["100k", "75k", "50k", "25k", "0"],
+    xTicks,
+    series: [
+      { key: "views", label: "Views", color: "#1A67E5", axis: "left", domain: [0, 100000], yLabels: ["100k", "75k", "50k", "25k", "0"], tooltipValueType: "number" },
+      { key: "likes", label: "Likes", color: "#DA5597", axis: "left", domain: [0, 25000], yLabels: ["25k", "20k", "15k", "10k", "0"], tooltipValueType: "number" },
+      { key: "comments", label: "Comments", color: "#E57100", axis: "left", domain: [0, 6000], yLabels: ["6k", "4.5k", "3k", "1.5k", "0"], tooltipValueType: "number" },
+      { key: "shares", label: "Shares", color: "#55B685", axis: "left", domain: [0, 3000], yLabels: ["3k", "2.25k", "1.5k", "750", "0"], tooltipValueType: "number" },
+    ],
+  };
+}
+
+function creatorToDetails(creator: Creator): CreatorDetailsData {
+  return {
+    name: creator.name,
+    joinedDate: creator.joined,
+    lastActive: "2d ago",
+    videoCount: 42,
+    platforms: creator.platforms,
+    category: "Gaming",
+    followers: "373K",
+    rating: "Legendary",
+    ratingStars: 6,
+    totalEarned: "$2,415.80",
+    engagementScore: creator.engScore,
+    engagementRate: creator.engRate,
+    sentiment: creator.sentiment,
+    approvedVideos: 37,
+    approvalRate: "88%",
+    connectedAccounts: [
+      { platform: "tiktok", handle: `@${creator.name.toLowerCase()}`, followers: "245K followers" },
+      { platform: "youtube", handle: `@${creator.name}Gaming`, followers: "128K followers" },
+    ],
+    matchScore: creator.match,
+    scoreBreakdown: { niche: 88, audience: 91, pastPerformance: 96 },
+    campaigns: [
+      { name: "Gambling Summer Push", cpm: "$0.84 CPM" },
+    ],
+    performanceData: generatePerformanceData(),
+    performanceStats: { views: "1.2M", likes: "48K", comments: "3.2K", shares: "1.1K" },
+    submissions: [
+      { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+      { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+      { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+    ],
+    demographics: {
+      ageGroups: [
+        { label: "13 - 17", percentage: 12, color: "rgba(174, 78, 238, 0.1)" },
+        { label: "18 - 24", percentage: 45, color: "rgba(0, 153, 77, 0.08)" },
+        { label: "24 - 34", percentage: 28, color: "rgba(238, 78, 81, 0.1)" },
+        { label: "35+", percentage: 15, color: "rgba(26, 103, 229, 0.08)" },
+      ],
+      countries: [
+        { code: "US", label: "USA", percentage: 48, color: "rgba(174, 78, 238, 0.1)" },
+        { code: "GB", label: "UK", percentage: 14, color: "rgba(0, 153, 77, 0.08)" },
+        { code: "CA", label: "CA", percentage: 9, color: "rgba(6, 182, 212, 0.1)" },
+        { code: "DE", label: "DE", percentage: 6, color: "rgba(238, 78, 81, 0.1)" },
+        { code: "AU", label: "AU", percentage: 5, color: "rgba(229, 113, 0, 0.1)" },
+        { code: "US", label: "Other", percentage: 18, color: "rgba(26, 103, 229, 0.08)" },
+      ],
+      genderSplit: [
+        { label: "Male", percentage: 62, color: "rgba(26, 103, 229, 0.1)" },
+        { label: "Female", percentage: 34, color: "rgba(218, 85, 151, 0.1)" },
+      ],
+      interests: [
+        { icon: "Gaming", label: "Gaming", percentage: 72 },
+        { icon: "Tech", label: "Tech", percentage: 45 },
+        { icon: "Entertainment", label: "Entertainment", percentage: 38 },
+        { icon: "Sports", label: "Sports", percentage: 22 },
+        { icon: "Music", label: "Music", percentage: 18 },
+      ],
+    },
+  };
+}
+
 // ── Page ─────────────────────────────────────────────────────────────
 
 const NAV_TABS = ["Creators", "Insights"];
@@ -531,12 +639,106 @@ const FILTER_TABS = [
   { name: "Blocked", count: 3 },
 ];
 
+// ── Scores & Matches Modal ──────────────────────────────────────────
+
+const SCORE_CARDS = [
+  {
+    title: "AI Quality Score",
+    description:
+      "Measures how well a submission meets the campaign\u2019s content, visual, and audio requirements. Scored 0\u2013100. Calculated by: AI content analysis.",
+  },
+  {
+    title: "Bot Score",
+    description:
+      "Detects artificial engagement on a submission. Higher means more suspicious activity. Calculated by: Engagement pattern analysis.",
+  },
+  {
+    title: "Match Score",
+    description:
+      "How well a creator\u2019s profile and audience align with a campaign. Higher is a stronger fit. Calculated by: Profile + audience data.",
+  },
+  {
+    title: "Engagement Score",
+    description:
+      "Measures the real quality of engagement a video receives, beyond just view counts. Scored 0\u2013100. Calculated by: Comment quality, save rate, share-to-like ratio, watch time, replay rate, follower-to-viewer ratio",
+  },
+] as const;
+
+function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Modal open={open} onClose={onClose} showClose={false}>
+      <div className="relative flex max-h-[90vh] flex-col">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 flex size-6 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/30 transition-colors hover:bg-foreground/[0.10]"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        <div className="scrollbar-hide flex flex-col items-center gap-4 overflow-y-auto p-5">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative flex size-14 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_var(--card-bg)]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 21H15M12 3C8.68629 3 6 5.68629 6 9C6 11.2208 7.20832 13.1599 9 14.1973V16C9 16.5523 9.44772 17 10 17H14C14.5523 17 15 16.5523 15 16V14.1973C16.7917 13.1599 18 11.2208 18 9C18 5.68629 15.3137 3 12 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <div
+                className="pointer-events-none absolute inset-0 rounded-full"
+                style={{
+                  background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)",
+                  mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  maskComposite: "exclude",
+                  WebkitMaskComposite: "xor",
+                  padding: 1,
+                }}
+              />
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <h2 className="font-inter text-lg font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                Understanding Scores and Matches
+              </h2>
+              <p className="max-w-[300px] text-center font-inter text-sm font-normal leading-[1.5] tracking-[-0.02em] text-foreground/70">
+                These metrics help you make faster, more informed decisions.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col gap-2">
+            {SCORE_CARDS.map((card) => (
+              <div key={card.title} className="flex flex-col gap-2 rounded-2xl border border-border bg-card-bg p-4">
+                <span className="font-inter text-sm font-medium leading-[1] tracking-[-0.02em] text-page-text">
+                  {card.title}
+                </span>
+                <p className="font-inter text-sm font-normal leading-[1.5] tracking-[-0.02em] text-foreground/50">
+                  {card.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex w-full shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 export default function CreatorsPage() {
   const [activeNavTab, setActiveNavTab] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [sortKey, setSortKey] = useState<ColumnKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [dubActiveFilters, setDubActiveFilters] = useState<ActiveFilter[]>([]);
+  const [scoresOpen, setScoresOpen] = useState(false);
+  const [selectedCreator, setSelectedCreator] = useState<CreatorDetailsData | null>(null);
 
   const handleFilterSelect = useCallback((key: string, value: string | string[]) => {
     const v = Array.isArray(value) ? value[0] : value;
@@ -575,7 +777,11 @@ export default function CreatorsPage() {
 
         {/* Right actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <button className="flex h-9 items-center gap-1.5 rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent">
+          <button
+            type="button"
+            onClick={() => setScoresOpen(true)}
+            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent"
+          >
             Understanding scores &amp; matches
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" />
@@ -711,10 +917,20 @@ export default function CreatorsPage() {
             <MobileCreatorsTable />
           </div>
           <div className="hidden md:block">
-            <CreatorsTable columns={visibleColumns} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+            <CreatorsTable columns={visibleColumns} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} onCreatorClick={(c) => setSelectedCreator(creatorToDetails(c))} />
           </div>
         </div>
       </div>
+
+      <ScoresModal open={scoresOpen} onClose={() => setScoresOpen(false)} />
+
+      {selectedCreator && (
+        <CreatorDetailsPopup
+          open={!!selectedCreator}
+          onClose={() => setSelectedCreator(null)}
+          creator={selectedCreator}
+        />
+      )}
     </div>
   );
 }
