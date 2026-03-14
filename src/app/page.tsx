@@ -1018,7 +1018,7 @@ function DashboardView() {
   return (
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-5">
       {/* AI Tip Banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:gap-4">
+      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:gap-4">
         <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
         <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-3">
           <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
@@ -1038,7 +1038,7 @@ function DashboardView() {
       {/* KPI Cards Row — subgrid aligns numbers across all 5 cards */}
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:flex-nowrap">
         {/* Balance card — fixed 320px on lg+, full width on mobile */}
-        <div className="flex w-full flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0">
+        <div className="flex w-full flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0">
           <div className="flex items-center gap-1.5">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Balance</span>
           </div>
@@ -1061,7 +1061,7 @@ function DashboardView() {
         </div>
 
         {/* Active */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
             <MiniSparkline />
@@ -1076,7 +1076,7 @@ function DashboardView() {
         </div>
 
         {/* Views */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
             <MiniSparkline />
@@ -1088,7 +1088,7 @@ function DashboardView() {
         </div>
 
         {/* Avg CPM */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
             <MiniSparkline />
@@ -1100,7 +1100,7 @@ function DashboardView() {
         </div>
 
         {/* Paid Out */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
             <MiniSparkline />
@@ -1115,9 +1115,9 @@ function DashboardView() {
       {/* Active Campaigns + Needs Attention Row */}
       <div className="flex flex-col gap-2 lg:flex-row">
         {/* Active Campaigns Table */}
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#202020] dark:bg-[#121212]">
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#2a2a2a] dark:bg-[#191919]">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border px-4 py-2.5 dark:border-[#202020] sm:px-6">
+          <div className="flex items-center justify-between border-b border-border px-4 py-2.5 dark:border-[#2a2a2a] sm:px-6">
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Active Campaigns</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
@@ -1173,7 +1173,7 @@ function DashboardView() {
         </div>
 
         {/* Needs Attention */}
-        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:w-[300px] lg:shrink-0">
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:w-[300px] lg:shrink-0">
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs Attention</span>
           <div className="flex flex-col gap-2">
             {ATTENTION_ITEMS.map((item, i) => (
@@ -1202,7 +1202,7 @@ function DashboardView() {
 
       {/* AI Weekly Insight */}
       <div
-        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4"
+        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4"
       >
         <div
           className="pointer-events-none absolute inset-0 dark:blur-[40px]"
@@ -1230,7 +1230,7 @@ function DashboardView() {
       {/* Bottom Row: Recent Activity + Top Creators + Pending Drafts */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Recent Activity */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -1280,7 +1280,7 @@ function DashboardView() {
         </div>
 
         {/* Top Creators This Week */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators this week</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -1290,7 +1290,7 @@ function DashboardView() {
           </div>
           <div className="flex flex-col gap-2">
             {/* #1 — featured card */}
-            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4">
+            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4">
               {/* Badge */}
               <div className="absolute left-4 top-4 flex h-10 items-center gap-2 rounded-full bg-[#FF9025] px-3">
                 <CrownIcon className="size-4 text-white" />
@@ -1326,7 +1326,7 @@ function DashboardView() {
         </div>
 
         {/* Pending Drafts */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -1372,7 +1372,7 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn("dark:bg-[#0a0a0a]", showOnboarding ? "flex min-h-full flex-col" : "")}>
+    <div className={cn("dark:bg-[#111111]", showOnboarding ? "flex min-h-full flex-col" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div

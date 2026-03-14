@@ -344,11 +344,11 @@ nav [data-active="true"] svg path {
   --secondary-foreground: #e5e5e5;
   --accent: rgba(255, 255, 255, 0.06);
   --accent-foreground: #e5e5e5;
-  --border: #2e2e2e;
-  --input: #3a3a3a;
-  --muted: #252525;
+  --border: #2a2a2a;
+  --input: #333333;
+  --muted: #222222;
 
-  /* Sidebar theme tokens */
+  /* Sidebar theme tokens — intentionally unchanged */
   --sidebar-bg: #1a1a1a;
   --sidebar-border: #2a2a2a;
   --sidebar-text: #e5e5e5;
@@ -361,8 +361,8 @@ nav [data-active="true"] svg path {
   --sidebar-section-label: rgba(255, 255, 255, 0.4);
 
   /* Page theme tokens */
-  --page-bg: #151515;
-  --page-outer-bg: #111111;
+  --page-bg: #111111;
+  --page-outer-bg: #0a0a0a;
   --page-border: rgba(255, 255, 255, 0.06);
   --page-text: #e5e5e5;
   --page-text-muted: rgba(255, 255, 255, 0.45);
@@ -370,28 +370,28 @@ nav [data-active="true"] svg path {
   --changelog-dim: rgba(255, 255, 255, 0.06);
 
   /* Card tokens */
-  --card-bg: #1d1b19;
-  --card-border: #2e2e2e;
+  --card-bg: #191919;
+  --card-border: #2a2a2a;
 
   /* Dropdown tokens */
-  --dropdown-bg: #1d1b19;
-  --dropdown-border: #2e2e2e;
+  --dropdown-bg: #191919;
+  --dropdown-border: #2a2a2a;
   --dropdown-hover: rgba(255, 255, 255, 0.06);
   --dropdown-text: #e5e5e5;
   --dropdown-text-muted: #737373;
 
   /* Tooltip */
-  --tooltip-bg: #2c2c2c;
+  --tooltip-bg: #2a2a2a;
   --tooltip-text: #ffffff;
   --tooltip-text-muted: #a3a3a3;
 
   /* Affiliate dashboard tokens */
-  --af-bg: #151515;
-  --af-bg-page: #151515;
-  --af-bg-card-color: #1e1e1e;
+  --af-bg: #111111;
+  --af-bg-page: #111111;
+  --af-bg-card-color: #191919;
   --af-bg-card-blend: normal;
   --af-bg-input: rgba(255, 255, 255, 0.06);
-  --af-bg-dropdown: #1f1d1b;
+  --af-bg-dropdown: #191919;
   --af-text: #ffffff;
   --af-text-secondary: rgba(255, 255, 255, 0.72);
   --af-text-muted: rgba(255, 255, 255, 0.56);
