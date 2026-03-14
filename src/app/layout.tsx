@@ -6,6 +6,7 @@ import { SideNavProvider } from "@/components/sidebar/sidebar-context";
 import { MainNav } from "@/components/sidebar/main-nav";
 import { ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChatWidget } from "@/components/chat-widget";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           <ToastProvider position="bottom-right">
             <SideNavProvider>
               <MainNav>{children}</MainNav>
+              {/* <ChatWidget /> */}
             </SideNavProvider>
           </ToastProvider>
         </ThemeProvider>

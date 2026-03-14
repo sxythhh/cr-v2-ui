@@ -738,33 +738,100 @@ const SUBMISSION_FILTERS: Filter[] = [
 
 function FullscreenCommentInput({ formatTime, currentTime }: { formatTime: (s: number) => string; currentTime: number }) {
   const [comment, setComment] = useState("");
+  const [attachments, setAttachments] = useState<{ id: string; type: "image" | "pdf"; src?: string }[]>([
+    { id: "img-1", type: "image", src: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=128&h=128&fit=crop" },
+    { id: "pdf-1", type: "pdf" },
+  ]);
+
+  const removeAttachment = useCallback((id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+  }, []);
+
+  const addAttachment = useCallback(() => {
+    const types: ("image" | "pdf")[] = ["image", "pdf"];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const id = `${type}-${Date.now()}`;
+    const src = type === "image"
+      ? `https://picsum.photos/128/128?random=${Date.now()}`
+      : undefined;
+    setAttachments((prev) => [...prev, { id, type, src }]);
+  }, []);
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="size-6 shrink-0 overflow-hidden rounded-md border border-foreground/[0.06] bg-page-text-muted/20" />
-      <div className="flex h-10 flex-1 items-center gap-2 rounded-full border border-foreground/[0.06] bg-white pl-1 pr-1 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg">
-        <button className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]"><PaperclipAttachIcon /></button>
-        <input
-          type="text"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && comment.trim()) {
-              e.preventDefault();
-              setComment("");
-            }
-          }}
-          className="min-w-0 flex-1 bg-transparent font-inter text-sm leading-none tracking-[-0.02em] text-page-text outline-none placeholder:text-[rgba(37,37,37,0.4)] dark:placeholder:text-page-text-muted/40"
-          placeholder="Leave a comment..."
-        />
-        {comment.trim() && (
-          <button
-            onClick={() => setComment("")}
-            className="flex h-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground px-3 dark:bg-white"
-          >
-            <span className="font-inter text-xs font-medium whitespace-nowrap tracking-[-0.02em] text-white dark:text-black">Comment at {formatTime(currentTime)}</span>
-          </button>
+    <div className="flex items-start gap-2">
+      {/* Workspace avatar */}
+      <img
+        src="https://i.pravatar.cc/36?u=outpace"
+        alt="Outpace Studios"
+        className="size-6 shrink-0 rounded-md border border-foreground/[0.06] object-cover"
+      />
+
+      {/* Comment card */}
+      <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg">
+        {/* Attachments row */}
+        {attachments.length > 0 && (
+          <div className="flex items-center gap-3">
+            {attachments.map((att) =>
+              att.type === "image" ? (
+                <div key={att.id} className="relative size-16 shrink-0">
+                  <img
+                    src={att.src}
+                    alt=""
+                    className="size-full rounded-[10px] border border-foreground/[0.06] object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeAttachment(att.id)}
+                    className="absolute -right-1 -top-1 flex size-5 cursor-pointer items-center justify-center rounded-full bg-[#F2F2F2] dark:bg-[#444]"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" strokeWidth="1.14" strokeLinecap="round" className="text-foreground/30" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <InlinePdfThumb key={att.id} onRemove={() => removeAttachment(att.id)} />
+              ),
+            )}
+          </div>
         )}
+
+        {/* Text input */}
+        <div className="relative py-1">
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows={2}
+            className="scrollbar-hide w-full resize-none overflow-hidden bg-transparent font-inter text-sm leading-[100%] tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/40"
+            placeholder="Looking good now sir! approving and the payout should be otw."
+          />
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex items-center justify-between">
+          {/* Attachment button */}
+          <button
+            type="button"
+            onClick={addAttachment}
+            className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06]"
+          >
+            <PaperclipAttachIcon />
+          </button>
+
+          {/* Submit button */}
+          <button
+            type="button"
+            onClick={() => {
+              setComment("");
+              setAttachments([]);
+            }}
+            className="flex h-8 cursor-pointer items-center justify-center rounded-full bg-foreground px-3 dark:bg-white"
+          >
+            <span className="font-inter text-xs font-medium whitespace-nowrap tracking-[-0.02em] text-white dark:text-black">
+              Comment at {formatTime(currentTime)}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -793,6 +860,16 @@ function VideoPlayer({
   const [hoveredSpeed, setHoveredSpeed] = useState<number | null>(null);
   const [volume, setVolume] = useState(0.75);
   const [volumeOpen, setVolumeOpen] = useState(false);
+  const [highlightedComment, setHighlightedComment] = useState<string | null>(null);
+
+  // Scroll to highlighted comment and auto-clear after 2s
+  useEffect(() => {
+    if (!highlightedComment) return;
+    const el = document.querySelector(`[data-comment-id="${highlightedComment}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    const timer = setTimeout(() => setHighlightedComment(null), 2000);
+    return () => clearTimeout(timer);
+  }, [highlightedComment]);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const volumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const volumeBarRef = useRef<HTMLDivElement>(null);
@@ -1087,16 +1164,42 @@ function VideoPlayer({
                       </div>
                     </div>
                   )}
-                  {/* Track */}
-                  <div className="relative h-1 w-full rounded-full bg-white/20">
-                    {hoverPct !== null && hoverPct * 100 > progress && (
-                      <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${hoverPct * 100}%`, background: "rgba(255,255,255,0.4)" }} />
-                    )}
-                    <div className="absolute left-0 top-0 h-full rounded-full bg-white" style={{ width: `${progress}%` }} />
+                  {/* Track + comment markers wrapper */}
+                  <div className="relative h-1 w-full">
+                    {/* Track bar */}
+                    <div className="absolute inset-0 rounded-full bg-white/20">
+                      {hoverPct !== null && hoverPct * 100 > progress && (
+                        <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${hoverPct * 100}%`, background: "rgba(255,255,255,0.4)" }} />
+                      )}
+                      <div className="absolute left-0 top-0 h-full rounded-full bg-white" style={{ width: `${progress}%` }} />
+                    </div>
                     {/* Thumb */}
                     <div className="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ left: `${progress}%` }}>
                       <svg width="6" height="12" viewBox="0 0 6 12" fill="none"><rect width="6" height="12" rx="3" fill="white"/></svg>
                     </div>
+                    {/* Comment markers */}
+                    {totalDuration > 0 && (
+                      <>
+                        <TimelineCommentMarker
+                          timestamp={8}
+                          totalDuration={totalDuration}
+                          brandAvatar="https://i.pravatar.cc/36?u=outpace"
+                          brandName="Outpace Studios"
+                          creatorAvatar="https://i.pravatar.cc/36?u=xkaizen"
+                          creatorName="xKaizen"
+                          commentId="comment-00:08"
+                          onClick={(id) => setHighlightedComment(id)}
+                        />
+                        <TimelineCommentMarker
+                          timestamp={21}
+                          totalDuration={totalDuration}
+                          brandAvatar="https://i.pravatar.cc/36?u=outpace"
+                          brandName="Outpace Studios"
+                          commentId="reply-approve"
+                          onClick={(id) => setHighlightedComment(id)}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -1185,31 +1288,128 @@ function VideoPlayer({
             <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Timeline</span>
-                <button className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06]" onClick={() => setIsFullscreen(false)}><CloseIcon size={16} /></button>
+                <div className="flex items-center gap-1">
+                  {/* Filter button */}
+                  <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.06]">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
+                    </svg>
+                  </button>
+                  {/* Close button */}
+                  <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl" onClick={() => setIsFullscreen(false)}><CloseIcon size={16} /></button>
+                </div>
               </div>
-              <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 py-4">
-                {[
-                  { name: "xKaizen", time: "Tue 24 Feb 4:37 AM", action: "Posted video", icon: "tiktok" },
-                  { name: "xKaizen", time: "Wed 25 Feb 12:37 AM", action: "Submitted video", icon: "upload" },
-                  { name: "Outpace Studios", time: "Wed 25 Feb 1:21 AM", action: "You're mentioning the wrong competitor", icon: "comment", timestamp: "00:08", isWorkspace: true },
-                  { name: "xKaizen", time: "Wed 25 Feb 2:56 AM", action: "Fixed!", isReply: true },
-                ].map((item, i) => (
-                  <div key={i} className={cn("flex flex-col gap-2", item.isReply && "pl-[22px]")}>
-                    <div className="flex items-center gap-2">
-                      <div className={cn("size-4 shrink-0 bg-page-text-muted/30", item.isWorkspace ? "rounded" : "rounded-full")} />
-                      <div className="flex flex-1 items-center gap-[6px]">
-                        <span className="flex-1 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{item.name}</span>
-                        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.time}</span>
-                      </div>
-                    </div>
+              <div className="scrollbar-hide flex flex-1 flex-col gap-5 overflow-y-auto px-4 py-4">
+                {/* Event: Posted video */}
+                <TimelineEvent
+                  id="event-posted"
+                  avatar="https://i.pravatar.cc/36?u=xkaizen"
+                  actorType="creator"
+                  name="xKaizen"
+                  time="Tue 24 Feb 4:37 AM"
+                  highlighted={highlightedComment === "event-posted"}
+                  actionContent={
                     <div className="flex items-center gap-1 pl-6">
-                      {item.icon === "tiktok" && <TikTokIcon size={12} className="text-page-text-muted" />}
-                      {item.icon === "upload" && <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-page-text-muted"><path d="M6 2V10M6 2L3 5M6 2L9 5" stroke="currentColor" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                      {item.timestamp && <span className="rounded-full border border-foreground/[0.06] bg-card-bg px-[6px] py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle">{item.timestamp}</span>}
-                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">{item.action}</span>
+                      <PlatformIcon platform="tiktok" size={12} className="shrink-0 text-page-text-muted" />
+                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Posted video</span>
                     </div>
-                  </div>
-                ))}
+                  }
+                  connector="straight"
+                />
+
+                {/* Event: Submitted video */}
+                <TimelineEvent
+                  id="event-submitted"
+                  avatar="https://i.pravatar.cc/36?u=xkaizen"
+                  actorType="creator"
+                  name="xKaizen"
+                  time="Wed 25 Feb 12:37 AM"
+                  highlighted={highlightedComment === "event-submitted"}
+                  actionContent={
+                    <div className="flex items-center gap-1 pl-6">
+                      <TimelineUploadIcon />
+                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Submitted video</span>
+                    </div>
+                  }
+                  connector="straight"
+                />
+
+                {/* Event: Brand comment */}
+                <TimelineEvent
+                  id="comment-00:08"
+                  avatar="https://i.pravatar.cc/36?u=outpace"
+                  actorType="brand"
+                  name="Outpace Studios"
+                  time="Wed 25 Feb 1:21 AM"
+                  highlighted={highlightedComment === "comment-00:08"}
+                  actionContent={
+                    <div className="flex items-center gap-1 pl-6">
+                      <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span>
+                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">You&apos;re mentioning the wrong competitor</span>
+                    </div>
+                  }
+                  connector="l-shape"
+                />
+
+                {/* Reply: Fixed! */}
+                <TimelineEvent
+                  id="reply-00:08"
+                  avatar="https://i.pravatar.cc/36?u=xkaizen"
+                  actorType="creator"
+                  name="xKaizen"
+                  time="Wed 25 Feb 2:56 AM"
+                  indent
+                  highlighted={highlightedComment === "reply-00:08"}
+                  actionContent={
+                    <div className="flex items-center gap-1 pl-6">
+                      <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span>
+                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Fixed!</span>
+                    </div>
+                  }
+                  connector="reply-straight"
+                />
+
+                {/* Reply: Approval comment with PDF */}
+                <TimelineEvent
+                  id="reply-approve"
+                  avatar="https://i.pravatar.cc/36?u=outpace"
+                  actorType="brand"
+                  name="Outpace Studios"
+                  time="Wed 25 Feb 3:18 AM"
+                  indent
+                  highlighted={highlightedComment === "reply-approve"}
+                  actionContent={
+                    <>
+                      <div className="flex flex-col gap-0.5 pl-6">
+                        <div className="flex items-center gap-1">
+                          <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:21</span>
+                          <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Looking good now sir! approving and</span>
+                        </div>
+                        <span className="pl-0 font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">the payout should be otw.</span>
+                      </div>
+                      <div className="flex items-center gap-3 pl-6 pt-2">
+                        <InlinePdfThumb />
+                        <InlinePdfThumb />
+                      </div>
+                    </>
+                  }
+                />
+
+                {/* Event: Approved */}
+                <TimelineEvent
+                  id="event-approved"
+                  avatar="https://i.pravatar.cc/36?u=outpace"
+                  actorType="brand"
+                  name="Outpace Studios"
+                  time="Wed 25 Feb 3:19 AM"
+                  highlighted={highlightedComment === "event-approved"}
+                  actionContent={
+                    <div className="flex items-center gap-1 pl-6">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg>
+                      <span className="font-inter text-sm tracking-[-0.02em] text-[#00994D]">Approved video</span>
+                    </div>
+                  }
+                />
               </div>
               {/* Comment input + actions */}
               <div className="flex flex-col gap-2 border-t border-foreground/[0.06] p-3">
@@ -1906,6 +2106,208 @@ function DotMenuPopover({ aiSummaryHidden, onToggleAiSummary }: { aiSummaryHidde
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function TimelineCommentMarker({
+  timestamp,
+  totalDuration,
+  brandAvatar,
+  brandName,
+  creatorAvatar,
+  creatorName,
+  commentId,
+  onClick,
+}: {
+  timestamp: number;
+  totalDuration: number;
+  brandAvatar: string;
+  brandName: string;
+  creatorAvatar?: string;
+  creatorName?: string;
+  commentId: string;
+  onClick: (id: string) => void;
+}) {
+  const pct = (timestamp / totalDuration) * 100;
+
+  return (
+    <div
+      className="absolute -translate-x-1/2"
+      style={{ left: `${pct}%`, bottom: 6 }}
+    >
+      <button
+        type="button"
+        className="pointer-events-auto flex cursor-pointer items-center transition-transform hover:scale-110"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick(commentId);
+        }}
+      >
+        <img
+          src={brandAvatar}
+          alt={brandName}
+          className={cn("size-6 rounded-lg border-[1.5px] border-white object-cover", creatorAvatar && "mr-[-10px]")}
+        />
+        {creatorAvatar && (
+          <img
+            src={creatorAvatar}
+            alt={creatorName}
+            className="size-6 rounded-full border-[1.5px] border-white object-cover"
+          />
+        )}
+      </button>
+    </div>
+  );
+}
+
+function InlinePdfThumb({ onRemove }: { onRemove?: () => void }) {
+  // The Figma subtract boolean cuts from ~(51,64) to (64,51) — a corner triangle.
+  // 51/64 ≈ 79.7%
+  return (
+    <div className="relative size-16 shrink-0">
+      {/* Grey card with corner cut via clip-path */}
+      <div
+        className="size-full rounded-[10px] border border-foreground/[0.06] bg-[#D9D9D9] dark:bg-[#3a3a3a]"
+        style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%)" }}
+      />
+      {/* Fold flap SVG */}
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" className="absolute bottom-0 right-0">
+        <g filter="url(#filter0_di_pdf_fold)">
+          <path d="M1.70556 5.60837C1.7568 3.47449 3.47449 1.7568 5.60837 1.70556L14.1405 1.50066C14.366 1.49524 14.4828 1.76782 14.3233 1.92736L1.92736 14.3233C1.76782 14.4828 1.49524 14.366 1.50066 14.1405L1.70556 5.60837Z" fill="url(#paint0_pdf_fold)"/>
+        </g>
+        <defs>
+          <filter id="filter0_di_pdf_fold" x="0" y="0" width="14.8965" height="14.8965" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+            <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dx="-0.5" dy="-0.5"/>
+            <feGaussianBlur stdDeviation="0.5"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dx="0.5" dy="0.5"/>
+            <feGaussianBlur stdDeviation="0.25"/>
+            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.145098 0 0 0 0 0.145098 0 0 0 0 0.145098 0 0 0 0.12 0"/>
+            <feBlend mode="normal" in2="shape" result="effect2_innerShadow"/>
+          </filter>
+          <linearGradient id="paint0_pdf_fold" x1="5.79836" y1="5.30031" x2="8.28163" y2="7.98047" gradientUnits="userSpaceOnUse">
+            <stop offset="0.65" stopColor="white"/>
+            <stop offset="1" stopColor="#F2F2F2"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      {/* PDF badge */}
+      <div className="absolute bottom-1 left-1 flex h-4 items-center rounded-full border border-foreground/[0.06] bg-white px-1 dark:bg-[#2a2a2a]">
+        <span className="font-inter text-[10px] font-medium leading-none tracking-[-0.02em] text-foreground/70">PDF</span>
+      </div>
+      {/* Remove button */}
+      {onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="absolute -right-1 -top-1 z-10 flex size-5 cursor-pointer items-center justify-center rounded-full bg-[#F2F2F2] dark:bg-[#444]"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" strokeWidth="1.14" strokeLinecap="round" className="text-foreground/30" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function TimelineEvent({
+  id,
+  avatar,
+  actorType,
+  name,
+  time,
+  indent,
+  highlighted,
+  actionContent,
+  connector,
+}: {
+  id: string;
+  avatar: string;
+  actorType: "creator" | "brand";
+  name: string;
+  time: string;
+  indent?: boolean;
+  highlighted?: boolean;
+  actionContent: React.ReactNode;
+  connector?: "straight" | "l-shape" | "reply-straight";
+}) {
+  return (
+    <div
+      className="relative flex flex-col gap-2"
+      data-comment-id={id}
+    >
+      {/* Full-width highlight background */}
+      <div
+        className={cn(
+          "pointer-events-none absolute -inset-x-4 -inset-y-1.5 transition-colors duration-500",
+          highlighted ? "bg-foreground/[0.06]" : "bg-transparent",
+        )}
+      />
+      {/* Connector line — absolute, behind content */}
+      {connector && (
+        <div
+          className="absolute"
+          style={{ left: indent ? 30 : 8, top: 16 }}
+        >
+          {connector === "straight" && (
+            <div className="h-[46px] w-px bg-foreground/[0.12]" />
+          )}
+          {connector === "l-shape" && (
+            <svg width="22" height="63" viewBox="0 0 22 63" fill="none" className="overflow-visible">
+              <path d="M0.5 0V58C0.5 60.2091 2.29086 62 4.5 62H21.5" stroke="currentColor" className="text-foreground/[0.12]" strokeLinecap="round"/>
+            </svg>
+          )}
+          {connector === "reply-straight" && (
+            <div className="h-[50px] w-px bg-foreground/[0.12]" />
+          )}
+        </div>
+      )}
+
+      {/* Event content */}
+      <div
+        className={cn(
+          "relative flex flex-col gap-2",
+          indent && "pl-[22px]",
+        )}
+      >
+        {/* Name row: avatar + name + time */}
+        <div className="flex items-center gap-2">
+          <img
+            src={avatar}
+            alt={name}
+            className={cn(
+              "size-4 shrink-0 object-cover",
+              actorType === "brand"
+                ? "rounded border border-foreground/[0.06]"
+                : "rounded-full",
+            )}
+          />
+          <div className="flex flex-1 items-center gap-1.5">
+            <span className="flex-1 truncate font-inter text-sm font-medium leading-none tracking-[-0.02em] text-page-text">{name}</span>
+            <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">{time}</span>
+          </div>
+        </div>
+
+        {/* Action row */}
+        {actionContent}
+      </div>
+    </div>
+  );
+}
+
+function TimelineUploadIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path d="M8.5625 4.9375V7.5625C8.5625 8.11478 8.11478 8.5625 7.5625 8.5625H1.5625C1.01022 8.5625 0.5625 8.11478 0.5625 7.5625V4.9375M4.56249 0.5625V6.1875M4.56249 0.5625L6.8125 2.8125M4.56249 0.5625L2.3125 2.8125" stroke="currentColor" className="text-foreground/50" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
   );
 }
 

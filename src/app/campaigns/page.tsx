@@ -808,14 +808,32 @@ function TopUpModal({
             Easily set up an agreement with a creator.
           </span>
 
-          {/* Current Balance */}
-          <div className="flex items-center justify-between rounded-2xl border border-foreground/[0.06] bg-card-bg p-4">
-            <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
-              Current Balance
-            </span>
-            <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">
-              {fmt(currentBalance)}
-            </span>
+          {/* Balance summary */}
+          <div className="flex flex-col rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
+              <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
+                Current Balance
+              </span>
+              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">
+                {fmt(currentBalance)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
+                Deposit amount
+              </span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">
+                +{fmt(depositAmount)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
+                New balance after deposit
+              </span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
+                {fmt(newBalance)}
+              </span>
+            </div>
           </div>
 
           {/* Select amount */}
@@ -933,25 +951,6 @@ function TopUpModal({
             </div>
           </div>
 
-          {/* Summary */}
-          <div className="flex flex-col rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-            <div className="flex items-center justify-between border-b border-foreground/[0.03] px-3 py-3">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
-                Deposit amount
-              </span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">
-                +{fmt(depositAmount)}
-              </span>
-            </div>
-            <div className="flex items-center justify-between px-3 py-3">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
-                New balance after deposit
-              </span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                {fmt(newBalance)}
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Footer — pinned */}

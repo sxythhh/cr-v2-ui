@@ -115,6 +115,7 @@ const NAV_AREAS: SidebarNavAreas = {
           { name: "Contracts", icon: Contracts, href: "/contracts", description: "Manage creator contracts and agreements." },
           { name: "Analytics", icon: PieChart, href: "/analytics", description: "Performance metrics across all campaigns." },
           { name: "Applications", icon: Paperclip, href: "/applications", description: "Manage incoming creator applications." },
+          { name: "Finance", icon: FilledFinance, href: "/finances", description: "Billing, invoices, and financial reports." },
         ],
       },
       {
@@ -230,7 +231,6 @@ const NAV_AREAS: SidebarNavAreas = {
         name: "Workspace",
         items: [
           { name: "General", icon: Gear, href: "/settings", exact: true },
-          { name: "Finance", icon: FilledFinance, href: "/settings/billing" },
           { name: "Members", icon: UsersIcon, href: "/settings/members" },
           {
             name: "Integrations",

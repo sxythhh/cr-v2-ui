@@ -1,13 +1,7 @@
 "use client";
 
 import { Toast } from "@base-ui/react/toast";
-import {
-  IconAlertCircleFilled,
-  IconCircleCheckFilled,
-  IconInfoCircleFilled,
-  IconLoader2,
-  IconAlertTriangleFilled,
-} from "@tabler/icons-react";
+import { IconLoader2 } from "@tabler/icons-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,12 +9,44 @@ import { buttonVariants } from "@/components/ui/button";
 const toastManager = Toast.createToastManager();
 const anchoredToastManager = Toast.createToastManager();
 
+function ToastInfoIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-[rgba(37,37,37,0.5)] dark:text-white/70" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M7 0C3.13401 0 0 3.13401 0 7C0 10.866 3.13401 14 7 14C10.866 14 14 10.866 14 7C14 3.13401 10.866 0 7 0ZM7.66667 4.33333C7.66667 3.96514 7.36819 3.66667 7 3.66667C6.63181 3.66667 6.33333 3.96514 6.33333 4.33333V7.66667C6.33333 8.03486 6.63181 8.33333 7 8.33333C7.36819 8.33333 7.66667 8.03486 7.66667 7.66667V4.33333ZM7 9.33333C6.63181 9.33333 6.33333 9.63181 6.33333 10C6.33333 10.3682 6.63181 10.6667 7 10.6667C7.36819 10.6667 7.66667 10.3682 7.66667 10C7.66667 9.63181 7.36819 9.33333 7 9.33333Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function ToastSuccessIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M6.66667 0C2.98477 0 0 2.98477 0 6.66667C0 10.3486 2.98477 13.3333 6.66667 13.3333C10.3486 13.3333 13.3333 10.3486 13.3333 6.66667C13.3333 2.98477 10.3486 0 6.66667 0ZM9.18264 5.42218C9.41579 5.13721 9.37379 4.7172 9.08882 4.48405C8.80386 4.2509 8.38385 4.2929 8.15069 4.57786L5.61717 7.67439L4.80474 6.86195C4.54439 6.6016 4.12228 6.6016 3.86193 6.86195C3.60158 7.1223 3.60158 7.54441 3.86193 7.80476L5.19526 9.13809C5.32845 9.27128 5.51176 9.34191 5.69988 9.33253C5.88799 9.32314 6.06337 9.23462 6.18264 9.08885L9.18264 5.42218Z" fill="#00994D" />
+    </svg>
+  );
+}
+
+function ToastWarningIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="14" height="13" viewBox="0 0 14 13" fill="none" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M4.95407 0.992259C5.72583 -0.330751 7.63743 -0.330754 8.40919 0.992257L13.0878 9.01275C13.8656 10.3461 12.9038 12.0205 11.3602 12.0205H2.00301C0.459432 12.0205 -0.502312 10.3461 0.275454 9.01275L4.95407 0.992259ZM6.68229 4.02051C7.05048 4.02051 7.34896 4.31898 7.34896 4.68717V6.68717C7.34896 7.05536 7.05048 7.35384 6.68229 7.35384C6.3141 7.35384 6.01562 7.05536 6.01562 6.68717V4.68717C6.01562 4.31898 6.3141 4.02051 6.68229 4.02051ZM5.84896 8.68717C5.84896 8.22694 6.22205 7.85384 6.68229 7.85384C7.14253 7.85384 7.51562 8.22694 7.51562 8.68717C7.51562 9.14741 7.14253 9.52051 6.68229 9.52051C6.22205 9.52051 5.84896 9.14741 5.84896 8.68717Z" fill="#E57100" />
+    </svg>
+  );
+}
+
+function ToastErrorIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 6.66667C0 2.98477 2.98477 0 6.66667 0C10.3486 0 13.3333 2.98477 13.3333 6.66667C13.3333 10.3486 10.3486 13.3333 6.66667 13.3333C2.98477 13.3333 0 10.3486 0 6.66667ZM5.13807 4.19526C4.87772 3.93491 4.45561 3.93491 4.19526 4.19526C3.93491 4.45561 3.93491 4.87772 4.19526 5.13807L5.72386 6.66667L4.19526 8.19526C3.93491 8.45561 3.93491 8.87772 4.19526 9.13807C4.45561 9.39842 4.87772 9.39842 5.13807 9.13807L6.66667 7.60948L8.19526 9.13807C8.45561 9.39842 8.87772 9.39842 9.13807 9.13807C9.39842 8.87772 9.39842 8.45561 9.13807 8.19526L7.60948 6.66667L9.13807 5.13807C9.39842 4.87772 9.39842 4.45561 9.13807 4.19526C8.87772 3.93491 8.45561 3.93491 8.19526 4.19526L6.66667 5.72386L5.13807 4.19526Z" fill="#FF3355" />
+    </svg>
+  );
+}
+
 const TOAST_ICONS = {
-  error: IconAlertCircleFilled,
-  info: IconInfoCircleFilled,
+  error: ToastErrorIcon,
+  info: ToastInfoIcon,
   loading: IconLoader2,
-  success: IconCircleCheckFilled,
-  warning: IconAlertTriangleFilled,
+  success: ToastSuccessIcon,
+  warning: ToastWarningIcon,
 } as const;
 
 type ToastPosition =
@@ -76,7 +102,7 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
           return (
             <Toast.Root
               className={cn(
-                "absolute z-[calc(9999-var(--toast-index))] h-(--toast-calc-height) w-full select-none rounded-xl border border-border bg-popover text-foreground shadow-lg [transition:transform_.28s_cubic-bezier(.22,1,.36,1),opacity_.28s,height_.15s]",
+                "absolute z-[calc(9999-var(--toast-index))] h-(--toast-calc-height) w-full select-none rounded-[12px] border border-foreground/[0.06] bg-card-bg text-foreground shadow-[0px_4px_12px_rgba(0,0,0,0.12)] [transition:transform_.28s_cubic-bezier(.22,1,.36,1),opacity_.28s,height_.15s]",
                 // Base positioning using data-position
                 "data-[position*=right]:right-0 data-[position*=right]:left-auto",
                 "data-[position*=left]:right-auto data-[position*=left]:left-0",
@@ -127,14 +153,14 @@ function Toasts({ position = "bottom-right" }: { position: ToastPosition }) {
               }
               toast={toast}
             >
-              <Toast.Content className="pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3 text-sm transition-opacity duration-250 data-behind:not-data-expanded:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100">
-                <div className="flex gap-2">
+              <Toast.Content className="pointer-events-auto flex items-center justify-between gap-2 overflow-hidden py-3 pl-2.5 pr-3.5 text-sm font-medium tracking-[-0.02em] transition-opacity duration-250 data-behind:not-data-expanded:pointer-events-none data-behind:opacity-0 data-expanded:opacity-100">
+                <div className="flex items-center gap-2">
                   {Icon && (
                     <div
                       className="[&>svg]:h-lh [&>svg]:w-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
                       data-slot="toast-icon"
                     >
-                      <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=success]:text-success in-data-[type=warning]:text-warning in-data-[type=loading]:opacity-80" />
+                      <Icon className="in-data-[type=loading]:animate-spin in-data-[type=loading]:opacity-80" />
                     </div>
                   )}
 
@@ -226,7 +252,7 @@ function AnchoredToasts() {
                           className="[&>svg]:h-lh [&>svg]:w-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
                           data-slot="toast-icon"
                         >
-                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=success]:text-success in-data-[type=warning]:text-warning in-data-[type=loading]:opacity-80" />
+                          <Icon className="in-data-[type=loading]:animate-spin in-data-[type=loading]:opacity-80" />
                         </div>
                       )}
 

@@ -208,6 +208,7 @@ function ClawbackView({
 }) {
   const [selectedReason, setSelectedReason] = useState<string>("Deleted video");
   const [note, setNote] = useState("");
+  const [banUsers, setBanUsers] = useState(false);
 
   return (
     <>
@@ -316,6 +317,28 @@ function ClawbackView({
           />
         </div>
 
+        {/* Ban toggle */}
+        <div className="flex w-full items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(255,37,37,0.06)] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
+            Ban selected users
+          </span>
+          <button
+            type="button"
+            onClick={() => setBanUsers(!banUsers)}
+            className={cn(
+              "relative flex h-5 w-10 cursor-pointer items-center rounded-full p-0.5 transition-colors",
+              banUsers ? "bg-[#FF3355]" : "bg-foreground/[0.12]",
+            )}
+          >
+            <div
+              className={cn(
+                "size-4 rounded-full bg-white shadow-sm transition-transform",
+                banUsers ? "translate-x-5" : "translate-x-0",
+              )}
+            />
+          </button>
+        </div>
+
         {/* Info text */}
         <p className="text-center font-inter text-xs leading-[1.4] tracking-[-0.02em] text-foreground/70">
           Clawbacks are deducted from creators&apos; next payouts. If their balance is insufficient, it will be flagged for manual review. Creators will be notified via email and in-app.
@@ -337,7 +360,7 @@ function ClawbackView({
           type="button"
           className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.10)]"
         >
-          Confirm Clawback (3 payouts)
+          {banUsers ? "Confirm Clawback & Ban (3 payouts)" : "Confirm Clawback (3 payouts)"}
         </button>
       </div>
     </>
@@ -478,8 +501,8 @@ function PayoutDetailDialog({
                         </span>
                       </div>
                       <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-foreground/[0.06] py-2 pl-2.5 pr-3">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-page-text-muted">
-                          <path d="M2.5 8.5L6 2L9.5 8.5H2.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                        <svg width="8" height="10" viewBox="0 0 8 10" fill="none" className="text-page-text-muted">
+                          <path d="M3.86385 6.84551C2.8322 6.55356 1.96254 6.32022 1 6.68982V9.8644H0V0.554783L0.27717 0.416799C1.71923 -0.301105 3.00051 0.061716 4.09294 0.371061L4.13615 0.383293C5.26585 0.702988 6.20131 0.952399 7.27717 0.416799L8 0.0569506V6.67402L7.72283 6.812C6.28077 7.52991 4.99949 7.16708 3.90706 6.85774L3.86385 6.84551Z" fill="currentColor" />
                         </svg>
                         <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
                           Flag

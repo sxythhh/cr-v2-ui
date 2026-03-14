@@ -618,8 +618,20 @@ function PerformanceMainLineChartBody({
 }) {
   const chartHoverRootRef = useRef<HTMLDivElement>(null);
   const chartPlotAreaRef = useRef<HTMLDivElement>(null);
+  const [measuredPlotWidth, setMeasuredPlotWidth] = useState(0);
   const lineGradientIdPrefix = useId().replace(/:/g, "");
   const hoverFocusGradientIdPrefix = useId().replace(/:/g, "");
+
+  // Measure chart plot area width accurately via ResizeObserver
+  useEffect(() => {
+    const el = chartPlotAreaRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setMeasuredPlotWidth(entry.contentRect.width);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const dataset =
     lineChart.datasets[activeLineDataset] ?? lineChart.datasets.daily;
@@ -657,7 +669,9 @@ function PerformanceMainLineChartBody({
     }
   };
 
-  const chartPlotWidth = chartPlotAreaRef.current?.clientWidth ?? 0;
+  const chartPlotWidth = measuredPlotWidth || (chartPlotAreaRef.current?.clientWidth ?? 0);
+  // Use Recharts' activeCoordinate.x directly — it correctly maps data points
+  // within the SVG coordinate system (including chart margins).
   const activeHoverX =
     activeHover && chartPlotWidth > 0
       ? clampNumber(activeHover.x, 0, chartPlotWidth)
@@ -762,11 +776,11 @@ function PerformanceMainLineChartBody({
           </div>
         </div>
 
-        <div className="relative h-full min-h-0 flex-1" ref={chartPlotAreaRef}>
+        <div className="relative h-full min-h-0 min-w-0 flex-1" ref={chartPlotAreaRef}>
           <ResponsiveContainer height="100%" width="100%">
             <LineChart
               data={dataset}
-              margin={{ bottom: 2, left: 0, right: 32, top: 0 }}
+              margin={{ bottom: 2, left: 0, right: 4, top: 0 }}
               onClick={handleLineChartClick}
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
@@ -775,18 +789,21 @@ function PerformanceMainLineChartBody({
               <XAxis
                 dataKey="index"
                 domain={[0, dataset.length - 1]}
+                height={0}
                 hide
                 type="number"
               />
               <YAxis
                 domain={leftDomain}
                 hide
+                width={0}
                 yAxisId="left"
               />
               <YAxis
                 domain={rightDomain}
                 hide
                 orientation="right"
+                width={0}
                 yAxisId="right"
               />
 
@@ -928,7 +945,7 @@ function PerformanceMainLineChartBody({
         <div
           className="absolute top-0 bottom-0"
           style={{
-            right: 32,
+            right: 4,
             width: 0,
             borderLeft: "1px solid var(--foreground)",
             opacity: 0.2,
@@ -966,7 +983,7 @@ function PerformanceMainLineChartBody({
         </div>
 
         {/* Static end-date pill */}
-        <div className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center" style={{ right: 32, transform: "translateX(50%)" }}>
+        <div className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center" style={{ right: 4, transform: "translateX(50%)" }}>
           <span className="whitespace-nowrap rounded-full bg-foreground/[0.06] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
           </span>

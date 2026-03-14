@@ -10,6 +10,7 @@ import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
 import { RichButton } from "@/components/rich-button";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
+import { Modal } from "@/components/ui/modal";
 
 // ── Icons ──────────────────────────────────────────────────────────
 
@@ -343,33 +344,21 @@ function OnboardingStepRow({
       <div className="relative flex w-10 shrink-0 flex-col items-center">
         {/* Top connector */}
         {!isFirst && (
-          <div className="absolute left-1/2 top-0 h-[calc(50%-20px)] w-px -translate-x-1/2">
-            <div
-              className="h-full w-full transition-colors duration-500"
-              style={{
-                background: prevComplete && isComplete
-                  ? "linear-gradient(to bottom, #00B36E, #00B36E)"
-                  : prevComplete
-                    ? "linear-gradient(to bottom, rgba(0,179,110,0.3), rgba(0,0,0,0.06))"
-                    : "rgba(0,0,0,0.06)",
-              }}
-            />
-          </div>
+          <div
+            className="absolute left-1/2 top-0 h-[calc(50%-20px)] w-px -translate-x-1/2 transition-colors duration-500"
+            style={{
+              background: prevComplete && isComplete ? "#00B36E" : "rgba(0,0,0,0.03)",
+            }}
+          />
         )}
         {/* Bottom connector */}
         {!isLast && (
-          <div className="absolute bottom-0 left-1/2 h-[calc(50%-20px)] w-px -translate-x-1/2">
-            <div
-              className="h-full w-full transition-colors duration-500"
-              style={{
-                background: isComplete && nextComplete
-                  ? "linear-gradient(to bottom, #00B36E, #00B36E)"
-                  : isComplete
-                    ? "linear-gradient(to bottom, rgba(0,179,110,0.3), rgba(0,0,0,0.06))"
-                    : "rgba(0,0,0,0.06)",
-              }}
-            />
-          </div>
+          <div
+            className="absolute bottom-0 left-1/2 h-[calc(50%-20px)] w-px -translate-x-1/2 transition-colors duration-500"
+            style={{
+              background: isComplete && nextComplete ? "#00B36E" : "rgba(0,0,0,0.03)",
+            }}
+          />
         )}
         {/* Icon */}
         <div className="relative z-10 flex items-center justify-center self-center py-3">
@@ -689,6 +678,329 @@ function OnboardingView({
   );
 }
 
+// ── Transaction History ────────────────────────────────────────────
+
+const TRANSACTIONS = [
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
+];
+
+function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Modal open={open} onClose={onClose} size="md" showClose={true}>
+      <div className="flex flex-col items-center px-5 pb-0 pt-5">
+        {/* Hero */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-white/10 dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1)]">
+            <svg width="24" height="24" viewBox="0 0 16 16" fill="none">
+              <path d="M2 3.333V6h2.667" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2.34 10A6 6 0 1 0 2 8" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" />
+              <path d="M8 5.333V8l2 1.333" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <span className="font-inter text-lg font-medium tracking-[-0.02em] text-page-text">Transaction History</span>
+            <span className="max-w-[300px] text-center font-inter text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">
+              An overview of your past transactions; incoming and outgoing.
+            </span>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          {/* Header */}
+          <div className="flex items-center border-b border-foreground/[0.06] px-1">
+            <div className="w-[61px] px-3 py-3">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Date</span>
+            </div>
+            <div className="flex-1 px-3 py-3">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Description</span>
+            </div>
+            <div className="w-24 px-3 py-3 text-right">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Transaction</span>
+            </div>
+          </div>
+
+          {/* Rows */}
+          {TRANSACTIONS.map((tx, i) => (
+            <div key={i} className="flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
+              <div className="w-[61px] px-3 py-4">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">{tx.date}</span>
+              </div>
+              <div className="flex-1 px-3 py-4">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{tx.description}</span>
+              </div>
+              <div className="w-24 px-3 py-4 text-right">
+                <span className={cn("font-inter text-xs tabular-nums tracking-[-0.02em]", tx.color)}>{tx.amount}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="p-5">
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        >
+          Close
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function HistoryButton() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+      >
+        <HistoryIcon className="size-4" />
+        History
+      </button>
+      <TransactionHistoryModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
+// ── Top Up Campaign ───────────────────────────────────────────────
+
+const QUICK_AMOUNTS = ["$1,000", "$5,000", "$10,000", "$25,000", "$50,000"];
+const CURRENT_BALANCE = 14200;
+
+function DollarSignIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8.5 2a.5.5 0 0 0-1 0v1.02A3.5 3.5 0 0 0 4.5 6.5c0 1.526.94 2.604 2.11 3.225.586.31 1.218.542 1.78.747l.11.04v3.468a2.5 2.5 0 0 1-1.857-1.193.5.5 0 1 0-.846.532A3.5 3.5 0 0 0 7.5 14.98V16a.5.5 0 0 0 1 0v-1.02a3.5 3.5 0 0 0 3-3.48c0-1.526-.94-2.604-2.11-3.225A14 14 0 0 0 7.61 7.528l-.11-.04V4.02A2.5 2.5 0 0 1 9.357 5.21a.5.5 0 0 0 .846-.532A3.5 3.5 0 0 0 8.5 3.02V2z" />
+    </svg>
+  );
+}
+
+function EnvelopeIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-foreground/50">
+      <path d="M1.333 4.667A2 2 0 0 1 3.333 2.667h9.334a2 2 0 0 1 2 2v6.666a2 2 0 0 1-2 2H3.333a2 2 0 0 1-2-2V4.667zm1.474-.195a.667.667 0 0 0-.14.195v6.666c0 .369.298.667.666.667h9.334a.667.667 0 0 0 .666-.667V4.667a.667.667 0 0 0-.14-.195L8.39 7.942a.667.667 0 0 1-.78 0L2.807 4.472z" />
+    </svg>
+  );
+}
+
+function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [amount, setAmount] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const numericAmount = parseInt(amount.replace(/[^0-9]/g, ""), 10) || 0;
+  const newBalance = CURRENT_BALANCE + numericAmount;
+
+  const handleDeposit = () => {
+    if (numericAmount > 0) setSuccess(true);
+  };
+
+  const handleClose = () => {
+    onClose();
+    setTimeout(() => {
+      setAmount("");
+      setSuccess(false);
+    }, 200);
+  };
+
+  const handleQuickAmount = (val: string) => {
+    setAmount(val);
+  };
+
+  return (
+    <Modal open={open} onClose={handleClose} size="md" showClose={!success}>
+      {!success ? (
+        <>
+          {/* Header */}
+          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Top up campaign</span>
+          </div>
+
+          {/* Subtitle */}
+          <div className="flex items-center justify-center px-5 pt-5">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-foreground/70">
+              Easily set up an agreement with a creator.
+            </span>
+          </div>
+
+          {/* Form */}
+          <div className="flex flex-col gap-4 px-5 pb-5 pt-4">
+            {/* Amount card */}
+            <div className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+              <span className="font-inter text-xs tracking-[-0.02em] text-foreground/70">
+                Current balance: ${CURRENT_BALANCE.toLocaleString()}
+              </span>
+
+              {/* Input */}
+              <div className="flex h-10 items-center gap-2 rounded-full border border-foreground/[0.06] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/5">
+                <DollarSignIcon />
+                <input
+                  type="text"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text placeholder:text-foreground/40 focus:outline-none"
+                />
+              </div>
+
+              {/* Quick amounts */}
+              <div className="flex flex-wrap gap-2">
+                {QUICK_AMOUNTS.map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => handleQuickAmount(val)}
+                    className={cn(
+                      "flex h-8 cursor-pointer items-center justify-center rounded-full border px-3 font-inter text-xs font-medium tracking-[-0.02em] transition-colors",
+                      amount === val
+                        ? "border-foreground bg-foreground/[0.04] text-page-text"
+                        : "border-foreground/[0.12] bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-foreground/[0.2] dark:bg-white/5",
+                    )}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Summary card */}
+            <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+              <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D]">
+                  +${numericAmount.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">New balance after deposit</span>
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-page-text">
+                  ${newBalance.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-2 px-5 pb-5">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleDeposit}
+              className={cn(
+                "flex h-10 cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors",
+                numericAmount > 0
+                  ? "bg-foreground hover:bg-foreground/90"
+                  : "bg-foreground/60 cursor-not-allowed",
+              )}
+              disabled={numericAmount <= 0}
+            >
+              Deposit funds
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Success header */}
+          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Top up campaign</span>
+          </div>
+
+          {/* Success content with green gradient */}
+          <div className="flex flex-col items-center gap-4 px-5 pb-5 pt-[60px]" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0, 153, 77, 0.24) 0%, rgba(0, 153, 77, 0) 100%)" }}>
+            {/* Green checkmark */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex size-14 items-center justify-center rounded-full bg-[#00994D] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M14 2.333A11.667 11.667 0 1 0 14 25.667 11.667 11.667 0 0 0 14 2.333zm4.185 9.017a.833.833 0 0 0-1.203-1.153l-4.635 5.668-1.65-1.65a.833.833 0 0 0-1.178 1.178l2.333 2.334a.833.833 0 0 0 1.191.025l5.142-6.402z" fill="#FFFFFF" />
+                </svg>
+              </div>
+              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#00994D]">Top up successful</span>
+            </div>
+
+            {/* View receipt link */}
+            <div className="flex items-center gap-1">
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-foreground/50">View receipt</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/50" />
+              </svg>
+            </div>
+
+            {/* Summary card */}
+            <div className="w-full overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+              <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D]">
+                  +${numericAmount.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">New balance after deposit</span>
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-page-text">
+                  ${newBalance.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            {/* Email confirmation */}
+            <div className="flex items-center gap-1.5">
+              <EnvelopeIcon />
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
+                receipt sent to vlad@outpacestudios.com
+              </span>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="px-5 pb-5">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90"
+            >
+              Close
+            </button>
+          </div>
+        </>
+      )}
+    </Modal>
+  );
+}
+
+function TopUpButton() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+      >
+        <PlusIcon className="size-4" />
+        Top up
+      </button>
+      <TopUpModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
 // ── Dashboard View ─────────────────────────────────────────────────
 
 function DashboardView() {
@@ -706,7 +1018,7 @@ function DashboardView() {
   return (
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-5">
       {/* AI Tip Banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg p-4 sm:gap-4">
+      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:gap-4">
         <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
         <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-3">
           <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
@@ -726,7 +1038,7 @@ function DashboardView() {
       {/* KPI Cards Row — subgrid aligns numbers across all 5 cards */}
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:flex-nowrap">
         {/* Balance card — fixed 320px on lg+, full width on mobile */}
-        <div className="flex w-full flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg p-4 sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0">
+        <div className="flex w-full flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0">
           <div className="flex items-center gap-1.5">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Balance</span>
           </div>
@@ -749,22 +1061,22 @@ function DashboardView() {
         </div>
 
         {/* Active */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
             <MiniSparkline />
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
-            <div className="flex gap-1">
-              <span className="flex h-6 items-center rounded-full bg-[rgba(59,130,246,0.12)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#3B82F6]">3 CPM</span>
-              <span className="flex h-6 items-center rounded-full bg-[#FFF2E5] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF9025] dark:bg-[rgba(255,144,37,0.15)]">2 Retainer</span>
+            <div className="flex">
+              <span className="-mr-1 flex h-6 items-center rounded-full bg-[rgba(26,103,229,0.12)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#1A67E5]">3 CPM</span>
+              <span className="flex h-6 items-center rounded-full border-2 border-white bg-[#FFF2E5] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#E57100] dark:border-card-bg dark:bg-[rgba(229,113,0,0.15)]">2 Retainer</span>
             </div>
           </div>
         </div>
 
         {/* Views */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
             <MiniSparkline />
@@ -776,7 +1088,7 @@ function DashboardView() {
         </div>
 
         {/* Avg CPM */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
             <MiniSparkline />
@@ -788,7 +1100,7 @@ function DashboardView() {
         </div>
 
         {/* Paid Out */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
             <MiniSparkline />
@@ -803,9 +1115,9 @@ function DashboardView() {
       {/* Active Campaigns + Needs Attention Row */}
       <div className="flex flex-col gap-2 lg:flex-row">
         {/* Active Campaigns Table */}
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#202020] dark:bg-[#121212]">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border px-4 py-2.5 sm:px-6">
+          <div className="flex items-center justify-between border-b border-border px-4 py-2.5 dark:border-[#202020] sm:px-6">
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Active Campaigns</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
@@ -824,7 +1136,7 @@ function DashboardView() {
               {campaignActiveRect && (
                 <motion.div
                   key={campaignHover.sessionRef.current}
-                  className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
+                  className="pointer-events-none absolute bg-foreground/[0.04] dark:bg-white/[0.03]"
                   initial={{ opacity: 0, top: campaignActiveRect.top, left: campaignActiveRect.left, width: campaignActiveRect.width, height: campaignActiveRect.height }}
                   animate={{ opacity: 1, top: campaignActiveRect.top, left: campaignActiveRect.left, width: campaignActiveRect.width, height: campaignActiveRect.height }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -839,9 +1151,12 @@ function DashboardView() {
                   key={i}
                   ref={(el) => campaignHover.registerItem(i, el)}
                   data-proximity-index={i}
-                  className="flex cursor-pointer items-center px-4 transition-colors duration-150 sm:px-6"
+                  className={cn(
+                    "relative flex cursor-pointer items-center px-4 transition-colors duration-150 sm:px-6",
+                    i < CAMPAIGNS.length - 1 && "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-foreground/[0.03] dark:after:bg-white/[0.03] dark:after:shadow-[0_1px_0_0_#000]",
+                  )}
                 >
-                  <div className={cn("flex flex-1 items-center justify-between py-3", i < CAMPAIGNS.length - 1 && "border-b", hideBorder ? "border-transparent" : "border-foreground/[0.03]")}>
+                  <div className="flex flex-1 items-center justify-between py-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="size-8 shrink-0 rounded bg-foreground/[0.06]" />
                       <div className="flex min-w-0 flex-col gap-1.5">
@@ -858,7 +1173,7 @@ function DashboardView() {
         </div>
 
         {/* Needs Attention */}
-        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:w-[300px] lg:shrink-0">
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:w-[300px] lg:shrink-0">
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs Attention</span>
           <div className="flex flex-col gap-2">
             {ATTENTION_ITEMS.map((item, i) => (
@@ -887,7 +1202,7 @@ function DashboardView() {
 
       {/* AI Weekly Insight */}
       <div
-        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4"
+        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4"
       >
         <div
           className="pointer-events-none absolute inset-0 dark:blur-[40px]"
@@ -915,7 +1230,7 @@ function DashboardView() {
       {/* Bottom Row: Recent Activity + Top Creators + Pending Drafts */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Recent Activity */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -961,11 +1276,11 @@ function DashboardView() {
             ))}
           </div>
           {/* Fade out bottom */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent dark:from-[#121212]" />
         </div>
 
         {/* Top Creators This Week */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators this week</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -975,7 +1290,7 @@ function DashboardView() {
           </div>
           <div className="flex flex-col gap-2">
             {/* #1 — featured card */}
-            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg p-4">
+            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4">
               {/* Badge */}
               <div className="absolute left-4 top-4 flex h-10 items-center gap-2 rounded-full bg-[#FF9025] px-3">
                 <CrownIcon className="size-4 text-white" />
@@ -1007,11 +1322,11 @@ function DashboardView() {
               ))}
             </div>
           </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent dark:from-[#121212]" />
         </div>
 
         {/* Pending Drafts */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#202020] dark:bg-[#121212] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
             <button className="group flex cursor-pointer items-center gap-1.5">
@@ -1057,7 +1372,7 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={showOnboarding ? "flex min-h-full flex-col" : ""}>
+    <div className={cn("dark:bg-[#0a0a0a]", showOnboarding ? "flex min-h-full flex-col" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div
@@ -1091,7 +1406,9 @@ export default function Home() {
               transition={{ duration: 0.2, delay: 0.08, ease: EASE_OUT }}
             >
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
-              <NewCampaignButton />
+              <div className="flex items-center gap-2">
+                <NewCampaignButton />
+              </div>
             </motion.div>
             <DashboardView />
           </motion.div>
