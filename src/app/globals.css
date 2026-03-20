@@ -1,10 +1,28 @@
 @import "tailwindcss";
+@import "../styles/clipper-theme.css";
+@import "../styles/campaign-flow.css";
 
 @custom-variant dark (&:is(.dark *));
+
+html, body {
+  cursor: default;
+}
+button, [role="button"], a, label[for], select, summary, [tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+input, textarea, [contenteditable] {
+  cursor: text;
+}
 
 @theme {
   --animate-fade-in: fade-in 0.2s ease-out forwards;
   --animate-slide-up-fade: slide-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-enter-from-right: enter-from-right 0.15s ease;
+  --animate-enter-from-left: enter-from-left 0.15s ease;
+  --animate-exit-to-right: exit-to-right 0.15s ease;
+  --animate-exit-to-left: exit-to-left 0.15s ease;
+  --animate-scale-in-content: scale-in-content 0.2s ease;
+  --animate-scale-out-content: scale-out-content 0.2s ease;
 
   @keyframes fade-in {
     0% {
@@ -25,6 +43,36 @@
       transform: translateY(0);
     }
   }
+}
+
+@keyframes enter-from-right {
+  0% { opacity: 0; transform: translateX(200px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes enter-from-left {
+  0% { opacity: 0; transform: translateX(-200px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes exit-to-right {
+  0% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(200px); }
+}
+@keyframes exit-to-left {
+  0% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-200px); }
+}
+@keyframes scale-in-content {
+  0% { opacity: 0; transform: scale(0.95) rotateX(-10deg); }
+  100% { opacity: 1; transform: scale(1) rotateX(0deg); }
+}
+@keyframes scale-out-content {
+  0% { opacity: 1; transform: scale(1) rotateX(0deg); }
+  100% { opacity: 0; transform: scale(0.95) rotateX(-10deg); }
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @keyframes star-pop {
@@ -330,7 +378,39 @@ nav [data-active="true"] svg path {
   --af-watermark-opacity-end: 0.01;
 }
 
+/* Support page – light mode */
+:root {
+  --support-page-bg: #ffffff;
+  --support-surface-bg: #f5f5f5;
+  --support-elevated-bg: #eeeeee;
+  --support-hover-bg: #e8e8e8;
+  --support-border: #e0e0e0;
+  --support-text-primary: #1a1a1a;
+  --support-text-secondary: #555555;
+  --support-text-muted: #888888;
+  --support-text-faint: #aaaaaa;
+  --support-search-bg: #f0f0f0;
+  --support-dropdown-bg: #f5f5f5;
+  --support-dropdown-hover: #ebebeb;
+  --support-sidebar-icon-bg: #eeeeee;
+}
+
 .dark {
+  /* Support page – dark mode */
+  --support-page-bg: #0a0a0a;
+  --support-surface-bg: #141413;
+  --support-elevated-bg: #1a1a1a;
+  --support-hover-bg: #222222;
+  --support-border: #1a1a1b;
+  --support-text-primary: #ffffff;
+  --support-text-secondary: #969696;
+  --support-text-muted: #696969;
+  --support-text-faint: #545454;
+  --support-search-bg: #0f0f0f;
+  --support-dropdown-bg: #0e0e0e;
+  --support-dropdown-hover: #181818;
+  --support-sidebar-icon-bg: #1a1a1a;
+
   --destructive-foreground: #f87171;
   --background: #151515;
   --foreground: #e5e5e5;

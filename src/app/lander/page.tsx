@@ -1,10 +1,10 @@
-import { LanderPage } from "@/components/lander/LanderPage";
+import { LanderPageClient } from "./page-client";
 
 export const metadata = {
-  title: "Features — Content Rewards",
-  description: "Task tracking, client management, team performance, and revenue tracking.",
+  title: "Dub.co — Landing Page",
+  description: "Dub.co landing page nav bar replica.",
 };
 
 export default function Page() {
-  return <LanderPage />;
+  return <LanderPageClient />;
 }

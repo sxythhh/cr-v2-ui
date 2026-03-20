@@ -129,6 +129,7 @@ export function SidebarNav({
   return (
     <div
       className="h-full"
+      data-slot="sidebar-nav"
       style={
         {
           width: targetWidth,
@@ -321,8 +322,13 @@ function SidebarAreasPanel({
         </div>
 
         {/* Nav items */}
-        <div className="min-h-0 flex-1 overflow-clip">
-          <div className="relative flex flex-col px-3 pb-3 text-sidebar-text-muted">
+        <div className="relative min-h-0 flex-1">
+          {/* Top gradient mask */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-4" style={{ background: "linear-gradient(180deg, var(--sidebar-bg) 0%, transparent 100%)" }} />
+          {/* Bottom gradient mask */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6" style={{ background: "linear-gradient(0deg, var(--sidebar-bg) 0%, transparent 100%)" }} />
+          <div className="scrollbar-hide h-full overflow-y-auto overflow-x-clip">
+          <div className="relative flex flex-col px-3 pb-3 pt-1 text-sidebar-text-muted">
             <div className="relative w-full grow">
               <AnimatePresence initial={false} mode="popLayout" custom={slideDirection}>
                 {currentArea && areas[currentArea] && (() => {
@@ -399,6 +405,7 @@ function SidebarAreasPanel({
                 })()}
               </AnimatePresence>
             </div>
+          </div>
           </div>
         </div>
 
@@ -703,6 +710,7 @@ function NavItem({ item, index }: { item: NavItemType | NavSubItemType; index?: 
         prefetch
         scroll={false}
         data-active={isActive}
+        data-demo-nav={href}
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
         className={cn(

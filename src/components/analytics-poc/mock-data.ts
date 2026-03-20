@@ -1062,8 +1062,8 @@ interface EngagementLineDataPoint {
   index: number;
   label: string;
   views: number;
-  applied: number;
-  joined: number;
+  engagement: number;
+  likes: number;
 }
 
 function buildEngagementDailyPoints(): EngagementLineDataPoint[] {
@@ -1081,7 +1081,7 @@ function buildEngagementDailyPoints(): EngagementLineDataPoint[] {
       850,
     );
 
-    const applied = clamp(
+    const engagement = clamp(
       Math.round(
         28 +
           Math.sin(index / 2.4) * 14 +
@@ -1092,7 +1092,7 @@ function buildEngagementDailyPoints(): EngagementLineDataPoint[] {
       62,
     );
 
-    const joined = clamp(
+    const likes = clamp(
       Math.round(
         14 +
           Math.sin((index + 1) / 2.6) * 8 +
@@ -1103,37 +1103,37 @@ function buildEngagementDailyPoints(): EngagementLineDataPoint[] {
       34,
     );
 
-    return { applied, index, joined, label, views };
+    return { engagement, index, label, likes, views };
   });
 }
 
 function buildEngagementCumulativePoints(
   dailyPoints: EngagementLineDataPoint[],
 ): EngagementLineDataPoint[] {
-  const running = { applied: 0, joined: 0, views: 0 };
+  const running = { engagement: 0, likes: 0, views: 0 };
 
   const cumulative = dailyPoints.map((point) => {
     running.views += point.views;
-    running.applied += point.applied;
-    running.joined += point.joined;
+    running.engagement += point.engagement;
+    running.likes += point.likes;
     return { ...point, ...running };
   });
 
   const maxes = cumulative.reduce(
     (acc, p) => ({
-      applied: Math.max(acc.applied, p.applied),
-      joined: Math.max(acc.joined, p.joined),
+      engagement: Math.max(acc.engagement, p.engagement),
+      likes: Math.max(acc.likes, p.likes),
       views: Math.max(acc.views, p.views),
     }),
-    { applied: 1, joined: 1, views: 1 },
+    { engagement: 1, likes: 1, views: 1 },
   );
 
-  const targets = { applied: 847, joined: 423, views: 12840 };
+  const targets = { engagement: 847, likes: 423, views: 12840 };
 
   return cumulative.map((point) => ({
     ...point,
-    applied: Math.round((point.applied / maxes.applied) * targets.applied),
-    joined: Math.round((point.joined / maxes.joined) * targets.joined),
+    engagement: Math.round((point.engagement / maxes.engagement) * targets.engagement),
+    likes: Math.round((point.likes / maxes.likes) * targets.likes),
     views: Math.round((point.views / maxes.views) * targets.views),
   }));
 }
@@ -1143,8 +1143,8 @@ const ENGAGEMENT_CUMULATIVE = buildEngagementCumulativePoints(ENGAGEMENT_DAILY);
 
 const ENGAGEMENT_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
   datasets: {
-    cumulative: ENGAGEMENT_CUMULATIVE as unknown as AnalyticsPocPerformanceLineDataPoint[],
-    daily: ENGAGEMENT_DAILY as unknown as AnalyticsPocPerformanceLineDataPoint[],
+    cumulative: ENGAGEMENT_CUMULATIVE as AnalyticsPocPerformanceLineDataPoint[],
+    daily: ENGAGEMENT_DAILY as AnalyticsPocPerformanceLineDataPoint[],
   },
   leftDomain: [0, 900],
   rightDomain: [0, 70],
@@ -1179,16 +1179,16 @@ const ENGAGEMENT_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
 interface ActivityLineDataPoint {
   index: number;
   label: string;
-  submissions: number;
-  creators: number;
-  applications: number;
+  views: number;
+  engagement: number;
+  likes: number;
 }
 
 function buildActivityDailyPoints(): ActivityLineDataPoint[] {
   const labels = buildDateLabels("2026-01-07", TOTAL_POINTS);
 
   return labels.map((label, index) => {
-    const submissions = clamp(
+    const views = clamp(
       Math.round(
         28 +
           Math.sin((index - 2) / 2.0) * 14 +
@@ -1199,7 +1199,7 @@ function buildActivityDailyPoints(): ActivityLineDataPoint[] {
       55,
     );
 
-    const creators = clamp(
+    const engagement = clamp(
       Math.round(
         14 +
           Math.sin(index / 2.3) * 7 +
@@ -1210,7 +1210,7 @@ function buildActivityDailyPoints(): ActivityLineDataPoint[] {
       30,
     );
 
-    const applications = clamp(
+    const likes = clamp(
       Math.round(
         20 +
           Math.sin((index + 2) / 1.8) * 10 +
@@ -1221,43 +1221,43 @@ function buildActivityDailyPoints(): ActivityLineDataPoint[] {
       42,
     );
 
-    return { applications, creators, index, label, submissions };
+    return { engagement, index, label, likes, views };
   });
 }
 
 function buildActivityCumulativePoints(
   dailyPoints: ActivityLineDataPoint[],
 ): ActivityLineDataPoint[] {
-  const running = { applications: 0, creators: 0, submissions: 0 };
+  const running = { engagement: 0, likes: 0, views: 0 };
 
   const cumulative = dailyPoints.map((point) => {
-    running.submissions += point.submissions;
-    running.creators += point.creators;
-    running.applications += point.applications;
+    running.views += point.views;
+    running.engagement += point.engagement;
+    running.likes += point.likes;
     return { ...point, ...running };
   });
 
   const maxes = cumulative.reduce(
     (acc, p) => ({
-      applications: Math.max(acc.applications, p.applications),
-      creators: Math.max(acc.creators, p.creators),
-      submissions: Math.max(acc.submissions, p.submissions),
+      engagement: Math.max(acc.engagement, p.engagement),
+      likes: Math.max(acc.likes, p.likes),
+      views: Math.max(acc.views, p.views),
     }),
-    { applications: 1, creators: 1, submissions: 1 },
+    { engagement: 1, likes: 1, views: 1 },
   );
 
-  const targets = { applications: 847, creators: 423, submissions: 690 };
+  const targets = { engagement: 423, likes: 847, views: 690 };
 
   return cumulative.map((point) => ({
     ...point,
-    applications: Math.round(
-      (point.applications / maxes.applications) * targets.applications,
+    engagement: Math.round(
+      (point.engagement / maxes.engagement) * targets.engagement,
     ),
-    creators: Math.round(
-      (point.creators / maxes.creators) * targets.creators,
+    likes: Math.round(
+      (point.likes / maxes.likes) * targets.likes,
     ),
-    submissions: Math.round(
-      (point.submissions / maxes.submissions) * targets.submissions,
+    views: Math.round(
+      (point.views / maxes.views) * targets.views,
     ),
   }));
 }
@@ -1267,8 +1267,8 @@ const ACTIVITY_CUMULATIVE = buildActivityCumulativePoints(ACTIVITY_DAILY);
 
 const ACTIVITY_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
   datasets: {
-    cumulative: ACTIVITY_CUMULATIVE as unknown as AnalyticsPocPerformanceLineDataPoint[],
-    daily: ACTIVITY_DAILY as unknown as AnalyticsPocPerformanceLineDataPoint[],
+    cumulative: ACTIVITY_CUMULATIVE as AnalyticsPocPerformanceLineDataPoint[],
+    daily: ACTIVITY_DAILY as AnalyticsPocPerformanceLineDataPoint[],
   },
   leftDomain: [0, 60],
   rightDomain: [0, 50],

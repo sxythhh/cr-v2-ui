@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { useSideNav } from "./sidebar-context";
 import { AppSidebarNav } from "./app-sidebar-nav";
 import { MobileHeader } from "@/components/mobile-header";
@@ -10,6 +11,12 @@ import { OnboardingButton } from "./onboarding-button";
 
 export function MainNav({ children }: { children: ReactNode }) {
   const { isOpen, setIsOpen, collapsed } = useSideNav();
+  const pathname = usePathname();
+
+  // Routes that bypass the sidebar entirely
+  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/help") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/support")) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex h-dvh flex-col bg-page-bg md:bg-page-outer-bg">
@@ -52,8 +59,8 @@ export function MainNav({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <MobileBottomNav />
 
-      {/* Floating onboarding — hidden for now */}
-      {/* <OnboardingButton /> */}
+      {/* Floating onboarding — hide on campaign detail pages */}
+      {!pathname?.match(/^\/campaigns\/[^/]+/) && <OnboardingButton />}
     </div>
   );
 }

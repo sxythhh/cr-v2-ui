@@ -19,22 +19,14 @@ const MONTH_SHORT = [
 const RANGE_BG =
   "radial-gradient(42.53% 86.44% at 50.57% 0%, var(--toggle-glow) 0%, var(--toggle-track) 100%)";
 
-/** Input trigger — default state (inline required for Tailwind v4 button preflight) */
+/** Input trigger — default state */
 const INPUT_BG: React.CSSProperties = {
-  backgroundColor: "var(--glass-surface)",
-  backgroundImage:
-    "radial-gradient(33.86% 79.61% at 50.57% 0%, var(--glass-subtle) 0%, oklch(1 0 0 / 0.006) 100%)",
+  backgroundColor: "rgba(37, 37, 37, 0.04)",
 };
 
-/** Input trigger — active/selected state (inline required for Tailwind v4 button preflight) */
+/** Input trigger — active/selected state */
 const ACTIVE_BG: React.CSSProperties = {
-  backgroundImage: [
-    "radial-gradient(60.93% 50% at 51.43% 0%, var(--glass-highlight) 0%, transparent 100%)",
-    "linear-gradient(0deg, var(--glass-tint), var(--glass-tint))",
-    "radial-gradient(33.86% 79.61% at 50.57% 0%, var(--glass-subtle) 0%, transparent 100%)",
-  ].join(", "),
-  backgroundColor: "var(--glass-surface)",
-  boxShadow: "inset 0 0 0 2px var(--glass-ring)",
+  backgroundColor: "rgba(37, 37, 37, 0.04)",
 };
 
 /** Selected day cell (inline required for Tailwind v4 button preflight) */
@@ -210,7 +202,7 @@ function CalendarGrid({
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full mt-1 z-50 flex min-w-[336px] w-[336px] flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/40"
+      className="absolute left-0 bottom-full mb-1 z-50 flex min-w-[336px] w-[336px] flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/40"
       style={{ backgroundColor: "#151515", border: "1px solid rgba(255, 255, 255, 0.15)" }}
     >
       {/* Month nav header */}
@@ -361,8 +353,8 @@ function DateRangeInputs({
             onClick={() => openPicker("start")}
             style={startDate ? ACTIVE_BG : INPUT_BG}
             className={cn(
-              "flex h-10 w-full items-center gap-2 rounded-xl px-3 transition-colors",
-              !startDate && "border border-glass-border",
+              "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
+              !startDate && "",
             )}
           >
             <Calendar size={16} className="shrink-0" />
@@ -387,8 +379,8 @@ function DateRangeInputs({
             onClick={() => openPicker("end")}
             style={endDate ? ACTIVE_BG : INPUT_BG}
             className={cn(
-              "flex h-10 w-full items-center gap-2 rounded-xl px-3 transition-colors",
-              !endDate && "border border-glass-border",
+              "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
+              !endDate && "",
             )}
           >
             <Calendar size={16} className="shrink-0" />
@@ -442,8 +434,8 @@ function DatePicker({
         onClick={() => setOpen(!open)}
         style={value ? ACTIVE_BG : INPUT_BG}
         className={cn(
-          "flex h-10 w-full items-center gap-2 rounded-xl px-3 transition-colors",
-          !value && "border border-glass-border",
+          "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
+          !value && "",
         )}
       >
         <Calendar size={16} className="shrink-0" />

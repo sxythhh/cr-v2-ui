@@ -13,9 +13,14 @@ import { springs } from "@/lib/springs";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { Tabs, TabItem } from "@/components/ui/tabs";
+import { ProximityTabs } from "@/components/ui/proximity-tabs";
+import { AnalyticsPocCreatorInsightsTab } from "@/components/analytics-poc";
 import { FilterSelect, type Filter, type ActiveFilter } from "@/components/ui/dub-filter";
 import { Modal } from "@/components/ui/modal";
 import { CreatorDetailsPopup, type CreatorDetailsData } from "@/components/creators/CreatorDetailsPopup";
+import { ContractsContent } from "@/app/contracts/contracts-client";
+import { ApplicationsContent } from "@/app/applications/applications-client";
+import { AffiliateDashboardView } from "@/components/affiliate/dashboard";
 
 // ── Filter Icon ─────────────────────────────────────────────────────
 
@@ -159,7 +164,7 @@ function CellContent({ colKey, creator }: { colKey: ColumnKey; creator: Creator 
             <img src={`https://i.pravatar.cc/48?u=${creator.name}`} alt="" className="size-full object-cover" />
           </div>
           <div className="flex min-w-0 items-center gap-1.5">
-            <span className="truncate text-sm font-medium tracking-[-0.02em] text-page-text">{creator.name}</span>
+            <span className="truncate text-sm leading-normal font-medium tracking-[-0.02em] text-page-text">{creator.name}</span>
             <span className="shrink-0 text-xs tracking-[-0.02em] text-muted-foreground">·</span>
             <span className="shrink-0 whitespace-nowrap text-xs tracking-[-0.02em] text-page-text-muted">joined {creator.joined}</span>
           </div>
@@ -628,7 +633,7 @@ function creatorToDetails(creator: Creator): CreatorDetailsData {
 
 // ── Page ─────────────────────────────────────────────────────────────
 
-const NAV_TABS = ["Creators", "Insights"];
+const NAV_TABS = ["Creators", "Insights", "Applications", "Contracts", "Affiliates"];
 
 const FILTER_TABS = [
   { name: "All", count: 18 },
@@ -767,13 +772,13 @@ export default function CreatorsPage() {
   return (
     <div>
       {/* Top nav */}
-      <div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-border bg-page-bg pr-5">
+      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
         {/* Underline tabs */}
-        <Tabs selectedIndex={activeNavTab} onSelect={setActiveNavTab} variant="underline" className="h-full">
-          {NAV_TABS.map((tab, i) => (
-            <TabItem key={tab} label={tab} index={i} />
-          ))}
-        </Tabs>
+        <ProximityTabs
+          tabs={NAV_TABS.map((t) => ({ label: t }))}
+          selectedIndex={activeNavTab}
+          onSelect={setActiveNavTab}
+        />
 
         {/* Right actions */}
         <div className="hidden items-center gap-2 md:flex">
@@ -790,16 +795,25 @@ export default function CreatorsPage() {
             </svg>
           </button>
 
-          <button className="flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-accent">
-            Export
+          <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M8 2.667V10M8 2.667L5.333 5.333M8 2.667L10.667 5.333M2.667 10.667V12C2.667 12.736 3.264 13.333 4 13.333H12C12.736 13.333 13.333 12.736 13.333 12V10.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
+            Export
           </button>
         </div>
       </div>
 
       {/* Content */}
+      {activeNavTab === 1 ? (
+        <AnalyticsPocCreatorInsightsTab />
+      ) : activeNavTab === 2 ? (
+        <ApplicationsContent />
+      ) : activeNavTab === 3 ? (
+        <ContractsContent />
+      ) : activeNavTab === 4 ? (
+        <AffiliateDashboardView />
+      ) : (
       <div className="px-4 pb-6 pt-[21px] sm:px-6">
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
@@ -921,6 +935,8 @@ export default function CreatorsPage() {
           </div>
         </div>
       </div>
+
+      )}
 
       <ScoresModal open={scoresOpen} onClose={() => setScoresOpen(false)} />
 

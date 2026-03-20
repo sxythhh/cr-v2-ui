@@ -100,46 +100,18 @@ const NAV_AREAS: SidebarNavAreas = {
 
     content: [
       {
-        name: "Overview",
         items: [
           { name: "Home", icon: Home, href: "/", exact: true, description: "Your dashboard overview and short links." },
           { name: "Campaigns", icon: Megaphone, href: "/campaigns", description: "Create and manage marketing campaigns." },
-        ],
-      },
-      {
-        name: "Manage",
-        items: [
           { name: "Submissions", icon: Submissions, href: "/submissions", description: "Review and manage creator content submissions." },
           { name: "Creators", icon: Creators, href: "/creators", description: "Browse and manage your creator network." },
           { name: "Payouts", icon: Payouts, href: "/payouts", description: "Track earnings and process creator payments." },
-          { name: "Contracts", icon: Contracts, href: "/contracts", description: "Manage creator contracts and agreements." },
-          { name: "Analytics", icon: PieChart, href: "/analytics", description: "Performance metrics across all campaigns." },
-          { name: "Applications", icon: Paperclip, href: "/applications", description: "Manage incoming creator applications." },
+
+          { name: "Insights", icon: PieChart, href: "/analytics", description: "Performance metrics across all campaigns." },
+
           { name: "Finance", icon: FilledFinance, href: "/finances", description: "Billing, invoices, and financial reports." },
-        ],
-      },
-      {
-        name: "Communication",
-        items: [
-          {
-            name: "Messages",
-            icon: ChatBubble,
-            href: "/messages",
-            description: "Direct messages with creators.",
-            badge: (
-              <span className="flex size-3.5 items-center justify-center rounded-full bg-[rgba(255,37,37,0.1)] text-[10px] font-semibold leading-none tracking-[-0.02em] text-[#FF2525]">
-                2
-              </span>
-            ),
-          },
-          {
-            name: "AI Assistant",
-            icon: Robot,
-            href: "/ai-assistant",
-            description: "Get AI-powered help with your campaigns.",
-            shortcut: "⌘E",
-          },
           { name: "Notifications", icon: NotificationBell, href: "/notifications", description: "Activity alerts and updates." },
+          { name: "Settings", icon: Gear, href: "/settings", description: "Workspace and account settings." },
         ],
       },
     ],
@@ -153,30 +125,10 @@ const NAV_AREAS: SidebarNavAreas = {
         items: [
           { name: "Overview", icon: LinesY, href: "/program", exact: true },
           { name: "Payouts", icon: Receipt, href: "/program/payouts", badge: 3 },
-        ],
-      },
-      {
-        name: "Partners",
-        items: [
           { name: "All Partners", icon: UsersIcon, href: "/program/partners" },
-          {
-            name: "Applications",
-            icon: User,
-            href: "/program/applications",
-            badge: 5,
-          },
-        ],
-      },
-      {
-        name: "Insights",
-        items: [
-          { name: "Analytics", icon: LinesY, href: "/program/analytics" },
+          { name: "Applications", icon: User, href: "/program/applications", badge: 5 },
+          { name: "Insights", icon: LinesY, href: "/program/analytics" },
           { name: "Customers", icon: User, href: "/program/customers" },
-        ],
-      },
-      {
-        name: "Engagement",
-        items: [
           { name: "Resources", icon: GiftIcon, href: "/program/resources" },
         ],
       },
@@ -190,32 +142,11 @@ const NAV_AREAS: SidebarNavAreas = {
           { name: "Home", icon: Home, href: "/creator", exact: true, description: "Your creator dashboard." },
           { name: "For you", icon: Sparkle, href: "/creator/for-you", description: "Personalized campaign recommendations." },
           { name: "Discover", icon: Compass, href: "/creator/discover", description: "Browse available campaigns." },
-        ],
-      },
-      {
-        name: "Your Work",
-        items: [
           { name: "Campaigns", icon: Megaphone, href: "/creator/campaigns", description: "Campaigns you've joined." },
           { name: "Applications", icon: Paperclip, href: "/creator/applications", description: "Your campaign applications." },
           { name: "Submissions", icon: Submissions, href: "/creator/submissions", description: "Your content submissions." },
-          { name: "Analytics", icon: PieChart, href: "/creator/analytics", description: "Your performance metrics." },
+          { name: "Insights", icon: PieChart, href: "/creator/analytics", description: "Your performance metrics." },
           { name: "Payouts", icon: Payouts, href: "/creator/payouts", description: "Your earnings and payouts." },
-        ],
-      },
-      {
-        name: "Communication",
-        items: [
-          {
-            name: "Messages",
-            icon: ChatBubble,
-            href: "/creator/messages",
-            description: "Direct messages with brands.",
-            badge: (
-              <span className="flex size-3.5 items-center justify-center rounded-full bg-[rgba(255,37,37,0.1)] text-[10px] font-semibold leading-none tracking-[-0.02em] text-[#FF2525]">
-                2
-              </span>
-            ),
-          },
           { name: "Notifications", icon: NotificationBell, href: "/creator/notifications", description: "Activity alerts and updates." },
         ],
       },
@@ -271,7 +202,6 @@ function AppSidebarNavInner() {
   const { editMode } = useSideNav();
 
   const currentArea = useMemo(() => {
-    if (pathname.startsWith("/settings")) return "workspaceSettings";
     if (pathname.startsWith("/program")) return "program";
     if (pathname === "/creator" || pathname.startsWith("/creator/")) return "creator";
     return "default";
@@ -311,7 +241,7 @@ function AppSidebarNavInner() {
       bottom={
         currentArea === "creator"
           ? walletCard
-          : currentArea === "workspaceSettings" && newsEmpty
+          : newsEmpty
             ? usageCard
             : undefined
       }

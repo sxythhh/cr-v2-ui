@@ -68,6 +68,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (isDark) document.documentElement.classList.add("dark");
   }, []);
 
+  // Sync when external code (e.g. nav bar toggle) changes theme
+  useEffect(() => {
+    const handler = () => {
+      const stored = localStorage.getItem("theme") as ThemeMode | null;
+      const next: ThemeMode = stored === "dark" || stored === "system" ? stored : "light";
+      setModeState(next);
+      setDarkMode(resolveIsDark(next));
+    };
+    window.addEventListener("theme-changed", handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener("theme-changed", handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, []);
+
   // Listen for system preference changes when in system mode
   useEffect(() => {
     if (mode !== "system") return;

@@ -158,7 +158,7 @@ export function Modal({
             ref={cardRef}
             className={cn(
               "relative flex w-full flex-col overflow-hidden rounded-t-[20px] border border-border bg-card-bg shadow-xl sm:rounded-[20px]",
-              "max-h-[90vh]",
+              "max-h-[90dvh]",
               maxWidth ?? sizeClasses[size],
               className,
             )}

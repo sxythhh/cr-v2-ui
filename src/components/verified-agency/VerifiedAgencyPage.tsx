@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   ChevronDown,
   ChevronUp,
@@ -640,6 +641,266 @@ function NewsletterCard() {
   );
 }
 
+// ── Application Form ──────────────────────────────────────────────────────────
+
+const inputClass = cn(
+  "flex h-10 w-full items-center rounded-[14px] bg-foreground/[0.04] px-3.5",
+  "font-inter text-[14px] leading-[1.2] tracking-[-0.02em] text-page-text",
+  "placeholder:text-page-text-muted outline-none",
+  "focus:ring-1 focus:ring-foreground/20",
+);
+
+const formLabelClass =
+  "font-inter text-[13px] font-medium leading-[24px] tracking-[-0.02em] text-page-text";
+
+const JOB_LEVELS = ["Individual Contributor", "Manager", "Director", "VP", "C-Level / Executive"];
+const JOB_FUNCTIONS = ["Marketing", "Growth", "Product", "Engineering", "Design", "Operations", "Sales", "Other"];
+const COUNTRIES = [
+  "United States", "United Kingdom", "Canada", "Australia", "Germany", "France",
+  "Netherlands", "South Africa", "Brazil", "India", "Japan", "Other",
+];
+
+function FormSelectInput({
+  label,
+  placeholder,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="flex items-start gap-0">
+      <div className="flex w-[160px] shrink-0 items-center pt-2">
+        <span className={formLabelClass}>{label}</span>
+      </div>
+      <div className="relative flex-1">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={cn(
+            inputClass,
+            "cursor-pointer appearance-none pr-10",
+            !value && "text-page-text-muted",
+          )}
+        >
+          <option value="" disabled>
+            {placeholder}
+          </option>
+          {options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-3.5 -translate-y-1/2 text-page-text" />
+      </div>
+    </div>
+  );
+}
+
+function FormTextInput({
+  label,
+  placeholder,
+  type = "text",
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  type?: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="flex items-start gap-0">
+      <div className="flex w-[160px] shrink-0 items-center pt-2">
+        <span className={formLabelClass}>{label}</span>
+      </div>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={cn(inputClass, "flex-1")}
+      />
+    </div>
+  );
+}
+
+function DocumentsIcon() {
+  return (
+    <svg width="34" height="40" viewBox="0 0 34 40" fill="none">
+      <path d="M0 4C0 1.79 1.79 0 4 0H22L34 12V30C34 32.21 32.21 34 30 34H4C1.79 34 0 32.21 0 30V4Z" fill="#80E9FF" />
+      <path d="M8 6C8 3.79 9.79 2 12 2H26L34 10V36C34 38.21 32.21 40 30 40H12C9.79 40 8 38.21 8 36V6Z" fill="#7A73FF" />
+      <path d="M8 6C8 3.79 9.79 2 12 2H26L34 10V36C34 38.21 32.21 40 30 40H12C9.79 40 8 38.21 8 36V6Z" fill="#0048E5" fillOpacity="0.6" />
+    </svg>
+  );
+}
+
+function AgencyApplicationForm() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [jobLevel, setJobLevel] = useState("");
+  const [jobFunction, setJobFunction] = useState("");
+  const [country, setCountry] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const isValid = firstName && lastName && email && website && jobLevel && jobFunction && country;
+
+  return (
+    <>
+    {/* Success dialog */}
+    {submitted && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div className="relative flex w-full max-w-[576px] flex-col items-start rounded-[20px] bg-[#F2F2F2] p-8 dark:bg-[#1e1e1e]">
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={() => setSubmitted(false)}
+            className="absolute right-8 top-8 flex size-9 cursor-pointer items-center justify-center rounded-[10px] border border-[#CAD0D9] bg-white transition-colors hover:bg-[#F5F5F5] dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M5.5 5.5L12.5 12.5M12.5 5.5L5.5 12.5" stroke="#383E47" strokeWidth="1.1" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          {/* Content */}
+          <div className="flex w-full flex-col items-center px-12 py-24 gap-2.5">
+            {/* Checkmark illustration */}
+            <svg width="213" height="120" viewBox="0 0 213 120" fill="none" className="mb-4">
+              <path d="M158.342 3.0876L148.457 4.84691C147.399 5.03327 146.422 5.54765 145.662 6.30803L103.356 48.6134L85.3382 30.0214C84.1231 28.769 82.3638 28.195 80.6417 28.5007L70.809 30.2451C69.7504 30.4314 68.7739 30.9458 68.0135 31.7062L52.5375 47.1896C50.4875 49.2396 50.4875 52.5719 52.5375 54.6294L74.9389 77.0308L93.3669 95.4588C94.582 96.6739 96.3115 97.2181 98.0037 96.9199L107.889 95.1606C108.947 94.9742 109.924 94.4598 110.684 93.6995L177.687 26.6966C179.737 24.6466 179.737 21.3143 177.687 19.2568L162.971 4.54126C161.756 3.32615 160.027 2.78195 158.335 3.08014L158.342 3.0876Z" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M69.5417 30.8862L95.3126 56.6571L103.356 48.606" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M144.856 7.11308L146.839 5.13013L167.206 25.5038L95.8567 96.8528" stroke="#EB6821" strokeLinejoin="round" />
+              <path d="M179.774 23.2673L167.206 25.5037" stroke="#EB6821" strokeLinejoin="round" />
+            </svg>
+
+            {/* Heading */}
+            <h2 className="font-[family-name:var(--font-geist-sans)] text-[29.6px] font-semibold leading-[38px] tracking-[-0.32px] text-[#232529] dark:text-white">
+              We&apos;ll be in touch soon!
+            </h2>
+
+            {/* Description */}
+            <p className="max-w-[350px] text-center font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#505967] dark:text-page-text-muted">
+              Our team will be in touch soon. If you have any questions, please email us at{" "}
+              <a href="mailto:support@contentrewards.com" className="text-[#EB6821] hover:underline">
+                support@contentrewards.com
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Form */}
+    <div className="flex w-full max-w-[540px] flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0px_30px_60px_-12px_rgba(50,50,93,0.25),0px_18px_36px_-18px_rgba(0,0,0,0.3)] dark:border-[#2a2a2a] dark:bg-[#191919]">
+      {/* Header */}
+      <div className="flex items-start gap-4 border-b border-border p-4 dark:border-[#2a2a2a]">
+        <DocumentsIcon />
+        <div className="flex flex-col gap-1">
+          <span className="font-inter text-[14px] font-medium leading-[24px] tracking-[-0.02em] text-page-text">
+            Apply for Verified Agency status
+          </span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.2" className="text-page-text-muted" />
+                <path d="M6.5 3.5V6.5L8.5 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="text-page-text-muted" />
+              </svg>
+              <span className="font-inter text-[12px] font-light tracking-[-0.02em] text-page-text-muted">
+                5 minute application
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <svg width="11" height="13" viewBox="0 0 11 13" fill="none">
+                <path d="M1 1h9v11H1V1z" stroke="currentColor" strokeWidth="1.2" className="text-page-text-muted" />
+                <path d="M3.5 4h4M3.5 6.5h4M3.5 9h2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-page-text-muted" />
+              </svg>
+              <span className="font-inter text-[12px] font-light tracking-[-0.02em] text-page-text-muted">
+                7 fields
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form */}
+      <div className="flex flex-col gap-3 p-4">
+        <FormTextInput label="First name" placeholder="Jane" value={firstName} onChange={setFirstName} />
+        <FormTextInput label="Last name" placeholder="Diaz" value={lastName} onChange={setLastName} />
+        <FormTextInput label="Work email" placeholder="jane@example.com" type="email" value={email} onChange={setEmail} />
+        <FormTextInput label="Company website" placeholder="example.com" value={website} onChange={setWebsite} />
+        <FormSelectInput label="Job level" placeholder="Select a job level" options={JOB_LEVELS} value={jobLevel} onChange={setJobLevel} />
+        <FormSelectInput label="Job function" placeholder="Select a job function" options={JOB_FUNCTIONS} value={jobFunction} onChange={setJobFunction} />
+        <FormSelectInput label="Country / Region" placeholder="Select a country" options={COUNTRIES} value={country} onChange={setCountry} />
+
+        {/* Email consent checkbox */}
+        <div className="flex items-start gap-0">
+          <div className="w-[160px] shrink-0" />
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-1 size-[13px] shrink-0 cursor-pointer rounded-[2.5px] border border-page-text-muted accent-[#635BFF]"
+            />
+            <span className="font-inter text-[12px] font-light leading-[20px] tracking-[-0.02em] text-page-text-subtle">
+              Get emails about product updates, industry news, and events. You can{" "}
+              <button type="button" className="font-medium text-[#635BFF] hover:underline">
+                unsubscribe
+              </button>{" "}
+              at any time.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col gap-3 px-4 pb-4">
+        {/* Submit button — right aligned */}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => isValid && setSubmitted(true)}
+            disabled={!isValid}
+            className={cn(
+              "inline-flex h-9 items-center justify-center gap-2 rounded-full px-5 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-all",
+              isValid
+                ? "cursor-pointer bg-foreground hover:bg-foreground/90"
+                : "cursor-not-allowed bg-foreground/40",
+            )}
+          >
+            Submit application
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M3.5 1.5L7 5l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Privacy footer */}
+        <div className="flex items-start gap-0">
+          <div className="w-[160px] shrink-0" />
+          <span className="font-inter text-[10px] font-light leading-[16px] tracking-[-0.02em] text-page-text-muted">
+            Content Rewards will handle your data pursuant to its{" "}
+            <button type="button" className="font-medium text-[#635BFF] hover:underline">
+              Privacy Policy
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    </>
+  );
+}
+
 // ── FAQ data ─────────────────────────────────────────────────────────────────
 const faqs = [
   {
@@ -781,8 +1042,6 @@ export function VerifiedAgencyPage() {
         display: "flex",
         justifyContent: "center",
         padding: 16,
-        backgroundColor: "var(--page-bg)",
-        minHeight: "100%",
         fontFamily: "var(--font-geist-sans), sans-serif",
       }}
     >
@@ -921,6 +1180,146 @@ export function VerifiedAgencyPage() {
               title="Newsletter Features"
               description="Submit case studies and agency wins to be featured in the Foreplay newsletter (300k subs)"
             />
+          </div>
+        </div>
+
+        {/* ── Application Form section ── */}
+        <div style={{ marginTop: 36 }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 24,
+              padding: "0 28px",
+            }}
+          >
+            {/* Left column */}
+            <div style={{ width: 280, flexShrink: 0 }}>
+              <h2
+                style={{
+                  fontSize: 16,
+                  fontWeight: 500,
+                  lineHeight: "24px",
+                  color: C.textSecondary,
+                  margin: 0,
+                }}
+              >
+                Apply Now
+              </h2>
+              <p
+                style={{
+                  fontSize: 14,
+                  fontWeight: 400,
+                  lineHeight: "20px",
+                  color: C.textMuted,
+                  margin: "4px 0 0",
+                }}
+              >
+                Fill out the form to apply for Verified Agency status and unlock premium features.
+              </p>
+            </div>
+
+            {/* Right column - form */}
+            <div style={{ flex: 1, minWidth: 320 }}>
+              <AgencyApplicationForm />
+            </div>
+          </div>
+        </div>
+
+        {/* ── End / CTA section ── */}
+        <div className="flex justify-center overflow-hidden py-20 sm:py-32">
+          <div className="relative flex w-full max-w-[1400px] items-center pr-0 sm:pr-8">
+            {/* Left — Text column */}
+            <div className="relative z-10 flex w-full max-w-[420px] shrink-0 flex-col justify-center gap-12 px-7">
+              {/* Header / Description */}
+              <div className="flex flex-col gap-4">
+                {/* Eyebrow */}
+                <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#353535] dark:text-page-text">
+                  How it works
+                </span>
+
+                {/* Heading */}
+                <div className="flex flex-col gap-6">
+                  <h2 className="font-inter text-[30px] font-bold leading-[1.3] tracking-[-1.5px]">
+                    <span className="text-[#000000] dark:text-white">Stop </span>
+                    <span className="text-[#FF6207]">burning adspend</span>
+                    <br />
+                    <span className="text-[#000000] dark:text-white">on rising CPMs.</span>
+                    <br />
+                    <span className="font-medium text-[#616161] dark:text-page-text-muted">
+                      Generate sustainable, organic growth.
+                    </span>
+                  </h2>
+
+                  {/* Body */}
+                  <p className="font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
+                    Content Rewards is a marketing tool that connects your business with content creators and allows you to run organic content campaigns.
+                  </p>
+                </div>
+              </div>
+
+              {/* Campaign types */}
+              <div className="flex flex-col gap-6">
+                <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#353535] dark:text-page-text">
+                  Types of Campaigns
+                </span>
+
+                <div className="flex flex-col gap-5">
+                  {/* UGC */}
+                  <div className="flex items-start gap-[61px]">
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect x="2" y="3.5" width="14" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
+                        <circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
+                      </svg>
+                      <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#000] dark:text-white">
+                        User-Generated Content
+                      </span>
+                    </div>
+                    <p className="max-w-[200px] flex-1 font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
+                      Creators produce original content featuring your brand based on guidelines you provide
+                    </p>
+                  </div>
+
+                  {/* Clipping */}
+                  <div className="flex items-start gap-[165px]">
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <circle cx="5" cy="13" r="2.5" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
+                        <path d="M7 11.5L13 5M13 5H9.5M13 5V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#000] dark:text-white" />
+                      </svg>
+                      <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#000] dark:text-white">
+                        Clipping
+                      </span>
+                    </div>
+                    <p className="max-w-[200px] flex-1 font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
+                      Creators turn your existing long-form content into clips
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right — Demo video / screenshot */}
+            <div className="absolute left-[500px] right-[-220px] top-1/2 z-[1] hidden -translate-y-1/2 items-center justify-center px-8 lg:flex">
+              <div className="flex w-full max-w-[936px] flex-col items-start">
+                <div className="relative flex w-full items-center justify-center rounded-xl border border-[#E5E7EB] bg-white p-2 shadow-[0px_20px_40px_rgba(0,0,0,0.08)] dark:border-white/[0.08] dark:bg-[#1a1a1a]">
+                  {/* Placeholder for demo screenshot */}
+                  <div className="flex aspect-[920/613] w-full items-center justify-center rounded-lg bg-[rgba(136,136,136,0.08)]">
+                    <span className="font-inter text-sm text-page-text-muted">Demo screenshot</span>
+                  </div>
+
+                  {/* Play button overlay */}
+                  <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/50 p-1.5 backdrop-blur-[5px] dark:border-white/[0.08]">
+                    <div className="flex size-14 items-center justify-center rounded-full bg-[#CFB671] shadow-[inset_-0.73px_0.73px_0.73px_-1.46px_rgba(255,255,255,0.35)]">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <path d="M19 15L33 24L19 33V15Z" fill="white" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

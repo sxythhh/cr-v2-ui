@@ -941,14 +941,14 @@ function PerformanceMainLineChartBody({
             transition: "left 100ms cubic-bezier(0.22, 1, 0.36, 1), opacity 100ms ease-out",
           }}
         />
-        {/* Static end-date line */}
+        {/* Static end-date line — fades when hover line overlaps */}
         <div
-          className="absolute top-0 bottom-0"
+          className="absolute top-0 bottom-0 transition-opacity duration-100"
           style={{
             right: 4,
             width: 0,
             borderLeft: "1px solid var(--foreground)",
-            opacity: 0.2,
+            opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 0.2,
           }}
         />
       </div>
@@ -982,9 +982,12 @@ function PerformanceMainLineChartBody({
           </span>
         </div>
 
-        {/* Static end-date pill */}
-        <div className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center" style={{ right: 4, transform: "translateX(50%)" }}>
-          <span className="whitespace-nowrap rounded-full bg-foreground/[0.06] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50">
+        {/* Static end-date pill — fades when hover pill overlaps */}
+        <div
+          className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center transition-opacity duration-100"
+          style={{ right: 4, transform: "translateX(50%)", opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 1 }}
+        >
+          <span className="whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-white/[0.08]">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
           </span>
         </div>

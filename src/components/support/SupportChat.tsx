@@ -138,7 +138,7 @@ export function SupportChat() {
       {isOpen && (
         <div
           className="fixed bottom-5 right-5 z-50 flex w-[380px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-950"
-          style={{ height: "min(600px, calc(100vh - 100px))" }}
+          style={{ height: "min(600px, calc(100dvh - 100px))" }}
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-neutral-800">

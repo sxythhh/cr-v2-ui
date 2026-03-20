@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect, type SVGProps } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
 import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
 import { WorkspaceAvatar } from "@/components/sidebar/workspace-avatar";
 import { cn } from "@/lib/utils";
@@ -218,11 +219,11 @@ const STEPS = [
 // ── Dashboard Data ─────────────────────────────────────────────────
 
 const CAMPAIGNS = [
-  { name: "Call of Duty BO7 Clipping", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
-  { name: "Caffeine AI Exclusive", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
-  { name: "G Fuel Summer Promo", meta: "CPM · 121k views · 31 creators", pct: 94, color: "#FF2525" },
-  { name: "Apex Legends Season 20", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
-  { name: "Fortnite Festival Clips", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
+  { id: 1, name: "Call of Duty BO7 Clipping", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
+  { id: 2, name: "Caffeine AI Exclusive", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
+  { id: 3, name: "G Fuel Summer Promo", meta: "CPM · 121k views · 31 creators", pct: 94, color: "#FF2525" },
+  { id: 4, name: "Apex Legends Season 20", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
+  { id: 1, name: "Fortnite Festival Clips", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
 ];
 
 function AttentionVideoIcon() {
@@ -261,10 +262,10 @@ function AttentionWarningIcon() {
 }
 
 const ATTENTION_ITEMS = [
-  { icon: AttentionVideoIcon, iconBg: "rgba(255,144,37,0.06)", title: "24 submissions", subtitle: "Awaiting review" },
-  { icon: AttentionUserAddIcon, iconBg: "rgba(174,78,238,0.06)", title: "2 applications", subtitle: "Awaiting review" },
-  { icon: AttentionContractIcon, iconBg: "rgba(0,178,89,0.04)", title: "1 contract pending", subtitle: "Awaiting review" },
-  { icon: AttentionWarningIcon, iconBg: "rgba(238,78,81,0.06)", title: "2 budget warnings", subtitle: "G Fuel critical, Caffeine AI low" },
+  { icon: AttentionVideoIcon, iconBg: "rgba(255,144,37,0.06)", title: "24 submissions", subtitle: "Awaiting review", href: "/submissions" },
+  { icon: AttentionUserAddIcon, iconBg: "rgba(174,78,238,0.06)", title: "2 applications", subtitle: "Awaiting review", href: "/applications" },
+  { icon: AttentionContractIcon, iconBg: "rgba(0,178,89,0.04)", title: "1 contract pending", subtitle: "Awaiting review", href: "/contracts" },
+  { icon: AttentionWarningIcon, iconBg: "rgba(238,78,81,0.06)", title: "2 budget warnings", subtitle: "G Fuel critical, Caffeine AI low", href: "/finances" },
 ];
 
 const ACTIVITY_ITEMS = [
@@ -565,7 +566,7 @@ function OnboardingView({
   onSkip: () => void;
 }) {
   return (
-    <div className="relative flex flex-col items-start gap-2 self-stretch p-4 sm:flex-1 sm:px-8 sm:py-4">
+    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-2 self-stretch overflow-y-auto p-4 sm:px-8 sm:py-4">
       {/* Radial gradient background with noise to prevent banding */}
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -585,8 +586,8 @@ function OnboardingView({
         </svg>
       </div>
 
-      <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-2 sm:flex-1 sm:py-4">
-        <div className="flex w-full max-w-[720px] flex-col items-center sm:flex-1 sm:justify-center">
+      <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-2 sm:py-4">
+        <div className="flex w-full max-w-[720px] flex-col items-center sm:my-auto">
           {/* Header */}
           <motion.div
             className="flex w-full max-w-[720px] flex-col items-center gap-4 pb-6"
@@ -1061,7 +1062,7 @@ function DashboardView() {
         </div>
 
         {/* Active */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <Link href="/campaigns" className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg transition-colors hover:bg-foreground/[0.02] dark:border-[#2a2a2a] dark:bg-[#191919] dark:hover:bg-white/[0.02] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
             <MiniSparkline />
@@ -1073,7 +1074,7 @@ function DashboardView() {
               <span className="flex h-6 items-center rounded-full border-2 border-white bg-[#FFF2E5] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#E57100] dark:border-card-bg dark:bg-[rgba(229,113,0,0.15)]">2 Retainer</span>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Views */}
         <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
@@ -1100,7 +1101,7 @@ function DashboardView() {
         </div>
 
         {/* Paid Out */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
+        <Link href="/payouts" className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg transition-colors hover:bg-foreground/[0.02] dark:border-[#2a2a2a] dark:bg-[#191919] dark:hover:bg-white/[0.02] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
           <div className="flex items-start justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
             <MiniSparkline />
@@ -1109,20 +1110,20 @@ function DashboardView() {
             <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$18.4k</span>
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$10.7k spend this period</span>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Active Campaigns + Needs Attention Row */}
       <div className="flex flex-col gap-2 lg:flex-row">
         {/* Active Campaigns Table */}
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#2a2a2a] dark:bg-[#191919]">
+        <div data-demo="active-campaigns" className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#2a2a2a] dark:bg-[#191919]">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border px-4 py-2.5 dark:border-[#2a2a2a] sm:px-6">
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Active Campaigns</span>
-            <button className="group flex cursor-pointer items-center gap-1.5">
+            <Link href="/campaigns" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </button>
+            </Link>
           </div>
           {/* Rows */}
           <div
@@ -1147,8 +1148,9 @@ function DashboardView() {
             {CAMPAIGNS.map((c, i) => {
               const hideBorder = campaignHover.activeIndex === i || campaignHover.activeIndex === i + 1;
               return (
-                <div
+                <Link
                   key={i}
+                  href={`/campaigns/${c.id}`}
                   ref={(el) => campaignHover.registerItem(i, el)}
                   data-proximity-index={i}
                   className={cn(
@@ -1166,7 +1168,7 @@ function DashboardView() {
                     </div>
                     <BudgetBar pct={c.pct} color={c.color} />
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -1177,8 +1179,9 @@ function DashboardView() {
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs Attention</span>
           <div className="flex flex-col gap-2">
             {ATTENTION_ITEMS.map((item, i) => (
-              <button
+              <Link
                 key={i}
+                href={item.href}
                 className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white px-3 py-4 text-left transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.06] dark:bg-card-bg"
               >
                 <div
@@ -1189,12 +1192,12 @@ function DashboardView() {
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">{item.title}</span>
-                  <span className="truncate font-inter text-xs leading-none tracking-[-0.02em] text-foreground/50">{item.subtitle}</span>
+                  <span className="truncate font-inter text-xs leading-normal tracking-[-0.02em] text-foreground/50">{item.subtitle}</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50 transition-transform duration-200 ease-out group-hover:translate-x-0.5">
                   <path d="M6 2.667L10 8L6 13.333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                 </svg>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -1233,10 +1236,10 @@ function DashboardView() {
         <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
-            <button className="group flex cursor-pointer items-center gap-1.5">
+            <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </button>
+            </Link>
           </div>
           <div
             ref={activityContainerRef}
@@ -1283,10 +1286,10 @@ function DashboardView() {
         <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators this week</span>
-            <button className="group flex cursor-pointer items-center gap-1.5">
+            <Link href="/creators" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </button>
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             {/* #1 — featured card */}
@@ -1329,10 +1332,10 @@ function DashboardView() {
         <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
-            <button className="group flex cursor-pointer items-center gap-1.5">
+            <Link href="/submissions" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </button>
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             {PENDING_DRAFTS.map((draft, i) => (
@@ -1359,9 +1362,61 @@ const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1];
 
 // ── Page ───────────────────────────────────────────────────────────
 
+// ── Empty State (no campaigns yet) ────────────────────────────────
+
+function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
+  return (
+    <div className="flex flex-1 flex-col">
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
+        <button
+          onClick={onNewCampaign}
+          className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90 dark:text-[#111111]"
+        >
+          <PlusIcon className="size-4" />
+          New Campaign
+        </button>
+      </div>
+
+      {/* Empty content */}
+      <div className="flex flex-1 flex-col items-center px-5 pt-[160px]">
+        <div className="flex flex-col items-center gap-4">
+          {/* Icon circle */}
+          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-[#191919] dark:shadow-[0_0_0_2px_#191919]">
+            <MegaphoneIcon className="size-6 text-page-text" width={24} height={24} />
+          </div>
+
+          {/* Text */}
+          <div className="flex flex-col items-center gap-2">
+            <h2 className="font-inter text-[18px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+              It&apos;s quiet in here (for now)
+            </h2>
+            <p className="max-w-[360px] text-center font-inter text-[14px] leading-[1.5] tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-white/50">
+              Launch a campaign and this dashboard will light up with views, CPM, creator payouts, drafts, and anything that needs your attention.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <button
+            onClick={onNewCampaign}
+            className="mt-2 inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90 dark:text-[#111111]"
+          >
+            <PlusIcon className="size-4" />
+            New Campaign
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────
+
 export default function Home() {
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [skipped, setSkipped] = useState(false);
+  const [hasCampaign, setHasCampaign] = useState(false);
 
   const onToggle = useCallback((key: string) => {
     setCompleted((prev) => ({ ...prev, [key]: true }));
@@ -1372,12 +1427,12 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn("dark:bg-[#111111]", showOnboarding ? "flex min-h-full flex-col" : "")}>
+    <div className={cn("dark:bg-[#111111]", showOnboarding || !hasCampaign ? "flex h-full flex-col" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div
             key="onboarding"
-            className="flex min-h-full flex-1 flex-col"
+            className="flex min-h-0 flex-1 flex-col"
             style={{ willChange: "transform, opacity" }}
             exit={{
               opacity: 0,
@@ -1391,6 +1446,21 @@ export default function Home() {
               onSkip={() => setSkipped(true)}
             />
           </motion.div>
+        ) : !hasCampaign ? (
+          <motion.div
+            key="empty"
+            className="flex min-h-0 flex-1 flex-col"
+            style={{ willChange: "transform, opacity" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{
+              opacity: 0,
+              x: -30,
+              transition: { duration: 0.2, ease: EASE_OUT },
+            }}
+          >
+            <EmptyHomeState onNewCampaign={() => setHasCampaign(true)} />
+          </motion.div>
         ) : (
           <motion.div
             key="dashboard"
@@ -1400,7 +1470,7 @@ export default function Home() {
             transition={{ duration: 0.25, ease: EASE_OUT }}
           >
             <motion.div
-              className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5"
+              className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2, delay: 0.08, ease: EASE_OUT }}

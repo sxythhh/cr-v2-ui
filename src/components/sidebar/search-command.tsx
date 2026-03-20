@@ -70,9 +70,9 @@ export function SearchCommand({ onOpenChange }: { onOpenChange?: (open: boolean)
                   Creators
                   <CommandShortcut>C</CommandShortcut>
                 </CommandItem>
-                <CommandItem value="Analytics" onClick={() => navigate("/analytics")}>
+                <CommandItem value="Insights" onClick={() => navigate("/analytics")}>
                   <PieChart className="size-4" />
-                  Analytics
+                  Insights
                   <CommandShortcut>A</CommandShortcut>
                 </CommandItem>
                 <CommandItem value="Settings" onClick={() => navigate("/settings")}>

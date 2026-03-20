@@ -62,10 +62,13 @@ export function AnalyticsPocSelect({
     >
       <button
         className={cn(
-          "inline-flex h-[34px] max-w-[200px] cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--ap-border)] px-2.5",
-          "font-inter text-[13px] font-medium leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]",
-          "outline-none transition-colors",
-          "bg-[var(--ap-select-bg)] hover:bg-[var(--ap-input-bg)]",
+          "inline-flex h-9 max-w-[300px] cursor-pointer items-center gap-2 rounded-full px-3.5",
+          "border border-foreground/[0.06] dark:border-white/[0.08]",
+          "bg-white dark:bg-white/[0.06]",
+          "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+          "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
+          "outline-none transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.08]",
+          "focus-visible:ring-2 focus-visible:ring-foreground/[0.12] dark:focus-visible:ring-white/[0.15] focus-visible:ring-offset-0",
         )}
         type="button"
       >
@@ -75,7 +78,7 @@ export function AnalyticsPocSelect({
           </span>
         ) : null}
         <span className="truncate">{displayLabel}</span>
-        <ChevronDown className="ml-0.5 size-3.5 shrink-0 text-[var(--ap-text-tertiary)]" />
+        <ChevronDown className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-data-[open]:rotate-180" />
       </button>
     </FilterSelect>
   );

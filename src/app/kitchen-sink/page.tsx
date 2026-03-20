@@ -197,7 +197,7 @@ export default function KitchenSinkPage() {
         {/* Variants */}
         <Label>Variants</Label>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary">Primary</Button>
+          <Button variant="default">Primary</Button>
           <Button variant="secondary">Secondary</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
@@ -209,33 +209,33 @@ export default function KitchenSinkPage() {
         <div className="flex flex-wrap items-center gap-3">
           <Button size="xs">Extra Small</Button>
           <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
+          <Button size="default">Medium</Button>
           <Button size="lg">Large</Button>
         </div>
 
         {/* With icons */}
         <Label>With Icons</Label>
         <div className="flex flex-wrap items-center gap-3">
-          <Button leadingIcon={<PlusIcon />}>Create Campaign</Button>
-          <Button variant="secondary" leadingIcon={<SearchIcon />}>Search</Button>
-          <Button variant="outline" trailingIcon={<ChevronDownIcon />}>Options</Button>
-          <Button variant="destructive" leadingIcon={<TrashIcon />}>Delete</Button>
+          <Button><PlusIcon /> Create Campaign</Button>
+          <Button variant="secondary"><SearchIcon /> Search</Button>
+          <Button variant="outline">Options <ChevronDownIcon /></Button>
+          <Button variant="destructive"><TrashIcon /> Delete</Button>
         </div>
 
         {/* Icon-only */}
         <Label>Icon Only</Label>
         <div className="flex flex-wrap items-center gap-3">
-          <Button iconOnly size="xs" variant="ghost"><SettingsIcon /></Button>
-          <Button iconOnly size="sm" variant="ghost"><SettingsIcon /></Button>
-          <Button iconOnly size="md" variant="secondary"><PlusIcon /></Button>
-          <Button iconOnly size="lg" variant="outline"><SearchIcon /></Button>
+          <Button size="icon-xs" variant="ghost"><SettingsIcon /></Button>
+          <Button size="icon-sm" variant="ghost"><SettingsIcon /></Button>
+          <Button size="icon" variant="secondary"><PlusIcon /></Button>
+          <Button size="icon-lg" variant="outline"><SearchIcon /></Button>
         </div>
 
         {/* States */}
         <Label>States</Label>
         <div className="flex flex-wrap items-center gap-3">
           <Button disabled>Disabled</Button>
-          <Button loading={loadingBtn} onClick={handleLoading}>
+          <Button disabled={loadingBtn} onClick={handleLoading}>
             {loadingBtn ? "Saving..." : "Click to Load"}
           </Button>
           <Button variant="secondary" disabled>Disabled Secondary</Button>
@@ -244,9 +244,9 @@ export default function KitchenSinkPage() {
         {/* All variants × outline/secondary with icons */}
         <Label>Rounded Pill</Label>
         <div className="flex flex-wrap items-center gap-3">
-          <Button className="rounded-full" leadingIcon={<PlusIcon />}>New</Button>
-          <Button className="rounded-full" variant="secondary" leadingIcon={<StarIcon />}>Favorite</Button>
-          <Button className="rounded-full" variant="outline" trailingIcon={<ChevronDownIcon />}>Filter</Button>
+          <Button className="rounded-full"><PlusIcon /> New</Button>
+          <Button className="rounded-full" variant="secondary"><StarIcon /> Favorite</Button>
+          <Button className="rounded-full" variant="outline">Filter <ChevronDownIcon /></Button>
         </div>
       </Section>
 
@@ -260,7 +260,7 @@ export default function KitchenSinkPage() {
             onSelect={handleDubFilterSelect}
             onRemove={handleDubFilterRemove}
           >
-            <Button variant="outline" trailingIcon={<ChevronDownIcon />}>
+            <Button variant="outline" >
               All Filters
             </Button>
           </FilterSelect>
@@ -271,7 +271,7 @@ export default function KitchenSinkPage() {
             onSelect={handleDubFilterSelect}
             onRemove={handleDubFilterRemove}
           >
-            <Button variant="secondary" trailingIcon={<ChevronDownIcon />}>
+            <Button variant="secondary" >
               Options
             </Button>
           </FilterSelect>
@@ -296,7 +296,7 @@ export default function KitchenSinkPage() {
             onSelect={handleDubFilterSelect}
             onRemove={handleDubFilterRemove}
           >
-            <Button iconOnly variant="outline" size="sm">
+            <Button variant="outline" size="icon-sm">
               <PlusIcon />
             </Button>
           </FilterSelect>
@@ -307,7 +307,7 @@ export default function KitchenSinkPage() {
             onSelect={handleDubFilterSelect}
             onRemove={handleDubFilterRemove}
           >
-            <Button iconOnly variant="ghost" size="sm">
+            <Button variant="ghost" size="icon-sm">
               <SettingsIcon />
             </Button>
           </FilterSelect>
@@ -333,7 +333,7 @@ export default function KitchenSinkPage() {
             onRemove={handleDubFilterRemove}
             searchPlaceholder="Search domains..."
           >
-            <Button variant="outline" size="sm" trailingIcon={<ChevronDownIcon />}>
+            <Button variant="outline" size="sm" >
               Domain
             </Button>
           </FilterSelect>
@@ -345,7 +345,7 @@ export default function KitchenSinkPage() {
             onRemove={handleDubFilterRemove}
             searchPlaceholder="Search tags..."
           >
-            <Button variant="outline" size="sm" trailingIcon={<ChevronDownIcon />}>
+            <Button variant="outline" size="sm" >
               Tags (multi)
             </Button>
           </FilterSelect>
@@ -523,6 +523,7 @@ export default function KitchenSinkPage() {
     </div>
   );
 }
+
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

@@ -32,6 +32,7 @@ export interface AnalyticsPocFilterToolbarProps {
   dateLabel: string;
   campaignLabel: string;
   dateSlot?: ReactNode;
+  platformSlot?: ReactNode;
   campaignSlot?: ReactNode;
   className?: string;
 }

@@ -2291,7 +2291,7 @@ function TimelineEvent({
             )}
           />
           <div className="flex flex-1 items-center gap-1.5">
-            <span className="flex-1 truncate font-inter text-sm font-medium leading-none tracking-[-0.02em] text-page-text">{name}</span>
+            <span className="flex-1 truncate font-inter text-sm font-medium leading-normal tracking-[-0.02em] text-page-text">{name}</span>
             <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">{time}</span>
           </div>
         </div>
@@ -2556,7 +2556,7 @@ function ScrollSnapList({ children }: { children: ReactNode }) {
         ref={scrollRef}
         onScroll={handleScroll}
         className="scrollbar-hide flex flex-col gap-2"
-        style={{ scrollSnapType: "y mandatory", overflowY: "auto", maxHeight: "calc(100vh - 180px)" }}
+        style={{ scrollSnapType: "y mandatory", overflowY: "auto", maxHeight: "calc(100dvh - 180px)" }}
       >
         {children}
       </div>
@@ -2945,7 +2945,7 @@ export default function SubmissionsPage() {
           )}
         >
           {/* Tabs */}
-          <Tabs selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="scrollbar-hide overflow-x-auto">
+          <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="scrollbar-hide overflow-x-auto">
             {TABS.map((tab, i) => (
               <TabItem
                 key={tab.name}

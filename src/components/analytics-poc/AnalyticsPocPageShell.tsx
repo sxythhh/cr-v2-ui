@@ -115,7 +115,7 @@ export function AnalyticsPocPageShell({
       <style>{AP_THEME_STYLES}</style>
       <div
         className={cn(
-          "min-h-screen select-none bg-[var(--ap-bg)]",
+          "min-h-screen select-none bg-page-bg",
           className,
         )}
       >

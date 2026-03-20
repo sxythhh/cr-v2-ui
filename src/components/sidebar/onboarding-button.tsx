@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect, type SVGProps } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useInteractiveDemo, PLATFORM_DEMO } from "@/components/interactive-demo";
 
 function CheckCircleIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -126,6 +127,7 @@ export function OnboardingButton() {
   const [open, setOpen] = useState(false);
   const [completed, setCompleted] = useState<Set<string>>(() => new Set(["account"]));
   const containerRef = useRef<HTMLDivElement>(null);
+  const { start: startDemo } = useInteractiveDemo();
 
   const toggle = useCallback((id: string) => {
     setCompleted((prev) => {
@@ -151,7 +153,7 @@ export function OnboardingButton() {
   const progress = completed.size / STEPS.length;
 
   return (
-    <div ref={containerRef} className="fixed bottom-0 right-0 z-40 m-5">
+    <div ref={containerRef} className="fixed bottom-5 right-5 z-50">
       {/* Popover - positioned above button */}
       <AnimatePresence>
         {open && (
@@ -160,7 +162,7 @@ export function OnboardingButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-full right-0 mb-2 w-[320px] origin-bottom-right overflow-hidden rounded-xl shadow-lg ring-1 ring-border"
+            className="absolute bottom-full right-0 mb-2 w-[320px] max-h-[calc(100dvh-80px)] origin-bottom-right overflow-y-auto overflow-x-hidden rounded-xl shadow-lg ring-1 ring-border"
           >
             {/* Header */}
             <div className="bg-[#151515] px-4 pb-3 pt-4">
@@ -253,8 +255,28 @@ export function OnboardingButton() {
               </div>
 
               <button
+                onClick={() => {
+                  setOpen(false);
+                  startDemo(PLATFORM_DEMO);
+                }}
+                className="mt-2 flex h-[34px] w-full cursor-pointer items-center justify-center gap-[6px] rounded-lg px-[12px] pr-[10px] font-[family-name:var(--font-inter)] text-[14px] font-medium leading-[22px] tracking-[-0.16px] text-white transition-transform active:scale-[0.98]"
+                style={{
+                  background: "#FF7A00",
+                  border: "1px solid #CC6200",
+                  borderRadius: "8px",
+                  boxShadow: "0px 1px 1px rgba(0,0,0,0.1), 0px 2px 3px rgba(0,0,0,0.08), 1px 4px 8px rgba(0,0,0,0.12), inset 0px -2px 1px rgba(0,0,0,0.2), inset 0px 1px 0px rgba(255,255,255,0.25)",
+                }}
+              >
+                Explore product
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                  <path d="M8 3.33V12.67" stroke="white" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12.67 8L8 12.67L3.33 8" stroke="white" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              <button
                 onClick={() => setOpen(false)}
-                className="mt-2 flex h-7 w-full cursor-pointer items-center justify-center rounded-lg bg-[rgba(37,37,37,0.06)] font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-75 hover:bg-[rgba(37,37,37,0.1)] active:scale-[0.98] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.1)]"
+                className="mt-1 flex h-7 w-full cursor-pointer items-center justify-center rounded-lg bg-[rgba(37,37,37,0.06)] font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-75 hover:bg-[rgba(37,37,37,0.1)] active:scale-[0.98] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.1)]"
               >
                 Dismiss guide
               </button>

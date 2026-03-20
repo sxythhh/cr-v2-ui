@@ -599,7 +599,7 @@ function PayoutDetailDialog({
                         </span>
                       </div>
                       <div className="flex h-14 min-w-0 flex-1 items-center px-3">
-                        <span className="truncate font-inter text-xs leading-none tracking-[-0.02em] text-page-text">
+                        <span className="truncate font-inter text-xs leading-normal tracking-[-0.02em] text-page-text">
                           {entry.title}
                         </span>
                       </div>
@@ -708,7 +708,7 @@ function PayoutTableRow({
           </div>
           <span
             className={cn(
-              "font-[family-name:var(--font-inter)] text-sm font-medium leading-none tracking-[-0.02em]",
+              "min-w-0 truncate font-[family-name:var(--font-inter)] text-sm font-medium leading-normal tracking-[-0.02em]",
               isFlagged ? "text-[#FF2525]" : "text-page-text",
             )}
           >
@@ -727,7 +727,7 @@ function PayoutTableRow({
 
         {/* Campaign */}
         <div className="flex h-14 min-w-0 flex-1 items-center justify-end py-3 pl-5 pr-3">
-          <span className="font-[family-name:var(--font-inter)] text-xs leading-none tracking-[-0.02em] text-page-text">
+          <span className="truncate font-[family-name:var(--font-inter)] text-xs leading-normal tracking-[-0.02em] text-page-text">
             {row.campaign}
           </span>
         </div>
@@ -878,7 +878,7 @@ export default function PayoutsPage() {
       {/* Content */}
       <div className="flex flex-col gap-3 px-4 py-4 sm:px-5 sm:py-5">
         {/* Stat cards row */}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {STAT_CARDS.map((card) => (
             <div
               key={card.label}

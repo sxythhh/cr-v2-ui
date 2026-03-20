@@ -400,8 +400,9 @@ export function FilterSelect({
       <div
         ref={refs.setReference}
         className={cn(
-          "inline-flex w-fit rounded-xl transition-shadow",
-          isOpen && "ring-2 ring-foreground/10",
+          "inline-flex w-fit rounded-full transition-shadow",
+          "group",
+          isOpen && "ring-2 ring-foreground/10 dark:ring-white/[0.15]",
           className,
         )}
         data-open={isOpen || undefined}

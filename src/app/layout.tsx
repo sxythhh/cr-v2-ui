@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
@@ -7,6 +7,7 @@ import { MainNav } from "@/components/sidebar/main-nav";
 import { ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChatWidget } from "@/components/chat-widget";
+import { InteractiveDemoProvider } from "@/components/interactive-demo";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -15,6 +16,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.webp",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -28,7 +36,9 @@ export default function RootLayout({
         <ThemeProvider>
           <ToastProvider position="bottom-right">
             <SideNavProvider>
-              <MainNav>{children}</MainNav>
+              <InteractiveDemoProvider>
+                <MainNav>{children}</MainNav>
+              </InteractiveDemoProvider>
               {/* <ChatWidget /> */}
             </SideNavProvider>
           </ToastProvider>

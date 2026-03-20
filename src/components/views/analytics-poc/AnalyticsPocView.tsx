@@ -10,8 +10,8 @@ import {
   AnalyticsPocDateRangePicker,
   AnalyticsPocDayDrilldown,
   AnalyticsPocDetailDialog,
+  AnalyticsPocDiscoverTab,
   AnalyticsPocFilterToolbar,
-  AnalyticsPocHeader,
   AnalyticsPocHealthCard,
   AnalyticsPocHeatmapCard,
   AnalyticsPocInsightsCard,
@@ -34,9 +34,12 @@ import {
   getAnalyticsPocDayDrilldown,
 } from "@/components/analytics-poc";
 import { AnalyticsPocChartToggleChip } from "@/components/analytics-poc/AnalyticsPocChartToggleChip";
+import { AnalyticsPocPlatformSelect } from "@/components/analytics-poc/AnalyticsPocPlatformSelect";
 import type { AnalyticsPocDayDrilldownData } from "@/components/analytics-poc/AnalyticsPocDayDrilldown";
+import { cn } from "@/lib/utils";
+import { ProximityTabs } from "@/components/ui/proximity-tabs";
 
-const PAGE_TABS = ["Overview", "Campaign Health"] as const;
+const PAGE_TABS = ["Content", "Campaigns health", "Discover page"] as const;
 type PageTab = (typeof PAGE_TABS)[number];
 
 const DRILLDOWN_TRANSITION = {
@@ -45,9 +48,45 @@ const DRILLDOWN_TRANSITION = {
   transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] },
 } as const;
 
+function ExportButton() {
+  return (
+    <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pr-3.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M5.33 6.67L8 4l2.67 2.67M8 4v6.67M3.33 10.67v1.33a1.33 1.33 0 001.34 1.33h6.66a1.33 1.33 0 001.34-1.33v-1.33"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      Export
+    </button>
+  );
+}
+
+function PageTabBar({
+  activeTab,
+  onTabChange,
+}: {
+  activeTab: PageTab;
+  onTabChange: (tab: PageTab) => void;
+}) {
+  return (
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-4 dark:border-foreground/[0.08] sm:pr-5 lg:pr-10">
+      <ProximityTabs
+        tabs={PAGE_TABS.map((t) => ({ label: t }))}
+        selectedIndex={PAGE_TABS.indexOf(activeTab)}
+        onSelect={(i) => onTabChange(PAGE_TABS[i])}
+      />
+      <ExportButton />
+    </header>
+  );
+}
+
 export function AnalyticsPocView() {
   const data = analyticsPocMockData;
-  const [activePageTab, _setActivePageTab] = useState<PageTab>("Overview");
+  const [activePageTab, setActivePageTab] = useState<PageTab>("Discover page");
   const [activePerformanceTab, setActivePerformanceTab] = useState(
     data.performance.activeTab,
   );
@@ -69,6 +108,21 @@ export function AnalyticsPocView() {
   );
   const [dateRange, setDateRange] = useState("last-30-days");
   const [selectedCampaign, setSelectedCampaign] = useState("fall-off");
+  const [platformState, setPlatformState] = useState<{ id: string; label: string; active: boolean }[]>(() =>
+    [
+      ...data.filters.platforms,
+      ...(data.filters.platforms.some((p) => p.id === "x") ? [] : [{ id: "x" as const, label: "X", active: false }]),
+    ].map((p) => ({ ...p })),
+  );
+  const handlePlatformToggle = (id: string) => {
+    setPlatformState((prev) => {
+      const enabledCount = prev.filter((p) => p.active).length;
+      const target = prev.find((p) => p.id === id);
+      // Don't allow deselecting the last one
+      if (target?.active && enabledCount <= 1) return prev;
+      return prev.map((p) => (p.id === id ? { ...p, active: !p.active } : p));
+    });
+  };
   const [perfRange, setPerfRange] = useState("last-30-days");
   const [showViewsDetail, setShowViewsDetail] = useState(false);
   const [viewsDialogOpen, setViewsDialogOpen] = useState(false);
@@ -165,7 +219,7 @@ export function AnalyticsPocView() {
   if (showViewsDetail) {
     return (
       <AnalyticsPocPageShell>
-        <AnalyticsPocHeader title={data.header.title} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
         <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocViewsDetail
             rows={analyticsPocViewsDetailMockData}
@@ -179,7 +233,7 @@ export function AnalyticsPocView() {
   if (dayDrilldown) {
     return (
       <AnalyticsPocPageShell>
-        <AnalyticsPocHeader title={data.header.title} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
         <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocDayDrilldown
             data={dayDrilldown}
@@ -190,10 +244,10 @@ export function AnalyticsPocView() {
     );
   }
 
-  if (activePageTab === "Campaign Health") {
+  if (activePageTab === "Campaigns health") {
     return (
       <AnalyticsPocPageShell>
-        <AnalyticsPocHeader title={data.header.title} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
         <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
           <AnalyticsPocCampaignHealthTab
             {...analyticsPocCampaignHealthMockData}
@@ -203,9 +257,44 @@ export function AnalyticsPocView() {
     );
   }
 
+  if (activePageTab === "Discover page") {
+    return (
+      <AnalyticsPocPageShell>
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
+          <AnalyticsPocFilterToolbar
+            campaignLabel={data.filters.campaignLabel}
+            campaignSlot={
+              <AnalyticsPocSelect
+                onValueChange={setSelectedCampaign}
+                options={campaignOptions}
+                value={selectedCampaign}
+              />
+            }
+            dateLabel={data.filters.dateLabel}
+            dateSlot={
+              <AnalyticsPocDateRangePicker
+                onValueChange={setDateRange}
+                value={dateRange}
+              />
+            }
+            platformSlot={
+              <AnalyticsPocPlatformSelect
+                platforms={platformState as import("@/components/analytics-poc/types").AnalyticsPocFilterChip[]}
+                onToggle={handlePlatformToggle}
+              />
+            }
+            platforms={platformState as import("@/components/analytics-poc/types").AnalyticsPocFilterChip[]}
+          />
+          <AnalyticsPocDiscoverTab />
+        </div>
+      </AnalyticsPocPageShell>
+    );
+  }
+
   return (
     <AnalyticsPocPageShell>
-      <AnalyticsPocHeader title={data.header.title} />
+      <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
 
       <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
       <AnalyticsPocFilterToolbar
@@ -224,12 +313,13 @@ export function AnalyticsPocView() {
             value={dateRange}
           />
         }
-        platforms={data.filters.platforms}
-      />
-
-      <AnalyticsPocMediumCardsRow
-        left={<AnalyticsPocInsightsCard {...data.insightsCard} />}
-        right={<AnalyticsPocHealthCard {...data.healthCard} />}
+        platformSlot={
+          <AnalyticsPocPlatformSelect
+            platforms={platformState as import("@/components/analytics-poc/types").AnalyticsPocFilterChip[]}
+            onToggle={handlePlatformToggle}
+          />
+        }
+        platforms={platformState as import("@/components/analytics-poc/types").AnalyticsPocFilterChip[]}
       />
 
       <AnalyticsPocKpiRow>
@@ -305,6 +395,11 @@ export function AnalyticsPocView() {
           />
         </div>
       </AnalyticsPocPanel>
+
+      <AnalyticsPocMediumCardsRow
+        left={<AnalyticsPocInsightsCard {...data.insightsCard} />}
+        right={<AnalyticsPocHealthCard {...data.healthCard} />}
+      />
 
       <AnalyticsPocTwoColumnRow
         left={<AnalyticsPocRankListCard {...data.viewsCard} />}

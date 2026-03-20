@@ -9,7 +9,9 @@ import {
   ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
   AnalyticsPocCardHeader,
 } from "./AnalyticsPocCardPrimitives";
+import { GlassTooltip } from "@/components/ui/glass-tooltip";
 import { AnalyticsPocChartPlaceholder } from "./AnalyticsPocChartPlaceholder";
+import { AnalyticsPocGradientBar } from "./AnalyticsPocGradientBar";
 import { ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS } from "./interaction";
 import type {
   AnalyticsPocEngagementCardProps,
@@ -27,11 +29,6 @@ const CTR_PILL_STYLE: CSSProperties = {
   backgroundColor: "rgba(34, 197, 94, 0.12)",
   borderRadius: "100px",
   color: "#15803d",
-};
-
-const TRAFFIC_BAR_STYLE: CSSProperties = {
-  background: "linear-gradient(90deg, #60A5FA 0%, #A78BFA 100%)",
-  borderRadius: "4px",
 };
 
 const SERIES_COLORS: Record<string, string> = {
@@ -137,22 +134,22 @@ function SeriesPill({
 
 function TrafficSourceRow({ source }: { source: AnalyticsPocTrafficSource }) {
   return (
-    <div className="grid grid-cols-[24px_1fr_100px_80px_60px_60px] items-center gap-3">
+    <GlassTooltip
+      text={`${source.label}: ${source.views} views → ${source.applied} applied (${source.convRate} conv. rate)`}
+      className="group/traffic-row -mx-2 grid grid-cols-[24px_1fr_100px_80px_60px_60px] items-center gap-3 rounded-lg px-2 py-1.5 cursor-default transition-colors duration-150 hover:bg-[var(--ap-hover)]"
+    >
       <span className="font-inter text-[12px] font-medium leading-[1.2] text-[var(--ap-text-tertiary)] text-center">
         {source.rank}
       </span>
       <span className="truncate font-inter text-[13px] font-medium leading-[1.2] text-[var(--ap-text)]">
         {source.label}
       </span>
-      <div className="h-[6px] overflow-hidden rounded-[4px] bg-[var(--ap-hover)]">
-        <div
-          className="h-full"
-          style={{
-            ...TRAFFIC_BAR_STYLE,
-            width: `${Math.min(Math.max(source.progress, 0), 100)}%`,
-          }}
-        />
-      </div>
+      <AnalyticsPocGradientBar
+        progress={source.progress}
+        color="#60A5FA"
+        colorEnd="#A78BFA"
+        className="transition-transform duration-150 ease-out group-hover/traffic-row:scale-y-[1.5]"
+      />
       <span className="font-inter text-[12px] font-normal leading-[1.2] text-[var(--ap-text-strong)] text-right">
         {source.views}
       </span>
@@ -162,7 +159,7 @@ function TrafficSourceRow({ source }: { source: AnalyticsPocTrafficSource }) {
       <span className="font-inter text-[12px] font-normal leading-[1.2] text-[var(--ap-text-strong)] text-right">
         {source.convRate}
       </span>
-    </div>
+    </GlassTooltip>
   );
 }
 

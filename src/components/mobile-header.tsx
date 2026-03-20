@@ -17,7 +17,7 @@ export function MobileHeader() {
       <div className="flex flex-1 items-center justify-end gap-1">
         <button
           type="button"
-          className="flex size-11 items-center justify-center rounded-full text-[#7B7B7B] active:bg-foreground/[0.06]"
+          className="flex size-11 items-center justify-center rounded-full text-page-text-muted active:bg-foreground/[0.06]"
           onClick={() => setSearchOpen(true)}
         >
           <IconSearch size={20} stroke={2} />
@@ -25,7 +25,7 @@ export function MobileHeader() {
 
         <button
           type="button"
-          className="relative flex size-11 items-center justify-center rounded-full text-[#7B7B7B] active:bg-foreground/[0.06]"
+          className="relative flex size-11 items-center justify-center rounded-full text-page-text-muted active:bg-foreground/[0.06]"
         >
           <IconBell size={20} stroke={2} />
           <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-red-500" />

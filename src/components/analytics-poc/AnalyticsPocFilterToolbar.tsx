@@ -4,88 +4,74 @@ import { cn } from "@/lib/utils";
 import { ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS } from "./interaction";
 import type { AnalyticsPocFilterToolbarProps } from "./types";
 
-function PlatformPill({
-  id,
-  active,
-}: {
-  id: string;
-  label: string;
-  active: boolean;
-}) {
-  const normalizedId = id.toLowerCase();
-
-  return (
-    <button
-      type="button"
-      className={cn(
-        "relative flex size-9 items-center justify-center rounded-full cursor-pointer",
-        "bg-foreground/[0.06] backdrop-blur-[12px]",
-        "transition-[transform,opacity,background-color] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)] active:scale-[0.95]",
-        "hover:bg-foreground/[0.10]",
-        active
-          ? "text-foreground"
-          : "text-foreground/30 dark:text-white/40",
-      )}
-    >
-      <PlatformIcon platform={normalizedId} size={20} />
-    </button>
-  );
-}
+/** Shared pill button classes matching Figma spec */
+export const analyticsPillButtonClass = cn(
+  "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-3.5",
+  "border border-foreground/[0.06] dark:border-white/[0.08]",
+  "bg-white dark:bg-white/[0.06]",
+  "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+  "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
+  "outline-none focus-visible:ring-2 focus-visible:ring-foreground/[0.12] dark:focus-visible:ring-white/[0.15] focus-visible:ring-offset-0",
+  "transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.08]",
+);
 
 export function AnalyticsPocFilterToolbar({
   platforms,
   dateLabel,
   campaignLabel,
   dateSlot,
+  platformSlot,
   campaignSlot,
   className,
 }: AnalyticsPocFilterToolbarProps) {
+  const activePlatforms = platforms.filter((p) => p.active);
+  const platformLabel = activePlatforms.map((p) => p.label).join(", ") || "All platforms";
+
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-between gap-2",
+        "flex flex-wrap items-center gap-2",
         className,
       )}
     >
-      <div className="flex items-center gap-2">
-        {platforms.map((platform) => (
-          <PlatformPill
-            active={platform.active}
-            id={platform.id}
-            key={platform.id}
-            label={platform.label}
-          />
-        ))}
-      </div>
+      {/* Date range */}
+      {dateSlot ?? (
+        <button
+          className={cn(ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS, analyticsPillButtonClass)}
+          type="button"
+        >
+          <CalendarDays className="size-4 text-page-text" />
+          {dateLabel}
+          <ChevronDown className="size-4 text-page-text-muted" />
+        </button>
+      )}
 
-      <div className="flex min-w-0 items-center gap-2">
-        {dateSlot ?? (
-          <button
-            className={cn(
-              ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-              "datetime-picker-trigger inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-[10px] border border-solid px-2.5 font-inter-display text-xs font-medium leading-4 tracking-[0.12px] text-foreground",
-            )}
-            type="button"
-          >
-            <CalendarDays className="size-3.5" />
-            {dateLabel}
-            <ChevronDown className="size-3.5" />
-          </button>
-        )}
+      {/* Platform selector */}
+      {platformSlot ?? (
+        <button
+          className={cn(ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS, analyticsPillButtonClass)}
+          type="button"
+        >
+          {activePlatforms.map((p) => (
+            <span key={p.id} className="flex shrink-0 items-center justify-center text-page-text">
+              <PlatformIcon platform={p.id.toLowerCase()} size={16} />
+            </span>
+          ))}
+          <span className="truncate">{platformLabel}</span>
+          <ChevronDown className="size-4 shrink-0 text-page-text-muted" />
+        </button>
+      )}
 
-        {campaignSlot ?? (
-          <button
-            className={cn(
-              ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-              "analytics-card-bg inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-[10px] border border-solid border-primary/12 px-2.5 font-inter-display text-xs font-medium leading-4 tracking-[0.12px] text-foreground",
-            )}
-            type="button"
-          >
-            {campaignLabel}
-            <ChevronDown className="size-3.5" />
-          </button>
-        )}
-      </div>
+      {/* Campaign selector */}
+      {campaignSlot ?? (
+        <button
+          className={cn(ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS, analyticsPillButtonClass)}
+          type="button"
+        >
+          {campaignLabel}
+          <ChevronDown className="size-4 text-page-text-muted" />
+        </button>
+      )}
     </div>
   );
 }

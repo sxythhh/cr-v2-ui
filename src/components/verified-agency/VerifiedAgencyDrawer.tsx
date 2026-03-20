@@ -41,7 +41,7 @@ export function VerifiedAgencyDrawer({
       <DrawerPrimitive.Portal>
         <DrawerPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <DrawerPrimitive.Content
-          className="agency-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100vh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-page-bg shadow-2xl outline-none"
+          className="agency-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-page-bg shadow-2xl outline-none"
           onPointerDownOutside={() => handleOpenChange(false)}
         >
           <style>{`

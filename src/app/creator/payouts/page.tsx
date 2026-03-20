@@ -483,7 +483,7 @@ function WalletDrawer({
       <DrawerPrimitive.Portal>
         <DrawerPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <DrawerPrimitive.Content
-          className="wallet-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100vh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-page-bg shadow-2xl outline-none"
+          className="wallet-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-page-bg shadow-2xl outline-none"
           onPointerDownOutside={() => handleOpenChange(false)}
         >
           <style>{`
@@ -679,7 +679,7 @@ export default function CreatorPayoutsPage() {
         <WalletDrawer open={walletOpen} onOpenChange={setWalletOpen} />
 
         {/* Stats row */}
-        <div className="flex w-full max-w-[640px] gap-2">
+        <div className="grid w-full max-w-[640px] grid-cols-2 gap-2 sm:grid-cols-4">
           {STAT_CARDS.map((card) => (
             <div
               key={card.label}

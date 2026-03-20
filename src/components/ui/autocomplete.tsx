@@ -50,7 +50,7 @@ function AutocompleteInput({
           className,
         )}
         data-slot="autocomplete-input"
-        render={<Input nativeInput size={sizeValue} />}
+        render={<input />}
         {...props}
       />
       {showTrigger && (
@@ -228,7 +228,7 @@ function AutocompleteList({
   ...props
 }: AutocompletePrimitive.List.Props) {
   return (
-    <ScrollArea scrollbarGutter={false} scrollFade={false}>
+    <ScrollArea>
       <AutocompletePrimitive.List
         className={cn(
           "not-empty:scroll-py-1 not-empty:p-1 in-data-has-overflow-y:pe-3",

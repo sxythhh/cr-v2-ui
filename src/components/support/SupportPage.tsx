@@ -17,20 +17,20 @@ import { SupportChat } from "./SupportChat";
 // ── Theme (ported from auth-standalone) ──────────────────────────────────────
 
 const C = {
-  pageBg: "#0a0a0a",
-  sidebarBg: "#0a0a0a",
-  surfaceBg: "#141413",
-  elevatedBg: "#1a1a1a",
-  hoverBg: "#222222",
-  border: "#1a1a1b",
-  textPrimary: "#ffffff",
-  textSecondary: "#969696",
-  textMuted: "#696969",
-  textFaint: "#545454",
-  searchBg: "#0f0f0f",
-  dropdownBg: "#0e0e0e",
-  dropdownHover: "#181818",
-  sidebarIconBg: "#1a1a1a",
+  pageBg: "var(--support-page-bg)",
+  sidebarBg: "var(--support-page-bg)",
+  surfaceBg: "var(--support-surface-bg)",
+  elevatedBg: "var(--support-elevated-bg)",
+  hoverBg: "var(--support-hover-bg)",
+  border: "var(--support-border)",
+  textPrimary: "var(--support-text-primary)",
+  textSecondary: "var(--support-text-secondary)",
+  textMuted: "var(--support-text-muted)",
+  textFaint: "var(--support-text-faint)",
+  searchBg: "var(--support-search-bg)",
+  dropdownBg: "var(--support-dropdown-bg)",
+  dropdownHover: "var(--support-dropdown-hover)",
+  sidebarIconBg: "var(--support-sidebar-icon-bg)",
   accent: "#ff6207",
 } as const;
 
@@ -178,10 +178,10 @@ function SearchBar({
       <div
         ref={barRef}
         onMouseEnter={(e) => {
-          if (!showDropdown) e.currentTarget.style.backgroundColor = "#141414";
+          if (!showDropdown) e.currentTarget.style.backgroundColor = C.elevatedBg as string;
         }}
         onMouseLeave={(e) => {
-          if (!showDropdown) e.currentTarget.style.backgroundColor = "#1a1a1a";
+          if (!showDropdown) e.currentTarget.style.backgroundColor = C.surfaceBg as string;
         }}
         style={{
           display: "flex",
@@ -189,7 +189,7 @@ function SearchBar({
           width: "100%",
           height: 52,
           padding: 3,
-          backgroundColor: "#1a1a1a",
+          backgroundColor: C.surfaceBg,
           borderRadius: showDropdown ? "10px 10px 0 0" : 10,
           boxSizing: "border-box",
           transition: "background-color 0.15s ease, border-radius 0.15s ease",
@@ -217,7 +217,7 @@ function SearchBar({
             width: 38,
             height: 46,
             flexShrink: 0,
-            backgroundColor: "#242222",
+            backgroundColor: C.hoverBg,
             backgroundImage: "none",
             borderRadius: 10,
             border: "none",
@@ -233,25 +233,12 @@ function SearchBar({
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            if (barRef.current) barRef.current.style.backgroundColor = "#1a1a1a";
+            if (barRef.current) barRef.current.style.backgroundColor = C.surfaceBg as string;
           }}
           onFocus={() => setFocused(true)}
-          placeholder={isAiMode ? "Ask AI..." : "Search docs..."}
-          className="support-search-input"
-          style={{
-            flex: 1,
-            minWidth: 0,
-            height: 46,
-            padding: "0 8px",
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            fontFamily: "Inter, sans-serif",
-            fontSize: 14,
-            fontWeight: 600,
-            letterSpacing: "-0.28px",
-            color: "#E3E4E8",
-          }}
+          placeholder={isAiMode ? "Ask AI..." : "Find Opportunities"}
+          className="flex-1 min-w-0 h-[46px] px-2 border-none outline-none bg-transparent font-inter text-[14px] font-semibold tracking-[-0.28px]"
+          style={{ color: C.textPrimary, }}
         />
 
         <button
@@ -281,7 +268,7 @@ function SearchBar({
             top: 52,
             left: 0,
             right: 0,
-            backgroundColor: "#1a1a1a",
+            backgroundColor: C.surfaceBg,
             borderRadius: "0 0 10px 10px",
             overflow: "hidden",
             zIndex: 50,
@@ -296,7 +283,7 @@ function SearchBar({
                 setFocused(false);
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#1e1e1e";
+                e.currentTarget.style.backgroundColor = C.elevatedBg as string;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -315,13 +302,13 @@ function SearchBar({
                 transition: "background-color 0.1s ease",
               }}
             >
-              <Search style={{ width: 14, height: 14, color: "#756B6B", flexShrink: 0 }} />
+              <Search style={{ width: 14, height: 14, color: C.textMuted, flexShrink: 0 }} />
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div
                   style={{
                     fontSize: 13,
                     fontWeight: 600,
-                    color: "#E3E4E8",
+                    color: C.textPrimary,
                     letterSpacing: "-0.28px",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
@@ -333,7 +320,7 @@ function SearchBar({
                 <div
                   style={{
                     fontSize: 11,
-                    color: "#756B6B",
+                    color: C.textMuted,
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -343,7 +330,7 @@ function SearchBar({
                   {page.subtitle}
                 </div>
               </div>
-              <ChevronRight style={{ width: 12, height: 12, color: "#756B6B", flexShrink: 0 }} />
+              <ChevronRight style={{ width: 12, height: 12, color: C.textMuted, flexShrink: 0 }} />
             </button>
           ))}
         </div>
@@ -373,7 +360,7 @@ function Sidebar({
 
   return (
     <div
-      className="hidden lg:flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto"
+      className="hidden lg:flex flex-col shrink-0 sticky top-0 h-dvh overflow-y-auto"
       style={{
         width: 260,
         borderRight: `1px solid ${C.border}`,
@@ -861,7 +848,14 @@ export function SupportPageClient() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAiMode, setIsAiMode] = useState(false);
 
-  const allPages = useMemo(() => categories.flatMap((c) => c.pages), []);
+  const allPages = useMemo(() => {
+    const seen = new Set<string>();
+    return categories.flatMap((c) => c.pages).filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
+  }, []);
 
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -882,7 +876,7 @@ export function SupportPageClient() {
 
   return (
     <div
-      className="min-h-screen font-inter antialiased flex"
+      className="min-h-dvh font-inter antialiased flex"
       style={{ backgroundColor: C.pageBg }}
     >
       {/* Sidebar */}
@@ -936,56 +930,28 @@ export function SupportPageClient() {
 
               {/* Category pills */}
               {!searchQuery && (
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 500,
-                      letterSpacing: "-0.42px",
-                      color: "#E3E4E8",
-                    }}
-                  >
+                <div className="flex items-center gap-2">
+                  <span className="font-inter text-[14px] font-medium tracking-[-0.42px]" style={{ color: C.textPrimary }}>
                     Discover
                   </span>
-                  {categories
-                    .filter((c) => c.pages.length > 0)
-                    .map((cat) => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => {
-                          // Navigate to first page in category
-                          if (cat.pages[0]) {
-                            setSelectedPage(cat.pages[0]);
-                          }
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "rgba(38, 38, 38, 0.32)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "rgba(38, 38, 38, 0.12)";
-                        }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 3,
-                          padding: "6px 12px",
-                          fontSize: 12,
-                          fontWeight: 500,
-                          letterSpacing: "-0.24px",
-                          color: "#F2F2F2",
-                          backgroundColor: "rgba(38, 38, 38, 0.12)",
-                          backgroundImage: "none",
-                          borderRadius: 8,
-                          border: "none",
-                          cursor: "pointer",
-                          transition: "background-color 0.15s ease",
-                        }}
-                      >
-                        <Search style={{ width: 13, height: 13 }} />
-                        {cat.name}
-                      </button>
-                    ))}
+                  {[
+                    { label: "Clipping", onClick: () => categories[0]?.pages[0] && setSelectedPage(categories[0].pages[0]) },
+                    { label: "UGC", onClick: () => categories[1]?.pages[0] && setSelectedPage(categories[1].pages[0]) },
+                    { label: "Music", onClick: () => categories[2]?.pages[0] && setSelectedPage(categories[2].pages[0]) },
+                  ].map((pill) => (
+                    <button
+                      key={pill.label}
+                      type="button"
+                      onClick={pill.onClick}
+                      className="flex h-7 cursor-pointer items-center gap-[3px] rounded-lg border-none bg-foreground/[0.08] px-3 font-inter text-[12px] font-medium tracking-[-0.24px] text-page-text transition-colors hover:bg-foreground/[0.15]"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M1.625 5.41667C1.625 3.32258 3.32258 1.625 5.41667 1.625C7.51075 1.625 9.20833 3.32258 9.20833 5.41667C9.20833 7.51075 7.51075 9.20833 5.41667 9.20833C3.32258 9.20833 1.625 7.51075 1.625 5.41667Z" stroke="currentColor" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8.125 8.125L11.375 11.375" stroke="currentColor" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {pill.label}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>

@@ -20,12 +20,12 @@ function CurrencyInput({
   return (
     <div
       className={cn(
-        "glass-input-bg flex items-center gap-0.5 rounded-xl h-10 p-3 border border-glass-border focus-within:outline-none focus-within:ring-1 focus-within:ring-foreground",
+        "flex items-center gap-0.5 rounded-[14px] h-10 px-3.5 bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(255,255,255,0.06)] focus-within:ring-1 focus-within:ring-[rgba(37,37,37,0.15)] dark:focus-within:ring-[rgba(255,255,255,0.15)]",
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}
     >
-      <span className="text-sm leading-[120%] tracking-[-0.09px] text-glass-text-secondary select-none">
+      <span className="text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-[rgba(255,255,255,0.45)] select-none">
         $
       </span>
       <input
@@ -38,7 +38,7 @@ function CurrencyInput({
         }}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 bg-transparent text-sm leading-[120%] tracking-[-0.09px] text-glass-text outline-none placeholder:text-text-muted"
+        className="flex-1 bg-transparent text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
       />
     </div>
   );

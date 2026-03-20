@@ -1,11 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: __dirname,
   images: {
     remotePatterns: [
       { hostname: "assets-2-prod.whop.com" },
       { hostname: "saqnibxhsephhucwjbdw.supabase.co" },
       { hostname: "ui-avatars.com" },
+      { hostname: "assets.dub.co" },
     ],
   },
   webpack(config) {
