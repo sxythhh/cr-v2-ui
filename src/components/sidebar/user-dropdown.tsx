@@ -222,9 +222,25 @@ function ProfileDropdownCompact({
           </button>
         </div>
 
+        {/* What's new */}
+        <div ref={register(1)}>
+          <button
+            type="button"
+            onClick={() => window.open("/changelog", "_self")}
+            className="relative z-10 flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2"
+          >
+            <svg width="16" height="16" viewBox="0 0 17 16" fill="none">
+              <path d="M13.667 9.034C14.773 9.034 15.667 8.14 15.667 7.034C15.667 5.929 14.773 5.034 13.667 5.034V2.418C13.667 1.296 12.58 0.495 11.508 0.826L1.925 3.785C1.226 4 0.75 4.646 0.75 5.377V8.692C0.75 9.423 1.226 10.068 1.925 10.284L4.083 10.993V12.243C4.083 13.347 4.979 14.243 6.083 14.243C6.914 14.243 7.633 13.729 7.924 13L11.508 11.893C12.58 11.562 13.667 12.364 13.667 13.486V9.034Z" fill="currentColor" fillOpacity="0.5" />
+            </svg>
+            <span className="font-[family-name:var(--font-inter)] text-sm font-normal tracking-[-0.02em] text-dropdown-text">
+              What&apos;s new
+            </span>
+          </button>
+        </div>
+
         {/* Theme (with submenu) */}
         <div
-          ref={register(1)}
+          ref={register(2)}
           className="relative"
           onPointerEnter={onThemeEnter}
           onPointerLeave={onThemeLeave}
@@ -264,7 +280,7 @@ function ProfileDropdownCompact({
         </div>
 
         {/* Log out */}
-        <div ref={register(2)}>
+        <div ref={register(3)}>
           <button
             type="button"
             onClick={onLogout}

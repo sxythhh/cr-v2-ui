@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import type { DetailsData } from "@/types/campaign-flow.types";
 import { ThumbnailUpload } from "../ThumbnailUpload";
+import { RichTextEditor } from "../RichTextEditor";
 
 // ── Icons ──────────────────────────────────────────────────────────
 
@@ -32,7 +33,7 @@ function CalendarIcon() {
   return <svg width="12" height="13" viewBox="0 0 12 13" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V10.6667C12 11.7712 11.1046 12.6667 10 12.6667H2C0.895431 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0ZM1.33333 6V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H10C10.3682 11.3333 10.6667 11.0349 10.6667 10.6667V6H1.33333Z" fill="currentColor" fillOpacity="0.5" /></svg>;
 }
 function EyeIcon() {
-  return <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8.95528 2.13731e-10C12.2484 -2.31454e-05 15.4474 1.8936 17.5859 5.48594C18.0188 6.2132 18.0188 7.12005 17.5859 7.84731C15.4474 11.4396 12.2484 13.3333 8.95529 13.3333C5.66219 13.3334 2.46314 11.4397 0.324692 7.84739C-0.108231 7.12014 -0.10823 6.21328 0.324691 5.48603C2.46314 1.89369 5.66218 2.31475e-05 8.95528 2.13731e-10ZM6.03861 6.66667C6.03861 5.05584 7.34445 3.75 8.95528 3.75C10.5661 3.75 11.8719 5.05584 11.8719 6.66667C11.8719 8.2775 10.5661 9.58333 8.95528 9.58333C7.34445 9.58333 6.03861 8.2775 6.03861 6.66667Z" fill="currentColor" fillOpacity="0.5" /></svg>;
+  return <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8.95528 2.13731e-10C12.2484 -2.31454e-05 15.4474 1.8936 17.5859 5.48594C18.0188 6.2132 18.0188 7.12005 17.5859 7.84731C15.4474 11.4396 12.2484 13.3333 8.95529 13.3333C5.66219 13.3334 2.46314 11.4397 0.324692 7.84739C-0.108231 7.12014 -0.10823 6.21328 0.324691 5.48603C2.46314 1.89369 5.66218 2.31475e-05 8.95528 2.13731e-10ZM6.03861 6.66667C6.03861 5.05584 7.34445 3.75 8.95528 3.75C10.5661 3.75 11.8719 5.05584 11.8719 6.66667C11.8719 8.2775 10.5661 9.58333 8.95528 9.58333C7.34445 9.58333 6.03861 8.2775 6.03861 6.66667Z" fill="currentColor" /></svg>;
 }
 function ChevronDownIcon() {
   return <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -59,8 +60,8 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-foreground" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }
@@ -114,9 +115,12 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
         <Card>
           <div className="flex flex-col gap-4">
             {/* Name */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Name</span>
-              <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+              <div className={cn(
+                "flex h-10 items-center rounded-[14px] px-3.5 transition-colors",
+                data.name.length > 0 && data.name.length < 3 ? "bg-[rgba(255,37,37,0.04)] ring-1 ring-[#FF2525]/30" : "bg-foreground/[0.04]",
+              )}>
                 <input
                   type="text"
                   value={data.name}
@@ -126,38 +130,20 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
                 />
                 <span className="shrink-0 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{data.name.length}/50</span>
               </div>
+              {data.name.length > 0 && data.name.length < 3 && (
+                <span className="font-inter text-xs tracking-[-0.02em] text-[#FF2525]">Name must be at least 3 characters</span>
+              )}
             </div>
 
             {/* Description with toolbar */}
             <div className="flex flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Description</span>
-              <div className="overflow-hidden rounded-[14px] border border-foreground/[0.06]">
-                {/* Toolbar */}
-                <div className="flex items-center gap-1 border-b border-foreground/[0.06] p-1">
-                  {TOOLBAR_BUTTONS.map((btn) => (
-                    <button
-                      key={btn.label}
-                      type="button"
-                      className={cn(
-                        "flex size-8 items-center justify-center rounded-[10px] transition-colors",
-                        btn.active ? "bg-foreground/[0.06] text-page-text" : "text-page-text-subtle hover:bg-foreground/[0.04]",
-                      )}
-                    >
-                      <btn.icon />
-                    </button>
-                  ))}
-                </div>
-                {/* Text area */}
-                <div className="relative bg-foreground/[0.04]">
-                  <textarea
-                    value={data.description}
-                    onChange={(e) => update({ description: e.target.value.slice(0, 300) })}
-                    placeholder="Describe your campaign..."
-                    className="h-[104px] w-full resize-none bg-transparent px-3.5 py-3 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
-                  />
-                  <span className="absolute bottom-3 right-3.5 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{data.description.length}/300</span>
-                </div>
-              </div>
+              <RichTextEditor
+                content={data.description}
+                onChange={(html) => update({ description: html })}
+                placeholder="Describe your campaign..."
+                maxLength={300}
+              />
             </div>
           </div>
         </Card>

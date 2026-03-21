@@ -614,7 +614,7 @@ function creatorToDetails(creator: Creator): CreatorDetailsData {
         { code: "CA", label: "CA", percentage: 9, color: "rgba(6, 182, 212, 0.1)" },
         { code: "DE", label: "DE", percentage: 6, color: "rgba(238, 78, 81, 0.1)" },
         { code: "AU", label: "AU", percentage: 5, color: "rgba(229, 113, 0, 0.1)" },
-        { code: "US", label: "Other", percentage: 18, color: "rgba(26, 103, 229, 0.08)" },
+        { code: "OTHER", label: "Other", percentage: 18, color: "rgba(26, 103, 229, 0.08)" },
       ],
       genderSplit: [
         { label: "Male", percentage: 62, color: "rgba(26, 103, 229, 0.1)" },

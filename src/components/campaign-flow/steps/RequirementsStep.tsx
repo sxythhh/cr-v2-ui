@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { Progress } from "@/components/ui/progress";
 import type { RequirementsData, RequirementsPresets } from "@/types/campaign-flow.types";
 
 // ── Icons ──────────────────────────────────────────────────────────
@@ -52,8 +54,8 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-foreground" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }
@@ -77,10 +79,31 @@ function PresetRow({ label, on, onToggle, children }: { label: string; on: boole
   );
 }
 
-function FileCard({ name, size, ext }: { name: string; size: string; ext: string }) {
+type UploadedFile = { name: string; size: string; ext: string };
+
+function UploadToast({ name, size, progress }: { name: string; size: string; progress: number }) {
+  const done = progress >= 100;
+  return (
+    <div className="flex w-[320px] flex-col gap-2.5 rounded-xl border border-foreground/[0.06] bg-card-bg p-3.5 shadow-lg">
+      <div className="flex items-center gap-3">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-[5px] bg-foreground/[0.06]">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 1h7l3 3v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+            {size} · {done ? "Complete" : `Uploading... ${progress}%`}
+          </span>
+        </div>
+      </div>
+      <Progress value={progress} className="h-1 **:data-[slot=progress-indicator]:bg-foreground" />
+    </div>
+  );
+}
+
+function FileCard({ name, size, ext, onRemove }: UploadedFile & { onRemove: () => void }) {
   return (
     <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
-      {/* Thumbnail placeholder */}
       <div className="flex size-9 shrink-0 items-center justify-center rounded-[5.6px] border border-foreground/[0.06] bg-[#D9D9D9]">
         <span className="rounded-full border border-foreground/[0.06] bg-white px-1 font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-subtle">{ext}</span>
       </div>
@@ -88,24 +111,65 @@ function FileCard({ name, size, ext }: { name: string; size: string; ext: string
         <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{size}</span>
       </div>
-      {/* Delete button */}
-      <button type="button" className="absolute -right-1 -top-1 flex size-6 items-center justify-center rounded-full border-2 border-white bg-[#F2F2F2]">
+      <button type="button" onClick={onRemove} className="absolute -right-1 -top-1 flex size-6 items-center justify-center rounded-full border-2 border-white bg-[#F2F2F2] transition-colors hover:bg-[#e0e0e0]">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.14" /></svg>
       </button>
     </div>
   );
 }
 
-function UploadArea({ icon, title, subtitle, files }: { icon: React.ReactNode; title: string; subtitle: string; files?: { name: string; size: string; ext: string }[] }) {
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function UploadArea({ icon, title, subtitle, accept }: { icon: React.ReactNode; title: string; subtitle: string; accept?: string }) {
+  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const simulateUpload = useCallback((file: File) => {
+    const ext = file.name.split(".").pop()?.toUpperCase() || "FILE";
+    const size = formatFileSize(file.size);
+    let progress = 0;
+
+    const id = toast.custom(() => <UploadToast name={file.name} size={size} progress={progress} />, { duration: Infinity });
+
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 20) + 10;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        toast.custom(() => <UploadToast name={file.name} size={size} progress={100} />, { id, duration: 2000 });
+        setFiles((prev) => [...prev, { name: file.name, size, ext }]);
+      } else {
+        toast.custom(() => <UploadToast name={file.name} size={size} progress={progress} />, { id, duration: Infinity });
+      }
+    }, 300);
+  }, []);
+
+  const handleFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files;
+    if (!selected) return;
+    Array.from(selected).forEach(simulateUpload);
+    e.target.value = "";
+  }, [simulateUpload]);
+
+  const removeFile = (i: number) => setFiles((prev) => prev.filter((_, idx) => idx !== i));
+
   return (
     <Card>
+      <input ref={fileRef} type="file" accept={accept} multiple onChange={handleFiles} className="hidden" />
       <div className="flex flex-col gap-2">
-        {files && files.length > 0 && (
+        {files.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {files.map((f, i) => <FileCard key={i} {...f} />)}
+            {files.map((f, i) => <FileCard key={i} {...f} onRemove={() => removeFile(i)} />)}
           </div>
         )}
-        <div className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[rgba(37,37,37,0.12)] bg-[rgba(37,37,37,0.02)] p-4 transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-[rgba(255,255,255,0.12)] dark:bg-[rgba(255,255,255,0.02)] dark:hover:bg-[rgba(255,255,255,0.04)]">
+        <div
+          onClick={() => fileRef.current?.click()}
+          className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[rgba(37,37,37,0.12)] bg-[rgba(37,37,37,0.02)] p-4 transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-[rgba(255,255,255,0.12)] dark:bg-[rgba(255,255,255,0.02)] dark:hover:bg-[rgba(255,255,255,0.04)]"
+        >
           <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]">
             <span className="text-page-text-subtle">{icon}</span>
           </div>
@@ -138,6 +202,7 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
   const [dos, setDos] = useState("");
   const [donts, setDonts] = useState("");
   const [engagementRate, setEngagementRate] = useState(false);
+  const [engagementValue, setEngagementValue] = useState("");
 
   return (
     <div className="flex flex-col gap-6">
@@ -253,15 +318,15 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
         />
         <div className="flex flex-col gap-2">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Videos</span>
-          <UploadArea icon={<VideoIcon />} title="Upload videos" subtitle="MP4, MOV only. Max 500 MB" />
+          <UploadArea icon={<VideoIcon />} title="Upload videos" subtitle="MP4, MOV only. Max 500 MB" accept="video/mp4,video/quicktime" />
         </div>
         <div className="flex flex-col gap-2">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Images/Moodboard</span>
-          <UploadArea icon={<ImageIcon />} title="Upload images" subtitle="PNG, JPG, ZIP" />
+          <UploadArea icon={<ImageIcon />} title="Upload images" subtitle="PNG, JPG, ZIP" accept="image/png,image/jpeg,application/zip" />
         </div>
         <div className="flex flex-col gap-2">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Brand assets</span>
-          <UploadArea icon={<PaintRollerIcon />} title="Upload assets" subtitle="PDF, ZIP, AI, PSD" />
+          <UploadArea icon={<PaintRollerIcon />} title="Upload assets" subtitle="PDF, ZIP, AI, PSD" accept=".pdf,.zip,.ai,.psd" />
         </div>
       </div>
 
@@ -269,7 +334,15 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
       <div className="flex flex-col gap-2">
         <SectionLabel title="Minimum engagement rate" description="Videos below this threshold will be flagged after posting. You can then claw back payouts for underperforming content." />
         <Card>
-          <PresetRow label="Minimum engagement rate" on={engagementRate} onToggle={() => setEngagementRate((v) => !v)} />
+          <PresetRow label="Minimum engagement rate" on={engagementRate} onToggle={() => setEngagementRate((v) => !v)}>
+            <div className="flex flex-col gap-2">
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Minimum rate</span>
+              <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                <input type="text" value={engagementValue} onChange={(e) => setEngagementValue(e.target.value)} placeholder="3" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60" />
+                <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">%</span>
+              </div>
+            </div>
+          </PresetRow>
         </Card>
       </div>
     </div>

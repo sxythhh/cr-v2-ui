@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { CreatorDetailsData } from "@/types/campaign-flow.types";
+import { RichTextEditor } from "../RichTextEditor";
 
 // ── Icons (reused from DetailsStep) ────────────────────────────────
 function BoldIcon() { return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2.667h5.333a2.667 2.667 0 0 1 0 5.333H4V2.667ZM4 8h6a2.667 2.667 0 0 1 0 5.333H4V8Z" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>; }
@@ -79,7 +80,7 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
               {/* Bar */}
               <div className="flex h-10 overflow-hidden rounded-xl">
                 {REGIONS.map((r) => (
-                  <div key={r.name} className="border border-white" style={{ width: `${r.pct}%`, background: `${r.color}99` }} />
+                  <div key={r.name} className="border border-card-bg" style={{ width: `${r.pct}%`, background: `${r.color}99` }} />
                 ))}
               </div>
               {/* Legend */}
@@ -114,24 +115,12 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
             {/* Description with toolbar */}
             <div className="flex flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Description</span>
-              <div className="overflow-hidden rounded-[14px] border border-foreground/[0.06]">
-                <div className="flex items-center gap-1 border-b border-foreground/[0.06] p-1">
-                  {TOOLBAR.map((btn, i) => (
-                    <button key={i} type="button" className={cn("flex size-8 items-center justify-center rounded-[10px] transition-colors", btn.active ? "bg-foreground/[0.06] text-page-text" : "text-page-text-subtle hover:bg-foreground/[0.04]")}>
-                      <btn.icon />
-                    </button>
-                  ))}
-                </div>
-                <div className="relative bg-foreground/[0.04]">
-                  <textarea
-                    value={data.description}
-                    onChange={(e) => update({ description: e.target.value.slice(0, 300) })}
-                    placeholder="Describe your ideal creator..."
-                    className="h-[104px] w-full resize-none bg-transparent px-3.5 py-3 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
-                  />
-                  <span className="absolute bottom-3 right-3.5 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{data.description.length}/300</span>
-                </div>
-              </div>
+              <RichTextEditor
+                content={data.description}
+                onChange={(html) => update({ description: html })}
+                placeholder="Describe your ideal creator..."
+                maxLength={300}
+              />
             </div>
           </div>
         </Card>

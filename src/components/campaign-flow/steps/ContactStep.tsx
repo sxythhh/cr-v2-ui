@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import type { ChatPlatform, ContactData } from "@/types/campaign-flow.types";
-import { PhoneInput } from "@/components/reui/phone-input";
-import type { Value } from "react-phone-number-input";
 
 function InfoIcon() {
   return (
@@ -90,13 +88,16 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
           {/* Phone */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Phone number</span>
-            <PhoneInput
-              value={(data.phone || "") as Value}
-              onChange={(value) => update({ phone: value || "" })}
-              defaultCountry="US"
-              placeholder="Enter phone number"
-              className="[&_*[data-slot=combobox-trigger]]:rounded-l-[14px] [&_*[data-slot=combobox-trigger]]:border-foreground/[0.06] [&_*[data-slot=combobox-trigger]]:bg-foreground/[0.04] [&_input]:rounded-r-[14px] [&_input]:border-foreground/[0.06] [&_input]:bg-foreground/[0.04] [&_input]:font-inter [&_input]:text-sm [&_input]:tracking-[-0.02em]"
-            />
+            <div className="flex gap-2">
+              <div className="flex h-10 w-[104px] shrink-0 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                <span className="text-[10px]">🇺🇸</span>
+                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">+1</span>
+                <ChevronDownIcon />
+              </div>
+              <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+                <input type="text" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(555) 123-4567" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+              </div>
+            </div>
           </div>
 
           {/* Address */}
@@ -176,7 +177,7 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
                 className={cn(
                   "relative z-10 flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[10px] font-inter text-sm font-medium tracking-[-0.02em] transition-all",
                   data.chatPlatform === opt.value
-                    ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10 dark:text-white"
+                    ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10 dark:text-white [&_svg_path]:!opacity-100"
                     : "text-page-text-subtle",
                 )}
               >

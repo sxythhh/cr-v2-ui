@@ -315,7 +315,7 @@ export function LanderPage() {
         padding: 16,
         backgroundColor: C.bg,
         minHeight: "100vh",
-        fontFamily: "var(--font-geist-sans), sans-serif",
+        fontFamily: "var(--font-inter-sans), sans-serif",
       }}
     >
       <div style={{ width: "100%", maxWidth: 1180 }}>

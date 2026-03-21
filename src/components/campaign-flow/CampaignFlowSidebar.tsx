@@ -34,7 +34,7 @@ export function CampaignFlowSidebar({ steps, stepLabels, currentIndex, onStepCli
         {activeRect && (
           <motion.div
             key={sessionRef.current}
-            className="pointer-events-none absolute rounded-xl bg-foreground/[0.04]"
+            className="pointer-events-none absolute rounded-xl bg-foreground/[0.025]"
             initial={{ opacity: 0, ...activeRect }}
             animate={{ opacity: 1, ...activeRect }}
             exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -44,6 +44,7 @@ export function CampaignFlowSidebar({ steps, stepLabels, currentIndex, onStepCli
       </AnimatePresence>
       {steps.map((step, i) => {
         const isActive = i === currentIndex;
+        const isCompleted = i < currentIndex;
         const isClickable = i <= currentIndex;
         return (
           <button
@@ -58,19 +59,21 @@ export function CampaignFlowSidebar({ steps, stepLabels, currentIndex, onStepCli
             )}
             type="button"
           >
-            <span className={cn(
-              "flex items-center justify-center w-4 h-4 rounded-full text-xs font-medium tracking-[-0.02em]",
-              isActive
-                ? "text-page-text"
-                : "text-page-text-muted"
-            )}>
-              {i + 1}
-            </span>
+            {isCompleted ? (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="size-4 shrink-0">
+                <path fillRule="evenodd" clipRule="evenodd" d="M6.66667 0C2.98477 0 0 2.98477 0 6.66667C0 10.3486 2.98477 13.3333 6.66667 13.3333C10.3486 13.3333 13.3333 10.3486 13.3333 6.66667C13.3333 2.98477 10.3486 0 6.66667 0ZM9.05365 5.31662C9.22851 5.1029 9.19701 4.78789 8.98329 4.61302C8.76956 4.43816 8.45455 4.46966 8.27969 4.68338L5.62955 7.92244L4.68689 6.97978C4.49162 6.78452 4.17504 6.78452 3.97978 6.97978C3.78452 7.17504 3.78452 7.49162 3.97978 7.68689L5.31311 9.02022C5.413 9.12011 5.55048 9.17308 5.69157 9.16605C5.83266 9.15901 5.96419 9.09262 6.05365 8.98329L9.05365 5.31662Z" fill="#00994D" />
+              </svg>
+            ) : (
+              <span className={cn(
+                "flex items-center justify-center w-4 h-4 rounded-full text-xs font-medium tracking-[-0.02em]",
+                isActive ? "text-page-text" : "text-page-text-muted"
+              )}>
+                {i + 1}
+              </span>
+            )}
             <span className={cn(
               "text-sm font-medium tracking-[-0.02em]",
-              isActive
-                ? "text-page-text"
-                : "text-page-text-subtle"
+              isCompleted ? "text-page-text-muted" : isActive ? "text-page-text" : "text-page-text-subtle"
             )}>
               {stepLabels[step]}
             </span>

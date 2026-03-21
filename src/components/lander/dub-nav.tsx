@@ -692,7 +692,7 @@ const buttonVariantStyles = {
 // ── Nav item class ──────────────────────────────────────────────────────────
 
 const navItemClassName = cn(
-  "relative z-[1] group/item flex items-center rounded-md px-4 py-2 text-sm rounded-lg font-medium font-[family-name:var(--font-geist-sans)] text-neutral-700 hover:text-neutral-900 transition-colors",
+  "relative z-[1] group/item flex items-center rounded-md px-4 py-2 text-sm rounded-lg font-medium font-inter text-neutral-700 hover:text-neutral-900 transition-colors",
   "dark:text-white/90 dark:hover:text-white",
 );
 
@@ -941,7 +941,7 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
       <div className="absolute left-1/2 top-full mt-3 -translate-x-1/2">
         <NavigationMenuPrimitive.Viewport
           className={cn(
-            "relative flex origin-[top_center] justify-start overflow-hidden rounded-[20px] border border-neutral-200 bg-white shadow-md font-[family-name:var(--font-geist-sans)] dark:border-white/[0.06] dark:bg-[#0e0e0e]",
+            "relative flex origin-[top_center] justify-start overflow-hidden rounded-[20px] border border-neutral-200 bg-white shadow-md font-inter dark:border-white/[0.06] dark:bg-[#0e0e0e]",
             "data-[state=closed]:animate-scale-out-content data-[state=open]:animate-scale-in-content",
             "h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] transition-[width,height]"
           )}

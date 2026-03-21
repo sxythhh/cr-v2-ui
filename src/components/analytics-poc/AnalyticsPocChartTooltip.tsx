@@ -25,7 +25,7 @@ export function AnalyticsPocChartTooltip({
 }: AnalyticsPocChartTooltipProps) {
   return (
     <div
-      className={cn("w-[200px] rounded-[8px] p-1 font-geist", className)}
+      className={cn("w-[200px] rounded-[8px] p-1 font-inter", className)}
       style={{
         backgroundColor: "#151515",
         backgroundImage:
@@ -34,7 +34,7 @@ export function AnalyticsPocChartTooltip({
     >
       <div className="flex flex-col p-1">
         <div className="flex items-center justify-between gap-2 pb-[6px]">
-          <p className="font-geist text-[12px] font-normal leading-[1.2] text-white/60">
+          <p className="font-inter text-[12px] font-normal leading-[1.2] text-white/60">
             {label}
           </p>
           {footerText ? (
@@ -42,7 +42,7 @@ export function AnalyticsPocChartTooltip({
               <button
                 className={cn(
                   ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-                  "cursor-pointer font-geist text-[11px] font-medium leading-[1.2] text-white transition-opacity hover:opacity-80",
+                  "cursor-pointer font-inter text-[11px] font-medium leading-[1.2] text-white transition-opacity hover:opacity-80",
                 )}
                 onClick={onFooterClick}
                 style={{ pointerEvents: "auto" }}
@@ -51,7 +51,7 @@ export function AnalyticsPocChartTooltip({
                 {footerText}
               </button>
             ) : (
-              <p className="font-geist text-[11px] font-medium leading-[1.2] text-white">
+              <p className="font-inter text-[11px] font-medium leading-[1.2] text-white">
                 {footerText}
               </p>
             )
@@ -69,11 +69,11 @@ export function AnalyticsPocChartTooltip({
                   className="inline-block size-[8px] shrink-0 rounded-[2px]"
                   style={{ backgroundColor: row.color }}
                 />
-                <span className="truncate font-geist text-[12px] font-normal leading-[1.2] text-white">
+                <span className="truncate font-inter text-[12px] font-normal leading-[1.2] text-white">
                   {row.label}
                 </span>
               </div>
-              <span className="ml-auto shrink-0 whitespace-nowrap font-geist text-[12px] font-normal leading-[1.2] text-right text-white tabular-nums">
+              <span className="ml-auto shrink-0 whitespace-nowrap font-inter text-[12px] font-normal leading-[1.2] text-right text-white tabular-nums">
                 {row.value || "-"}
               </span>
             </div>

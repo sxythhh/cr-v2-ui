@@ -774,7 +774,7 @@ function AgencyApplicationForm() {
             </svg>
 
             {/* Heading */}
-            <h2 className="font-[family-name:var(--font-geist-sans)] text-[29.6px] font-semibold leading-[38px] tracking-[-0.32px] text-[#232529] dark:text-white">
+            <h2 className="font-inter text-[29.6px] font-semibold leading-[38px] tracking-[-0.32px] text-[#232529] dark:text-white">
               We&apos;ll be in touch soon!
             </h2>
 
@@ -1033,7 +1033,7 @@ export function VerifiedAgencyPage() {
         display: "flex",
         justifyContent: "center",
         padding: 16,
-        fontFamily: "var(--font-geist-sans), sans-serif",
+        fontFamily: "var(--font-inter-sans), sans-serif",
       }}
     >
       <div style={{ width: "100%", maxWidth: 1104 }}>

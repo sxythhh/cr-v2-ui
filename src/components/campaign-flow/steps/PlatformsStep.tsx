@@ -71,10 +71,10 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       onClick={(e) => { e.stopPropagation(); onToggle(); }}
       className={cn(
         "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors",
-        on ? "bg-foreground" : "bg-foreground/20",
+        on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20",
       )}
     >
-      <div className={cn("size-4 rounded-full bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }

@@ -17,7 +17,7 @@ export default function CreateCampaignLayout({
   return (
     <div
       className="fixed inset-0 z-[9999] overflow-hidden tracking-[-0.5px] [&_button]:cursor-pointer bg-page-bg"
-      style={{ fontFamily: "var(--font-geist-sans), sans-serif" }}
+      style={{ fontFamily: "var(--font-inter-sans), sans-serif" }}
     >
       {children}
     </div>

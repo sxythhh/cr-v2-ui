@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { GeistSans } from "geist/font/sans";
+
 import "./globals.css";
 import { SideNavProvider } from "@/components/sidebar/sidebar-context";
 import { MainNav } from "@/components/sidebar/main-nav";
 import { ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 import { ChatWidget } from "@/components/chat-widget";
 import { InteractiveDemoProvider } from "@/components/interactive-demo";
 
@@ -32,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${GeistSans.variable} select-none overflow-x-hidden bg-page-outer-bg text-foreground antialiased`}>
+      <body className={`${inter.className} select-none overflow-x-hidden bg-page-outer-bg text-foreground antialiased`}>
         <ThemeProvider>
           <ToastProvider position="bottom-right">
             <SideNavProvider>
@@ -42,6 +43,7 @@ export default function RootLayout({
               {/* <ChatWidget /> */}
             </SideNavProvider>
           </ToastProvider>
+          <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
     </html>

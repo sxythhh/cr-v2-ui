@@ -124,55 +124,14 @@ function RadioCard({
       {/* Radio */}
       <div className="flex shrink-0 items-center justify-center">
         {selected ? (
-          <svg width="26" height="28" viewBox="0 0 26 28" fill="none">
-            <g filter="url(#filter0_dddi_sel)">
-              <path fillRule="evenodd" clipRule="evenodd" d="M13 4C7.47715 4 3 8.47715 3 14C3 19.5228 7.47715 24 13 24C18.5228 24 23 19.5228 23 14C23 8.47715 18.5228 4 13 4ZM16.5805 11.9749C16.8428 11.6543 16.7955 11.1818 16.4749 10.9195C16.1543 10.6572 15.6818 10.7045 15.4195 11.0251L11.4443 15.8837L10.0303 14.4697C9.73744 14.1768 9.26256 14.1768 8.96967 14.4697C8.67678 14.7626 8.67678 15.2374 8.96967 15.5303L10.9697 17.5303C11.1195 17.6802 11.3257 17.7596 11.5374 17.7491C11.749 17.7385 11.9463 17.6389 12.0805 17.4749L16.5805 11.9749Z" fill="#FF9025" />
-            </g>
-            <defs>
-              <filter id="filter0_dddi_sel" x="0" y="0" width="26" height="28" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="2" /><feGaussianBlur stdDeviation="1" /><feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="-1" /><feGaussianBlur stdDeviation="1.5" /><feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                <feBlend mode="normal" in2="effect1" result="effect2" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2" result="shape" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="0.5" /><feGaussianBlur stdDeviation="1" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0" />
-                <feBlend mode="normal" in2="shape" result="effect3" />
-              </filter>
-            </defs>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM15.5805 9.9749C15.8428 9.6543 15.7955 9.18183 15.4749 8.91953C15.1543 8.65723 14.6818 8.70461 14.4195 9.02513L10.4443 13.8837L9.03033 12.4697C8.73744 12.1768 8.26256 12.1768 7.96967 12.4697C7.67678 12.7626 7.67678 13.2374 7.96967 13.5303L9.96967 15.5303C10.1195 15.6802 10.3257 15.7596 10.5374 15.7491C10.749 15.7385 10.9463 15.6389 11.0805 15.4749L15.5805 9.9749Z" fill="#FF9025" />
+            <circle cx="12" cy="12" r="9.5" stroke="#FF9025" strokeOpacity="0.15" />
           </svg>
         ) : (
-          <svg width="26" height="28" viewBox="0 0 26 28" fill="none">
-            <g filter="url(#filter0_dddi_unsel)">
-              <circle cx="13" cy="14" r="10" fill="white" />
-              <circle cx="13" cy="14" r="9.5" stroke="#252525" strokeOpacity="0.1" />
-            </g>
-            <defs>
-              <filter id="filter0_dddi_unsel" x="0" y="0" width="26" height="28" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="2" /><feGaussianBlur stdDeviation="1" /><feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="-1" /><feGaussianBlur stdDeviation="1.5" /><feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                <feBlend mode="normal" in2="effect1" result="effect2" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2" result="shape" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                <feOffset dy="0.5" /><feGaussianBlur stdDeviation="1" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0" />
-                <feBlend mode="normal" in2="shape" result="effect3" />
-              </filter>
-            </defs>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="var(--card-bg)" />
+            <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeOpacity="0.1" />
           </svg>
         )}
       </div>
@@ -189,12 +148,12 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       onClick={onToggle}
       className={cn(
         "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors",
-        on ? "bg-foreground" : "bg-foreground/[0.12]",
+        on ? "bg-[#252525] dark:bg-white" : "bg-foreground/[0.12]",
       )}
     >
       <div
         className={cn(
-          "size-4 rounded-full bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform",
+          "size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform",
           on ? "translate-x-5" : "translate-x-0",
         )}
       />
@@ -477,22 +436,47 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
       <div className="flex flex-col gap-2">
         <SectionLabel title="Creator earnings cap" description="Set a maximum amount a single creator can earn, or allow unlimited earnings." />
         <div
-          onClick={() => setNoEarningsCap((v) => !v)}
           className={cn(
-            "flex w-full cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-colors",
-            noEarningsCap
-              ? "border-[rgba(255,144,37,0.3)] shadow-[0px_1px_2px_rgba(0,0,0,0.03)]"
-              : "border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+            "flex w-full flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+            noEarningsCap ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
           )}
-          style={noEarningsCap ? {
-            background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
-          } : undefined}
+          style={noEarningsCap ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
         >
-          <div className="flex min-w-0 flex-1 flex-col gap-1">
-            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">No limit</span>
-            <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">Creators can earn unlimited from this campaign.</span>
+          <div className="flex cursor-pointer items-center gap-3" onClick={() => setNoEarningsCap((v) => !v)}>
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Add limit</span>
+              <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">Cap the maximum a single creator can earn from this campaign.</span>
+            </div>
+            <ToggleSwitch on={noEarningsCap} onToggle={() => setNoEarningsCap((v) => !v)} />
           </div>
-          <ToggleSwitch on={noEarningsCap} onToggle={() => setNoEarningsCap((v) => !v)} />
+          {noEarningsCap && (() => {
+            const val = parseInt(data.maxPayout.replace(/[^\d]/g, "")) || 0;
+            const hasError = data.maxPayout.length > 0 && val < 50;
+            return (
+              <div className="flex flex-col gap-1.5">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Maximum earnings per creator</span>
+                <div className={cn(
+                  "flex h-10 items-center gap-1.5 rounded-[14px] px-3.5 transition-colors",
+                  hasError ? "bg-[rgba(255,37,37,0.04)] ring-1 ring-[#FF2525]/30" : "bg-foreground/[0.04]",
+                )}>
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+                  <input
+                    type="text"
+                    value={data.maxPayout}
+                    onChange={(e) => update({ maxPayout: e.target.value })}
+                    placeholder="500"
+                    className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+                {hasError && (
+                  <span className="font-inter text-xs tracking-[-0.02em] text-[#FF2525]">
+                    Minimum cap is $50
+                  </span>
+                )}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>

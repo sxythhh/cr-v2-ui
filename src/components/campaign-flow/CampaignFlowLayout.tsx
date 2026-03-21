@@ -69,6 +69,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
 
   const [mounted, setMounted] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showTopUpModal, setShowTopUpModal] = useState(false);
   useEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
 
   const isLastStep = stepIndex === steps.length - 1;
@@ -114,11 +115,11 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
             Save as draft
           </button>
           <button
-            disabled={!canContinue}
-            onClick={handleContinue}
+            disabled={!canContinue && !isLastStep}
+            onClick={isLastStep && !editMode ? () => setShowTopUpModal(true) : handleContinue}
             className={cn(
               "flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-all active:scale-[0.98] dark:text-[#111111]",
-              !canContinue && "opacity-30 cursor-not-allowed"
+              !canContinue && !isLastStep && "opacity-30 cursor-not-allowed"
             )}
             type="button"
           >
@@ -135,6 +136,44 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
         onDiscard={() => { setShowLeaveModal(false); handleBackToList(); }}
         onClose={() => setShowLeaveModal(false)}
       />
+
+      {/* Top up and publish modal */}
+      <Modal open={showTopUpModal} onClose={() => setShowTopUpModal(false)} size="sm" showClose={true}>
+        <div className="flex flex-col items-center gap-4 px-5 pt-5">
+          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-white/10 dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1)]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#252525" strokeWidth="2" strokeLinecap="round" /></svg>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <span className="font-inter text-lg font-medium tracking-[-0.02em] text-page-text">Top up and publish</span>
+            <span className="max-w-[300px] text-center font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-subtle">
+              Add funds to your campaign balance to make it live. Creators will start seeing your campaign immediately.
+            </span>
+          </div>
+        </div>
+        <div className="flex w-full flex-col gap-2 px-5 pb-5 pt-4">
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Deposit amount</span>
+            <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+              <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+              <input type="text" placeholder="5,000" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => { setShowTopUpModal(false); handleBackToList(); }}
+            className="mt-2 flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 active:scale-[0.98] dark:text-[#111111]"
+          >
+            Deposit and publish
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowTopUpModal(false)}
+            className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] active:scale-[0.98]"
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
 
       <div ref={portalContainer} />
     </div>
