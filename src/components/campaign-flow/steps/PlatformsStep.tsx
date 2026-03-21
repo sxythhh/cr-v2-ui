@@ -103,7 +103,7 @@ function ToggleCard({
           : "border-foreground/[0.06] bg-card-bg",
       )}
       style={on ? {
-        background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF",
+        background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
       } : undefined}
     >
       <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
@@ -166,7 +166,7 @@ export function PlatformsStep() {
                       : "border-foreground/[0.06] bg-card-bg text-page-text-subtle hover:bg-foreground/[0.02]",
                   )}
                   style={isOn ? {
-                    background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF",
+                    background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
                   } : undefined}
                 >
                   <PlatformIcon platform={p.id} size={16} />

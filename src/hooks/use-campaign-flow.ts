@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   loadCampaignFlowDraft,
   saveCampaignFlowDraft,
@@ -17,17 +17,23 @@ import type {
   RequirementsData,
 } from "@/types/campaign-flow.types";
 
-const STEP_ORDER: CampaignFlowStep[] = [
-  "configuration",
-  "platforms",
-  "details",
-  "requirements",
-  "application-setup",
-  "incentives",
-  "creator-details",
-  "contact",
-  "preview",
-];
+function getStepOrder(model: CampaignModel): CampaignFlowStep[] {
+  const base: CampaignFlowStep[] = [
+    "configuration",
+    "platforms",
+    "details",
+    "requirements",
+    "application-setup",
+    "incentives",
+    "creator-details",
+    "contact",
+  ];
+  if (model === "retainer" || model === "per-video") {
+    base.push("contract");
+  }
+  base.push("preview");
+  return base;
+}
 
 const STEP_LABELS: Record<CampaignFlowStep, string> = {
   configuration: "Configuration",
@@ -38,6 +44,7 @@ const STEP_LABELS: Record<CampaignFlowStep, string> = {
   incentives: "Incentives (optional)",
   "creator-details": "Creator details",
   contact: "Contact",
+  contract: "Contract",
   preview: "Preview",
 };
 
@@ -114,6 +121,7 @@ export function useCampaignFlow(
 ) {
   const router = useRouter();
   const [model] = useState<CampaignModel>(initialModel);
+  const STEP_ORDER = useMemo(() => getStepOrder(model), [model]);
   const [step, setStep] = useState<CampaignFlowStep>("configuration");
   const [isRestoring, setIsRestoring] = useState(true);
   const [configuration, setConfiguration] = useState<ConfigurationData>(initialData?.configuration ?? DEFAULT_CONFIGURATION);

@@ -11,6 +11,7 @@ import { IncentivesStep } from "./steps/IncentivesStep";
 import { PreviewStep } from "./steps/PreviewStep";
 import { PlatformsStep } from "./steps/PlatformsStep";
 import { ApplicationSetupStep } from "./steps/ApplicationSetupStep";
+import { ContractStep } from "./steps/ContractStep";
 import { RequirementsStep } from "./steps/RequirementsStep";
 
 interface CampaignFlowViewProps {
@@ -56,6 +57,8 @@ function StepContent() {
       return <CreatorDetailsStep data={creatorDetails} onChange={setCreatorDetails} />;
     case "contact":
       return <ContactStep data={contact} onChange={setContact} />;
+    case "contract":
+      return <ContractStep />;
     case "preview":
       return <PreviewStep configuration={configuration} details={details} />;
     default:

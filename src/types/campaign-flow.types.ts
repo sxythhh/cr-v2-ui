@@ -11,6 +11,7 @@ export type CampaignFlowStep =
   | "incentives"
   | "creator-details"
   | "contact"
+  | "contract"
   | "preview";
 
 export type PayoutFrequency = "monthly" | "weekly";

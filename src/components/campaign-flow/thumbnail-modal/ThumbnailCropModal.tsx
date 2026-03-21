@@ -68,9 +68,9 @@ export function ThumbnailCropModal({ open, onOpenChange, onSave, initialFile }: 
       const preview = await crop.exportCrop(imageSrc);
       setCroppedPreview(preview);
       onSave(preview, selectedFile);
-      setState("preview");
+      handleOpenChange(false);
     } catch { /* Export failed */ }
-  }, [imageSrc, selectedFile, crop, onSave]);
+  }, [imageSrc, selectedFile, crop, onSave, handleOpenChange]);
 
   const handleDelete = useCallback(() => { setState("upload"); setSelectedFile(null); setImageSrc(null); setCroppedPreview(null); }, []);
   const handleReplace = useCallback(() => { fileRef.current?.click(); }, []);
@@ -84,9 +84,9 @@ export function ThumbnailCropModal({ open, onOpenChange, onSave, initialFile }: 
 
   return (
     <DialogPrimitive.Root disablePointerDismissal onOpenChange={handleOpenChange} open={open}>
-      <DialogPrimitive.Portal container={portalContainer}>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-[200] bg-black/90 data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0" />
-        <DialogPrimitive.Popup className="fixed z-[200] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 focus:outline-none data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0 data-[ending-style]:zoom-out-95 data-[open]:zoom-in-95">
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-[10000] bg-black/90 data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0" />
+        <DialogPrimitive.Popup className="fixed z-[10000] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 focus:outline-none data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0 data-[ending-style]:zoom-out-95 data-[open]:zoom-in-95">
           <DialogPrimitive.Title className="sr-only">Edit thumbnail</DialogPrimitive.Title>
 
           <input accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleReplaceFile} ref={fileRef} type="file" />

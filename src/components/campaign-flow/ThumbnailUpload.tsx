@@ -31,6 +31,7 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
   const handleFileSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || file.size > 5 * 1024 * 1024 || !file.type.match(/^image\/(png|jpeg|webp)$/)) return;
+    setLastFile(file);
     setModalInitialFile(file);
     setModalOpen(true);
     e.target.value = "";

@@ -24,7 +24,7 @@ import {
   ComboboxValue,
 } from "@/components/ui/combobox"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { GlobeIcon } from "lucide-react"
 
 type PhoneInputSize = "sm" | "default" | "lg"
@@ -92,7 +92,7 @@ function InputComponent({ className, ...props }: ComponentProps<typeof Input>) {
   return (
     <Input
       className={cn(
-        "rounded-s-none focus:z-1",
+        "rounded-s-none focus:z-1 focus-visible:border-input focus-visible:ring-0 focus-visible:ring-transparent",
         variant === "sm" &&
           "h-7",
         variant === "lg" &&
@@ -165,42 +165,40 @@ function CountrySelect({
           "w-xs *:data-[slot=input-group]:bg-transparent",
           popupClassName
         )}
+        side="bottom"
+        collisionPadding={-9999}
       >
         <ComboboxInput
           placeholder="e.g. United States"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           showTrigger={false}
-          className="border-input focus-visible:border-border rounded-none border-0 px-0 py-2.5 shadow-none ring-0! outline-none! focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="border-input focus-visible:border-border rounded-lg border-0 px-0 py-2.5 shadow-none ring-0! outline-none! focus-visible:ring-0 focus-visible:ring-offset-0"
         />
         <ComboboxSeparator />
         <ComboboxEmpty className="px-4 py-2.5 text-sm">
           No country found.
         </ComboboxEmpty>
         <ComboboxList>
-          <div className="relative flex max-h-full">
-            <div className="flex max-h-[min(var(--available-height),24rem)] w-full scroll-pt-2 scroll-pb-2 flex-col overscroll-contain">
-              <ScrollArea className="size-full min-h-0 **:data-[slot=scroll-area-scrollbar]:m-0 [&_[data-slot=scroll-area-viewport]]:h-full [&_[data-slot=scroll-area-viewport]]:overscroll-contain">
-                {filteredCountries.map((item: CountryEntry) =>
-                  item.value ? (
-                    <ComboboxItem
-                      key={item.value}
-                      value={item.value}
-                      className="flex items-center gap-2"
-                    >
-                      <FlagComponent
-                        country={item.value}
-                        countryName={item.label}
-                      />
-                      <span className="flex-1 text-sm">{item.label}</span>
-                      <span className="text-foreground/50 text-sm">
-                        {`+${BasePhoneInput.getCountryCallingCode(item.value)}`}
-                      </span>
-                    </ComboboxItem>
-                  ) : null
-                )}
-              </ScrollArea>
-            </div>
+          <div className="max-h-[min(var(--available-height),24rem)] overflow-y-auto overscroll-contain scrollbar-none">
+            {filteredCountries.map((item: CountryEntry) =>
+              item.value ? (
+                <ComboboxItem
+                  key={item.value}
+                  value={item.value}
+                  className="flex items-center gap-2"
+                >
+                  <FlagComponent
+                    country={item.value}
+                    countryName={item.label}
+                  />
+                  <span className="flex-1 text-sm">{item.label}</span>
+                  <span className="text-foreground/50 text-sm">
+                    {`+${BasePhoneInput.getCountryCallingCode(item.value)}`}
+                  </span>
+                </ComboboxItem>
+              ) : null
+            )}
           </div>
         </ComboboxList>
       </ComboboxContent>

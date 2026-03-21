@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import type { ChatPlatform, ContactData } from "@/types/campaign-flow.types";
+import { PhoneInput } from "@/components/reui/phone-input";
+import type { Value } from "react-phone-number-input";
 
 function InfoIcon() {
   return (
@@ -47,6 +49,11 @@ const CHAT_OPTIONS: { value: ChatPlatform; label: string; icon: () => React.Reac
 
 export function ContactStep({ data, onChange }: { data: ContactData; onChange: (data: ContactData) => void }) {
   const update = (partial: Partial<ContactData>) => onChange({ ...data, ...partial });
+  const [address, setAddress] = useState("123 Creator Blvd, Suite 400");
+  const [city, setCity] = useState("Los Angeles");
+  const [state, setState] = useState("California");
+  const [country, setCountry] = useState("United States");
+  const [zip, setZip] = useState("90028");
   const chatRef = useRef<HTMLDivElement>(null);
   const chatHover = useProximityHover(chatRef, { axis: "x" });
   useEffect(() => { chatHover.measureItems(); }, [chatHover.measureItems]);
@@ -83,23 +90,20 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
           {/* Phone */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Phone number</span>
-            <div className="flex gap-2">
-              <div className="flex h-10 w-[104px] shrink-0 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="text-[10px]">🇺🇸</span>
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">+1</span>
-                <ChevronDownIcon />
-              </div>
-              <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="text" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(555) 123-4567" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
-              </div>
-            </div>
+            <PhoneInput
+              value={(data.phone || "") as Value}
+              onChange={(value) => update({ phone: value || "" })}
+              defaultCountry="US"
+              placeholder="Enter phone number"
+              className="[&_*[data-slot=combobox-trigger]]:rounded-l-[14px] [&_*[data-slot=combobox-trigger]]:border-foreground/[0.06] [&_*[data-slot=combobox-trigger]]:bg-foreground/[0.04] [&_input]:rounded-r-[14px] [&_input]:border-foreground/[0.06] [&_input]:bg-foreground/[0.04] [&_input]:font-inter [&_input]:text-sm [&_input]:tracking-[-0.02em]"
+            />
           </div>
 
           {/* Address */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Address (required for contracts and invoicing)</span>
             <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-              <input type="text" defaultValue="123 Creator Blvd, Suite 400" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+              <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="123 Creator Blvd, Suite 400" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
             </div>
           </div>
 
@@ -108,14 +112,13 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">City</span>
               <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="text" defaultValue="Los Angeles" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Los Angeles" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
               </div>
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">State/Region</span>
-              <div className="flex h-10 items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">California</span>
-                <ChevronDownIcon />
+              <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+                <input type="text" value={state} onChange={(e) => setState(e.target.value)} placeholder="California" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
               </div>
             </div>
           </div>
@@ -125,13 +128,13 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Country</span>
               <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="text" defaultValue="United States" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="United States" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
               </div>
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">ZIP/Postal code</span>
               <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="text" defaultValue="90028" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                <input type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="90028" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
               </div>
             </div>
           </div>

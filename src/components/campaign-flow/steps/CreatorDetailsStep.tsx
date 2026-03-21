@@ -168,7 +168,7 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
                 <div
                   key={i}
                   className="flex h-9 items-center gap-1.5 rounded-full border border-[rgba(255,144,37,0.3)] px-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]"
-                  style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" }}
+                  style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" }}
                 >
                   <div className="size-4 rounded-full bg-foreground/10" />
                   <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{handle}</span>

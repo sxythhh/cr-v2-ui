@@ -209,7 +209,7 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
             "flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
             isPublic ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
           )}
-          style={isPublic ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" } : undefined}
+          style={isPublic ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
         >
           <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
             <span className={isPublic ? "text-[#252525] dark:text-white" : "text-page-text-muted"}><EyeIcon /></span>

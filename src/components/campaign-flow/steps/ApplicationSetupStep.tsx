@@ -37,7 +37,7 @@ function ToggleRow({ title, description, on, onToggle, children }: { title: stri
         "flex flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
         on ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
       )}
-      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" } : undefined}
+      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
     >
       <div className="flex cursor-pointer items-center gap-3" onClick={onToggle}>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -73,6 +73,8 @@ export function ApplicationSetupStep() {
   const [autoDeclineBelowThreshold, setAutoDeclineBelowThreshold] = useState(false);
   const [autoApproveTrusted, setAutoApproveTrusted] = useState(false);
   const [autoDeclineDeadline, setAutoDeclineDeadline] = useState(false);
+  const [maxApplicants, setMaxApplicants] = useState("no-limit");
+  const [reviewDeadline, setReviewDeadline] = useState("48h");
 
   const removeQuestion = (index: number) => setQuestions((prev) => prev.filter((_, i) => i !== index));
 
@@ -133,13 +135,13 @@ export function ApplicationSetupStep() {
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Min. followers (any platform)</span>
                 <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                  <input type="text" value={minFollowersValue} onChange={(e) => setMinFollowersValue(e.target.value)} className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                  <input type="text" inputMode="numeric" value={minFollowersValue} onChange={(e) => setMinFollowersValue(e.target.value.replace(/[^\d,]/g, ""))} className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
                 </div>
               </div>
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Preferred followers</span>
                 <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                  <input type="text" value={preferredFollowers} onChange={(e) => setPreferredFollowers(e.target.value)} className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                  <input type="text" inputMode="numeric" value={preferredFollowers} onChange={(e) => setPreferredFollowers(e.target.value.replace(/[^\d,]/g, ""))} className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
                 </div>
               </div>
             </div>
@@ -150,7 +152,7 @@ export function ApplicationSetupStep() {
               "flex cursor-pointer items-center justify-between rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
               requirePortfolio ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
             )}
-            style={requirePortfolio ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" } : undefined}
+            style={requirePortfolio ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
           >
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Require portfolio link</span>
             <ToggleSwitch on={requirePortfolio} onToggle={() => setRequirePortfolio((v) => !v)} />
@@ -175,16 +177,28 @@ export function ApplicationSetupStep() {
           <div className="flex gap-3">
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Max applicants</span>
-              <div className="flex h-10 items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">No limit</span>
-                <ChevronDownIcon />
+              <div className="relative">
+                <select value={maxApplicants} onChange={(e) => setMaxApplicants(e.target.value)} className="flex h-10 w-full cursor-pointer appearance-none items-center rounded-[14px] bg-foreground/[0.04] px-3.5 pr-8 font-inter text-sm tracking-[-0.02em] text-page-text outline-none">
+                  <option value="no-limit">No limit</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="250">250</option>
+                  <option value="500">500</option>
+                </select>
+                <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"><ChevronDownIcon /></div>
               </div>
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Review deadline</span>
-              <div className="flex h-10 items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Review within 48 hours</span>
-                <ChevronDownIcon />
+              <div className="relative">
+                <select value={reviewDeadline} onChange={(e) => setReviewDeadline(e.target.value)} className="flex h-10 w-full cursor-pointer appearance-none items-center rounded-[14px] bg-foreground/[0.04] px-3.5 pr-8 font-inter text-sm tracking-[-0.02em] text-page-text outline-none">
+                  <option value="24h">Review within 24 hours</option>
+                  <option value="48h">Review within 48 hours</option>
+                  <option value="72h">Review within 72 hours</option>
+                  <option value="7d">Review within 7 days</option>
+                </select>
+                <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"><ChevronDownIcon /></div>
               </div>
             </div>
           </div>

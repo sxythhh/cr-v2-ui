@@ -7,7 +7,7 @@ import type { RequirementsData, RequirementsPresets } from "@/types/campaign-flo
 // ── Icons ──────────────────────────────────────────────────────────
 
 function SparkleIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7.30522 0.475101C7.22062 0.193112 6.96107 0 6.66667 0C6.37226 0 6.11271 0.193112 6.02812 0.475101C5.54855 2.07364 4.92691 3.21362 4.07026 4.07026C3.21362 4.92691 2.07364 5.54855 0.475101 6.02812C0.193112 6.11271 0 6.37226 0 6.66667C0 6.96107 0.193112 7.22062 0.475101 7.30522C2.07364 7.78478 3.21362 8.40642 4.07026 9.26307C4.92691 10.1197 5.54855 11.2597 6.02812 12.8582C6.11271 13.1402 6.37226 13.3333 6.66667 13.3333C6.96107 13.3333 7.22062 13.1402 7.30522 12.8582C7.78478 11.2597 8.40642 10.1197 9.26307 9.26307C10.1197 8.40642 11.2597 7.78478 12.8582 7.30522C13.1402 7.22062 13.3333 6.96107 13.3333 6.66667C13.3333 6.37226 13.1402 6.11271 12.8582 6.02812C11.2597 5.54855 10.1197 4.92691 9.26307 4.07026C8.40642 3.21362 7.78478 2.07364 7.30522 0.475101Z" fill="currentColor" fillOpacity="0.5" /></svg>;
 }
 function XIcon() {
   return <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="#252525" strokeOpacity="0.7" strokeLinecap="round" /></svg>;
@@ -66,7 +66,7 @@ function PresetRow({ label, on, onToggle, children }: { label: string; on: boole
         children ? "flex-col gap-3" : "",
         on ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
       )}
-      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" } : undefined}
+      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
     >
       <div className="flex w-full cursor-pointer items-center justify-between gap-4" onClick={onToggle}>
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{label}</span>
@@ -142,35 +142,38 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
   return (
     <div className="flex flex-col gap-6">
       {/* 1. AI Suggested requirements */}
-      <div className="relative overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg p-4">
-        {/* Gradient blur borders */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[2px]" style={{ background: "linear-gradient(135deg, rgba(255,144,37,0.3) 0%, transparent 50%, rgba(174,78,238,0.2) 100%)" }} />
-        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ background: "linear-gradient(135deg, rgba(255,144,37,0.3) 0%, transparent 50%, rgba(174,78,238,0.2) 100%)", border: "1px solid rgba(255,144,37,0.2)" }} />
+      {suggestions.length > 0 && (
+        <div className="relative">
+          {/* Blurred gradient border layers */}
+          <div className="pointer-events-none absolute -inset-0.5 z-0 rounded-[18px]" style={{ background: "conic-gradient(from 180deg, rgba(255,144,37,0.4), rgba(174,78,238,0.25), rgba(59,130,246,0.2), rgba(255,144,37,0.4))", filter: "blur(3px)", opacity: 0.35 }} />
+          <div className="pointer-events-none absolute -inset-0.5 z-0 rounded-[18px]" style={{ background: "conic-gradient(from 0deg, rgba(255,144,37,0.4), rgba(174,78,238,0.25), rgba(59,130,246,0.2), rgba(255,144,37,0.4))", filter: "blur(3px)", opacity: 0.35, transform: "matrix(-1, 0, 0, 1, 0, 0)" }} />
 
-        <div className="relative flex flex-col gap-3">
-          <div className="flex gap-2">
-            <span className="text-page-text-muted"><SparkleIcon /></span>
-            <div className="flex flex-col gap-1.5">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Suggested requirements based on your campaign type</span>
-              <span className="font-inter text-sm font-normal leading-[140%] tracking-[-0.02em] text-page-text-subtle">These are auto-generated from your campaign type and brand profile. Accept or dismiss each one.</span>
+          {/* White card on top */}
+          <div className="relative flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4">
+            <div className="flex gap-2">
+              <span className="mt-0.5 shrink-0 text-page-text-muted"><SparkleIcon /></span>
+              <div className="flex flex-col gap-1.5">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Suggested requirements based on your campaign type</span>
+                <span className="font-inter text-sm font-normal leading-[140%] tracking-[-0.02em] text-page-text-subtle">These are auto-generated from your campaign type and brand profile. Accept or dismiss each one.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 pl-6">
+              {suggestions.map((s, i) => (
+                <div key={i} className="flex items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+                  <span className="flex-1 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{s}</span>
+                  <button type="button" onClick={() => setSuggestions((prev) => prev.filter((_, j) => j !== i))} className="flex size-6 items-center justify-center rounded-full text-page-text-subtle transition-colors hover:bg-foreground/[0.06]">
+                    <XIcon />
+                  </button>
+                  <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(0,153,77,0.06)] text-[#00994D]">
+                    <CheckIcon />
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="flex flex-col gap-2 pl-6">
-            {suggestions.map((s, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
-                <span className="flex-1 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{s}</span>
-                <button type="button" onClick={() => setSuggestions((prev) => prev.filter((_, j) => j !== i))} className="flex size-6 items-center justify-center rounded-full text-page-text-subtle transition-colors hover:bg-foreground/[0.06]">
-                  <XIcon />
-                </button>
-                <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(0,153,77,0.06)] text-[#00994D]">
-                  <CheckIcon />
-                </button>
-              </div>
-            ))}
-          </div>
         </div>
-      </div>
+      )}
 
       {/* 2. Dos */}
       <div className="flex flex-col gap-2">

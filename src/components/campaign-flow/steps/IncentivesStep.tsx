@@ -54,7 +54,7 @@ function RadioCard({ selected, onClick, icon, title, description }: { selected: 
         "flex items-center gap-3 rounded-2xl border p-4 text-left transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
         selected ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02]",
       )}
-      style={selected ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF" } : undefined}
+      style={selected ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
     >
       <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
         <span className={selected ? "text-[#252525] dark:text-white" : "text-page-text-muted"}>{icon}</span>
@@ -124,6 +124,16 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
         <SectionLabel title="Bonus milestones" description="Reward creators for reaching view milestones." />
         {data.milestones.map((m, i) => (
           <div key={i} className="flex flex-col gap-4 rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6">
+            <div className="flex items-center justify-between">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Milestone {i + 1}</span>
+              <button
+                type="button"
+                onClick={() => removeMilestone(i)}
+                className="flex size-8 items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" /></svg>
+              </button>
+            </div>
             <div className="flex flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Milestone name</span>
               <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
@@ -143,8 +153,9 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
                   <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
                   <input
                     type="text"
+                    inputMode="numeric"
                     value={m.amount}
-                    onChange={(e) => updateMilestone(i, { amount: e.target.value })}
+                    onChange={(e) => updateMilestone(i, { amount: e.target.value.replace(/[^\d.,]/g, "") })}
                     placeholder="50"
                     className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
                   />
@@ -153,8 +164,9 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
                 <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
                   <input
                     type="text"
+                    inputMode="numeric"
                     value={m.views}
-                    onChange={(e) => updateMilestone(i, { views: e.target.value })}
+                    onChange={(e) => updateMilestone(i, { views: e.target.value.replace(/[^\d,]/g, "") })}
                     placeholder="50,000"
                     className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
                   />
@@ -168,12 +180,12 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
           <button
             type="button"
             onClick={addMilestone}
-            className="flex w-full items-center gap-3 rounded-2xl border border-dashed border-foreground/[0.12] p-4"
+            className="group flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[rgba(37,37,37,0.12)] bg-[rgba(37,37,37,0.02)] p-4 transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-[rgba(255,255,255,0.12)] dark:bg-[rgba(255,255,255,0.02)] dark:hover:bg-[rgba(255,255,255,0.04)]"
           >
             <div className="flex size-9 items-center justify-center rounded-full bg-foreground/[0.06]">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9H15M9 3V15" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.5" strokeLinecap="round" /></svg>
             </div>
-            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Add milestone</span>
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text group-hover:underline">Add milestone</span>
           </button>
         </div>
       </div>

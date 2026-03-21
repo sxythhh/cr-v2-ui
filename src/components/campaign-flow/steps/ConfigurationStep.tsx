@@ -61,7 +61,7 @@ function ChevronDownIcon() {
 
 // ── Section helpers ────────────────────────────────────────────────
 
-function SectionLabel({ title, description }: { title: string; description: string }) {
+function SectionLabel({ title, description }: { title: string; description?: string }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{title}</span>
@@ -104,7 +104,7 @@ function RadioCard({
           : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02]",
       )}
       style={selected ? {
-        background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF",
+        background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
       } : undefined}
     >
       {/* Icon */}
@@ -210,6 +210,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
   );
   const [branding, setBranding] = useState<"white-label" | "co-branded">("white-label");
   const [noEarningsCap, setNoEarningsCap] = useState(false);
+  const [template, setTemplate] = useState("scratch");
 
   const update = (partial: Partial<ConfigurationData>) => onChange({ ...data, ...partial });
 
@@ -221,9 +222,14 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
         <Card>
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Select template</span>
-            <div className="flex h-10 items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5">
-              <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Start from scratch</span>
-              <ChevronDownIcon />
+            <div className="relative">
+              <select value={template} onChange={(e) => setTemplate(e.target.value)} className="flex h-10 w-full cursor-pointer appearance-none items-center rounded-[14px] bg-foreground/[0.04] px-3.5 pr-8 font-inter text-sm tracking-[-0.02em] text-page-text outline-none">
+                <option value="scratch">Start from scratch</option>
+                <option value="ugc">UGC Campaign</option>
+                <option value="ambassador">Brand Ambassador</option>
+                <option value="product-review">Product Review</option>
+              </select>
+              <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"><ChevronDownIcon /></div>
             </div>
           </div>
         </Card>
@@ -283,40 +289,189 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
         </Card>
       </div>
 
-      {/* 4. Pricing */}
-      <div className="flex flex-col gap-2">
-        <SectionLabel title="Pricing" description="Set your CPM rate and total campaign budget." />
-        <Card>
-          <div className="flex gap-3">
-            <div className="flex flex-1 flex-col gap-2">
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per 1,000 views</span>
-              <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
-                <input
-                  type="text"
-                  value={data.rewardPer1000Views}
-                  onChange={(e) => update({ rewardPer1000Views: e.target.value })}
-                  placeholder="2"
-                  className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
-                />
+      {/* 4. Pricing — model-specific */}
+      {model === "cpm" ? (
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Pricing" description="Set your CPM rate and total campaign budget." />
+          <Card>
+            <div className="flex gap-3">
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per 1,000 views</span>
+                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+                  <input type="text" inputMode="numeric" value={data.rewardPer1000Views} onChange={(e) => update({ rewardPer1000Views: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="2" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Total budget</span>
+                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+                  <input type="text" inputMode="numeric" value={data.budget} onChange={(e) => update({ budget: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="5,000" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+                </div>
               </div>
             </div>
-            <div className="flex flex-1 flex-col gap-2">
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Total budget</span>
-              <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
-                <input
-                  type="text"
-                  value={data.budget}
-                  onChange={(e) => update({ budget: e.target.value })}
-                  placeholder="5,000"
-                  className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
-                />
+          </Card>
+        </div>
+      ) : model === "per-video" ? (
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Flat rate pricing" description="Set a fixed payout per delivered video and the maximum number of posts per creator." />
+          <Card>
+            <div className="flex gap-3">
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per post</span>
+                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+                  <input type="text" inputMode="numeric" value={data.rewardPer1000Views} onChange={(e) => update({ rewardPer1000Views: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="0" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Max posts per creator</span>
+                <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <input type="text" inputMode="numeric" value={data.maxPayout} onChange={(e) => update({ maxPayout: e.target.value.replace(/[^\d]/g, "") })} placeholder="0" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60" />
+                </div>
               </div>
             </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
+      ) : (
+        /* Retainer: Rate and contract length */
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Rate and contract length" />
+          <Card>
+            <div className="flex gap-3">
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate</span>
+                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text">$</span>
+                  <input type="text" inputMode="numeric" value={data.rewardPer1000Views} onChange={(e) => update({ rewardPer1000Views: e.target.value.replace(/[^\d.,]/g, "") })} placeholder="0" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Contract length</span>
+                <div className="relative">
+                  <select value={data.contractLength} onChange={(e) => update({ contractLength: e.target.value })} className="flex h-10 w-full cursor-pointer appearance-none items-center rounded-[14px] bg-foreground/[0.04] px-3.5 pr-8 font-inter text-sm tracking-[-0.02em] text-page-text outline-none">
+                    <option value="1">1 month</option>
+                    <option value="3">3 months</option>
+                    <option value="6">6 months</option>
+                    <option value="12">12 months</option>
+                  </select>
+                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"><ChevronDownIcon /></div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Retainer/per-video: Payout frequency */}
+      {model !== "cpm" && (
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Payout frequency" description="How often creators receive their earnings." />
+          <Card>
+            <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5">
+              {(["monthly", "weekly"] as const).map((freq) => (
+                <button
+                  key={freq}
+                  type="button"
+                  onClick={() => update({ payoutFrequency: freq })}
+                  className={cn(
+                    "flex h-8 flex-1 items-center justify-center rounded-[10px] font-inter text-sm font-medium tracking-[-0.02em] transition-all capitalize",
+                    data.payoutFrequency === freq
+                      ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10"
+                      : "text-page-text-subtle",
+                  )}
+                >
+                  {freq}
+                </button>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Retainer/per-video: Creator spots */}
+      {model !== "cpm" && (
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Creator spots" description="Set how many creators can join this campaign." />
+          <Card className="flex flex-col gap-4 p-5">
+            <div className="flex gap-3">
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Total spots</span>
+                <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <input type="text" defaultValue="60" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Already filled (if any)</span>
+                <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+                  <input type="text" defaultValue="0" className="w-full bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none" />
+                </div>
+              </div>
+            </div>
+            <div
+              className="flex items-center justify-between rounded-2xl border px-4 py-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] border-[rgba(255,144,37,0.3)]"
+              style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" }}
+            >
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Show available spots to creators</span>
+              <ToggleSwitch on={true} onToggle={() => {}} />
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Retainer/per-video: Posts amount */}
+      {model !== "cpm" && (
+        <div className="flex flex-col gap-2">
+          <SectionLabel title="Posts amount" description="Set a minimum number of posts per creator." />
+          <Card className="flex flex-col gap-4 p-5">
+            {/* Toggle */}
+            <div
+              onClick={() => update({ expectedPostsEnabled: !data.expectedPostsEnabled })}
+              className={cn(
+                "flex cursor-pointer items-center justify-between rounded-2xl border px-4 py-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+                data.expectedPostsEnabled ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
+              )}
+              style={data.expectedPostsEnabled ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+            >
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Expected amount of posts</span>
+              <ToggleSwitch on={data.expectedPostsEnabled} onToggle={() => update({ expectedPostsEnabled: !data.expectedPostsEnabled })} />
+            </div>
+
+            {/* Slider — shown when enabled */}
+            {data.expectedPostsEnabled && (
+              <div className="flex flex-col gap-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">Amount of posts per creator</span>
+                  <div className="flex h-8 items-center gap-0.5 rounded-[10px] bg-foreground/[0.04] px-3.5">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{data.expectedPostsPerMonth}</span>
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text">/mo</span>
+                  </div>
+                </div>
+                {/* Progress bar with handle */}
+                <div className="relative h-4 flex items-center">
+                  <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    value={parseInt(data.expectedPostsPerMonth) || 20}
+                    onChange={(e) => update({ expectedPostsPerMonth: e.target.value })}
+                    className="absolute inset-0 z-10 w-full cursor-pointer appearance-none bg-transparent opacity-0"
+                  />
+                  {/* Track bg */}
+                  <div className="absolute left-0 right-0 h-1 rounded-full bg-foreground/[0.06]" />
+                  {/* Track fill */}
+                  <div className="absolute left-0 h-1 rounded-full bg-foreground" style={{ width: `${((parseInt(data.expectedPostsPerMonth) || 20) / 50) * 100}%` }} />
+                  {/* Handle */}
+                  <div
+                    className="absolute size-3.5 rounded-full border-2 border-white bg-foreground shadow-sm"
+                    style={{ left: `calc(${((parseInt(data.expectedPostsPerMonth) || 20) / 50) * 100}% - 7px)` }}
+                  />
+                </div>
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
 
       {/* 5. Creator earnings cap */}
       <div className="flex flex-col gap-2">
@@ -330,7 +485,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
               : "border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
           )}
           style={noEarningsCap ? {
-            background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), #FFFFFF",
+            background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
           } : undefined}
         >
           <div className="flex min-w-0 flex-1 flex-col gap-1">
