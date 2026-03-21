@@ -19,7 +19,7 @@ a {
   --animate-modal-content-in: modal-content-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 
   --font-sans: var(--font-inter-display), "Arial", "Helvetica", sans-serif;
-  --font-geist: var(--font-inter), "Arial", "Helvetica", sans-serif;
+  --font-inter-fallback: var(--font-inter), "Arial", "Helvetica", sans-serif;
   /* --font-inter is set by Next.js font loader on <body> */
 
   @keyframes fade-in {
@@ -59,6 +59,7 @@ a {
 @utility font-geist {
   font-family: var(--font-inter), "Inter", Arial, Helvetica, sans-serif;
 }
+/* font-geist kept as alias for backwards compatibility — resolves to Inter */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

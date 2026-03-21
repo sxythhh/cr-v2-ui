@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { VerifiedAgencyDrawer } from "./VerifiedAgencyDrawer";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+
 import {
   ChevronDown,
   ChevronUp,
   Globe,
   Linkedin,
   Mail,
-  MessageCircle,
   Search,
 } from "lucide-react";
 import AgencyDirectoryIcon from "@/assets/icons/agency-directory.svg";
@@ -104,8 +106,8 @@ function AgencyCardIllustration() {
           gap: 12,
         }}
       >
-        <AgencyLogo name="Ogilvy" bg="#B8A898" />
-        <AgencyLogo name="Huge" bg="#1a1a2e" />
+        <img src="/icons/agency1.avif" alt="" width={48} height={48} style={{ borderRadius: 12, objectFit: "cover" }} />
+        <img src="/icons/agency2.avif" alt="" width={48} height={48} style={{ borderRadius: 12, objectFit: "cover" }} />
       </div>
 
       {/* Floating agency logos - right */}
@@ -118,8 +120,8 @@ function AgencyCardIllustration() {
           gap: 12,
         }}
       >
-        <AgencyLogo name="Wieden Kennedy" bg="#0f4c3a" />
-        <AgencyLogo name="Droga5" bg="#2d1b4e" />
+        <img src="/icons/agency3.avif" alt="" width={48} height={48} style={{ borderRadius: 12, objectFit: "cover" }} />
+        <img src="/icons/agency4.avif" alt="" width={48} height={48} style={{ borderRadius: 12, objectFit: "cover" }} />
       </div>
 
       {/* Center card */}
@@ -161,7 +163,7 @@ function AgencyCardIllustration() {
               <span
                 style={{
                   fontSize: 13.2,
-                  fontWeight: 100,
+                  fontWeight: 400,
                   letterSpacing: "-0.066px",
                   color: "#C0C7D1",
                 }}
@@ -321,7 +323,7 @@ function BrowserCard() {
         width: "100%",
         height: 120,
         backgroundColor: C.surface,
-        border: `1px solid ${C.surface}`,
+        border: `1px solid ${C.border}`,
         borderRadius: 12,
         position: "relative",
         overflow: "hidden",
@@ -334,11 +336,9 @@ function BrowserCard() {
           right: 1,
           bottom: 1,
           width: "calc(100% - 20px)",
-          height: 80,
+          height: 72,
           backgroundColor: "var(--card-bg)",
           borderRadius: "8px 0 0 0",
-          boxShadow:
-            "0px 48px 48px -32px rgba(47,53,71,0.08), 0px 24px 24px -12px rgba(47,53,71,0.08), 0px 4px 4px -3px rgba(47,53,71,0.08)",
         }}
       />
 
@@ -349,71 +349,101 @@ function BrowserCard() {
           left: 12,
           top: 12,
           display: "flex",
-          gap: 3,
+          gap: 4,
         }}
       >
-        <div
-          style={{ width: 4, height: 4, borderRadius: 2, background: "#FF5E57" }}
-        />
-        <div
-          style={{ width: 4, height: 4, borderRadius: 2, background: "#FFB700" }}
-        />
-        <div
-          style={{ width: 4, height: 4, borderRadius: 2, background: "#00CC1A" }}
-        />
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#FF5E57" }} />
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#FFB700" }} />
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#00CC1A" }} />
       </div>
 
       {/* URL bar */}
       <div
         style={{
           position: "absolute",
-          left: 4,
-          top: 30,
-          right: 4,
-          height: 32,
+          left: 6,
+          top: 28,
+          right: 6,
+          height: 28,
           backgroundColor: C.surface,
-          borderRadius: 4,
+          borderRadius: 6,
           display: "flex",
           alignItems: "center",
-          padding: "6px 0 6px 6px",
+          padding: "0 8px",
           gap: 6,
         }}
       >
-        <Search size={20} color="#A4ACB9" strokeWidth={1.33} />
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3.5 6.5L5 8L8.5 4.5" stroke="#00B259" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="6" cy="6" r="5" stroke="#00B259" strokeWidth="1" />
+        </svg>
         <span
           style={{
-            fontSize: 12,
-            fontWeight: 400,
-            lineHeight: "16px",
+            fontSize: 10,
+            fontWeight: 500,
+            lineHeight: "14px",
             color: C.textMuted,
+            fontFamily: "var(--font-inter), Inter, sans-serif",
           }}
         >
-          https://foreplay.co/agencies/your-agency
+          contentrewards.com/agencies/your-agency
         </span>
       </div>
 
-      {/* Verified badge floating */}
-      <svg
-        width={42}
-        height={42}
-        viewBox="0 0 16 16"
-        fill="none"
-        style={{
-          position: "absolute",
-          right: 80,
-          top: 15,
-          transform: "rotate(15deg)",
-        }}
-      >
-        <path
-          d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"
-          fill={C.blue}
-        />
-        <path
-          d="M6.5 10.8L4 8.3l1-1 1.5 1.5L10 5.3l1 1-4.5 4.5z"
-          fill="#fff"
-        />
-      </svg>
+      {/* Placeholder content lines */}
+      <div style={{ position: "absolute", left: 26, bottom: 16, display: "flex", flexDirection: "column", gap: 4 }}>
+        <div style={{ width: 140, height: 6, backgroundColor: C.border, borderRadius: 3 }} />
+        <div style={{ width: 100, height: 6, backgroundColor: C.border, borderRadius: 3 }} />
+      </div>
+    </div>
+  );
+}
+
+function BrandedProfileCard() {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: 120,
+        backgroundColor: C.surface,
+        border: `1px solid ${C.border}`,
+        borderRadius: 12,
+        position: "relative",
+        overflow: "hidden",
+        fontFamily: "var(--font-inter), Inter, sans-serif",
+      }}
+    >
+      {/* Browser chrome */}
+      <div style={{ position: "absolute", left: 10, top: 8, display: "flex", gap: 4 }}>
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#FF5E57" }} />
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#FFB700" }} />
+        <div style={{ width: 6, height: 6, borderRadius: 3, background: "#00CC1A" }} />
+      </div>
+
+      {/* URL bar */}
+      <div style={{ position: "absolute", left: 6, top: 22, right: 6, height: 22, backgroundColor: "var(--card-bg)", borderRadius: 4, display: "flex", alignItems: "center", padding: "0 6px", gap: 4 }}>
+        <span style={{ fontSize: 8, fontWeight: 500, color: C.textMuted }}>contentrewards.com/agency/your-agency</span>
+      </div>
+
+      {/* Profile preview */}
+      <div style={{ position: "absolute", left: 10, top: 50, right: 10, bottom: 6, backgroundColor: "var(--card-bg)", borderRadius: 6, padding: "8px 10px", display: "flex", gap: 8, alignItems: "center" }}>
+        {/* Avatar */}
+        <div style={{ width: 36, height: 36, borderRadius: 8, background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.9)" }}>A</span>
+        </div>
+        {/* Info */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: C.textPrimary }}>Agency Name</span>
+            <VerifiedBadge size={10} />
+          </div>
+        </div>
+        {/* Stats */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2, flexShrink: 0 }}>
+          <span style={{ fontSize: 9, fontWeight: 600, color: "#00B259" }}>12 campaigns</span>
+          <span style={{ fontSize: 8, fontWeight: 500, color: C.textMuted }}>47 creators</span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -425,7 +455,7 @@ function BadgeCard() {
         width: "100%",
         height: 120,
         backgroundColor: C.surface,
-        border: `1px solid ${C.surface}`,
+        border: `1px solid ${C.border}`,
         borderRadius: 12,
         position: "relative",
         overflow: "hidden",
@@ -435,76 +465,28 @@ function BadgeCard() {
       <div
         style={{
           position: "absolute",
-          left: 16.65,
-          top: 22.09,
+          left: 16,
+          top: 28,
           display: "flex",
           alignItems: "center",
-          padding: "2.71px 7.22px 2.71px 2.71px",
-          gap: 8.12,
-          width: 168.06,
-          height: 51.45,
-          background:
-            "linear-gradient(0deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08)), #060710",
+          padding: "4px 10px 4px 4px",
+          gap: 8,
+          background: "linear-gradient(0deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08)), #060710",
           borderRadius: 12,
           transform: "rotate(6deg)",
         }}
       >
-        {/* Logo container */}
-        <div
-          style={{
-            width: 46.02,
-            height: 46.03,
-            borderRadius: 9,
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <AgencyLogo name="Foreplay" bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" size={32} radius={6} fontSize={13} />
-        </div>
+        {/* Favicon */}
+        <img src="/icons/cr-favicon.png" alt="" width={38} height={38} style={{ borderRadius: 8, flexShrink: 0 }} />
 
         {/* Text area */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            padding: "2.71px 4.51px 2.71px 0",
-            gap: 2.62,
-            minWidth: 103.99,
-          }}
-        >
-          <span
-            style={{
-              fontSize: 13.2,
-              fontWeight: 100,
-              letterSpacing: "-0.066px",
-              lineHeight: "13.54px",
-              color: "#C0C7D1",
-            }}
-          >
-            foreplay
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <span style={{ fontSize: 12, fontWeight: 500, letterSpacing: "-0.02em", lineHeight: "14px", color: "#8A8A8A", fontFamily: "var(--font-inter), Inter, sans-serif", whiteSpace: "nowrap" }}>
+            Agency Name
           </span>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 3.61,
-              marginTop: 0.9,
-            }}
-          >
-            <VerifiedBadge size={14.44} />
-            <span
-              style={{
-                fontSize: 10.8,
-                fontWeight: 300,
-                lineHeight: "14px",
-                color: "#FFFFFF",
-              }}
-            >
+          <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+            <VerifiedBadge size={12} />
+            <span style={{ fontSize: 10, fontWeight: 500, lineHeight: "12px", color: "#FFFFFF", fontFamily: "var(--font-inter), Inter, sans-serif", whiteSpace: "nowrap" }}>
               Verified Agency
             </span>
           </div>
@@ -518,115 +500,78 @@ function BadgeCard() {
           left: 201,
           top: "50%",
           transform: "translateY(-50%)",
-          width: 140,
-          height: 52,
+          width: 120,
+          height: 48,
           backgroundColor: C.border,
-          borderRadius: 10,
+          borderRadius: "10px 0 0 10px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <LockIcon width={20} height={20} style={{ color: C.textMuted }} />
+        <LockIcon width={18} height={18} style={{ color: C.textMuted }} />
       </div>
 
       {/* Cursor hand icon */}
       <CursorHandIcon
-        width={24}
-        height={24}
+        width={22}
+        height={22}
         style={{
           position: "absolute",
-          left: 159,
-          top: 28,
+          left: 155,
+          top: 30,
         }}
       />
     </div>
   );
 }
 
-function NewsletterCard() {
+function RevenueChartCard() {
+  const days = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
   return (
     <div
       style={{
         width: "100%",
         height: 120,
+        padding: "10px 12px",
         backgroundColor: C.surface,
-        border: `1px solid ${C.surface}`,
+        border: `1px solid ${C.border}`,
         borderRadius: 12,
-        position: "relative",
-        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        fontFamily: "var(--font-inter), Inter, sans-serif",
       }}
     >
-      {/* White content area */}
-      <div
-        style={{
-          position: "absolute",
-          left: 17,
-          top: 17,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "var(--card-bg)",
-          boxShadow:
-            "0px 48px 48px -32px rgba(47,53,71,0.08), 0px 24px 24px -12px rgba(47,53,71,0.08), 0px 4px 4px -3px rgba(47,53,71,0.08)",
-        }}
-      />
-      {/* Badge pill */}
-      <div
-        style={{
-          position: "absolute",
-          left: 23,
-          top: 25,
-          backgroundColor: C.surface,
-          borderRadius: 24,
-          padding: "4px 6px",
-        }}
-      >
-        <span
-          style={{
-            fontSize: 12,
-            fontWeight: 400,
-            lineHeight: "16px",
-            color: C.textSecondary,
-          }}
-        >
-          300K+ People
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: 11, fontWeight: 600, lineHeight: "14px", color: "#0A0B0B", letterSpacing: "-0.04em" }}>
+          Total Revenue
+        </span>
+        <span style={{ fontSize: 13, fontWeight: 600, lineHeight: "14px", color: "#0A0B0B", letterSpacing: "-0.04em" }}>
+          $142,592
         </span>
       </div>
-      {/* Placeholder lines */}
-      <div
-        style={{
-          position: "absolute",
-          left: 23,
-          top: 58,
-          display: "flex",
-          flexDirection: "column",
-          gap: 6,
-        }}
-      >
-        <div
-          style={{
-            width: 180,
-            height: 8,
-            backgroundColor: C.border,
-            borderRadius: 4,
-          }}
-        />
-        <div
-          style={{
-            width: 140,
-            height: 8,
-            backgroundColor: C.border,
-            borderRadius: 4,
-          }}
-        />
-        <div
-          style={{
-            width: 160,
-            height: 8,
-            backgroundColor: C.border,
-            borderRadius: 4,
-          }}
-        />
+      {/* Chart area with fill */}
+      <div style={{ position: "relative", flex: 1, marginTop: 4, marginBottom: 2 }}>
+        <svg width="100%" height="100%" viewBox="0 0 390 44" fill="none" style={{ overflow: "visible" }}>
+          {/* Fill area */}
+          <path d="M-2 42L23 16L29 18L65 30L129 32L142 38L149 26L184 18L189 26L195 16L232 26L241 24L276 0L286 24L322 26L343 20L363 24L381 7L404 42L404 44L-2 44Z" fill="url(#revFill)" />
+          {/* Stroke line */}
+          <path d="M-2 42L23 16L29 18L65 30L129 32L142 38L149 26L184 18L189 26L195 16L232 26L241 24L276 0L286 24L322 26L343 20L363 24L381 7L404 42" stroke="#FA8837" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <defs>
+            <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#FA8837" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#FA8837" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      {/* Day labels */}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        {days.map((d) => (
+          <span key={d} style={{ fontSize: 9, fontWeight: 500, color: "#545454", letterSpacing: "0.3px", fontFamily: "var(--font-inter), Inter, sans-serif" }}>{d}</span>
+        ))}
       </div>
     </div>
   );
@@ -644,12 +589,6 @@ const inputClass = cn(
 const formLabelClass =
   "font-inter text-[13px] font-medium leading-[24px] tracking-[-0.02em] text-page-text";
 
-const JOB_LEVELS = ["Individual Contributor", "Manager", "Director", "VP", "C-Level / Executive"];
-const JOB_FUNCTIONS = ["Marketing", "Growth", "Product", "Engineering", "Design", "Operations", "Sales", "Other"];
-const COUNTRIES = [
-  "United States", "United Kingdom", "Canada", "Australia", "Germany", "France",
-  "Netherlands", "South Africa", "Brazil", "India", "Japan", "Other",
-];
 
 function FormSelectInput({
   label,
@@ -723,140 +662,87 @@ function FormTextInput({
   );
 }
 
-function DocumentsIcon() {
-  return (
-    <svg width="34" height="40" viewBox="0 0 34 40" fill="none">
-      <path d="M0 4C0 1.79 1.79 0 4 0H22L34 12V30C34 32.21 32.21 34 30 34H4C1.79 34 0 32.21 0 30V4Z" fill="#80E9FF" />
-      <path d="M8 6C8 3.79 9.79 2 12 2H26L34 10V36C34 38.21 32.21 40 30 40H12C9.79 40 8 38.21 8 36V6Z" fill="#7A73FF" />
-      <path d="M8 6C8 3.79 9.79 2 12 2H26L34 10V36C34 38.21 32.21 40 30 40H12C9.79 40 8 38.21 8 36V6Z" fill="#0048E5" fillOpacity="0.6" />
-    </svg>
-  );
-}
+
+const CR_TOOLS = ["Sideshift", "Aff Network", "Discord", "Other"];
 
 function AgencyApplicationForm() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [agencyName, setAgencyName] = useState("");
+  const [agencyLink, setAgencyLink] = useState("");
+  const [usingCR, setUsingCR] = useState("");
+  const [altTool, setAltTool] = useState("");
   const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
-  const [jobLevel, setJobLevel] = useState("");
-  const [jobFunction, setJobFunction] = useState("");
-  const [country, setCountry] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const isValid = firstName && lastName && email && website && jobLevel && jobFunction && country;
+  const isValid = fullName && agencyName && agencyLink && usingCR && email && phone && (usingCR === "Yes" || altTool);
 
   return (
     <>
-    {/* Success dialog */}
+    {/* Success - full page */}
     {submitted && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div className="relative flex w-full max-w-[576px] flex-col items-start rounded-[20px] bg-[#F2F2F2] p-8 dark:bg-[#1e1e1e]">
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={() => setSubmitted(false)}
-            className="absolute right-8 top-8 flex size-9 cursor-pointer items-center justify-center rounded-[10px] border border-[#CAD0D9] bg-white transition-colors hover:bg-[#F5F5F5] dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M5.5 5.5L12.5 12.5M12.5 5.5L5.5 12.5" stroke="#383E47" strokeWidth="1.1" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          {/* Content */}
-          <div className="flex w-full flex-col items-center px-12 py-24 gap-2.5">
-            {/* Checkmark illustration */}
-            <svg width="213" height="120" viewBox="0 0 213 120" fill="none" className="mb-4">
-              <path d="M158.342 3.0876L148.457 4.84691C147.399 5.03327 146.422 5.54765 145.662 6.30803L103.356 48.6134L85.3382 30.0214C84.1231 28.769 82.3638 28.195 80.6417 28.5007L70.809 30.2451C69.7504 30.4314 68.7739 30.9458 68.0135 31.7062L52.5375 47.1896C50.4875 49.2396 50.4875 52.5719 52.5375 54.6294L74.9389 77.0308L93.3669 95.4588C94.582 96.6739 96.3115 97.2181 98.0037 96.9199L107.889 95.1606C108.947 94.9742 109.924 94.4598 110.684 93.6995L177.687 26.6966C179.737 24.6466 179.737 21.3143 177.687 19.2568L162.971 4.54126C161.756 3.32615 160.027 2.78195 158.335 3.08014L158.342 3.0876Z" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
-              <path d="M69.5417 30.8862L95.3126 56.6571L103.356 48.606" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
-              <path d="M144.856 7.11308L146.839 5.13013L167.206 25.5038L95.8567 96.8528" stroke="#EB6821" strokeLinejoin="round" />
-              <path d="M179.774 23.2673L167.206 25.5037" stroke="#EB6821" strokeLinejoin="round" />
-            </svg>
-
-            {/* Heading */}
-            <h2 className="font-inter text-[29.6px] font-semibold leading-[38px] tracking-[-0.32px] text-[#232529] dark:text-white">
-              We&apos;ll be in touch soon!
-            </h2>
-
-            {/* Description */}
-            <p className="max-w-[350px] text-center font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#505967] dark:text-page-text-muted">
-              Our team will be in touch soon. If you have any questions, please email us at{" "}
-              <a href="mailto:support@contentrewards.com" className="text-[#EB6821] hover:underline">
-                support@contentrewards.com
-              </a>
-              .
-            </p>
-          </div>
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#F2F2F2] dark:bg-[#111111]">
+        <button
+          type="button"
+          onClick={() => setSubmitted(false)}
+          className="absolute right-8 top-8 flex size-9 cursor-pointer items-center justify-center rounded-[10px] border border-[#CAD0D9] bg-white transition-colors hover:bg-[#F5F5F5] dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M5.5 5.5L12.5 12.5M12.5 5.5L5.5 12.5" stroke="#383E47" strokeWidth="1.1" strokeLinecap="round" />
+          </svg>
+        </button>
+        <div className="flex flex-col items-center gap-2.5">
+          <svg width="213" height="120" viewBox="0 0 213 120" fill="none" className="mb-4">
+            <path d="M158.342 3.0876L148.457 4.84691C147.399 5.03327 146.422 5.54765 145.662 6.30803L103.356 48.6134L85.3382 30.0214C84.1231 28.769 82.3638 28.195 80.6417 28.5007L70.809 30.2451C69.7504 30.4314 68.7739 30.9458 68.0135 31.7062L52.5375 47.1896C50.4875 49.2396 50.4875 52.5719 52.5375 54.6294L74.9389 77.0308L93.3669 95.4588C94.582 96.6739 96.3115 97.2181 98.0037 96.9199L107.889 95.1606C108.947 94.9742 109.924 94.4598 110.684 93.6995L177.687 26.6966C179.737 24.6466 179.737 21.3143 177.687 19.2568L162.971 4.54126C161.756 3.32615 160.027 2.78195 158.335 3.08014L158.342 3.0876Z" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
+            <path d="M69.5417 30.8862L95.3126 56.6571L103.356 48.606" stroke="#EB6821" strokeWidth="2" strokeLinejoin="round" />
+            <path d="M144.856 7.11308L146.839 5.13013L167.206 25.5038L95.8567 96.8528" stroke="#EB6821" strokeLinejoin="round" />
+            <path d="M179.774 23.2673L167.206 25.5037" stroke="#EB6821" strokeLinejoin="round" />
+          </svg>
+          <h2 className="font-inter text-[29.6px] font-semibold leading-[38px] tracking-[-0.32px] text-[#232529] dark:text-white">
+            Application received!
+          </h2>
+          <p className="max-w-[350px] text-center font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#505967] dark:text-page-text-muted">
+            We have received your application. If you fit the program you will be messaged shortly.
+          </p>
         </div>
       </div>
     )}
 
     {/* Form */}
-    <div className="flex w-full max-w-[540px] flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0px_30px_60px_-12px_rgba(50,50,93,0.25),0px_18px_36px_-18px_rgba(0,0,0,0.3)] dark:border-[#2a2a2a] dark:bg-[#191919]">
+    <div className="flex w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919]">
       {/* Header */}
       <div className="flex items-start gap-4 border-b border-border p-4 dark:border-[#2a2a2a]">
-        <DocumentsIcon />
         <div className="flex flex-col gap-1">
           <span className="font-inter text-[14px] font-medium leading-[24px] tracking-[-0.02em] text-page-text">
-            Apply for Verified Agency status
+            Apply for the Agency Partner Program
           </span>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.2" className="text-page-text-muted" />
-                <path d="M6.5 3.5V6.5L8.5 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="text-page-text-muted" />
-              </svg>
-              <span className="font-inter text-[12px] font-light tracking-[-0.02em] text-page-text-muted">
-                5 minute application
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <svg width="11" height="13" viewBox="0 0 11 13" fill="none">
-                <path d="M1 1h9v11H1V1z" stroke="currentColor" strokeWidth="1.2" className="text-page-text-muted" />
-                <path d="M3.5 4h4M3.5 6.5h4M3.5 9h2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-page-text-muted" />
-              </svg>
-              <span className="font-inter text-[12px] font-light tracking-[-0.02em] text-page-text-muted">
-                7 fields
-              </span>
-            </div>
+          <div className="flex items-center gap-1.5 text-page-text-muted">
+            <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="currentColor"/>
+            </svg>
+            <span className="font-inter text-[12px] font-light tracking-[-0.02em]">
+              2 minute application
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Form */}
+      {/* Form fields */}
       <div className="flex flex-col gap-3 p-4">
-        <FormTextInput label="First name" placeholder="Jane" value={firstName} onChange={setFirstName} />
-        <FormTextInput label="Last name" placeholder="Diaz" value={lastName} onChange={setLastName} />
-        <FormTextInput label="Work email" placeholder="jane@example.com" type="email" value={email} onChange={setEmail} />
-        <FormTextInput label="Company website" placeholder="example.com" value={website} onChange={setWebsite} />
-        <FormSelectInput label="Job level" placeholder="Select a job level" options={JOB_LEVELS} value={jobLevel} onChange={setJobLevel} />
-        <FormSelectInput label="Job function" placeholder="Select a job function" options={JOB_FUNCTIONS} value={jobFunction} onChange={setJobFunction} />
-        <FormSelectInput label="Country / Region" placeholder="Select a country" options={COUNTRIES} value={country} onChange={setCountry} />
-
-        {/* Email consent checkbox */}
-        <div className="flex items-start gap-0">
-          <div className="w-[160px] shrink-0" />
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-1 size-[13px] shrink-0 cursor-pointer rounded-[2.5px] border border-page-text-muted accent-[#635BFF]"
-            />
-            <span className="font-inter text-[12px] font-light leading-[20px] tracking-[-0.02em] text-page-text-subtle">
-              Get emails about product updates, industry news, and events. You can{" "}
-              <button type="button" className="font-medium text-[#635BFF] hover:underline">
-                unsubscribe
-              </button>{" "}
-              at any time.
-            </span>
-          </label>
-        </div>
+        <FormTextInput label="Full name" placeholder="Jane Diaz" value={fullName} onChange={setFullName} />
+        <FormTextInput label="Agency name" placeholder="Your agency name" value={agencyName} onChange={setAgencyName} />
+        <FormTextInput label="Website" placeholder="https://youragency.com" value={agencyLink} onChange={setAgencyLink} />
+        <FormSelectInput label="Using CR?" placeholder="Are you currently using Content Rewards?" options={["Yes", "No"]} value={usingCR} onChange={setUsingCR} />
+        {usingCR === "No" && (
+          <FormSelectInput label="Current tool" placeholder="What are you currently using?" options={CR_TOOLS} value={altTool} onChange={setAltTool} />
+        )}
+        <FormTextInput label="Email" placeholder="jane@agency.com" type="email" value={email} onChange={setEmail} />
+        <FormTextInput label="WhatsApp phone" placeholder="+1 (555) 123-4567" type="tel" value={phone} onChange={setPhone} />
       </div>
 
       {/* Footer */}
       <div className="flex flex-col gap-3 px-4 pb-4">
-        {/* Submit button — right aligned */}
+        {/* Submit button */}
         <div className="flex justify-end">
           <button
             type="button"
@@ -895,24 +781,24 @@ function AgencyApplicationForm() {
 // ── FAQ data ─────────────────────────────────────────────────────────────────
 const faqs = [
   {
-    question: "Is searching for an agency free?",
+    question: "Who qualifies for the Agency Partner Program?",
     answer:
-      "Yes, feel free to browse the agency directory here. When you find one you like submit the contact form and we will connect you.",
+      "Any agency running campaigns on Content Rewards or ready to start. There's no minimum size requirement. If you're delivering real results for brands, you qualify.",
   },
   {
-    question: "How can I list my agency?",
+    question: "How do milestone rewards work?",
     answer:
-      "Access to the agency directory is included on the Agency Plan. If you're on another plan you can reach out directly to see if you qualify.",
+      "Rewards are based on your total creator payouts (GMV) across all campaigns. As your agency's campaigns pay out more to creators, you automatically unlock the next tier. Rewards are cumulative, you keep everything you've earned.",
   },
   {
-    question: 'What are "Verified Agencies"?',
+    question: "What is the private deal-flow?",
     answer:
-      "Verified agencies are vetted by our team to ensure they meet our quality standards. Often they have been given a referral by Foreplay already and successfully serviced the referral.",
+      "We match you with at least 2 qualified brand deals per month. These are brands already on Content Rewards that are ready to spend and need an agency to manage their campaigns.",
   },
   {
-    question: "What are the benefits of being listed?",
+    question: "How long does it take to get accepted?",
     answer:
-      "Foreplay is used by over 20,000 marketers from DTC brands to B2B GTM teams. Being listed in the directory gives you exposure to these marketers along with being featured in our newsletter of over 300,000 marketers.",
+      "Most applications are reviewed within 48 hours. If you fit the program, a member of our team will reach out via WhatsApp to get you onboarded.",
   },
 ];
 
@@ -999,7 +885,8 @@ function FeatureCard({
             fontSize: 14,
             fontWeight: 500,
             lineHeight: "20px",
-            color: C.textSecondary,
+            letterSpacing: "-0.04em",
+            color: C.textPrimary,
             margin: 0,
           }}
         >
@@ -1023,9 +910,11 @@ function FeatureCard({
   );
 }
 
+
 // ── Main page ────────────────────────────────────────────────────────────────
 export function VerifiedAgencyPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <div
@@ -1056,94 +945,75 @@ export function VerifiedAgencyPage() {
             }}
           >
             {/* Breadcrumb */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <AgencyDirectoryIcon width={20} height={20} style={{ color: C.textMuted }} />
-              <span
-                style={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: "20px",
-                  color: C.textMuted,
-                }}
-              >
+              <span style={{ fontSize: 14, fontWeight: 500, lineHeight: "20px", color: C.textMuted }}>
                 Agency Directory
               </span>
             </div>
 
             {/* Heading */}
-            <div style={{ marginTop: 12, maxWidth: 420 }}>
-              <h1
-                style={{
-                  fontSize: 26,
-                  fontWeight: 600,
-                  lineHeight: "36px",
-                  color: C.textPrimary,
-                  margin: 0,
-                }}
-              >
-                Expand your reach and get inbound leads for your agency.
+            <div style={{ marginTop: 16, maxWidth: 600 }}>
+              <h1 className="font-inter text-[30px] font-bold leading-[1.3] tracking-[-1.5px]">
+                <span className="text-[#000000] dark:text-white">Expand your </span>
+                <span className="text-[#FF6207]">reach</span>
+                <span className="text-[#000000] dark:text-white"> and get </span>
+                <span className="text-[#FF6207]">inbound leads</span>
+                <br />
+                <span className="font-medium text-[#616161] dark:text-page-text-muted">
+                  for your agency.
+                </span>
               </h1>
             </div>
 
             {/* Subtitle */}
-            <div style={{ marginTop: 0, maxWidth: 440 }}>
-              <p
-                style={{
-                  fontSize: 16,
-                  fontWeight: 400,
-                  lineHeight: "24px",
-                  color: C.textPrimary,
-                  margin: 0,
-                }}
-              >
-                Set up your agency profile and get matched with business owners
-                and executives looking to hire expert help for their marketing
-                projects.
+            <div style={{ marginTop: 8, maxWidth: 540 }}>
+              <p className="font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted" style={{ margin: 0 }}>
+                For agencies running campaigns on Content Rewards or ready to start. Whether you&apos;re managing clipping campaigns, UGC campaigns, or both. If you&apos;re delivering real results, this program is built for you. No minimum size requirement.
               </p>
             </div>
 
-            {/* Upgrade notice */}
-            <div style={{ marginTop: 56 }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: 6,
-                  backgroundColor: C.surface,
-                  borderRadius: 6,
-                }}
+            {/* Apply Now button */}
+            <div style={{ marginTop: 32 }}>
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(true)}
+                className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-6 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-all hover:bg-foreground/90 active:scale-[0.98] dark:text-[#111111]"
               >
-                <LockIcon width={20} height={20} style={{ color: C.textSecondary }} />
-                <span
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "20px",
-                    color: C.textSecondary,
-                  }}
-                >
-                  You need to upgrade your plan to Agency.
-                </span>
+                Apply Now
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M3.5 1.5L7 5l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Trusted by */}
+            <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ display: "flex" }}>
+                {["agency1", "agency2", "agency3", "agency4"].map((a, i) => (
+                  <img
+                    key={a}
+                    src={`/icons/${a}.avif`}
+                    alt=""
+                    width={26}
+                    height={26}
+                    style={{
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      border: "2px solid var(--card-bg)",
+                      marginLeft: i > 0 ? -6 : 0,
+                    }}
+                  />
+                ))}
               </div>
+              <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">
+                Trusted by 200+ agencies
+              </span>
             </div>
           </div>
 
-          {/* Right column - illustration */}
-          <div
-            style={{
-              flex: "1 1 480px",
-              minWidth: 320,
-            }}
-          >
-            <AgencyCardIllustration />
-          </div>
+          {/* Right column - spacer (illustration removed) */}
+          <div style={{ flex: "1 1 200px", minWidth: 0 }} />
         </div>
 
         {/* ── Features section ── */}
@@ -1157,254 +1027,171 @@ export function VerifiedAgencyPage() {
             }}
           >
             <FeatureCard
-              illustration={<BrowserCard />}
+              illustration={<BrandedProfileCard />}
               title="Verified Branded Profile"
-              description="Set up your page in under 15 minutes to drive website traffic from over 500k monthly visitors."
+              description="Set up your Content Rewards agency profile in under 15 minutes and start receiving inbound leads."
             />
             <FeatureCard
               illustration={<BadgeCard />}
               title="Agency Badge"
-              description='Get your "Foreplay Agency" badge to embed on your website.'
+              description='Get your "Content Rewards Verified Agency" badge to embed on your website.'
             />
             <FeatureCard
-              illustration={<NewsletterCard />}
-              title="Newsletter Features"
-              description="Submit case studies and agency wins to be featured in the Foreplay newsletter (300k subs)"
+              illustration={<RevenueChartCard />}
+              title="Manage Your Revenue"
+              description="Track earnings, payouts, and campaign performance across all your clients in one dashboard."
             />
           </div>
         </div>
 
-        {/* ── Application Form section ── */}
-        <div style={{ marginTop: 36 }}>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 24,
-              padding: "0 28px",
-            }}
-          >
-            {/* Left column */}
-            <div style={{ width: 280, flexShrink: 0 }}>
-              <h2
-                style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  lineHeight: "24px",
-                  color: C.textSecondary,
-                  margin: 0,
-                }}
-              >
-                Apply Now
+        {/* ── Partner Program section ── */}
+        <div style={{ marginTop: 64, padding: "0 28px" }}>
+          <div className="mx-auto flex max-w-[1000px] flex-col gap-16">
+            {/* Section header */}
+            <div className="flex flex-col items-center gap-4">
+              <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#FF6207]">
+                Agency Partner Program
+              </span>
+              <h2 className="max-w-[600px] text-center font-inter text-[32px] font-bold leading-[38px] tracking-[-1.6px] text-black dark:text-white">
+                A real partnership, not an affiliate deal.
               </h2>
-              <p
-                style={{
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: "20px",
-                  color: C.textMuted,
-                  margin: "4px 0 0",
-                }}
-              >
-                Fill out the form to apply for Verified Agency status and unlock premium features.
+              <p className="max-w-[480px] text-center font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#707070] dark:text-page-text-muted">
+                If you&apos;re running campaigns for brands on Content Rewards, this program gives you free mentoring, resources, milestone rewards, and direct access to the team.
               </p>
             </div>
 
-            {/* Right column - form */}
-            <div style={{ flex: 1, minWidth: 320 }}>
-              <AgencyApplicationForm />
-            </div>
-          </div>
-        </div>
-
-        {/* ── End / CTA section ── */}
-        <div className="flex justify-center overflow-hidden py-20 sm:py-32">
-          <div className="relative flex w-full max-w-[1400px] items-center pr-0 sm:pr-8">
-            {/* Left — Text column */}
-            <div className="relative z-10 flex w-full max-w-[420px] shrink-0 flex-col justify-center gap-12 px-7">
-              {/* Header / Description */}
-              <div className="flex flex-col gap-4">
-                {/* Eyebrow */}
-                <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#353535] dark:text-page-text">
-                  How it works
-                </span>
-
-                {/* Heading */}
-                <div className="flex flex-col gap-6">
-                  <h2 className="font-inter text-[30px] font-bold leading-[1.3] tracking-[-1.5px]">
-                    <span className="text-[#000000] dark:text-white">Stop </span>
-                    <span className="text-[#FF6207]">burning adspend</span>
-                    <br />
-                    <span className="text-[#000000] dark:text-white">on rising CPMs.</span>
-                    <br />
-                    <span className="font-medium text-[#616161] dark:text-page-text-muted">
-                      Generate sustainable, organic growth.
+            {/* What you get */}
+            <div className="flex flex-col gap-6">
+              <h3 className="font-inter text-[20px] font-medium leading-[24px] tracking-[-1px] text-black dark:text-white">
+                What you get (free)
+              </h3>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  { title: "Verified Agency Status", desc: "Your agency gets a verified badge on the platform. Brands and creators see it, signaling you're recognized by CR directly." },
+                  { title: "CR x Agency Hoodies", desc: "Custom merch for your team. You're part of the family now." },
+                  { title: "Private Deal-Flow", desc: "We send you at least 2 qualified brand deals per month, matched to your agency. Ready-to-spend brands that need campaigns run." },
+                  { title: "Full X Growth Guide", desc: "The exact playbook for building your agency's presence on X. Tactics, frameworks, and strategy from people actually doing it." },
+                  { title: "Unlimited Consulting", desc: "Virality is the #1 clipping agency on CR. As a partner, you get unlimited access to their team for campaign strategy, scaling, and more." },
+                  { title: "Super Bowl Rings", desc: "Every partner agency receives 20 custom rings. Give them to your top clippers or employees. If you're winning, show it." },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-5"
+                  >
+                    <span className="font-inter text-[14px] font-medium leading-[20px] tracking-[-0.04em] text-page-text">
+                      {item.title}
                     </span>
-                  </h2>
+                    <p className="font-inter text-[13px] font-normal leading-[20px] tracking-[-0.02em] text-page-text-muted" style={{ margin: 0 }}>
+                      {item.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                  {/* Body */}
-                  <p className="font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
-                    Content Rewards is a marketing tool that connects your business with content creators and allows you to run organic content campaigns.
+            {/* Milestone Rewards */}
+            <div className="flex flex-col gap-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-inter text-[20px] font-medium leading-[24px] tracking-[-1px] text-black dark:text-white">
+                    Milestone Rewards
+                  </h3>
+                  <p className="font-inter text-[14px] font-normal leading-[20px] text-page-text-muted" style={{ margin: 0 }}>
+                    As your agency grows, you unlock rewards based on total creator payouts (GMV).
                   </p>
                 </div>
-              </div>
-
-              {/* Campaign types */}
-              <div className="flex flex-col gap-6">
-                <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#353535] dark:text-page-text">
-                  Types of Campaigns
-                </span>
-
-                <div className="flex flex-col gap-5">
-                  {/* UGC */}
-                  <div className="flex items-start gap-[61px]">
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="2" y="3.5" width="14" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
-                        <circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
-                      </svg>
-                      <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#000] dark:text-white">
-                        User-Generated Content
-                      </span>
-                    </div>
-                    <p className="max-w-[200px] flex-1 font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
-                      Creators produce original content featuring your brand based on guidelines you provide
-                    </p>
-                  </div>
-
-                  {/* Clipping */}
-                  <div className="flex items-start gap-[165px]">
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <circle cx="5" cy="13" r="2.5" stroke="currentColor" strokeWidth="1.5" className="text-[#000] dark:text-white" />
-                        <path d="M7 11.5L13 5M13 5H9.5M13 5V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#000] dark:text-white" />
-                      </svg>
-                      <span className="font-inter text-sm font-semibold tracking-[-0.42px] text-[#000] dark:text-white">
-                        Clipping
-                      </span>
-                    </div>
-                    <p className="max-w-[200px] flex-1 font-inter text-[15px] font-medium leading-[22px] tracking-[-0.45px] text-[#616161] dark:text-page-text-muted">
-                      Creators turn your existing long-form content into clips
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right — Demo video / screenshot */}
-            <div className="absolute left-[500px] right-[-220px] top-1/2 z-[1] hidden -translate-y-1/2 items-center justify-center px-8 lg:flex">
-              <div className="flex w-full max-w-[936px] flex-col items-start">
-                <div className="relative flex w-full items-center justify-center rounded-xl border border-[#E5E7EB] bg-white p-2 shadow-[0px_20px_40px_rgba(0,0,0,0.08)] dark:border-white/[0.08] dark:bg-[#1a1a1a]">
-                  {/* Placeholder for demo screenshot */}
-                  <div className="flex aspect-[920/613] w-full items-center justify-center rounded-lg bg-[rgba(136,136,136,0.08)]">
-                    <span className="font-inter text-sm text-page-text-muted">Demo screenshot</span>
-                  </div>
-
-                  {/* Play button overlay */}
-                  <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/50 p-1.5 backdrop-blur-[5px] dark:border-white/[0.08]">
-                    <div className="flex size-14 items-center justify-center rounded-full bg-[#CFB671] shadow-[inset_-0.73px_0.73px_0.73px_-1.46px_rgba(255,255,255,0.35)]">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                        <path d="M19 15L33 24L19 33V15Z" fill="white" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── FAQ section ── */}
-        <div style={{ marginTop: 36 }}>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 24,
-              padding: "0 28px",
-            }}
-          >
-            {/* Left column */}
-            <div style={{ width: 280, flexShrink: 0 }}>
-              <h2
-                style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  lineHeight: "24px",
-                  color: C.textSecondary,
-                  margin: 0,
-                }}
-              >
-                FAQ
-              </h2>
-              <p
-                style={{
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: "20px",
-                  color: C.textMuted,
-                  margin: "4px 0 0",
-                }}
-              >
-                Questions about the agency directory.
-              </p>
-
-              {/* Contact Support button */}
-              <div style={{ marginTop: 20 }}>
                 <button
                   type="button"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "8px 10px",
-                    borderRadius: 6,
-                    border: "none",
-                    cursor: "pointer",
-                    backgroundColor: "transparent",
-                    boxShadow:
-                      "0px 1px 2px rgba(4,26,75,0.13), 0px 0px 0px 1px rgba(0,56,108,0.08)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = C.surface;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
+                  onClick={() => setDrawerOpen(true)}
+                  className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-5 font-inter text-[13px] font-medium tracking-[-0.02em] text-white transition-all hover:bg-foreground/90 active:scale-[0.98] dark:text-[#111111]"
                 >
-                  <MessageCircle
-                    size={20}
-                    color={C.textMuted}
-                    strokeWidth={1.5}
-                  />
-                  <span
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 500,
-                      lineHeight: "20px",
-                      color: C.textSecondary,
-                    }}
-                  >
-                    Contact Support
-                  </span>
+                  Apply Now
                 </button>
               </div>
+              <div className="rounded-2xl border border-foreground/[0.06] [&>div:first-child]:rounded-t-2xl [&>div:last-child]:rounded-b-2xl">
+                {[
+                  { threshold: "$10K", reward: "AirPods Pro", img: "/icons/prizes/airpods.png" },
+                  { threshold: "$30K", reward: "iPhone 17 Pro Max", img: "/icons/prizes/iphone.png" },
+                  { threshold: "$60K", reward: "iPad Pro M4 + Apple Pencil", img: "/icons/prizes/ipad.png" },
+                  { threshold: "$100K", reward: "MacBook Pro M4", img: "/icons/prizes/macbook.png" },
+                  { threshold: "$200K", reward: "A Week at CR HQ", img: null },
+                  { threshold: "$300K", reward: "Rolex Oyster Perpetual 41", img: "/icons/prizes/rolex.png" },
+                  { threshold: "$500K", reward: "$20,000 Cash", img: null },
+                  { threshold: "$750K", reward: "BMW 330i", img: "/icons/prizes/bmw.png" },
+                ].map((row, i, arr) => (
+                  <div
+                    key={row.threshold}
+                    className={cn(
+                      "flex items-center justify-between px-5 py-3.5",
+                      i < arr.length - 1 && "border-b border-foreground/[0.06]",
+                      i % 2 === 0 ? "bg-card-bg" : "bg-foreground/[0.02]",
+                    )}
+                  >
+                    <span className="font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text-muted">
+                      <span className="text-[#FF6207] tabular-nums">{row.threshold}</span> in Creator Payouts
+                    </span>
+                    {row.img ? (
+                      <HoverCard openDelay={100} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          <span className="cursor-pointer font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text underline decoration-foreground/20 underline-offset-2 transition-colors hover:text-page-text/80">
+                            {row.reward}
+                          </span>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-[220px] overflow-hidden rounded-xl border-foreground/[0.06] p-0" side="top" align="end">
+                          <div className="flex items-center justify-center bg-foreground/[0.02] p-4">
+                            <img src={row.img} alt={row.reward} className="max-h-[140px] max-w-full object-contain" />
+                          </div>
+                          <div className="border-t border-foreground/[0.06] px-3 py-2">
+                            <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text">{row.reward}</span>
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    ) : (
+                      <span className="font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text">
+                        {row.reward}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
             </div>
 
-            {/* Right column - FAQ accordion */}
-            <div style={{ flex: 1, minWidth: 320 }}>
-              {faqs.map((faq, i) => (
-                <FAQItem
-                  key={i}
-                  question={faq.question}
-                  answer={faq.answer}
-                  isOpen={openFaq === i}
-                  onToggle={() => setOpenFaq(openFaq === i ? null : i)}
-                />
-              ))}
-            </div>
           </div>
         </div>
+
+        {/* CTA section removed */}
+
+        {/* Drawer with application form + FAQ */}
+        <VerifiedAgencyDrawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <div className="flex flex-col gap-10 px-5 pt-8 pb-12 sm:px-8">
+            {/* Application form */}
+            <div className="flex justify-center">
+              <AgencyApplicationForm />
+            </div>
+
+            {/* FAQ */}
+            <div className="mx-auto w-full max-w-[540px]">
+              <h2 className="font-inter text-[16px] font-medium leading-[24px] text-page-text">
+                FAQ
+              </h2>
+              <p className="mt-1 font-inter text-[14px] font-normal leading-[20px] text-page-text-muted">
+                Common questions about the partner program.
+              </p>
+              <div className="mt-4">
+                {faqs.map((faq, i) => (
+                  <FAQItem
+                    key={i}
+                    question={faq.question}
+                    answer={faq.answer}
+                    isOpen={openFaq === i}
+                    onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </VerifiedAgencyDrawer>
       </div>
     </div>
   );

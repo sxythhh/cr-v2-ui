@@ -2,14 +2,15 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
-import { VerifiedAgencyPage } from "./VerifiedAgencyPage";
 
 export function VerifiedAgencyDrawer({
   open,
   onOpenChange,
+  children,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  children?: React.ReactNode;
 }) {
   const [snap, setSnap] = useState<number | string | null>(0.5);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -57,7 +58,7 @@ export function VerifiedAgencyDrawer({
             <div className="h-1 w-9 rounded-full bg-black/20 dark:bg-white/30" />
           </div>
           <DrawerPrimitive.Title className="sr-only">
-            Verified Agency
+            Apply for Verified Agency
           </DrawerPrimitive.Title>
           <div
             ref={scrollRef}
@@ -98,7 +99,7 @@ export function VerifiedAgencyDrawer({
               }
             }}
           >
-            <VerifiedAgencyPage />
+            {children}
           </div>
         </DrawerPrimitive.Content>
       </DrawerPrimitive.Portal>
