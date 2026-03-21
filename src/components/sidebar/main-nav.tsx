@@ -60,7 +60,7 @@ export function MainNav({ children }: { children: ReactNode }) {
       <MobileBottomNav />
 
       {/* Floating onboarding — hide on campaign detail pages */}
-      {!pathname?.match(/^\/campaigns\/[^/]+/) && <OnboardingButton />}
+      {!pathname?.match(/^\/campaigns\/[^/]+/) && !pathname?.startsWith("/create-campaign") && <OnboardingButton />}
     </div>
   );
 }

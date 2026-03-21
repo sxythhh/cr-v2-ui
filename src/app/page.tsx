@@ -283,9 +283,10 @@ const TOP_CREATORS = [
   { name: "Clip_Nova_23", earned: "$4,280" },
 ];
 
-const PENDING_DRAFTS = [
-  { name: "Lila Bennett", campaign: "NFL UGC · Revision 2 uploaded", tag: "V2", tagColor: "#FF9025", bg: "rgba(255,144,37,0.1)" },
-  { name: "Marcus Cole", campaign: "Caffeine Exclusive - New draft", tag: "New", tagColor: "#3B82F6", bg: "rgba(59,130,246,0.1)" },
+const ACTIVE_CAMPAIGNS_DATA = [
+  { name: "Call of Duty BO7 Clipping", subtitle: "CPM · 121k views · 31 creators", progress: 45, progressColor: "#00994D" },
+  { name: "Caffeine AI Launch", subtitle: "CPM · 89k views · 18 creators", progress: 78, progressColor: "#E57100" },
+  { name: "G Fuel Summer Push", subtitle: "CPM · 204k views · 52 creators", progress: 94, progressColor: "#FF3355" },
 ];
 
 // ── Sparkline ──────────────────────────────────────────────────────
@@ -765,10 +766,10 @@ function HistoryButton() {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
-        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        onClick={() => setOpen((v) => !v)}
+        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
       >
-        <HistoryIcon className="size-4" />
+        <HistoryIcon className="size-3" />
         History
       </button>
       <TransactionHistoryModal open={open} onClose={() => setOpen(false)} />
@@ -991,7 +992,7 @@ function TopUpButton() {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen((v) => !v)}
         className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
       >
         <PlusIcon className="size-4" />
@@ -1002,18 +1003,30 @@ function TopUpButton() {
   );
 }
 
+function DepositButton() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground px-3 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#111111]"
+      >
+        <PlusIcon className="size-3" />
+        Deposit
+      </button>
+      <TopUpModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
 // ── Dashboard View ─────────────────────────────────────────────────
 
 function DashboardView() {
-  const campaignsContainerRef = useRef<HTMLDivElement>(null);
-  const campaignHover = useProximityHover(campaignsContainerRef);
-  const campaignActiveRect = campaignHover.activeIndex !== null ? campaignHover.itemRects[campaignHover.activeIndex] : null;
-
   const activityContainerRef = useRef<HTMLDivElement>(null);
   const activityHover = useProximityHover(activityContainerRef);
   const activityActiveRect = activityHover.activeIndex !== null ? activityHover.itemRects[activityHover.activeIndex] : null;
 
-  useEffect(() => { campaignHover.measureItems(); }, [campaignHover.measureItems]);
   useEffect(() => { activityHover.measureItems(); }, [activityHover.measureItems]);
 
   return (
@@ -1025,9 +1038,7 @@ function DashboardView() {
           <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
             You&apos;ve spent <span className="font-semibold text-[#FF9025]">78%</span> of your budget in the <span className="font-semibold text-page-text">Caffeine AI</span> campaign, with <span className="font-semibold text-page-text">4 days left.</span>
           </span>
-          <RichButton size="sm" className="shrink-0 rounded-full">
-            Top up
-          </RichButton>
+          <TopUpButton />
         </div>
         <div className="flex items-center gap-0 opacity-70">
           <ChevronLeftIcon className="size-4 text-page-text" />
@@ -1049,14 +1060,8 @@ function DashboardView() {
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$2,880 unallocated</span>
             </div>
             <div className="flex gap-2">
-              <RichButton size="sm" className="flex-1 rounded-full">
-                <PlusIcon className="size-3" />
-                Deposit
-              </RichButton>
-              <button className="flex h-8 flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                <HistoryIcon className="size-3" />
-                History
-              </button>
+              <DepositButton />
+              <HistoryButton />
             </div>
           </div>
         </div>
@@ -1113,137 +1118,78 @@ function DashboardView() {
         </Link>
       </div>
 
-      {/* Active Campaigns + Needs Attention Row */}
-      <div className="flex flex-col gap-2 lg:flex-row">
-        {/* Active Campaigns Table */}
-        <div data-demo="active-campaigns" className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#2a2a2a] dark:bg-[#191919]">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-border px-4 py-2.5 dark:border-[#2a2a2a] sm:px-6">
-            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Active Campaigns</span>
+      {/* Bottom Row: Active Campaigns + Needs Attention + Recent Activity */}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Active Campaigns */}
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex items-center justify-between px-4">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active campaigns</span>
             <Link href="/campaigns" className="group flex cursor-pointer items-center gap-1.5">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
             </Link>
           </div>
-          {/* Rows */}
-          <div
-            ref={campaignsContainerRef}
-            className="relative flex flex-col"
-            onMouseEnter={campaignHover.handlers.onMouseEnter}
-            onMouseMove={campaignHover.handlers.onMouseMove}
-            onMouseLeave={campaignHover.handlers.onMouseLeave}
-          >
-            <AnimatePresence>
-              {campaignActiveRect && (
-                <motion.div
-                  key={campaignHover.sessionRef.current}
-                  className="pointer-events-none absolute bg-foreground/[0.04] dark:bg-white/[0.03]"
-                  initial={{ opacity: 0, top: campaignActiveRect.top, left: campaignActiveRect.left, width: campaignActiveRect.width, height: campaignActiveRect.height }}
-                  animate={{ opacity: 1, top: campaignActiveRect.top, left: campaignActiveRect.left, width: campaignActiveRect.width, height: campaignActiveRect.height }}
-                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
-                  transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
-                />
-              )}
-            </AnimatePresence>
-            {CAMPAIGNS.map((c, i) => {
-              const hideBorder = campaignHover.activeIndex === i || campaignHover.activeIndex === i + 1;
-              return (
-                <Link
-                  key={i}
-                  href={`/campaigns/${c.id}`}
-                  ref={(el) => campaignHover.registerItem(i, el)}
-                  data-proximity-index={i}
-                  className={cn(
-                    "relative flex cursor-pointer items-center px-4 transition-colors duration-150 sm:px-6",
-                    i < CAMPAIGNS.length - 1 && "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-foreground/[0.03] dark:after:bg-white/[0.03] dark:after:shadow-[0_1px_0_0_#000]",
-                  )}
-                >
-                  <div className="flex flex-1 items-center justify-between py-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div className="size-8 shrink-0 rounded bg-foreground/[0.06]" />
-                      <div className="flex min-w-0 flex-col gap-1.5">
-                        <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
-                        <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.meta}</span>
-                      </div>
-                    </div>
-                    <BudgetBar pct={c.pct} color={c.color} />
+          <div className="flex flex-col gap-2 px-4">
+            {ACTIVE_CAMPAIGNS_DATA.map((campaign, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 transition-colors hover:bg-foreground/[0.02] sm:p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="size-8 shrink-0 rounded-[10px] bg-foreground/10" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                    <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{campaign.name}</span>
+                    <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{campaign.subtitle}</span>
                   </div>
-                </Link>
-              );
-            })}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="shrink-0 font-inter text-xs tracking-[-0.02em]" style={{ color: campaign.progressColor }}>{campaign.progress}%</span>
+                  <div className="h-1 flex-1 rounded-full bg-foreground/10">
+                    <div className="h-1 rounded-full" style={{ width: `${campaign.progress}%`, background: campaign.progressColor }} />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Needs Attention */}
-        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:w-[300px] lg:shrink-0">
-          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs Attention</span>
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex items-center">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs attention</span>
+          </div>
           <div className="flex flex-col gap-2">
             {ATTENTION_ITEMS.map((item, i) => (
               <Link
                 key={i}
                 href={item.href}
-                className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white px-3 py-4 text-left transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.06] dark:bg-card-bg"
+                className="group flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 transition-colors hover:bg-foreground/[0.02] sm:px-3 sm:py-4"
               >
-                <div
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full backdrop-blur-[12px]"
-                  style={{ background: item.iconBg }}
-                >
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full backdrop-blur-[12px]" style={{ background: item.iconBg }}>
                   <item.icon />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">{item.title}</span>
-                  <span className="truncate font-inter text-xs leading-normal tracking-[-0.02em] text-foreground/50">{item.subtitle}</span>
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
                 </div>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50 transition-transform duration-200 ease-out group-hover:translate-x-0.5">
-                  <path d="M6 2.667L10 8L6 13.333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                </svg>
+                <ChevronRightIcon className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* AI Weekly Insight */}
-      <div
-        className="relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4"
-      >
-        <div
-          className="pointer-events-none absolute inset-0 dark:blur-[40px]"
-          style={{
-            background: [
-              "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255, 63, 213, 0.24) 0%, rgba(255, 63, 213, 0) 100%)",
-              "radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255, 144, 37, 0.24) 0%, rgba(255, 144, 37, 0) 100%)",
-            ].join(", "),
-          }}
-        />
-        <div className="relative flex min-w-0 items-center gap-4">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_var(--card-bg)]">
-            <RobotIcon />
-          </div>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">AI Weekly Insight</span>
-            <span className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">
-              Your COD BO7 campaign is outperforming by 2.4x - consider increasing budget by $500 to capture momentum. 3 creators are consistently hitting 90%+ approval, ideal candidates for retainer contracts.
-            </span>
-          </div>
-        </div>
-        <ChevronRightIcon className="relative size-4 shrink-0 text-page-text opacity-70" />
-      </div>
-
-      {/* Bottom Row: Recent Activity + Top Creators + Pending Drafts */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Recent Activity */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
               <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
             </Link>
           </div>
           <div
             ref={activityContainerRef}
-            className="relative flex flex-col gap-2"
+            className="relative flex flex-col"
             onMouseEnter={activityHover.handlers.onMouseEnter}
             onMouseMove={activityHover.handlers.onMouseMove}
             onMouseLeave={activityHover.handlers.onMouseLeave}
@@ -1252,9 +1198,9 @@ function DashboardView() {
               {activityActiveRect && (
                 <motion.div
                   key={activityHover.sessionRef.current}
-                  className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
-                  initial={{ opacity: 0, top: activityActiveRect.top, left: activityActiveRect.left, width: activityActiveRect.width, height: activityActiveRect.height }}
-                  animate={{ opacity: 1, top: activityActiveRect.top, left: activityActiveRect.left, width: activityActiveRect.width, height: activityActiveRect.height }}
+                  className="pointer-events-none absolute rounded-xl bg-foreground/[0.04]"
+                  initial={{ opacity: 0, ...activityActiveRect }}
+                  animate={{ opacity: 1, ...activityActiveRect }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
                   transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
                 />
@@ -1264,90 +1210,16 @@ function DashboardView() {
               <div
                 key={i}
                 ref={(el) => activityHover.registerItem(i, el)}
-                data-proximity-index={i}
-                className="flex cursor-pointer items-center gap-2 rounded-xl px-2 py-1.5 transition-colors duration-150"
+                className="relative z-[1] flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2"
               >
-                <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]">
-                  <item.icon className="size-3 text-page-text" />
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-card-bg backdrop-blur-[16px]">
+                  <item.icon className="size-4 text-page-text-muted" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="truncate font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
                   <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
                 </div>
-                <span className="shrink-0 font-inter text-[10px] tracking-[-0.02em] text-page-text-muted">{item.time}</span>
-              </div>
-            ))}
-          </div>
-          {/* Fade out bottom */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent dark:from-[#121212]" />
-        </div>
-
-        {/* Top Creators This Week */}
-        <div className="relative flex min-w-0 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-          <div className="flex items-center justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators this week</span>
-            <Link href="/creators" className="group flex cursor-pointer items-center gap-1.5">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
-              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            {/* #1 — featured card */}
-            <div className="relative flex items-center justify-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4">
-              {/* Badge */}
-              <div className="absolute left-4 top-4 flex h-10 items-center gap-2 rounded-full bg-[#FF9025] px-3">
-                <CrownIcon className="size-4 text-white" />
-                <span className="font-inter text-base font-medium tracking-[-0.02em] text-white">1</span>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="size-10 rounded-full bg-foreground/10" />
-                <div className="flex flex-col items-center gap-2">
-                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{TOP_CREATORS[0].name}</span>
-                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{TOP_CREATORS[0].earned}</span>
-                </div>
-              </div>
-            </div>
-            {/* #2 and #3 */}
-            <div className="flex gap-2">
-              {TOP_CREATORS.slice(1).map((creator, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center justify-between gap-3 rounded-2xl border border-border p-4">
-                  <div className="flex size-10 items-center justify-center rounded-full border" style={{ borderColor: i === 0 ? "#839FB9" : "#9E5200" }}>
-                    <span className="font-inter text-base font-medium tracking-[-0.02em]" style={{ color: i === 0 ? "#839FB9" : "#9E5200" }}>{i + 2}</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="size-10 rounded-full bg-foreground/10" />
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{creator.name}</span>
-                      <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{creator.earned}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[35px] bg-gradient-to-t from-[var(--card-bg)] to-transparent dark:from-[#121212]" />
-        </div>
-
-        {/* Pending Drafts */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:col-span-2 lg:col-span-1">
-          <div className="flex items-center justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
-            <Link href="/submissions" className="group flex cursor-pointer items-center gap-1.5">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View All</span>
-              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            {PENDING_DRAFTS.map((draft, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-xl p-2" style={{ background: draft.bg }}>
-                <div className="flex size-6 shrink-0 items-center justify-center rounded-full" style={{ background: `${draft.tagColor}10` }}>
-                  <VideoIcon className="size-3" style={{ color: draft.tagColor }} />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="truncate font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
-                  <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.campaign}</span>
-                </div>
-                <span className="shrink-0 font-inter text-[10px] tracking-[-0.02em]" style={{ color: draft.tagColor }}>{draft.tag}</span>
+                <span className="shrink-0 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.time}</span>
               </div>
             ))}
           </div>

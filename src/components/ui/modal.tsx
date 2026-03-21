@@ -157,8 +157,8 @@ export function Modal({
           <motion.div
             ref={cardRef}
             className={cn(
-              "relative flex w-full flex-col overflow-hidden rounded-t-[20px] border border-border bg-card-bg shadow-xl sm:rounded-[20px]",
-              "max-h-[90dvh]",
+              "relative flex w-full flex-col overflow-y-auto rounded-t-[20px] border border-border bg-card-bg shadow-xl sm:rounded-[20px]",
+              "max-h-[90dvh] scrollbar-hide",
               maxWidth ?? sizeClasses[size],
               className,
             )}

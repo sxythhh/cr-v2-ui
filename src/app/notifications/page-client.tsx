@@ -211,10 +211,10 @@ function CategorySidebar({
   const activeRect = activeIndex !== null ? itemRects[activeIndex] : null;
 
   return (
-    <div className="hidden w-[186px] shrink-0 p-1 md:block">
+    <div className="w-[186px] shrink-0">
       <div
         ref={containerRef}
-        className="relative flex flex-col gap-1 rounded-2xl bg-foreground/[0.04] p-1"
+        className="sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl bg-[rgba(37,37,37,0.04)] p-1 dark:bg-[rgba(255,255,255,0.04)]"
         {...handlers}
       >
         <AnimatePresence>
@@ -239,11 +239,13 @@ function CategorySidebar({
               ref={(el) => registerItem(i, el)}
               onClick={() => onSelect(cat.key)}
               className={cn(
-                "relative flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 font-inter text-[14px] font-medium leading-none tracking-[-0.02em] transition-colors",
+                "relative z-10 flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 font-inter text-[14px] font-medium leading-none tracking-[-0.02em] transition-colors",
                 isActive
-                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#2a2a2a]"
+                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.1)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.2)]"
                   : "bg-transparent",
-                "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]"
+                isActive
+                  ? "text-[rgba(37,37,37,0.9)] dark:text-[rgba(255,255,255,0.8)]"
+                  : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]",
               )}
             >
               <span>{cat.label}</span>
@@ -268,10 +270,10 @@ function NotificationList({
   notifications: NotificationItem[];
 }) {
   return (
-    <div className="overflow-y-auto scrollbar-hide p-5">
+    <div>
       <div
         className={cn(
-          "flex w-[600px] flex-col rounded-2xl border p-5",
+          "flex w-[600px] max-w-full flex-col rounded-2xl border p-5",
           "border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
           "dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
         )}
@@ -623,9 +625,9 @@ export default function NotificationsPageClient() {
       : NOTIFICATIONS.filter((n) => n.type === activeCategory);
 
   return (
-    <div className="flex h-full flex-col bg-page-bg">
+    <div className="flex h-full flex-col">
       {/* Header bar */}
-      <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-border px-4 sm:px-5">
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
           Notifications
         </span>
@@ -645,41 +647,39 @@ export default function NotificationsPageClient() {
         </div>
       </div>
 
-      {/* Body — two-column */}
-      <div className="flex min-h-0 flex-1 justify-center">
-        {/* Left sidebar — hidden on mobile */}
-        <div className="hidden md:block">
-          <CategorySidebar
-            activeCategory={activeCategory}
-            onSelect={setActiveCategory}
-          />
+      {/* Scroll container — own overflow so sticky works inside */}
+      <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+        {/* Mobile category pills */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide px-5 pt-4 md:hidden">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                activeCategory === cat.key
+                  ? "bg-foreground/[0.06] text-page-text dark:bg-white/[0.06]"
+                  : "text-foreground/60 dark:text-white/60"
+              )}
+            >
+              {cat.label}
+              <span className="rounded-full bg-[rgba(255,51,85,0.1)] px-1.5 py-0.5 text-[10px] font-semibold text-[#FF3355]">
+                {cat.count}
+              </span>
+            </button>
+          ))}
         </div>
 
-        {/* Mobile category selector */}
-        <div className="flex flex-col md:hidden">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide border-b border-border px-4 py-2">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
-                className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors",
-                  activeCategory === cat.key
-                    ? "bg-foreground/[0.06] text-page-text dark:bg-white/[0.06]"
-                    : "text-foreground/60 dark:text-white/60"
-                )}
-              >
-                {cat.label}
-                <span className="rounded-full bg-[rgba(255,51,85,0.1)] px-1.5 py-0.5 text-[10px] font-semibold text-[#FF3355]">
-                  {cat.count}
-                </span>
-              </button>
-            ))}
+        {/* Body — same layout as EventsTab */}
+        <div className="flex gap-4 p-5">
+          <div className="hidden w-[186px] shrink-0 md:block">
+            <CategorySidebar
+              activeCategory={activeCategory}
+              onSelect={setActiveCategory}
+            />
           </div>
+          <NotificationList notifications={filtered} />
         </div>
-
-        {/* Right content — notification list */}
-        <NotificationList notifications={filtered} />
       </div>
 
       {/* Preferences modal */}

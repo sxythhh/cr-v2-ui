@@ -9,6 +9,8 @@ import { CreatorDetailsStep } from "./steps/CreatorDetailsStep";
 import { DetailsStep } from "./steps/DetailsStep";
 import { IncentivesStep } from "./steps/IncentivesStep";
 import { PreviewStep } from "./steps/PreviewStep";
+import { PlatformsStep } from "./steps/PlatformsStep";
+import { ApplicationSetupStep } from "./steps/ApplicationSetupStep";
 import { RequirementsStep } from "./steps/RequirementsStep";
 
 interface CampaignFlowViewProps {
@@ -40,10 +42,14 @@ function StepContent() {
   switch (step) {
     case "configuration":
       return <ConfigurationStep data={configuration} model={model} onChange={setConfiguration} />;
+    case "platforms":
+      return <PlatformsStep />;
     case "details":
       return <DetailsStep data={details} onChange={setDetails} />;
     case "requirements":
       return <RequirementsStep data={requirements} onChange={setRequirements} showErrors={showErrors} />;
+    case "application-setup":
+      return <ApplicationSetupStep />;
     case "incentives":
       return <IncentivesStep data={incentives} onChange={setIncentives} />;
     case "creator-details":

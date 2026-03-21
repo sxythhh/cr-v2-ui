@@ -76,16 +76,7 @@ function AgencyLogo({
 // ── Verified badge SVG ───────────────────────────────────────────────────────
 function VerifiedBadge({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-      <path
-        d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"
-        fill={C.blue}
-      />
-      <path
-        d="M6.5 10.8L4 8.3l1-1 1.5 1.5L10 5.3l1 1-4.5 4.5z"
-        fill="#fff"
-      />
-    </svg>
+    <img src="/icons/verified-check.svg" alt="Verified" width={size} height={size} className="dark:invert" />
   );
 }
 

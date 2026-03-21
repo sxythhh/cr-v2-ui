@@ -788,7 +788,7 @@ export default function CampaignsPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setHistoryOpen(true)}
+            onClick={() => setHistoryOpen((v) => !v)}
             className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-2 pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
           >
             <HistoryIcon />

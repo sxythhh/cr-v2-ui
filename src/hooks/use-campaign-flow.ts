@@ -19,8 +19,10 @@ import type {
 
 const STEP_ORDER: CampaignFlowStep[] = [
   "configuration",
+  "platforms",
   "details",
   "requirements",
+  "application-setup",
   "incentives",
   "creator-details",
   "contact",
@@ -29,12 +31,14 @@ const STEP_ORDER: CampaignFlowStep[] = [
 
 const STEP_LABELS: Record<CampaignFlowStep, string> = {
   configuration: "Configuration",
-  contact: "Contact",
-  "creator-details": "Creator details",
+  platforms: "Platforms & tracking",
   details: "Details",
-  incentives: "Incentives (optional)",
-  preview: "Preview",
   requirements: "Requirements",
+  "application-setup": "Application setup",
+  incentives: "Incentives (optional)",
+  "creator-details": "Creator details",
+  contact: "Contact",
+  preview: "Preview",
 };
 
 const DEFAULT_CONFIGURATION: ConfigurationData = {

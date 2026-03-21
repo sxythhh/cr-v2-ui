@@ -4,8 +4,10 @@ export type Platform = "tiktok" | "instagram" | "youtube" | "x";
 
 export type CampaignFlowStep =
   | "configuration"
+  | "platforms"
   | "details"
   | "requirements"
+  | "application-setup"
   | "incentives"
   | "creator-details"
   | "contact"
