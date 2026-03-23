@@ -68,6 +68,106 @@ const COST_ACTION_ICONS: Record<string, ReactNode> = {
   "Eng.": <EngagementIcon />,
 };
 
+/* ── Icons ────────────────────────────────────────────────────────── */
+
+function HistoryIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 3V6H5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.34 10A6 6 0 1 0 3.64 4.64L2 6" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 5V8L10 9.5" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 2.67V13.33M2.67 8H13.33" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="7.33" cy="7.33" r="4.67" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10.67 10.67L13.33 13.33" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 3.33H14M4 8H12M6 12.67H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* ── Campaign Status Tabs ────────────────────────────────────────── */
+
+const STATUS_TABS = [
+  { label: "All", count: 21 },
+  { label: "Active", count: 8 },
+  { label: "Pending Budget", count: 5 },
+  { label: "Ended", count: 5 },
+  { label: "Archived", count: 3 },
+];
+
+function MobileActionButtons() {
+  return (
+    <div className="flex items-center gap-2 px-5 sm:hidden">
+      <button className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
+        <HistoryIcon />
+        History
+      </button>
+      <button className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
+        <PlusIcon />
+        New campaign
+      </button>
+    </div>
+  );
+}
+
+function MobileStatusTabs({ activeTab, onTabChange }: { activeTab: string; onTabChange: (tab: string) => void }) {
+  return (
+    <div className="overflow-x-auto scrollbar-hide sm:hidden">
+      <div className="flex items-center gap-0.5 rounded-[14px] bg-foreground/[0.03] p-0.5" style={{ width: "max-content" }}>
+        {STATUS_TABS.map((tab) => (
+          <button
+            key={tab.label}
+            onClick={() => onTabChange(tab.label)}
+            className={cn(
+              "flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium tracking-[-0.02em] whitespace-nowrap",
+              activeTab === tab.label
+                ? "bg-foreground/[0.03] text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                : "text-page-text-muted",
+            )}
+          >
+            {tab.label}
+            <span className="text-sm font-normal text-page-text-muted">{tab.count}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MobileSearchBar() {
+  return (
+    <div className="flex items-center gap-2 sm:hidden">
+      <div className="flex flex-1 items-center gap-2 rounded-xl bg-foreground/[0.03] px-3 py-2.5">
+        <SearchIcon />
+        <span className="text-sm tracking-[-0.02em] text-page-text-muted">Search</span>
+      </div>
+      <div className="flex size-9 items-center justify-center rounded-xl bg-foreground/[0.03]">
+        <FilterIcon />
+      </div>
+    </div>
+  );
+}
+
 /* ── Filter Toolbar ───────────────────────────────────────────────── */
 
 function FilterToolbar({ dateRange, setDateRange, selectedPlatform, setSelectedPlatform, selectedCampaign, setSelectedCampaign }: {
@@ -88,7 +188,7 @@ function FilterToolbar({ dateRange, setDateRange, selectedPlatform, setSelectedP
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="hidden flex-wrap items-center gap-2 sm:flex">
       <AnalyticsPocDateRangePicker value={dateRange} onValueChange={setDateRange} />
       <AnalyticsPocSelect value={selectedPlatform} onValueChange={setSelectedPlatform} options={platformOptions} />
       <AnalyticsPocSelect value={selectedCampaign} onValueChange={setSelectedCampaign} options={campaignOptions} />
@@ -318,7 +418,7 @@ function TrafficSourcesCard() {
             </div>
             <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.views}</span>
             <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.applications}</span>
-            <span className="relative z-10 w-[66px] text-right font-inter text-sm tracking-[-0.02em] text-[#00994D] tabular-nums">{source.joined}</span>
+            <span className="relative z-10 w-[66px] text-right font-inter text-sm tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] tabular-nums">{source.joined}</span>
           </div>
         ))}
       </div>
@@ -395,6 +495,32 @@ function ChartSection({
 
 /* ── Main Tab ─────────────────────────────────────────────────────── */
 
+/* ── Mobile KPI Scroll ────────────────────────────────────────────── */
+
+function MobileKpiScroll({ children }: { children: ReactNode[] }) {
+  return (
+    <div className="flex flex-col items-center gap-2 sm:hidden">
+      <div className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide">
+        {children.map((child, i) => (
+          <div key={i} className="w-full shrink-0 snap-center">
+            {child}
+          </div>
+        ))}
+      </div>
+      {children.length > 1 && (
+        <div className="flex items-center justify-center gap-1">
+          {children.map((_, i) => (
+            <div
+              key={i}
+              className="size-1.5 rounded-full bg-foreground/[0.06] first:bg-foreground"
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function AnalyticsPocCampaignHealthTab({
   engagement,
   activityKpis,
@@ -407,6 +533,7 @@ export function AnalyticsPocCampaignHealthTab({
   const [dateRange, setDateRange] = useState("last-30-days");
   const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [selectedCampaign, setSelectedCampaign] = useState("fall-off");
+  const [statusTab, setStatusTab] = useState("All");
 
   // Engagement chart metrics from the engagement prop
   const engagementChartMetrics: AnalyticsPocChartToggleCardProps[] = engagement.funnelSteps.map((step, i) => ({
@@ -417,17 +544,38 @@ export function AnalyticsPocCampaignHealthTab({
     enabled: true,
   }));
 
+  const topKpiCards = [
+    <StatCard key="views" value="5.14M" change="+18.3%" label="Total views" />,
+    <StatCard key="visitors" value="8,420" change="+18.3%" label="Unique visitors" />,
+    <StatCard key="apps" value="847" change="+18.3%" label="Applications" sublabel="6.6% conversion" />,
+    <StatCard key="joined" value="423" change="+18.3%" label="Joined" sublabel="49.9% acceptance" />,
+  ];
+
+  const bottomKpiCards = [
+    <StatCard key="subs" value="847" label="Total submissions" sublabel="All platforms" />,
+    <StatCard key="creators" value="234" label="Unique creators" sublabel="Active in campaign" />,
+    <StatCard key="apps2" value="189" change="12 pending review" label="Applications" sublabel="6.6% conversion" changeColor="#E57100" />,
+    <StatCard key="growth" value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" changeColor="#00994D" />,
+  ];
+
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      {/* 1. Filter toolbar */}
+      {/* Mobile: action buttons */}
+      <MobileActionButtons />
+
+      {/* Mobile: status tabs */}
+      <MobileStatusTabs activeTab={statusTab} onTabChange={setStatusTab} />
+
+      {/* Mobile: search bar */}
+      <MobileSearchBar />
+
+      {/* 1. Filter toolbar (desktop only) */}
       <FilterToolbar dateRange={dateRange} setDateRange={setDateRange} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} selectedCampaign={selectedCampaign} setSelectedCampaign={setSelectedCampaign} />
 
       {/* 2. Top KPI row */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard value="5.14M" change="+18.3%" label="Total views" />
-        <StatCard value="8,420" change="+18.3%" label="Unique visitors" />
-        <StatCard value="847" change="+18.3%" label="Applications" sublabel="6.6% conversion" />
-        <StatCard value="423" change="+18.3%" label="Joined" sublabel="49.9% acceptance" />
+      <MobileKpiScroll>{topKpiCards}</MobileKpiScroll>
+      <div className="hidden gap-2 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+        {topKpiCards}
       </div>
 
       {/* 3. Health + Financials side by side */}
@@ -447,11 +595,9 @@ export function AnalyticsPocCampaignHealthTab({
       <TrafficSourcesCard />
 
       {/* 6. Bottom KPI row */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard value="847" label="Total submissions" sublabel="All platforms" />
-        <StatCard value="234" label="Unique creators" sublabel="Active in campaign" />
-        <StatCard value="189" change="12 pending review" label="Applications" sublabel="6.6% conversion" changeColor="#E57100" />
-        <StatCard value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" changeColor="#00994D" />
+      <MobileKpiScroll>{bottomKpiCards}</MobileKpiScroll>
+      <div className="hidden gap-2 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+        {bottomKpiCards}
       </div>
 
       {/* 7. Activity over time chart */}

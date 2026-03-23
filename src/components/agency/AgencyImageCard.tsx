@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { BannerSlideIndicator } from "./BannerSlideIndicator";
+import Link from "next/link";
+import { BannerSlideIndicator } from "../discover/hero/BannerSlideIndicator";
 
 import type { AgencyCampaign, CampaignStats } from "./types";
 
@@ -26,12 +27,12 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
   const activeCampaign = campaigns[activeIndex];
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-xl border border-[#EBF0EF] bg-white lg:w-[480px] lg:shrink-0">
+    <div style={{ display: "flex", flexDirection: "column", width: "100%", borderRadius: 12, overflow: "hidden", backgroundColor: "#fff", border: "1px solid #EBF0EF" }}>
       {/* Image carousel — click to advance */}
       <button
         type="button"
         onClick={advance}
-        className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-[#f0f0f0]"
+        className="relative aspect-[16/10] w-full overflow-hidden bg-[#f0f0f0] cursor-pointer"
       >
         {campaigns.map((campaign, i) => (
           <div
@@ -50,11 +51,27 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
           </div>
         ))}
 
+        {/* Info button — top right */}
+        <Link
+          href={`/discover/${activeCampaign?.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="absolute z-20 top-4 right-4 flex items-center justify-center size-10 rounded-full border border-white/15 hover:bg-white/10 hover:border-white/30 active:scale-[0.96] transition-[transform,background,border-color] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)]"
+          aria-label="View campaign details"
+        >
+          <Image
+            src="/icons/svg/circle-info.svg"
+            alt=""
+            width={20}
+            height={20}
+            className="opacity-[0.72]"
+          />
+        </Link>
+
         {/* Bottom overlay with title + indicator */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end gap-4 p-4 md:p-6">
+        <div className="absolute inset-0 flex flex-col justify-end items-center p-4 md:p-6 gap-4">
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-          <span className="relative z-10 font-sans text-[20px] font-bold leading-[28px] tracking-[-1.15px] text-white md:text-[23px]">
+          <span className="relative z-10 text-[20px] md:text-[23px] font-bold leading-[28px] tracking-[-1.15px] text-white font-geist">
             {activeCampaign?.title}
           </span>
 
@@ -95,6 +112,7 @@ function useCountUp(target: number, duration = 600) {
     function tick(now: number) {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCurrent(Math.round(from + (target - from) * eased));
 
@@ -118,16 +136,14 @@ function CountingStatCell({ stat }: { stat: CampaignStats }) {
   const count = useCountUp(stat.value);
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-[3.5px] py-4">
-      <span className="text-[11px] font-medium leading-[14px] tracking-[-0.24px] text-black md:text-[12px]">
+    <div className="flex-1 flex flex-col items-center justify-center gap-[3.5px] py-4">
+      <span className="text-[11px] md:text-[12px] font-medium leading-[14px] tracking-[-0.24px] text-black">
         {stat.label}
       </span>
-      <span className="tabular-nums text-[13px] font-medium leading-[17px] tracking-[-0.28px] text-black md:text-[14px]">
-        {stat.prefix}
-        {formatNumber(count)}
-        {stat.suffix}
+      <span className="text-[13px] md:text-[14px] font-medium leading-[17px] tracking-[-0.28px] text-black tabular-nums">
+        {stat.prefix}{formatNumber(count)}{stat.suffix}
       </span>
-      <span className="text-[11px] font-medium leading-[14px] tracking-[-0.24px] text-black/50 md:text-[12px]">
+      <span className="text-[11px] md:text-[12px] font-medium leading-[14px] tracking-[-0.24px] text-black/50">
         {stat.sub}
       </span>
     </div>

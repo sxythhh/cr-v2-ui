@@ -74,7 +74,7 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
         on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20",
       )}
     >
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }

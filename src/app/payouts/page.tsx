@@ -631,7 +631,7 @@ function PayoutDetailDialog({
         </div>
 
         {/* Footer buttons — sticky at bottom */}
-        <div className="flex w-full shrink-0 items-center justify-end gap-2 border-t border-card-border bg-card-bg px-5 py-4 sm:border-t-0 sm:pb-5 sm:pt-0">
+        <div className="flex w-full shrink-0 items-center justify-end gap-2 border-t border-border px-5 py-4 sm:border-t-0 sm:pb-5 sm:pt-0">
           <button
             type="button"
             onClick={() => setShowClawback(true)}

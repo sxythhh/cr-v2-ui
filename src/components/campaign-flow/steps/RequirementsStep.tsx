@@ -55,7 +55,7 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }
@@ -101,18 +101,44 @@ function UploadToast({ name, size, progress }: { name: string; size: string; pro
   );
 }
 
+function FileCardIcon({ ext }: { ext: string }) {
+  return (
+    <div className="relative size-9 shrink-0">
+      {/* File body with corner cut */}
+      <div
+        className="size-full rounded-[5.6px] border border-foreground/[0.06] bg-[#D9D9D9] dark:bg-[#3a3a3a]"
+        style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%)" }}
+      />
+      {/* Corner flap — light mode */}
+      <div className="absolute bottom-0 right-0 size-[10px] dark:hidden">
+        <svg width="10" height="10" viewBox="0 0 15 15" fill="none">
+          <path d="M1.706 5.608C1.757 3.474 3.474 1.757 5.608 1.706L14.14 1.501a.15.15 0 0 1 .183.226L1.927 14.323a.15.15 0 0 1-.226-.183L1.706 5.608Z" fill="#ECECEC" />
+        </svg>
+      </div>
+      {/* Corner flap — dark mode */}
+      <div className="absolute bottom-0 right-0 hidden size-[10px] dark:block">
+        <svg width="10" height="10" viewBox="0 0 15 15" fill="none">
+          <path d="M1.706 5.608C1.757 3.474 3.474 1.757 5.608 1.706L14.14 1.501a.15.15 0 0 1 .183.226L1.927 14.323a.15.15 0 0 1-.226-.183L1.706 5.608Z" fill="#4a4a4a" />
+        </svg>
+      </div>
+      {/* Extension badge */}
+      <div className="absolute bottom-0.5 left-0.5 flex h-3.5 items-center rounded-full border border-foreground/[0.06] bg-white px-1 dark:bg-[#2a2a2a]">
+        <span className="font-inter text-[8px] font-medium leading-none tracking-[-0.02em] text-foreground/70">{ext.toUpperCase()}</span>
+      </div>
+    </div>
+  );
+}
+
 function FileCard({ name, size, ext, onRemove }: UploadedFile & { onRemove: () => void }) {
   return (
-    <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
-      <div className="flex size-9 shrink-0 items-center justify-center rounded-[5.6px] border border-foreground/[0.06] bg-[#D9D9D9]">
-        <span className="rounded-full border border-foreground/[0.06] bg-white px-1 font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-subtle">{ext}</span>
-      </div>
+    <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+      <FileCardIcon ext={ext} />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{size}</span>
       </div>
-      <button type="button" onClick={onRemove} className="absolute -right-1 -top-1 flex size-6 items-center justify-center rounded-full border-2 border-white bg-[#F2F2F2] transition-colors hover:bg-[#e0e0e0]">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.14" /></svg>
+      <button type="button" onClick={onRemove} className="absolute -right-1.5 -top-1.5 z-10 flex size-5 items-center justify-center rounded-full border border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.06)]">
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 1.5L6.5 6.5M6.5 1.5L1.5 6.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="text-page-text-muted" /></svg>
       </button>
     </div>
   );
@@ -230,7 +256,7 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
                   <button type="button" onClick={() => setSuggestions((prev) => prev.filter((_, j) => j !== i))} className="flex size-6 items-center justify-center rounded-full text-page-text-subtle transition-colors hover:bg-foreground/[0.06]">
                     <XIcon />
                   </button>
-                  <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(0,153,77,0.06)] text-[#00994D]">
+                  <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(0,153,77,0.06)] text-[#00994D] dark:text-[#34D399]">
                     <CheckIcon />
                   </button>
                 </div>
@@ -314,7 +340,7 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
         <SectionLabel
           title="Reference materials"
           description="Upload videos, images, and brand assets for creators to reference directly in the app."
-          badge={<span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">Hosted</span>}
+          badge={<span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Hosted</span>}
         />
         <div className="flex flex-col gap-2">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Videos</span>

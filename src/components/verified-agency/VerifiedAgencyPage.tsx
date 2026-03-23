@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { VerifiedAgencyDrawer } from "./VerifiedAgencyDrawer";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { motion, AnimatePresence } from "motion/react";
+import { FloatingPortal } from "@floating-ui/react";
+import { springs } from "@/lib/springs";
 
 import {
   ChevronDown,
@@ -78,7 +81,7 @@ function AgencyLogo({
 // ── Verified badge SVG ───────────────────────────────────────────────────────
 function VerifiedBadge({ size = 16 }: { size?: number }) {
   return (
-    <img src="/icons/verified-check.svg" alt="Verified" width={size} height={size} className="dark:invert" />
+    <img src="/icons/verified-check.svg" alt="Verified" width={size} height={size} />
   );
 }
 
@@ -471,7 +474,7 @@ function BadgeCard() {
           alignItems: "center",
           padding: "4px 10px 4px 4px",
           gap: 8,
-          background: "linear-gradient(0deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08)), #060710",
+          background: "linear-gradient(0deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08)), #0A0A0A",
           borderRadius: 12,
           transform: "rotate(6deg)",
         }}
@@ -545,10 +548,10 @@ function RevenueChartCard() {
     >
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: 11, fontWeight: 600, lineHeight: "14px", color: "#0A0B0B", letterSpacing: "-0.04em" }}>
+        <span style={{ fontSize: 11, fontWeight: 600, lineHeight: "14px", color: C.textPrimary, letterSpacing: "-0.04em" }}>
           Total Revenue
         </span>
-        <span style={{ fontSize: 13, fontWeight: 600, lineHeight: "14px", color: "#0A0B0B", letterSpacing: "-0.04em" }}>
+        <span style={{ fontSize: 13, fontWeight: 600, lineHeight: "14px", color: C.textPrimary, letterSpacing: "-0.04em" }}>
           $142,592
         </span>
       </div>
@@ -570,7 +573,7 @@ function RevenueChartCard() {
       {/* Day labels */}
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         {days.map((d) => (
-          <span key={d} style={{ fontSize: 9, fontWeight: 500, color: "#545454", letterSpacing: "0.3px", fontFamily: "var(--font-inter), Inter, sans-serif" }}>{d}</span>
+          <span key={d} style={{ fontSize: 9, fontWeight: 500, color: C.textMuted, letterSpacing: "0.3px", fontFamily: "var(--font-inter), Inter, sans-serif" }}>{d}</span>
         ))}
       </div>
     </div>
@@ -681,7 +684,7 @@ function AgencyApplicationForm() {
     <>
     {/* Success - full page */}
     {submitted && (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#F2F2F2] dark:bg-[#111111]">
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#F2F2F2] dark:bg-[#161616]">
         <button
           type="button"
           onClick={() => setSubmitted(false)}
@@ -709,9 +712,9 @@ function AgencyApplicationForm() {
     )}
 
     {/* Form */}
-    <div className="flex w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919]">
+    <div className="flex w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-[rgba(37,37,37,0.06)] dark:bg-card-bg">
       {/* Header */}
-      <div className="flex items-start gap-4 border-b border-border p-4 dark:border-[#2a2a2a]">
+      <div className="flex items-start gap-4 border-b border-border p-4 dark:border-[rgba(37,37,37,0.06)]">
         <div className="flex flex-col gap-1">
           <span className="font-inter text-[14px] font-medium leading-[24px] tracking-[-0.02em] text-page-text">
             Apply for the Agency Partner Program
@@ -911,6 +914,106 @@ function FeatureCard({
 }
 
 
+// ── Trusted-by avatars with shared fluid tooltip ─────────────────────────────
+const AGENCIES = [
+  { id: "agency1", name: "Virality" },
+  { id: "agency2", name: "Outpace Studios" },
+  { id: "agency3", name: "ClipFactory" },
+  { id: "agency4", name: "Nova Media" },
+];
+
+function TrustedByAvatars() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    let closest = -1;
+    let closestDist = Infinity;
+    for (let i = 0; i < AGENCIES.length; i++) {
+      const el = itemRefs.current[i];
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const dist = Math.abs(e.clientX - cx);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = i;
+      }
+    }
+    if (closest >= 0) setActiveIndex(closest);
+  }, []);
+
+  const tooltipPos = (() => {
+    if (activeIndex === null) return null;
+    const el = itemRefs.current[activeIndex];
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.bottom };
+  })();
+
+  const activeLabel = activeIndex !== null ? AGENCIES[activeIndex]?.name : null;
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div
+        style={{ display: "flex" }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setActiveIndex(null)}
+      >
+        {AGENCIES.map((a, i) => (
+          <div
+            key={a.id}
+            ref={(el) => { itemRefs.current[i] = el; }}
+            style={{ marginLeft: i > 0 ? -6 : 0, position: "relative", zIndex: 4 - i }}
+          >
+            <img
+              src={`/icons/${a.id}.avif`}
+              alt={a.name}
+              width={26}
+              height={26}
+              style={{
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "2px solid var(--card-bg)",
+                display: "block",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+      <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">
+        Trusted by 200+ agencies
+      </span>
+
+      <FloatingPortal>
+        <AnimatePresence>
+          {activeLabel && tooltipPos && (
+            <motion.div
+              className="pointer-events-none fixed z-[9999]"
+              style={{ top: tooltipPos.y }}
+              initial={{ opacity: 0, y: 0, left: tooltipPos.x }}
+              animate={{ opacity: 1, y: 4, left: tooltipPos.x }}
+              exit={{ opacity: 0, y: 0, transition: { duration: 0.08 } }}
+              transition={{
+                left: springs.fast,
+                opacity: { duration: 0.12 },
+                y: { duration: 0.12 },
+              }}
+            >
+              <div
+                className="whitespace-nowrap rounded-lg bg-tooltip-bg px-2.5 py-1 text-xs font-medium text-tooltip-text shadow-lg"
+                style={{ transform: "translateX(-50%)" }}
+              >
+                {activeLabel}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </FloatingPortal>
+    </div>
+  );
+}
+
 // ── Main page ────────────────────────────────────────────────────────────────
 export function VerifiedAgencyPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -988,27 +1091,8 @@ export function VerifiedAgencyPage() {
             </div>
 
             {/* Trusted by */}
-            <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ display: "flex" }}>
-                {["agency1", "agency2", "agency3", "agency4"].map((a, i) => (
-                  <img
-                    key={a}
-                    src={`/icons/${a}.avif`}
-                    alt=""
-                    width={26}
-                    height={26}
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      border: "2px solid var(--card-bg)",
-                      marginLeft: i > 0 ? -6 : 0,
-                    }}
-                  />
-                ))}
-              </div>
-              <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">
-                Trusted by 200+ agencies
-              </span>
+            <div style={{ marginTop: 24 }}>
+              <TrustedByAvatars />
             </div>
           </div>
 
@@ -1041,6 +1125,278 @@ export function VerifiedAgencyPage() {
               title="Manage Your Revenue"
               description="Track earnings, payouts, and campaign performance across all your clients in one dashboard."
             />
+          </div>
+        </div>
+
+        {/* ── Pricing section ── */}
+        <div style={{ marginTop: 16, padding: "0 28px", display: "none" }}>
+          <div className="flex flex-col gap-1.5 rounded-2xl bg-[#F0F0F0] p-1.5 dark:bg-white/[0.06]">
+            {/* Top row */}
+            <div className="flex gap-1.5" style={{ height: 269 }}>
+              {/* Left - Illustration card */}
+              <div className="relative flex flex-col justify-end rounded-xl bg-white shadow-[0px_0.6px_0.6px_-0.9px_rgba(0,0,0,0.07),0px_1.8px_1.8px_-1.9px_rgba(0,0,0,0.07),0px_4.8px_4.8px_-2.8px_rgba(0,0,0,0.06),0px_15px_15px_-3.8px_rgba(0,0,0,0.03)] dark:bg-white/[0.05]" style={{ flex: "0 0 37.6%" }}>
+                {/* Tilted card overlay - floats above everything */}
+                <div
+                  className="pointer-events-none absolute z-30 flex flex-col justify-between rounded-3xl bg-black p-6"
+                  style={{
+                    width: 339,
+                    height: 190,
+                    left: -20,
+                    top: -28,
+                    transform: "matrix(1, 0.05, -0.05, 1, 0, 0)",
+                    boxShadow: "0px 1px 1px -0.75px rgba(0,0,0,0.33), 0px 2px 2px -1.5px rgba(0,0,0,0.32), 0px 4.4px 4.4px -2.25px rgba(0,0,0,0.3), 0px 10px 10px -3px rgba(0,0,0,0.25), 0px 25px 25px -3.75px rgba(0,0,0,0.11), 0px 0px 0px 1px #828282, inset 0px 2px 4px rgba(255,255,255,0.4)",
+                  }}
+                >
+                  {/* CTA pill */}
+                  <div className="relative z-10 mx-auto inline-flex w-fit items-center gap-1 rounded-3xl bg-[rgba(41,119,255,0.36)] px-3 py-[9px] backdrop-blur-sm">
+                    <div className="flex h-3.5 w-3.5 items-center justify-center bg-[#2977FF]">
+                      <svg width="9" height="9" viewBox="0 0 14 14" fill="none">
+                        <path d="M8 1L5 7h3l-1 6 4-8H8l1-4z" fill="white" />
+                      </svg>
+                    </div>
+                    <span className="font-inter text-[11.3px] font-semibold leading-3 text-[#2977FF]">
+                      Start Your Free Trial
+                    </span>
+                  </div>
+
+                  {/* Text */}
+                  <div className="relative z-10 mx-auto mt-auto">
+                    <p className="m-0 font-inter text-[18.1px] font-medium leading-[23px] tracking-[-0.57px] text-[#B8B8B8]">
+                      Private platform built{" "}
+                    </p>
+                    <p className="m-0 font-inter text-[17.8px] font-medium leading-[23px] tracking-[-0.57px] text-white">
+                      away from the noise.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Illustration content area - bottom of card, overflow visible so pills aren't clipped */}
+                <div className="relative z-0 flex items-end justify-end pr-[10px] pt-[10px]" style={{ height: 193 }}>
+                  {/* Floating pills - aligned right, stacked */}
+                  <div className="flex w-[328px] flex-col items-end gap-4 py-[9px]">
+                    {[
+                      { width: 266, progress: 0 },
+                      { width: 285, progress: 62 },
+                      { width: 328, progress: 0 },
+                    ].map((pill, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center rounded-full border border-[rgba(255,255,255,0.08)] bg-[#F5F5F5] shadow-[0px_1px_3px_rgba(0,0,0,0.06)] dark:border-white/10 dark:bg-[linear-gradient(94deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.02)_48%,rgba(255,255,255,0.06)_100%)]"
+                        style={{
+                          width: pill.width,
+                          height: 47.83,
+                          padding: "6.4px 20.7px 6.4px 6.4px",
+                          gap: 7.15,
+                        }}
+                      >
+                        <div className="h-[35px] w-[35px] shrink-0 rounded-full bg-[#E0E0E0] dark:bg-white/10" />
+                        <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-[#E8E8E8] dark:bg-white/[0.07]">
+                          {pill.progress > 0 && (
+                            <div
+                              className="absolute inset-y-0 left-0 rounded-full bg-[#D4D4D4] dark:bg-gradient-to-b dark:from-[#363636] dark:to-[#252426]"
+                              style={{ width: `${pill.progress}%` }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right - Design Subscription card */}
+              <div className="flex flex-1 flex-col justify-end gap-8 rounded-xl bg-white shadow-[0px_0.6px_0.6px_-0.9px_rgba(0,0,0,0.07),0px_1.8px_1.8px_-1.9px_rgba(0,0,0,0.07),0px_4.8px_4.8px_-2.8px_rgba(0,0,0,0.06),0px_15px_15px_-3.8px_rgba(0,0,0,0.03)] dark:bg-white/[0.05]" style={{ padding: "25px 32px", isolation: "isolate" }}>
+                {/* Info */}
+                <div className="flex flex-col gap-4">
+                  {/* Rating badge */}
+                  <div className="flex w-fit items-center gap-2 rounded-md bg-[rgba(145,145,145,0.1)] px-2 py-1">
+                    <span className="font-inter text-[13px] font-medium leading-4 tracking-[-0.39px] text-[#171717] opacity-60 dark:text-white">
+                      4.8+
+                    </span>
+                    {/* 5 stars - Trustpilot style */}
+                    <svg width="96" height="17" viewBox="0 0 96 17" fill="none">
+                      {[0, 20, 40, 60, 80].map((x) => (
+                        <g key={x}>
+                          <rect x={x} y={0.5} width="16" height="16" rx="1" fill="#0099FF" />
+                          <path
+                            d={`M${x + 8} 3.5l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z`}
+                            fill="white"
+                            fillOpacity="0.8"
+                          />
+                        </g>
+                      ))}
+                    </svg>
+                  </div>
+
+                  {/* Heading */}
+                  <div className="flex flex-col gap-0.5">
+                    <h3 className="font-inter text-[21.1px] font-bold leading-[26px] tracking-[-0.66px] text-[#292929] dark:text-white">
+                      For Founders &<br />Business Owners
+                    </h3>
+                  </div>
+
+                  {/* Description */}
+                  <p className="m-0 max-w-[379px] font-inter text-[14px] font-medium leading-[22px] tracking-[-0.4px] text-black dark:text-page-text-muted">
+                    Gain access to the exact roadmap for scalable, organic customer acquisition. Ideal for any business looking to grow.
+                  </p>
+                </div>
+
+                {/* CTA Button */}
+                <div>
+                  <button
+                    type="button"
+                    className="inline-flex h-[46px] cursor-pointer items-center justify-center gap-2.5 rounded-[10px] border-2 border-white/20 bg-[#2060DF] px-[18px] font-inter text-[16px] font-bold leading-[26px] tracking-[-0.8px] text-white shadow-[0px_0px_0px_1px_rgba(33,101,237,0.12)] transition-all hover:bg-[#1a52c4] active:scale-[0.98]"
+                  >
+                    Get Started For Free
+                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
+                      <path d="M10 6.25L16.25 12.5L10 18.75" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom - Single Project / Your Private Network */}
+            <div className="relative flex flex-col items-center overflow-hidden rounded-xl bg-[#0A0A0A] border border-black shadow-[0px_1px_1px_-0.8px_rgba(0,0,0,0.33),0px_2px_2px_-1.5px_rgba(0,0,0,0.32),0px_4.4px_4.4px_-2.3px_rgba(0,0,0,0.3),0px_10px_10px_-3px_rgba(0,0,0,0.25),0px_25px_25px_-3.8px_rgba(0,0,0,0.11),0px_0px_0px_1px_#828282,inset_0px_2px_4px_rgba(255,255,255,0.4)]" style={{ padding: "0 32px 20px" }}>
+              {/* Content header */}
+              <div className="flex flex-col items-center gap-0 pb-0 pt-[19px]" style={{ padding: "19px 0 0" }}>
+                {/* Heading */}
+                <div className="flex flex-col items-center gap-2 py-2">
+                  <h2 className="font-inter text-[31.1px] font-bold leading-[46px] tracking-[-1px] text-white">
+                    Your Private Network
+                  </h2>
+                </div>
+
+                {/* Subtitle */}
+                <div className="flex flex-col items-center pb-[10px]">
+                  <div className="flex items-center justify-center">
+                    <span className="font-inter text-[17px] font-medium leading-[29px] tracking-[-0.68px] text-[#8A8A8A]">
+                      In marketing, the only constant is{" "}
+                    </span>
+                    <span className="relative inline-block">
+                      <span
+                        className="absolute bottom-[3px] left-0 right-0 h-[10px] rounded-[1px]"
+                        style={{ background: "linear-gradient(95.56deg, rgba(88,101,242,0.8) 50%, rgba(88,101,242,0) 50%)" }}
+                      />
+                      <span className="relative font-inter text-[17px] font-medium leading-[29px] tracking-[-0.68px] text-white">
+                        change.
+                      </span>
+                    </span>
+                  </div>
+                  <span className="font-inter text-[17px] font-medium leading-[29px] tracking-[-0.68px] text-[#8A8A8A]">
+                    Stay on top of the game by joining the Virality Network
+                  </span>
+                </div>
+              </div>
+
+              {/* Feature cards */}
+              <div className="flex w-full flex-wrap justify-center gap-5" style={{ padding: "0 50px" }}>
+                {/* Connect with Founders */}
+                <div className="flex min-w-[300px] flex-1 flex-col items-center rounded-[20px] bg-[#0D0D0D]" style={{ height: 316 }}>
+                  {/* Illustration */}
+                  <div className="relative flex flex-1 items-center justify-center" style={{ width: 294 }}>
+                    {/* Top-left card */}
+                    <div className="absolute left-0 top-0 flex items-center gap-2 rounded-xl bg-[#121212] px-4 py-4">
+                      <div className="flex h-8 w-8 items-center justify-center rounded bg-[#061D42]">
+                        <span className="text-[10px] font-bold text-white">C</span>
+                      </div>
+                      <span className="font-['Instrument_Sans'] text-[16px] font-bold leading-5 tracking-[-0.64px] text-white">
+                        Cluely
+                      </span>
+                    </div>
+                    {/* Center card */}
+                    <div className="flex items-center gap-2 rounded-xl bg-[#121212] px-6 py-2.5">
+                      <div className="h-8 w-8 overflow-hidden rounded-full bg-white/10" />
+                      <span className="font-['Instrument_Sans'] text-[16px] font-bold leading-5 tracking-[-0.64px] text-white">
+                        Your Brand
+                      </span>
+                    </div>
+                    {/* Bottom-right card */}
+                    <div className="absolute bottom-0 right-[-1.56px] flex items-center gap-2 rounded-xl bg-[#121212] px-4 py-4">
+                      <div className="flex h-8 w-8 items-center justify-center rounded bg-[#3D4043]">
+                        <span className="text-[10px] font-bold text-white">W</span>
+                      </div>
+                      <span className="font-['Instrument_Sans'] text-[16px] font-bold leading-5 tracking-[-0.64px] text-white">
+                        Whop
+                      </span>
+                      {/* Whop verified icon */}
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M0.74 3.64C0.74 15.27 15.26 15.27 15.26 3.64" fill="url(#whop_outer)" />
+                        <path d="M1.43 3.91C1.43 14.01 14.57 14.01 14.57 3.91" fill="url(#whop_inner)" />
+                        <path d="M4.36 6.08L6.14 10.69L8 6.08L9.86 10.69L11.64 6.08" fill="#D18800" />
+                        <defs>
+                          <linearGradient id="whop_outer" x1="2" y1="1" x2="14" y2="15" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#F4E72A" /><stop offset="0.57" stopColor="#CD8105" /><stop offset="1" stopColor="#F4E72A" />
+                          </linearGradient>
+                          <linearGradient id="whop_inner" x1="2" y1="2" x2="14" y2="14" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#F9E87F" /><stop offset="0.5" stopColor="#E2B719" /><stop offset="1" stopColor="#E2B719" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  {/* Text */}
+                  <div className="flex flex-col items-center gap-1.5 p-[30px]" style={{ height: 134.8 }}>
+                    <h4 className="font-inter text-[20px] font-bold leading-6 tracking-[-0.8px] text-white">
+                      Connect with Founders
+                    </h4>
+                    <p className="max-w-[317px] text-center font-inter text-[14px] font-medium leading-[22px] tracking-[-0.56px] text-[#D5DBE6] opacity-60">
+                      Stay ahead with authentic conversations and value from top consumer brand founders.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Exclusive Training */}
+                <div className="flex min-w-[300px] flex-1 flex-col items-center rounded-[20px] bg-[#0D0D0D]" style={{ height: 315 }}>
+                  {/* Illustration */}
+                  <div className="flex flex-1 flex-col justify-center gap-2" style={{ width: 312 }}>
+                    {/* Row 1 - Virality */}
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 rounded-[10px] bg-white/10" />
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-inter text-[18px] font-bold leading-[22px] tracking-[-0.72px] text-white">
+                            Virality
+                          </span>
+                          <div className="flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-[#0D86FF]">
+                            <svg width="8" height="8" viewBox="0 0 14 14" fill="white">
+                              <path d="M5.5 10l-3-3 1-1 2 2 5-5 1 1-6 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                        <span className="font-inter text-[14px] font-medium leading-[17px] text-[#B5B5B5]">
+                          Training & Resources
+                        </span>
+                      </div>
+                    </div>
+                    {/* Row 2 - App icons */}
+                    <div className="flex items-center gap-2">
+                      {[0, 1, 2, 3].map((i) => (
+                        <div key={i} className="h-[50px] w-[50px] rounded-[10px] bg-white/[0.08]" />
+                      ))}
+                    </div>
+                    {/* More button */}
+                    <div className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#121212]" style={{ height: 40 }}>
+                      <svg width="14" height="13" viewBox="0 0 14 13" fill="none" className="rotate-180">
+                        <path d="M9 2L5 6.5L9 11" stroke="#B5B5B5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <span className="font-inter text-[15px] font-semibold leading-[18px] tracking-[-0.3px] text-[#B5B5B5]">
+                        More
+                      </span>
+                    </div>
+                  </div>
+                  {/* Text */}
+                  <div className="flex flex-col items-center gap-1.5 p-[30px]" style={{ height: 134.8 }}>
+                    <h4 className="font-inter text-[20px] font-bold leading-6 tracking-[-0.8px] text-white">
+                      Exclusive Training
+                    </h4>
+                    <p className="max-w-[317px] text-center font-inter text-[14px] font-medium leading-[22px] tracking-[-0.56px] text-[#D5DBE6] opacity-60">
+                      Gain access to the exact resources & training to grow your business with organic content.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1108,7 +1464,7 @@ export function VerifiedAgencyPage() {
                   Apply Now
                 </button>
               </div>
-              <div className="rounded-2xl border border-foreground/[0.06] [&>div:first-child]:rounded-t-2xl [&>div:last-child]:rounded-b-2xl">
+              <div className="overflow-hidden rounded-xl border border-foreground/[0.06]">
                 {[
                   { threshold: "$10K", reward: "AirPods Pro", img: "/icons/prizes/airpods.png" },
                   { threshold: "$30K", reward: "iPhone 17 Pro Max", img: "/icons/prizes/iphone.png" },

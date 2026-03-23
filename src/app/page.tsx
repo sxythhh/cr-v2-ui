@@ -12,8 +12,60 @@ import { RichButton } from "@/components/rich-button";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { Modal } from "@/components/ui/modal";
-
+import { AnalyticsPocMobileCarousel } from "@/components/analytics-poc/AnalyticsPocMobileCarousel";
+import { CreatorDetailsPopup, type CreatorDetailsData } from "@/components/creators/CreatorDetailsPopup";
 // ── Icons ──────────────────────────────────────────────────────────
+
+function OnboardingPersonIcon({ className }: { className?: string }) {
+  return (
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" className={className}>
+      <path d="M6.76107 0C4.69 0 3.01107 1.67893 3.01107 3.75C3.01107 5.82107 4.69 7.5 6.76107 7.5C8.83214 7.5 10.5111 5.82107 10.5111 3.75C10.5111 1.67893 8.83214 0 6.76107 0Z" fill="currentColor" fillOpacity="0.7" />
+      <path d="M6.7623 8.33333C3.56905 8.33333 1.12512 10.2469 0.132775 12.93C-0.150917 13.6971 0.0433127 14.4532 0.494278 14.9906C0.933755 15.5144 1.61217 15.8333 2.343 15.8333H11.1816C11.9124 15.8333 12.5909 15.5144 13.0303 14.9906C13.4813 14.4532 13.6755 13.6971 13.3918 12.93C12.3995 10.2469 9.95555 8.33333 6.7623 8.33333Z" fill="currentColor" fillOpacity="0.7" />
+    </svg>
+  );
+}
+
+function OnboardingLinkIcon({ className }: { className?: string }) {
+  return (
+    <svg width="18" height="15" viewBox="0 0 18 15" fill="none" className={className}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M4.00634 4.55372C5.63353 2.92654 8.27172 2.92654 9.8989 4.55372L10.1849 4.83967C10.8651 5.5199 11.2617 6.37902 11.3728 7.2657C11.43 7.72237 11.1062 8.13895 10.6495 8.19615C10.1928 8.25336 9.77626 7.92954 9.71905 7.47287C9.6524 6.94077 9.41548 6.42732 9.00635 6.01819L8.72039 5.73223C7.74408 4.75592 6.16117 4.75592 5.18486 5.73223L2.3989 8.51819C1.42259 9.4945 1.42259 11.0774 2.3989 12.0537L2.68486 12.3397C3.66117 13.316 5.24408 13.316 6.22039 12.3397L6.36334 12.1967C6.68876 11.8713 7.2164 11.8712 7.54185 12.1967C7.8673 12.5221 7.86732 13.0497 7.54189 13.3752L7.39892 13.5182C5.77174 15.1453 3.13353 15.1454 1.50634 13.5182L1.22039 13.2322C-0.406795 11.605 -0.406798 8.96686 1.22039 7.33968L4.00634 4.55372Z" fill="currentColor" fillOpacity="0.7" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M9.83963 1.22039C11.4668 -0.406797 14.105 -0.406795 15.7322 1.22039L16.0181 1.50634C17.6453 3.13353 17.6453 5.77171 16.0181 7.3989L13.2322 10.1849C11.605 11.812 8.96681 11.812 7.33963 10.1849L7.05367 9.8989C6.37345 9.21867 5.97681 8.35955 5.86574 7.47287C5.80853 7.0162 6.13236 6.59962 6.58902 6.54241C7.04569 6.48521 7.46227 6.80903 7.51948 7.2657C7.58613 7.7978 7.82305 8.31125 8.23219 8.72039L8.51814 9.00634C9.49445 9.98265 11.0774 9.98265 12.0537 9.00634L14.8396 6.22039C15.8159 5.24408 15.8159 3.66117 14.8396 2.68485L14.5537 2.3989C13.5774 1.42262 11.9945 1.42259 11.0182 2.39882L10.8753 2.54179C10.5499 2.86727 10.0223 2.86734 9.69677 2.54195C9.37129 2.21655 9.37122 1.68892 9.69662 1.36344L9.83963 1.22039Z" fill="currentColor" fillOpacity="0.7" />
+    </svg>
+  );
+}
+
+function OnboardingMegaphoneIcon({ className }: { className?: string }) {
+  return (
+    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" className={className}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M10.9085 0.11952C12.5209 -0.393616 14.1667 0.809717 14.1667 2.50179V3.6607C15.6044 4.03074 16.6667 5.33582 16.6667 6.88902C16.6667 8.44222 15.6044 9.7473 14.1667 10.1173V11.2762C14.1667 12.9683 12.5209 14.1716 10.9085 13.6585L9.69942 13.2737C9.17404 14.4226 8.01467 15.2224 6.66667 15.2224C4.82572 15.2224 3.33333 13.73 3.33333 11.889V11.2399L1.74012 10.7316C0.703624 10.4009 0 9.43787 0 8.3499V5.42814C0 4.34017 0.703626 3.37711 1.74012 3.04642L3.81318 2.38501C3.85189 2.36674 3.89224 2.35136 3.93394 2.33915L10.9085 0.11952ZM5 11.7782V11.889C5 12.8095 5.74619 13.5557 6.66667 13.5557C7.26668 13.5557 7.79403 13.2383 8.08768 12.7608L5 11.7782ZM15 6.88902C15 7.50592 14.6648 8.04454 14.1667 8.33272V5.44532C14.6648 5.7335 15 6.27212 15 6.88902ZM3.33516 4.28696V9.49107L2.24671 9.1438C1.90121 9.03357 1.66667 8.71255 1.66667 8.3499V5.42814C1.66667 5.06548 1.90121 4.74446 2.24671 4.63423L3.33516 4.28696Z" fill="currentColor" fillOpacity="0.7" />
+    </svg>
+  );
+}
+
+function OnboardingStarIcon({ className }: { className?: string }) {
+  return (
+    <svg width="18" height="17" viewBox="0 0 18 17" fill="none" className={className}>
+      <path d="M9.89545 0.718521C9.43523 -0.239505 8.06809 -0.239508 7.60786 0.71852L5.63944 4.81606L1.1055 5.40972C0.0543692 5.54735 -0.383309 6.84619 0.399327 7.58416L3.71258 10.7083L2.88108 15.1687C2.68366 16.2277 3.80481 17.0128 4.73106 16.5135L8.75166 14.3459L12.7723 16.5135C13.6985 17.0128 14.8197 16.2277 14.6222 15.1687L13.7907 10.7083L17.104 7.58416C17.8866 6.84619 17.4489 5.54735 16.3978 5.40972L11.8639 4.81606L9.89545 0.718521Z" fill="currentColor" fillOpacity="0.7" />
+    </svg>
+  );
+}
+
+function MobileNotificationIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C12.7123 2 13.4014 2.10318 14.0537 2.29395C13.5902 2.79837 13.255 3.42248 13.0986 4.11426C12.7439 4.03951 12.3764 4 12 4C9.17193 4 6.84068 6.21751 6.69922 9.04199L6.53027 12.4209C6.50263 12.9738 6.36084 13.5156 6.11328 14.0107L5.11816 16H18.8818L17.8867 14.0107C17.6392 13.5156 17.4974 12.9738 17.4697 12.4209L17.3008 9.04199C17.2999 9.0237 17.297 9.00555 17.2959 8.9873C18.0124 8.93489 18.6761 8.69484 19.2383 8.31445C19.2664 8.52114 19.2882 8.73037 19.2988 8.94238L19.4678 12.3213C19.4816 12.5977 19.552 12.8686 19.6758 13.1162L20.8086 15.3818C20.9342 15.633 21 15.9106 21 16.1914C20.9998 17.1902 20.1902 17.9998 19.1914 18H16.8994C16.4361 20.2822 14.4189 22 12 22C9.58108 22 7.5639 20.2822 7.10059 18H4.80859C3.87216 17.9998 3.10243 17.288 3.00977 16.376L3 16.1914L3.01172 15.9814C3.03599 15.7733 3.0972 15.5703 3.19141 15.3818L4.32422 13.1162C4.448 12.8687 4.5184 12.5977 4.53223 12.3213L4.70117 8.94238C4.89571 5.05335 8.10608 2 12 2ZM9.17383 18C9.58594 19.1647 10.6941 20 12 20C13.3059 20 14.4141 19.1647 14.8262 18H9.17383Z" fill="#7B7B7B" />
+      <circle cx="17" cy="5" r="3" fill="#EF4444" />
+    </svg>
+  );
+}
+
+function MobileSearchIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M17 17L13.05 13.05M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 function CheckCircleIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -187,7 +239,7 @@ const STEPS = [
     title: "Complete your agency profile",
     description: "Add logo, description, team members and portfolio",
     completed: false,
-    icon: PersonIcon,
+    icon: OnboardingPersonIcon,
     action: "Complete profile",
   },
   {
@@ -195,7 +247,7 @@ const STEPS = [
     title: "Add your first brand client",
     description: "Connect a brand to start managing their campaigns",
     completed: false,
-    icon: ChainLinkIcon,
+    icon: OnboardingLinkIcon,
     action: "Add clients",
   },
   {
@@ -203,7 +255,7 @@ const STEPS = [
     title: "Launch first campaign",
     description: "Create a CPM, retainer, or per-video campaign for your brand",
     completed: false,
-    icon: MegaphoneIcon,
+    icon: OnboardingMegaphoneIcon,
     action: "Launch campaign",
   },
   {
@@ -211,7 +263,7 @@ const STEPS = [
     title: "Recruit creators",
     description: "Upload content and start earning",
     completed: false,
-    icon: StarIcon,
+    icon: OnboardingStarIcon,
     action: "Recruit",
   },
 ];
@@ -284,9 +336,9 @@ const TOP_CREATORS = [
 ];
 
 const ACTIVE_CAMPAIGNS_DATA = [
-  { name: "Call of Duty BO7 Clipping", subtitle: "CPM · 121k views · 31 creators", progress: 45, progressColor: "#00994D" },
-  { name: "Caffeine AI Launch", subtitle: "CPM · 89k views · 18 creators", progress: 78, progressColor: "#E57100" },
-  { name: "G Fuel Summer Push", subtitle: "CPM · 204k views · 52 creators", progress: 94, progressColor: "#FF3355" },
+  { name: "Call of Duty BO7 Clipping", subtitle: "CPM · 121k views · 31 creators", progress: 45, progressColor: "#34D399", slug: "call-of-duty-bo7" },
+  { name: "Caffeine AI Launch", subtitle: "CPM · 89k views · 18 creators", progress: 78, progressColor: "#E57100", slug: "caffeine-ai-launch" },
+  { name: "G Fuel Summer Push", subtitle: "CPM · 204k views · 52 creators", progress: 94, progressColor: "#FF3355", slug: "g-fuel-summer-push" },
 ];
 
 // ── Sparkline ──────────────────────────────────────────────────────
@@ -390,7 +442,7 @@ function OnboardingStepRow({
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                {step.icon && <step.icon className="size-5 text-page-text-subtle" />}
+                {step.icon && <step.icon className="text-page-text-subtle" />}
               </motion.div>
             )}
           </AnimatePresence>
@@ -683,27 +735,36 @@ function OnboardingView({
 // ── Transaction History ────────────────────────────────────────────
 
 const TRANSACTIONS = [
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
-  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
-  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
-  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D]" },
-  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
 ];
 
 function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Modal open={open} onClose={onClose} size="md" showClose={true}>
-      <div className="flex flex-col items-center px-5 pb-0 pt-5">
+    <Modal open={open} onClose={onClose} size="md" showClose={false}>
+      <div className="relative flex flex-col items-center px-5 pb-0 pt-5">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 flex size-6 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] text-foreground/30 transition-colors hover:bg-foreground/[0.06]"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" />
+          </svg>
+        </button>
         {/* Hero */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-white/10 dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1)]">
-            <svg width="24" height="24" viewBox="0 0 16 16" fill="none">
-              <path d="M2 3.333V6h2.667" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2.34 10A6 6 0 1 0 2 8" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" />
-              <path d="M8 5.333V8l2 1.333" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_var(--page-text)]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 12.5V5h2.667" />
+              <path d="M3.34 16A8 8 0 1 0 2 12" />
+              <path d="M12 7.5V12l3 2" />
             </svg>
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -715,7 +776,7 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         </div>
 
         {/* Table */}
-        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           {/* Header */}
           <div className="flex items-center border-b border-foreground/[0.06] px-1">
             <div className="w-[61px] px-3 py-3">
@@ -747,11 +808,11 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
       </div>
 
       {/* Footer */}
-      <div className="p-5">
+      <div className="px-5 pb-5">
         <button
           type="button"
           onClick={onClose}
-          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
         >
           Close
         </button>
@@ -767,7 +828,7 @@ function HistoryButton() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[#222222] dark:hover:bg-[#2a2a2a]"
       >
         <HistoryIcon className="size-3" />
         History
@@ -784,8 +845,8 @@ const CURRENT_BALANCE = 14200;
 
 function DollarSignIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8.5 2a.5.5 0 0 0-1 0v1.02A3.5 3.5 0 0 0 4.5 6.5c0 1.526.94 2.604 2.11 3.225.586.31 1.218.542 1.78.747l.11.04v3.468a2.5 2.5 0 0 1-1.857-1.193.5.5 0 1 0-.846.532A3.5 3.5 0 0 0 7.5 14.98V16a.5.5 0 0 0 1 0v-1.02a3.5 3.5 0 0 0 3-3.48c0-1.526-.94-2.604-2.11-3.225A14 14 0 0 0 7.61 7.528l-.11-.04V4.02A2.5 2.5 0 0 1 9.357 5.21a.5.5 0 0 0 .846-.532A3.5 3.5 0 0 0 8.5 3.02V2z" />
+    <svg width="8" height="13" viewBox="0 0 8 13" fill="currentColor">
+      <path d="M3.40554 12.7273V0H4.22088V12.7273H3.40554ZM5.95597 3.94744C5.90294 3.4768 5.68419 3.11222 5.29972 2.85369C4.91525 2.59186 4.43134 2.46094 3.84801 2.46094C3.4304 2.46094 3.06913 2.52723 2.7642 2.6598C2.45928 2.78906 2.2223 2.96804 2.05327 3.19673C1.88755 3.42211 1.80469 3.67898 1.80469 3.96733C1.80469 4.20928 1.86103 4.41809 1.97372 4.59375C2.08973 4.76941 2.24053 4.9169 2.42614 5.03622C2.61506 5.15223 2.81723 5.25 3.03267 5.32955C3.24811 5.40578 3.45526 5.46875 3.65412 5.51847L4.64844 5.77699C4.97325 5.85653 5.30634 5.96425 5.64773 6.10014C5.98911 6.23603 6.30563 6.41501 6.5973 6.63707C6.88897 6.85914 7.12429 7.13423 7.30327 7.46236C7.48556 7.79048 7.5767 8.18324 7.5767 8.64063C7.5767 9.21733 7.42756 9.7294 7.12926 10.1768C6.83428 10.6243 6.40507 10.9773 5.84162 11.2358C5.28149 11.4943 4.60369 11.6236 3.80824 11.6236C3.04593 11.6236 2.38636 11.5026 1.82955 11.2607C1.27273 11.0187 0.836884 10.6757 0.522017 10.2315C0.20715 9.78409 0.0331439 9.25379 0 8.64063H1.54119C1.57102 9.00852 1.69034 9.31511 1.89915 9.56037C2.11127 9.80232 2.38139 9.98295 2.70952 10.1023C3.04096 10.2183 3.40388 10.2763 3.7983 10.2763C4.23248 10.2763 4.61861 10.2083 4.95668 10.0724C5.29806 9.93324 5.56652 9.741 5.76207 9.49574C5.95762 9.24716 6.0554 8.95715 6.0554 8.62571C6.0554 8.3241 5.96922 8.07718 5.79688 7.88494C5.62784 7.69271 5.39749 7.53362 5.10582 7.40767C4.81747 7.28172 4.491 7.17069 4.12642 7.07457L2.9233 6.74645C2.10795 6.52438 1.46165 6.19792 0.984375 5.76705C0.510417 5.33617 0.273438 4.7661 0.273438 4.05682C0.273438 3.47017 0.432528 2.9581 0.75071 2.5206C1.06889 2.0831 1.49976 1.74337 2.04332 1.50142C2.58688 1.25616 3.20005 1.13352 3.88281 1.13352C4.57221 1.13352 5.1804 1.2545 5.70739 1.49645C6.23769 1.7384 6.6553 2.0715 6.96023 2.49574C7.26515 2.91667 7.42424 3.40057 7.4375 3.94744H5.95597Z" />
     </svg>
   );
 }
@@ -840,13 +901,13 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           {/* Form */}
           <div className="flex flex-col gap-4 px-5 pb-5 pt-4">
             {/* Amount card */}
-            <div className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+            <div className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none">
               <span className="font-inter text-xs tracking-[-0.02em] text-foreground/70">
                 Current balance: ${CURRENT_BALANCE.toLocaleString()}
               </span>
 
               {/* Input */}
-              <div className="flex h-10 items-center gap-2 rounded-full border border-foreground/[0.06] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/5">
+              <div className="flex h-10 items-center gap-1.5 rounded-[14px] border border-foreground/[0.06] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-transparent dark:bg-foreground/[0.03] dark:shadow-none">
                 <DollarSignIcon />
                 <input
                   type="text"
@@ -868,7 +929,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                       "flex h-8 cursor-pointer items-center justify-center rounded-full border px-3 font-inter text-xs font-medium tracking-[-0.02em] transition-colors",
                       amount === val
                         ? "border-foreground bg-foreground/[0.04] text-page-text"
-                        : "border-foreground/[0.12] bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-foreground/[0.2] dark:bg-white/5",
+                        : "border-foreground/[0.12] bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-foreground/[0.2] dark:border-foreground/[0.08] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]",
                     )}
                   >
                     {val}
@@ -878,10 +939,10 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             </div>
 
             {/* Summary card */}
-            <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+            <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D]">
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">
                   +${numericAmount.toLocaleString()}
                 </span>
               </div>
@@ -899,7 +960,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <button
               type="button"
               onClick={handleClose}
-              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06]px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
             >
               Cancel
             </button>
@@ -934,7 +995,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <path fillRule="evenodd" clipRule="evenodd" d="M14 2.333A11.667 11.667 0 1 0 14 25.667 11.667 11.667 0 0 0 14 2.333zm4.185 9.017a.833.833 0 0 0-1.203-1.153l-4.635 5.668-1.65-1.65a.833.833 0 0 0-1.178 1.178l2.333 2.334a.833.833 0 0 0 1.191.025l5.142-6.402z" fill="#FFFFFF" />
                 </svg>
               </div>
-              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#00994D]">Top up successful</span>
+              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">Top up successful</span>
             </div>
 
             {/* View receipt link */}
@@ -946,10 +1007,10 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             </div>
 
             {/* Summary card */}
-            <div className="w-full overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+            <div className="w-full overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D]">
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">
                   +${numericAmount.toLocaleString()}
                 </span>
               </div>
@@ -993,7 +1054,7 @@ function TopUpButton() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06]pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
       >
         <PlusIcon className="size-4" />
         Top up
@@ -1020,9 +1081,168 @@ function DepositButton() {
   );
 }
 
+// ── KPI Card Components (shared between mobile carousel & desktop grid) ──
+
+const kpiCard = "flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4";
+
+function KpiCardBalance({ className }: { className?: string }) {
+  return (
+    <div className={cn(kpiCard, "gap-4", className)}>
+      <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Balance</span>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <span className="flex-1 font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$14,200</span>
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$2,880 unallocated</span>
+        </div>
+        <div className="flex gap-2">
+          <DepositButton />
+          <HistoryButton />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function KpiCardActive({ className }: { className?: string }) {
+  return (
+    <Link href="/campaigns" className={cn(kpiCard, className)}>
+      <div className="flex items-start justify-between">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
+        <MiniSparkline />
+      </div>
+      <div className="flex flex-col gap-3">
+        <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
+        <div className="flex gap-1">
+          <span className="flex h-6 items-center rounded-full bg-[rgba(26,103,229,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#1A67E5]">3 CPM</span>
+          <span className="flex h-6 items-center rounded-full bg-[rgba(229,113,0,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#E57100]">2 Retainer</span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function KpiCardViews({ className }: { className?: string }) {
+  return (
+    <div className={cn(kpiCard, className)}>
+      <div className="flex items-start justify-between">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
+        <MiniSparkline />
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">10</span>
+        <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">+31% this week</span>
+      </div>
+    </div>
+  );
+}
+
+function KpiCardAvgCpm({ className }: { className?: string }) {
+  return (
+    <div className={cn(kpiCard, className)}>
+      <div className="flex items-start justify-between">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
+        <MiniSparkline />
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$0.67</span>
+        <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">-$0.05 (better)</span>
+      </div>
+    </div>
+  );
+}
+
+function KpiCardPaidOut({ className }: { className?: string }) {
+  return (
+    <Link href="/payouts" className={cn(kpiCard, className)}>
+      <div className="flex items-start justify-between">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
+        <MiniSparkline />
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$18.4k</span>
+        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$10.7k spend this period</span>
+      </div>
+    </Link>
+  );
+}
+
 // ── Dashboard View ─────────────────────────────────────────────────
 
+const MOCK_CREATOR_DETAILS: CreatorDetailsData = {
+  name: "ClipMaster_Jay",
+  joinedDate: "Oct '26",
+  lastActive: "2d ago",
+  videoCount: 42,
+  platforms: ["tiktok", "instagram"],
+  category: "Gaming",
+  followers: "373K",
+  rating: "Legendary",
+  ratingStars: 6,
+  totalEarned: "$2,415.80",
+  engagementScore: 85,
+  engagementRate: "4.2%",
+  sentiment: "78%",
+  approvedVideos: 37,
+  approvalRate: "88%",
+  connectedAccounts: [
+    { platform: "tiktok", handle: "@xkaizen", followers: "245K followers" },
+    { platform: "youtube", handle: "@xKaizenGaming", followers: "128K followers" },
+  ],
+  matchScore: 92,
+  scoreBreakdown: { niche: 88, audience: 91, pastPerformance: 96 },
+  campaigns: [{ name: "Gambling Summer Push", cpm: "$0.84 CPM" }],
+  performanceData: {
+    datasets: {
+      daily: Array.from({ length: 30 }, (_, i) => ({ index: i, label: `Day ${i + 1}`, views: Math.floor(Math.random() * 80000 + 20000), engagement: 0, likes: Math.floor(Math.random() * 5000 + 1000), comments: Math.floor(Math.random() * 800 + 200), shares: Math.floor(Math.random() * 400 + 100) })),
+      cumulative: Array.from({ length: 30 }, (_, i) => ({ index: i, label: `Day ${i + 1}`, views: (i + 1) * 35000, engagement: 0, likes: (i + 1) * 2500, comments: (i + 1) * 500, shares: (i + 1) * 250 })),
+    },
+    series: [
+      { key: "views" as const, label: "Views", color: "#60A5FA", axis: "left" as const },
+      { key: "likes" as const, label: "Likes", color: "#F9A8D4", axis: "left" as const },
+      { key: "comments" as const, label: "Comments", color: "#FB923C", axis: "left" as const },
+      { key: "shares" as const, label: "Shares", color: "#55B685", axis: "left" as const },
+    ],
+    xTicks: Array.from({ length: 10 }, (_, i) => ({ label: `Jan ${5 + i * 3}`, index: i * 3 })),
+    yLabels: ["0", "25K", "50K", "75K", "100K"],
+    rightYLabels: [],
+  },
+  performanceStats: { views: "1.2M", likes: "48K", comments: "3.2K", shares: "1.1K" },
+  submissions: [
+    { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+    { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+    { title: "This fitness hack changed my life", platform: "tiktok", earned: "$24,815.67", views: "680,4K", engRate: "4.8%", cpm: "$0.84" },
+  ],
+  demographics: {
+    ageGroups: [
+      { label: "13 - 17", percentage: 12, color: "rgba(192, 132, 252, 0.1)" },
+      { label: "18 - 24", percentage: 45, color: "rgba(52, 211, 153, 0.08)" },
+      { label: "24 - 34", percentage: 28, color: "rgba(251, 113, 133, 0.1)" },
+      { label: "35+", percentage: 15, color: "rgba(96, 165, 250, 0.08)" },
+    ],
+    countries: [
+      { code: "US", label: "USA", percentage: 48, color: "rgba(192, 132, 252, 0.1)" },
+      { code: "GB", label: "UK", percentage: 14, color: "rgba(52, 211, 153, 0.08)" },
+      { code: "CA", label: "CA", percentage: 9, color: "rgba(6, 182, 212, 0.1)" },
+      { code: "DE", label: "DE", percentage: 6, color: "rgba(251, 113, 133, 0.1)" },
+      { code: "AU", label: "AU", percentage: 5, color: "rgba(251, 146, 60, 0.1)" },
+      { code: "OTHER", label: "Other", percentage: 18, color: "rgba(96, 165, 250, 0.08)" },
+    ],
+    genderSplit: [
+      { label: "Male", percentage: 62, color: "rgba(96, 165, 250, 0.1)" },
+      { label: "Female", percentage: 34, color: "rgba(249, 168, 212, 0.1)" },
+    ],
+    interests: [
+      { icon: "Gaming", label: "Gaming", percentage: 72 },
+      { icon: "Tech", label: "Tech", percentage: 45 },
+      { icon: "Entertainment", label: "Entertainment", percentage: 38 },
+      { icon: "Sports", label: "Sports", percentage: 22 },
+      { icon: "Music", label: "Music", percentage: 18 },
+    ],
+  },
+};
+
 function DashboardView() {
+  const [creatorPopupOpen, setCreatorPopupOpen] = useState(false);
   const activityContainerRef = useRef<HTMLDivElement>(null);
   const activityHover = useProximityHover(activityContainerRef);
   const activityActiveRect = activityHover.activeIndex !== null ? activityHover.itemRects[activityHover.activeIndex] : null;
@@ -1032,7 +1252,7 @@ function DashboardView() {
   return (
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-5">
       {/* AI Tip Banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:gap-4">
+      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg p-4 sm:gap-4">
         <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
         <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-3">
           <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
@@ -1046,82 +1266,32 @@ function DashboardView() {
         </div>
       </div>
 
-      {/* KPI Cards Row */}
-      {/* KPI Cards Row — subgrid aligns numbers across all 5 cards */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:flex-nowrap">
-        {/* Balance card — fixed 320px on lg+, full width on mobile */}
-        <div className="flex w-full flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0">
-          <div className="flex items-center gap-1.5">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Balance</span>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <span className="flex-1 font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$14,200</span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$2,880 unallocated</span>
-            </div>
-            <div className="flex gap-2">
-              <DepositButton />
-              <HistoryButton />
-            </div>
-          </div>
-        </div>
+      {/* KPI Cards — Mobile carousel */}
+      <div className="sm:hidden">
+        <AnalyticsPocMobileCarousel>
+          {[
+            <KpiCardActive key="active" />,
+            <KpiCardBalance key="balance" />,
+            <KpiCardViews key="views" />,
+            <KpiCardAvgCpm key="cpm" />,
+            <KpiCardPaidOut key="paid" />,
+          ]}
+        </AnalyticsPocMobileCarousel>
+      </div>
 
-        {/* Active */}
-        <Link href="/campaigns" className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg transition-colors hover:bg-foreground/[0.02] dark:border-[#2a2a2a] dark:bg-[#191919] dark:hover:bg-white/[0.02] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
-          <div className="flex items-start justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active</span>
-            <MiniSparkline />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
-            <div className="flex">
-              <span className="-mr-1 flex h-6 items-center rounded-full bg-[rgba(26,103,229,0.12)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#1A67E5]">3 CPM</span>
-              <span className="flex h-6 items-center rounded-full border-2 border-white bg-[#FFF2E5] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#E57100] dark:border-card-bg dark:bg-[rgba(229,113,0,0.15)]">2 Retainer</span>
-            </div>
-          </div>
-        </Link>
-
-        {/* Views */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
-          <div className="flex items-start justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
-            <MiniSparkline />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">10</span>
-            <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">+31% this week</span>
-          </div>
-        </div>
-
-        {/* Avg CPM */}
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg dark:border-[#2a2a2a] dark:bg-[#191919] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
-          <div className="flex items-start justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
-            <MiniSparkline />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$0.67</span>
-            <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">-$0.05 (better)</span>
-          </div>
-        </div>
-
-        {/* Paid Out */}
-        <Link href="/payouts" className="flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg transition-colors hover:bg-foreground/[0.02] dark:border-[#2a2a2a] dark:bg-[#191919] dark:hover:bg-white/[0.02] p-4 sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1">
-          <div className="flex items-start justify-between">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Paid Out</span>
-            <MiniSparkline />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$18.4k</span>
-            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$10.7k spend this period</span>
-          </div>
-        </Link>
+      {/* KPI Cards — Desktop grid */}
+      <div className="hidden gap-2 sm:flex sm:flex-wrap lg:flex-nowrap">
+        <KpiCardBalance className="sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0" />
+        <KpiCardActive className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
+        <KpiCardViews className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
+        <KpiCardAvgCpm className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
+        <KpiCardPaidOut className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
       </div>
 
       {/* Bottom Row: Active Campaigns + Needs Attention + Recent Activity */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {/* Active Campaigns */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
           <div className="flex items-center justify-between px-4">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active campaigns</span>
             <Link href="/campaigns" className="group flex cursor-pointer items-center gap-1.5">
@@ -1131,30 +1301,31 @@ function DashboardView() {
           </div>
           <div className="flex flex-col gap-2 px-4">
             {ACTIVE_CAMPAIGNS_DATA.map((campaign, i) => (
-              <div
+              <Link
                 key={i}
-                className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 transition-colors hover:bg-foreground/[0.02] sm:p-4"
+                href={`/campaigns/${campaign.slug}`}
+                className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] p-3 transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06] sm:px-4 sm:py-3"
               >
                 <div className="flex items-center gap-3">
-                  <div className="size-8 shrink-0 rounded-[10px] bg-foreground/10" />
+                  <div className="size-8 shrink-0 overflow-hidden rounded-[10px] bg-foreground/10" />
                   <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                     <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{campaign.name}</span>
                     <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{campaign.subtitle}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="shrink-0 font-inter text-xs tracking-[-0.02em]" style={{ color: campaign.progressColor }}>{campaign.progress}%</span>
+                  <span className="shrink-0 font-inter text-xs tracking-[-0.02em] text-page-text">{campaign.progress}%</span>
                   <div className="h-1 flex-1 rounded-full bg-foreground/10">
                     <div className="h-1 rounded-full" style={{ width: `${campaign.progress}%`, background: campaign.progressColor }} />
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
 
         {/* Needs Attention */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
           <div className="flex items-center">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs attention</span>
           </div>
@@ -1163,7 +1334,7 @@ function DashboardView() {
               <Link
                 key={i}
                 href={item.href}
-                className="group flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 transition-colors hover:bg-foreground/[0.02] sm:px-3 sm:py-4"
+                className="group flex items-center gap-3 rounded-2xl border border-foreground/[0.06] p-3 transition-colors hover:bg-foreground/[0.02] dark:border-card-inner-border dark:bg-card-inner-bg dark:hover:border-[#303030] dark:hover:bg-[#282828] sm:px-3 sm:py-4"
               >
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-full backdrop-blur-[12px]" style={{ background: item.iconBg }}>
                   <item.icon />
@@ -1179,7 +1350,7 @@ function DashboardView() {
         </div>
 
         {/* Recent Activity */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] sm:col-span-2 lg:col-span-1">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
@@ -1212,7 +1383,7 @@ function DashboardView() {
                 ref={(el) => activityHover.registerItem(i, el)}
                 className="relative z-[1] flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2"
               >
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-card-bg backdrop-blur-[16px]">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-card-inner-border bg-card-inner-bg backdrop-blur-[16px]">
                   <item.icon className="size-4 text-page-text-muted" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -1225,6 +1396,103 @@ function DashboardView() {
           </div>
         </div>
       </div>
+
+      {/* Bottom Row: Top Creators + Pending Drafts */}
+      <div className="flex flex-col gap-2 sm:flex-row">
+        {/* Top creators */}
+        <div className="flex flex-1 flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex flex-col gap-2">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators</span>
+              <Link href="/creators" className="group flex cursor-pointer items-center gap-1.5">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
+                <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+              </Link>
+            </div>
+
+            {/* Podium */}
+            <div className="flex items-end justify-center gap-2">
+              {/* 2nd place */}
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[197px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(131,159,185,0.04)] p-4 transition-colors hover:bg-[rgba(131,159,185,0.08)]">
+                <div className="flex size-[26px] items-center justify-center rounded-full bg-[#839FB9] font-inter text-[16px] font-medium text-white">2</div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="size-8 rounded-full bg-foreground/[0.08]" />
+                  <div className="flex flex-col items-center gap-1.5">
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">ClipMaster_Jay</span>
+                    <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$4,280</span>
+                  </div>
+                </div>
+              </button>
+              {/* 1st place */}
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[260px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(229,113,0,0.04)] p-4 transition-colors hover:bg-[rgba(229,113,0,0.08)]">
+                <div className="flex h-6 items-center gap-2 rounded-full bg-[#E57100] px-2">
+                  <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
+                  <span className="font-inter text-[16px] font-medium text-white">1</span>
+                </div>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="size-10 rounded-full bg-foreground/[0.08]" />
+                  <div className="flex flex-col items-center gap-1.5">
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">ClipMaster_Jay</span>
+                    <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$4,280</span>
+                  </div>
+                </div>
+              </button>
+              {/* 3rd place */}
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(158,82,0,0.04)] p-4 transition-colors hover:bg-[rgba(158,82,0,0.08)]">
+                <div className="flex size-[27px] items-center justify-center rounded-full bg-[#9E5200] font-inter text-[16px] font-medium text-white">3</div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="size-8 rounded-full bg-foreground/[0.08]" />
+                  <div className="flex flex-col items-center gap-1.5">
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">ClipMaster_Jay</span>
+                    <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$4,280</span>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Pending Drafts */}
+        <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex items-center justify-between">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
+            <Link href="/submissions" className="group flex cursor-pointer items-center gap-1.5">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
+              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+            </Link>
+          </div>
+          <div className="flex flex-col gap-2">
+            {[
+              { name: "Lila Bennett", desc: "NFL UGC · Revision 2 uploaded", badge: "R2", badgeColor: "#FB923C" },
+              { name: "Marcus Cole", desc: "Caffeine Exclusive - New draft", badge: "New", badgeColor: "#60A5FA" },
+            ].map((draft) => (
+              <div key={draft.name} className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] p-4 transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.03] bg-foreground/[0.03] backdrop-blur-[12px]">
+                  <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M3 0C3.36819 0 3.66667 0.298477 3.66667 0.666667H5C5 0.298477 5.29848 0 5.66667 0C6.03486 0 6.33333 0.298477 6.33333 0.666667H7.66667C7.66667 0.298477 7.96514 0 8.33333 0C8.70152 0 9 0.298477 9 0.666667H9.33333C10.4379 0.666667 11.3333 1.5621 11.3333 2.66667V11.3333C11.3333 12.4379 10.4379 13.3333 9.33333 13.3333H2C0.895431 13.3333 0 12.4379 0 11.3333V2.66667C0 1.5621 0.895431 0.666667 2 0.666667H2.33333C2.33333 0.298477 2.63181 0 3 0ZM3 5.66667C3 5.29848 3.29848 5 3.66667 5H7.66667C8.03486 5 8.33333 5.29848 8.33333 5.66667C8.33333 6.03486 8.03486 6.33333 7.66667 6.33333H3.66667C3.29848 6.33333 3 6.03486 3 5.66667ZM3 8.33333C3 7.96514 3.29848 7.66667 3.66667 7.66667H6.33333C6.70152 7.66667 7 7.96514 7 8.33333C7 8.70152 6.70152 9 6.33333 9H3.66667C3.29848 9 3 8.70152 3 8.33333Z" fill="currentColor" fillOpacity="0.5"/>
+                  </svg>
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.desc}</span>
+                    <span className="font-inter text-xs tracking-[-0.02em]" style={{ color: draft.badgeColor }}>{draft.badge}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Creator Details Popup */}
+      <CreatorDetailsPopup
+        open={creatorPopupOpen}
+        onClose={() => setCreatorPopupOpen(false)}
+        creator={MOCK_CREATOR_DETAILS}
+      />
     </div>
   );
 }
@@ -1255,7 +1523,7 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
       <div className="flex flex-1 flex-col items-center px-5 pt-[160px]">
         <div className="flex flex-col items-center gap-4">
           {/* Icon circle */}
-          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-[#191919] dark:shadow-[0_0_0_2px_#191919]">
+          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-card-bg dark:shadow-[0_0_0_2px_#191919]">
             <MegaphoneIcon className="size-6 text-page-text" width={24} height={24} />
           </div>
 
@@ -1299,7 +1567,7 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn("dark:bg-[#111111]", showOnboarding || !hasCampaign ? "flex h-full flex-col" : "")}>
+    <div className={cn(showOnboarding || !hasCampaign ? "flex h-full flex-col" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div
@@ -1342,7 +1610,7 @@ export default function Home() {
             transition={{ duration: 0.25, ease: EASE_OUT }}
           >
             <motion.div
-              className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5"
+              className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2, delay: 0.08, ease: EASE_OUT }}

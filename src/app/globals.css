@@ -91,6 +91,44 @@ input, textarea, [contenteditable] {
   100% { background-position: -300% 0; }
 }
 
+/* Thinking indicator shimmer text gradient */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.4) 35%,
+    rgba(0, 0, 0, 0.9) 50%,
+    rgba(0, 0, 0, 0.4) 65%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text-move 2.5s ease-in-out infinite;
+}
+
+.dark .shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(224, 224, 224, 0.4) 0%,
+    rgba(224, 224, 224, 0.4) 35%,
+    rgba(224, 224, 224, 0.9) 50%,
+    rgba(224, 224, 224, 0.4) 65%,
+    rgba(224, 224, 224, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text-move 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmer-text-move {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
 /* Active nav item icons: override SVG fill-opacity (scoped to sidebar nav) */
 nav [data-active="true"] svg path {
   fill-opacity: 1 !important;
@@ -249,6 +287,15 @@ nav [data-active="true"] svg path {
   box-shadow: none !important;
 }
 
+/* Remove default focus rings globally — rely on hover/active states instead */
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+}
+
 /* Apple-style smooth corners (superellipse/squircle) */
 .rounded-xl,
 .rounded-2xl,
@@ -337,6 +384,8 @@ nav [data-active="true"] svg path {
   /* Card tokens */
   --card-bg: #ffffff;
   --card-border: #e5e5e5;
+  --card-inner-bg: #f5f5f5;
+  --card-inner-border: #e5e5e5;
 
   /* Dropdown tokens */
   --dropdown-bg: #ffffff;
@@ -397,93 +446,95 @@ nav [data-active="true"] svg path {
 
 .dark {
   /* Support page – dark mode */
-  --support-page-bg: #0a0a0a;
-  --support-surface-bg: #141413;
-  --support-elevated-bg: #1a1a1a;
-  --support-hover-bg: #222222;
-  --support-border: #1a1a1b;
-  --support-text-primary: #ffffff;
-  --support-text-secondary: #969696;
-  --support-text-muted: #696969;
-  --support-text-faint: #545454;
-  --support-search-bg: #0f0f0f;
-  --support-dropdown-bg: #0e0e0e;
-  --support-dropdown-hover: #181818;
-  --support-sidebar-icon-bg: #1a1a1a;
+  --support-page-bg: #161616;
+  --support-surface-bg: rgba(224, 224, 224, 0.03);
+  --support-elevated-bg: rgba(224, 224, 224, 0.03);
+  --support-hover-bg: rgba(224, 224, 224, 0.06);
+  --support-border: rgba(37, 37, 37, 0.06);
+  --support-text-primary: #E0E0E0;
+  --support-text-secondary: rgba(224, 224, 224, 0.7);
+  --support-text-muted: rgba(224, 224, 224, 0.5);
+  --support-text-faint: rgba(224, 224, 224, 0.5);
+  --support-search-bg: rgba(224, 224, 224, 0.03);
+  --support-dropdown-bg: rgba(224, 224, 224, 0.03);
+  --support-dropdown-hover: rgba(224, 224, 224, 0.06);
+  --support-sidebar-icon-bg: rgba(224, 224, 224, 0.03);
 
   --destructive-foreground: #f87171;
-  --background: #151515;
-  --foreground: #e5e5e5;
-  --popover: #1d1b19;
-  --popover-foreground: #e5e5e5;
-  --muted-foreground: #737373;
-  --ring: rgba(255, 255, 255, 0.2);
-  --primary: #e5e5e5;
-  --primary-foreground: #151515;
-  --secondary: #252525;
-  --secondary-foreground: #e5e5e5;
-  --accent: rgba(255, 255, 255, 0.06);
-  --accent-foreground: #e5e5e5;
-  --border: #2a2a2a;
-  --input: #333333;
-  --muted: #222222;
+  --background: #161616;
+  --foreground: #E0E0E0;
+  --popover: #1C1C1C;
+  --popover-foreground: #E0E0E0;
+  --muted-foreground: rgba(224, 224, 224, 0.5);
+  --ring: rgba(224, 224, 224, 0.1);
+  --primary: #E0E0E0;
+  --primary-foreground: #111111;
+  --secondary: rgba(224, 224, 224, 0.03);
+  --secondary-foreground: #E0E0E0;
+  --accent: rgba(224, 224, 224, 0.06);
+  --accent-foreground: #E0E0E0;
+  --border: #212121;
+  --input: rgba(224, 224, 224, 0.06);
+  --muted: rgba(224, 224, 224, 0.03);
 
-  /* Sidebar theme tokens — intentionally unchanged */
-  --sidebar-bg: #1a1a1a;
-  --sidebar-border: #2a2a2a;
-  --sidebar-text: #e5e5e5;
-  --sidebar-text-muted: rgba(255, 255, 255, 0.45);
-  --sidebar-text-subtle: rgba(255, 255, 255, 0.6);
-  --sidebar-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-active: rgba(255, 255, 255, 0.08);
-  --sidebar-icon: rgba(255, 255, 255, 0.45);
-  --sidebar-icon-hover: rgba(255, 255, 255, 0.8);
-  --sidebar-section-label: rgba(255, 255, 255, 0.4);
+  /* Sidebar theme tokens */
+  --sidebar-bg: #111111;
+  --sidebar-border: #1A1A1A;
+  --sidebar-text: #EEEEEE;
+  --sidebar-text-muted: rgba(224, 224, 224, 0.5);
+  --sidebar-text-subtle: rgba(224, 224, 224, 0.7);
+  --sidebar-hover: rgba(224, 224, 224, 0.03);
+  --sidebar-active: rgba(224, 224, 224, 0.06);
+  --sidebar-icon: rgba(224, 224, 224, 0.5);
+  --sidebar-icon-hover: #B4B4B4;
+  --sidebar-section-label: #7B7B7B;
 
   /* Page theme tokens */
-  --page-bg: #111111;
-  --page-outer-bg: #0a0a0a;
-  --page-border: rgba(255, 255, 255, 0.06);
-  --page-text: #e5e5e5;
-  --page-text-muted: rgba(255, 255, 255, 0.45);
-  --page-text-subtle: rgba(255, 255, 255, 0.6);
-  --changelog-dim: rgba(255, 255, 255, 0.06);
+  --page-bg: #161616;
+  --page-outer-bg: #111111;
+  --page-border: rgba(224, 224, 224, 0.03);
+  --page-text: #E0E0E0;
+  --page-text-muted: rgba(224, 224, 224, 0.5);
+  --page-text-subtle: rgba(224, 224, 224, 0.7);
+  --changelog-dim: rgba(224, 224, 224, 0.03);
 
   /* Card tokens */
-  --card-bg: #191919;
-  --card-border: #2a2a2a;
+  --card-bg: #1C1C1C;
+  --card-border: #212121;
+  --card-inner-bg: #232323;
+  --card-inner-border: #282828;
 
   /* Dropdown tokens */
-  --dropdown-bg: #191919;
-  --dropdown-border: #2a2a2a;
-  --dropdown-hover: rgba(255, 255, 255, 0.06);
-  --dropdown-text: #e5e5e5;
-  --dropdown-text-muted: #737373;
+  --dropdown-bg: #1C1C1C;
+  --dropdown-border: transparent;
+  --dropdown-hover: rgba(224, 224, 224, 0.03);
+  --dropdown-text: #E0E0E0;
+  --dropdown-text-muted: rgba(224, 224, 224, 0.5);
 
   /* Tooltip */
-  --tooltip-bg: #2a2a2a;
-  --tooltip-text: #ffffff;
-  --tooltip-text-muted: #a3a3a3;
+  --tooltip-bg: #1A1A1A;
+  --tooltip-text: #E0E0E0;
+  --tooltip-text-muted: rgba(224, 224, 224, 0.5);
 
   /* Affiliate dashboard tokens */
   --af-bg: #111111;
   --af-bg-page: #111111;
-  --af-bg-card-color: #191919;
+  --af-bg-card-color: #171717;
   --af-bg-card-blend: normal;
-  --af-bg-input: rgba(255, 255, 255, 0.06);
+  --af-bg-input: rgba(224, 224, 224, 0.03);
   --af-bg-dropdown: #191919;
-  --af-text: #ffffff;
-  --af-text-secondary: rgba(255, 255, 255, 0.72);
-  --af-text-muted: rgba(255, 255, 255, 0.56);
-  --af-text-faint: rgba(255, 255, 255, 0.4);
-  --af-border: rgba(255, 255, 255, 0.15);
-  --af-border-subtle: rgba(255, 255, 255, 0.08);
-  --af-divider: rgba(255, 255, 255, 0.06);
-  --af-hover: rgba(255, 255, 255, 0.05);
-  --af-shadow-card: none;
+  --af-text: #E0E0E0;
+  --af-text-secondary: rgba(224, 224, 224, 0.7);
+  --af-text-muted: rgba(224, 224, 224, 0.5);
+  --af-text-faint: rgba(224, 224, 224, 0.5);
+  --af-border: rgba(37, 37, 37, 0.06);
+  --af-border-subtle: rgba(224, 224, 224, 0.03);
+  --af-divider: rgba(224, 224, 224, 0.03);
+  --af-hover: rgba(224, 224, 224, 0.03);
+  --af-shadow-card: 0px 1px 2px rgba(0, 0, 0, 0.03);
   --af-bg-card-image: none;
-  --af-skeleton: rgba(255, 255, 255, 0.08);
-  --af-skeleton-subtle: rgba(255, 255, 255, 0.04);
+  --af-skeleton: rgba(224, 224, 224, 0.06);
+  --af-skeleton-subtle: rgba(224, 224, 224, 0.03);
   --af-podium-radial: radial-gradient(50% 50% at 50% 50%, rgba(241, 166, 36, 0.12) 0%, transparent 100%);
   --af-podium-silver-grad: linear-gradient(179.9deg, rgba(165, 185, 204, 0.2) 0.08%, rgba(165, 185, 204, 0) 99.92%), radial-gradient(50% 50% at 50% 50%, rgba(165, 185, 204, 0.1) 0%, transparent 100%);
   --af-podium-silver-text: #A5B9CC;
@@ -533,6 +584,8 @@ nav [data-active="true"] svg path {
   --color-page-text-subtle: var(--page-text-subtle);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
+  --color-card-inner-bg: var(--card-inner-bg);
+  --color-card-inner-border: var(--card-inner-border);
   --color-dropdown-bg: var(--dropdown-bg);
   --color-dropdown-border: var(--dropdown-border);
   --color-dropdown-hover: var(--dropdown-hover);

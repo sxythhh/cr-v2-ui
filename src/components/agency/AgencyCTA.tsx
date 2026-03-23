@@ -1,76 +1,115 @@
 "use client";
 
 import Image from "next/image";
+
 import type { AgencyData } from "./types";
 
 export function AgencyCTA({ agency }: { agency: AgencyData }) {
   return (
-    <section className="relative flex items-center overflow-hidden rounded-2xl bg-[rgba(234,232,230,0.6)] p-4 md:p-5">
-      <div className="relative flex w-full flex-col gap-6 rounded-lg p-3 md:flex-row md:items-center md:gap-[50px] md:p-4">
-        {/* Left — text content */}
-        <div className="flex min-w-0 flex-1 flex-col">
-          <h2 className="mb-2.5 font-sans text-[26px] font-bold leading-[1.2] tracking-[-1.08px] text-[#060612] md:text-[36px]">
-            Ready to launch your campaign?
-          </h2>
-          <p className="text-[16px] font-medium leading-[22px] tracking-[-0.54px] text-[#060612] md:text-[18px]">
-            Get started and reach thousands of creators today.
-          </p>
-        </div>
+    <>
+      <style>{`
+        .agency-cta {
+          position: relative;
+          display: flex;
+          align-items: center;
+          padding: 20px;
+          border-radius: 16px;
+          overflow: hidden;
+          background: rgba(234, 232, 230, 0.6);
+        }
+        .agency-cta-inner {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          padding: 16px;
+          border-radius: 8px;
+          width: 100%;
+        }
+        .agency-cta-card {
+          width: 100%;
+        }
+        @media (min-width: 768px) {
+          .agency-cta-inner {
+            flex-direction: row;
+            align-items: center;
+            gap: 50px;
+          }
+          .agency-cta-card {
+            width: 360px;
+            flex-shrink: 0;
+          }
+        }
+      `}</style>
+      <section className="agency-cta">
+        <div className="agency-cta-inner">
+          {/* Left — text content */}
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
+            <h2 style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.2, letterSpacing: "-1.08px", color: "#060612", marginBottom: 10 }}>
+              Ready to launch your campaign?
+            </h2>
+            <p style={{ fontSize: 18, fontWeight: 500, lineHeight: "22px", letterSpacing: "-0.54px", color: "#060612" }}>
+              Get started and reach thousands of creators today.
+            </p>
+          </div>
 
-        {/* Right — booking card */}
-        <div className="w-full md:w-[360px] md:shrink-0">
-          <div className="agency-cta-card flex flex-col gap-5 rounded-2xl p-5">
-            {/* Avatars */}
-            <div className="flex items-center gap-2">
-              <div className="relative size-[50px] overflow-hidden rounded-full">
-                <Image
-                  src={agency.logo}
-                  alt={agency.name}
-                  fill
-                  className="object-cover"
-                  sizes="50px"
-                />
-              </div>
-              <span className="font-sans text-[20px] font-medium leading-[24px] tracking-[-0.6px] text-[#69686E]">
-                +
-              </span>
-              <div className="flex size-[50px] items-center justify-center rounded-full bg-[#060612]">
-                <span className="font-sans text-[16px] font-medium leading-[19px] tracking-[0.04px] text-white">
-                  You
+          {/* Right — booking card */}
+          <div className="agency-cta-card">
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, padding: 20, borderRadius: 16, backgroundColor: "#fff", border: "1px solid #eae8e6" }}>
+              {/* Avatars */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div className="relative" style={{ width: 50, height: 50, borderRadius: "50%", overflow: "hidden" }}>
+                  <Image
+                    src={agency.logo}
+                    alt={agency.name}
+                    fill
+                    className="object-cover"
+                    sizes="50px"
+                  />
+                </div>
+                <span style={{ fontSize: 20, fontWeight: 500, color: "#69686E" }}>
+                  +
                 </span>
+                <div style={{ width: 50, height: 50, borderRadius: "50%", backgroundColor: "#060612", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 16, fontWeight: 500, color: "#fff" }}>
+                    You
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Text */}
-            <div className="flex flex-col gap-1.5">
-              <h3 className="font-sans text-[22px] font-medium leading-[26px] tracking-[-0.66px] text-[#060612]">
-                Quick 15-minute call
-              </h3>
-              <p className="font-sans text-[16px] font-medium leading-[19px] tracking-[0.04px] text-[#69686E]">
-                Pick a time that works for you.
-              </p>
-            </div>
+              {/* Text */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <h3 style={{ fontSize: 22, fontWeight: 500, lineHeight: "26px", letterSpacing: "-0.66px", color: "#060612", margin: 0 }}>
+                  Quick 15-minute call
+                </h3>
+                <p style={{ fontSize: 16, fontWeight: 500, lineHeight: "19px", color: "#69686E", margin: 0 }}>
+                  Pick a time that works for you.
+                </p>
+              </div>
 
-            {/* CTA buttons */}
-            <div className="flex flex-col gap-2.5">
-              <button
-                type="button"
-                className="flex h-12 items-center justify-center rounded-[40px] bg-black text-[16px] font-medium leading-[19px] tracking-[0.04px] text-white transition-[transform,background] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:bg-neutral-800 active:scale-[0.96]"
-              >
-                Contact
-              </button>
-              <button
-                type="button"
-                className="flex h-12 items-center justify-center rounded-[40px] bg-white transition-[transform,background] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:bg-[#f0f0f0] active:scale-[0.96]"
-              >
-                <span className="font-sans text-[16px] font-medium leading-[19px] tracking-[0.04px] text-[#060612]">
-                  Invite to Workspace
-                </span>
-              </button>
+              {/* CTA buttons */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <button
+                  type="button"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 48, borderRadius: 40, backgroundColor: "#000", border: "none", cursor: "pointer" }}
+                >
+                  <span style={{ fontSize: 16, fontWeight: 500, color: "#fff" }}>
+                    Contact
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 48, borderRadius: 40, backgroundColor: "#fff", border: "1px solid #eae8e6", cursor: "pointer" }}
+                >
+                  <span style={{ fontSize: 16, fontWeight: 500, color: "#060612" }}>
+                    Invite to Workspace
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

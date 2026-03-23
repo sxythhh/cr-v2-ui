@@ -177,7 +177,7 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
                 className={cn(
                   "relative z-10 flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[10px] font-inter text-sm font-medium tracking-[-0.02em] transition-all",
                   data.chatPlatform === opt.value
-                    ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10 dark:text-white [&_svg_path]:!opacity-100"
+                    ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:text-white [&_svg_path]:!opacity-100"
                     : "text-page-text-subtle",
                 )}
               >

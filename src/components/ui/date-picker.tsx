@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ── Helpers ── */
@@ -16,28 +15,15 @@ const MONTH_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
-const RANGE_BG =
-  "radial-gradient(42.53% 86.44% at 50.57% 0%, var(--toggle-glow) 0%, var(--toggle-track) 100%)";
-
-/** Input trigger — default state */
-const INPUT_BG: React.CSSProperties = {
-  backgroundColor: "rgba(37, 37, 37, 0.04)",
-};
-
-/** Input trigger — active/selected state */
-const ACTIVE_BG: React.CSSProperties = {
-  backgroundColor: "rgba(37, 37, 37, 0.04)",
-};
-
-/** Selected day cell (inline required for Tailwind v4 button preflight) */
-const SELECTED_DAY: React.CSSProperties = {
-  backgroundImage: [
-    "radial-gradient(31.76% 50.52% at 64.86% 100.52%, var(--accent-pink) 0%, transparent 100%)",
-    "radial-gradient(31.58% 54.43% at 32.86% 102.32%, var(--accent-orange) 0%, transparent 100%)",
-  ].join(", "),
-  backgroundColor: "var(--foreground)",
-  color: "var(--background)",
-};
+function ChevronLeftIcon() {
+  return <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+function ChevronRightIcon() {
+  return <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+function CalendarIcon() {
+  return <svg width="12" height="13" viewBox="0 0 12 13" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V10.6667C12 11.7712 11.1046 12.6667 10 12.6667H2C0.895431 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0ZM1.33333 6V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H10C10.3682 11.3333 10.6667 11.0349 10.6667 10.6667V6H1.33333Z" fill="currentColor" fillOpacity="0.5" /></svg>;
+}
 
 interface DayCell {
   day: number;
@@ -202,30 +188,26 @@ function CalendarGrid({
   return (
     <div
       ref={ref}
-      className="absolute left-0 bottom-full mb-1 z-50 flex min-w-[336px] w-[336px] flex-col rounded-2xl overflow-hidden shadow-lg shadow-black/40"
-      style={{ backgroundColor: "#151515", border: "1px solid rgba(255, 255, 255, 0.15)" }}
+      className="absolute left-0 top-full mt-1 z-50 flex min-w-[336px] w-[336px] flex-col rounded-2xl overflow-hidden border border-border bg-card-bg shadow-lg shadow-black/10 dark:shadow-black/40"
     >
       {/* Month nav header */}
-      <div className="flex h-10 items-center justify-center gap-8 px-2.5" style={{ backgroundColor: "rgba(255, 255, 255, 0.08)" }}>
-
+      <div className="flex h-10 items-center justify-center gap-8 px-2.5 bg-foreground/[0.04]">
         <button
           type="button"
           onClick={goBack}
-          className="flex size-5 items-center justify-center rounded-full transition-colors"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }}
+          className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.10]"
         >
-          <ChevronLeft size={12} className="text-text-dim" />
+          <ChevronLeftIcon />
         </button>
-        <span className="flex-1 text-center text-sm font-medium leading-[120%] tracking-[-0.09px] text-text-dim whitespace-nowrap">
+        <span className="flex-1 text-center font-inter text-sm font-medium tracking-[-0.02em] text-page-text whitespace-nowrap">
           {MONTH_NAMES[viewMonth]} {viewYear}
         </span>
         <button
           type="button"
           onClick={goForward}
-          className="flex size-5 items-center justify-center rounded-full transition-colors"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }}
+          className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.10]"
         >
-          <ChevronRight size={12} className="text-text-dim" />
+          <ChevronRightIcon />
         </button>
       </div>
 
@@ -236,7 +218,7 @@ function CalendarGrid({
           {DAY_LABELS.map((label, i) => (
             <div
               key={i}
-              className="flex items-center justify-center text-[10px] font-medium leading-[120%] tracking-[-0.09px] text-text-dim"
+              className="flex items-center justify-center font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-muted"
             >
               {label}
             </div>
@@ -264,9 +246,8 @@ function CalendarGrid({
               <div key={wi} className="grid grid-cols-7 gap-2">
                 {hasRange && rangeStartIdx !== -1 && (
                   <div
-                    className="rounded-full self-center"
+                    className="rounded-full self-center bg-foreground/[0.06]"
                     style={{
-                      background: RANGE_BG,
                       height: 32,
                       gridRow: 1,
                       gridColumn: `${rangeStartIdx + 1} / ${rangeEndIdx + 2}`,
@@ -290,19 +271,26 @@ function CalendarGrid({
                       onClick={() => handleDayClick(cell.dateStr)}
                       onMouseEnter={() => setHovered(cell.dateStr)}
                       onMouseLeave={() => setHovered(null)}
+                      className={cn(
+                        "z-[1] flex size-8 items-center justify-center rounded-full font-inter text-sm font-medium tracking-[-0.02em] transition-colors place-self-center",
+                        isSelected
+                          ? "bg-[#252525] text-white dark:bg-white dark:text-[#151515]"
+                          : cell.isToday
+                            ? "ring-1 ring-foreground/20"
+                            : "",
+                        !isSelected && isHovered && !isInRange && "bg-foreground/[0.06]",
+                        !isSelected && !cell.isCurrentMonth
+                          ? "text-page-text-subtle/40"
+                          : !isSelected && cell.isWeekend
+                            ? "text-page-text-muted"
+                            : !isSelected
+                              ? "text-page-text"
+                              : "",
+                      )}
                       style={{
                         gridRow: 1,
                         gridColumn: i + 1,
-                        ...(isSelected ? SELECTED_DAY : cell.isToday ? { border: "1px solid #FFFFFF" } : isHovered && !isInRange ? { backgroundColor: "rgba(255, 255, 255, 0.08)" } : {}),
                       }}
-                      className={cn(
-                        "z-[1] flex size-8 items-center justify-center rounded-full text-sm font-medium leading-[120%] tracking-[-0.09px] transition-colors place-self-center",
-                        !isSelected && !cell.isCurrentMonth
-                          ? "text-text-faint"
-                          : cell.isWeekend
-                            ? "text-glass-text-secondary"
-                            : "text-glass-text",
-                      )}
                     >
                       {cell.day}
                     </button>
@@ -324,6 +312,8 @@ interface DateRangeInputsProps {
   endDate: string;
   onChangeStart: (value: string) => void;
   onChangeEnd: (value: string) => void;
+  disabled?: boolean;
+  endDisabled?: boolean;
 }
 
 function DateRangeInputs({
@@ -331,12 +321,12 @@ function DateRangeInputs({
   endDate,
   onChangeStart,
   onChangeEnd,
+  endDisabled,
 }: DateRangeInputsProps) {
   const [open, setOpen] = useState(false);
-  const [activeField, setActiveField] = useState<"start" | "end">("start");
 
   const openPicker = (field: "start" | "end") => {
-    setActiveField(field);
+    if (field === "end" && endDisabled) return;
     setOpen(true);
   };
 
@@ -344,24 +334,18 @@ function DateRangeInputs({
     <div className="relative">
       <div className="flex gap-3">
         {/* Start date */}
-        <div className="flex-1 min-w-[200px] flex flex-col gap-2">
-          <span className="text-xs leading-[120%] text-glass-text-secondary">
-            Start date
-          </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Start date</span>
           <button
             type="button"
             onClick={() => openPicker("start")}
-            style={startDate ? ACTIVE_BG : INPUT_BG}
-            className={cn(
-              "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
-              !startDate && "",
-            )}
+            className="flex h-10 w-full items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 transition-colors hover:bg-foreground/[0.06] text-page-text-muted"
           >
-            <Calendar size={16} className="shrink-0" />
+            <CalendarIcon />
             <span
               className={cn(
-                "flex-1 text-left text-sm leading-[120%] tracking-[-0.09px]",
-                startDate ? "text-glass-text" : "text-text-muted",
+                "flex-1 text-left font-inter text-sm tracking-[-0.02em]",
+                startDate ? "text-page-text" : "text-page-text-muted",
               )}
             >
               {startDate ? formatDisplay(startDate) : "Select date"}
@@ -370,33 +354,30 @@ function DateRangeInputs({
         </div>
 
         {/* End date */}
-        <div className="flex-1 min-w-[200px] flex flex-col gap-2">
-          <span className="text-xs leading-[120%] text-glass-text-secondary">
-            End date
-          </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">End date</span>
           <button
             type="button"
             onClick={() => openPicker("end")}
-            style={endDate ? ACTIVE_BG : INPUT_BG}
+            disabled={endDisabled}
             className={cn(
-              "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
-              !endDate && "",
+              "flex h-10 w-full items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 transition-colors text-page-text-muted",
+              endDisabled ? "opacity-40 cursor-not-allowed" : "hover:bg-foreground/[0.06]",
             )}
           >
-            <Calendar size={16} className="shrink-0" />
+            <CalendarIcon />
             <span
               className={cn(
-                "flex-1 text-left text-sm leading-[120%] tracking-[-0.09px]",
-                endDate ? "text-glass-text" : "text-text-muted",
+                "flex-1 text-left font-inter text-sm tracking-[-0.02em]",
+                endDate && !endDisabled ? "text-page-text" : "text-page-text-muted",
               )}
             >
-              {endDate ? formatDisplay(endDate) : "Select date"}
+              {endDate && !endDisabled ? formatDisplay(endDate) : "Select date"}
             </span>
           </button>
         </div>
       </div>
 
-      {/* Calendar popup — anchored to the outer container, not individual inputs */}
       {open && (
         <CalendarGrid
           startDate={startDate}
@@ -432,17 +413,13 @@ function DatePicker({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        style={value ? ACTIVE_BG : INPUT_BG}
-        className={cn(
-          "flex h-10 w-full items-center gap-2 rounded-[14px] px-3.5 transition-colors",
-          !value && "",
-        )}
+        className="flex h-10 w-full items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 transition-colors hover:bg-foreground/[0.06] text-page-text-muted"
       >
-        <Calendar size={16} className="shrink-0" />
+        <CalendarIcon />
         <span
           className={cn(
-            "flex-1 text-left text-sm leading-[120%] tracking-[-0.09px]",
-            value ? "text-glass-text" : "text-text-muted",
+            "flex-1 text-left font-inter text-sm tracking-[-0.02em]",
+            value ? "text-page-text" : "text-page-text-muted",
           )}
         >
           {value ? formatDisplay(value) : placeholder}

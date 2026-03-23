@@ -153,7 +153,7 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
     >
       <div
         className={cn(
-          "size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform",
+          "size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform",
           on ? "translate-x-5" : "translate-x-0",
         )}
       />
@@ -233,7 +233,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
             title="White label"
             description="Run as the brand. Creators only see the brand name."
             badge={
-              <span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">
+              <span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">
                 Recommended
               </span>
             }
@@ -336,7 +336,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
                   className={cn(
                     "flex h-8 flex-1 items-center justify-center rounded-[10px] font-inter text-sm font-medium tracking-[-0.02em] transition-all capitalize",
                     data.payoutFrequency === freq
-                      ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10"
+                      ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                       : "text-page-text-subtle",
                   )}
                 >

@@ -14,7 +14,7 @@ export function MainNav({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   // Routes that bypass the sidebar entirely
-  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/help") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/support")) {
+  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/articles")) {
     return <>{children}</>;
   }
 
@@ -59,8 +59,8 @@ export function MainNav({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <MobileBottomNav />
 
-      {/* Floating onboarding — hide on campaign detail pages */}
-      {!pathname?.match(/^\/campaigns\/[^/]+/) && !pathname?.startsWith("/create-campaign") && <OnboardingButton />}
+      {/* Floating onboarding — only show on home page */}
+      {pathname === "/" && <OnboardingButton />}
     </div>
   );
 }

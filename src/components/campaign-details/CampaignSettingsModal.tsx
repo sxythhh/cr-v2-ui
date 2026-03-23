@@ -24,7 +24,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
     >
       <div
         className={cn(
-          "size-4 rounded-full bg-white transition-transform dark:bg-[#111111]",
+          "size-4 rounded-full bg-white transition-transform dark:bg-[#161616]",
           on ? "translate-x-5" : "translate-x-0",
         )}
       />
@@ -80,7 +80,7 @@ function SegmentedControl({
           className={cn(
             "relative z-10 h-7 cursor-pointer rounded-lg px-3 text-[12px] font-medium tracking-[-0.02em] transition-colors",
             value === opt
-              ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.10)] dark:text-[#e5e5e5]"
+              ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.10)] dark:text-[#E0E0E0]"
               : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.5)]",
           )}
         >
@@ -108,7 +108,7 @@ function InputField({
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-8 w-16 rounded-[10px] bg-[rgba(37,37,37,0.04)] px-3 text-[12px] text-[#252525] outline-none dark:bg-[rgba(255,255,255,0.04)] dark:text-[#e5e5e5]"
+        className="h-8 w-16 rounded-[10px] bg-[rgba(37,37,37,0.04)] px-3 text-[12px] text-[#252525] outline-none dark:bg-[rgba(255,255,255,0.04)] dark:text-[#E0E0E0]"
       />
       <span className="text-[12px] text-page-text-muted">
         {suffix}
@@ -225,13 +225,13 @@ function ApplicationFormSection() {
         Application Form
       </span>
 
-      <div className="rounded-2xl border border-border bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+      <div className="rounded-2xl border border-border p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none">
         {/* Existing fields */}
         <div className="flex flex-col gap-2">
           {fields.map((field) => (
             <div
               key={field.id}
-              className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg p-4 transition-colors hover:bg-foreground/[0.02]"
+              className="flex items-center gap-3 rounded-2xl border border-border p-4 transition-colors hover:bg-foreground/[0.02] dark:border-card-inner-border"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <span className="truncate text-[14px] font-medium tracking-[-0.02em] text-page-text">
@@ -245,7 +245,7 @@ function ApplicationFormSection() {
                 className={cn(
                   "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium",
                   field.required
-                    ? "bg-[rgba(0,153,77,0.08)] text-[#00994D]"
+                    ? "bg-[rgba(0,153,77,0.08)] text-[#00994D] dark:text-[#34D399]"
                     : "bg-[rgba(229,113,0,0.08)] text-[#E57100]",
                 )}
               >
@@ -293,7 +293,7 @@ function ApplicationFormSection() {
                   setNewTitle(e.target.value.slice(0, 50))
                 }
                 placeholder="Title of your question/requirement"
-                className="h-8 w-full rounded-[10px] bg-[rgba(37,37,37,0.04)] px-3 text-[12px] text-[#252525] placeholder:text-[rgba(37,37,37,0.35)] outline-none dark:bg-[rgba(255,255,255,0.04)] dark:text-[#e5e5e5] dark:placeholder:text-[rgba(255,255,255,0.3)]"
+                className="h-8 w-full rounded-[10px] bg-[rgba(37,37,37,0.04)] px-3 text-[12px] text-[#252525] placeholder:text-[rgba(37,37,37,0.35)] outline-none dark:bg-[rgba(255,255,255,0.04)] dark:text-[#E0E0E0] dark:placeholder:text-[rgba(255,255,255,0.3)]"
               />
               <span className="self-end text-[11px] text-[rgba(37,37,37,0.4)] dark:text-[rgba(255,255,255,0.35)]">
                 {newTitle.length}/50
@@ -378,12 +378,12 @@ export function CampaignSettingsModal({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50" />
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60" />
         <DialogPrimitive.Popup
           className={cn(
             "fixed left-1/2 top-1/2 z-50 flex w-[752px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
-            "bg-white dark:bg-[#1a1a1a] shadow-xl",
+            "bg-white dark:bg-page-bg shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
           )}
         >
@@ -590,7 +590,7 @@ export function CampaignSettingsModal({
                 extra={
                   <button
                     type="button"
-                    className="mt-1 inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-full bg-[rgba(37,37,37,0.06)] px-2.5 text-[11px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]"
+                    className="mt-1 inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-full bg-[rgba(37,37,37,0.06)] px-2.5 text-[11px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
                   >
                     Manage
                     <svg

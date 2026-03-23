@@ -15,9 +15,9 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
       {/* Header */}
       <div className="flex flex-col items-center gap-4 px-5 pt-5">
         {/* Icon */}
-        <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-white/10 dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1)]">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M8.25 17H3C1.89543 17 1 16.1046 1 15L1 3C1 1.89543 1.89543 1 3 1L8.25 1M17 8.99999L5.75 8.99999M17 8.99999L12.5 13.5M17 8.99999L12.5 4.5" stroke="#252525" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+          <svg width="24" height="24" viewBox="0 0 18 18" fill="none">
+            <path d="M8.25 17H3C1.89543 17 1 16.1046 1 15L1 3C1 1.89543 1.89543 1 3 1L8.25 1M17 8.99999L5.75 8.99999M17 8.99999L12.5 13.5M17 8.99999L12.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" />
           </svg>
         </div>
 
@@ -49,7 +49,7 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
         <button
           type="button"
           onClick={onDiscard}
-          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.10)] active:scale-[0.98]"
+          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)] active:scale-[0.98]"
         >
           Discard and leave
         </button>
@@ -74,10 +74,10 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
 
   const isLastStep = stepIndex === steps.length - 1;
 
-  if (isRestoring) return <div className="h-full bg-white dark:bg-[#111111]" />;
+  if (isRestoring) return <div className="h-full bg-white dark:bg-[#161616]" />;
 
   return (
-    <div className={cn("flex h-full flex-col bg-white dark:bg-[#111111] transition-opacity duration-250", mounted ? "opacity-100" : "opacity-0")}>
+    <div className={cn("flex h-full flex-col bg-white dark:bg-[#161616] transition-opacity duration-250", mounted ? "opacity-100" : "opacity-0")}>
       {/* Top bar */}
       <div className="flex items-center h-14 px-5 border-b border-border">
         <button
@@ -88,6 +88,33 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
           <IconArrowLeft size={16} strokeWidth={1.5} className="text-page-text" />
           <span>{editMode ? "Back to campaign" : "Back to model selection"}</span>
         </button>
+      </div>
+
+      {/* Mobile step nav */}
+      <div className="flex md:hidden px-5 py-1">
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-xl bg-accent p-0.5">
+          {steps.map((step, i) => {
+            const isActive = i === stepIndex;
+            const isClickable = i <= stepIndex;
+            return (
+              <button
+                key={step}
+                type="button"
+                onClick={() => isClickable && handleStepClick(i)}
+                disabled={!isClickable}
+                className={cn(
+                  "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-[10px] px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+                  isActive
+                    ? "bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                    : "text-page-text-subtle",
+                  !isClickable && "cursor-default",
+                )}
+              >
+                {stepLabels[step]}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Body */}
@@ -140,8 +167,8 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
       {/* Top up and publish modal */}
       <Modal open={showTopUpModal} onClose={() => setShowTopUpModal(false)} size="sm" showClose={true}>
         <div className="flex flex-col items-center gap-4 px-5 pt-5">
-          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-white/10 dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1)]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#252525" strokeWidth="2" strokeLinecap="round" /></svg>
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-page-text" /></svg>
           </div>
           <div className="flex flex-col items-center gap-2">
             <span className="font-inter text-lg font-medium tracking-[-0.02em] text-page-text">Top up and publish</span>

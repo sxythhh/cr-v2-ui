@@ -28,7 +28,7 @@ const FILTER_TABS = [
 
 function StatCard({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) {
   return (
-    <div className="flex-1 flex flex-col gap-3 bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-4">
+    <div className="flex-1 flex flex-col gap-3 bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-4">
       <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">{label}</span>
       <span className={cn("text-[24px] font-medium tracking-[-0.02em]", valueColor || "text-page-text")}>{value}</span>
     </div>
@@ -54,7 +54,7 @@ function ClockIcon() {
 function StatusPill({ status }: { status: "approved" | "pending" }) {
   if (status === "approved") {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-medium tracking-[-0.02em] bg-[rgba(0,153,77,0.08)] text-[#00994D]">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-medium tracking-[-0.02em] bg-[rgba(0,153,77,0.08)] text-[#00994D] dark:text-[#34D399]">
         <CheckCircleIcon />
         Approved
       </span>
@@ -89,7 +89,7 @@ export default function SubmissionsTab() {
       <div className="flex gap-2">
         <StatCard label="Total submissions" value="98" />
         <StatCard label="Pending review" value="9" />
-        <StatCard label="Approved" value="89" valueColor="text-[#00994D]" />
+        <StatCard label="Approved" value="89" valueColor="text-[#00994D] dark:text-[#34D399]" />
         <StatCard label="Total views" value="2.4M" />
       </div>
 
@@ -97,7 +97,7 @@ export default function SubmissionsTab() {
       <div className="flex items-center justify-between">
         <div
           ref={filterContainerRef}
-          className="relative inline-flex items-center p-0.5 gap-0.5 bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)] rounded-xl"
+          className="relative inline-flex items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}
@@ -106,7 +106,7 @@ export default function SubmissionsTab() {
             {filterActiveRect && (
               <motion.div
                 key={filterSessionRef.current}
-                className="pointer-events-none absolute rounded-[10px] bg-foreground/[0.04]"
+                className="pointer-events-none absolute rounded-[10px] bg-accent dark:bg-[#1f1f1f]"
                 initial={{ opacity: 0, ...filterActiveRect }}
                 animate={{ opacity: 1, ...filterActiveRect }}
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -124,8 +124,8 @@ export default function SubmissionsTab() {
                 className={cn(
                   "relative z-10 flex items-center justify-center gap-1.5 h-8 px-4 text-sm font-medium tracking-[-0.02em] rounded-[10px] transition-all",
                   isActive
-                    ? "bg-white dark:bg-[#2a2a2a] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] text-page-text"
-                    : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]"
+                    ? "bg-white dark:bg-[#222222] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] text-page-text"
+                    : "text-page-text-subtle"
                 )}
                 type="button"
               >
@@ -151,7 +151,7 @@ export default function SubmissionsTab() {
       </div>
 
       {/* Submissions table */}
-      <div className="relative overflow-hidden bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl">
+      <div className="relative overflow-hidden bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl">
         <div className="p-5 pb-0">
           <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">Submissions</span>
         </div>

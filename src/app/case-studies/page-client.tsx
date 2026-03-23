@@ -182,7 +182,7 @@ function InsightsIcon({ active }: { active?: boolean }) {
 
 function FeatureCard({ text }: { text: string }) {
   return (
-    <div className="flex w-[160px] flex-col gap-2 rounded-xl bg-white p-4 shadow-[0px_1px_1px_rgba(0,0,0,0.15),0px_3px_3px_rgba(0,0,0,0.05)] dark:bg-[#191919] dark:shadow-[0px_1px_1px_rgba(0,0,0,0.4),0px_3px_3px_rgba(0,0,0,0.2)]">
+    <div className="flex w-[160px] flex-col gap-2 rounded-xl bg-white p-4 shadow-[0px_1px_1px_rgba(0,0,0,0.15),0px_3px_3px_rgba(0,0,0,0.05)] dark:bg-card-bg dark:shadow-[0px_1px_1px_rgba(0,0,0,0.4),0px_3px_3px_rgba(0,0,0,0.2)]">
       <OrangeIconBadge />
       <p className="font-inter text-[15.1px] leading-[1.4] text-[#4D4D4D] dark:text-[rgba(255,255,255,0.6)]">
         {text}
@@ -606,7 +606,7 @@ function buildSideColumn(centerLen: number): (string | null)[] {
 
 function TestimonialTicker() {
   const { darkMode: dk } = useTheme();
-  const gridBg = dk ? "#191919" : "#F0F0F0";
+  const gridBg = dk ? "#0a0a0a" : "#F0F0F0";
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const len = TESTIMONIALS.length;
@@ -709,7 +709,7 @@ function TestimonialTicker() {
           {/* Quote + author — subtle blur transition */}
           <div className="flex flex-col gap-3">
             <div style={{ transition: "filter 0.35s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.35s cubic-bezier(0.33, 1, 0.68, 1)", filter: isShifting ? "blur(3px)" : "blur(0px)", opacity: isShifting ? 0.5 : 1 }}>
-              <p className="max-w-[390px] font-inter text-[22px] font-medium leading-[29px] tracking-[-0.44px] text-[#4A4A4A] dark:text-[#e5e5e5]">
+              <p className="max-w-[390px] font-inter text-[22px] font-medium leading-[29px] tracking-[-0.44px] text-[#4A4A4A] dark:text-[#E0E0E0]">
                 {t.quote}
               </p>
             </div>
@@ -1061,14 +1061,14 @@ function CaseStudyCard({
       </p>
 
       {/* Headline */}
-      <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#e5e5e5] sm:text-[29px] sm:leading-[38px]">
+      <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#E0E0E0] sm:text-[29px] sm:leading-[38px]">
         {study.headline}
       </h3>
 
       {/* Read case study link */}
       <a
         href={study.href ?? "#"}
-        className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#e5e5e5] transition-opacity hover:opacity-70"
+        className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#E0E0E0] transition-opacity hover:opacity-70"
       >
         Read case study
         <CaseStudyArrow />
@@ -1089,7 +1089,7 @@ function CaseStudyCard({
       />
 
       {/* Screenshot card */}
-      <div className="relative mx-4 w-full max-w-[560px] overflow-hidden rounded-xl border border-[#D3D8DF] bg-white p-2 shadow-[0px_6px_20px_-2px_rgba(28,40,64,0.08),0px_2px_6px_rgba(28,40,64,0.06)] dark:border-white/[0.06] dark:bg-[#191919]">
+      <div className="relative mx-4 w-full max-w-[560px] overflow-hidden rounded-xl border border-[#D3D8DF] bg-white p-2 shadow-[0px_6px_20px_-2px_rgba(28,40,64,0.08),0px_2px_6px_rgba(28,40,64,0.06)] dark:border-white/[0.06] dark:bg-card-bg">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={study.image}
@@ -1101,7 +1101,7 @@ function CaseStudyCard({
   );
 
   return (
-    <div className="relative flex min-h-[460px] flex-col bg-white dark:bg-[#111111] lg:flex-row">
+    <div className="relative flex min-h-[460px] flex-col bg-white dark:bg-[#161616] lg:flex-row">
       {/* Center dashed divider */}
       <div className="pointer-events-none hidden lg:block">
         <DashedDividerV />
@@ -1125,7 +1125,7 @@ function CaseStudyPairRow({ left, right }: { left: CaseStudy; right: CaseStudy }
   return (
     <div className="relative flex flex-col bg-[#E4E7EC] dark:bg-white/[0.06] lg:flex-row lg:gap-px lg:px-px">
       {/* Left card */}
-      <div className="relative flex-1 bg-white dark:bg-[#111111]">
+      <div className="relative flex-1 bg-white dark:bg-[#161616]">
         <div className="flex h-full flex-col px-8 py-10 sm:px-14 sm:py-16">
           {/* Logo */}
           <div className="mb-12 flex h-8 items-center">
@@ -1144,14 +1144,14 @@ function CaseStudyPairRow({ left, right }: { left: CaseStudy; right: CaseStudy }
           </p>
 
           {/* Headline */}
-          <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#e5e5e5] sm:text-[29px] sm:leading-[38px]">
+          <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#E0E0E0] sm:text-[29px] sm:leading-[38px]">
             {left.headline}
           </h3>
 
           {/* Read case study link */}
           <a
             href={left.href ?? "#"}
-            className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#e5e5e5] transition-opacity hover:opacity-70"
+            className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#E0E0E0] transition-opacity hover:opacity-70"
           >
             Read case study
             <CaseStudyArrow />
@@ -1160,7 +1160,7 @@ function CaseStudyPairRow({ left, right }: { left: CaseStudy; right: CaseStudy }
       </div>
 
       {/* Right card */}
-      <div className="relative flex-1 bg-white dark:bg-[#111111]">
+      <div className="relative flex-1 bg-white dark:bg-[#161616]">
         <div className="flex h-full flex-col px-8 py-10 sm:px-14 sm:py-16">
           {/* Logo */}
           <div className="mb-12 flex h-8 items-center">
@@ -1179,14 +1179,14 @@ function CaseStudyPairRow({ left, right }: { left: CaseStudy; right: CaseStudy }
           </p>
 
           {/* Headline */}
-          <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#e5e5e5] sm:text-[29px] sm:leading-[38px]">
+          <h3 className="mb-5 max-w-[448px] font-inter text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-[#1C1D1F] dark:text-[#E0E0E0] sm:text-[29px] sm:leading-[38px]">
             {right.headline}
           </h3>
 
           {/* Read case study link */}
           <a
             href={right.href ?? "#"}
-            className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#e5e5e5] transition-opacity hover:opacity-70"
+            className="group flex items-center gap-1.5 font-inter text-[16px] font-medium leading-[22px] tracking-[-0.16px] text-[#1C1D1F] dark:text-[#E0E0E0] transition-opacity hover:opacity-70"
           >
             Read case study
             <CaseStudyArrow />
@@ -1358,10 +1358,10 @@ function TypewriterSection() {
   return (
     <section
       ref={sectionRef}
-      className="flex w-full flex-col items-center justify-center bg-[#0a0a0a] px-8 py-[140px]"
+      className="flex w-full flex-col items-center justify-center bg-white px-8 py-[140px] dark:bg-white"
     >
       <div className="flex max-w-[800px] flex-col items-center gap-8">
-        <div className="text-center font-inter text-[32px] font-medium leading-[56px] tracking-[-2.2px] sm:text-[40px]">
+        <div className="text-center font-inter text-[32px] font-medium leading-[56px] tracking-[-2.2px] text-[#1A1A1A] sm:text-[40px]">
           {tokenLines.map((tokens, li) => (
             <div key={li}>
               {tokens.map((token, ti) => {
@@ -1440,7 +1440,7 @@ function TypewriterSection() {
 
         <a
           href="#"
-          className="mt-4 inline-flex items-center justify-center rounded-[10px] bg-[#EFEEEC] px-[18px] py-[10px] font-inter text-[16px] font-semibold leading-[26px] tracking-[-0.64px] text-[#000000]"
+          className="mt-4 inline-flex items-center justify-center rounded-[10px] bg-[#1A1A1A] px-[18px] py-[10px] font-inter text-[16px] font-semibold leading-[26px] tracking-[-0.64px] text-white"
           style={{
             opacity: btnT,
             transform: `translateY(${(1 - btnT) * 8}px)`,
@@ -1464,7 +1464,7 @@ export function CaseStudiesPageClient() {
 
       {/* Grid Carousel Testimonial in gray container */}
       <section className="w-full px-4 py-[80px] sm:px-6">
-        <div className="relative mx-auto max-w-[1140px] overflow-visible bg-[#F0F0F0] dark:bg-[#191919]">
+        <div className="relative mx-auto max-w-[1140px] overflow-visible bg-[#F0F0F0] dark:bg-[#0a0a0a]">
           <DecorativeGrid />
           <div className="relative z-0 overflow-hidden">
             <TestimonialTicker />

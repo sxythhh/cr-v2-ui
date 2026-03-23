@@ -5,32 +5,30 @@ import { cn } from "@/lib/utils";
 import type { DetailsData } from "@/types/campaign-flow.types";
 import { ThumbnailUpload } from "../ThumbnailUpload";
 import { RichTextEditor } from "../RichTextEditor";
+import { DateRangeInputs } from "@/components/ui/date-picker";
 
 // ── Icons ──────────────────────────────────────────────────────────
 
-function BoldIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2.667h5.333a2.667 2.667 0 0 1 0 5.333H4V2.667ZM4 8h6a2.667 2.667 0 0 1 0 5.333H4V8Z" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-}
 function ItalicIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.667 2.667H6.667M9.333 13.333H5.333M10 2.667L6 13.333" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.66659 2.66797L9.66659 2.66797M12.6666 2.66797L9.66659 2.66797M9.66659 2.66797L6.33325 13.3346M6.33325 13.3346H3.33325M6.33325 13.3346L9.33325 13.3346" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+function BoldIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.33341 6.0013H0.666748M5.33341 6.0013C6.80617 6.0013 8.00008 4.80739 8.00008 3.33464C8.00008 1.86188 6.80617 0.667969 5.33341 0.667969H2.00008C1.2637 0.667969 0.666748 1.26492 0.666748 2.0013V6.0013M5.33341 6.0013H6.00008C7.47284 6.0013 8.66675 7.19521 8.66675 8.66797C8.66675 10.1407 7.47284 11.3346 6.00008 11.3346H2.00008C1.2637 11.3346 0.666748 10.7377 0.666748 10.0013V6.0013" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="square" strokeLinejoin="round" /></svg>;
 }
 function UnderlineIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2.667v4a4 4 0 0 0 8 0v-4M3.333 13.333h9.334" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 14.0013H12M4 2.66797V8.0013C4 10.2104 5.79086 12.0013 8 12.0013C10.2091 12.0013 12 10.2104 12 8.0013V2.66797" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" /></svg>;
 }
 function LinkChainIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.667 8.667a3.333 3.333 0 0 0 4.994.36l2-2a3.334 3.334 0 0 0-4.714-4.714l-1.147 1.14M9.333 7.333a3.333 3.333 0 0 0-4.994-.36l-2 2a3.334 3.334 0 0 0 4.714 4.714l1.14-1.14" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.66667 12.665L6.55229 12.7793C5.51089 13.8207 3.82245 13.8207 2.78105 12.7793L2.55229 12.5506C1.51089 11.5092 1.51089 9.82074 2.55229 8.77934L4.78105 6.55058C5.82245 5.50918 7.51089 5.50918 8.55229 6.55058L8.78105 6.77934C9.2168 7.21509 9.47022 7.76411 9.54131 8.33162" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" /><path d="M6.45874 8.33423C6.52983 8.90174 6.78325 9.45077 7.219 9.88652L7.44776 10.1153C8.48916 11.1567 10.1776 11.1567 11.219 10.1153L13.4478 7.88652C14.4892 6.84512 14.4892 5.15668 13.4478 4.11528L13.219 3.88652C12.1776 2.84512 10.4892 2.84512 9.44776 3.88652L9.33341 4.0009" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 function OrderedListIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.667 3h6.666M6.667 8h6.666M6.667 13h6.666M2.667 3h.667v2M2.667 7.333h1.666L2.667 9.333h2M2.667 12.333v1.334h1.666v-1.334h-1.666v-1h1.666" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8.00008 11.3333H13.3334M8.00008 4.66667H13.3334M4.00008 6.33333V3L2.66675 3.66667M2.83341 10C2.83341 10 3.26675 9.66667 3.74076 9.66667C4.25217 9.66667 4.66675 10.0812 4.66675 10.5927C4.66675 11.7923 2.66675 12 2.66675 13H4.83341" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 function BulletListIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.667 3.333h6.666M6.667 8h6.666M6.667 12.667h6.666" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /><circle cx="3.333" cy="3.333" r="0.667" fill="currentColor" /><circle cx="3.333" cy="8" r="0.667" fill="currentColor" /><circle cx="3.333" cy="12.667" r="0.667" fill="currentColor" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8.66675 11.332H13.3334M8.66675 4.66536H13.3334M5.33341 4.66536C5.33341 5.40174 4.73646 5.9987 4.00008 5.9987C3.2637 5.9987 2.66675 5.40174 2.66675 4.66536C2.66675 3.92898 3.2637 3.33203 4.00008 3.33203C4.73646 3.33203 5.33341 3.92898 5.33341 4.66536ZM5.33341 11.332C5.33341 12.0684 4.73646 12.6654 4.00008 12.6654C3.2637 12.6654 2.66675 12.0684 2.66675 11.332C2.66675 10.5957 3.2637 9.9987 4.00008 9.9987C4.73646 9.9987 5.33341 10.5957 5.33341 11.332Z" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" /></svg>;
 }
 function AlignLeftIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.667 3.333h10.666M2.667 6.667h6.666M2.667 10h10.666M2.667 13.333h6.666" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-}
-function CalendarIcon() {
-  return <svg width="12" height="13" viewBox="0 0 12 13" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V10.6667C12 11.7712 11.1046 12.6667 10 12.6667H2C0.895431 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0ZM1.33333 6V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H10C10.3682 11.3333 10.6667 11.0349 10.6667 10.6667V6H1.33333Z" fill="currentColor" fillOpacity="0.5" /></svg>;
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3.33203V12.6654M6 3.9987H14M6 7.9987H14M6 11.9987H10.6667" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 function EyeIcon() {
   return <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8.95528 2.13731e-10C12.2484 -2.31454e-05 15.4474 1.8936 17.5859 5.48594C18.0188 6.2132 18.0188 7.12005 17.5859 7.84731C15.4474 11.4396 12.2484 13.3333 8.95529 13.3333C5.66219 13.3334 2.46314 11.4397 0.324692 7.84739C-0.108231 7.12014 -0.10823 6.21328 0.324691 5.48603C2.46314 1.89369 5.66218 2.31475e-05 8.95528 2.13731e-10ZM6.03861 6.66667C6.03861 5.05584 7.34445 3.75 8.95528 3.75C10.5661 3.75 11.8719 5.05584 11.8719 6.66667C11.8719 8.2775 10.5661 9.58333 8.95528 9.58333C7.34445 9.58333 6.03861 8.2775 6.03861 6.66667Z" fill="currentColor" /></svg>;
@@ -61,7 +59,7 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }
@@ -213,41 +211,19 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
         <SectionLabel title="Campaign duration" description="Set when your campaign starts and ends" />
         <Card>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3">
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Start date</span>
-                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
-                  <CalendarIcon />
-                  <input
-                    type="text"
-                    value={data.startDate}
-                    onChange={(e) => update({ startDate: e.target.value })}
-                    placeholder="26 Jan, 2026"
-                    className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
-                  />
-                </div>
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">End date</span>
-                <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
-                  <CalendarIcon />
-                  <input
-                    type="text"
-                    value={data.endDate}
-                    onChange={(e) => update({ endDate: e.target.value })}
-                    placeholder="31 Jan, 2026"
-                    disabled={noEndDate}
-                    className={cn("flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted", noEndDate && "opacity-40")}
-                  />
-                </div>
-              </div>
-            </div>
-            <label className="flex cursor-pointer items-center gap-2">
+            <DateRangeInputs
+              startDate={data.startDate}
+              endDate={data.endDate}
+              onChangeStart={(v) => update({ startDate: v })}
+              onChangeEnd={(v) => update({ endDate: v })}
+              endDisabled={noEndDate}
+            />
+            <button type="button" onClick={() => setNoEndDate((v) => !v)} className="flex cursor-pointer items-center gap-2">
               <div className={cn("flex size-4 items-center justify-center rounded-full border transition-colors", noEndDate ? "border-[#FF9025] bg-[#FF9025]" : "border-foreground/[0.12] bg-card-bg shadow-[0px_0.46px_0.91px_rgba(0,0,0,0.03)]")}>
                 {noEndDate && <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.25 5.75L6.5 2.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
               </div>
               <span className="font-inter text-sm tracking-[-0.02em] text-page-text">No end date</span>
-            </label>
+            </button>
           </div>
         </Card>
       </div>

@@ -180,6 +180,7 @@ function DropdownPanel({
   onRemove,
   onClose,
   searchPlaceholder,
+  hideSearch,
 }: {
   isOpen: boolean;
   filters: Filter[];
@@ -188,6 +189,7 @@ function DropdownPanel({
   onRemove: (key: string, value: string) => void;
   onClose: () => void;
   searchPlaceholder?: string;
+  hideSearch?: boolean;
 }) {
   const listContainer = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
@@ -255,29 +257,31 @@ function DropdownPanel({
 
   return (
     <Command loop shouldFilter={!selectedFilter || true}>
-      <div className="flex items-center overflow-hidden rounded-t-2xl border-b border-border">
-        <Command.Input
-          placeholder={placeholder}
-          value={search}
-          onValueChange={setSearch}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              if (selectedFilterKey && !isSingleFilterMode) {
-                e.preventDefault();
-                e.stopPropagation();
-                reset();
-              } else {
-                onClose();
+      {!hideSearch && (
+        <div className="flex items-center overflow-hidden rounded-t-2xl border-b border-border">
+          <Command.Input
+            placeholder={placeholder}
+            value={search}
+            onValueChange={setSearch}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                if (selectedFilterKey && !isSingleFilterMode) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  reset();
+                } else {
+                  onClose();
+                }
               }
-            }
-            if (e.key === "Backspace" && !search && selectedFilterKey && !isSingleFilterMode) {
-              reset();
-            }
-          }}
-          className="grow border-0 bg-transparent py-3 pl-4 pr-2 font-inter text-sm text-page-text outline-none placeholder:text-page-text-muted focus:ring-0"
-          autoCapitalize="none"
-        />
-      </div>
+              if (e.key === "Backspace" && !search && selectedFilterKey && !isSingleFilterMode) {
+                reset();
+              }
+            }}
+            className="grow border-0 bg-transparent py-3 pl-4 pr-2 font-inter text-sm text-page-text outline-none placeholder:text-page-text-muted focus:ring-0"
+            autoCapitalize="none"
+          />
+        </div>
+      )}
 
       <FilterScroll ref={listContainer}>
         <Command.List
@@ -349,6 +353,8 @@ interface FilterSelectProps {
   placement?: Placement;
   /** Search input placeholder */
   searchPlaceholder?: string;
+  /** Hide the search input (useful for short preset lists) */
+  hideSearch?: boolean;
 }
 
 export function FilterSelect({
@@ -360,6 +366,7 @@ export function FilterSelect({
   className,
   placement = "bottom-start",
   searchPlaceholder,
+  hideSearch,
 }: FilterSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -402,7 +409,7 @@ export function FilterSelect({
         className={cn(
           "inline-flex w-fit rounded-full transition-shadow",
           "group",
-          isOpen && "ring-2 ring-foreground/10 dark:ring-white/[0.15]",
+          isOpen && "",
           className,
         )}
         data-open={isOpen || undefined}
@@ -434,6 +441,7 @@ export function FilterSelect({
                   onRemove={onRemove}
                   onClose={() => setIsOpen(false)}
                   searchPlaceholder={searchPlaceholder}
+                  hideSearch={hideSearch}
                 />
               </motion.div>
             </div>

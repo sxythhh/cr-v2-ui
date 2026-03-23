@@ -469,35 +469,217 @@ const BadgeComponents = [
   HexCrestBadge,
 ];
 
+/* ── Locked Badge Card (Figma neumorphic style) ── */
+function LockedBadgeCard({
+  badge,
+  progress,
+  locked,
+}: {
+  badge: React.ReactNode;
+  progress: number;
+  locked: boolean;
+}) {
+  const circumference = Math.PI * 46; // radius ~23
+  const dashOffset = circumference * (1 - progress / 100);
+
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      style={{
+        width: 144,
+        height: 144,
+        padding: 4,
+        background: "radial-gradient(ellipse at 10% -69%, #E9E6E3 0%, #EDEDED 60%, #F4F4F4 100%)",
+        boxShadow: "inset 0px 8px 9px -12.5px rgba(37,37,37,0.08), inset -5px 5px 10px -9px rgba(37,37,37,0.12), inset 5px 5px 10px -9px rgba(37,37,37,0.16), inset 0px -2px 4px -1px rgba(255,255,255,0.8)",
+        borderRadius: 30,
+      }}
+    >
+      {/* Inner card */}
+      <div
+        className="relative flex items-center justify-center"
+        style={{
+          width: 136,
+          height: 136,
+          background: "linear-gradient(180deg, #FFFFFF -10%, rgba(255,255,255,0.01) 69%), #EAE8E6",
+          boxShadow: "0px 14.4px 5.4px rgba(0,0,0,0.01), 0px 8.1px 4.5px rgba(0,0,0,0.04), 0px 3.6px 3.6px rgba(0,0,0,0.07), 0px 0.9px 1.8px rgba(0,0,0,0.08), inset 0px 1.8px 0px #FFFFFF, inset 0px -1.8px 0px rgba(255,255,255,0.7)",
+          borderRadius: 30,
+        }}
+      >
+        {/* Badge */}
+        <div style={{ opacity: locked ? 0.4 : 1, filter: locked ? "grayscale(0.8)" : "none" }}>
+          {badge}
+        </div>
+
+        {/* Circular progress ring */}
+        <svg
+          className="pointer-events-none absolute"
+          width={53}
+          height={53}
+          viewBox="0 0 53 53"
+          style={{ top: "calc(50% - 34.5px)", left: "calc(50% - 26.5px)" }}
+        >
+          {/* Track */}
+          <circle cx="26.5" cy="26.5" r="23" fill="none" stroke="#BAB9B9" strokeWidth="3.5" />
+          {/* Progress */}
+          <circle
+            cx="26.5" cy="26.5" r="23" fill="none"
+            stroke="#594FEE" strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+          />
+          {/* Inner white fill */}
+          <circle cx="26.5" cy="26.5" r="19.5" fill="white" />
+        </svg>
+
+        {/* Lock icon (centered on ring) */}
+        {locked && (
+          <svg
+            className="pointer-events-none absolute"
+            width={21}
+            height={22}
+            viewBox="0 0 21 22"
+            style={{ top: "calc(50% - 19px)", left: "calc(50% - 10.5px)" }}
+          >
+            <rect x="2" y="9" width="17" height="13" rx="3" fill="#BAB9B9" />
+            <path d="M6 9V6.5C6 4.01 8.01 2 10.5 2C12.99 2 15 4.01 15 6.5V9" stroke="#BAB9B9" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          </svg>
+        )}
+
+        {/* Progress pill */}
+        <div
+          className="absolute flex items-center justify-center rounded-full font-inter text-[6px] font-bold tracking-[-0.05em] text-white"
+          style={{
+            left: "50%",
+            transform: "translateX(-50%)",
+            bottom: -8,
+            height: 14,
+            paddingLeft: 8,
+            paddingRight: 6,
+            backgroundColor: locked ? "#BAB9B9" : "#594FEE",
+          }}
+        >
+          {progress}%
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Gold Shield Badge (Figma spec) ── */
+function GoldShieldBadge() {
+  return (
+    <svg width="138" height="166" viewBox="0 0 138 166" fill="none">
+      {/* Outer shape — dark gradient border */}
+      <rect x="0" y="3.83" width="138" height="158.34" rx="10"
+        fill="url(#gold-outer)" />
+      {/* Mid layer — gold gradient */}
+      <rect x="5.49" y="10.92" width="127.02" height="144.16" rx="8"
+        fill="url(#gold-mid)" />
+      {/* Inner layer — darker gold with inset shadow */}
+      <rect x="16" y="27" width="105.26" height="112.4" rx="6"
+        fill="url(#gold-inner)"
+        style={{ filter: "drop-shadow(0px 1.6px 0px #E0D90F)" }} />
+      {/* Star emblem */}
+      <path d="M69 50L77.5 67L96 70L82.5 83L85.5 102L69 93.5L52.5 102L55.5 83L42 70L60.5 67L69 50Z"
+        fill="url(#gold-star)" fillOpacity="0.9" />
+      {/* Highlight line top */}
+      <line x1="20" y1="14" x2="118" y2="14" stroke="white" strokeOpacity="0.3" strokeWidth="0.5" />
+      <defs>
+        <linearGradient id="gold-outer" x1="69" y1="0" x2="69" y2="166" gradientUnits="userSpaceOnUse">
+          <stop stopColor="rgba(39,38,38,0.08)" /><stop offset="1" stopColor="rgba(29,27,25,0)" />
+        </linearGradient>
+        <linearGradient id="gold-mid" x1="69" y1="11" x2="69" y2="155" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFC13B" /><stop offset="1" stopColor="#FF9D01" />
+        </linearGradient>
+        <linearGradient id="gold-inner" x1="69" y1="27" x2="69" y2="139" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FF8401" /><stop offset="1" stopColor="#D06213" />
+        </linearGradient>
+        <linearGradient id="gold-star" x1="69" y1="50" x2="69" y2="102" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFE082" /><stop offset="1" stopColor="#FFB300" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export default function RanksPage() {
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 p-8">
-      {ranks.map((r, i) => {
-        const Badge = BadgeComponents[i];
-        const id = `rank-${r.rank}`;
-        return (
-          <div
-            key={r.rank}
-            className="flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.03] px-6 py-5"
-          >
-            <div className="flex items-center gap-4">
-              <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center">
-                <Badge id={id} p={r.palette} />
-              </div>
-              <div>
-                <div className="text-[15px] font-bold" style={{ color: r.nameColor }}>
-                  {r.name}
+    <div className="flex h-full flex-col">
+      <div className="sticky top-0 z-10 flex h-14 items-center border-b border-border bg-page-bg px-5">
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Ranks</span>
+      </div>
+      <div className="flex-1 overflow-y-auto p-6" style={{ scrollbarWidth: "none" }}>
+        <div className="mx-auto max-w-[800px]">
+          <div className="mb-8">
+            <h1 className="font-inter text-[24px] font-semibold tracking-[-0.04em] text-page-text">Creator Ranks</h1>
+            <p className="mt-1 font-inter text-[14px] tracking-[-0.02em] text-page-text-muted">
+              Level up by growing your influence score. Higher ranks unlock lower fees and exclusive perks.
+            </p>
+          </div>
+
+          {/* Current rank showcase */}
+          <div className="mb-10 flex flex-col items-center gap-4">
+            <LockedBadgeCard
+              badge={
+                <div className="flex items-center justify-center">
+                  <GoldShieldBadge />
                 </div>
-                <div className="text-sm text-white/40">{r.range}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 text-right">
-              <span className="text-[15px] font-bold text-green-400">{r.fee} fee</span>
-              <span className="text-sm text-white/50">{r.perk}</span>
+              }
+              progress={67}
+              locked={true}
+            />
+            <div className="text-center">
+              <div className="font-inter text-[14px] font-bold tracking-[-0.02em] text-page-text">Next: Contender</div>
+              <div className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">67% progress to rank 3</div>
             </div>
           </div>
-        );
-      })}
+
+          {/* Rank list */}
+          <div className="flex flex-col gap-2">
+            {ranks.map((r, i) => {
+              const Badge = BadgeComponents[i];
+              const isUnlocked = i < 2;
+              const isCurrent = i === 1;
+              return (
+                <div
+                  key={r.rank}
+                  className={`flex items-center justify-between rounded-xl border px-5 py-4 ${
+                    isCurrent
+                      ? "border-foreground/[0.12] bg-card-bg"
+                      : "border-foreground/[0.06] bg-card-bg"
+                  }`}
+                  style={{ opacity: isUnlocked ? 1 : 0.45 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-[48px] w-[48px] shrink-0 items-center justify-center">
+                      <Badge id={`rank-${r.rank}`} p={r.palette} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-inter text-[14px] font-semibold tracking-[-0.02em]" style={{ color: isUnlocked ? r.nameColor : undefined }}>
+                          {r.name}
+                        </span>
+                        {isCurrent && (
+                          <span className="rounded-full bg-[rgba(0,179,110,0.1)] px-2 py-0.5 font-inter text-[10px] font-semibold text-[#00B36E]">
+                            Current
+                          </span>
+                        )}
+                      </div>
+                      <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{r.range}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-inter text-[13px] font-semibold tracking-[-0.02em] text-[#00B36E]">{r.fee}</span>
+                    <span className="hidden font-inter text-[12px] tracking-[-0.02em] text-page-text-muted sm:block">{r.perk}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

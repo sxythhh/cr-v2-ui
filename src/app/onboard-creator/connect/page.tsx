@@ -45,7 +45,7 @@ type DialogStep = "username" | "code" | "success";
 
 function CodeDigit({ digit }: { digit: string }) {
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.06] bg-white text-base font-medium tracking-[-0.02em] text-black shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-[#151515] dark:text-white dark:shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.06] bg-white text-base font-medium tracking-[-0.02em] text-black shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-[#161616] dark:text-white dark:shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
       {digit}
     </div>
   );
@@ -119,7 +119,7 @@ export default function ConnectAccountsPage() {
             {/* Header section */}
             <div className="flex w-full flex-col items-center gap-4 pb-6">
               {/* Link icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-black/[0.06] bg-white dark:border-white/[0.06] dark:bg-[#151515]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-black/[0.06] bg-white dark:border-white/[0.06] dark:bg-[#161616]">
                 <LinkIcon className="h-6 w-6 text-black/72 dark:text-white/72" />
               </div>
 
@@ -148,7 +148,7 @@ export default function ConnectAccountsPage() {
                       isConnected
                         ? "border-[#00B26E] shadow-[0_0_0_2px_rgba(0,178,110,0.1),0_1px_2px_rgba(0,0,0,0.03)]"
                         : "border-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:shadow-[0_1px_2px_rgba(0,0,0,0.1)]"
-                    } bg-white dark:bg-[#151515]`}
+                    } bg-white dark:bg-[#161616]`}
                   >
                     {/* Status dot */}
                     {isConnected ? (
@@ -160,7 +160,7 @@ export default function ConnectAccountsPage() {
                     {/* Icon + name */}
                     <div className="flex flex-col items-center gap-3">
                       <div className="relative">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-black/[0.06] bg-white shadow-[0_0_0_2px_#FFFFFF] dark:border-white/[0.06] dark:bg-[#151515] dark:shadow-[0_0_0_2px_#151515]">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-black/[0.06] bg-white shadow-[0_0_0_2px_#FFFFFF] dark:border-white/[0.06] dark:bg-[#161616] dark:shadow-[0_0_0_2px_#111111]">
                           <platform.icon
                             className={`${platform.iconClass} ${platform.iconColor}`}
                           />
@@ -243,7 +243,7 @@ export default function ConnectAccountsPage() {
           onClick={closeDialog}
         >
           <div
-            className="relative flex w-full max-w-[400px] flex-col items-center rounded-[20px] bg-white shadow-[0_24px_48px_-8px_rgba(0,0,0,0.2)] dark:bg-[#151515] dark:shadow-[0_24px_48px_-8px_rgba(0,0,0,0.5)] mx-4"
+            className="relative flex w-full max-w-[400px] flex-col items-center rounded-[20px] bg-white shadow-[0_24px_48px_-8px_rgba(0,0,0,0.2)] dark:bg-[#161616] dark:shadow-[0_24px_48px_-8px_rgba(0,0,0,0.5)] mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Back button (code step only) */}

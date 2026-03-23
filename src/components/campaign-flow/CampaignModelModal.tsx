@@ -108,34 +108,47 @@ export function CampaignModelModal({
   return (
     <DialogPrimitive.Root onOpenChange={handleOpenChange} open={open}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50 data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0" />
-        <DialogPrimitive.Popup className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] max-w-[calc(100vw-32px)] focus:outline-none data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0 data-[ending-style]:zoom-out-95 data-[open]:zoom-in-95">
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60 data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0" />
+        <DialogPrimitive.Popup className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-32px)] sm:w-[800px] max-w-[800px] focus:outline-none data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0 data-[ending-style]:zoom-out-95 data-[open]:zoom-in-95">
           <DialogPrimitive.Title className="sr-only">
             Select campaign model
           </DialogPrimitive.Title>
 
-          <div className="flex flex-col h-[608px] rounded-3xl bg-card-bg overflow-hidden border border-border">
+          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[608px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border">
             {/* Top bar */}
-            <div className="flex items-center justify-center px-6 h-[41px] shrink-0 bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(255,255,255,0.04)]">
-              <span className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">
+            <div className="relative flex items-center justify-center px-5 sm:px-6 h-10 sm:h-[41px] shrink-0 bg-foreground/[0.03] dark:bg-foreground/[0.03] border-b border-foreground/[0.03]">
+              <span className="text-sm font-medium tracking-[-0.02em] text-page-text">
                 New campaign
               </span>
+              {/* Mobile close button */}
+              <DialogPrimitive.Close
+                render={
+                  <button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center sm:hidden"
+                    type="button"
+                  />
+                }
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.52" strokeLinecap="round" />
+                </svg>
+              </DialogPrimitive.Close>
             </div>
 
             {/* Content */}
-            <div className="flex flex-col p-8 gap-8 flex-1 min-h-0">
+            <div className="flex flex-col px-5 sm:p-8 gap-4 sm:gap-8 flex-1 min-h-0">
               {/* Title section */}
-              <div className="flex flex-col items-center gap-2 shrink-0">
-                <h2 className="text-xl font-semibold text-page-text tracking-[-0.02em]">
+              <div className="flex flex-col items-center gap-2 shrink-0 py-0 sm:py-0">
+                <h2 className="hidden sm:block text-xl font-semibold text-page-text tracking-[-0.02em]">
                   Campaign Model
                 </h2>
-                <p className="text-base text-page-text-muted text-center tracking-[-0.02em]">
-                  Select a model for your campaign
+                <p className="text-sm sm:text-base font-medium sm:font-normal text-page-text-muted text-center tracking-[-0.02em]">
+                  Select a payment model for your campaign.
                 </p>
               </div>
 
-              {/* Cards row */}
-              <div className="flex gap-4 flex-1 min-h-0">
+              {/* Cards — vertical on mobile, horizontal on desktop */}
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 flex-1 min-h-0 pt-2 sm:pt-0">
                 {MODELS.map((model) => {
                   const isSelected = selected === model.id;
                   const Icon = model.icon;
@@ -143,52 +156,53 @@ export function CampaignModelModal({
                   return (
                     <button
                       className={cn(
-                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-2xl text-left transition-all duration-200 bg-card-bg border border-[rgba(37,37,37,0.06)] dark:border-[rgba(255,255,255,0.08)]",
+                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 bg-foreground/[0.03] dark:bg-foreground/[0.03] overflow-hidden",
+                        isSelected
+                          ? "border border-[rgba(96,165,250,0.3)]"
+                          : "border border-foreground/[0.03]",
                       )}
                       key={model.id}
                       onClick={() => setSelected((prev) => prev === model.id ? null : model.id)}
-                      style={{
-                        boxShadow: isSelected
-                          ? `0px 0px 0px 4px rgba(${model.rgb}, 0.08)`
-                          : "none",
-                      }}
                       type="button"
                     >
-                      {/* Color gradient overlay */}
-                      <div
-                        className="absolute inset-0 rounded-2xl pointer-events-none z-0"
-                        style={{
-                          backgroundImage: `radial-gradient(100% 100% at 50.14% 0%, rgba(${model.rgb}, 0.32) 0%, rgba(${model.rgb}, 0) 100%)`,
-                        }}
-                      />
                       {/* Decorative illustration */}
                       <CardIllustration model={model.id} />
 
                       {/* Selection circle */}
                       <div
-                        className="absolute top-4 right-4 flex items-center justify-center w-5 h-5 rounded-full transition-all z-10"
+                        className="absolute top-4 right-4 flex items-center justify-center size-6 sm:size-5 rounded-full transition-all z-10"
                         style={{
                           background: isSelected
                             ? model.checkGradient
-                            : "radial-gradient(50% 100% at 50% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%), rgba(255,255,255,0.08)",
+                            : "transparent",
                           border: isSelected
                             ? "none"
-                            : "1px solid rgba(37,37,37,0.12)",
+                            : "1px solid rgba(224,224,224,0.2)",
+                          boxShadow: isSelected
+                            ? "none"
+                            : "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)",
                           backdropFilter: "blur(4px)",
                         }}
                       >
                         {isSelected && (
                           <IconCheck
-                            className="text-[#252525] dark:text-[#151515]"
-                            size={12}
+                            className="text-[#252525]"
+                            size={14}
                             strokeWidth={2.5}
                           />
                         )}
                       </div>
 
-                      {/* Icon */}
-                      <div className={cn("z-[1]", model.iconColor)}>
-                        <Icon size={24} />
+                      {/* Icon circle */}
+                      <div
+                        className="z-[1] flex items-center justify-center size-10 rounded-full"
+                        style={{
+                          background: `rgba(${model.rgb}, 0.08)`,
+                        }}
+                      >
+                        <div className={model.iconColor}>
+                          <Icon size={17} />
+                        </div>
                       </div>
 
                       {/* Title + subtitle */}
@@ -196,13 +210,13 @@ export function CampaignModelModal({
                         <span className="text-lg font-medium text-page-text tracking-[-0.02em]">
                           {model.label}
                         </span>
-                        <p className="text-sm text-page-text-subtle tracking-[-0.02em]">
+                        <p className="text-sm text-page-text-muted tracking-[-0.02em]">
                           {model.subtitle}
                         </p>
                       </div>
 
                       {/* Footer */}
-                      <span className="text-xs text-page-text-muted z-[4]">
+                      <span className="text-xs text-page-text-subtle z-[4]">
                         {model.footer}
                       </span>
                     </button>
@@ -212,14 +226,14 @@ export function CampaignModelModal({
             </div>
 
             {/* Bottom bar */}
-            <div className="flex items-center justify-between px-6 h-[68px] shrink-0">
-              {/* Left placeholder for centering */}
-              <div className="w-[150px] opacity-0 pointer-events-none">
+            <div className="flex items-center justify-end sm:justify-between px-5 sm:px-6 h-20 sm:h-[68px] shrink-0">
+              {/* Left placeholder for centering — hidden on mobile */}
+              <div className="hidden sm:block w-[150px] opacity-0 pointer-events-none">
                 <div className="rounded-full px-4 h-9 text-sm">Cancel</div>
               </div>
 
-              {/* Center indicator */}
-              <div className="flex items-center gap-1.5 h-[17px]">
+              {/* Center indicator — hidden on mobile */}
+              <div className="hidden sm:flex items-center gap-1.5 h-[17px]">
                 {selectedModel ? (
                   <>
                     <div className={selectedModel.iconColor}>
@@ -233,11 +247,11 @@ export function CampaignModelModal({
               </div>
 
               {/* Right buttons */}
-              <div className="flex items-center gap-2 w-[150px] justify-end">
+              <div className="flex items-center gap-2 sm:w-[150px] justify-end">
                 <DialogPrimitive.Close
                   render={
                     <button
-                      className="flex items-center justify-center rounded-full h-9 px-4 text-sm font-medium tracking-[-0.02em] text-page-text-subtle bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)] transition-colors hover:bg-[rgba(37,37,37,0.1)] dark:hover:bg-[rgba(255,255,255,0.1)] active:scale-[0.98]"
+                      className="flex items-center justify-center rounded-full h-10 sm:h-9 px-4 text-sm font-medium tracking-[-0.02em] text-page-text bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] active:scale-[0.98]"
                       type="button"
                     />
                   }
@@ -246,7 +260,7 @@ export function CampaignModelModal({
                 </DialogPrimitive.Close>
                 <button
                   className={cn(
-                    "flex items-center justify-center rounded-full h-9 px-4 text-sm font-medium tracking-[-0.02em] bg-[#252525] dark:bg-white text-white dark:text-[#151515] transition-all active:scale-[0.98]",
+                    "flex items-center justify-center rounded-full h-10 sm:h-9 px-4 text-sm font-medium tracking-[-0.02em] bg-[#252525] dark:bg-white text-white dark:text-[#151515] transition-all active:scale-[0.98]",
                     !selected && "opacity-30 cursor-not-allowed",
                   )}
                   disabled={!selected}

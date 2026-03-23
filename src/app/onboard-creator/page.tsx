@@ -82,7 +82,7 @@ export default function OnboardCreatorPage() {
                 </div>
 
                 {/* User avatar */}
-                <div className="-ml-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[rgba(0,0,0,0.1)] shadow-[0_0_0_2px_#FFFFFF] dark:border-[rgba(255,255,255,0.15)] dark:shadow-[0_0_0_2px_#151515]">
+                <div className="-ml-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[rgba(0,0,0,0.1)] shadow-[0_0_0_2px_#FFFFFF] dark:border-[rgba(255,255,255,0.15)] dark:shadow-[0_0_0_2px_#111111]">
                   <div className="h-full w-full bg-gradient-to-br from-orange-300 to-pink-300" />
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function OnboardCreatorPage() {
             </div>
 
             {/* Steps card */}
-            <div className="flex w-full flex-col items-center gap-4 rounded-[20px] border border-black/[0.06] bg-white p-6 dark:border-white/[0.06] dark:bg-[#151515]">
+            <div className="flex w-full flex-col items-center gap-4 rounded-[20px] border border-black/[0.06] bg-white p-6 dark:border-white/[0.06] dark:bg-[#161616]">
               {steps.map((step, i) => (
                 <div key={step.title} className="flex w-full flex-col gap-4">
                   {i > 0 && (
@@ -111,11 +111,11 @@ export default function OnboardCreatorPage() {
                   <div className="flex flex-row items-center gap-3">
                     {/* Step indicator */}
                     {step.completed ? (
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#00B36E] shadow-[0_0_0_2px_#FFFFFF] dark:shadow-[0_0_0_2px_#151515]">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#00B36E] shadow-[0_0_0_2px_#FFFFFF] dark:shadow-[0_0_0_2px_#111111]">
                         <CheckCircle className="h-5 w-5 text-white" />
                       </div>
                     ) : (
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white shadow-[0_0_0_2px_#FFFFFF] dark:border-white/[0.06] dark:bg-[#151515] dark:shadow-[0_0_0_2px_#151515]">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white shadow-[0_0_0_2px_#FFFFFF] dark:border-white/[0.06] dark:bg-[#161616] dark:shadow-[0_0_0_2px_#111111]">
                         <step.icon className="h-5 w-5 text-black/72 dark:text-white/72" />
                       </div>
                     )}

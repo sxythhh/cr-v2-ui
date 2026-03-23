@@ -300,7 +300,7 @@ function StepIcon({
 
   // Upcoming step
   return (
-    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white dark:border-white/[0.06] dark:bg-[#151515]">
+    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white dark:border-white/[0.06] dark:bg-[#161616]">
       {step.icon === "loader" && (
         <Loader2 className="h-3 w-3 text-black/50 dark:text-white/50" />
       )}
@@ -369,7 +369,7 @@ function ApplicationCard({ app }: { app: Application }) {
   const colors = statusColors[app.status];
 
   return (
-    <div className="relative flex w-full overflow-hidden rounded-[20px] border border-black/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)] dark:border-white/[0.06] dark:bg-[#151515] dark:shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
+    <div className="relative flex w-full overflow-hidden rounded-[20px] border border-black/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)] dark:border-white/[0.06] dark:bg-[#161616] dark:shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
       {/* Gradient overlay */}
       <div
         className="pointer-events-none absolute inset-0 rounded-[20px]"

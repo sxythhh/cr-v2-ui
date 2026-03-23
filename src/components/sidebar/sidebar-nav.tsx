@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -30,6 +31,9 @@ import { useSideNav, SIDEBAR_COLLAPSED_WIDTH, SIDEBAR_EXPANDED_WIDTH } from "./s
 import { SearchCommand } from "./search-command";
 import { FloatingPortal } from "@floating-ui/react";
 import { EditModeContent } from "./sidebar-edit-mode";
+import { CampaignModelModal } from "@/components/campaign-flow/CampaignModelModal";
+import type { CampaignModel } from "@/types/campaign-flow.types";
+import { useRouter } from "next/navigation";
 
 // ── Sidebar Icon ──────────────────────────────────────────────────
 
@@ -448,6 +452,8 @@ function HeaderIconGroup({
   collapsed: boolean;
   onCollapse: () => void;
 }) {
+  const router = useRouter();
+  const [modelModalOpen, setModelModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const {
@@ -535,7 +541,14 @@ function HeaderIconGroup({
 
         {/* New */}
         <div ref={register(0)}>
-          <button className="relative z-10 flex size-7 cursor-pointer items-center justify-center rounded-lg text-sidebar-text-muted">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setModelModalOpen(true);
+            }}
+            className="relative z-10 flex size-7 cursor-pointer items-center justify-center rounded-lg text-sidebar-text-muted"
+          >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.08333 0.75V6.08333M6.08333 6.08333V11.4167M6.08333 6.08333H0.75M6.08333 6.08333H11.4167" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
           </button>
         </div>
@@ -583,6 +596,18 @@ function HeaderIconGroup({
           )}
         </AnimatePresence>
       </FloatingPortal>
+
+      {typeof document !== "undefined" && createPortal(
+        <CampaignModelModal
+          open={modelModalOpen}
+          onOpenChange={setModelModalOpen}
+          onSelect={(model: CampaignModel) => {
+            setModelModalOpen(false);
+            router.push(`/create-campaign?model=${model}`);
+          }}
+        />,
+        document.body
+      )}
     </div>
   );
 }

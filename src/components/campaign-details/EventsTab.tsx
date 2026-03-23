@@ -48,7 +48,7 @@ const EVENT_STYLES: Record<EventType, { icon: React.FC<React.SVGProps<SVGSVGElem
   },
   "submission-approved": {
     icon: Submissions,
-    color: "text-[#00994D]",
+    color: "text-[#00994D] dark:text-[#34D399]",
     bg: "bg-[rgba(0,178,89,0.04)] dark:bg-[rgba(0,178,89,0.1)]",
   },
   "new-joiner": {
@@ -138,7 +138,7 @@ export default function EventsTab() {
               )}>
                 {f.label}
               </span>
-              <span className="inline-flex items-center justify-center rounded-full bg-[rgba(255,51,85,0.1)] px-1 text-[10px] font-semibold tracking-[-0.02em] text-[#FF3355]">
+              <span className="inline-flex items-center justify-center rounded-full bg-[rgba(255,51,85,0.1)] px-1 text-[10px] font-semibold tracking-[-0.02em] text-[#FF3355] dark:text-[#FB7185]">
                 {f.count}
               </span>
             </button>
@@ -151,7 +151,7 @@ export default function EventsTab() {
         className={cn(
           "flex w-[600px] flex-col rounded-2xl border p-5",
           "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-          "dark:bg-[rgba(255,255,255,0.02)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+          "dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
         )}
       >
         <div className="flex flex-col gap-2">
@@ -166,32 +166,33 @@ export default function EventsTab() {
                   "relative flex gap-3 rounded-2xl border p-4",
                   event.highlighted
                     ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(255,144,37,0.25)]"
-                    : "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(255,255,255,0.02)]",
+                    : "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-inner-bg dark:border-card-inner-border dark:shadow-none",
                 )}
-                style={
-                  event.highlighted
-                    ? {
+              >
+                {/* Background overlay for highlighted */}
+                {event.highlighted && (
+                  <>
+                    <div
+                      className="pointer-events-none absolute inset-0 rounded-2xl dark:hidden"
+                      style={{
                         background:
                           "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.12) 0%, rgba(255,144,37,0) 50%), #FFFFFF",
-                      }
-                    : undefined
-                }
-              >
-                {/* Dark-mode overlay for highlighted */}
-                {event.highlighted && (
-                  <div
-                    className="pointer-events-none absolute inset-0 hidden rounded-2xl dark:block"
-                    style={{
-                      background:
-                        "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.08) 0%, rgba(255,144,37,0) 50%), rgba(255,255,255,0.04)",
-                    }}
-                  />
+                      }}
+                    />
+                    <div
+                      className="pointer-events-none absolute inset-0 hidden rounded-2xl dark:block"
+                      style={{
+                        background:
+                          "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.08) 0%, rgba(255,144,37,0) 50%), var(--card-bg)",
+                      }}
+                    />
+                  </>
                 )}
 
                 {/* Unread dot */}
                 {event.unread && (
                   <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-[#111111]" />
+                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-[#161616]" />
                   </span>
                 )}
 

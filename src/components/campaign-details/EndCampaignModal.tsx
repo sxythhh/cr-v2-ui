@@ -102,10 +102,10 @@ function ConfirmStep({
         </div>
       </div>
       <div className="flex items-center justify-center gap-2 px-5 py-5">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]">
+        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
           No, take me back
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] px-4 text-[14px] font-medium text-[#FF3355] transition-colors hover:bg-[rgba(255,37,37,0.10)] dark:bg-[rgba(255,51,85,0.10)] dark:hover:bg-[rgba(255,51,85,0.15)]">
+        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
           Yes, end campaign
         </button>
       </div>
@@ -152,7 +152,7 @@ function CompletedStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
         </div>
 
         {/* Campaign name */}
@@ -168,7 +168,7 @@ function CompletedStep({
               <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{s.value}</span>
               <div className="flex flex-col gap-2">
                 <span className={cn("text-[12px]", muted)}>{s.label}</span>
-                <span className="text-[10px] tracking-[-0.02em] text-[#00994D]">{s.change}</span>
+                <span className="text-[10px] tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{s.change}</span>
               </div>
             </div>
           ))}
@@ -193,7 +193,7 @@ function CompletedStep({
 
       {/* Footer */}
       <div className="flex items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]">
+        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
           Cancel
         </button>
         <button onClick={onContinue} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
@@ -234,7 +234,7 @@ function FeedbackStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>
@@ -271,7 +271,7 @@ function FeedbackStep({
           <span className={cn("text-[12px]", muted)}>What worked well?</span>
           <textarea
             placeholder="e.g. Great creator quality, fast turnaround"
-            className="h-[58px] w-full resize-none rounded-[14px] bg-[rgba(37,37,37,0.04)] px-3.5 py-3 text-[14px] leading-[1.2] tracking-[-0.02em] text-[#252525] outline-none placeholder:text-[rgba(37,37,37,0.5)] dark:bg-[rgba(255,255,255,0.04)] dark:text-[#e5e5e5] dark:placeholder:text-[rgba(255,255,255,0.45)]"
+            className="h-[58px] w-full resize-none rounded-[14px] bg-[rgba(37,37,37,0.04)] px-3.5 py-3 text-[14px] leading-[1.2] tracking-[-0.02em] text-[#252525] outline-none placeholder:text-[rgba(37,37,37,0.5)] dark:bg-[rgba(255,255,255,0.04)] dark:text-[#E0E0E0] dark:placeholder:text-[rgba(255,255,255,0.45)]"
           />
         </div>
 
@@ -280,7 +280,7 @@ function FeedbackStep({
           <span className={cn("text-[12px]", muted)}>What could be improved?</span>
           <textarea
             placeholder="e.g. Great creator quality, fast turnaround"
-            className="h-[58px] w-full resize-none rounded-[14px] bg-[rgba(37,37,37,0.04)] px-3.5 py-3 text-[14px] leading-[1.2] tracking-[-0.02em] text-[#252525] outline-none placeholder:text-[rgba(37,37,37,0.5)] dark:bg-[rgba(255,255,255,0.04)] dark:text-[#e5e5e5] dark:placeholder:text-[rgba(255,255,255,0.45)]"
+            className="h-[58px] w-full resize-none rounded-[14px] bg-[rgba(37,37,37,0.04)] px-3.5 py-3 text-[14px] leading-[1.2] tracking-[-0.02em] text-[#252525] outline-none placeholder:text-[rgba(37,37,37,0.5)] dark:bg-[rgba(255,255,255,0.04)] dark:text-[#E0E0E0] dark:placeholder:text-[rgba(255,255,255,0.45)]"
           />
         </div>
 
@@ -322,7 +322,7 @@ function FeedbackStep({
 
       {/* Footer */}
       <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]">
+        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
           Back
         </button>
         <button onClick={onSubmit} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
@@ -410,7 +410,7 @@ function NextStepsStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>
@@ -450,7 +450,7 @@ function NextStepsStep({
 
       {/* Footer */}
       <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]">
+        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
           Back
         </button>
         <button onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
@@ -481,12 +481,12 @@ export function EndCampaignModal({ open, onOpenChange, campaign }: EndCampaignMo
   return (
     <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50" />
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60" />
         <DialogPrimitive.Popup
           className={cn(
             "fixed left-1/2 top-1/2 z-50 flex w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
-            "bg-white dark:bg-[#1a1a1a] shadow-xl",
+            "bg-white dark:bg-page-bg shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
           )}
         >

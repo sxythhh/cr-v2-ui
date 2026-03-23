@@ -115,7 +115,7 @@ export const Tabs = forwardRef<
           onMouseLeave={handleMouseLeave}
           className={cn(
             "relative flex items-center select-none",
-            isContained && "w-fit gap-0.5 rounded-2xl bg-accent p-0.5",
+            isContained && "w-fit gap-0.5 rounded-2xl bg-accent p-0.5 dark:bg-card-bg",
             isUnderline && "gap-0 border-b border-border",
             className,
           )}
@@ -125,7 +125,7 @@ export const Tabs = forwardRef<
           {/* Contained: selected pill background */}
           {isContained && selectedRect && (
             <motion.div
-              className="pointer-events-none absolute rounded-xl bg-card-bg shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/[0.10] dark:shadow-none"
+              className="pointer-events-none absolute rounded-[10px] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
               initial={false}
               animate={{
                 left: selectedRect.left,
@@ -146,7 +146,7 @@ export const Tabs = forwardRef<
             <AnimatePresence>
               {hoverRect && !isHoveringSelected && selectedRect && (
                 <motion.div
-                  className="pointer-events-none absolute rounded-xl bg-accent dark:bg-white/[0.06]"
+                  className="pointer-events-none absolute rounded-[10px] bg-accent dark:bg-[#1f1f1f]"
                   initial={{
                     left: selectedRect.left,
                     width: selectedRect.width,
@@ -193,7 +193,7 @@ export const Tabs = forwardRef<
               animate={{
                 left: selectedRect.left,
                 width: selectedRect.width,
-                opacity: isHovering ? 0.5 : 1,
+                opacity: 1,
               }}
               transition={{
                 ...springs.moderate,
@@ -207,7 +207,7 @@ export const Tabs = forwardRef<
             <AnimatePresence>
               {hoverRect && !isHoveringSelected && selectedRect && (
                 <motion.div
-                  className="pointer-events-none absolute bottom-0 left-0 h-[2px] rounded-full bg-page-text-muted"
+                  className="pointer-events-none absolute bottom-0 left-0 h-[2px] rounded-full bg-foreground/[0.15] dark:bg-foreground/[0.10]"
                   initial={{
                     left: selectedRect.left,
                     width: selectedRect.width,

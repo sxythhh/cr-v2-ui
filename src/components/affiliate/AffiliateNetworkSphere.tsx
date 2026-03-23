@@ -9,7 +9,7 @@ const AffiliateGlobeScene = dynamic(
 
 export function AffiliateNetworkSphere() {
   return (
-    <section className="relative w-full overflow-hidden -mt-14" style={{ height: 772 }}>
+    <section className="relative z-0 w-full overflow-hidden -mt-14" style={{ height: 772 }}>
       {/* ── gradient backdrop ── */}
       <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
         {/* main orange glow — right-biased, lower, stronger */}

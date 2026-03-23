@@ -48,13 +48,13 @@ export function BoostCampaignModal({
     <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop
-          className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50"
+          className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60"
         />
         <DialogPrimitive.Popup
           className={cn(
             "fixed left-1/2 top-1/2 z-50 flex w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
-            "bg-white dark:bg-[#1a1a1a] shadow-xl",
+            "bg-white dark:bg-page-bg shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
           )}
         >
@@ -96,7 +96,7 @@ export function BoostCampaignModal({
                         "flex flex-1 cursor-pointer items-start justify-between rounded-2xl border p-3 transition-colors",
                         isSelected
                           ? "border-[rgba(139,92,246,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(139,92,246,0.12)_0%,rgba(139,92,246,0)_50%),#FFFFFF] dark:bg-[radial-gradient(50%_50%_at_50%_100%,rgba(139,92,246,0.12)_0%,rgba(139,92,246,0)_50%),#1a1a1a]"
-                          : "border-[rgba(37,37,37,0.06)] bg-white hover:border-[rgba(37,37,37,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a] dark:hover:border-[rgba(255,255,255,0.12)]",
+                          : "border-[rgba(37,37,37,0.06)] bg-white hover:border-[rgba(37,37,37,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg dark:hover:border-[rgba(255,255,255,0.12)]",
                       )}
                     >
                       {/* Left: label + price */}
@@ -116,7 +116,7 @@ export function BoostCampaignModal({
                             "flex size-4 items-center justify-center rounded-full",
                             isSelected
                               ? "bg-[#8B5CF6]"
-                              : "border border-[rgba(37,37,37,0.15)] bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.15)] dark:bg-[#1a1a1a] dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]",
+                              : "border border-[rgba(37,37,37,0.15)] bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.15)] dark:bg-card-bg dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]",
                           )}
                         >
                           {isSelected && (
@@ -144,7 +144,7 @@ export function BoostCampaignModal({
                 {BOOST_STATS.map((stat) => (
                   <div
                     key={stat.value}
-                    className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]"
+                    className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg"
                   >
                     <div className="text-[14px] font-medium text-page-text">
                       {stat.value}
@@ -170,9 +170,9 @@ export function BoostCampaignModal({
 
               {/* Row 1 */}
               <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium">
-                    <span className="text-[#252525]/40 line-through dark:text-[#e5e5e5]/40">
+                    <span className="text-[#252525]/40 line-through dark:text-[#E0E0E0]/40">
                       120
                     </span>{" "}
                     <span className="text-[#8B5CF6]">780</span>
@@ -181,7 +181,7 @@ export function BoostCampaignModal({
                     Daily views
                   </div>
                 </div>
-                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium text-[#8B5CF6]">
                     12-18
                   </div>
@@ -193,7 +193,7 @@ export function BoostCampaignModal({
 
               {/* Row 2 */}
               <div className="grid grid-cols-3 gap-2">
-                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium text-[#8B5CF6]">
                     6-10
                   </div>
@@ -201,7 +201,7 @@ export function BoostCampaignModal({
                     Est. new creators
                   </div>
                 </div>
-                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium text-[#8B5CF6]">
                     15-25
                   </div>
@@ -209,7 +209,7 @@ export function BoostCampaignModal({
                     Est. new submissions
                   </div>
                 </div>
-                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium text-[#8B5CF6]">
                     ~$6.13
                   </div>
@@ -230,7 +230,7 @@ export function BoostCampaignModal({
           {/* ── Footer ──────────────────────────────────────────── */}
           <div className="flex items-center justify-end gap-2 px-5 pb-5">
             <DialogPrimitive.Close
-              className="flex h-10 cursor-pointer items-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5] dark:hover:bg-[rgba(255,255,255,0.10)]"
+              className="flex h-10 cursor-pointer items-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
             >
               Cancel
             </DialogPrimitive.Close>
@@ -299,7 +299,7 @@ export function BoostCampaignModal({
             </div>
 
             {/* Receipt card */}
-            <div className="w-full rounded-2xl border border-border bg-white dark:bg-[#1a1a1a] shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="w-full rounded-2xl border border-border bg-white dark:bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
               <div className="flex items-center justify-between border-b border-[rgba(37,37,37,0.03)] dark:border-[rgba(255,255,255,0.03)] px-4 py-3">
                 <span className="text-xs font-medium text-page-text-muted">Paid amount</span>
                 <span className="text-xs font-medium text-page-text">${selected.price}</span>

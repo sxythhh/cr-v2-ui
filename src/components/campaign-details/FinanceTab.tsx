@@ -18,7 +18,7 @@ const TRANSACTIONS = [
 
 function StatCard({ label, value, valueColor, secondary, secondaryColor }: { label: string; value: string; valueColor?: string; secondary?: string; secondaryColor?: string }) {
   return (
-    <div className="flex-1 flex flex-col gap-3 bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-4">
+    <div className="flex-1 flex flex-col gap-3 bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-4">
       <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">{label}</span>
       <div className="flex items-baseline justify-between">
         <span className={cn("text-[24px] font-medium tracking-[-0.02em]", valueColor || "text-page-text")}>{value}</span>
@@ -49,7 +49,7 @@ function ClockIcon() {
 function StatusPill({ status }: { status: "paid" | "pending" }) {
   if (status === "paid") {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-medium tracking-[-0.02em] bg-[rgba(0,153,77,0.08)] text-[#00994D]">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-medium tracking-[-0.02em] bg-[rgba(0,153,77,0.08)] text-[#00994D] dark:text-[#34D399]">
         <CheckCircleIcon />
         Paid
       </span>
@@ -74,15 +74,15 @@ export default function FinanceTab() {
       {/* Top stats row */}
       <div className="flex gap-2">
         <StatCard label="Total budget" value="$15,000" />
-        <StatCard label="Spent" value="$11,250" valueColor="text-[#FF3355]" secondary="75%" />
-        <StatCard label="Remaining" value="$3,750" valueColor="text-[#00994D]" secondary="12 days left" />
-        <StatCard label="Daily burn rate" value="$312" secondary="+8% vs last week" secondaryColor="text-[#FF3355]" />
+        <StatCard label="Spent" value="$11,250" valueColor="text-[#FF3355] dark:text-[#FB7185]" secondary="75%" />
+        <StatCard label="Remaining" value="$3,750" valueColor="text-[#00994D] dark:text-[#34D399]" secondary="12 days left" />
+        <StatCard label="Daily burn rate" value="$312" secondary="+8% vs last week" secondaryColor="text-[#FF3355] dark:text-[#FB7185]" />
       </div>
 
       {/* Two-column chart area */}
       <div className="flex gap-4">
         {/* Budget utilization */}
-        <div className="flex-1 flex flex-col bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-5">
+        <div className="flex-1 flex flex-col bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">Budget utilization</span>
             <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">75% of budget used</span>
@@ -111,14 +111,14 @@ export default function FinanceTab() {
         </div>
 
         {/* Spend summary */}
-        <div className="flex-1 flex flex-col bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-5">
+        <div className="flex-1 flex flex-col bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-5">
           <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted mb-4">Spend summary</span>
           <div className="flex flex-col gap-0">
             {[
               { label: "Campaign budget", value: "$10,000", color: "" },
-              { label: "Creator payouts", value: "-$7,123", color: "text-[#FF3355]" },
-              { label: "Clawbacks recovered", value: "+$377", color: "text-[#00994D]" },
-              { label: "Platform fee (7%)", value: "-$700", color: "text-[#FF3355]" },
+              { label: "Creator payouts", value: "-$7,123", color: "text-[#FF3355] dark:text-[#FB7185]" },
+              { label: "Clawbacks recovered", value: "+$377", color: "text-[#00994D] dark:text-[#34D399]" },
+              { label: "Platform fee (7%)", value: "-$700", color: "text-[#FF3355] dark:text-[#FB7185]" },
             ].map((item, i) => (
               <div key={i} className="flex items-center justify-between py-3 border-b border-border">
                 <span className="text-[13px] tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">{item.label}</span>
@@ -127,7 +127,7 @@ export default function FinanceTab() {
             ))}
             <div className="flex items-center justify-between pt-3">
               <span className="text-[13px] font-semibold tracking-[-0.02em] text-page-text">Remaining budget</span>
-              <span className="text-[14px] font-medium tracking-[-0.02em] text-[#00994D]">$2,554</span>
+              <span className="text-[14px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">$2,554</span>
             </div>
           </div>
         </div>
@@ -136,12 +136,12 @@ export default function FinanceTab() {
       {/* Bottom stats row */}
       <div className="flex gap-2">
         <StatCard label="Total budget" value="$15,000" />
-        <StatCard label="Remaining" value="$3,750" valueColor="text-[#00994D]" secondary="12 days left" />
-        <StatCard label="Daily burn rate" value="$312" secondary="+8% vs last week" secondaryColor="text-[#FF3355]" />
+        <StatCard label="Remaining" value="$3,750" valueColor="text-[#00994D] dark:text-[#34D399]" secondary="12 days left" />
+        <StatCard label="Daily burn rate" value="$312" secondary="+8% vs last week" secondaryColor="text-[#FF3355] dark:text-[#FB7185]" />
       </div>
 
       {/* Recent transactions table */}
-      <div className="relative overflow-hidden bg-white dark:bg-[#1a1a1a] border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl">
+      <div className="relative overflow-hidden bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl">
         <div className="p-5 pb-0">
           <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">Recent transactions</span>
         </div>

@@ -91,7 +91,7 @@ function PlatformCircle({ platform, size = 22 }: { platform: string; size?: numb
       className={cn(
         "inline-flex items-center justify-center rounded-full border",
         "border-border",
-        "bg-white dark:bg-[#1a1a1a]"
+        "bg-white dark:bg-card-bg"
       )}
       style={{ width: size, height: size }}
     >
@@ -147,7 +147,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
   const pct = Math.round((c.budget.spent / c.budget.total) * 100);
 
   return (
-    <div className="flex h-full flex-col bg-white dark:bg-[#111111]">
+    <div className="flex h-full flex-col bg-white dark:bg-[#161616]">
       {/* ── Top bar ─────────────────────────────────────────────── */}
       <header className="flex items-center border-b border-border px-5">
         {/* Back */}
@@ -186,8 +186,8 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                           {tag.label}
                         </span>
                       ) : (
-                        <span key={tag.label} className="relative z-[2] inline-flex h-[26px] items-center rounded-full bg-white dark:bg-[#111111]" style={{ padding: "1px" }}>
-                          <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white pl-2 pr-2.5 text-[12px] font-medium tracking-[-0.02em] text-[#252525] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a] dark:text-[#e5e5e5]">
+                        <span key={tag.label} className="relative z-[2] inline-flex h-[26px] items-center rounded-full bg-white dark:bg-[#161616]" style={{ padding: "1px" }}>
+                          <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white pl-2 pr-2.5 text-[12px] font-medium tracking-[-0.02em] text-[#252525] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg dark:text-[#E0E0E0]">
                             {tag.locked && (
                               <svg width="12" height="12" viewBox="0 0 8 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M4 0C2.61929 0 1.5 1.11929 1.5 2.5V3.5C0.671573 3.5 0 4.17157 0 5V8.5C0 9.32843 0.671573 10 1.5 10H6.5C7.32843 10 8 9.32843 8 8.5V5C8 4.17157 7.32843 3.5 6.5 3.5V2.5C6.5 1.11929 5.38071 0 4 0ZM5.5 3.5V2.5C5.5 1.67157 4.82843 1 4 1C3.17157 1 2.5 1.67157 2.5 2.5V3.5H5.5ZM4 5.5C4.27614 5.5 4.5 5.72386 4.5 6V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V6C3.5 5.72386 3.72386 5.5 4 5.5Z" fill="currentColor" /></svg>
                             )}
@@ -212,15 +212,15 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                     <span className="text-[rgba(37,37,37,0.2)] dark:text-[rgba(255,255,255,0.2)]">·</span>
                     <span className="flex items-center gap-1">
                       {/* TikTok */}
-                      <span className="inline-flex size-6 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                      <span className="inline-flex size-6 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                         <svg width="12" height="12" viewBox="0 0 9 10" fill="none"><path d="M8.71705 4.10671C7.82723 4.10671 7.00339 3.82398 6.33063 3.34349V6.83632C6.33063 8.58357 4.91349 10 3.16538 10C2.51313 10 1.9069 9.80288 1.40329 9.4649C0.55712 8.89703 0 7.9315 0 6.83629C0 5.08914 1.41718 3.67271 3.16543 3.67275C3.31072 3.67268 3.45582 3.68255 3.59975 3.70221V4.09002L3.59967 5.452C3.46114 5.40806 3.31346 5.38422 3.16023 5.38422C2.36052 5.38422 1.71235 6.03217 1.71235 6.83135C1.71235 7.39641 2.03634 7.88571 2.50881 8.12405C2.70471 8.22282 2.92596 8.27845 3.16025 8.27845C3.95832 8.27845 4.60538 7.63314 4.60813 6.83629V0H6.33061V0.220145C6.33669 0.285959 6.34545 0.351524 6.35685 0.416659C6.4764 1.09819 6.88411 1.68047 7.45002 2.03343C7.83003 2.27052 8.26916 2.39585 8.71706 2.39517L8.71705 4.10671Z" fill="currentColor" /></svg>
                       </span>
                       {/* Instagram */}
-                      <span className="inline-flex size-6 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                      <span className="inline-flex size-6 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                         <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M4.75 0.855864C6.01825 0.855864 6.16852 0.860614 6.66943 0.8835C6.97056 0.887137 7.26883 0.942495 7.55121 1.04716C7.75756 1.12331 7.94422 1.24475 8.09746 1.40255C8.25525 1.55578 8.37669 1.74244 8.45284 1.9488C8.55751 2.23117 8.61286 2.52944 8.6165 2.83057C8.63939 3.33148 8.64414 3.48175 8.64414 4.75C8.64414 6.01825 8.63939 6.16852 8.6165 6.66943C8.61286 6.97056 8.55751 7.26883 8.45284 7.55121C8.37382 7.7561 8.25276 7.94219 8.09747 8.09747C7.94219 8.25276 7.7561 8.37382 7.55121 8.45284C7.26883 8.55751 6.97056 8.61286 6.66943 8.6165C6.16852 8.63939 6.01825 8.64414 4.75 8.64414C3.48175 8.64414 3.33148 8.63939 2.83057 8.6165C2.52929 8.61291 2.23088 8.55756 1.94836 8.45284C1.74216 8.37663 1.55566 8.2552 1.40255 8.09746C1.24475 7.94422 1.12331 7.75756 1.04716 7.55121C0.942495 7.26883 0.887137 6.97056 0.8835 6.66943C0.860614 6.16852 0.855864 6.01825 0.855864 4.75C0.855864 3.48175 0.860614 3.33148 0.8835 2.83057C0.887137 2.52944 0.942495 2.23117 1.04716 1.9488C1.12331 1.74244 1.24475 1.55578 1.40255 1.40255C1.55578 1.24475 1.74244 1.12331 1.9488 1.04716C2.23117 0.942495 2.52944 0.887137 2.83057 0.8835C3.33148 0.860614 3.48175 0.855864 4.75 0.855864ZM4.75 0C3.46016 0 3.29823 0.00561363 2.7917 0.0285C2.39768 0.0363607 2.00783 0.110971 1.63875 0.249159C1.32165 0.368548 1.03443 0.555706 0.797136 0.797568C0.555482 1.03478 0.368477 1.32185 0.249159 1.63875C0.111118 2.00786 0.0366543 2.3977 0.0289318 2.7917C0.00518183 3.29823 0 3.46016 0 4.75C0 6.03984 0.00561363 6.20177 0.0285 6.7083C0.0363607 7.10232 0.110971 7.49217 0.249159 7.86125C0.368548 8.17835 0.555706 8.46557 0.797568 8.70286C1.03478 8.94452 1.32185 9.13152 1.63875 9.25084C2.00786 9.38888 2.3977 9.46335 2.7917 9.47107C3.29823 9.49482 3.46016 9.5 4.75 9.5C6.03984 9.5 6.20177 9.49439 6.7083 9.4715C7.10232 9.46364 7.49217 9.38903 7.86125 9.25084C8.1769 9.1288 8.46356 8.94215 8.70285 8.70285C8.94215 8.46356 9.1288 8.1769 9.25084 7.86125C9.38888 7.49214 9.46335 7.1023 9.47107 6.7083C9.49482 6.20177 9.5 6.03984 9.5 4.75C9.5 3.46016 9.49439 3.29823 9.4715 2.7917C9.46364 2.39768 9.38903 2.00783 9.25084 1.63875C9.13145 1.32165 8.9443 1.03443 8.70243 0.797136C8.46522 0.555482 8.17816 0.368477 7.86125 0.249159C7.49214 0.111118 7.1023 0.0366543 6.7083 0.0289318C6.20177 0.00518183 6.03984 0 4.75 0ZM4.75 2.31066C4.26754 2.31066 3.79592 2.45372 3.39478 2.72176C2.99363 2.9898 2.68097 3.37077 2.49634 3.81651C2.31172 4.26224 2.26341 4.75271 2.35753 5.22589C2.45165 5.69908 2.68398 6.13373 3.02513 6.47488C3.36627 6.81602 3.80092 7.04835 4.27411 7.14247C4.74729 7.23659 5.23776 7.18829 5.6835 7.00366C6.12923 6.81903 6.5102 6.50637 6.77824 6.10523C7.04628 5.70408 7.18934 5.23246 7.18934 4.75C7.18934 4.10305 6.93234 3.48259 6.47488 3.02513C6.01741 2.56766 5.39695 2.31066 4.75 2.31066ZM4.75 6.33348C4.43682 6.33348 4.13067 6.24061 3.87027 6.06661C3.60987 5.89262 3.40691 5.64531 3.28706 5.35597C3.16721 5.06663 3.13585 4.74824 3.19695 4.44108C3.25805 4.13392 3.40886 3.85177 3.63031 3.63031C3.85177 3.40886 4.13392 3.25805 4.44108 3.19695C4.74824 3.13585 5.06663 3.16721 5.35597 3.28706C5.64531 3.40691 5.89262 3.60987 6.06661 3.87027C6.24061 4.13067 6.33348 4.43682 6.33348 4.75C6.33348 5.16996 6.16665 5.57273 5.86969 5.86969C5.57273 6.16665 5.16996 6.33348 4.75 6.33348ZM7.28564 1.64436C7.1729 1.64436 7.0627 1.67779 6.96896 1.74043C6.87523 1.80306 6.80217 1.89208 6.75903 1.99623C6.71588 2.10039 6.7046 2.215 6.72659 2.32557C6.74858 2.43613 6.80287 2.5377 6.88259 2.61741C6.9623 2.69713 7.06387 2.75142 7.17444 2.77341C7.28501 2.79541 7.39961 2.78412 7.50377 2.74098C7.60792 2.69783 7.69694 2.62478 7.75957 2.53104C7.82221 2.4373 7.85564 2.3271 7.85564 2.21436C7.85564 2.06319 7.79558 1.91821 7.68869 1.81131C7.58179 1.70442 7.43681 1.64436 7.28564 1.64436Z" fill="currentColor" /></svg>
                       </span>
                     </span>
-                    <span className="flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white pl-2 pr-2.5 backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+                    <span className="flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white pl-2 pr-2.5 backdrop-blur-[12px] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                       <svg width="12" height="12" viewBox="0 0 9 10" fill="none"><path d="M4.05664 0C2.814 0 1.80664 1.00736 1.80664 2.25C1.80664 3.49264 2.814 4.5 4.05664 4.5C5.29928 4.5 6.30664 3.49264 6.30664 2.25C6.30664 1.00736 5.29928 0 4.05664 0Z" fill="currentColor" /><path d="M4.05738 5C2.14143 5 0.675071 6.14811 0.0796651 7.75801C-0.0905503 8.21824 0.0259876 8.6719 0.296567 8.99437C0.560253 9.30862 0.967304 9.5 1.4058 9.5H6.70896C7.14746 9.5 7.55451 9.30862 7.8182 8.99437C8.08878 8.6719 8.20531 8.21824 8.0351 7.75801C7.43969 6.14811 5.97333 5 4.05738 5Z" fill="currentColor" /></svg>
                       {c.category}
                     </span>
@@ -297,7 +297,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 
                 {/* Right: stats card */}
                 <div className="w-[400px] shrink-0">
-                <div className="flex flex-col gap-4 rounded-2xl border border-border bg-white dark:bg-[#1a1a1a] p-4">
+                <div className="flex flex-col gap-4 rounded-2xl border border-border bg-white dark:bg-card-bg p-4">
                   {/* Budget card */}
                   <div className="flex flex-col gap-2 rounded-[10px] border border-border p-3">
                     <div className="flex items-baseline justify-between">
@@ -359,7 +359,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                     <StatRow
                       label="Min. engagement rate"
                       value={
-                        <span className="text-[#FF3355]">{c.stats.minEngagementRate}</span>
+                        <span className="text-[#FF3355] dark:text-[#FB7185]">{c.stats.minEngagementRate}</span>
                       }
                     />
                   </div>
@@ -402,7 +402,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           <div ref={dotsRef} className="relative">
             <button
               onClick={() => setDotsOpen((v) => !v)}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border text-page-text-muted hover:bg-[rgba(37,37,37,0.04)] dark:hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border bg-white text-page-text-muted hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors"
             >
               <IconDots size={16} />
             </button>
@@ -413,7 +413,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 4 }}
                   transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-full left-0 z-50 mb-2 flex w-44 flex-col rounded-xl border border-[rgba(37,37,37,0.06)] bg-white p-1 shadow-[0px_4px_12px_rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]"
+                  className="absolute bottom-full left-0 z-50 mb-2 flex w-44 flex-col rounded-xl border border-[rgba(37,37,37,0.06)] bg-white p-1 shadow-[0px_4px_12px_rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg"
                 >
                   <DotsMenuItems
                     onClose={() => setDotsOpen(false)}
@@ -423,10 +423,10 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
               )}
             </AnimatePresence>
           </div>
-          <button className="rounded-full border border-border px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:hover:bg-[rgba(255,255,255,0.06)] transition-colors">
+          <button className="cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors">
             Edit
           </button>
-          <button onClick={() => setTopUpOpen(true)} className="rounded-full border border-border px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:hover:bg-[rgba(255,255,255,0.06)] transition-colors">
+          <button onClick={() => setTopUpOpen(true)} className="cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors">
             Top up
           </button>
           <button onClick={() => setBoostOpen(true)} className="flex items-center gap-1.5 rounded-full bg-[#8B5CF6] px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-white hover:bg-[#7c3aed] transition-colors cursor-pointer">

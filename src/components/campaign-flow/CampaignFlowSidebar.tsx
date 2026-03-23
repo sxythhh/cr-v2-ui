@@ -34,7 +34,7 @@ export function CampaignFlowSidebar({ steps, stepLabels, currentIndex, onStepCli
         {activeRect && (
           <motion.div
             key={sessionRef.current}
-            className="pointer-events-none absolute rounded-xl bg-foreground/[0.025]"
+            className="pointer-events-none absolute rounded-xl bg-foreground/[0.025] dark:bg-foreground/[0.03]"
             initial={{ opacity: 0, ...activeRect }}
             animate={{ opacity: 1, ...activeRect }}
             exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -54,7 +54,7 @@ export function CampaignFlowSidebar({ steps, stepLabels, currentIndex, onStepCli
             disabled={!isClickable}
             className={cn(
               "relative z-10 flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition-colors",
-              isActive && "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(255,255,255,0.06)]",
+              isActive && "bg-foreground/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]",
               !isClickable && "cursor-default opacity-100"
             )}
             type="button"

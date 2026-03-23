@@ -31,6 +31,8 @@ export function CardIllustration({ model }: { model: CampaignModel }) {
         draggable={false}
         className="w-[110%] max-w-none object-contain object-bottom select-none hidden dark:block"
       />
+      {/* Bottom fade mask so footer text is visible */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-card-bg to-transparent" />
     </div>
   );
 }

@@ -95,7 +95,7 @@ export default function CreatorsTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* ── Participation Breakdown Card ─────────────────────────── */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]">
+      <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
         <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">
           Creator participation breakdown
         </span>
@@ -142,7 +142,7 @@ export default function CreatorsTab() {
         {/* Segmented control */}
         <div
           ref={filterContainerRef}
-          className="relative flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-[rgba(255,255,255,0.06)]"
+          className="relative flex items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-card-bg"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}
@@ -151,7 +151,7 @@ export default function CreatorsTab() {
             {filterActiveRect && (
               <motion.div
                 key={filterSessionRef.current}
-                className="pointer-events-none absolute rounded-[10px] bg-foreground/[0.04]"
+                className="pointer-events-none absolute rounded-[10px] bg-accent dark:bg-[#1f1f1f]"
                 initial={{ opacity: 0, ...filterActiveRect }}
                 animate={{ opacity: 1, ...filterActiveRect }}
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -168,7 +168,7 @@ export default function CreatorsTab() {
               className={cn(
                 "relative z-10 flex items-center gap-1 rounded-[10px] px-2.5 py-1.5 text-[13px] font-medium tracking-[-0.02em] transition-all",
                 filter === tab.value
-                  ? "bg-white text-[#252525] shadow-[0px_1px_2px_rgba(0,0,0,0.06)] dark:bg-[#2a2a2a] dark:text-[#e5e5e5]"
+                  ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:text-page-text"
                   : "text-page-text-muted"
               )}
             >
@@ -234,9 +234,9 @@ export default function CreatorsTab() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 py-2 shadow-[0px_8px_24px_rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[#1a1a1a]"
+            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 py-2 shadow-[0px_8px_24px_rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg"
           >
-            <span className="flex h-7 items-center rounded-full bg-[rgba(37,37,37,0.06)] px-3 text-[13px] font-medium tracking-[-0.02em] text-[#252525] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#e5e5e5]">
+            <span className="flex h-7 items-center rounded-full bg-[rgba(37,37,37,0.06)] px-3 text-[13px] font-medium tracking-[-0.02em] text-[#252525] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0]">
               {selected.size} selected
             </span>
             <button
@@ -329,7 +329,7 @@ function CreatorCardItem({
     <div
       onClick={bulkMode ? onToggle : undefined}
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors dark:bg-[#1a1a1a]",
+        "flex flex-col gap-4 rounded-2xl border bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors dark:bg-card-bg",
         bulkMode && "cursor-pointer",
         isSelected
           ? "border-[#252525] dark:border-[#e5e5e5]"

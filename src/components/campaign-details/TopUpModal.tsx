@@ -40,7 +40,7 @@ export function TopUpModal({
     <Modal open onClose={onClose} maxWidth="max-w-[520px]" showClose={false}>
       <div className="flex max-h-[90vh] flex-col">
         {/* Header bar */}
-        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] bg-card-bg px-5">
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
             Top Up Campaign
           </span>
@@ -63,7 +63,7 @@ export function TopUpModal({
           </span>
 
           {/* Balance summary */}
-          <div className="flex flex-col rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="flex flex-col rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-none">
             <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
               <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
                 Current Balance
@@ -76,7 +76,7 @@ export function TopUpModal({
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
                 Deposit amount
               </span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">
                 +{fmt(depositAmount)}
               </span>
             </div>
@@ -107,7 +107,7 @@ export function TopUpModal({
                       "flex h-10 flex-1 cursor-pointer items-center justify-center rounded-lg border font-inter text-base font-medium tracking-[-0.02em] shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors",
                       selectedAmount === amount
                         ? "border-foreground/16 bg-foreground text-white dark:bg-foreground dark:text-page-bg"
-                        : "border-foreground/16 bg-card-bg text-page-text hover:bg-accent",
+                        : "border-foreground/16 bg-card-bg text-page-text hover:bg-accent dark:bg-foreground/[0.03]",
                     )}
                   >
                     {fmt(amount)}
@@ -125,7 +125,7 @@ export function TopUpModal({
                       "flex h-10 flex-1 cursor-pointer items-center justify-center rounded-lg border font-inter text-base font-medium tracking-[-0.02em] shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors",
                       selectedAmount === amount
                         ? "border-foreground/16 bg-foreground text-white dark:bg-foreground dark:text-page-bg"
-                        : "border-foreground/16 bg-card-bg text-page-text hover:bg-accent",
+                        : "border-foreground/16 bg-card-bg text-page-text hover:bg-accent dark:bg-foreground/[0.03]",
                     )}
                   >
                     {fmt(amount)}
@@ -171,7 +171,7 @@ export function TopUpModal({
                   type="button"
                   onClick={() => setSelectedPayment(method.id)}
                   className={cn(
-                    "flex h-14 cursor-pointer items-center gap-3 rounded-2xl border bg-card-bg px-3 transition-colors",
+                    "flex h-14 cursor-pointer items-center gap-3 rounded-2xl border bg-card-bg px-3 transition-colors dark:bg-foreground/[0.03]",
                     selectedPayment === method.id
                       ? "border-foreground"
                       : "border-foreground/16",
@@ -208,7 +208,7 @@ export function TopUpModal({
         </div>
 
         {/* Footer — pinned */}
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] bg-card-bg px-5 py-5">
+        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] px-5 py-5">
           <button
             type="button"
             onClick={onClose}

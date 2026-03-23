@@ -102,7 +102,7 @@ const TYPE_STYLES: Record<
   },
   contracts: {
     bg: "bg-[rgba(0,178,89,0.04)] dark:bg-[rgba(0,178,89,0.10)]",
-    color: "text-[#00994D]",
+    color: "text-[#00994D] dark:text-[#34D399]",
     icon: (
       <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
         <path d="M2 0C0.895431 0 0 0.89543 0 2V11.3333C0 12.4379 0.895431 13.3333 2 13.3333H7.44714C7.37344 13.1248 7.33333 12.9004 7.33333 12.6667C6.22876 12.6667 5.33333 11.7712 5.33333 10.6667C5.33333 9.5621 6.22876 8.66667 7.33333 8.66667C7.33333 7.5621 8.22876 6.66667 9.33333 6.66667C9.84557 6.66667 10.3128 6.85924 10.6667 7.17593V2C10.6667 0.895431 9.77124 0 8.66667 0H2Z" fill="currentColor"/>
@@ -164,7 +164,7 @@ const TYPE_STYLES: Record<
     ),
   },
   system: {
-    bg: "bg-foreground/[0.04] dark:bg-white/[0.06]",
+    bg: "bg-foreground/[0.04] dark:bg-foreground/[0.06]",
     color: "text-page-text-muted",
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -214,14 +214,14 @@ function CategorySidebar({
     <div className="w-[186px] shrink-0">
       <div
         ref={containerRef}
-        className="sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl bg-[rgba(37,37,37,0.04)] p-1 dark:bg-[rgba(255,255,255,0.04)]"
+        className="sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl bg-accent p-1 dark:bg-card-bg"
         {...handlers}
       >
         <AnimatePresence>
           {activeRect && (
             <motion.div
               key={sessionRef.current}
-              className="pointer-events-none absolute rounded-xl bg-foreground/[0.04] dark:bg-white/[0.04]"
+              className="pointer-events-none absolute rounded-xl bg-accent dark:bg-[#1f1f1f]"
               initial={{ opacity: 0, ...activeRect }}
               animate={{ opacity: 1, ...activeRect }}
               exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -241,16 +241,16 @@ function CategorySidebar({
               className={cn(
                 "relative z-10 flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 font-inter text-[14px] font-medium leading-none tracking-[-0.02em] transition-colors",
                 isActive
-                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.1)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.2)]"
+                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.06)]"
                   : "bg-transparent",
                 isActive
-                  ? "text-[rgba(37,37,37,0.9)] dark:text-[rgba(255,255,255,0.8)]"
-                  : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]",
+                  ? "text-page-text"
+                  : "text-page-text-subtle",
               )}
             >
               <span>{cat.label}</span>
               <span
-                className="flex min-w-fit items-center justify-center rounded-full bg-[rgba(255,51,85,0.1)] px-1 font-inter text-[10px] font-semibold leading-none text-[#FF3355]"
+                className="flex min-w-fit items-center justify-center rounded-full bg-[rgba(255,51,85,0.1)] px-1 font-inter text-[10px] font-semibold leading-none text-[#FF3355] dark:text-[#FB7185]"
               >
                 {cat.count}
               </span>
@@ -314,7 +314,7 @@ function NotificationList({
                 {/* Unread dot */}
                 {notif.unread && (
                   <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-[#111111]" />
+                    <span className="size-3 rounded-full border-2 border-white bg-[#FB7185] dark:border-page-bg" />
                   </span>
                 )}
 
@@ -412,7 +412,7 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       )}
     >
       <motion.div
-        className="absolute top-0.5 size-4 rounded-full bg-white shadow-sm dark:bg-[#191919]"
+        className="absolute top-0.5 size-4 rounded-full bg-white shadow-sm dark:bg-page-bg"
         animate={{ left: on ? 22 : 2 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
@@ -497,12 +497,12 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
                 key={ch.key}
                 onClick={() => toggleChannel(ch.key)}
                 className={cn(
-                  "flex h-[52px] cursor-pointer items-center gap-3 px-4 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]",
+                  "flex h-[52px] cursor-pointer items-center gap-3 px-4 transition-colors hover:bg-foreground/[0.02]",
                   !isLast && "border-b border-border"
                 )}
               >
                 {/* Icon circle */}
-                <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06] text-[#252525] dark:bg-white/[0.06] dark:text-[#e5e5e5]">
+                <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text">
                   {CHANNEL_ICONS[ch.key]}
                 </div>
                 {/* Name + status */}
@@ -521,7 +521,7 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
                     className={cn(
                       "font-inter text-xs",
                       ch.connected
-                        ? "text-[#00994D]"
+                        ? "text-[#00994D] dark:text-[#34D399]"
                         : "text-page-text-muted"
                     )}
                   >
@@ -597,14 +597,14 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium text-[#252525] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:text-[#e5e5e5] dark:hover:bg-white/[0.10]"
+          className="rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10]"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full bg-[#252525] px-4 py-2 font-inter text-sm font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#191919] dark:hover:bg-white/90"
+          className="rounded-full bg-foreground px-4 py-2 font-inter text-sm font-medium text-white transition-colors hover:bg-foreground/80 dark:text-page-bg"
         >
           Save preferences
         </button>
@@ -658,12 +658,12 @@ export default function NotificationsPageClient() {
               className={cn(
                 "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
                 activeCategory === cat.key
-                  ? "bg-foreground/[0.06] text-page-text dark:bg-white/[0.06]"
+                  ? "bg-foreground/[0.06] text-page-text"
                   : "text-foreground/60 dark:text-white/60"
               )}
             >
               {cat.label}
-              <span className="rounded-full bg-[rgba(255,51,85,0.1)] px-1.5 py-0.5 text-[10px] font-semibold text-[#FF3355]">
+              <span className="rounded-full bg-[rgba(255,51,85,0.1)] px-1.5 py-0.5 text-[10px] font-semibold text-[#FF3355] dark:text-[#FB7185]">
                 {cat.count}
               </span>
             </button>

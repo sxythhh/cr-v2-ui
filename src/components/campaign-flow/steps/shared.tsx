@@ -38,7 +38,7 @@ export function SectionHeading({ title, description }: { title: string; descript
 
 export function SegmentedControl({ options, value, onChange }: { options: { label: string; value: string; icon?: React.ReactNode }[]; value: string; onChange: (v: string) => void }) {
   return (
-    <div className="inline-flex self-start items-center p-0.5 gap-0.5 bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)] rounded-xl">
+    <div className="inline-flex self-start items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg">
       {options.map((opt) => {
         const isActive = opt.value === value;
         return (
@@ -47,7 +47,7 @@ export function SegmentedControl({ options, value, onChange }: { options: { labe
             onClick={() => onChange(opt.value)}
             className={`flex items-center justify-center gap-1.5 h-8 px-4 text-sm font-medium tracking-[-0.02em] rounded-[10px] transition-all ${
               isActive
-                ? "bg-white dark:bg-[#2a2a2a] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] text-page-text"
+                ? "bg-white dark:bg-[#222222] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] text-page-text"
                 : "text-page-text-subtle"
             }`}
             type="button"

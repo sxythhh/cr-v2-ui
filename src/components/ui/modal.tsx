@@ -146,7 +146,7 @@ export function Modal({
         >
           {/* Overlay */}
           <motion.div
-            className="absolute inset-0 bg-neutral-100/50 backdrop-blur-md dark:bg-neutral-900/50"
+            className="absolute inset-0 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: OVERLAY_TRANSITION }}
@@ -157,7 +157,7 @@ export function Modal({
           <motion.div
             ref={cardRef}
             className={cn(
-              "relative flex w-full flex-col overflow-y-auto rounded-t-[20px] border border-border bg-card-bg shadow-xl sm:rounded-[20px]",
+              "relative flex w-full flex-col overflow-y-auto rounded-t-[20px] border border-border bg-card-bg shadow-xl dark:bg-page-bg sm:rounded-[20px]",
               "max-h-[90dvh] scrollbar-hide",
               maxWidth ?? sizeClasses[size],
               className,

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import { GlassTooltip } from "@/components/ui/glass-tooltip";
 import { AnalyticsPocPanel } from "./AnalyticsPocPanel";
 import {
@@ -85,6 +86,60 @@ function resolvePlatformLabel(platform: string) {
 
   if (knownLabel) return knownLabel;
   return platform.charAt(0).toUpperCase() + platform.slice(1);
+}
+
+function MobilePostCard({
+  row,
+  index,
+}: {
+  row: AnalyticsPocTopPostRow;
+  index: number;
+}) {
+  const normalizedPlatform = row.platform.toLowerCase();
+  return (
+    <div className="flex items-center gap-0 border-b border-foreground/[0.03] px-1">
+      <div className="flex w-8 shrink-0 items-center justify-center self-stretch">
+        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+          {index + 1}
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col gap-3 py-3 pr-3">
+        <div className="flex items-center gap-4">
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <p className="truncate font-inter text-sm font-medium leading-none tracking-[-0.02em] text-[var(--ap-text)]">
+              {row.post}
+            </p>
+            <p className="font-inter text-xs leading-none tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+              {row.author}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-foreground/[0.03] p-1.5 backdrop-blur-xl">
+            {hasAnalyticsPocPlatformIcon(normalizedPlatform) ? (
+              <AnalyticsPocPlatformIcon
+                className="text-foreground/70"
+                platform={normalizedPlatform}
+                size={12}
+                tone="inherit"
+              />
+            ) : null}
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-inter text-xs tracking-[-0.02em] text-[var(--ap-text)]">
+            {formatCurrency(row.payout)}
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+              Views · {formatViews(row.views)}
+            </span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+              CPM · {formatCurrency(row.cpm)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function AnalyticsPocTopPostsTable({
@@ -234,27 +289,49 @@ export function AnalyticsPocTopPostsTable({
         </AnalyticsPocToggleGroup>
       </div>
 
-      <AnalyticsPocTable
-        columns={columns}
-        emptyMessage="No posts available"
-        onPageChange={setPage}
-        onSortKeyChange={(nextSortKey) => {
-          if (!isSortableKey(nextSortKey)) return;
-          if (nextSortKey === sortKey) {
-            setSortDirection((d) => (d === "desc" ? "asc" : "desc"));
-          } else {
-            setSortKey(nextSortKey);
-            setSortDirection("desc");
-          }
-          setPage(1);
-        }}
-        page={page}
-        pageSize={pageSize}
-        rowKey={(row) => row.id}
-        rows={rows}
-        sortDirection={sortDirection}
-        sortKey={sortKey}
-      />
+      {/* Mobile: card layout */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between border-b border-foreground/[0.03] px-1">
+          <div className="flex w-8 shrink-0 items-center justify-center py-3">
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+              #
+            </span>
+          </div>
+          <div className="flex-1 py-3 pr-3">
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+              Post
+            </span>
+          </div>
+        </div>
+        {rows.slice(0, pageSize).map((row, i) => (
+          <MobilePostCard key={row.id} row={row} index={i} />
+        ))}
+      </div>
+
+      {/* Desktop: full table */}
+      <div className="hidden md:block">
+        <AnalyticsPocTable
+          columns={columns}
+          emptyMessage="No posts available"
+          onPageChange={setPage}
+          onSortKeyChange={(nextSortKey) => {
+            if (!isSortableKey(nextSortKey)) return;
+            if (nextSortKey === sortKey) {
+              setSortDirection((d) => (d === "desc" ? "asc" : "desc"));
+            } else {
+              setSortKey(nextSortKey);
+              setSortDirection("desc");
+            }
+            setPage(1);
+          }}
+          page={page}
+          pageSize={pageSize}
+          rowKey={(row) => row.id}
+          rows={rows}
+          sortDirection={sortDirection}
+          sortKey={sortKey}
+        />
+      </div>
     </AnalyticsPocPanel>
   );
 }

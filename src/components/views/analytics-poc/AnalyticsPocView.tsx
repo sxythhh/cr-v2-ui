@@ -35,6 +35,7 @@ import {
 } from "@/components/analytics-poc";
 import { AnalyticsPocChartToggleChip } from "@/components/analytics-poc/AnalyticsPocChartToggleChip";
 import { AnalyticsPocPlatformSelect } from "@/components/analytics-poc/AnalyticsPocPlatformSelect";
+import { AnalyticsPocMobileCarousel } from "@/components/analytics-poc/AnalyticsPocMobileCarousel";
 import type { AnalyticsPocDayDrilldownData } from "@/components/analytics-poc/AnalyticsPocDayDrilldown";
 import { cn } from "@/lib/utils";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
@@ -73,13 +74,17 @@ function PageTabBar({
   onTabChange: (tab: PageTab) => void;
 }) {
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-4 dark:border-foreground/[0.08] sm:pr-5 lg:pr-10">
-      <ProximityTabs
-        tabs={PAGE_TABS.map((t) => ({ label: t }))}
-        selectedIndex={PAGE_TABS.indexOf(activeTab)}
-        onSelect={(i) => onTabChange(PAGE_TABS[i])}
-      />
-      <ExportButton />
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-0 dark:border-foreground/[0.08] sm:pr-5 lg:pr-10">
+      <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
+        <ProximityTabs
+          tabs={PAGE_TABS.map((t) => ({ label: t }))}
+          selectedIndex={PAGE_TABS.indexOf(activeTab)}
+          onSelect={(i) => onTabChange(PAGE_TABS[i])}
+        />
+      </div>
+      <div className="hidden sm:block">
+        <ExportButton />
+      </div>
     </header>
   );
 }
@@ -464,7 +469,16 @@ export function AnalyticsPocView() {
         </div>
       </AnalyticsPocPanel>
 
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+      {/* Mobile: carousel for heatmaps */}
+      <div className="md:hidden">
+        <AnalyticsPocMobileCarousel>
+          {data.heatmaps.map((heatmap) => (
+            <AnalyticsPocHeatmapCard key={heatmap.title} {...heatmap} />
+          ))}
+        </AnalyticsPocMobileCarousel>
+      </div>
+      {/* Desktop: grid */}
+      <div className="hidden gap-2 md:grid md:grid-cols-2">
         {data.heatmaps.map((heatmap) => (
           <AnalyticsPocHeatmapCard key={heatmap.title} {...heatmap} />
         ))}

@@ -843,10 +843,74 @@ function LandingView({
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 
+const SUPPORT_CATEGORIES = [
+  {
+    title: "Getting Started",
+    description: "Learn the basics of Content Rewards",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+    ),
+    categoryId: "general",
+  },
+  {
+    title: "For Brands",
+    description: "Campaigns, budgets, and creator management",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 7V5a4 4 0 0 0-8 0v2" />
+      </svg>
+    ),
+    categoryId: "brands",
+  },
+  {
+    title: "For Creators",
+    description: "Submissions, payouts, and growing your reach",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+      </svg>
+    ),
+    categoryId: "creators",
+  },
+  {
+    title: "Billing & Payments",
+    description: "Invoices, deposits, and payment methods",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
+      </svg>
+    ),
+    categoryId: "general",
+  },
+  {
+    title: "Account & Settings",
+    description: "Profile, team members, and workspace settings",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+    ),
+    categoryId: "general",
+  },
+  {
+    title: "Academy",
+    description: "Tutorials, guides, and best practices",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </svg>
+    ),
+    href: "/academy",
+  },
+];
+
 export function SupportPageClient() {
   const [selectedPage, setSelectedPage] = useState<DocPage | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAiMode, setIsAiMode] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const allPages = useMemo(() => {
     const seen = new Set<string>();
@@ -874,31 +938,23 @@ export function SupportPageClient() {
       .slice(0, 5);
   }, [searchQuery, allPages]);
 
-  return (
-    <div
-      className="min-h-dvh font-inter antialiased flex"
-      style={{ backgroundColor: C.pageBg }}
-    >
-      {/* Sidebar */}
-      <Sidebar
-        categories={categories}
-        activePage={selectedPage}
-        onSelectPage={(page) => {
-          setSelectedPage(page);
-          setSearchQuery("");
-        }}
-      />
+  const categoryPages = useMemo(() => {
+    if (!activeCategory) return [];
+    const cat = categories.find((c) => c.id === activeCategory);
+    return cat?.pages ?? [];
+  }, [activeCategory]);
 
-      {/* Main content area */}
-      <div className="flex-1 min-w-0">
+  return (
+    <div className="help-page font-inter antialiased">
+      <div className="min-w-0">
         {/* Header with search */}
-        {!selectedPage && (
-          <div className="py-12 sm:py-16 px-4 sm:px-10 max-w-[900px]">
+        {!selectedPage && !activeCategory && (
+          <div className="py-8 sm:py-10 px-4 sm:px-10 max-w-[900px]">
             <h1
-              className="text-[32px] sm:text-[48px] font-medium"
+              className="text-[28px] sm:text-[36px] font-semibold"
               style={{
-                letterSpacing: "-0.02em",
-                lineHeight: "50px",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.2,
                 color: C.textPrimary,
               }}
             >
@@ -962,28 +1018,114 @@ export function SupportPageClient() {
         {selectedPage ? (
           <ArticleView
             page={selectedPage}
-            onBack={() => setSelectedPage(null)}
+            onBack={() => {
+              setSelectedPage(null);
+              if (activeCategory) setActiveCategory(activeCategory);
+            }}
             allPages={allPages}
             onNavigate={(page) => {
               setSelectedPage(page);
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           />
+        ) : activeCategory ? (
+          /* Category article list */
+          <div className="px-4 sm:px-10 py-8 max-w-[900px]">
+            <button
+              type="button"
+              onClick={() => setActiveCategory(null)}
+              className="flex items-center gap-1.5 mb-6 font-inter text-[14px] font-medium tracking-[-0.02em] transition-colors hover:opacity-80"
+              style={{ color: C.textMuted, background: "none", border: "none", cursor: "pointer" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 4l-4 4 4 4" /></svg>
+              Back to Help Center
+            </button>
+            <h2 className="text-[24px] font-semibold tracking-[-0.04em]" style={{ color: C.textPrimary }}>
+              {categories.find((c) => c.id === activeCategory)?.name}
+            </h2>
+            <p className="text-[14px] font-medium mt-1 mb-6" style={{ color: C.textMuted }}>
+              {categoryPages.length} article{categoryPages.length !== 1 ? "s" : ""}
+            </p>
+            <div className="divide-y" style={{ borderColor: C.border }}>
+              {categoryPages.map((page) => (
+                <button
+                  key={page.id}
+                  type="button"
+                  onClick={() => setSelectedPage(page)}
+                  className="group flex items-center gap-4 w-full text-left py-4"
+                  style={{ background: "none", border: "none", cursor: "pointer" }}
+                >
+                  <div className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg" style={{ backgroundColor: C.surfaceBg }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="block text-[15px] font-medium tracking-[-0.4px] group-hover:underline" style={{ color: C.textPrimary }}>
+                      {page.title}
+                    </span>
+                    <span className="block text-[13px] mt-0.5 truncate" style={{ color: C.textMuted }}>
+                      {page.subtitle}
+                    </span>
+                  </div>
+                  <ChevronRight size={14} style={{ color: C.textMuted }} className="shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+                </button>
+              ))}
+            </div>
+          </div>
         ) : (
-          <LandingView pages={allPages} onSelectPage={(p) => setSelectedPage(p)} />
+          /* Category cards grid */
+          !searchQuery && (
+            <div className="px-4 sm:px-10 pb-6 max-w-[900px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {SUPPORT_CATEGORIES.map((cat) => {
+                  if (cat.href) {
+                    return (
+                      <a
+                        key={cat.title}
+                        href={cat.href}
+                        className="group flex flex-col gap-3 rounded-2xl border p-5 transition-colors hover:bg-foreground/[0.03]"
+                        style={{ borderColor: C.border }}
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: C.surfaceBg, color: C.textMuted }}>
+                          {cat.icon}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[15px] font-semibold tracking-[-0.4px]" style={{ color: C.textPrimary }}>{cat.title}</span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={C.textMuted} strokeWidth="1.5"><path d="M5 3h8v8" /><path d="M13 3L3 13" /></svg>
+                          </div>
+                          <p className="text-[13px] font-medium mt-1" style={{ color: C.textMuted }}>{cat.description}</p>
+                        </div>
+                      </a>
+                    );
+                  }
+                  return (
+                    <button
+                      key={cat.title}
+                      type="button"
+                      onClick={() => setActiveCategory(cat.categoryId!)}
+                      className="group flex flex-col gap-3 rounded-2xl border p-5 text-left transition-colors hover:bg-foreground/[0.03] cursor-pointer"
+                      style={{ borderColor: C.border, background: "none" }}
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: C.surfaceBg, color: C.textMuted }}>
+                        {cat.icon}
+                      </div>
+                      <div>
+                        <span className="text-[15px] font-semibold tracking-[-0.4px]" style={{ color: C.textPrimary }}>{cat.title}</span>
+                        <p className="text-[13px] font-medium mt-1" style={{ color: C.textMuted }}>{cat.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )
         )}
       </div>
 
       {/* AI Chat widget */}
       <SupportChat />
-
-      {/* Global hover styles */}
-      <style>{`
-        ::selection {
-          background-color: rgba(255, 120, 16, 0.9);
-          color: #fff;
-        }
-      `}</style>
     </div>
   );
 }

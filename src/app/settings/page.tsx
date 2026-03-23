@@ -49,7 +49,7 @@ const labelClass = "font-inter text-[12px] leading-[1] tracking-[-0.02em] text-p
 const cardClass = cn(
   "flex flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-white p-4",
   "shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-  "dark:border-white/[0.06] dark:bg-white/[0.02]",
+  "dark:border-border dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
 );
 
 // ── Select-like input with chevron ───────────────────────────────────────────
@@ -82,7 +82,7 @@ function ConnectedAccount({ name, detail, icon }: { name: string; detail: string
   return (
     <div className={cn(cardClass, "gap-2 p-4")}>
       <div className="flex items-center gap-3">
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white dark:border-white/[0.06] dark:bg-white/[0.04]">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white dark:border-card-inner-border dark:bg-card-inner-bg">
           <div className="flex size-5 items-center justify-center">{icon}</div>
         </div>
         <div className="flex flex-1 flex-col gap-0.5">
@@ -91,7 +91,7 @@ function ConnectedAccount({ name, detail, icon }: { name: string; detail: string
           </div>
           <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{detail}</span>
         </div>
-        <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">Connected</span>
+        <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">Connected</span>
       </div>
     </div>
   );
@@ -109,7 +109,7 @@ function ProfileTab() {
         <div className={cardClass}>
           {/* Avatar + change photo */}
           <div className="flex items-center gap-4">
-            <div className="size-14 rounded-full bg-[rgba(37,37,37,0.08)] dark:bg-white/[0.08]" />
+            <div className="size-14 rounded-full bg-[rgba(37,37,37,0.08)] dark:bg-foreground/[0.08]" />
             <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
               Change photo
             </button>
@@ -165,7 +165,7 @@ function ProfileTab() {
           <div className="flex justify-end">
             <button
               className={cn(
-                "inline-flex h-9 items-center justify-center rounded-full bg-foreground px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-white dark:text-[#111111]",
+                "inline-flex h-9 items-center justify-center rounded-full bg-foreground px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-white dark:text-page-bg",
                 "",
                 !dirty && "cursor-default opacity-30",
                 dirty && "cursor-pointer opacity-100",
@@ -223,7 +223,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
     >
       <div
         className={cn(
-          "size-4 rounded-full bg-white transition-transform dark:bg-[#111111]",
+          "size-4 rounded-full bg-white transition-transform dark:bg-page-bg",
           on ? "translate-x-5" : "translate-x-0",
         )}
       />
@@ -406,7 +406,7 @@ function NotificationsTab() {
                     if (!selectedRect) return null;
                     return (
                       <motion.div
-                        className="pointer-events-none absolute z-0 rounded-[10px] bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/[0.10]"
+                        className="pointer-events-none absolute z-0 rounded-[10px] bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                         initial={false}
                         animate={{ left: selectedRect.left, width: selectedRect.width, top: selectedRect.top, height: selectedRect.height }}
                         transition={springs.moderate}
@@ -517,7 +517,7 @@ function BrandCard({ brand }: { brand: (typeof BRANDS_DATA)[number] }) {
           <button className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
             Edit
           </button>
-          <button className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FF3355] transition-colors hover:bg-[rgba(255,37,37,0.10)]">
+          <button className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
             Remove
           </button>
         </div>
@@ -574,7 +574,7 @@ function BrandsTab() {
             Manage the brands your agency works with. Details stay private until a campaign goes live.
           </span>
         </div>
-        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-[#111111]">
+        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -619,22 +619,22 @@ const BANNED_MEMBERS = [
 function StatusBadge({ status }: { status: "active" | "pending" | "banned" }) {
   if (status === "active") {
     return (
-      <span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">
+      <span className="inline-flex items-center rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">
         Active
       </span>
     );
   }
   if (status === "pending") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(229,113,0,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#E57100]">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#E57100" /><path d="M6 3.5v2.5l1.5 1" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(229,113,0,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#E57100] dark:text-[#FB923C]">
+        <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C" /></svg>
         Pending
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(255,37,37,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FF3355]">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#FF3355" /><path d="M4.25 4.25l3.5 3.5M7.75 4.25l-3.5 3.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" /></svg>
+    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(251,113,133,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">
+      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM3.15 3.85711L3.85711 3.15L5 4.29289L6.14289 3.15L6.85 3.85711L5.70711 5L6.85 6.14289L6.14289 6.85L5 5.70711L3.85711 6.85L3.15 6.14289L4.29289 5L3.15 3.85711Z" fill="#FB7185" /></svg>
       Banned
     </span>
   );
@@ -732,7 +732,7 @@ function MemberDropdown({ onAction }: { onAction: (action: string) => void }) {
           onMouseMove={(e) => { e.stopPropagation(); handlers.onMouseMove(e); }}
           onMouseEnter={() => { handlers.onMouseEnter(); }}
           onMouseLeave={() => { handlers.onMouseLeave(); }}
-          className="absolute bottom-full right-0 z-50 mb-1 flex w-[180px] flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0px_4px_16px_rgba(0,0,0,0.08)] dark:bg-[#191919]"
+          className="absolute bottom-full right-0 z-50 mb-1 flex w-[180px] flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0px_4px_16px_rgba(0,0,0,0.08)] dark:bg-card-bg"
         >
           <AnimatePresence>
             {activeRect && (
@@ -768,7 +768,7 @@ function DropdownItem({ item, index, registerItem, onAction }: { item: { label: 
       onClick={() => onAction(item.action)}
       className={cn(
         "relative z-10 flex h-8 w-full cursor-pointer items-center rounded-lg px-2.5 font-inter text-[13px] font-medium tracking-[-0.02em]",
-        item.danger ? "text-[#FF3355]" : "text-page-text",
+        item.danger ? "text-[#FB7185]" : "text-page-text",
       )}
     >
       {item.label}
@@ -786,6 +786,7 @@ function ConfirmModal({
   description,
   confirmLabel,
   danger,
+  icon,
 }: {
   open: boolean;
   onClose: () => void;
@@ -794,33 +795,44 @@ function ConfirmModal({
   description: string;
   confirmLabel: string;
   danger?: boolean;
+  icon?: React.ReactNode;
 }) {
   return (
     <Modal open={open} onClose={onClose} size="sm" showClose={false}>
-      <div className="flex flex-col gap-5 p-6">
-        <div className="flex flex-col gap-2">
-          <span className="font-inter text-[16px] font-medium tracking-[-0.02em] text-page-text">{title}</span>
-          <span className="font-inter text-[14px] leading-[1.5] tracking-[-0.02em] text-page-text-muted">{description}</span>
+      <div className="flex flex-col items-center gap-4 px-5 pt-5">
+        {/* Icon circle */}
+        {icon && (
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+            {icon}
+          </div>
+        )}
+
+        {/* Text */}
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-inter text-lg font-medium tracking-[-0.02em] text-page-text">{title}</span>
+          <span className="max-w-[300px] text-center font-inter text-sm leading-[1.5] tracking-[-0.02em] text-page-text-muted">{description}</span>
         </div>
-        <div className="flex items-center justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => { onConfirm(); onClose(); }}
-            className={cn(
-              "inline-flex h-9 cursor-pointer items-center rounded-full px-4 font-inter text-[14px] font-medium tracking-[-0.02em] transition-colors",
-              danger
-                ? "bg-[#FF3355] text-white hover:bg-[#e62e4d]"
-                : "bg-foreground text-white hover:opacity-90 dark:text-[#111111]",
-            )}
-          >
-            {confirmLabel}
-          </button>
-        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex w-full items-center justify-end gap-2 px-5 pb-5 pt-4">
+        <button
+          onClick={onClose}
+          className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => { onConfirm(); onClose(); }}
+          className={cn(
+            "inline-flex h-9 cursor-pointer items-center rounded-full px-4 font-inter text-[14px] font-medium tracking-[-0.02em] transition-colors",
+            danger
+              ? "bg-[rgba(251,113,133,0.08)] text-[#FB7185] hover:bg-[rgba(251,113,133,0.12)]"
+              : "bg-foreground text-white hover:opacity-90 dark:text-page-bg",
+          )}
+        >
+          {confirmLabel}
+        </button>
       </div>
     </Modal>
   );
@@ -905,7 +917,7 @@ function BannedMemberRow({ member, index, registerItem, onUnban }: {
       <div className="flex min-w-0 flex-1 items-center gap-2 px-3 py-3">
         <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
         <div className="flex min-w-0 flex-col gap-1.5">
-          <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FF3355]">{member.name}</span>
+          <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">{member.name}</span>
           <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
         </div>
       </div>
@@ -959,6 +971,11 @@ function TeamTab() {
         description={`Are you sure you want to revoke the invitation for ${revokeTarget}? They will no longer be able to join your organization.`}
         confirmLabel="Revoke"
         danger
+        icon={
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 7L9 4C9 2.89543 9.89543 2 11 2H13C14.1046 2 15 2.89543 15 4V7M3 7H21M5 7V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" />
+          </svg>
+        }
       />
 
       {/* Unban modal */}
@@ -969,6 +986,12 @@ function TeamTab() {
         title="Unban member"
         description={`Are you sure you want to unban ${unbanTarget}? They will regain access to your organization.`}
         confirmLabel="Unban"
+        icon={
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" className="text-page-text" />
+            <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" />
+          </svg>
+        }
       />
 
       {/* Ban modal */}
@@ -980,6 +1003,12 @@ function TeamTab() {
         description={`Are you sure you want to ban ${banTarget}? They will lose all access to your organization immediately.`}
         confirmLabel="Ban member"
         danger
+        icon={
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" className="text-page-text" />
+            <path d="M5.63 5.63L18.37 18.37" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-page-text" />
+          </svg>
+        }
       />
 
       {/* Remove modal */}
@@ -991,6 +1020,11 @@ function TeamTab() {
         description={`Are you sure you want to remove ${removeTarget}? This action cannot be undone.`}
         confirmLabel="Remove"
         danger
+        icon={
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21M12.5 3.5C12.5 5.433 10.933 7 9 7C7.067 7 5.5 5.433 5.5 3.5C5.5 1.567 7.067 0 9 0C10.933 0 12.5 1.567 12.5 3.5ZM20 8L20 14M17 11H23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" />
+          </svg>
+        }
       />
 
       {/* Invite member modal */}
@@ -1017,7 +1051,7 @@ function TeamTab() {
             <button onClick={() => setInviteOpen(false)} className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
               Cancel
             </button>
-            <button onClick={() => setInviteOpen(false)} className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-[#111111]">
+            <button onClick={() => setInviteOpen(false)} className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
               Send invite
             </button>
           </div>
@@ -1032,7 +1066,7 @@ function TeamTab() {
             Manage who has access to your organization.
           </span>
         </div>
-        <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-[#111111]">
+        <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -1176,7 +1210,7 @@ function ColorPickerPopover({
       {open && (
         <div
           ref={popoverRef}
-          className="fixed z-[100] w-[240px] -translate-x-1/2 rounded-xl border border-foreground/[0.06] bg-white p-3 shadow-[0px_8px_24px_rgba(0,0,0,0.12)] dark:bg-[#191919]"
+          className="fixed z-[100] w-[240px] -translate-x-1/2 rounded-xl border border-foreground/[0.06] bg-white p-3 shadow-[0px_8px_24px_rgba(0,0,0,0.12)] dark:bg-card-bg"
           style={{ top: pos.top, left: pos.left }}
         >
           <div className="flex flex-col gap-3">
@@ -1248,7 +1282,7 @@ function AgencyProfileTab() {
                   className={cn(
                     "flex h-7 cursor-pointer items-center justify-center rounded-[10px] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] transition-colors",
                     previewMode === mode
-                      ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/[0.10] dark:text-white"
+                      ? "bg-white text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:text-white"
                       : "text-page-text-subtle hover:text-page-text",
                   )}
                 >
@@ -1296,7 +1330,7 @@ function AgencyProfileTab() {
               <div className="relative flex flex-1 flex-col gap-4 overflow-hidden px-5">
                 {/* Filter tabs */}
                 <div className="flex items-center gap-0.5 rounded-[14px] bg-foreground/[0.04] p-0.5">
-                  <div className="flex h-9 items-center gap-1.5 rounded-xl bg-white px-3 shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/[0.10]">
+                  <div className="flex h-9 items-center gap-1.5 rounded-xl bg-white px-3 shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]">
                     <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">All</span>
                     <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">8</span>
                   </div>
@@ -1396,7 +1430,7 @@ function AgencyProfileTab() {
                             <span className="inline-flex h-8 items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text">
                               {card.status === "rejected" ? "Browse similar" : card.status === "accepted" ? "View campaign" : "Withdraw"}
                             </span>
-                            <span className={cn("inline-flex h-8 items-center rounded-full px-3 font-inter text-[13px] font-medium tracking-[-0.02em]", card.status === "pending" ? "bg-foreground/[0.06] text-page-text" : "bg-foreground text-white dark:text-[#111111]")}>
+                            <span className={cn("inline-flex h-8 items-center rounded-full px-3 font-inter text-[13px] font-medium tracking-[-0.02em]", card.status === "pending" ? "bg-foreground/[0.06] text-page-text" : "bg-foreground text-white dark:text-page-bg")}>
                               {card.status === "rejected" ? "Reapply" : card.status === "accepted" ? "Submit" : "View details"}
                             </span>
                           </div>
@@ -1488,7 +1522,7 @@ function AgencyProfileTab() {
                             <div className="flex min-w-0 flex-1 flex-col gap-2">
                               <span className="truncate font-inter text-[14px] tracking-[-0.02em] text-page-text">{logoFile.name}</span>
                               <div className="flex items-center gap-2">
-                                <button onClick={() => setLogoFile(null)} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FF3355] transition-colors hover:bg-[rgba(255,37,37,0.10)]">
+                                <button onClick={() => setLogoFile(null)} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
                                   Delete
                                 </button>
                                 <button onClick={() => logoInputRef.current?.click()} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
@@ -1526,7 +1560,7 @@ function AgencyProfileTab() {
                               <img src={bannerFile.url} alt="Banner" className="h-full w-full object-cover" />
                             </div>
                             <div className="absolute bottom-3 right-3 flex items-center gap-2">
-                              <button onClick={() => setBannerFile(null)} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FF3355] backdrop-blur-sm transition-colors hover:bg-[rgba(255,37,37,0.10)]">
+                              <button onClick={() => setBannerFile(null)} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] backdrop-blur-sm transition-colors hover:bg-[rgba(251,113,133,0.12)]">
                                 Delete
                               </button>
                               <button onClick={() => bannerInputRef.current?.click()} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text backdrop-blur-sm transition-colors hover:bg-foreground/[0.10]">
@@ -1758,7 +1792,7 @@ function AgencyProfileTab() {
                           <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text hover:bg-foreground/[0.10]">
                             Cancel
                           </button>
-                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-[#111111]">
+                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-page-bg">
                             Add Member
                           </button>
                         </div>
@@ -1819,7 +1853,7 @@ function AgencyProfileTab() {
                           <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text hover:bg-foreground/[0.10]">
                             Cancel
                           </button>
-                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-[#111111]">
+                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-page-bg">
                             Add Case Study
                           </button>
                         </div>
@@ -1885,7 +1919,7 @@ function AgencyProfileTab() {
                           <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text hover:bg-foreground/[0.10]">
                             Cancel
                           </button>
-                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-[#111111]">
+                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-page-bg">
                             Add Testimonial
                           </button>
                         </div>
@@ -1933,7 +1967,7 @@ function AgencyProfileTab() {
                           <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text hover:bg-foreground/[0.10]">
                             Cancel
                           </button>
-                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-[#111111]">
+                          <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-white hover:opacity-90 dark:text-page-bg">
                             Add Brand
                           </button>
                         </div>
@@ -2039,7 +2073,7 @@ function OnboardingStepRow({ step, index, registerItem }: { step: typeof CLIENT_
       {index > 0 && <div className="pl-[52px]"><div className="h-px w-full bg-foreground/[0.06]" /></div>}
       <div className="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3">
         {/* Step number */}
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-foreground/[0.02] shadow-[0_0_0_2px_#FFFFFF] dark:shadow-[0_0_0_2px_#151515]">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-foreground/[0.02] shadow-[0_0_0_2px_#FFFFFF] dark:shadow-[0_0_0_2px_var(--page-outer-bg)]">
           <span className="font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text">{index + 1}</span>
         </div>
         {/* Text */}
@@ -2080,7 +2114,7 @@ function ClientOnboardingTab() {
         {/* Header section */}
         <div className="flex w-full flex-col items-center gap-4 pb-6">
           {/* User-add icon */}
-          <div className="flex size-14 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-[#151515] dark:shadow-[0_0_0_2px_#151515]">
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <svg width="19" height="20" viewBox="0 0 19 20" fill="none">
               <path d="M8.35156 0C5.86628 0 3.85156 2.01472 3.85156 4.5C3.85156 6.98528 5.86628 9 8.35156 9C10.8368 9 12.8516 6.98528 12.8516 4.5C12.8516 2.01472 10.8368 0 8.35156 0Z" fill="currentColor" fillOpacity="0.7" />
               <path d="M14.3516 12C14.9038 12 15.3516 12.4477 15.3516 13V15H17.3516C17.9038 15 18.3516 15.4477 18.3516 16C18.3516 16.5523 17.9038 17 17.3516 17H15.3516V19C15.3516 19.5523 14.9038 20 14.3516 20C13.7993 20 13.3516 19.5523 13.3516 19V17H11.3516C10.7993 17 10.3516 16.5523 10.3516 16C10.3516 15.4477 10.7993 15 11.3516 15H13.3516V13C13.3516 12.4477 13.7993 12 14.3516 12Z" fill="currentColor" fillOpacity="0.7" />
@@ -2098,7 +2132,7 @@ function ClientOnboardingTab() {
         </div>
 
         {/* Steps card */}
-        <div className="flex w-full flex-col rounded-[20px] border border-foreground/[0.06] bg-white p-6 dark:bg-[#151515]">
+        <div className="flex w-full flex-col rounded-[20px] border border-foreground/[0.06] bg-white p-6 dark:bg-page-bg">
           <div ref={stepsContainerRef} {...stepsHover.handlers} className="relative">
             <AnimatePresence>
               {stepsActiveRect && (
@@ -2139,7 +2173,7 @@ export default function SettingsPage() {
   const [copied, setCopied] = useState(false);
 
   return (
-    <div className="flex flex-1 flex-col dark:bg-[#111111]">
+    <div className="flex flex-1 flex-col dark:bg-page-bg">
       {/* Tab header */}
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
         <ProximityTabs

@@ -603,22 +603,22 @@ function creatorToDetails(creator: Creator): CreatorDetailsData {
     ],
     demographics: {
       ageGroups: [
-        { label: "13 - 17", percentage: 12, color: "rgba(174, 78, 238, 0.1)" },
-        { label: "18 - 24", percentage: 45, color: "rgba(0, 153, 77, 0.08)" },
-        { label: "24 - 34", percentage: 28, color: "rgba(238, 78, 81, 0.1)" },
-        { label: "35+", percentage: 15, color: "rgba(26, 103, 229, 0.08)" },
+        { label: "13 - 17", percentage: 12, color: "rgba(192, 132, 252, 0.1)" },
+        { label: "18 - 24", percentage: 45, color: "rgba(52, 211, 153, 0.08)" },
+        { label: "24 - 34", percentage: 28, color: "rgba(251, 113, 133, 0.1)" },
+        { label: "35+", percentage: 15, color: "rgba(96, 165, 250, 0.08)" },
       ],
       countries: [
-        { code: "US", label: "USA", percentage: 48, color: "rgba(174, 78, 238, 0.1)" },
-        { code: "GB", label: "UK", percentage: 14, color: "rgba(0, 153, 77, 0.08)" },
+        { code: "US", label: "USA", percentage: 48, color: "rgba(192, 132, 252, 0.1)" },
+        { code: "GB", label: "UK", percentage: 14, color: "rgba(52, 211, 153, 0.08)" },
         { code: "CA", label: "CA", percentage: 9, color: "rgba(6, 182, 212, 0.1)" },
-        { code: "DE", label: "DE", percentage: 6, color: "rgba(238, 78, 81, 0.1)" },
-        { code: "AU", label: "AU", percentage: 5, color: "rgba(229, 113, 0, 0.1)" },
-        { code: "OTHER", label: "Other", percentage: 18, color: "rgba(26, 103, 229, 0.08)" },
+        { code: "DE", label: "DE", percentage: 6, color: "rgba(251, 113, 133, 0.1)" },
+        { code: "AU", label: "AU", percentage: 5, color: "rgba(251, 146, 60, 0.1)" },
+        { code: "OTHER", label: "Other", percentage: 18, color: "rgba(96, 165, 250, 0.08)" },
       ],
       genderSplit: [
-        { label: "Male", percentage: 62, color: "rgba(26, 103, 229, 0.1)" },
-        { label: "Female", percentage: 34, color: "rgba(218, 85, 151, 0.1)" },
+        { label: "Male", percentage: 62, color: "rgba(96, 165, 250, 0.1)" },
+        { label: "Female", percentage: 34, color: "rgba(249, 168, 212, 0.1)" },
       ],
       interests: [
         { icon: "Gaming", label: "Gaming", percentage: 72 },
@@ -683,6 +683,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
           </svg>
         </button>
 
+        {/* Scrollable content */}
         <div className="scrollbar-hide flex flex-col items-center gap-4 overflow-y-auto p-5">
           <div className="flex flex-col items-center gap-4">
             <div className="relative flex size-14 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_var(--card-bg)]">
@@ -712,7 +713,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
           <div className="flex w-full flex-col gap-2">
             {SCORE_CARDS.map((card) => (
-              <div key={card.title} className="flex flex-col gap-2 rounded-2xl border border-border bg-card-bg p-4">
+              <div key={card.title} className="flex flex-col gap-2 rounded-2xl border border-card-inner-border bg-card-inner-bg p-4">
                 <span className="font-inter text-sm font-medium leading-[1] tracking-[-0.02em] text-page-text">
                   {card.title}
                 </span>
@@ -722,11 +723,14 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </div>
             ))}
           </div>
+        </div>
 
+        {/* Footer — pinned */}
+        <div className="shrink-0 border-t border-border px-5 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="flex w-full shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+            className="flex w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 py-2.5 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
           >
             Got it
           </button>

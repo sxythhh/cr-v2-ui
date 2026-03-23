@@ -1,10 +1,11 @@
-import { HelpCenterLanding } from "./page-client";
+import { SupportPageClient } from "@/components/support/SupportPage";
 
 export const metadata = {
-  title: "Help Center — Content Rewards",
-  description: "Find answers, guides, and support for Content Rewards.",
+  title: "Help — Content Rewards",
+  description:
+    "Get help with Content Rewards. Browse documentation, FAQs, and chat with our AI assistant.",
 };
 
 export default function HelpPage() {
-  return <HelpCenterLanding />;
+  return <SupportPageClient />;
 }

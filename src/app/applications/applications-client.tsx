@@ -305,7 +305,7 @@ function ApplicationDetailsModal({
             <div className="flex items-center justify-between">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#AE4EEE]">Instagram 33%</span>
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#EE4E51]">YouTube 33%</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">TikTok 33%</span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">TikTok 33%</span>
             </div>
           </div>
 
@@ -407,7 +407,7 @@ function ApplicationDetailsModal({
                   <img src={video.img} alt="" className="absolute inset-0 size-full object-cover" style={{ filter: "brightness(0.8)" }} />
                   {/* Play button */}
                   <div className="relative z-10 flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 2L12 7L4 12V2Z" fill="rgba(255,255,255,0.88)" /></svg>
+                    <svg width="14" height="16" viewBox="-1 0 16 18" fill="none"><path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="rgba(255,255,255,0.88)" /></svg>
                   </div>
                   {/* TikTok icon */}
                   <div className="absolute left-3 top-3 z-10">
@@ -443,7 +443,7 @@ function ApplicationDetailsModal({
         </div>
 
         {/* Footer with actions */}
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border bg-card-bg px-5 py-3">
+        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-5 py-3">
           <button
             className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] py-1.5 pl-2.5 pr-3 transition-colors hover:bg-foreground/[0.06]"
           >
@@ -463,7 +463,7 @@ function ApplicationDetailsModal({
           </button>
           <button
             onClick={() => { onAction?.("reject"); onClose(); }}
-            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] bg-[rgba(255,37,37,0.06)] py-1.5 pl-2.5 pr-3 text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.1)]"
+            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] bg-[rgba(251,113,133,0.08)] py-1.5 pl-2.5 pr-3 text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]"
           >
             <XCircleFilledIcon />
             <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em]">
@@ -557,7 +557,7 @@ function QuickReviewModal({
             <div className="flex items-center justify-between">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#AE4EEE]">Instagram 33%</span>
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#EE4E51]">YouTube 33%</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">TikTok 33%</span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">TikTok 33%</span>
             </div>
           </div>
 
@@ -576,8 +576,8 @@ function QuickReviewModal({
                   <img src={src} alt="" className="absolute inset-0 size-full object-cover" style={{ filter: "brightness(0.8)" }} />
                   {/* Play button */}
                   <div className="relative z-10 flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M4 2L12 7L4 12V2Z" fill="rgba(255,255,255,0.88)" />
+                    <svg width="14" height="16" viewBox="-1 0 16 18" fill="none">
+                      <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="rgba(255,255,255,0.88)" />
                     </svg>
                   </div>
                   {/* Platform icon */}
@@ -595,7 +595,7 @@ function QuickReviewModal({
         <div className="flex shrink-0 items-center justify-center gap-6 border-t border-foreground/[0.06] px-5 py-5">
             {/* Reject */}
             <div className="flex flex-col items-center gap-2">
-              <button type="button" onClick={() => onAction("reject")} className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(255,37,37,0.12)]">
+              <button type="button" onClick={() => onAction("reject")} className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.14)]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.54 12.46a.75.75 0 1 1-1.08 1.08L12 13.08l-2.46 2.46a.75.75 0 0 1-1.08-1.08L10.92 12 8.46 9.54a.75.75 0 0 1 1.08-1.08L12 10.92l2.46-2.46a.75.75 0 0 1 1.08 1.08L13.08 12l2.46 2.46Z" fill="#FF3355"/></svg>
               </button>
               <div className="flex items-center gap-1">
@@ -674,12 +674,12 @@ function ApplicationSegmentedTabs({ activeFilter, onSelect }: { activeFilter: nu
       onMouseMove={handlers.onMouseMove}
       onMouseEnter={handlers.onMouseEnter}
       onMouseLeave={handlers.onMouseLeave}
-      className="relative flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5"
+      className="relative flex items-center gap-0.5 rounded-2xl bg-accent p-0.5 dark:bg-card-bg"
     >
       {/* Active indicator */}
       {activeRect && (
         <motion.div
-          className="pointer-events-none absolute rounded-[10px] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg"
+          className="pointer-events-none absolute rounded-[10px] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
           animate={{ left: activeRect.left, width: activeRect.width, top: activeRect.top, height: activeRect.height }}
           transition={{ type: "spring", duration: 0.25, bounce: 0.1 }}
         />
@@ -827,7 +827,7 @@ function ApplicationCard({ app, onClick }: { app: Application; onClick: () => vo
             <CheckCircleFilledIcon />
             Accept
           </button>
-          <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] bg-[rgba(255,37,37,0.06)] py-1.5 pl-2.5 pr-3 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.1)]">
+          <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] bg-[rgba(251,113,133,0.08)] py-1.5 pl-2.5 pr-3 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
             <XCircleFilledIcon />
             Reject
           </button>

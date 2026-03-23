@@ -42,11 +42,10 @@ function FilterIcon({ className }: { className?: string }) {
 
 // ── Icons ───────────────────────────────────────────────────────────
 
-function ClockIcon({ color = "currentColor", size = 12 }: { color?: string; size?: number }) {
+function PendingClockIcon({ size = 12 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 12 12" fill="none">
-      <circle cx="6" cy="6" r="5" stroke={color} strokeWidth="1.2" />
-      <path d="M6 3V6L8 7" stroke={color} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 10 10" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C" />
     </svg>
   );
 }
@@ -1115,14 +1114,14 @@ function VideoPlayer({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[9999] flex overflow-hidden bg-black"
+          className="fixed inset-0 z-[9999] flex flex-col overflow-hidden bg-black md:flex-row"
         >
           {/* Full-screen blurred background — synced with playback */}
           <video ref={fsBgVideoRef} src={src} className="pointer-events-none absolute inset-0 z-0 h-full w-full scale-110 object-cover" style={{ filter: "blur(50px)" }} muted playsInline loop />
           <div className="pointer-events-none absolute inset-0 z-0 bg-black/40" />
 
-          {/* Left: Video */}
-          <div className="relative z-[1] flex flex-1 flex-col p-2">
+          {/* Left/Top: Video */}
+          <div className="relative z-[1] flex min-h-0 flex-1 flex-col p-2">
             <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-[20px] bg-black">
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[120px]" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%)" }} />
               <video
@@ -1283,8 +1282,8 @@ function VideoPlayer({
               </div>
             </div>
           </div>
-          {/* Right: Timeline */}
-          <div className="relative z-[1] flex w-[320px] shrink-0 flex-col justify-end p-2 lg:w-[400px]">
+          {/* Right/Bottom: Timeline */}
+          <div className="relative z-[1] flex shrink-0 flex-col justify-end p-2 md:w-[320px] lg:w-[400px]">
             <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Timeline</span>
@@ -1406,7 +1405,7 @@ function VideoPlayer({
                   actionContent={
                     <div className="flex items-center gap-1 pl-6">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg>
-                      <span className="font-inter text-sm tracking-[-0.02em] text-[#00994D]">Approved video</span>
+                      <span className="font-inter text-sm tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Approved video</span>
                     </div>
                   }
                 />
@@ -1417,7 +1416,7 @@ function VideoPlayer({
                 <FullscreenCommentInput formatTime={formatTime} currentTime={currentTime} />
                 {/* Reject / Approve */}
                 <div className="flex gap-2">
-                  <button className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(255,37,37,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525]">Reject</span></button>
+                  <button className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185]">Reject</span></button>
                   <button className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Approve</span></button>
                 </div>
               </div>
@@ -1556,8 +1555,8 @@ function VideoPlayer({
                   className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]"
                 >
                   {isPlaying ? <PauseIcon /> : (
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M3 1.5L10.5 6L3 10.5V1.5Z" fill="white" />
+                    <svg width="8" height="10" viewBox="-1 0 16 18" fill="none">
+                      <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="white" />
                     </svg>
                   )}
                 </button>
@@ -2027,10 +2026,10 @@ function AIReviewPanel({ submission, scoreColor, onAction }: { submission: Submi
       <div className="flex gap-2 p-3">
         <button
           onClick={() => onAction?.("reject")}
-          className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(255,37,37,0.12)] dark:bg-[rgba(255,37,37,0.12)] dark:hover:bg-[rgba(255,37,37,0.2)]"
+          className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
-          <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF2525]">
+          <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
             Reject
           </span>
         </button>
@@ -2311,10 +2310,38 @@ function TimelineUploadIcon() {
   );
 }
 
+/* ── Mobile Submission Tab Bar ──────────────────────────────────────── */
+
+const MOBILE_SUB_TABS = ["Overview", "Stats", "AI Quality"] as const;
+type MobileSubTab = (typeof MOBILE_SUB_TABS)[number];
+
+function MobileSubmissionTabBar({ activeTab, onTabChange }: { activeTab: MobileSubTab; onTabChange: (t: MobileSubTab) => void }) {
+  return (
+    <div className="flex border-b border-foreground/[0.03]">
+      {MOBILE_SUB_TABS.map((tab) => (
+        <button
+          key={tab}
+          type="button"
+          onClick={() => onTabChange(tab)}
+          className={cn(
+            "flex flex-1 items-center justify-center py-4 font-inter text-sm font-medium tracking-[-0.02em]",
+            activeTab === tab
+              ? "border-b border-page-text text-page-text"
+              : "text-page-text-muted",
+          )}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function SubmissionCard({ submission, onAction }: { submission: Submission; onAction?: (action: "approve" | "reject") => void }) {
   const isPass = submission.aiResult === "pass";
   const scoreColor = isPass ? "#00B259" : "#FF2525";
   const [aiSummaryHidden, setAiSummaryHidden] = useState(false);
+  const [mobileTab, setMobileTab] = useState<MobileSubTab>("Overview");
   const [metricState, setMetricState] = useState<Record<string, boolean>>({
     views: true,
     likes: true,
@@ -2331,23 +2358,23 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
 
   return (
     <div className="overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
-      {/* Header row */}
-      <div className="flex items-center border-b border-foreground/[0.06]">
-        {/* Creator info */}
-        <div className="flex flex-1 items-center gap-3 px-3 py-3">
+      {/* ───── MOBILE LAYOUT ───── */}
+      <div className="md:hidden">
+        {/* Creator header */}
+        <div className="flex items-center gap-3 border-b border-foreground/[0.03] p-3">
           <img
             src={submission.avatar}
             alt={submission.creator}
             className="size-9 rounded-full object-cover"
           />
-          <div className="flex flex-col gap-1.5">
+          <div className="min-w-0 flex-1">
             <span className="font-inter text-sm font-medium leading-none tracking-[-0.02em] text-page-text">
               {submission.creator}
             </span>
-            <div className="flex items-center gap-1">
+            <div className="mt-1.5 flex items-center gap-1">
               <PlatformIcon platform={submission.platform} size={12} className="opacity-50" />
               <span className="font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/20">·</span>
-              <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+              <span className="truncate font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                 {submission.campaign}
               </span>
               <span className="font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/20">·</span>
@@ -2360,155 +2387,327 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
               </span>
             </div>
           </div>
-
-          {/* Status badge */}
-          <div className="ml-auto flex items-center gap-1 rounded-full bg-[rgba(255,144,37,0.1)] py-2 pr-2 pl-1.5">
-            <ClockIcon color="#FF9025" />
-            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF9025]">
-              Pending
-            </span>
+          <div className="flex items-center gap-1 rounded-full bg-[rgba(255,144,37,0.1)] p-2">
+            <PendingClockIcon size={16} />
           </div>
-
-          {/* Dot menu */}
           <div onClick={(e) => e.stopPropagation()}>
             <DotMenuPopover aiSummaryHidden={aiSummaryHidden} onToggleAiSummary={() => setAiSummaryHidden((v) => !v)} />
           </div>
         </div>
 
-        {/* AI Quality section / Action buttons when summary hidden */}
-        {aiSummaryHidden ? (
-          <div className="flex w-[200px] shrink-0 items-center gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[280px]">
-            <button
-              onClick={() => onAction?.("reject")}
-              className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(255,37,37,0.12)] dark:bg-[rgba(255,37,37,0.12)] dark:hover:bg-[rgba(255,37,37,0.2)]"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
-              <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF2525]">
-                Reject
-              </span>
-            </button>
-            <button
-              onClick={() => onAction?.("approve")}
-              className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
-                Approve
-              </span>
-            </button>
-          </div>
-        ) : (
-          <div className="flex w-[280px] shrink-0 flex-col gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[360px]">
-            <div className="flex items-center gap-2">
-              <div className="flex flex-1 items-center gap-1.5">
-                <SparkleIcon color={scoreColor} />
-                <span
-                  className="font-inter text-sm font-medium leading-none tracking-[-0.02em]"
-                  style={{ color: scoreColor }}
-                >
-                  {submission.aiScore}/100
-                </span>
-              </div>
-              <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text">
-                AI Quality
+        {/* AI Quality bar */}
+        <div className="flex flex-col gap-2 border-b border-foreground/[0.03] p-3">
+          <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center gap-1.5">
+              <SparkleIcon color={scoreColor} />
+              <span className="font-inter text-sm font-medium leading-none tracking-[-0.02em]" style={{ color: scoreColor }}>
+                {submission.aiScore}/100
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex flex-1 items-center gap-1">
-                <span
-                  className="font-inter text-sm font-medium leading-none tracking-[-0.02em]"
-                  style={{ color: scoreColor }}
-                >
-                  {isPass ? "Pass" : "Fail"}
+            <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text">
+              AI Quality
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="font-inter text-sm font-medium leading-none tracking-[-0.02em]" style={{ color: scoreColor }}>
+              {isPass ? "Pass" : "Fail"}
+            </span>
+            <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+              {submission.checksPassed}/{submission.checksTotal} passed
+            </span>
+          </div>
+        </div>
+
+        {/* Tab bar */}
+        <MobileSubmissionTabBar activeTab={mobileTab} onTabChange={setMobileTab} />
+
+        {/* Tab content */}
+        {mobileTab === "Overview" && (
+          <div className="flex" style={{ height: 328 }}>
+            {/* Video preview — cropped/zoomed */}
+            <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210 }}>
+              <div className="h-full overflow-hidden rounded-xl">
+                <VideoPlayer
+                  src={submission.videoUrl}
+                  platform={submission.platform}
+                  duration={submission.videoDuration}
+                />
+              </div>
+            </div>
+            {/* Stats sidebar */}
+            <div className="flex flex-1 flex-col gap-2 p-3">
+              <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
+              <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
+              <StatMiniCard
+                value={`${submission.botScore}/100`}
+                label="Bot score"
+                valueColor={submission.botScoreColor}
+                variant="outlined"
+              />
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3">
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top country</span>
+                <div className="flex items-center gap-1.5">
+                  <img
+                    src={`https://hatscripts.github.io/circle-flags/flags/${submission.countryCode}.svg`}
+                    alt={submission.topCountry}
+                    className="size-3 shrink-0 rounded-full"
+                  />
+                  <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                    {submission.topCountry}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3">
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top age</span>
+                <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                  {submission.topAge}
                 </span>
               </div>
-              <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
-                {submission.checksPassed}/{submission.checksTotal} passed
-              </span>
             </div>
           </div>
         )}
+
+        {mobileTab === "Stats" && (
+          <div className="flex flex-col gap-2 p-3">
+            <div className="flex gap-2">
+              <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
+              <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
+              <StatMiniCard
+                value={`${submission.botScore}/100`}
+                label="Bot score"
+                valueColor={submission.botScoreColor}
+                variant="outlined"
+              />
+            </div>
+            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3">
+              <div className="flex flex-wrap items-center gap-2 pb-2">
+                <MetricPill label="Views" value={submission.views} color="#4D81EE" bg="rgba(77,129,238,0.1)" active={metricState.views} onClick={() => toggleMetric("views")} />
+                <MetricPill label="Likes" value={submission.likes} color="#DA5597" bg="rgba(218,85,151,0.1)" active={metricState.likes} onClick={() => toggleMetric("likes")} />
+                <MetricPill label="Comments" value={submission.comments} color="#E9A23B" bg="rgba(233,162,59,0.1)" active={metricState.comments} onClick={() => toggleMetric("comments")} />
+                <MetricPill label="Shares" value={submission.shares} color="var(--page-text-subtle)" bg="rgba(128,128,128,0.1)" active={metricState.shares} onClick={() => toggleMetric("shares")} />
+              </div>
+              <AnalyticsPocChartPlaceholder
+                variant="line"
+                chartStylePreset="performance-main"
+                lineChart={SUBMISSIONS_CHART_DATA}
+                activeLineDataset="daily"
+                visibleMetricKeys={visibleMetricKeys}
+                heightClassName="h-[172px]"
+              />
+            </div>
+          </div>
+        )}
+
+        {mobileTab === "AI Quality" && !aiSummaryHidden && (
+          <div className="p-3">
+            <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
+          </div>
+        )}
+
+        {/* Action buttons */}
+        <div className="flex items-center gap-2 p-3">
+          <button
+            onClick={() => onAction?.("reject")}
+            className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
+              Reject
+            </span>
+          </button>
+          <button
+            onClick={() => onAction?.("approve")}
+            className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
+              Approve
+            </span>
+          </button>
+        </div>
       </div>
 
-      {/* Body: 3-column layout */}
-      <div className="flex" style={{ height: 380 }}>
-        {/* Col 1: Video Player */}
-        <div className="w-[200px] shrink-0 overflow-hidden lg:w-[260px]">
-          <VideoPlayer
-            src={submission.videoUrl}
-            platform={submission.platform}
-            duration={submission.videoDuration}
-          />
-        </div>
-
-        {/* Col 2: Stats, Chart, Info */}
-        <div className="flex flex-1 flex-col gap-2 overflow-hidden p-3">
-          {/* Stat cards */}
-          <div className="flex gap-2">
-            <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
-            <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
-            <StatMiniCard
-              value={`${submission.botScore}/100`}
-              label="Bot score"
-              valueColor={submission.botScoreColor}
-              variant="outlined"
+      {/* ───── DESKTOP LAYOUT ───── */}
+      <div className="hidden md:block">
+        {/* Header row */}
+        <div className="flex items-center border-b border-foreground/[0.06]">
+          {/* Creator info */}
+          <div className="flex flex-1 items-center gap-3 px-3 py-3">
+            <img
+              src={submission.avatar}
+              alt={submission.creator}
+              className="size-9 rounded-full object-cover"
             />
-          </div>
-
-          {/* Performance chart card */}
-          <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3">
-            {/* Metric pills */}
-            <div className="flex flex-wrap items-center gap-2 pb-2">
-              <MetricPill label="Views" value={submission.views} color="#4D81EE" bg="rgba(77,129,238,0.1)" active={metricState.views} onClick={() => toggleMetric("views")} />
-              <MetricPill label="Likes" value={submission.likes} color="#DA5597" bg="rgba(218,85,151,0.1)" active={metricState.likes} onClick={() => toggleMetric("likes")} />
-              <MetricPill label="Comments" value={submission.comments} color="#E9A23B" bg="rgba(233,162,59,0.1)" active={metricState.comments} onClick={() => toggleMetric("comments")} />
-              <MetricPill label="Shares" value={submission.shares} color="var(--page-text-subtle)" bg="rgba(128,128,128,0.1)" active={metricState.shares} onClick={() => toggleMetric("shares")} />
-            </div>
-
-            {/* Chart */}
-            <AnalyticsPocChartPlaceholder
-              variant="line"
-              chartStylePreset="performance-main"
-              lineChart={SUBMISSIONS_CHART_DATA}
-              activeLineDataset="daily"
-              visibleMetricKeys={visibleMetricKeys}
-              heightClassName="h-[172px]"
-            />
-          </div>
-
-          {/* Bottom info row */}
-          <div className="flex gap-2">
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
-              <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
-                Top country
+            <div className="flex flex-col gap-1.5">
+              <span className="font-inter text-sm font-medium leading-none tracking-[-0.02em] text-page-text">
+                {submission.creator}
               </span>
-              <div className="flex min-w-0 items-center gap-1.5">
-                <img
-                  src={`https://hatscripts.github.io/circle-flags/flags/${submission.countryCode}.svg`}
-                  alt={submission.topCountry}
-                  className="size-4 shrink-0 rounded-full"
-                />
-                <span className="truncate font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
-                  {submission.topCountry}
+              <div className="flex items-center gap-1">
+                <PlatformIcon platform={submission.platform} size={12} className="opacity-50" />
+                <span className="font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/20">·</span>
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  {submission.campaign}
+                </span>
+                <span className="font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/20">·</span>
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  {submission.date}
+                </span>
+                <span className="font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/20">·</span>
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  {submission.timeLeft}
                 </span>
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
-              <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
-                Top age
+
+            {/* Status badge */}
+            <div className="ml-auto flex items-center gap-1 rounded-full bg-[rgba(255,144,37,0.1)] py-2 pr-2 pl-1.5">
+              <PendingClockIcon />
+              <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF9025]">
+                Pending
               </span>
-              <span className="truncate font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
-                {submission.topAge}
-              </span>
+            </div>
+
+            {/* Dot menu */}
+            <div onClick={(e) => e.stopPropagation()}>
+              <DotMenuPopover aiSummaryHidden={aiSummaryHidden} onToggleAiSummary={() => setAiSummaryHidden((v) => !v)} />
             </div>
           </div>
 
+          {/* AI Quality section / Action buttons when summary hidden */}
+          {aiSummaryHidden ? (
+            <div className="flex w-[200px] shrink-0 items-center gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[280px]">
+              <button
+                onClick={() => onAction?.("reject")}
+                className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+                <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
+                  Reject
+                </span>
+              </button>
+              <button
+                onClick={() => onAction?.("approve")}
+                className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
+                  Approve
+                </span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex w-[280px] shrink-0 flex-col gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[360px]">
+              <div className="flex items-center gap-2">
+                <div className="flex flex-1 items-center gap-1.5">
+                  <SparkleIcon color={scoreColor} />
+                  <span
+                    className="font-inter text-sm font-medium leading-none tracking-[-0.02em]"
+                    style={{ color: scoreColor }}
+                  >
+                    {submission.aiScore}/100
+                  </span>
+                </div>
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text">
+                  AI Quality
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex flex-1 items-center gap-1">
+                  <span
+                    className="font-inter text-sm font-medium leading-none tracking-[-0.02em]"
+                    style={{ color: scoreColor }}
+                  >
+                    {isPass ? "Pass" : "Fail"}
+                  </span>
+                </div>
+                <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  {submission.checksPassed}/{submission.checksTotal} passed
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Col 3: AI Review Panel */}
-        {!aiSummaryHidden && (
-          <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
-        )}
+        {/* Body: 3-column layout */}
+        <div className="flex" style={{ height: 380 }}>
+          {/* Col 1: Video Player */}
+          <div className="w-[200px] shrink-0 overflow-hidden lg:w-[260px]">
+            <VideoPlayer
+              src={submission.videoUrl}
+              platform={submission.platform}
+              duration={submission.videoDuration}
+            />
+          </div>
+
+          {/* Col 2: Stats, Chart, Info */}
+          <div className="flex flex-1 flex-col gap-2 overflow-hidden p-3">
+            {/* Stat cards */}
+            <div className="flex gap-2">
+              <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
+              <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
+              <StatMiniCard
+                value={`${submission.botScore}/100`}
+                label="Bot score"
+                valueColor={submission.botScoreColor}
+                variant="outlined"
+              />
+            </div>
+
+            {/* Performance chart card */}
+            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3">
+              {/* Metric pills */}
+              <div className="flex flex-wrap items-center gap-2 pb-2">
+                <MetricPill label="Views" value={submission.views} color="#4D81EE" bg="rgba(77,129,238,0.1)" active={metricState.views} onClick={() => toggleMetric("views")} />
+                <MetricPill label="Likes" value={submission.likes} color="#DA5597" bg="rgba(218,85,151,0.1)" active={metricState.likes} onClick={() => toggleMetric("likes")} />
+                <MetricPill label="Comments" value={submission.comments} color="#E9A23B" bg="rgba(233,162,59,0.1)" active={metricState.comments} onClick={() => toggleMetric("comments")} />
+                <MetricPill label="Shares" value={submission.shares} color="var(--page-text-subtle)" bg="rgba(128,128,128,0.1)" active={metricState.shares} onClick={() => toggleMetric("shares")} />
+              </div>
+
+              {/* Chart */}
+              <AnalyticsPocChartPlaceholder
+                variant="line"
+                chartStylePreset="performance-main"
+                lineChart={SUBMISSIONS_CHART_DATA}
+                activeLineDataset="daily"
+                visibleMetricKeys={visibleMetricKeys}
+                heightClassName="h-[172px]"
+              />
+            </div>
+
+            {/* Bottom info row */}
+            <div className="flex gap-2">
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
+                <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  Top country
+                </span>
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <img
+                    src={`https://hatscripts.github.io/circle-flags/flags/${submission.countryCode}.svg`}
+                    alt={submission.topCountry}
+                    className="size-4 shrink-0 rounded-full"
+                  />
+                  <span className="truncate font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                    {submission.topCountry}
+                  </span>
+                </div>
+              </div>
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
+                <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
+                  Top age
+                </span>
+                <span className="truncate font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                  {submission.topAge}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Col 3: AI Review Panel */}
+          {!aiSummaryHidden && (
+            <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
+          )}
+        </div>
       </div>
 
     </div>
@@ -2844,7 +3043,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             {SCORE_CARDS.map((card) => (
               <div
                 key={card.title}
-                className="flex flex-col gap-2 rounded-2xl border border-border bg-card-bg p-4"
+                className="flex flex-col gap-2 rounded-2xl border border-card-inner-border bg-card-inner-bg p-4"
               >
                 <span className="font-inter text-sm font-medium leading-[1] tracking-[-0.02em] text-page-text">
                   {card.title}
@@ -2855,12 +3054,14 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Got it button — scrolls into view */}
+        {/* Footer — pinned */}
+        <div className="shrink-0 border-t border-border px-5 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="flex w-full shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+            className="flex w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 py-2.5 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
           >
             Got it
           </button>

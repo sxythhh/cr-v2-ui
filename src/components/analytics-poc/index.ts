@@ -1,4 +1,5 @@
 export { AnalyticsPocCardHeader } from "./AnalyticsPocCardPrimitives";
+export { AnalyticsPocMobileCarousel } from "./AnalyticsPocMobileCarousel";
 export { AnalyticsPocClusterDrilldown } from "./AnalyticsPocClusterDrilldown";
 export { AnalyticsPocDateRangePicker } from "./AnalyticsPocDateRangePicker";
 export { AnalyticsPocSelect } from "./AnalyticsPocSelect";

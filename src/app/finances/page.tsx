@@ -7,8 +7,16 @@ import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
+import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
+import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
-const TABS = ["Overview", "Campaigns", "Invoices", "Client Onboarding"] as const;
+const TABS = ["Overview", "Campaigns", "Invoices"] as const;
 
 function ReceiptIcon() {
   return (
@@ -44,7 +52,7 @@ function FinanceHeader({
         {/* Deposit */}
         <button
           type="button"
-          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-foreground transition-colors hover:bg-foreground/[0.10]"
+          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
@@ -55,7 +63,7 @@ function FinanceHeader({
         {/* Withdraw */}
         <button
           type="button"
-          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-foreground transition-colors hover:bg-foreground/[0.10]"
+          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
         >
           <ExportIcon />
           Withdraw
@@ -68,53 +76,29 @@ function FinanceHeader({
 }
 
 function FinanceMoreMenu() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
-
   return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className={cn(
-          "flex size-9 cursor-pointer items-center justify-center rounded-full transition-colors",
-          open ? "bg-foreground/[0.12]" : "bg-foreground/[0.12] hover:bg-foreground/[0.16]",
-        )}
-      >
-        <svg width="3" height="14" viewBox="0 0 3 14" fill="none">
-          <path fillRule="evenodd" clipRule="evenodd" d="M0 1.33333C0 0.596954 0.596954 0 1.33333 0C2.06971 0 2.66667 0.596954 2.66667 1.33333C2.66667 2.06971 2.06971 2.66667 1.33333 2.66667C0.596954 2.66667 0 2.06971 0 1.33333ZM0 6.66667C0 5.93029 0.596954 5.33333 1.33333 5.33333C2.06971 5.33333 2.66667 5.93029 2.66667 6.66667C2.66667 7.40305 2.06971 8 1.33333 8C0.596954 8 0 7.40305 0 6.66667ZM0 12C0 11.2636 0.596954 10.6667 1.33333 10.6667C2.06971 10.6667 2.66667 11.2636 2.66667 12C2.66667 12.7364 2.06971 13.3333 1.33333 13.3333C0.596954 13.3333 0 12.7364 0 12Z" fill="currentColor" className="text-foreground" />
-        </svg>
-      </button>
-      {open && (
-        <div className="absolute right-0 top-11 z-50 flex w-64 flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:bg-card-bg">
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 transition-colors hover:bg-foreground/[0.04]"
-          >
-            <ExportIcon />
-            <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Export report</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 transition-colors hover:bg-foreground/[0.04]"
-          >
-            <ReceiptIcon />
-            <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Download invoice</span>
-          </button>
-        </div>
-      )}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.12] transition-colors hover:bg-foreground/[0.16]"
+        >
+          <svg width="3" height="14" viewBox="0 0 3 14" fill="none">
+            <path fillRule="evenodd" clipRule="evenodd" d="M0 1.33333C0 0.596954 0.596954 0 1.33333 0C2.06971 0 2.66667 0.596954 2.66667 1.33333C2.66667 2.06971 2.06971 2.66667 1.33333 2.66667C0.596954 2.66667 0 2.06971 0 1.33333ZM0 6.66667C0 5.93029 0.596954 5.33333 1.33333 5.33333C2.06971 5.33333 2.66667 5.93029 2.66667 6.66667C2.66667 7.40305 2.06971 8 1.33333 8C0.596954 8 0 7.40305 0 6.66667ZM0 12C0 11.2636 0.596954 10.6667 1.33333 10.6667C2.06971 10.6667 2.66667 11.2636 2.66667 12C2.66667 12.7364 2.06971 13.3333 1.33333 13.3333C0.596954 13.3333 0 12.7364 0 12Z" fill="currentColor" />
+          </svg>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-64 rounded-xl border-foreground/[0.06] bg-card-bg p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)]">
+        <DropdownMenuItem className="cursor-pointer gap-2 rounded-lg px-2.5 py-2">
+          <ExportIcon />
+          <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Export report</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer gap-2 rounded-lg px-2.5 py-2">
+          <ReceiptIcon />
+          <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Download invoice</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -151,13 +135,34 @@ function ExternalLinkIcon() {
   );
 }
 
-function CheckCircleIcon() {
+/** Correct status icons matching payouts page */
+function StatusCheckIcon({ color = "#00B259" }: { color?: string }) {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="#00994D">
-      <path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm2.354 3.854a.5.5 0 00-.708-.708L5.5 6.293 4.354 5.146a.5.5 0 00-.708.708l1.5 1.5a.5.5 0 00.708 0l2.5-2.5z" />
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM6.88698 4.06663C7.06184 3.85291 7.03034 3.5379 6.81662 3.36304C6.6029 3.18817 6.28789 3.21967 6.11302 3.4334L4.21288 5.75579L3.60355 5.14646C3.40829 4.9512 3.09171 4.9512 2.89645 5.14646C2.70118 5.34172 2.70118 5.65831 2.89645 5.85357L3.89645 6.85357C3.99634 6.95346 4.13382 7.00643 4.27491 6.9994C4.416 6.99236 4.54752 6.92597 4.63698 6.81663L6.88698 4.06663Z" fill={color} />
     </svg>
   );
 }
+function StatusClockIcon({ color = "#FF9025" }: { color?: string }) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill={color} />
+    </svg>
+  );
+}
+function StatusDotIcon({ color = "#00B259" }: { color?: string }) {
+  return <div className="size-1.5 rounded-full" style={{ background: color }} />;
+}
+function StatusIcon({ status, color }: { status: string; color: string }) {
+  switch (status) {
+    case "Withdrawn": case "Paid": return <StatusCheckIcon color={color} />;
+    case "Pending": return <StatusClockIcon color={color} />;
+    case "Active": return <StatusDotIcon color={color} />;
+    default: return <StatusDotIcon color={color} />;
+  }
+}
+
+const TIMEFRAME_OPTIONS = ["Last 7 days", "Last 14 days", "Last month", "Last 3 months", "Last 6 months", "Last year", "All time"] as const;
 
 const CAMPAIGN_ROWS = [
   {
@@ -208,7 +213,7 @@ const CAMPAIGN_ROWS = [
     collected: "$0.00",
     collectedColor: "text-[#E57100]",
     outstanding: "$15,000",
-    outstandingColor: "text-[#FF3355]",
+    outstandingColor: "text-[#FF3355] dark:text-[#FB7185]",
     status: "Pending" as const,
     statusColor: "bg-[rgba(229,113,0,0.1)] text-[#E57100]",
   },
@@ -332,12 +337,12 @@ const INVOICES: InvoiceData[] = [
     campaign: "Spring Influencer Series",
     client: "SocialSphere Media",
     dueDate: "Due 2026-02-15",
-    dueDateColor: "text-[#FF3355]",
+    dueDateColor: "text-[#FF3355] dark:text-[#FB7185]",
     amount: "$3,500.00",
-    amountColor: "text-[#FF3355]",
+    amountColor: "text-[#FF3355] dark:text-[#FB7185]",
     status: "Overdue",
     statusLabel: "Overdue",
-    statusColor: "text-[#FF3355]",
+    statusColor: "text-[#FF3355] dark:text-[#FB7185]",
   },
   {
     id: "INV-2026-007",
@@ -397,7 +402,7 @@ const INVOICES: InvoiceData[] = [
     amountColor: "text-page-text",
     status: "Paid",
     statusLabel: "Paid 2026-03-01",
-    statusColor: "text-[#00994D]",
+    statusColor: "text-[#00994D] dark:text-[#34D399]",
     paidDate: "2026-03-01",
     faded: true,
   },
@@ -434,7 +439,7 @@ function InvoicesTab() {
               className={cn(
                 "flex h-8 cursor-pointer items-center gap-1.5 rounded-[10px] px-4 font-inter text-sm tracking-[-0.02em] transition-all",
                 filter === f
-                  ? "bg-white font-medium text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10"
+                  ? "bg-card-bg font-medium text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                   : "font-medium text-foreground/70 hover:text-foreground",
               )}
             >
@@ -446,7 +451,7 @@ function InvoicesTab() {
 
         {/* Search + filter */}
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-[300px] items-center gap-2 rounded-xl border border-foreground/[0.06] bg-white px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/5">
+          <div className="flex h-9 w-[300px] items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
             <SearchIcon />
             <span className="font-inter text-sm tracking-[-0.02em] text-foreground/70">Search</span>
           </div>
@@ -483,7 +488,7 @@ function InvoicesTab() {
           >
             {/* Top: icon + due date */}
             <div className="flex items-center justify-between">
-              <div className="flex size-9 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/5">
+              <div className="flex size-9 items-center justify-center rounded-full border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
                 <InvoiceReceiptIcon />
               </div>
               <span className={cn("font-inter text-xs tracking-[-0.02em]", inv.dueDateColor)}>{inv.dueDate}</span>
@@ -505,7 +510,7 @@ function InvoicesTab() {
               <div className="flex flex-col gap-1.5">
                 <span className={cn("font-inter text-sm font-medium tabular-nums tracking-[-0.02em]", inv.amountColor)}>{inv.amount}</span>
                 <div className="flex items-center gap-1.5">
-                  {inv.status === "Paid" && <CheckCircleIcon />}
+                  {inv.status === "Paid" && <StatusCheckIcon color="#00994D" />}
                   <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]", inv.statusColor)}>{inv.statusLabel}</span>
                 </div>
               </div>
@@ -526,123 +531,46 @@ function InvoicesTab() {
   );
 }
 
-function UserAddIcon() {
+
+// ── Whop Integration Card (shared) ───────────────────────────────────
+
+const whopButtonClass =
+  "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.03] px-4 pl-3 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]";
+
+function WhopIntegrationCard() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M20 8v6M23 11h-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.3" />
-    </svg>
-  );
-}
-
-const ONBOARDING_STEPS = [
-  {
-    number: 1,
-    title: "Client intake form",
-    description: "Auto-generate a contract with payment terms, deliverables, and policies.",
-  },
-  {
-    number: 2,
-    title: "Connect payment via Whop",
-    description: "Once connected, all future payments flow through Whop automatically.",
-  },
-  {
-    number: 3,
-    title: "Generate contract",
-    description: "Auto-generate that includes all relevant info, via Whop.",
-  },
-  {
-    number: 4,
-    title: "Create campaign",
-    description: "Select specifics and campaign model (CPM, retainer, per post)",
-  },
-  {
-    number: 5,
-    title: "First invoice & reporting",
-    description: "Schedule recurring invoices based on contract terms.",
-  },
-];
-
-function ClientOnboardingTab() {
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const stepsHover = useProximityHover(stepsRef);
-  const activeRect = stepsHover.activeIndex !== null ? stepsHover.itemRects[stepsHover.activeIndex] : null;
-
-  useEffect(() => { stepsHover.measureItems(); }, [stepsHover.measureItems]);
-
-  return (
-    <div className="flex flex-col items-center py-10">
-      {/* Icon */}
-      <div className="flex size-14 items-center justify-center rounded-full border border-foreground/[0.06] bg-white text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/5">
-        <UserAddIcon />
+    <div className={cn(cardBase, "flex-row items-center gap-3 p-4")}>
+      <div className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-page-border bg-white">
+        <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+          <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="#FA4616"/>
+          <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="#FA4616"/>
+          <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="#FA4616"/>
+        </svg>
       </div>
-
-      {/* Title + description */}
-      <h2 className="mt-5 font-inter text-xl font-medium tracking-[-0.02em] text-page-text">
-        New client setup
-      </h2>
-      <p className="mt-2 max-w-[440px] text-center font-inter text-sm tracking-[-0.02em] text-foreground/50">
-        Your agency dashboard lets you run multiple brand campaigns from one place. Add your first brand client to get started.
-      </p>
-
-      {/* Steps card */}
-      <div className="mt-8 w-full max-w-[720px] overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
-        <div ref={stepsRef} className="relative">
-          {activeRect && (
-            <motion.div
-              className="pointer-events-none absolute inset-x-[-8px] z-0 rounded-xl bg-foreground/[0.04]"
-              initial={false}
-              animate={{
-                top: activeRect.top - 4,
-                height: activeRect.height + 8,
-                opacity: 1,
-              }}
-              transition={springs.moderate}
-            />
-          )}
-          {ONBOARDING_STEPS.map((step, i) => (
-            <div key={step.number}>
-              <div
-                data-proximity-item
-                className="relative z-10 flex items-center gap-3 py-3"
-              >
-                {/* Number circle */}
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-gradient-to-b from-white to-[#f8f8f8] font-inter text-sm font-semibold tabular-nums text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:from-white/10 dark:to-white/5">
-                  {step.number}
-                </div>
-
-                {/* Text */}
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                    {step.title}
-                  </span>
-                  <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
-                    {step.description}
-                  </span>
-                </div>
-
-                {/* Chevron */}
-                <div className="shrink-0">
-                  <ChevronRightIcon />
-                </div>
-              </div>
-
-              {/* Separator */}
-              {i < ONBOARDING_STEPS.length - 1 && (
-                <div className="ml-[52px] h-px bg-foreground/[0.06]" />
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Connect your Whop account</span>
+        <span className="max-w-[400px] font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-subtle">
+          Handle all billing: payments, auto-invoicing, contracts, and instant payouts across 241+ territories. Free to connect, 2.7% + 30c/transaction.
+        </span>
+      </div>
+      <div className="flex shrink-0 items-center gap-2">
+        <button type="button" className={whopButtonClass}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 8V8.005M6 6.5C6 5.68041 7 5.96594 7 5C7 4.44772 6.55228 4 6 4C5.62986 4 5.30669 4.2011 5.13378 4.5M10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6C1.5 3.51472 3.51472 1.5 6 1.5C8.48528 1.5 10.5 3.51472 10.5 6Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Learn more
+        </button>
+        <button type="button" className={whopButtonClass}>
+          <svg width="20" height="10" viewBox="0 0 22 12" fill="none">
+            <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="currentColor"/>
+            <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="currentColor"/>
+            <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="currentColor"/>
+          </svg>
+          Connect Whop
+          <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+            <path d="M7.33464 0.667969L11.3346 4.66796L7.33464 8.66797M10.668 4.66796H0.667969" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   );
@@ -651,7 +579,7 @@ function ClientOnboardingTab() {
 // ── Finance Overview ──────────────────────────────────────────────────
 
 const cardBase =
-  "flex flex-col justify-center rounded-2xl border border-card-border bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]";
+  "flex flex-col justify-center rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]";
 const muted = "text-page-text-muted";
 
 const OVERVIEW_STATS = [
@@ -677,6 +605,49 @@ const BOTTOM_STATS = [
 const BAR_MONTHS = ["Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25","Jan '26","Feb '26","Mar '26"];
 const BAR_HEIGHTS = [108,142,156,88,168,168,204,192,171,142,168,192];
 const PROFIT_HEIGHTS = [77,97,105,112,105,105,108,108,108,97,105,108];
+
+const REVENUE_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
+  datasets: {
+    daily: [
+      { index: 0, label: "Jan 5", views: 12000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 1, label: "Jan 8", views: 18000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 2, label: "Jan 11", views: 32000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 3, label: "Jan 14", views: 28000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 4, label: "Jan 17", views: 38000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 5, label: "Jan 20", views: 35000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 6, label: "Jan 23", views: 42000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 7, label: "Jan 27", views: 39000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 8, label: "Jan 30", views: 45000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 9, label: "Feb 2", views: 41000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 10, label: "Feb 5", views: 47800, engagement: 0, likes: 0, comments: 0, shares: 0 },
+    ],
+    cumulative: [
+      { index: 0, label: "Jan 5", views: 12000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 1, label: "Jan 8", views: 30000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 2, label: "Jan 11", views: 62000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 3, label: "Jan 14", views: 90000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 4, label: "Jan 17", views: 128000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 5, label: "Jan 20", views: 163000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 6, label: "Jan 23", views: 205000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 7, label: "Jan 27", views: 244000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 8, label: "Jan 30", views: 289000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 9, label: "Feb 2", views: 330000, engagement: 0, likes: 0, comments: 0, shares: 0 },
+      { index: 10, label: "Feb 5", views: 377800, engagement: 0, likes: 0, comments: 0, shares: 0 },
+    ],
+  },
+  series: [
+    { key: "views", label: "Revenue", color: "#E9A23B", axis: "left", tooltipValueType: "currency" },
+  ],
+  xTicks: [
+    { label: "Jan 5", index: 0 }, { label: "Jan 8", index: 1 }, { label: "Jan 11", index: 2 },
+    { label: "Jan 14", index: 3 }, { label: "Jan 17", index: 4 }, { label: "Jan 20", index: 5 },
+    { label: "Jan 23", index: 6 }, { label: "Jan 27", index: 7 }, { label: "Jan 30", index: 8 },
+    { label: "Feb 2", index: 9 }, { label: "Feb 5", index: 10 },
+  ],
+  yLabels: ["$0", "$10K", "$20K", "$30K", "$40K", "$50K"],
+  rightYLabels: [],
+  leftDomain: [0, 50000],
+};
 
 const CAMPAIGN_REVENUE = [
   { name: "FanDuel - All Formats", amount: "$5,000", pct: "42%", barWidth: "55%", type: "CPM · 12 creators", typeColor: "#0162FF" },
@@ -710,6 +681,7 @@ const UPCOMING_PAYOUTS = [
 function FinanceOverview() {
   const [chartToggle, setChartToggle] = useState<"GMV" | "Total revenue">("GMV");
   const [activityTab, setActivityTab] = useState<"Withdrawals" | "Deposits" | "Deductions">("Withdrawals");
+  const [timeframe, setTimeframe] = useState<typeof TIMEFRAME_OPTIONS[number]>("Last month");
   const activityRef = useRef<HTMLDivElement>(null);
   const activityHover = useProximityHover(activityRef);
   const activityRect = activityHover.activeIndex !== null ? activityHover.itemRects[activityHover.activeIndex] : null;
@@ -729,36 +701,7 @@ function FinanceOverview() {
   return (
     <div className="flex flex-col gap-2">
       {/* Whop Integration Card */}
-      <div className={cn(cardBase, "flex-row items-center gap-3 p-4")}>
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-border bg-white dark:bg-white/[0.05]">
-          <svg width="22" height="12" viewBox="0 0 22 12" fill="none" className="dark:brightness-0 dark:invert">
-            <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="#FA4616"/>
-            <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="#FA4616"/>
-            <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="#FA4616"/>
-          </svg>
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">Connect your Whop account</span>
-          <span className="max-w-[400px] font-inter text-[12px] leading-[150%] tracking-[-0.02em] text-page-text-subtle">
-            Handle all billing: payments, auto-invoicing, contracts, and instant payouts across 241+ territories. Free to connect, 2.7% + 30c/transaction.
-          </span>
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <button type="button" className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-4 pl-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-foreground/[0.04]">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.125" opacity="0.5"/><path d="M6 5.5V8.5M6 3.5h.005" stroke="currentColor" strokeWidth="1.125" strokeLinecap="round"/></svg>
-            Learn more
-          </button>
-          <button type="button" className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
-            <svg width="20" height="10" viewBox="0 0 22 12" fill="none">
-              <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="currentColor"/>
-              <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="currentColor"/>
-              <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="currentColor"/>
-            </svg>
-            Connect Whop
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/></svg>
-          </button>
-        </div>
-      </div>
+      <WhopIntegrationCard />
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
@@ -798,7 +741,7 @@ function FinanceOverview() {
                   className={cn(
                     "flex h-8 cursor-pointer items-center rounded-[10px] px-4 font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] transition-all",
                     chartToggle === t
-                      ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-white/10 dark:text-white"
+                      ? "bg-card-bg text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                       : "text-page-text-subtle",
                   )}
                 >
@@ -810,34 +753,40 @@ function FinanceOverview() {
               $47.8K
             </span>
           </div>
-          {/* Date picker button */}
-          <button type="button" className="flex h-9 items-center gap-2 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-3.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[rgba(255,255,255,0.05)]">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#252525"><path d="M12 2.667h1.333C14.07 2.667 14.667 3.264 14.667 4v9.333c0 .737-.597 1.334-1.334 1.334H2.667c-.737 0-1.334-.597-1.334-1.334V4c0-.736.597-1.333 1.334-1.333H4M4 1.333v2.667M12 1.333v2.667M1.333 6.667h13.334" fillRule="evenodd" clipRule="evenodd"/></svg>
-            <span className="font-inter text-[14px] tracking-[-0.02em] text-page-text">Last month</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="rgba(37,37,37,0.5)" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
+          {/* Date picker dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button" className="flex h-9 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+                <svg width="12" height="13" viewBox="0 0 12 13" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V10.6667C12 11.7712 11.1046 12.6667 10 12.6667H2C0.895431 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0ZM1.33333 6V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H10C10.3682 11.3333 10.6667 11.0349 10.6667 10.6667V6H1.33333Z" fill="currentColor" fillOpacity="0.5" /></svg>
+                <span className="font-inter text-[14px] tracking-[-0.02em] text-page-text">{timeframe}</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" /></svg>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 rounded-xl border-foreground/[0.06] bg-card-bg p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)]">
+              {TIMEFRAME_OPTIONS.map((opt) => (
+                <DropdownMenuItem
+                  key={opt}
+                  onClick={() => setTimeframe(opt)}
+                  className={cn(
+                    "cursor-pointer rounded-lg px-3 py-1.5 font-inter text-sm tracking-[-0.02em]",
+                    timeframe === opt ? "font-medium text-page-text" : "text-page-text-muted",
+                  )}
+                >
+                  {opt}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
-        {/* Chart area (placeholder line) */}
-        <div className="relative h-[220px] w-full">
-          <svg width="100%" height="100%" viewBox="0 0 1096 220" preserveAspectRatio="none" className="overflow-visible">
-            <path d="M0 180 C100 160, 200 120, 300 140 S500 60, 600 80 S800 40, 900 30 S1000 50, 1096 70" stroke="#55B685" strokeWidth="1.5" fill="none"/>
-            <path d="M0 180 C100 160, 200 120, 300 140 S500 60, 600 80 S800 40, 900 30 S1000 50, 1096 70 V220 H0Z" fill="url(#chartGrad)" opacity="0.3"/>
-            <defs>
-              <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(244,114,182,0.1)"/>
-                <stop offset="50%" stopColor="rgba(244,114,182,0)"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        {/* X-axis labels */}
-        <div className="flex justify-between px-9">
-          {["Jan 5","Jan 8","Jan 11","Jan 14","Jan 17","Jan 20","Jan 23","Jan 27","Jan 30","Feb 2","Feb 5"].map((d) => (
-            <span key={d} className={cn("font-inter text-[10px] leading-[120%]", muted)}>{d}</span>
-          ))}
-        </div>
+        {/* Chart */}
+        <AnalyticsPocChartPlaceholder
+          variant="line"
+          lineChart={REVENUE_CHART_DATA}
+          activeLineDataset="daily"
+          visibleMetricKeys={["views"]}
+          heightClassName="h-[200px]"
+        />
       </div>
 
       {/* 3 Bottom Stat Cards */}
@@ -846,7 +795,7 @@ function FinanceOverview() {
           <div key={s.label} className={cn(cardBase, "h-[61px] flex-1 gap-2 p-3")}>
             <div className="flex items-center justify-between">
               <span className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{s.value}</span>
-              <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#00994D]">{s.change}</span>
+              <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{s.change}</span>
             </div>
             <div className="flex items-center justify-between gap-1.5">
               <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{s.label}</span>
@@ -860,17 +809,17 @@ function FinanceOverview() {
       <div className={cn(cardBase, "p-0")}>
         <div className="flex items-center justify-between px-4 py-4">
           <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent activity</span>
-          <div className="flex items-center gap-1 rounded-full bg-foreground/[0.04] p-0.5">
+          <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5">
             {(["Withdrawals", "Deposits", "Deductions"] as const).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setActivityTab(t)}
                 className={cn(
-                  "flex h-7 cursor-pointer items-center rounded-full px-3 font-inter text-[12px] font-medium tracking-[-0.02em] transition-all",
+                  "flex h-7 cursor-pointer items-center rounded-[10px] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] transition-all",
                   activityTab === t
-                    ? "border border-border bg-white text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-white/10"
-                    : "text-page-text-subtle",
+                    ? "bg-card-bg text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                    : "text-page-text-subtle hover:text-page-text",
                 )}
               >
                 {t}
@@ -902,7 +851,7 @@ function FinanceOverview() {
               </div>
               <div className="flex w-[96px] items-center py-3">
                 <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: row.statusBg }}>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill={row.statusColor}><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm2.354 3.854a.5.5 0 00-.708-.708L5.5 6.293 4.354 5.146a.5.5 0 00-.708.708l1.5 1.5a.5.5 0 00.708 0l2.5-2.5z"/></svg>
+                  <StatusIcon status={row.status} color={row.statusColor} />
                   <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: row.statusColor }}>{row.status}</span>
                 </span>
               </div>
@@ -918,7 +867,7 @@ function FinanceOverview() {
               <div className="flex flex-1 items-center justify-end py-3 pr-5">
                 <span className="flex items-center gap-1.5">
                   <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>Download</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 8l4-0M10 6l0 4" stroke="rgba(37,37,37,0.5)" strokeWidth="1.33" strokeLinecap="round"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted opacity-60"><path d="M6 8l4-0M10 6l0 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round"/></svg>
                 </span>
               </div>
             </div>
@@ -940,7 +889,7 @@ function FinanceOverview() {
           <div className="flex flex-1 items-center justify-end py-3 pr-5"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
         </div>
         {/* Campaign row */}
-        <div className="flex items-center border-b border-[rgba(37,37,37,0.03)] px-1 dark:border-[rgba(255,255,255,0.03)]">
+        <div className="flex items-center border-b border-foreground/[0.03] px-1">
           <div className="flex w-[240px] flex-col justify-center gap-1.5 px-5 py-3">
             <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">Gambling Summer Push</span>
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>BetKing Corp</span>
@@ -955,15 +904,15 @@ function FinanceOverview() {
             <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">$20,000</span>
           </div>
           <div className="flex w-[128px] items-center px-3 py-3">
-            <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">$10,000</span>
+            <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">$10,000</span>
           </div>
           <div className="flex w-[128px] items-center px-3 py-3">
             <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">$0.00</span>
           </div>
           <div className="flex flex-1 items-center justify-end py-3 pr-5">
-            <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: "rgba(0,153,77,0.08)" }}>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="#00994D"><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm2.354 3.854a.5.5 0 00-.708-.708L5.5 6.293 4.354 5.146a.5.5 0 00-.708.708l1.5 1.5a.5.5 0 00.708 0l2.5-2.5z"/></svg>
-              <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">Active</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-2" style={{ background: "rgba(0,153,77,0.08)" }}>
+              <StatusIcon status="Active" color="#00994D" />
+              <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Active</span>
             </span>
           </div>
         </div>
@@ -984,7 +933,7 @@ function FinanceOverview() {
               <div className="flex h-6 items-center gap-1 rounded-full border border-border px-2">
                 <div className="size-2 rounded-full bg-[#00994D]" />
                 <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">Net profit</span>
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">$23.3K</span>
+                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">$23.3K</span>
               </div>
             </div>
           </div>
@@ -1001,8 +950,8 @@ function FinanceOverview() {
               {BAR_MONTHS.map((m, i) => (
                 <div key={m} className="flex flex-col items-center gap-2">
                   <div className="relative w-7" style={{ height: BAR_HEIGHTS[i] }}>
-                    <div className="absolute inset-x-0 top-0 rounded-lg border border-white" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.3)" }} />
-                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-white" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.3)" }} />
+                    <div className="absolute inset-x-0 top-0 rounded-lg border border-card-bg" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.3)" }} />
+                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-card-bg" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.3)" }} />
                   </div>
                 </div>
               ))}
@@ -1018,12 +967,12 @@ function FinanceOverview() {
 
         {/* Revenue by campaign */}
         <div className={cn(cardBase, "relative w-[400px] shrink-0 gap-4 overflow-hidden p-4")}>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-white to-transparent dark:from-[#1a1a1a] dark:via-[#1a1a1a]" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
           <div className="relative z-10 flex items-center justify-between">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Revenue by campaign</span>
             <div className="flex items-center gap-1">
               <span className={cn("font-inter text-[12px] tracking-[-0.02em]", muted)}>$836.50 fees</span>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="rgba(37,37,37,0.5)"><circle cx="6" cy="6" r="5" fillRule="evenodd" clipRule="evenodd"/><path d="M6 5.5V8.5M6 3.5h.005" stroke="white" strokeWidth="1" strokeLinecap="round"/></svg>
+              <svg width="12" height="12" viewBox="0 0 12 12" className="text-page-text-muted opacity-60"><circle cx="6" cy="6" r="5" fill="currentColor" fillRule="evenodd" clipRule="evenodd"/><path d="M6 5.5V8.5M6 3.5h.005" stroke="var(--card-bg, white)" strokeWidth="1" strokeLinecap="round"/></svg>
             </div>
           </div>
           <div className="relative z-10 flex flex-col gap-2">
@@ -1036,8 +985,8 @@ function FinanceOverview() {
                     <span className={cn("font-inter text-[10px] font-medium tracking-[-0.02em]", muted)}>{c.pct}</span>
                   </div>
                 </div>
-                <div className="h-1 w-full rounded-full bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)]">
-                  <div className="h-full rounded-full bg-black dark:bg-white" style={{ width: c.barWidth }} />
+                <div className="h-1 w-full rounded-full bg-foreground/[0.06]">
+                  <div className="h-full rounded-full bg-foreground" style={{ width: c.barWidth }} />
                 </div>
                 <span className="font-inter text-[12px] tracking-[-0.02em]" style={{ color: c.typeColor }}>{c.type}</span>
               </div>
@@ -1050,7 +999,7 @@ function FinanceOverview() {
       <div className="flex gap-2">
         {/* Recent transactions */}
         <div className={cn(cardBase, "relative flex-1 overflow-hidden p-0")}>
-          <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-white via-white to-transparent dark:from-[#1a1a1a] dark:via-[#1a1a1a]" />
+          <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
           <div className="relative z-10 px-4 py-4">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent transactions</span>
           </div>
@@ -1083,7 +1032,7 @@ function FinanceOverview() {
                 <div className="flex w-[128px] items-center justify-end py-3.5 pr-3">
                   <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: tx.statusBg }}>
                     {tx.status === "Paid" ? (
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill={tx.statusColor}><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm2.354 3.854a.5.5 0 00-.708-.708L5.5 6.293 4.354 5.146a.5.5 0 00-.708.708l1.5 1.5a.5.5 0 00.708 0l2.5-2.5z"/></svg>
+                      <StatusIcon status={tx.status} color={tx.statusColor} />
                     ) : (
                       <svg width="12" height="12" viewBox="0 0 12 12" fill={tx.statusColor}><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm0 3a.5.5 0 01.5.5V6h.5a.5.5 0 010 1h-1a.5.5 0 01-.5-.5v-2A.5.5 0 016 4z"/></svg>
                     )}
@@ -1097,7 +1046,7 @@ function FinanceOverview() {
 
         {/* Client payment health */}
         <div className={cn(cardBase, "relative w-[400px] shrink-0 gap-4 overflow-hidden p-4")}>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-white to-transparent dark:from-[#1a1a1a] dark:via-[#1a1a1a]" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
           <div className="relative z-10 flex items-center justify-between">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Client payment health</span>
           </div>
@@ -1110,7 +1059,7 @@ function FinanceOverview() {
                 <div className="size-6 shrink-0 rounded-full bg-gradient-to-br from-pink-300 to-purple-400" />
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
-                  <span className="font-inter text-[12px] tracking-[-0.02em]" style={{ color: c.subtitleColor || "rgba(37,37,37,0.5)" }}>{c.subtitle}</span>
+                  <span className={cn("font-inter text-[12px] tracking-[-0.02em]", c.subtitleColor ? "" : "text-page-text-muted")} style={c.subtitleColor ? { color: c.subtitleColor } : undefined}>{c.subtitle}</span>
                 </div>
                 <span className="shrink-0 font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: c.ratingColor }}>{c.rating}</span>
               </div>
@@ -1124,17 +1073,19 @@ function FinanceOverview() {
         <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Client payment health</span>
         <div className="flex gap-4">
           {UPCOMING_PAYOUTS.map((p, i) => (
-            <div key={i} className={cn(cardBase, "flex-1 justify-between gap-3 p-4")}>
-              <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{p.date}</span>
-              <div className="flex flex-col gap-2">
+            <div key={i} className={cn(cardBase, "flex-1 flex-row items-start justify-between gap-2 p-4")}>
+              <div className="flex flex-1 flex-col gap-3">
+                <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{p.date}</span>
                 <span className="font-inter text-[16px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{p.amount}</span>
-                <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{p.desc}</span>
+                <div className="flex flex-col gap-2">
+                  <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{p.desc}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex shrink-0 items-center gap-1">
                 {p.tags.map((tag) => (
-                  <span key={tag} className="flex h-6 items-center gap-1 rounded-full bg-[rgba(37,37,37,0.04)] px-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:bg-[rgba(255,255,255,0.04)] dark:text-[rgba(255,255,255,0.5)]">
+                  <span key={tag} className="flex h-6 items-center gap-1 rounded-full bg-foreground/[0.04] px-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">
                     {tag === "Recurring" && (
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="rgba(37,37,37,0.7)"><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 014.33 2.5H9a.5.5 0 000 1h2.5a.5.5 0 00.5-.5V1.5a.5.5 0 00-1 0v1.07A6 6 0 000 6a.5.5 0 001 0 5 5 0 015-5zm5 5a.5.5 0 00-1 0 5 5 0 01-9.33 2.5H3a.5.5 0 000-1H.5a.5.5 0 00-.5.5v2.5a.5.5 0 001 0v-1.07A6 6 0 0012 6z"/></svg>
+                      <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2.02142 7C2.66199 7.61793 3.54474 8 4.5 8C6.433 8 8 6.433 8 4.5C8 4.22386 8.22386 4 8.5 4C8.77614 4 9 4.22386 9 4.5C9 6.98528 6.98528 9 4.5 9C3.36176 9 2.30391 8.57686 1.49994 7.8779V8.5C1.49994 8.77614 1.27608 9 0.999939 9C0.723796 9 0.499939 8.77614 0.499939 8.5V6.875C0.499939 6.39175 0.89169 6 1.37494 6H2.87494C3.15108 6 3.37494 6.22386 3.37494 6.5C3.37494 6.77614 3.15108 7 2.87494 7H2.02142Z" fill="currentColor" fillOpacity="0.7" /><path d="M1 4.5C1 4.77614 0.776142 5 0.5 5C0.223858 5 0 4.77614 0 4.5C0 2.01472 2.01472 0 4.5 0C5.64098 0 6.70118 0.425178 7.50586 1.12715V0.5C7.50586 0.223858 7.72972 0 8.00586 0C8.282 0 8.50586 0.223858 8.50586 0.5V2.125C8.50586 2.60825 8.11411 3 7.63086 3H6.00586C5.72972 3 5.50586 2.77614 5.50586 2.5C5.50586 2.22386 5.72972 2 6.00586 2H6.97858C6.33801 1.38207 5.45526 1 4.5 1C2.567 1 1 2.567 1 4.5Z" fill="currentColor" fillOpacity="0.7" /></svg>
                     )}
                     {tag}
                   </span>
@@ -1162,30 +1113,7 @@ export default function BillingPage() {
       {activeTab === "Campaigns" && (
         <div className="flex flex-col gap-5">
           {/* Whop Integration Card */}
-          <div className="flex items-center gap-4 rounded-2xl border border-border bg-card-bg p-5">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-foreground/[0.06] bg-white dark:bg-white/5">
-              <svg width="22" height="12" viewBox="0 0 22 12" fill="none" className="dark:brightness-0 dark:invert">
-                <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="#FA4616"/>
-                <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="#FA4616"/>
-                <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="#FA4616"/>
-              </svg>
-            </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="font-inter text-sm font-semibold tracking-[-0.02em] text-page-text">Connect your Whop account</span>
-              <span className="font-inter text-sm tracking-[-0.02em] text-foreground/50">Sync your billing, payments, and invoicing with Whop for seamless financial management.</span>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <button type="button" className="flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-foreground transition-colors hover:bg-foreground/[0.10]">
-                Learn more
-              </button>
-              <button type="button" className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-bg transition-colors hover:bg-foreground/90">
-                Connect Whop
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M4.083 9.917L9.917 4.083M9.917 4.083H5.25M9.917 4.083v4.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <WhopIntegrationCard />
 
           {/* Campaigns Table */}
           <CampaignsTable />
@@ -1194,10 +1122,6 @@ export default function BillingPage() {
 
       {activeTab === "Invoices" && (
         <InvoicesTab />
-      )}
-
-      {activeTab === "Client Onboarding" && (
-        <ClientOnboardingTab />
       )}
     </PageShell>
   );

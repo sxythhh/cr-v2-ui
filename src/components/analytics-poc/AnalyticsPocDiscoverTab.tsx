@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -160,7 +160,7 @@ function TypeBadge({ type }: { type: CampaignType }) {
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#00994D]">
+    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#00994D] dark:text-[#34D399]">
       <GlobeIcon />
       Open
     </span>
@@ -179,15 +179,107 @@ function TrendCell({ trend }: { trend: CampaignRow["trend"] }) {
   if (trend.direction === "down") {
     return (
       <div className="flex items-center justify-end gap-0.5">
-        <ChevronDoubleDownIcon className="size-4 text-[#FF3355]" />
-        <span className="text-xs tracking-[-0.02em] text-[#FF3355]">{trend.value}</span>
+        <ChevronDoubleDownIcon className="size-4 text-[#FF3355] dark:text-[#FB7185]" />
+        <span className="text-xs tracking-[-0.02em] text-[#FF3355] dark:text-[#FB7185]">{trend.value}</span>
       </div>
     );
   }
   return (
     <div className="flex items-center justify-end gap-0.5">
-      <ChevronDoubleUpIcon className="size-4 text-[#00994D]" />
-      <span className="text-xs tracking-[-0.02em] text-[#00994D]">{trend.value}</span>
+      <ChevronDoubleUpIcon className="size-4 text-[#00994D] dark:text-[#34D399]" />
+      <span className="text-xs tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{trend.value}</span>
+    </div>
+  );
+}
+
+// ── Mobile Helpers ──────────────────────────────────────────────────
+
+function MobileStatScroll({ stats }: { stats: typeof STATS }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || !el.children[0]) return;
+    const childWidth = (el.children[0] as HTMLElement).clientWidth;
+    if (childWidth === 0) return;
+    const index = Math.round(el.scrollLeft / (childWidth + 8));
+    setActiveIndex(Math.min(index, stats.length - 1));
+  }, [stats.length]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div
+        ref={scrollRef}
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide"
+      >
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="w-full shrink-0 snap-center rounded-2xl border border-border bg-card-bg p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
+              {stat.showChange && (
+                <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{stat.change}</span>
+              )}
+            </div>
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className="text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {stats.length > 1 && (
+        <div className="flex items-center justify-center gap-1">
+          {stats.map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "size-1.5 rounded-full transition-colors duration-200",
+                i === activeIndex ? "bg-foreground" : "bg-foreground/[0.06]",
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileCampaignCard({ row }: { row: CampaignRow }) {
+  return (
+    <div className="flex items-center gap-0 border-b border-foreground/[0.03] px-1">
+      <div className="flex flex-1 flex-col gap-3 py-3 pr-3 pl-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="size-6 overflow-hidden rounded-full border border-foreground/[0.06]">
+              <Image
+                src={row.avatar}
+                alt={row.name}
+                width={24}
+                height={24}
+                className="size-6 object-cover"
+              />
+            </div>
+            <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{row.name}</span>
+          </div>
+          <TypeBadge type={row.type} />
+        </div>
+        <div className="flex items-center justify-between gap-2 text-xs tracking-[-0.02em] text-page-text-muted tabular-nums">
+          <span>Imp. {row.impressions}</span>
+          <span>Clicks {row.clicks}</span>
+          <span>CTR {row.ctr}</span>
+          <TrendCell trend={row.trend} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -219,37 +311,36 @@ export function AnalyticsPocDiscoverTab() {
   return (
     <div className="relative flex flex-col gap-2 md:gap-3">
       {/* AI Insights Bar */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
-        {/* Main insights card */}
+      <div className="flex items-center gap-2">
+        {/* Main insights card — single-row compact */}
         <div
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,
             ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
-            "relative flex flex-1 items-center justify-between gap-4 p-4",
+            "relative flex h-16 flex-1 items-center justify-between gap-4 p-4",
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
-          {/* Blurred border effect - left */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-[50%] rounded-2xl border-2 border-[#EC3EFF] opacity-30 blur-[2px]" />
-          {/* Blurred border effect - right */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-[50%] scale-x-[-1] rounded-2xl border-2 border-[#EC3EFF] opacity-30 blur-[2px]" />
+          {/* Blurred border effect */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px]" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px] scale-x-[-1]" />
 
           {/* Label */}
-          <div className="relative z-10 flex items-center gap-1.5">
+          <div className="relative z-10 flex shrink-0 items-center gap-1.5">
             <SparkleIcon className="size-4 text-page-text-muted" />
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">AI Insights</span>
           </div>
 
-          {/* Content */}
+          {/* Insight text + action */}
           <div className="relative z-10 flex items-center gap-4">
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">{insight.text}</span>
-            <button className="shrink-0 rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text">
+            <button className="shrink-0 rounded-full bg-foreground/[0.03] px-3 py-2 text-xs font-medium text-page-text">
               {insight.action}
             </button>
           </div>
 
           {/* Navigation */}
-          <div className="relative z-10 flex items-center gap-1.5">
+          <div className="relative z-10 flex shrink-0 items-center gap-1.5">
             <button
               type="button"
               className="cursor-pointer text-page-text-muted hover:text-page-text"
@@ -266,10 +357,6 @@ export function AnalyticsPocDiscoverTab() {
               <ChevronRightIcon />
             </button>
           </div>
-
-          {/* Outer sharp border */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px]" />
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px] scale-x-[-1]" />
         </div>
 
         {/* Campaign card button */}
@@ -277,7 +364,7 @@ export function AnalyticsPocDiscoverTab() {
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,
             ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
-            "flex shrink-0 items-center justify-between gap-4 p-4",
+            "flex h-16 shrink-0 items-center justify-between gap-4 p-4",
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
@@ -285,7 +372,7 @@ export function AnalyticsPocDiscoverTab() {
             <LayoutIcon />
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">Campaign card</span>
           </div>
-          <button className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text">
+          <button className="rounded-full bg-foreground/[0.03] px-3 py-2 text-xs font-medium text-page-text">
             View
           </button>
         </div>
@@ -294,7 +381,12 @@ export function AnalyticsPocDiscoverTab() {
       {/* Stats Row */}
       <AnalyticsPocPanel>
         <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+          {/* Mobile: horizontal scroll stats */}
+          <div className="sm:hidden">
+            <MobileStatScroll stats={STATS} />
+          </div>
+          {/* Desktop: grid stats */}
+          <div className="hidden gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-5">
             {STATS.map((stat) => (
               <div
                 key={stat.label}
@@ -303,7 +395,7 @@ export function AnalyticsPocDiscoverTab() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
                   {stat.showChange && (
-                    <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D]">{stat.change}</span>
+                    <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{stat.change}</span>
                   )}
                 </div>
                 <span className="text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
@@ -324,11 +416,11 @@ export function AnalyticsPocDiscoverTab() {
             </div>
 
             {/* Legend */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide sm:flex-wrap sm:overflow-x-visible">
               {FUNNEL_SEGMENTS.map((seg) => (
                 <div
                   key={seg.label}
-                  className="inline-flex items-center gap-1 rounded-full border border-border bg-card-bg px-2 py-1.5"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-card-bg px-2 py-1.5"
                 >
                   <span className="size-2 rounded-full" style={{ backgroundColor: seg.dotColor }} />
                   <span className="text-xs tracking-[-0.02em] text-page-text">{seg.label}</span>
@@ -382,8 +474,15 @@ export function AnalyticsPocDiscoverTab() {
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Mobile: card layout */}
+        <div className="md:hidden">
+          {CAMPAIGN_ROWS.map((row) => (
+            <MobileCampaignCard key={row.name} row={row} />
+          ))}
+        </div>
+
+        {/* Desktop: full table */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full">
             <thead>
               <tr className="border-b border-foreground/[0.06]">

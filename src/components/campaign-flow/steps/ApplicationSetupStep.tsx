@@ -25,23 +25,23 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#111111] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
     </button>
   );
 }
 
-function ToggleRow({ title, description, on, onToggle, children }: { title: string; description?: string; on: boolean; onToggle: () => void; children?: React.ReactNode }) {
+function ToggleRow({ title, description, on, onToggle, titleColor, children }: { title: string; description?: string; on: boolean; onToggle: () => void; titleColor?: string; children?: React.ReactNode }) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+        "flex flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
         on ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
       )}
       style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
     >
       <div className="flex cursor-pointer items-center gap-3" onClick={onToggle}>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{title}</span>
+          <span className="font-inter text-sm font-medium tracking-[-0.02em]" style={titleColor ? { color: titleColor } : undefined}>{title}</span>
           {description && <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">{description}</span>}
         </div>
         <ToggleSwitch on={on} onToggle={onToggle} />
@@ -164,9 +164,9 @@ export function ApplicationSetupStep() {
       <div className="flex flex-col gap-2">
         <SectionLabel title="Auto-screening rules" description="Automatically filter applications based on criteria." />
         <Card className="flex flex-col gap-2 p-5">
-          <ToggleRow title="Auto-decline if no connected accounts" description="Reject applicants without verified social accounts." on={autoDeclineNoAccounts} onToggle={() => setAutoDeclineNoAccounts((v) => !v)} />
-          <ToggleRow title="Auto-decline if below follower threshold" description="Instantly reject applications below minimum followers." on={autoDeclineBelowThreshold} onToggle={() => setAutoDeclineBelowThreshold((v) => !v)} />
-          <ToggleRow title="Auto-approve trusted creators" description="Skip review for creators with 80%+ trust score on the platform." on={autoApproveTrusted} onToggle={() => setAutoApproveTrusted((v) => !v)} />
+          <ToggleRow title="Auto-decline if no connected accounts" description="Reject applicants without verified social accounts." on={autoDeclineNoAccounts} onToggle={() => setAutoDeclineNoAccounts((v) => !v)} titleColor="#E5484D" />
+          <ToggleRow title="Auto-decline if below follower threshold" description="Instantly reject applications below minimum followers." on={autoDeclineBelowThreshold} onToggle={() => setAutoDeclineBelowThreshold((v) => !v)} titleColor="#E5484D" />
+          <ToggleRow title="Auto-approve trusted creators" description="Skip review for creators with 80%+ trust score on the platform." on={autoApproveTrusted} onToggle={() => setAutoApproveTrusted((v) => !v)} titleColor="#00994D" />
         </Card>
       </div>
 
