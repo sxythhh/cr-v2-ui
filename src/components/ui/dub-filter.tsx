@@ -407,9 +407,8 @@ export function FilterSelect({
       <div
         ref={refs.setReference}
         className={cn(
-          "inline-flex w-fit rounded-full transition-shadow",
+          "inline-flex w-fit rounded-full outline-none",
           "group",
-          isOpen && "",
           className,
         )}
         data-open={isOpen || undefined}

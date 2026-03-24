@@ -1720,7 +1720,7 @@ function StatMiniCard({
         "flex flex-1 flex-col justify-center gap-2 rounded-2xl p-3",
         variant === "filled"
           ? "bg-foreground/[0.04]"
-          : "border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none",
+          : "border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none",
       )}
     >
       <span
@@ -1881,7 +1881,7 @@ function CheckSection({
   const allFailed = passed === 0;
 
   return (
-    <div className="overflow-hidden rounded-[10px] border border-foreground/[0.06] bg-card-bg">
+    <div className="overflow-hidden rounded-[10px] border border-foreground/[0.06] bg-card-bg dark:border-card-inner-border dark:bg-card-inner-bg">
       {/* Header */}
       <button
         onClick={() => setExpanded(!expanded)}
@@ -1971,7 +1971,7 @@ function AIReviewPanel({ submission, scoreColor, onAction }: { submission: Submi
 
         <div className="flex flex-col gap-2 px-3 pb-3 pt-2" style={{ marginTop: scrolled ? 0 : -40 }}>
           {/* Overview card */}
-          <div className="overflow-hidden rounded-[10px] border border-foreground/[0.06] bg-card-bg">
+          <div className="overflow-hidden rounded-[10px] border border-foreground/[0.06] bg-card-bg dark:border-card-inner-border dark:bg-card-inner-bg">
             <button
               onClick={() => setOverviewOpen((o) => !o)}
               className="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2.5 transition-colors hover:bg-foreground/[0.04]"
@@ -2444,7 +2444,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 valueColor={submission.botScoreColor}
                 variant="outlined"
               />
-              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3">
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top country</span>
                 <div className="flex items-center gap-1.5">
                   <img
@@ -2457,7 +2457,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3">
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top age</span>
                 <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                   {submission.topAge}
@@ -2479,7 +2479,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 variant="outlined"
               />
             </div>
-            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3">
+            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
               <div className="flex flex-wrap items-center gap-2 pb-2">
                 <MetricPill label="Views" value={submission.views} color="#4D81EE" bg="rgba(77,129,238,0.1)" active={metricState.views} onClick={() => toggleMetric("views")} />
                 <MetricPill label="Likes" value={submission.likes} color="#DA5597" bg="rgba(218,85,151,0.1)" active={metricState.likes} onClick={() => toggleMetric("likes")} />
@@ -2654,7 +2654,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
             </div>
 
             {/* Performance chart card */}
-            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3">
+            <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
               {/* Metric pills */}
               <div className="flex flex-wrap items-center gap-2 pb-2">
                 <MetricPill label="Views" value={submission.views} color="#4D81EE" bg="rgba(77,129,238,0.1)" active={metricState.views} onClick={() => toggleMetric("views")} />
@@ -2676,7 +2676,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
 
             {/* Bottom info row */}
             <div className="flex gap-2">
-              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                   Top country
                 </span>
@@ -2691,7 +2691,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                   </span>
                 </div>
               </div>
-              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                   Top age
                 </span>

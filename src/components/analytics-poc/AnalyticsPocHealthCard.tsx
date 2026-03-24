@@ -16,15 +16,8 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 function HeartbeatIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="dark:invert">
-      <path
-        d="M1 8.5H3.5L5.5 4L8 12L10 6.5L11.5 8.5H15"
-        stroke="#252525"
-        strokeOpacity="0.5"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="14" height="13" viewBox="0 0 14 13" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M13.0152 2.56385C14.0611 5.1781 12.7284 9.0031 6.91521 12.2693C6.76311 12.3548 6.57747 12.3548 6.42537 12.2693C0.612192 9.00312 -0.720565 5.17811 0.325298 2.56387C0.836732 1.28548 1.90854 0.372816 3.16845 0.0912035C4.31407 -0.164862 5.577 0.10875 6.67026 1.03304C7.7635 0.10875 9.02643 -0.164863 10.1721 0.0912005C11.432 0.372811 12.5038 1.28547 13.0152 2.56385ZM6.11648 3.77639C6.03336 3.61015 5.86489 3.50374 5.67907 3.5001C5.49324 3.49645 5.32073 3.59619 5.23116 3.75904L4.27364 5.5H3.16927C2.89313 5.5 2.66927 5.72386 2.66927 6C2.66927 6.27614 2.89313 6.5 3.16927 6.5H4.56927C4.75162 6.5 4.9195 6.40073 5.00738 6.24096L5.64818 5.07586L7.22206 8.22361C7.30518 8.38985 7.47365 8.49626 7.65947 8.4999C7.8453 8.50355 8.01781 8.40381 8.10738 8.24096L9.06491 6.5H10.1693C10.4454 6.5 10.6693 6.27614 10.6693 6C10.6693 5.72386 10.4454 5.5 10.1693 5.5H8.76927C8.58693 5.5 8.41904 5.59927 8.33116 5.75904L7.69036 6.92414L6.11648 3.77639Z" fill="currentColor" fillOpacity="0.7"/>
     </svg>
   );
 }
@@ -101,6 +94,7 @@ export function AnalyticsPocHealthCard({
     <AnalyticsPocMediumCardBase className={className}>
       <AnalyticsPocCardHeader
         title={title}
+        icon={<HeartbeatIcon />}
       />
 
       <div className="mt-auto flex items-end justify-between gap-4">
@@ -128,7 +122,7 @@ export function AnalyticsPocHealthCard({
         <ScoreRing
           score={score}
           progressPercent={progressPercent}
-          accentColor="#00B259"
+          accentColor="#34D399"
         />
       </div>
     </AnalyticsPocMediumCardBase>

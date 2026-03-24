@@ -271,11 +271,11 @@ const STEPS = [
 // ── Dashboard Data ─────────────────────────────────────────────────
 
 const CAMPAIGNS = [
-  { id: 1, name: "Call of Duty BO7 Clipping", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
-  { id: 2, name: "Caffeine AI Exclusive", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
-  { id: 3, name: "G Fuel Summer Promo", meta: "CPM · 121k views · 31 creators", pct: 94, color: "#FF2525" },
-  { id: 4, name: "Apex Legends Season 20", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FF9025" },
-  { id: 1, name: "Fortnite Festival Clips", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#00B259" },
+  { id: 1, name: "Call of Duty BO7 Clipping", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#34D399" },
+  { id: 2, name: "Caffeine AI Exclusive", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FB923C" },
+  { id: 3, name: "G Fuel Summer Promo", meta: "CPM · 121k views · 31 creators", pct: 94, color: "#FB7185" },
+  { id: 4, name: "Apex Legends Season 20", meta: "CPM · 121k views · 31 creators", pct: 78, color: "#FB923C" },
+  { id: 1, name: "Fortnite Festival Clips", meta: "CPM · 121k views · 31 creators", pct: 45, color: "#34D399" },
 ];
 
 function AttentionVideoIcon() {
@@ -337,8 +337,8 @@ const TOP_CREATORS = [
 
 const ACTIVE_CAMPAIGNS_DATA = [
   { name: "Call of Duty BO7 Clipping", subtitle: "CPM · 121k views · 31 creators", progress: 45, progressColor: "#34D399", slug: "call-of-duty-bo7" },
-  { name: "Caffeine AI Launch", subtitle: "CPM · 89k views · 18 creators", progress: 78, progressColor: "#E57100", slug: "caffeine-ai-launch" },
-  { name: "G Fuel Summer Push", subtitle: "CPM · 204k views · 52 creators", progress: 94, progressColor: "#FF3355", slug: "g-fuel-summer-push" },
+  { name: "Caffeine AI Launch", subtitle: "CPM · 89k views · 18 creators", progress: 78, progressColor: "#FB923C", slug: "caffeine-ai-launch" },
+  { name: "G Fuel Summer Push", subtitle: "CPM · 204k views · 52 creators", progress: 94, progressColor: "#FB7185", slug: "g-fuel-summer-push" },
 ];
 
 // ── Sparkline ──────────────────────────────────────────────────────
@@ -1083,7 +1083,7 @@ function DepositButton() {
 
 // ── KPI Card Components (shared between mobile carousel & desktop grid) ──
 
-const kpiCard = "flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4";
+const kpiCard = "flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
 function KpiCardBalance({ className }: { className?: string }) {
   return (
@@ -1113,8 +1113,8 @@ function KpiCardActive({ className }: { className?: string }) {
       <div className="flex flex-col gap-3">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
         <div className="flex gap-1">
-          <span className="flex h-6 items-center rounded-full bg-[rgba(26,103,229,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#1A67E5]">3 CPM</span>
-          <span className="flex h-6 items-center rounded-full bg-[rgba(229,113,0,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#E57100]">2 Retainer</span>
+          <span className="flex h-6 items-center rounded-full bg-[rgba(96,165,250,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#60A5FA]">3 CPM</span>
+          <span className="flex h-6 items-center rounded-full bg-[rgba(251,146,60,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB923C]">2 Retainer</span>
         </div>
       </div>
     </Link>
@@ -1425,8 +1425,8 @@ function DashboardView() {
                 </div>
               </button>
               {/* 1st place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[260px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(229,113,0,0.04)] p-4 transition-colors hover:bg-[rgba(229,113,0,0.08)]">
-                <div className="flex h-6 items-center gap-2 rounded-full bg-[#E57100] px-2">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[260px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(251,146,60,0.04)] p-4 transition-colors hover:bg-[rgba(251,146,60,0.08)]">
+                <div className="flex h-6 items-center gap-2 rounded-full bg-[#FB923C] px-2">
                   <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
                   <span className="font-inter text-[16px] font-medium text-white">1</span>
                 </div>

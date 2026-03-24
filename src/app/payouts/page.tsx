@@ -47,41 +47,41 @@ const STATUS_CONFIG: Record<
 > = {
   pending: {
     label: "Pending",
-    color: "#FF9025",
-    bg: "rgba(255, 144, 37, 0.1)",
+    color: "#FB923C",
+    bg: "rgba(251, 146, 60, 0.08)",
     icon: (
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FF9025"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C"/>
       </svg>
     ),
   },
   paid: {
     label: "Paid",
-    color: "#00B259",
-    bg: "rgba(0, 178, 89, 0.1)",
+    color: "#34D399",
+    bg: "rgba(52, 211, 153, 0.08)",
     icon: (
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM6.88698 4.06663C7.06184 3.85291 7.03034 3.5379 6.81662 3.36304C6.6029 3.18817 6.28789 3.21967 6.11302 3.4334L4.21288 5.75579L3.60355 5.14646C3.40829 4.9512 3.09171 4.9512 2.89645 5.14646C2.70118 5.34172 2.70118 5.65831 2.89645 5.85357L3.89645 6.85357C3.99634 6.95346 4.13382 7.00643 4.27491 6.9994C4.416 6.99236 4.54752 6.92597 4.63698 6.81663L6.88698 4.06663Z" fill="#00B259"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM6.88698 4.06663C7.06184 3.85291 7.03034 3.5379 6.81662 3.36304C6.6029 3.18817 6.28789 3.21967 6.11302 3.4334L4.21288 5.75579L3.60355 5.14646C3.40829 4.9512 3.09171 4.9512 2.89645 5.14646C2.70118 5.34172 2.70118 5.65831 2.89645 5.85357L3.89645 6.85357C3.99634 6.95346 4.13382 7.00643 4.27491 6.9994C4.416 6.99236 4.54752 6.92597 4.63698 6.81663L6.88698 4.06663Z" fill="#34D399"/>
       </svg>
     ),
   },
   blocked: {
     label: "Blocked",
-    color: "#FF2525",
-    bg: "rgba(255, 37, 37, 0.1)",
+    color: "#FB7185",
+    bg: "rgba(251, 113, 133, 0.08)",
     icon: (
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM3.85355 3.14645C3.65829 2.95118 3.34171 2.95118 3.14645 3.14645C2.95118 3.34171 2.95118 3.65829 3.14645 3.85355L4.29289 5L3.14645 6.14645C2.95118 6.34171 2.95118 6.65829 3.14645 6.85355C3.34171 7.04882 3.65829 7.04882 3.85355 6.85355L5 5.70711L6.14645 6.85355C6.34171 7.04882 6.65829 7.04882 6.85355 6.85355C7.04882 6.65829 7.04882 6.34171 6.85355 6.14645L5.70711 5L6.85355 3.85355C7.04882 3.65829 7.04882 3.34171 6.85355 3.14645C6.65829 2.95118 6.34171 2.95118 6.14645 3.14645L5 4.29289L3.85355 3.14645Z" fill="#FF2525"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM3.85355 3.14645C3.65829 2.95118 3.34171 2.95118 3.14645 3.14645C2.95118 3.34171 2.95118 3.65829 3.14645 3.85355L4.29289 5L3.14645 6.14645C2.95118 6.34171 2.95118 6.65829 3.14645 6.85355C3.34171 7.04882 3.65829 7.04882 3.85355 6.85355L5 5.70711L6.14645 6.85355C6.34171 7.04882 6.65829 7.04882 6.85355 6.85355C7.04882 6.65829 7.04882 6.34171 6.85355 6.14645L5.70711 5L6.85355 3.85355C7.04882 3.65829 7.04882 3.34171 6.85355 3.14645C6.65829 2.95118 6.34171 2.95118 6.14645 3.14645L5 4.29289L3.85355 3.14645Z" fill="#FB7185"/>
       </svg>
     ),
   },
   upcoming: {
     label: "Upcoming",
-    color: "#3B82F6",
-    bg: "rgba(59, 130, 246, 0.1)",
+    color: "#60A5FA",
+    bg: "rgba(96, 165, 250, 0.08)",
     icon: (
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#3B82F6"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#60A5FA"/>
       </svg>
     ),
   },
@@ -140,7 +140,7 @@ const PAYOUT_COLUMNS: { label: string; sortKey: PayoutSortKey | null }[] = [
 
 function PlatformBadge({ platform }: { platform: string }) {
   return (
-    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent text-page-text-subtle">
+    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.03] text-foreground/70 backdrop-blur-sm">
       <PlatformIcon platform={platform} size={12} />
     </div>
   );
@@ -153,10 +153,10 @@ function Checkbox({ checked, onChange, indeterminate }: { checked: boolean; onCh
       type="button"
       onClick={(e) => { e.stopPropagation(); onChange(); }}
       className={cn(
-        "flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-[4px] border transition-colors",
+        "flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-colors",
         isActive
           ? "border-foreground/80 bg-foreground/80"
-          : "border-foreground/[0.08] bg-card-bg shadow-[0_0.457px_0.914px_rgba(0,0,0,0.03)] dark:shadow-[0_0.457px_0.914px_rgba(0,0,0,0.15)]",
+          : "border-foreground/[0.08] bg-foreground/[0.03] shadow-[0_0.457px_0.914px_rgba(0,0,0,0.03)]",
       )}
     >
       {checked && (
@@ -709,7 +709,7 @@ function PayoutTableRow({
           <span
             className={cn(
               "min-w-0 truncate font-[family-name:var(--font-inter)] text-sm font-medium leading-normal tracking-[-0.02em]",
-              isFlagged ? "text-[#FF2525]" : "text-page-text",
+              isFlagged ? "text-[#FB7185]" : "text-page-text",
             )}
           >
             {row.name}
@@ -737,7 +737,7 @@ function PayoutTableRow({
           <span
             className={cn(
               "font-[family-name:var(--font-inter)] text-xs leading-none tracking-[-0.02em]",
-              isFlagged ? "text-[rgba(255,37,37,0.7)]" : "text-page-text",
+              isFlagged ? "text-[rgba(251,113,133,0.6)]" : "text-page-text",
             )}
           >
             {row.views}
@@ -749,7 +749,7 @@ function PayoutTableRow({
           <span
             className={cn(
               "font-[family-name:var(--font-inter)] text-xs font-medium leading-none tracking-[-0.02em]",
-              isFlagged ? "text-[#FF2525]" : "text-[#00B26E]",
+              isFlagged ? "text-[#FB7185] line-through" : "text-[#34D399]",
             )}
           >
             {row.estPayout}
@@ -761,7 +761,7 @@ function PayoutTableRow({
           <span
             className={cn(
               "font-[family-name:var(--font-inter)] text-xs leading-none tracking-[-0.02em]",
-              isFlagged ? "text-[rgba(255,37,37,0.7)]" : "text-page-text",
+              isFlagged ? "text-[rgba(251,113,133,0.6)]" : "text-page-text",
             )}
           >
             {row.net}
@@ -908,10 +908,10 @@ export default function PayoutsPage() {
         </div>
 
         {/* Table */}
-        <div className="flex min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.02)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <div className="w-full overflow-x-auto">
           {/* Header row */}
-          <div className="flex w-full min-w-[800px] items-center border-b border-card-border px-1">
+          <div className="flex w-full min-w-[800px] items-center border-b border-foreground/[0.03] px-1">
             <div className="flex h-10 w-12 items-center justify-center px-3 pr-5">
               <Checkbox
                 checked={allSelected}

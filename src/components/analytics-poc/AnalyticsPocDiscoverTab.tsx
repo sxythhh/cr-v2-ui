@@ -41,15 +41,11 @@ function ChevronRightIcon() {
   );
 }
 
-function LayoutIcon() {
+function LayoutIcon({ className }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d="M2 4C2 2.89543 2.89543 2 4 2H12C13.1046 2 14 2.89543 14 4V12C14 13.1046 13.1046 14 12 14H4C2.89543 14 2 13.1046 2 12V4Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path d="M2 8H14" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className={className}>
+      <path d="M2.77431 5.36958e-07H9.2257C9.57712 -1.08734e-05 9.88031 -2.07163e-05 10.13 0.0203813C10.3936 0.0419153 10.6557 0.0894593 10.908 0.217989C11.2843 0.409735 11.5903 0.715697 11.782 1.09202C11.9105 1.34427 11.9581 1.60642 11.9796 1.86998C12 2.11969 12 2.42286 12 2.77429L12 6.66667L5.32571e-07 6.66667V2.7743C-1.08154e-05 2.42288 -2.06046e-05 2.11969 0.0203814 1.86998C0.0419154 1.60642 0.0894593 1.34427 0.217989 1.09202C0.409735 0.715697 0.715697 0.409735 1.09202 0.217989C1.34427 0.0894593 1.60642 0.0419153 1.86998 0.0203813C2.11969 -2.07163e-05 2.42288 -1.08733e-05 2.77431 5.36958e-07Z" fill="currentColor" fillOpacity="0.7"/>
+      <path d="M5.32571e-07 8V9.2257C-1.08155e-05 9.57712 -2.06046e-05 9.88031 0.0203814 10.13C0.0419154 10.3936 0.0894593 10.6557 0.217989 10.908C0.409735 11.2843 0.715697 11.5903 1.09202 11.782C1.34427 11.9105 1.60642 11.9581 1.86998 11.9796C2.11969 12 2.42286 12 2.77429 12H9.22571C9.57714 12 9.88031 12 10.13 11.9796C10.3936 11.9581 10.6557 11.9105 10.908 11.782C11.2843 11.5903 11.5903 11.2843 11.782 10.908C11.9105 10.6557 11.9581 10.3936 11.9796 10.13C12 9.88031 12 9.57714 12 9.22571L12 8L5.32571e-07 8Z" fill="currentColor" fillOpacity="0.7"/>
     </svg>
   );
 }
@@ -83,7 +79,7 @@ function MinusIcon({ className }: { className?: string }) {
 function LockIcon() {
   return (
     <svg width="8" height="10" viewBox="0 0 8 10" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M4 0C2.61929 0 1.5 1.11929 1.5 2.5V3.5C0.671573 3.5 0 4.17157 0 5V8.5C0 9.32843 0.671573 10 1.5 10H6.5C7.32843 10 8 9.32843 8 8.5V5C8 4.17157 7.32843 3.5 6.5 3.5V2.5C6.5 1.11929 5.38071 0 4 0ZM5.5 3.5V2.5C5.5 1.67157 4.82843 1 4 1C3.17157 1 2.5 1.67157 2.5 2.5V3.5H5.5ZM4 5.5C4.27614 5.5 4.5 5.72386 4.5 6V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V6C3.5 5.72386 3.72386 5.5 4 5.5Z" fill="#E57100"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M4 0C2.61929 0 1.5 1.11929 1.5 2.5V3.5C0.671573 3.5 0 4.17157 0 5V8.5C0 9.32843 0.671573 10 1.5 10H6.5C7.32843 10 8 9.32843 8 8.5V5C8 4.17157 7.32843 3.5 6.5 3.5V2.5C6.5 1.11929 5.38071 0 4 0ZM5.5 3.5V2.5C5.5 1.67157 4.82843 1 4 1C3.17157 1 2.5 1.67157 2.5 2.5V3.5H5.5ZM4 5.5C4.27614 5.5 4.5 5.72386 4.5 6V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V6C3.5 5.72386 3.72386 5.5 4 5.5Z" fill="#FB923C"/>
     </svg>
   );
 }
@@ -91,12 +87,12 @@ function LockIcon() {
 function GlobeIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M6.41543 1.73708C6.23505 1.54635 6.09457 1.5006 6.00022 1.5006C5.90586 1.5006 5.76538 1.54635 5.585 1.73708C5.40363 1.92886 5.21726 2.23321 5.05024 2.65076C4.75956 3.37746 4.55718 4.37235 4.5105 5.5006L7.48993 5.5006C7.44325 4.37235 7.24087 3.37746 6.95019 2.65076C6.78317 2.23321 6.5968 1.92886 6.41543 1.73708Z" fill="#00994D"/>
-      <path d="M7.48993 6.5006L4.5105 6.5006C4.55718 7.62886 4.75956 8.62374 5.05024 9.35044C5.21726 9.76799 5.40363 10.0723 5.585 10.2641C5.76538 10.4549 5.90586 10.5006 6.00022 10.5006C6.09457 10.5006 6.23505 10.4549 6.41543 10.2641C6.5968 10.0723 6.78317 9.76799 6.95019 9.35044C7.24087 8.62374 7.44325 7.62886 7.48993 6.5006Z" fill="#00994D"/>
-      <path d="M3.50971 5.5006C3.55682 4.26702 3.77692 3.14148 4.12176 2.27937C4.29589 1.84405 4.50967 1.45613 4.76518 1.1543C2.75744 1.66439 1.23452 3.38933 1.0249 5.5006H3.50971Z" fill="#00994D"/>
-      <path d="M1.0249 6.5006H3.50971C3.55682 7.73419 3.77692 8.85972 4.12176 9.72183C4.29589 10.1572 4.50967 10.5451 4.76518 10.8469C2.75744 10.3368 1.23452 8.61188 1.0249 6.5006Z" fill="#00994D"/>
-      <path d="M8.49072 6.5006H10.9755C10.7659 8.61188 9.24299 10.3368 7.23525 10.8469C7.49076 10.5451 7.70454 10.1572 7.87867 9.72183C8.22351 8.85973 8.44361 7.73419 8.49072 6.5006Z" fill="#00994D"/>
-      <path d="M10.9755 5.5006C10.7659 3.38933 9.24299 1.66439 7.23525 1.1543C7.49076 1.45613 7.70454 1.84405 7.87867 2.27937C8.22351 3.14148 8.44361 4.26702 8.49072 5.5006H10.9755Z" fill="#00994D"/>
+      <path d="M6.41543 1.73708C6.23505 1.54635 6.09457 1.5006 6.00022 1.5006C5.90586 1.5006 5.76538 1.54635 5.585 1.73708C5.40363 1.92886 5.21726 2.23321 5.05024 2.65076C4.75956 3.37746 4.55718 4.37235 4.5105 5.5006L7.48993 5.5006C7.44325 4.37235 7.24087 3.37746 6.95019 2.65076C6.78317 2.23321 6.5968 1.92886 6.41543 1.73708Z" fill="#34D399"/>
+      <path d="M7.48993 6.5006L4.5105 6.5006C4.55718 7.62886 4.75956 8.62374 5.05024 9.35044C5.21726 9.76799 5.40363 10.0723 5.585 10.2641C5.76538 10.4549 5.90586 10.5006 6.00022 10.5006C6.09457 10.5006 6.23505 10.4549 6.41543 10.2641C6.5968 10.0723 6.78317 9.76799 6.95019 9.35044C7.24087 8.62374 7.44325 7.62886 7.48993 6.5006Z" fill="#34D399"/>
+      <path d="M3.50971 5.5006C3.55682 4.26702 3.77692 3.14148 4.12176 2.27937C4.29589 1.84405 4.50967 1.45613 4.76518 1.1543C2.75744 1.66439 1.23452 3.38933 1.0249 5.5006H3.50971Z" fill="#34D399"/>
+      <path d="M1.0249 6.5006H3.50971C3.55682 7.73419 3.77692 8.85972 4.12176 9.72183C4.29589 10.1572 4.50967 10.5451 4.76518 10.8469C2.75744 10.3368 1.23452 8.61188 1.0249 6.5006Z" fill="#34D399"/>
+      <path d="M8.49072 6.5006H10.9755C10.7659 8.61188 9.24299 10.3368 7.23525 10.8469C7.49076 10.5451 7.70454 10.1572 7.87867 9.72183C8.22351 8.85973 8.44361 7.73419 8.49072 6.5006Z" fill="#34D399"/>
+      <path d="M10.9755 5.5006C10.7659 3.38933 9.24299 1.66439 7.23525 1.1543C7.49076 1.45613 7.70454 1.84405 7.87867 2.27937C8.22351 3.14148 8.44361 4.26702 8.49072 5.5006H10.9755Z" fill="#34D399"/>
     </svg>
   );
 }
@@ -112,10 +108,10 @@ const STATS = [
 ];
 
 const FUNNEL_SEGMENTS = [
-  { label: "Impressions", color: "rgba(0, 153, 77, 0.6)", value: "18.4K", pct: "100%", width: "52.8%", dotColor: "#00994D" },
-  { label: "Clicks", color: "rgba(26, 103, 229, 0.6)", value: "3.2K", pct: "17.5%", width: "19.6%", dotColor: "#1A67E5" },
-  { label: "Applied", color: "rgba(229, 113, 0, 0.6)", value: "891", pct: "27.7%", width: "15.1%", dotColor: "#E57100" },
-  { label: "Joined", color: "rgba(237, 18, 133, 0.6)", value: "287", pct: "32.2%", width: "12.5%", dotColor: "#ED1285" },
+  { label: "Impressions", color: "rgba(52, 211, 153, 0.6)", value: "18.4K", pct: "100%", width: "52.8%", dotColor: "#34D399" },
+  { label: "Clicks", color: "rgba(96, 165, 250, 0.6)", value: "3.2K", pct: "17.5%", width: "19.6%", dotColor: "#60A5FA" },
+  { label: "Applied", color: "rgba(251, 146, 60, 0.6)", value: "891", pct: "27.7%", width: "15.1%", dotColor: "#FB923C" },
+  { label: "Joined", color: "rgba(244, 114, 182, 0.6)", value: "287", pct: "32.2%", width: "12.5%", dotColor: "#F472B6" },
 ];
 
 const INSIGHTS = [
@@ -153,14 +149,14 @@ const TABLE_COLUMNS = ["Campaign", "Type", "Impressions", "Clicks", "CTR", "Conv
 function TypeBadge({ type }: { type: CampaignType }) {
   if (type === "apply") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(229,113,0,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#E57100]">
+      <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(251,146,60,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#FB923C]">
         <LockIcon />
         Apply
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#00994D] dark:text-[#34D399]">
+    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(52,211,153,0.08)] py-1.5 pl-1.5 pr-2 text-xs font-medium text-[#34D399]">
       <GlobeIcon />
       Open
     </span>
@@ -179,15 +175,15 @@ function TrendCell({ trend }: { trend: CampaignRow["trend"] }) {
   if (trend.direction === "down") {
     return (
       <div className="flex items-center justify-end gap-0.5">
-        <ChevronDoubleDownIcon className="size-4 text-[#FF3355] dark:text-[#FB7185]" />
-        <span className="text-xs tracking-[-0.02em] text-[#FF3355] dark:text-[#FB7185]">{trend.value}</span>
+        <ChevronDoubleDownIcon className="size-4 text-[#FB7185]" />
+        <span className="text-xs tracking-[-0.02em] text-[#FB7185]">{trend.value}</span>
       </div>
     );
   }
   return (
     <div className="flex items-center justify-end gap-0.5">
-      <ChevronDoubleUpIcon className="size-4 text-[#00994D] dark:text-[#34D399]" />
-      <span className="text-xs tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{trend.value}</span>
+      <ChevronDoubleUpIcon className="size-4 text-[#34D399]" />
+      <span className="text-xs tracking-[-0.02em] text-[#34D399]">{trend.value}</span>
     </div>
   );
 }
@@ -223,12 +219,12 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="w-full shrink-0 snap-center rounded-2xl border border-border bg-card-bg p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none"
+            className="w-full shrink-0 snap-center rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
               {stat.showChange && (
-                <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{stat.change}</span>
+                <span className="text-xs font-medium tracking-[-0.02em] text-[#34D399]">{stat.change}</span>
               )}
             </div>
             <div className="mt-2 flex items-center gap-1.5">
@@ -369,7 +365,7 @@ export function AnalyticsPocDiscoverTab() {
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
           <div className="flex items-center gap-1.5">
-            <LayoutIcon />
+            <LayoutIcon className="text-page-text-muted" />
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">Campaign card</span>
           </div>
           <button className="rounded-full bg-foreground/[0.03] px-3 py-2 text-xs font-medium text-page-text">
@@ -390,12 +386,12 @@ export function AnalyticsPocDiscoverTab() {
             {STATS.map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col gap-2 rounded-2xl border border-border bg-card-bg p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none"
+                className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
                   {stat.showChange && (
-                    <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{stat.change}</span>
+                    <span className="text-xs font-medium tracking-[-0.02em] text-[#34D399]">{stat.change}</span>
                   )}
                 </div>
                 <span className="text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>

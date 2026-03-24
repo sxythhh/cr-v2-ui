@@ -13,6 +13,7 @@ import { AnalyticsPocChartPlaceholder } from "./AnalyticsPocChartPlaceholder";
 import { AnalyticsPocChartToggleChip } from "./AnalyticsPocChartToggleChip";
 import { AnalyticsPocDateRangePicker } from "./AnalyticsPocDateRangePicker";
 import { AnalyticsPocSelect } from "./AnalyticsPocSelect";
+import { AnalyticsPocPlatformSelect, type PlatformOption } from "./AnalyticsPocPlatformSelect";
 import {
   AnalyticsPocToggleGroup,
   AnalyticsPocToggleGroupItem,
@@ -170,18 +171,11 @@ function MobileSearchBar() {
 
 /* ── Filter Toolbar ───────────────────────────────────────────────── */
 
-function FilterToolbar({ dateRange, setDateRange, selectedPlatform, setSelectedPlatform, selectedCampaign, setSelectedCampaign }: {
+function FilterToolbar({ dateRange, setDateRange, platforms, onTogglePlatform, selectedCampaign, setSelectedCampaign }: {
   dateRange: string; setDateRange: (v: string) => void;
-  selectedPlatform: string; setSelectedPlatform: (v: string) => void;
+  platforms: PlatformOption[]; onTogglePlatform: (id: string) => void;
   selectedCampaign: string; setSelectedCampaign: (v: string) => void;
 }) {
-  const platformOptions = [
-    { value: "all", label: "YouTube, TikTok, Instagram", icon: <div className="flex items-center gap-1"><PlatformIcon platform="youtube" size={14} /><PlatformIcon platform="tiktok" size={14} /><PlatformIcon platform="instagram" size={14} /></div> },
-    { value: "youtube", label: "YouTube", icon: <PlatformIcon platform="youtube" size={14} /> },
-    { value: "tiktok", label: "TikTok", icon: <PlatformIcon platform="tiktok" size={14} /> },
-    { value: "instagram", label: "Instagram", icon: <PlatformIcon platform="instagram" size={14} /> },
-  ];
-
   const campaignOptions = [
     { value: "fall-off", label: "The Fall-Off x Superbowl" },
     { value: "creator-sprint-q1", label: "Creator Sprint Q1" },
@@ -190,7 +184,7 @@ function FilterToolbar({ dateRange, setDateRange, selectedPlatform, setSelectedP
   return (
     <div className="hidden flex-wrap items-center gap-2 sm:flex">
       <AnalyticsPocDateRangePicker value={dateRange} onValueChange={setDateRange} />
-      <AnalyticsPocSelect value={selectedPlatform} onValueChange={setSelectedPlatform} options={platformOptions} />
+      <AnalyticsPocPlatformSelect platforms={platforms} onToggle={onTogglePlatform} />
       <AnalyticsPocSelect value={selectedCampaign} onValueChange={setSelectedCampaign} options={campaignOptions} />
     </div>
   );
@@ -198,7 +192,7 @@ function FilterToolbar({ dateRange, setDateRange, selectedPlatform, setSelectedP
 
 /* ── Stat KPI Card ────────────────────────────────────────────────── */
 
-function StatCard({ value, change, label, sublabel, changeColor = "#00994D" }: {
+function StatCard({ value, change, label, sublabel, changeColor = "#34D399" }: {
   value: string;
   change?: string;
   label: string;
@@ -276,20 +270,24 @@ function HealthBreakdownRow({ name, weight, score, scoreColor }: {
 
 function HealthCard() {
   const healthItems = [
-    { name: "Fill rate", weight: "20%", score: 68, color: "#E57100" },
-    { name: "Engagement", weight: "25%", score: 82, color: "#00994D" },
-    { name: "Approval rate", weight: "20%", score: 80, color: "#00994D" },
-    { name: "CPM efficiency", weight: "20%", score: 84, color: "#00994D" },
-    { name: "Creator quality", weight: "15%", score: 71, color: "#E57100" },
+    { name: "Fill rate", weight: "20%", score: 68, color: "#FB923C" },
+    { name: "Engagement", weight: "25%", score: 82, color: "#34D399" },
+    { name: "Approval rate", weight: "20%", score: 80, color: "#34D399" },
+    { name: "CPM efficiency", weight: "20%", score: 84, color: "#34D399" },
+    { name: "Creator quality", weight: "15%", score: 71, color: "#FB923C" },
   ];
 
   return (
     <div className={cn(CARD, "flex flex-col gap-4 p-4")}>
       <div className="flex items-center gap-1.5">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-page-text-muted">
+          <path d="M2.77431 5.36958e-07H9.2257C9.57712 -1.08734e-05 9.88031 -2.07163e-05 10.13 0.0203813C10.3936 0.0419153 10.6557 0.0894593 10.908 0.217989C11.2843 0.409735 11.5903 0.715697 11.782 1.09202C11.9105 1.34427 11.9581 1.60642 11.9796 1.86998C12 2.11969 12 2.42286 12 2.77429L12 6.66667L5.32571e-07 6.66667V2.7743C-1.08154e-05 2.42288 -2.06046e-05 2.11969 0.0203814 1.86998C0.0419154 1.60642 0.0894593 1.34427 0.217989 1.09202C0.409735 0.715697 0.715697 0.409735 1.09202 0.217989C1.34427 0.0894593 1.60642 0.0419153 1.86998 0.0203813C2.11969 -2.07163e-05 2.42288 -1.08733e-05 2.77431 5.36958e-07Z" fill="currentColor" fillOpacity="0.7"/>
+          <path d="M5.32571e-07 8V9.2257C-1.08155e-05 9.57712 -2.06046e-05 9.88031 0.0203814 10.13C0.0419154 10.3936 0.0894593 10.6557 0.217989 10.908C0.409735 11.2843 0.715697 11.5903 1.09202 11.782C1.34427 11.9105 1.60642 11.9581 1.86998 11.9796C2.11969 12 2.42286 12 2.77429 12H9.22571C9.57714 12 9.88031 12 10.13 11.9796C10.3936 11.9581 10.6557 11.9105 10.908 11.782C11.2843 11.5903 11.5903 11.2843 11.782 10.908C11.9105 10.6557 11.9581 10.3936 11.9796 10.13C12 9.88031 12 9.57714 12 9.22571L12 8L5.32571e-07 8Z" fill="currentColor" fillOpacity="0.7"/>
+        </svg>
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Health</span>
       </div>
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
-        <HealthRing score={76} label="Healthy" color="#00994D" />
+        <HealthRing score={76} label="Healthy" color="#34D399" />
         <div className="flex w-full flex-1 flex-col gap-2">
           {healthItems.map((item) => (
             <div key={item.name}>
@@ -307,8 +305,8 @@ function HealthCard() {
 
 function FinancialsCard() {
   const legendItems = [
-    { label: "Paid out", color: "#00994D", value: "$3,241.50" },
-    { label: "Pending", color: "#E57100", value: "$832" },
+    { label: "Paid out", color: "#34D399", value: "$3,241.50" },
+    { label: "Pending", color: "#FB923C", value: "$832" },
     { label: "Clawed back", color: "#FF3355", value: "$145" },
     { label: "Net spend", color: "var(--page-text-muted)", value: "$3,928.50" },
   ];
@@ -380,11 +378,11 @@ function FinancialsCard() {
 /* ── Traffic Sources Table ────────────────────────────────────────── */
 
 const TRAFFIC_SOURCES = [
-  { label: "Direct/Bookmark", color: "#E57100", bgAlpha: 0.1, views: "4,879", applications: "312", joined: "6.4%", barWidth: "100%" },
-  { label: "TikTok bio link", color: "#1A67E5", bgAlpha: 0.1, views: "3,595", applications: "248", joined: "6.9%", barWidth: "91%" },
-  { label: "Instagram story", color: "#00994D", bgAlpha: 0.08, views: "2,311", applications: "152", joined: "6.6%", barWidth: "85%" },
+  { label: "Direct/Bookmark", color: "#FB923C", bgAlpha: 0.1, views: "4,879", applications: "312", joined: "6.4%", barWidth: "100%" },
+  { label: "TikTok bio link", color: "#60A5FA", bgAlpha: 0.1, views: "3,595", applications: "248", joined: "6.9%", barWidth: "91%" },
+  { label: "Instagram story", color: "#34D399", bgAlpha: 0.08, views: "2,311", applications: "152", joined: "6.6%", barWidth: "85%" },
   { label: "Google search", color: "#FACC15", bgAlpha: 0.1, views: "1,284", applications: "89", joined: "6.9%", barWidth: "78%" },
-  { label: "X (Twitter)", color: "#AE4EEE", bgAlpha: 0.1, views: "771", applications: "46", joined: "6.2%", barWidth: "54%" },
+  { label: "X (Twitter)", color: "#C084FC", bgAlpha: 0.1, views: "771", applications: "46", joined: "6.2%", barWidth: "54%" },
 ];
 
 function TrafficSourcesCard() {
@@ -418,7 +416,7 @@ function TrafficSourcesCard() {
             </div>
             <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.views}</span>
             <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.applications}</span>
-            <span className="relative z-10 w-[66px] text-right font-inter text-sm tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] tabular-nums">{source.joined}</span>
+            <span className="relative z-10 w-[66px] text-right font-inter text-sm tracking-[-0.02em] text-[#34D399] tabular-nums">{source.joined}</span>
           </div>
         ))}
       </div>
@@ -531,7 +529,14 @@ export function AnalyticsPocCampaignHealthTab({
   className,
 }: AnalyticsPocCampaignHealthTabProps) {
   const [dateRange, setDateRange] = useState("last-30-days");
-  const [selectedPlatform, setSelectedPlatform] = useState("all");
+  const [platforms, setPlatforms] = useState<PlatformOption[]>([
+    { id: "youtube", label: "YouTube", active: true },
+    { id: "tiktok", label: "TikTok", active: true },
+    { id: "instagram", label: "Instagram", active: true },
+  ]);
+  const handleTogglePlatform = (id: string) => {
+    setPlatforms((prev) => prev.map((p) => (p.id === id ? { ...p, active: !p.active } : p)));
+  };
   const [selectedCampaign, setSelectedCampaign] = useState("fall-off");
   const [statusTab, setStatusTab] = useState("All");
 
@@ -554,8 +559,8 @@ export function AnalyticsPocCampaignHealthTab({
   const bottomKpiCards = [
     <StatCard key="subs" value="847" label="Total submissions" sublabel="All platforms" />,
     <StatCard key="creators" value="234" label="Unique creators" sublabel="Active in campaign" />,
-    <StatCard key="apps2" value="189" change="12 pending review" label="Applications" sublabel="6.6% conversion" changeColor="#E57100" />,
-    <StatCard key="growth" value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" changeColor="#00994D" />,
+    <StatCard key="apps2" value="189" change="12 pending review" label="Applications" sublabel="6.6% conversion" changeColor="#FB923C" />,
+    <StatCard key="growth" value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" changeColor="#34D399" />,
   ];
 
   return (
@@ -570,7 +575,7 @@ export function AnalyticsPocCampaignHealthTab({
       <MobileSearchBar />
 
       {/* 1. Filter toolbar (desktop only) */}
-      <FilterToolbar dateRange={dateRange} setDateRange={setDateRange} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} selectedCampaign={selectedCampaign} setSelectedCampaign={setSelectedCampaign} />
+      <FilterToolbar dateRange={dateRange} setDateRange={setDateRange} platforms={platforms} onTogglePlatform={handleTogglePlatform} selectedCampaign={selectedCampaign} setSelectedCampaign={setSelectedCampaign} />
 
       {/* 2. Top KPI row */}
       <MobileKpiScroll>{topKpiCards}</MobileKpiScroll>

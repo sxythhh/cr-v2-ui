@@ -28,7 +28,7 @@ function DotIndicator({
             "size-1.5 rounded-full transition-colors duration-200",
             i === active
               ? "bg-foreground"
-              : "bg-foreground/[0.06]",
+              : "bg-foreground/[0.10]",
           )}
         />
       ))}

@@ -48,7 +48,6 @@ export function AnalyticsPocPlatformSelect({
         className={cn(
           analyticsPillButtonClass,
           "max-w-[320px]",
-          open && "ring-2 ring-foreground/10 dark:ring-white/[0.15]",
         )}
         type="button"
         onClick={() => setOpen((v) => !v)}

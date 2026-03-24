@@ -8,6 +8,7 @@ import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
 import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
+import { AnalyticsPocSelect } from "@/components/analytics-poc/AnalyticsPocSelect";
 import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
 import {
   DropdownMenu,
@@ -41,6 +42,8 @@ function FinanceHeader({
   activeTab: typeof TABS[number];
   onTabChange: (tab: typeof TABS[number]) => void;
 }) {
+  const actionBtnClass = "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
+
   return (
     <div className="flex w-full items-center justify-between">
       <ProximityTabs
@@ -50,10 +53,7 @@ function FinanceHeader({
       />
       <div className="flex items-center gap-2">
         {/* Deposit */}
-        <button
-          type="button"
-          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
-        >
+        <button type="button" className={actionBtnClass}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
             <path d="M2.66671 4.66602C2.66671 4.29783 2.96518 3.99935 3.33337 3.99935H5.33337C5.70156 3.99935 6.00004 3.70087 6.00004 3.33268C6.00004 2.96449 5.70156 2.66602 5.33337 2.66602H3.33337C2.2288 2.66602 1.33337 3.56145 1.33337 4.66602V11.3327C1.33337 12.4373 2.2288 13.3327 3.33337 13.3327H12.6667C13.7713 13.3327 14.6667 12.4373 14.6667 11.3327V5.99935C14.6667 5.63116 14.3682 5.33268 14 5.33268C13.6319 5.33268 13.3334 5.63116 13.3334 5.99935V11.3327C13.3334 11.7009 13.0349 11.9993 12.6667 11.9993H3.33337C2.96518 11.9993 2.66671 11.7009 2.66671 11.3327V4.66602Z" fill="currentColor"/>
@@ -61,10 +61,7 @@ function FinanceHeader({
           Deposit
         </button>
         {/* Withdraw */}
-        <button
-          type="button"
-          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
-        >
+        <button type="button" className={actionBtnClass}>
           <ExportIcon />
           Withdraw
         </button>
@@ -81,7 +78,7 @@ function FinanceMoreMenu() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.12] transition-colors hover:bg-foreground/[0.16]"
+          className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
         >
           <svg width="3" height="14" viewBox="0 0 3 14" fill="none">
             <path fillRule="evenodd" clipRule="evenodd" d="M0 1.33333C0 0.596954 0.596954 0 1.33333 0C2.06971 0 2.66667 0.596954 2.66667 1.33333C2.66667 2.06971 2.06971 2.66667 1.33333 2.66667C0.596954 2.66667 0 2.06971 0 1.33333ZM0 6.66667C0 5.93029 0.596954 5.33333 1.33333 5.33333C2.06971 5.33333 2.66667 5.93029 2.66667 6.66667C2.66667 7.40305 2.06971 8 1.33333 8C0.596954 8 0 7.40305 0 6.66667ZM0 12C0 11.2636 0.596954 10.6667 1.33333 10.6667C2.06971 10.6667 2.66667 11.2636 2.66667 12C2.66667 12.7364 2.06971 13.3333 1.33333 13.3333C0.596954 13.3333 0 12.7364 0 12Z" fill="currentColor" />
@@ -136,21 +133,21 @@ function ExternalLinkIcon() {
 }
 
 /** Correct status icons matching payouts page */
-function StatusCheckIcon({ color = "#00B259" }: { color?: string }) {
+function StatusCheckIcon({ color = "#34D399" }: { color?: string }) {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM6.88698 4.06663C7.06184 3.85291 7.03034 3.5379 6.81662 3.36304C6.6029 3.18817 6.28789 3.21967 6.11302 3.4334L4.21288 5.75579L3.60355 5.14646C3.40829 4.9512 3.09171 4.9512 2.89645 5.14646C2.70118 5.34172 2.70118 5.65831 2.89645 5.85357L3.89645 6.85357C3.99634 6.95346 4.13382 7.00643 4.27491 6.9994C4.416 6.99236 4.54752 6.92597 4.63698 6.81663L6.88698 4.06663Z" fill={color} />
     </svg>
   );
 }
-function StatusClockIcon({ color = "#FF9025" }: { color?: string }) {
+function StatusClockIcon({ color = "#FB923C" }: { color?: string }) {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill={color} />
     </svg>
   );
 }
-function StatusDotIcon({ color = "#00B259" }: { color?: string }) {
+function StatusDotIcon({ color = "#34D399" }: { color?: string }) {
   return <div className="size-1.5 rounded-full" style={{ background: color }} />;
 }
 function StatusIcon({ status, color }: { status: string; color: string }) {
@@ -172,11 +169,11 @@ const CAMPAIGN_ROWS = [
     model: "CPM $2.00",
     monthlyValue: "$20,000",
     collected: "$20,000",
-    collectedColor: "text-[#00B259]",
+    collectedColor: "text-[#34D399]",
     outstanding: "$0.00",
     outstandingColor: "text-foreground/30",
     status: "Active" as const,
-    statusColor: "bg-[rgba(0,178,89,0.1)] text-[#00B259]",
+    statusColor: "bg-[rgba(52,211,153,0.08)] text-[#34D399]",
   },
   {
     name: "Crypto Fall Blitz",
@@ -185,11 +182,11 @@ const CAMPAIGN_ROWS = [
     model: "25% of budget",
     monthlyValue: "$20,000",
     collected: "$6,000",
-    collectedColor: "text-[#00B259]",
+    collectedColor: "text-[#34D399]",
     outstanding: "$0.00",
     outstandingColor: "text-foreground/30",
     status: "Active" as const,
-    statusColor: "bg-[rgba(0,178,89,0.1)] text-[#00B259]",
+    statusColor: "bg-[rgba(52,211,153,0.08)] text-[#34D399]",
   },
   {
     name: "Q1 Brand Awareness",
@@ -198,11 +195,11 @@ const CAMPAIGN_ROWS = [
     model: "Retainer + 15%",
     monthlyValue: "$20,000",
     collected: "$5,000",
-    collectedColor: "text-[#00B259]",
+    collectedColor: "text-[#34D399]",
     outstanding: "$0.00",
     outstandingColor: "text-foreground/30",
     status: "Active" as const,
-    statusColor: "bg-[rgba(0,178,89,0.1)] text-[#00B259]",
+    statusColor: "bg-[rgba(52,211,153,0.08)] text-[#34D399]",
   },
   {
     name: "Summer UGC Sprint",
@@ -213,7 +210,7 @@ const CAMPAIGN_ROWS = [
     collected: "$0.00",
     collectedColor: "text-[#E57100]",
     outstanding: "$15,000",
-    outstandingColor: "text-[#FF3355] dark:text-[#FB7185]",
+    outstandingColor: "text-[#FB7185]",
     status: "Pending" as const,
     statusColor: "bg-[rgba(229,113,0,0.1)] text-[#E57100]",
   },
@@ -224,11 +221,11 @@ const CAMPAIGN_ROWS = [
     model: "$1,000 Per video",
     monthlyValue: "$20,000",
     collected: "$10,000",
-    collectedColor: "text-[#00B259]",
+    collectedColor: "text-[#34D399]",
     outstanding: "$0.00",
     outstandingColor: "text-foreground/50",
     status: "Active" as const,
-    statusColor: "bg-[rgba(0,178,89,0.1)] text-[#00B259]",
+    statusColor: "bg-[rgba(52,211,153,0.08)] text-[#34D399]",
   },
 ];
 
@@ -240,11 +237,11 @@ function CampaignsTable() {
   useEffect(() => { hover.measureItems(); }, [hover.measureItems]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card-bg">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-foreground/[0.03] dark:bg-foreground/[0.03]">
       <div className="overflow-x-auto">
         <div className="min-w-[800px]">
       {/* Header */}
-      <div className="flex border-b border-foreground/[0.06] px-5 py-3">
+      <div className="flex border-b border-foreground/[0.06] dark:border-foreground/[0.03] px-5 py-3">
         <div className="w-[22%] font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Campaign</div>
         <div className="w-[20%] font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Client</div>
         <div className="w-[15%] font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Model</div>
@@ -295,7 +292,7 @@ function CampaignsTable() {
             </div>
             <div className="flex w-[10%] justify-end">
               <span className={cn("inline-flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-2 font-inter text-xs font-medium tracking-[-0.02em]", row.statusColor)}>
-                {row.status === "Active" && <div className="size-1.5 rounded-full bg-[#00B259]" />}
+                {row.status === "Active" && <div className="size-1.5 rounded-full bg-[#34D399]" />}
                 {row.status === "Pending" && (
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <circle cx="5" cy="5" r="4.25" stroke="#E57100" strokeWidth="1.5" />
@@ -337,12 +334,12 @@ const INVOICES: InvoiceData[] = [
     campaign: "Spring Influencer Series",
     client: "SocialSphere Media",
     dueDate: "Due 2026-02-15",
-    dueDateColor: "text-[#FF3355] dark:text-[#FB7185]",
+    dueDateColor: "text-[#FB7185]",
     amount: "$3,500.00",
-    amountColor: "text-[#FF3355] dark:text-[#FB7185]",
+    amountColor: "text-[#FB7185]",
     status: "Overdue",
     statusLabel: "Overdue",
-    statusColor: "text-[#FF3355] dark:text-[#FB7185]",
+    statusColor: "text-[#FB7185]",
   },
   {
     id: "INV-2026-007",
@@ -402,7 +399,7 @@ const INVOICES: InvoiceData[] = [
     amountColor: "text-page-text",
     status: "Paid",
     statusLabel: "Paid 2026-03-01",
-    statusColor: "text-[#00994D] dark:text-[#34D399]",
+    statusColor: "text-[#34D399]",
     paidDate: "2026-03-01",
     faded: true,
   },
@@ -439,7 +436,7 @@ function InvoicesTab() {
               className={cn(
                 "flex h-8 cursor-pointer items-center gap-1.5 rounded-[10px] px-4 font-inter text-sm tracking-[-0.02em] transition-all",
                 filter === f
-                  ? "bg-card-bg font-medium text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                  ? "bg-card-bg font-medium text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                   : "font-medium text-foreground/70 hover:text-foreground",
               )}
             >
@@ -510,7 +507,7 @@ function InvoicesTab() {
               <div className="flex flex-col gap-1.5">
                 <span className={cn("font-inter text-sm font-medium tabular-nums tracking-[-0.02em]", inv.amountColor)}>{inv.amount}</span>
                 <div className="flex items-center gap-1.5">
-                  {inv.status === "Paid" && <StatusCheckIcon color="#00994D" />}
+                  {inv.status === "Paid" && <StatusCheckIcon color="#34D399" />}
                   <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]", inv.statusColor)}>{inv.statusLabel}</span>
                 </div>
               </div>
@@ -539,21 +536,23 @@ const whopButtonClass =
 
 function WhopIntegrationCard() {
   return (
-    <div className={cn(cardBase, "flex-row items-center gap-3 p-4")}>
-      <div className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-page-border bg-white">
-        <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
-          <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="#FA4616"/>
-          <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="#FA4616"/>
-          <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="#FA4616"/>
-        </svg>
+    <div className={cn(cardBase, "gap-3 p-4")}>
+      <div className="flex items-start gap-3">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-foreground/[0.03] bg-white dark:bg-white">
+          <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+            <path d="M3.49643 0C2.04966 0 1.05645 0.637265 0.298619 1.34917C0.298619 1.34917 -0.0056609 1.63622 8.02324e-05 1.6477L3.16918 4.81681L6.33828 1.6477C5.73547 0.820981 4.60446 0 3.49643 0Z" fill="#FA4616"/>
+            <path d="M11.3216 0C9.87482 0 8.8816 0.637265 8.12377 1.34916C8.12377 1.34916 7.8482 1.63048 7.83098 1.6477L3.91553 5.56315L7.07889 8.72651L14.1577 1.6477C13.5549 0.820981 12.4296 0 11.3216 0Z" fill="#FA4616"/>
+            <path d="M19.164 0C17.7173 0 16.7241 0.637265 15.9662 1.34917C15.9662 1.34917 15.6792 1.63048 15.6677 1.6477L7.83105 9.48434L8.65778 10.3111C9.93805 11.5913 12.0393 11.5913 13.3253 10.3111L21.9887 1.6477H22.0002C21.4031 0.820981 20.2721 0 19.164 0Z" fill="#FA4616"/>
+          </svg>
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Connect your Whop account</span>
+          <span className="max-w-[400px] font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-subtle">
+            Handle all billing: payments, auto-invoicing, contracts, and instant payouts across 241+ territories. Free to connect, 2.7% + 30c/transaction.
+          </span>
+        </div>
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Connect your Whop account</span>
-        <span className="max-w-[400px] font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-subtle">
-          Handle all billing: payments, auto-invoicing, contracts, and instant payouts across 241+ territories. Free to connect, 2.7% + 30c/transaction.
-        </span>
-      </div>
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex items-center gap-2">
         <button type="button" className={whopButtonClass}>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M6 8V8.005M6 6.5C6 5.68041 7 5.96594 7 5C7 4.44772 6.55228 4 6 4C5.62986 4 5.30669 4.2011 5.13378 4.5M10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6C1.5 3.51472 3.51472 1.5 6 1.5C8.48528 1.5 10.5 3.51472 10.5 6Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
@@ -579,21 +578,21 @@ function WhopIntegrationCard() {
 // ── Finance Overview ──────────────────────────────────────────────────
 
 const cardBase =
-  "flex flex-col justify-center rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]";
+  "flex flex-col justify-center rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]";
 const muted = "text-page-text-muted";
 
 const OVERVIEW_STATS = [
-  { label: "Balance", value: "$50,000", change: "+18.3%", changeColor: "#00994D" },
-  { label: "Net profit", value: "$38.2K", valueColor: "#00994D", change: "+18.3%", changeColor: "#00994D" },
+  { label: "Balance", value: "$50,000", change: "+18.3%", changeColor: "#34D399" },
+  { label: "Net profit", value: "$38.2K", valueColor: "#34D399", change: "+18.3%", changeColor: "#34D399" },
   { label: "Avg campaign ROI", value: "5.4x", secondary: "2.1x industry avg" },
   { label: "Paid out", value: "$3.32k", secondary: "Across all campaigns" },
 ];
 
 const WITHDRAWAL_ROWS = [
-  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
-  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
-  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
-  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
+  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
+  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
+  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
+  { amount: "$20,000", status: "Withdrawn", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399", sentTo: "Chase Bank", initiated: "Fri 13 Mar 2026, 1:21pm", arrival: "Tomorrow" },
 ];
 
 const BOTTOM_STATS = [
@@ -651,25 +650,25 @@ const REVENUE_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
 
 const CAMPAIGN_REVENUE = [
   { name: "FanDuel - All Formats", amount: "$5,000", pct: "42%", barWidth: "55%", type: "CPM · 12 creators", typeColor: "#0162FF" },
-  { name: "FanDuel - All Formats", amount: "$5,000", pct: "25%", barWidth: "36%", type: "Retainer · 4 creators", typeColor: "#FF9025" },
+  { name: "FanDuel - All Formats", amount: "$5,000", pct: "25%", barWidth: "36%", type: "Retainer · 4 creators", typeColor: "#FB923C" },
   { name: "G Fuel Meme Clips", amount: "$5,000", pct: "33%", barWidth: "24%", type: "CPM · 12 creators", typeColor: "#0162FF" },
   { name: "G Fuel Meme Clips", amount: "$5,000", pct: "33%", barWidth: "15%", type: "CPM · 12 creators", typeColor: "#0162FF" },
 ];
 
 const RECENT_TX = [
   { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Pending", statusBg: "rgba(229,113,0,0.08)", statusColor: "#E57100" },
-  { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Paid", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D" },
+  { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Paid", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399" },
   { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Pending", statusBg: "rgba(229,113,0,0.08)", statusColor: "#E57100" },
-  { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Paid", statusBg: "rgba(0,153,77,0.08)", statusColor: "#00994D" },
+  { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Paid", statusBg: "rgba(52,211,153,0.08)", statusColor: "#34D399" },
   { date: "Feb 18", desc: "CPM payout - 171.9K views", campaign: "Gambling Summer Push", amount: "$139.75", status: "Pending", statusBg: "rgba(229,113,0,0.08)", statusColor: "#E57100" },
 ];
 
 const CLIENT_HEALTH = [
-  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Excellent", ratingColor: "#00994D" },
-  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#00994D" },
-  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#00994D" },
-  { name: "BetKing Corp", subtitle: "$15,000 overdue · 0/5 invoices paid", rating: "At Risk", ratingColor: "#FF3355", subtitleColor: "rgba(255,51,85,0.6)" },
-  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#00994D" },
+  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Excellent", ratingColor: "#34D399" },
+  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#34D399" },
+  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#34D399" },
+  { name: "BetKing Corp", subtitle: "$15,000 overdue · 0/5 invoices paid", rating: "At Risk", ratingColor: "#FB7185", subtitleColor: "rgba(251,113,133,0.6)" },
+  { name: "BetKing Corp", subtitle: "Always on time · 4 invoices paid", rating: "Good", ratingColor: "#34D399" },
 ];
 
 const UPCOMING_PAYOUTS = [
@@ -677,6 +676,29 @@ const UPCOMING_PAYOUTS = [
   { date: "Mar 10, 2026", amount: "$8,450.00", desc: "Creator payouts for Gambling Summer Push", tags: ["15 creators"] },
   { date: "Mar 10, 2026", amount: "$8,450.00", desc: "Creator payouts for Gambling Summer Push", tags: ["47 creators", "Recurring"] },
 ];
+
+function StatCardContent({ s }: { s: typeof OVERVIEW_STATS[number] }) {
+  return (
+    <>
+      <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{s.label}</span>
+      <div className="flex items-baseline justify-between gap-3">
+        <span className={cn("font-inter text-[24px] font-medium leading-none tracking-[-0.02em]", s.valueColor ? "" : "text-page-text")} style={s.valueColor ? { color: s.valueColor } : undefined}>
+          {s.value}
+        </span>
+        {s.change && (
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em]" style={{ color: s.changeColor }}>
+            {s.change}
+          </span>
+        )}
+        {s.secondary && (
+          <span className={cn("font-inter text-[12px] font-medium leading-none tracking-[-0.02em]", muted)}>
+            {s.secondary}
+          </span>
+        )}
+      </div>
+    </>
+  );
+}
 
 function FinanceOverview() {
   const [chartToggle, setChartToggle] = useState<"GMV" | "Total revenue">("GMV");
@@ -703,26 +725,11 @@ function FinanceOverview() {
       {/* Whop Integration Card */}
       <WhopIntegrationCard />
 
-      {/* 4 Stat Cards */}
+      {/* 4 Stat Cards — grid on desktop */}
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {OVERVIEW_STATS.map((s) => (
           <div key={s.label} className={cn(cardBase, "h-20 flex-1 gap-3")}>
-            <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{s.label}</span>
-            <div className="flex items-baseline justify-between gap-3">
-              <span className={cn("font-inter text-[24px] font-medium leading-none tracking-[-0.02em]", s.valueColor ? "" : "text-page-text")} style={s.valueColor ? { color: s.valueColor } : undefined}>
-                {s.value}
-              </span>
-              {s.change && (
-                <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em]" style={{ color: s.changeColor }}>
-                  {s.change}
-                </span>
-              )}
-              {s.secondary && (
-                <span className={cn("font-inter text-[12px] font-medium leading-none tracking-[-0.02em]", muted)}>
-                  {s.secondary}
-                </span>
-              )}
-            </div>
+            <StatCardContent s={s} />
           </div>
         ))}
       </div>
@@ -741,7 +748,7 @@ function FinanceOverview() {
                   className={cn(
                     "flex h-8 cursor-pointer items-center rounded-[10px] px-4 font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] transition-all",
                     chartToggle === t
-                      ? "bg-card-bg text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                      ? "bg-card-bg text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                       : "text-page-text-subtle",
                   )}
                 >
@@ -754,34 +761,17 @@ function FinanceOverview() {
             </span>
           </div>
           {/* Date picker dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button type="button" className="flex h-9 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
-                <svg width="12" height="13" viewBox="0 0 12 13" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V10.6667C12 11.7712 11.1046 12.6667 10 12.6667H2C0.895431 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0ZM1.33333 6V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H10C10.3682 11.3333 10.6667 11.0349 10.6667 10.6667V6H1.33333Z" fill="currentColor" fillOpacity="0.5" /></svg>
-                <span className="font-inter text-[14px] tracking-[-0.02em] text-page-text">{timeframe}</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" /></svg>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 rounded-xl border-foreground/[0.06] bg-card-bg p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)]">
-              {TIMEFRAME_OPTIONS.map((opt) => (
-                <DropdownMenuItem
-                  key={opt}
-                  onClick={() => setTimeframe(opt)}
-                  className={cn(
-                    "cursor-pointer rounded-lg px-3 py-1.5 font-inter text-sm tracking-[-0.02em]",
-                    timeframe === opt ? "font-medium text-page-text" : "text-page-text-muted",
-                  )}
-                >
-                  {opt}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AnalyticsPocSelect
+            value={timeframe}
+            onValueChange={(v) => setTimeframe(v as typeof timeframe)}
+            options={TIMEFRAME_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
+          />
         </div>
 
         {/* Chart */}
         <AnalyticsPocChartPlaceholder
           variant="line"
+          chartStylePreset="performance-main"
           lineChart={REVENUE_CHART_DATA}
           activeLineDataset="daily"
           visibleMetricKeys={["views"]}
@@ -795,7 +785,7 @@ function FinanceOverview() {
           <div key={s.label} className={cn(cardBase, "h-[61px] flex-1 gap-2 p-3")}>
             <div className="flex items-center justify-between">
               <span className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{s.value}</span>
-              <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{s.change}</span>
+              <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#34D399]">{s.change}</span>
             </div>
             <div className="flex items-center justify-between gap-1.5">
               <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{s.label}</span>
@@ -818,7 +808,7 @@ function FinanceOverview() {
                 className={cn(
                   "flex h-7 cursor-pointer items-center rounded-[10px] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] transition-all",
                   activityTab === t
-                    ? "bg-card-bg text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                    ? "bg-card-bg text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
                     : "text-page-text-subtle hover:text-page-text",
                 )}
               >
@@ -829,7 +819,7 @@ function FinanceOverview() {
         </div>
         {/* Table header */}
         <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex min-w-[700px] border-b border-border px-1">
+        <div className="flex min-w-[700px] border-b border-border dark:border-foreground/[0.03] px-1">
           <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span></div>
           <div className="flex w-[96px] items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
           <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Sent to</span></div>
@@ -879,7 +869,7 @@ function FinanceOverview() {
       {/* Campaign row from Figma spec */}
       <div className={cn(cardBase, "p-0")}>
         {/* Table header */}
-        <div className="flex border-b border-border px-1">
+        <div className="flex border-b border-border dark:border-foreground/[0.03] px-1">
           <div className="flex w-[240px] items-center px-5 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span></div>
           <div className="flex w-[200px] items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client email</span></div>
           <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Model</span></div>
@@ -904,15 +894,15 @@ function FinanceOverview() {
             <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">$20,000</span>
           </div>
           <div className="flex w-[128px] items-center px-3 py-3">
-            <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">$10,000</span>
+            <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">$10,000</span>
           </div>
           <div className="flex w-[128px] items-center px-3 py-3">
             <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">$0.00</span>
           </div>
           <div className="flex flex-1 items-center justify-end py-3 pr-5">
             <span className="inline-flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-2" style={{ background: "rgba(0,153,77,0.08)" }}>
-              <StatusIcon status="Active" color="#00994D" />
-              <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Active</span>
+              <StatusIcon status="Active" color="#34D399" />
+              <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">Active</span>
             </span>
           </div>
         </div>
@@ -925,15 +915,15 @@ function FinanceOverview() {
           <div className="flex flex-col gap-2">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Avg revenue/profit by month</span>
             <div className="flex items-center gap-2">
-              <div className="flex h-6 items-center gap-1 rounded-full border border-border px-2">
-                <div className="size-2 rounded-full bg-[#ED1285]" />
+              <div className="flex h-6 items-center gap-1 rounded-full border border-foreground/[0.03] bg-foreground/[0.03] px-2">
+                <div className="size-2 rounded-full bg-[#F472B6]" />
                 <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">Revenue</span>
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#ED1285]">$35.4K</span>
+                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#F472B6]">$35.4K</span>
               </div>
-              <div className="flex h-6 items-center gap-1 rounded-full border border-border px-2">
-                <div className="size-2 rounded-full bg-[#00994D]" />
+              <div className="flex h-6 items-center gap-1 rounded-full border border-foreground/[0.03] bg-foreground/[0.03] px-2">
+                <div className="size-2 rounded-full bg-[#34D399]" />
                 <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">Net profit</span>
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">$23.3K</span>
+                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">$23.3K</span>
               </div>
             </div>
           </div>
@@ -1004,7 +994,7 @@ function FinanceOverview() {
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent transactions</span>
           </div>
           {/* Table header */}
-          <div className="relative z-10 flex border-b border-border px-1">
+          <div className="relative z-10 flex border-b border-border dark:border-foreground/[0.03] px-1">
             <div className="flex w-20 items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Date</span></div>
             <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client</span></div>
             <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span></div>

@@ -322,18 +322,21 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   </div>
 
                   {/* Warning card */}
-                  <div className="flex flex-col gap-2 rounded-[10px] bg-[rgba(229,113,0,0.06)] p-3">
-                    <div className="flex items-center gap-2">
-                      <svg width="11" height="10" viewBox="0 0 11 10" fill="none" className="shrink-0 text-[rgba(37,37,37,0.5)] dark:text-[rgba(255,255,255,0.5)]"><path fillRule="evenodd" clipRule="evenodd" d="M3.71555 0.744194C4.29437 -0.248063 5.72807 -0.248066 6.30689 0.744193L9.81585 6.75956C10.3992 7.75954 9.67787 9.01537 8.52019 9.01537H1.50226C0.344574 9.01537 -0.376734 7.75955 0.206591 6.75956L3.71555 0.744194ZM5.01172 3.01538C5.28786 3.01538 5.51172 3.23924 5.51172 3.51538V5.01538C5.51172 5.29152 5.28786 5.51538 5.01172 5.51538C4.73558 5.51538 4.51172 5.29152 4.51172 5.01538V3.51538C4.51172 3.23924 4.73558 3.01538 5.01172 3.01538ZM4.38672 6.51538C4.38672 6.1702 4.66654 5.89038 5.01172 5.89038C5.3569 5.89038 5.63672 6.1702 5.63672 6.51538C5.63672 6.86056 5.3569 7.14038 5.01172 7.14038C4.66654 7.14038 4.38672 6.86056 4.38672 6.51538Z" fill="currentColor"/></svg>
-                      <span className="text-sm font-medium tracking-[-0.02em] text-[#E57100]">
+                  <div className="flex flex-col gap-3 rounded-xl bg-[rgba(229,113,0,0.08)] px-4 py-3">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(229,113,0,0.08)]">
+                      <svg width="20" height="20" viewBox="0 0 28 26" fill="none">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M11.8396 2.88086C12.8043 1.22719 15.1938 1.22719 16.1585 2.88086L22.0067 12.9066C22.9789 14.5732 21.7768 16.6662 19.8473 16.6662H8.15073C6.22127 16.6662 5.01912 14.5732 5.99135 12.9066L11.8396 2.88086ZM13.9998 6.66626C14.4601 6.66626 14.8332 7.03936 14.8332 7.49959V9.99959C14.8332 10.4598 14.4601 10.8329 13.9998 10.8329C13.5396 10.8329 13.1665 10.4598 13.1665 9.99959V7.49959C13.1665 7.03936 13.5396 6.66626 13.9998 6.66626ZM12.9582 12.4996C12.9582 11.9243 13.4245 11.4579 13.9998 11.4579C14.5751 11.4579 15.0415 11.9243 15.0415 12.4996C15.0415 13.0749 14.5751 13.5413 13.9998 13.5413C13.4245 13.5413 12.9582 13.0749 12.9582 12.4996Z" fill="#E57100"/>
+                      </svg>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-[#252525]">
                         Running low
                       </span>
+                      <p className="font-inter text-sm leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.5)]">
+                        At current pace, budget runs out in ~4 days. Top up to keep creators submitting.
+                      </p>
                     </div>
-                    <p className="text-xs leading-relaxed tracking-[-0.02em] text-page-text-muted">
-                      Your campaign budget is almost exhausted. Top up to keep your campaign running
-                      without interruption.
-                    </p>
-                    <button className="mt-1 w-full rounded-full bg-[#E57100] px-4 py-2 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#cc6400]">
+                    <button className="w-full rounded-full bg-[#E57100] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#cc6400]">
                       Top up $2,000 from balance
                     </button>
                   </div>
