@@ -1405,7 +1405,7 @@ function VideoPlayer({
                   actionContent={
                     <div className="flex items-center gap-1 pl-6">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg>
-                      <span className="font-inter text-sm tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Approved video</span>
+                      <span className="font-inter text-sm tracking-[-0.02em] text-[#34D399]">Approved video</span>
                     </div>
                   }
                 />
@@ -1621,8 +1621,8 @@ function VideoPlayer({
                 </button>
               </div>
               <div className="flex items-center gap-1">
-                {/* Speed with popup menu */}
-                <div className="relative" data-speed-menu>
+                {/* Speed with popup menu — hidden on mobile */}
+                <div className="relative hidden sm:block" data-speed-menu>
                   <AnimatePresence>
                     {speedOpen && (
                       <motion.div
@@ -2028,7 +2028,7 @@ function AIReviewPanel({ submission, scoreColor, onAction }: { submission: Submi
           onClick={() => onAction?.("reject")}
           className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
         >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
           <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
             Reject
           </span>
@@ -2387,7 +2387,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-1 rounded-full bg-[rgba(255,144,37,0.1)] p-2">
+          <div className="flex items-center gap-1 rounded-full bg-[rgba(251,146,60,0.08)] p-2">
             <PendingClockIcon size={16} />
           </div>
           <div onClick={(e) => e.stopPropagation()}>
@@ -2423,9 +2423,9 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
 
         {/* Tab content */}
         {mobileTab === "Overview" && (
-          <div className="flex" style={{ height: 328 }}>
+          <div className="flex min-h-0">
             {/* Video preview — cropped/zoomed */}
-            <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210 }}>
+            <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210, height: 328 }}>
               <div className="h-full overflow-hidden rounded-xl">
                 <VideoPlayer
                   src={submission.videoUrl}
@@ -2435,7 +2435,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
               </div>
             </div>
             {/* Stats sidebar */}
-            <div className="flex flex-1 flex-col gap-2 p-3">
+            <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-3">
               <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
               <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
               <StatMiniCard
@@ -2560,9 +2560,9 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
             </div>
 
             {/* Status badge */}
-            <div className="ml-auto flex items-center gap-1 rounded-full bg-[rgba(255,144,37,0.1)] py-2 pr-2 pl-1.5">
+            <div className="ml-auto flex items-center gap-1 rounded-full bg-[rgba(251,146,60,0.08)] py-2 pr-2 pl-1.5">
               <PendingClockIcon />
-              <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FF9025]">
+              <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB923C]">
                 Pending
               </span>
             </div>
@@ -2580,7 +2580,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 onClick={() => onAction?.("reject")}
                 className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
                 <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
                   Reject
                 </span>
