@@ -1284,8 +1284,8 @@ function VideoPlayer({
           </div>
           {/* Right/Bottom: Timeline */}
           <div className="relative z-[1] flex shrink-0 flex-col justify-end p-2 md:w-[320px] lg:w-[400px]">
-            <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-              <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4">
+            <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616]">
+              <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4 dark:border-[rgba(224,224,224,0.03)]">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Timeline</span>
                 <div className="flex items-center gap-1">
                   {/* Filter button */}
@@ -1411,13 +1411,13 @@ function VideoPlayer({
                 />
               </div>
               {/* Comment input + actions */}
-              <div className="flex flex-col gap-2 border-t border-foreground/[0.06] p-3">
+              <div className="flex flex-col gap-2 border-t border-foreground/[0.06] p-4 dark:border-[rgba(224,224,224,0.03)]">
                 {/* Comment — collapsed pill / expanded card */}
                 <FullscreenCommentInput formatTime={formatTime} currentTime={currentTime} />
                 {/* Reject / Approve */}
                 <div className="flex gap-2">
-                  <button className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FF2525"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185]">Reject</span></button>
-                  <button className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Approve</span></button>
+                  <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(251,113,133,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185]">Reject</span></button>
+                  <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground/[0.03] transition-colors hover:bg-foreground/[0.06]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM11.3536 6.35355C11.5488 6.15829 11.5488 5.84171 11.3536 5.64645C11.1583 5.45118 10.8417 5.45118 10.6464 5.64645L7 9.29289L5.35355 7.64645C5.15829 7.45118 4.84171 7.45118 4.64645 7.64645C4.45118 7.84171 4.45118 8.15829 4.64645 8.35355L6.64645 10.3536C6.84171 10.5488 7.15829 10.5488 7.35355 10.3536L11.3536 6.35355Z" fill="currentColor"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Approve</span></button>
                 </div>
               </div>
             </div>
