@@ -776,7 +776,7 @@ export default function CreatorsPage() {
   return (
     <div>
       {/* Top nav */}
-      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         {/* Underline tabs */}
         <ProximityTabs
           tabs={NAV_TABS.map((t) => ({ label: t }))}

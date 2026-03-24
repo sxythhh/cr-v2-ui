@@ -10,9 +10,9 @@ import type {
 } from "./types";
 
 const DELTA_COLOR: Record<AnalyticsPocKpiDeltaTone, string> = {
-  danger: "text-[#b91c1c]",
+  danger: "text-[#FB7185]",
   neutral: "text-[var(--ap-text-secondary)]",
-  success: "text-[#00B259]",
+  success: "text-[#34D399]",
 };
 
 export function AnalyticsPocKpiCard({
@@ -20,6 +20,7 @@ export function AnalyticsPocKpiCard({
   value,
   deltaBadge,
   meta,
+  metaTone,
   onClick,
   className,
 }: AnalyticsPocKpiCardProps) {
@@ -39,29 +40,43 @@ export function AnalyticsPocKpiCard({
     >
       {/* Row 1: value + delta */}
       <div className="flex items-center justify-between gap-3">
-        <p className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--ap-text)]">
+        <p className="flex-1 font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--ap-text)]">
           {value}
         </p>
-        {deltaBadge ? (
+        {deltaBadge && (
           <span
             className={cn(
-              "font-inter text-[12px] font-medium leading-none tracking-[-0.02em]",
+              "shrink-0 font-inter text-[12px] font-medium leading-none tracking-[-0.02em]",
               DELTA_COLOR[deltaBadge.tone ?? "success"],
             )}
           >
             {deltaBadge.label}
           </span>
-        ) : meta ? (
-          <span className="font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+        )}
+        {!deltaBadge && meta && (
+          <span className={cn(
+            "shrink-0 font-inter text-[12px] font-normal leading-none tracking-[-0.02em]",
+            metaTone === "success" ? "text-[#34D399]" : "text-[var(--ap-text-secondary)]",
+          )}>
             {meta}
           </span>
-        ) : null}
+        )}
       </div>
 
-      {/* Row 2: label */}
-      <p className="font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-[var(--ap-text-secondary)]">
-        {label}
-      </p>
+      {/* Row 2: label + meta */}
+      <div className="flex items-center justify-between gap-1.5">
+        <p className="font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+          {label}
+        </p>
+        {deltaBadge && meta && (
+          <span className={cn(
+            "shrink-0 font-inter text-[12px] font-normal leading-none tracking-[-0.02em]",
+            metaTone === "success" ? "font-medium text-[#34D399]" : "text-page-text-subtle",
+          )}>
+            {meta}
+          </span>
+        )}
+      </div>
     </article>
   );
 }

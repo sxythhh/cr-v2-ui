@@ -140,6 +140,7 @@ export interface AnalyticsPocKpiCardProps {
   iconName?: AnalyticsPocKpiIcon;
   deltaBadge?: AnalyticsPocKpiDeltaBadge;
   meta?: string;
+  metaTone?: string;
   status?: string;
   tone?: AnalyticsPocTone;
   variant?: AnalyticsPocKpiVariant;

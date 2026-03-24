@@ -784,7 +784,7 @@ export default function CampaignsPage() {
   return (
     <div className="min-h-full bg-page-bg">
       {/* Header with underline tabs */}
-      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
         <div className="flex items-center gap-2">
           <button

@@ -18,10 +18,10 @@ import type { AnalyticsPocHeatmapCardProps } from "./types";
 
 const HEATMAP_TONE_COLOR: Record<AnalyticsPocHeatmapCardProps["tone"], string> =
   {
-    blue: "#4E8EEE",
-    green: "#13C368",
-    purple: "#AE4EEE",
-    red: "#EE4E51",
+    blue: "#60A5FA",
+    green: "#34D399",
+    purple: "#C084FC",
+    red: "#FB7185",
   };
 
 
@@ -47,10 +47,11 @@ export function AnalyticsPocHeatmapCard({
 
   const colorScale = useMemo(
     () => [
-      "var(--ap-hover)",
-      `color-mix(in srgb, ${toneColor} 25%, transparent)`,
-      `color-mix(in srgb, ${toneColor} 50%, transparent)`,
-      `color-mix(in srgb, ${toneColor} 75%, transparent)`,
+      `color-mix(in srgb, ${toneColor} 8%, transparent)`,
+      `color-mix(in srgb, ${toneColor} 20%, transparent)`,
+      `color-mix(in srgb, ${toneColor} 30%, transparent)`,
+      `color-mix(in srgb, ${toneColor} 40%, transparent)`,
+      `color-mix(in srgb, ${toneColor} 60%, transparent)`,
       toneColor,
     ],
     [toneColor],

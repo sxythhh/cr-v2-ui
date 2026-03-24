@@ -490,18 +490,39 @@ function StackedBarSegmentShape({
           : clampNumber(normalizedOpacity, 0, 1)
       }
     >
-      <path d={fillPath} fill={fill ?? "transparent"} />
-      {stroke ? (
-        <path
-          d={strokePath}
-          fill="none"
-          stroke={stroke}
-          strokeLinecap="butt"
-          strokeLinejoin="round"
-          strokeWidth={strokeWidth}
-          vectorEffect="non-scaling-stroke"
-        />
-      ) : null}
+      {/* Base fill */}
+      <rect
+        x={normalizedX}
+        y={normalizedY}
+        width={normalizedWidth}
+        height={normalizedHeight}
+        rx={radius}
+        ry={radius}
+        fill="var(--card-bg, #1C1C1C)"
+      />
+      {/* Colored overlay at 30% */}
+      <rect
+        x={normalizedX}
+        y={normalizedY}
+        width={normalizedWidth}
+        height={normalizedHeight}
+        rx={radius}
+        ry={radius}
+        fill={fill ?? "transparent"}
+        fillOpacity={0.3}
+      />
+      {/* Border mask to separate segments */}
+      <rect
+        x={normalizedX}
+        y={normalizedY}
+        width={normalizedWidth}
+        height={normalizedHeight}
+        rx={radius}
+        ry={radius}
+        fill="none"
+        stroke="var(--card-bg, #1C1C1C)"
+        strokeWidth={2}
+      />
     </g>
   );
 }
@@ -619,6 +640,15 @@ function PerformanceMainLineChartBody({
   const chartHoverRootRef = useRef<HTMLDivElement>(null);
   const chartPlotAreaRef = useRef<HTMLDivElement>(null);
   const [measuredPlotWidth, setMeasuredPlotWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  const hasRightAxis = !isMobile && Boolean(lineChart.rightYLabels?.length);
   const lineGradientIdPrefix = useId().replace(/:/g, "");
   const hoverFocusGradientIdPrefix = useId().replace(/:/g, "");
 
@@ -761,9 +791,9 @@ function PerformanceMainLineChartBody({
 
   return (
     <div className="absolute inset-0 chart-no-focus-ring" ref={chartHoverRootRef}>
-      <div className={cn("absolute inset-x-0 bottom-7 top-0 flex items-end gap-4", lineChart.rightYLabels?.length ? "pr-8" : "")}>
-        {/* Y-axis labels — left side */}
-        <div className="relative h-full w-5 shrink-0">
+      <div className="absolute inset-x-0 bottom-7 top-0 flex items-end gap-4">
+        {/* Y-axis labels — left side (hidden on mobile) */}
+        <div className="relative hidden h-full w-5 shrink-0 sm:block">
           <div className="absolute inset-0 flex flex-col items-end justify-between">
             {animatedYLabels.map((label, i) => (
               <span
@@ -780,7 +810,7 @@ function PerformanceMainLineChartBody({
           <ResponsiveContainer height="100%" width="100%">
             <LineChart
               data={dataset}
-              margin={{ bottom: 2, left: 0, right: 4, top: 0 }}
+              margin={{ bottom: 2, left: 0, right: hasRightAxis ? 48 : 4, top: 0 }}
               onClick={handleLineChartClick}
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
@@ -920,7 +950,26 @@ function PerformanceMainLineChartBody({
           </div>
 
         </div>
+
       </div>
+
+      {/* Y-axis labels — right side (engagement %) — absolutely positioned */}
+      {lineChart.rightYLabels && lineChart.rightYLabels.length > 0 && (
+        <div className="absolute right-0 top-0 bottom-7 hidden w-9 flex-col items-end justify-between sm:flex">
+          {lineChart.rightYLabels.map((label, i) => {
+            const rightSeries = lineChart.series.find((s) => s.axis === "right");
+            return (
+              <span
+                className="font-inter text-[10px] font-normal leading-[1.2] text-right whitespace-nowrap"
+                key={`yr-${i}`}
+                style={{ color: rightSeries?.color ?? "#C084FC" }}
+              >
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      )}
 
       {/* Hover crosshair line */}
       <div
@@ -945,7 +994,7 @@ function PerformanceMainLineChartBody({
         <div
           className="absolute top-0 bottom-0 transition-opacity duration-100"
           style={{
-            right: 4,
+            right: hasRightAxis ? 47 : 0,
             width: 0,
             borderLeft: "1px solid var(--foreground)",
             opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 0.2,
@@ -985,31 +1034,13 @@ function PerformanceMainLineChartBody({
         {/* Static end-date pill — fades when hover pill overlaps */}
         <div
           className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center transition-opacity duration-100"
-          style={{ right: 4, transform: "translateX(50%)", opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 1 }}
+          style={{ right: hasRightAxis ? 47 : 4, transform: "translateX(50%)" }}
         >
           <span className="whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-white/[0.08]">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
           </span>
         </div>
       </div>
-
-      {/* Y-axis labels — right side (engagement %) */}
-      {lineChart.rightYLabels && lineChart.rightYLabels.length > 0 && (
-        <div className="absolute right-0 top-0 bottom-7 flex w-6 flex-col items-end justify-between">
-          {lineChart.rightYLabels.map((label, i) => {
-            const rightSeries = lineChart.series.find((s) => s.axis === "right");
-            return (
-              <span
-                className="font-inter text-[10px] font-normal leading-[1.2] text-right whitespace-nowrap"
-                key={`yr-${i}`}
-                style={{ color: rightSeries?.color ?? "#C084FC" }}
-              >
-                {label}
-              </span>
-            );
-          })}
-        </div>
-      )}
 
     </div>
   );
@@ -1202,7 +1233,7 @@ function StackedBarChartBody({
                       isAnimationActive={isAnimationEnabled}
                       key={series.key}
                       maxBarSize={STACKED_BAR_MAX_SIZE}
-                      shape={<StackedBarSegmentShape radius={series.key === topVisibleSeriesKey ? 4 : 0} />}
+                      shape={<StackedBarSegmentShape radius={8} />}
                       stackId="posts"
                       stroke="none"
                       strokeWidth={0}

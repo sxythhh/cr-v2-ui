@@ -25,10 +25,10 @@ export const ANALYTICS_POC_PLATFORM_LABELS: Record<string, string> = {
 };
 
 const ANALYTICS_POC_PLATFORM_BRAND_COLORS: Record<string, string> = {
-  facebook: "#4E8EEE",
-  instagram: "#AE4EEE",
-  tiktok: "#13C368",
-  youtube: "#EE4E51",
+  facebook: "#60A5FA",
+  instagram: "#C084FC",
+  tiktok: "#34D399",
+  youtube: "#FB7185",
 };
 
 export function hasAnalyticsPocPlatformIcon(platform: string) {

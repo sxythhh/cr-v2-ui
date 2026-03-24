@@ -817,6 +817,10 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       variant: "views",
     },
     {
+      deltaBadge: {
+        label: "+18.3%",
+        tone: "success",
+      },
       iconName: "payouts",
       label: "Total Payouts",
       meta: "$832 pending",
@@ -824,18 +828,21 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       variant: "payouts",
     },
     {
+      deltaBadge: {
+        label: "+18.3%",
+        tone: "success",
+      },
       iconName: "cpm",
       label: "Effective CPM",
-      meta: "vs $1.00",
-      status: "80.3%",
-      tone: "success",
+      meta: "Efficient",
+      metaTone: "success",
       value: "$0.84",
       variant: "cpm-efficient",
     },
     {
       iconName: "submissions",
       label: "Submissions",
-      meta: "690 approved",
+      meta: "680 approved · 80.3%",
       value: "847",
       variant: "submissions",
     },

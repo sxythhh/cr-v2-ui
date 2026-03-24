@@ -2412,7 +2412,7 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-1 flex-col dark:bg-page-bg">
       {/* Tab header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         <ProximityTabs
           tabs={SETTINGS_TABS.map((t) => ({ label: t }))}
           selectedIndex={SETTINGS_TABS.indexOf(activeTab)}
