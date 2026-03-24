@@ -72,8 +72,8 @@ html.dark {
   --ap-border: oklch(1 0 0 / 0.08);
   --ap-hover: oklch(1 0 0 / 0.06);
   --ap-share-hover-bg: rgba(255, 255, 255, 0.08);
-  --ap-toggle-bg: oklch(1 0 0 / 0.06);
-  --ap-toggle-thumb: #4a4a4a;
+  --ap-toggle-bg: rgba(224,224,224,0.03);
+  --ap-toggle-thumb: rgba(224,224,224,0.03);
   --ap-pill-bg: rgba(255,255,255,0.07);
   --ap-pill-bg-solid: #2a2a2a;
   --ap-pill-border: rgba(255,255,255,0.06);
@@ -83,8 +83,8 @@ html.dark {
   --ap-select-bg: #2a2a2a;
   --ap-input-bg: #242424;
   --ap-badge-pill: rgba(255,255,255,0.08);
-  --ap-inactive-surface: rgba(255,255,255,0.02);
-  --ap-inactive-border: rgba(255,255,255,0.04);
+  --ap-inactive-surface: rgba(224,224,224,0.03);
+  --ap-inactive-border: rgba(224,224,224,0.03);
   --ap-card-shine-opacity: 0;
   --ap-shadow-popup: 0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
   --glass-action-btn-bg: #2c2c2c;

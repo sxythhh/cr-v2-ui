@@ -46,7 +46,7 @@ const PERFORMANCE_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
   series: [
     {
       axis: "left",
-      color: "#4D81EE",
+      color: "#60A5FA",
       domain: [0, 100000],
       key: "views",
       label: "Views",
@@ -55,7 +55,7 @@ const PERFORMANCE_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
     },
     {
       axis: "right",
-      color: "#9D5AEF",
+      color: "#C084FC",
       domain: [0, 8],
       key: "engagement",
       label: "Engagement",
@@ -64,7 +64,7 @@ const PERFORMANCE_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
     },
     {
       axis: "left",
-      color: "#DA5597",
+      color: "#F9A8D4",
       domain: [0, 5000],
       key: "likes",
       label: "Likes",
@@ -73,7 +73,7 @@ const PERFORMANCE_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
     },
     {
       axis: "left",
-      color: "#E9A23B",
+      color: "#FB923C",
       domain: [0, 1500],
       key: "comments",
       label: "Comments",
@@ -82,7 +82,7 @@ const PERFORMANCE_LINE_CHART: AnalyticsPocPerformanceLineChartData = {
     },
     {
       axis: "left",
-      color: "#13C368",
+      color: "#34D399",
       domain: [0, 800],
       key: "shares",
       label: "Shares",
@@ -98,10 +98,10 @@ const TOTAL_POSTS_STACKED_CHART: AnalyticsPocStackedBarChartData = {
   maxValue: 110000,
   points: buildTotalPostsStackedPoints(),
   series: [
-    { color: "#13C368", key: "tiktok", label: "TikTok" },
-    { color: "#AE4EEE", key: "instagram", label: "Instagram" },
-    { color: "#EE4E51", key: "youtube", label: "YouTube" },
-    { color: "#4E8EEE", key: "facebook", label: "Facebook" },
+    { color: "#34D399", key: "tiktok", label: "TikTok" },
+    { color: "#C084FC", key: "instagram", label: "Instagram" },
+    { color: "#FB7185", key: "youtube", label: "YouTube" },
+    { color: "#60A5FA", key: "facebook", label: "Facebook" },
   ],
   xTicks: CHART_TICKS,
   yLabels: ["100k", "75k", "50k", "25k", "10k", "0"],
@@ -442,7 +442,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Breakdown of dominant content themes and their contribution to total views.",
     items: [
       {
-        accentColor: "#E9A23B",
+        accentColor: "#FB923C",
         detailLabel: "85 videos",
         dotColorClass: "bg-[#E9A23B]",
         id: "cluster-reaction",
@@ -454,7 +454,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "500K",
       },
       {
-        accentColor: "#4D81EE",
+        accentColor: "#60A5FA",
         detailLabel: "45 videos",
         dotColorClass: "bg-[#4D81EE]",
         id: "cluster-meme",
@@ -517,24 +517,24 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
     drilldowns: {
       "cluster-reaction": {
         label: "Reaction Videos",
-        accentColor: "#E9A23B",
+        accentColor: "#FB923C",
         items: [
-          { id: "cr1", label: "Reacting to viral cooking fails", detailLabel: "@sarah_creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#E9A23B", percentLabel: "", progress: 100, valueLabel: "124K", rightMetrics: [{ text: "124K" }] },
-          { id: "cr2", label: "First time watching K-drama", detailLabel: "@mike.films", avatarSrc: "/logos/brand8.jpg", accentColor: "#E9A23B", percentLabel: "", progress: 79, valueLabel: "98K", rightMetrics: [{ text: "98K" }] },
-          { id: "cr3", label: "Reacting to my old videos", detailLabel: "@ava.style", avatarSrc: "/logos/brand8.jpg", accentColor: "#E9A23B", percentLabel: "", progress: 70, valueLabel: "87K", rightMetrics: [{ text: "87K" }] },
-          { id: "cr4", label: "Fan edits that made me cry", detailLabel: "@luna.creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#E9A23B", percentLabel: "", progress: 58, valueLabel: "72K", rightMetrics: [{ text: "72K" }] },
-          { id: "cr5", label: "Trying weird food combos", detailLabel: "@jess_vlogs", avatarSrc: "/logos/brand8.jpg", accentColor: "#E9A23B", percentLabel: "", progress: 49, valueLabel: "61K", rightMetrics: [{ text: "61K" }] },
+          { id: "cr1", label: "Reacting to viral cooking fails", detailLabel: "@sarah_creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#FB923C", percentLabel: "", progress: 100, valueLabel: "124K", rightMetrics: [{ text: "124K" }] },
+          { id: "cr2", label: "First time watching K-drama", detailLabel: "@mike.films", avatarSrc: "/logos/brand8.jpg", accentColor: "#FB923C", percentLabel: "", progress: 79, valueLabel: "98K", rightMetrics: [{ text: "98K" }] },
+          { id: "cr3", label: "Reacting to my old videos", detailLabel: "@ava.style", avatarSrc: "/logos/brand8.jpg", accentColor: "#FB923C", percentLabel: "", progress: 70, valueLabel: "87K", rightMetrics: [{ text: "87K" }] },
+          { id: "cr4", label: "Fan edits that made me cry", detailLabel: "@luna.creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#FB923C", percentLabel: "", progress: 58, valueLabel: "72K", rightMetrics: [{ text: "72K" }] },
+          { id: "cr5", label: "Trying weird food combos", detailLabel: "@jess_vlogs", avatarSrc: "/logos/brand8.jpg", accentColor: "#FB923C", percentLabel: "", progress: 49, valueLabel: "61K", rightMetrics: [{ text: "61K" }] },
         ],
       },
       "cluster-meme": {
         label: "Meme Edits",
-        accentColor: "#4D81EE",
+        accentColor: "#60A5FA",
         items: [
-          { id: "cm1", label: "POV: your code works first try", detailLabel: "@noahkim_", avatarSrc: "/logos/brand8.jpg", accentColor: "#4D81EE", percentLabel: "", progress: 100, valueLabel: "68K", rightMetrics: [{ text: "68K" }] },
-          { id: "cm2", label: "When the WiFi drops mid-stream", detailLabel: "@dan.photo", avatarSrc: "/logos/brand8.jpg", accentColor: "#4D81EE", percentLabel: "", progress: 62, valueLabel: "42K", rightMetrics: [{ text: "42K" }] },
-          { id: "cm3", label: "Monday morning energy", detailLabel: "@olivia.n", avatarSrc: "/logos/brand8.jpg", accentColor: "#4D81EE", percentLabel: "", progress: 56, valueLabel: "38K", rightMetrics: [{ text: "38K" }] },
-          { id: "cm4", label: "That friend who never texts back", detailLabel: "@sarah_creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#4D81EE", percentLabel: "", progress: 46, valueLabel: "31K", rightMetrics: [{ text: "31K" }] },
-          { id: "cm5", label: "Expectations vs reality: adulting", detailLabel: "@ava.style", avatarSrc: "/logos/brand8.jpg", accentColor: "#4D81EE", percentLabel: "", progress: 31, valueLabel: "21K", rightMetrics: [{ text: "21K" }] },
+          { id: "cm1", label: "POV: your code works first try", detailLabel: "@noahkim_", avatarSrc: "/logos/brand8.jpg", accentColor: "#60A5FA", percentLabel: "", progress: 100, valueLabel: "68K", rightMetrics: [{ text: "68K" }] },
+          { id: "cm2", label: "When the WiFi drops mid-stream", detailLabel: "@dan.photo", avatarSrc: "/logos/brand8.jpg", accentColor: "#60A5FA", percentLabel: "", progress: 62, valueLabel: "42K", rightMetrics: [{ text: "42K" }] },
+          { id: "cm3", label: "Monday morning energy", detailLabel: "@olivia.n", avatarSrc: "/logos/brand8.jpg", accentColor: "#60A5FA", percentLabel: "", progress: 56, valueLabel: "38K", rightMetrics: [{ text: "38K" }] },
+          { id: "cm4", label: "That friend who never texts back", detailLabel: "@sarah_creates", avatarSrc: "/logos/brand8.jpg", accentColor: "#60A5FA", percentLabel: "", progress: 46, valueLabel: "31K", rightMetrics: [{ text: "31K" }] },
+          { id: "cm5", label: "Expectations vs reality: adulting", detailLabel: "@ava.style", avatarSrc: "/logos/brand8.jpg", accentColor: "#60A5FA", percentLabel: "", progress: 31, valueLabel: "21K", rightMetrics: [{ text: "21K" }] },
         ],
       },
       "cluster-pov": {
@@ -590,7 +590,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Average effective payout per thousand views split by platform.",
     items: [
       {
-        accentColor: "#4E8EEE",
+        accentColor: "#60A5FA",
         id: "ecpm-facebook",
         label: "Facebook",
         percentLabel: "",
@@ -600,7 +600,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "$0.22",
       },
       {
-        accentColor: "#AE4EEE",
+        accentColor: "#C084FC",
         id: "ecpm-instagram",
         label: "Instagram",
         percentLabel: "",
@@ -610,7 +610,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "$0.12",
       },
       {
-        accentColor: "#EE4E51",
+        accentColor: "#FB7185",
         id: "ecpm-youtube",
         label: "YouTube",
         percentLabel: "",
@@ -620,7 +620,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "$0.06",
       },
       {
-        accentColor: "#13C368",
+        accentColor: "#34D399",
         id: "ecpm-tiktok",
         label: "TikTok",
         percentLabel: "",
@@ -638,7 +638,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Average engagement rate by platform over the selected date range.",
     items: [
       {
-        accentColor: "#13C368",
+        accentColor: "#34D399",
         id: "er-tiktok",
         label: "TikTok",
         percentLabel: "",
@@ -648,7 +648,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "4.2%",
       },
       {
-        accentColor: "#EE4E51",
+        accentColor: "#FB7185",
         id: "er-youtube",
         label: "YouTube",
         percentLabel: "",
@@ -658,7 +658,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "3.1%",
       },
       {
-        accentColor: "#AE4EEE",
+        accentColor: "#C084FC",
         id: "er-instagram",
         label: "Instagram",
         percentLabel: "",
@@ -668,7 +668,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "1.8%",
       },
       {
-        accentColor: "#4E8EEE",
+        accentColor: "#60A5FA",
         id: "er-facebook",
         label: "Facebook",
         percentLabel: "",
@@ -851,7 +851,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
     },
     metrics: [
       {
-        accentColor: "#4D81EE",
+        accentColor: "#60A5FA",
         dotColorClass: "bg-blue-500",
         enabled: true,
         label: "Views",
@@ -860,15 +860,15 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "1.93M",
       },
       {
-        accentColor: "#9D5AEF",
-        dotColorClass: "bg-violet-500",
+        accentColor: "#C084FC",
+        dotColorClass: "bg-purple-400",
         enabled: true,
         label: "Engagement",
         metricKey: "engagement",
         value: "4.8%",
       },
       {
-        accentColor: "#DA5597",
+        accentColor: "#F9A8D4",
         dotColorClass: "bg-pink-500",
         enabled: true,
         label: "Likes",
@@ -876,7 +876,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "465K",
       },
       {
-        accentColor: "#E9A23B",
+        accentColor: "#FB923C",
         dotColorClass: "bg-amber-500",
         enabled: true,
         label: "Comments",
@@ -884,8 +884,8 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "629K",
       },
       {
-        accentColor: "#000000",
-        dotColorClass: "bg-emerald-500",
+        accentColor: "#34D399",
+        dotColorClass: "bg-emerald-400",
         enabled: false,
         label: "Shares",
         metricKey: "shares",
@@ -901,7 +901,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Post volume distribution by platform during the selected period.",
     items: [
       {
-        accentColor: "#AE4EEE",
+        accentColor: "#C084FC",
         id: "posts-instagram",
         label: "Instagram",
         percentLabel: "42%",
@@ -911,7 +911,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "345",
       },
       {
-        accentColor: "#13C368",
+        accentColor: "#34D399",
         id: "posts-tiktok",
         label: "TikTok",
         percentLabel: "35%",
@@ -921,7 +921,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "289",
       },
       {
-        accentColor: "#EE4E51",
+        accentColor: "#FB7185",
         id: "posts-youtube",
         label: "YouTube",
         percentLabel: "15%",
@@ -931,7 +931,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "123",
       },
       {
-        accentColor: "#4E8EEE",
+        accentColor: "#60A5FA",
         id: "posts-facebook",
         label: "Facebook",
         percentLabel: "8%",
@@ -960,8 +960,8 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
     delta: "~27/day",
     metrics: [
       {
-        accentColor: "#13C368",
-        dotColorClass: "bg-[#13C368]",
+        accentColor: "#34D399",
+        dotColorClass: "bg-[#34D399]",
         enabled: true,
         label: "TikTok",
         metricKey: "tiktok",
@@ -970,8 +970,8 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "345 · 43%",
       },
       {
-        accentColor: "#AE4EEE",
-        dotColorClass: "bg-[#AE4EEE]",
+        accentColor: "#C084FC",
+        dotColorClass: "bg-[#C084FC]",
         enabled: true,
         label: "Instagram",
         metricKey: "instagram",
@@ -980,8 +980,8 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "289 · 35%",
       },
       {
-        accentColor: "#EE4E51",
-        dotColorClass: "bg-[#EE4E51]",
+        accentColor: "#FB7185",
+        dotColorClass: "bg-[#FB7185]",
         enabled: true,
         label: "YouTube",
         metricKey: "youtube",
@@ -990,8 +990,8 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "123 · 13%",
       },
       {
-        accentColor: "#4E8EEE",
-        dotColorClass: "bg-[#4E8EEE]",
+        accentColor: "#60A5FA",
+        dotColorClass: "bg-[#60A5FA]",
         enabled: true,
         label: "Facebook",
         metricKey: "facebook",
@@ -1010,7 +1010,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Share of total views by platform for the selected date range.",
     items: [
       {
-        accentColor: "#AE4EEE",
+        accentColor: "#C084FC",
         id: "views-instagram",
         label: "Instagram",
         percentLabel: "61%",
@@ -1020,7 +1020,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "3.14M",
       },
       {
-        accentColor: "#13C368",
+        accentColor: "#34D399",
         id: "views-tiktok",
         label: "TikTok",
         percentLabel: "20%",
@@ -1030,7 +1030,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "1.02M",
       },
       {
-        accentColor: "#EE4E51",
+        accentColor: "#FB7185",
         id: "views-youtube",
         label: "YouTube",
         percentLabel: "12%",
@@ -1040,7 +1040,7 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "612K",
       },
       {
-        accentColor: "#4E8EEE",
+        accentColor: "#60A5FA",
         id: "views-facebook",
         label: "Facebook",
         percentLabel: "7%",
@@ -1328,7 +1328,7 @@ const CLUSTER_VIDEOS: Record<string, AnalyticsPocClusterDrilldownData> = {
   "cluster-reaction": {
     clusterId: "cluster-reaction",
     clusterLabel: "Reaction Videos",
-    accentColor: "#E9A23B",
+    accentColor: "#FB923C",
     videoCount: "85",
     totalViews: "500K",
     videos: [
@@ -1342,7 +1342,7 @@ const CLUSTER_VIDEOS: Record<string, AnalyticsPocClusterDrilldownData> = {
   "cluster-meme": {
     clusterId: "cluster-meme",
     clusterLabel: "Meme Edits",
-    accentColor: "#4D81EE",
+    accentColor: "#60A5FA",
     videoCount: "45",
     totalViews: "200K",
     videos: [

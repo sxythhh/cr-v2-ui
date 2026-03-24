@@ -185,17 +185,12 @@ export function AnalyticsPocProgressBarRow({
       tabIndex={onClick ? 0 : undefined}
     >
       <span
-        className={cn(
-          "absolute inset-y-0 left-0 rounded-[12px] bg-[var(--ap-pill-bg-solid)]",
-          styles.pillGlow,
-        )}
-        style={fillStyle}
-      >
-        <span
-          className="absolute inset-0 rounded-[12px] pointer-events-none ap-pill-gradient-border"
-          style={PILL_MASK}
-        />
-      </span>
+        className="absolute inset-y-0 left-0 rounded-[12px]"
+        style={{
+          ...fillStyle,
+          backgroundColor: accentColor ? `color-mix(in srgb, ${accentColor} 10%, transparent)` : "var(--ap-pill-bg-solid)",
+        }}
+      />
 
       <div
         className={cn(

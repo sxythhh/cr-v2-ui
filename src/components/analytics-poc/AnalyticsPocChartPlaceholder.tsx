@@ -761,7 +761,7 @@ function PerformanceMainLineChartBody({
 
   return (
     <div className="absolute inset-0 chart-no-focus-ring" ref={chartHoverRootRef}>
-      <div className="absolute inset-x-0 bottom-7 top-0 flex items-end gap-4">
+      <div className={cn("absolute inset-x-0 bottom-7 top-0 flex items-end gap-4", lineChart.rightYLabels?.length ? "pr-8" : "")}>
         {/* Y-axis labels — left side */}
         <div className="relative h-full w-5 shrink-0">
           <div className="absolute inset-0 flex flex-col items-end justify-between">
@@ -992,6 +992,24 @@ function PerformanceMainLineChartBody({
           </span>
         </div>
       </div>
+
+      {/* Y-axis labels — right side (engagement %) */}
+      {lineChart.rightYLabels && lineChart.rightYLabels.length > 0 && (
+        <div className="absolute right-0 top-0 bottom-7 flex w-6 flex-col items-end justify-between">
+          {lineChart.rightYLabels.map((label, i) => {
+            const rightSeries = lineChart.series.find((s) => s.axis === "right");
+            return (
+              <span
+                className="font-inter text-[10px] font-normal leading-[1.2] text-right whitespace-nowrap"
+                key={`yr-${i}`}
+                style={{ color: rightSeries?.color ?? "#C084FC" }}
+              >
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      )}
 
     </div>
   );

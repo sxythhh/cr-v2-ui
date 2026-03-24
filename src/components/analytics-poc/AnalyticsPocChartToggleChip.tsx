@@ -1,4 +1,3 @@
-import { Check } from "lucide-react";
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS } from "./interaction";
@@ -85,10 +84,10 @@ function withAlpha(color: string, alpha: number): string {
 
 function buildChipStyle(seriesColor: string): ChipStyle {
   return {
-    "--ap-chip-active-bg": `radial-gradient(42.53% 86.44% at 50.57% 0%, ${withAlpha(seriesColor, 0.144)} 0%, ${withAlpha(seriesColor, 0.072)} 100%)`,
-    "--ap-chip-active-bg-hover": `radial-gradient(42.53% 86.44% at 50.57% 0%, ${withAlpha(seriesColor, 0.2)} 0%, ${withAlpha(seriesColor, 0.1)} 100%)`,
-    "--ap-chip-active-border": withAlpha(seriesColor, 0.15),
-    "--ap-chip-active-border-hover": withAlpha(seriesColor, 0.25),
+    "--ap-chip-active-bg": withAlpha(seriesColor, 0.1),
+    "--ap-chip-active-bg-hover": withAlpha(seriesColor, 0.15),
+    "--ap-chip-active-border": "transparent",
+    "--ap-chip-active-border-hover": "transparent",
     "--ap-chip-indicator-bg": seriesColor,
     "--ap-chip-indicator-bg-hover": seriesColor,
     "--ap-chip-indicator-border": seriesColor,
@@ -109,40 +108,22 @@ export function AnalyticsPocChartToggleChip({
   const style = buildChipStyle(seriesColor);
 
   const indicator = enabled ? (
-    <span
-      aria-hidden
-      className={cn(
-        "inline-flex size-4 shrink-0 items-center justify-center rounded-full border",
-        "border-[var(--ap-chip-indicator-border)] bg-[var(--ap-chip-indicator-bg)]",
-        "transition-[border-color,background-color] duration-150 ease-out",
-        "group-hover/chip:border-[var(--ap-chip-indicator-border-hover)] group-hover/chip:bg-[var(--ap-chip-indicator-bg-hover)]",
-      )}
-    >
-      <Check
-        className="size-3"
-        strokeWidth={2.25}
-        style={{ color: "#FFFFFF" }}
-      />
-    </span>
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="none" className="size-4 shrink-0" style={{ color: seriesColor }}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M6.66667 0C2.98477 0 0 2.98477 0 6.66667C0 10.3486 2.98477 13.3333 6.66667 13.3333C10.3486 13.3333 13.3333 10.3486 13.3333 6.66667C13.3333 2.98477 10.3486 0 6.66667 0ZM9.18264 5.42218C9.41579 5.13721 9.37379 4.7172 9.08882 4.48405C8.80386 4.2509 8.38385 4.2929 8.15069 4.57786L5.61717 7.67439L4.80474 6.86195C4.54439 6.6016 4.12228 6.6016 3.86193 6.86195C3.60158 7.1223 3.60158 7.54441 3.86193 7.80476L5.19526 9.13809C5.32845 9.27128 5.51176 9.34191 5.69988 9.33253C5.88799 9.32314 6.06337 9.23462 6.18264 9.08885L9.18264 5.42218Z" fill="currentColor"/>
+    </svg>
   ) : (
-    <span
-      aria-hidden
-      className={cn(
-        "inline-flex size-4 shrink-0 rounded-full border",
-        "border-[var(--ap-text-quaternary)] bg-transparent",
-        "transition-colors duration-150 ease-out",
-        "group-hover/chip:border-[var(--ap-text-secondary)]",
-      )}
-    />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="size-4 shrink-0">
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.5" className="text-foreground"/>
+    </svg>
   );
 
   const chipClassName = cn(
-    "group/chip inline-flex h-9 min-w-0 items-center justify-center gap-2 rounded-full px-3 py-2 pl-[10px]",
-    "border text-left",
-    "transition-[background,border-color,color] duration-150 ease-out",
+    "group/chip inline-flex h-6 min-w-0 items-center justify-center gap-1 rounded-full px-2 py-2 pl-1",
+    "text-left",
+    "transition-[background,color] duration-150 ease-out",
     enabled
-      ? "border-[var(--ap-chip-active-border)] [background:var(--ap-chip-active-bg)] hover:border-[var(--ap-chip-active-border-hover)] hover:[background:var(--ap-chip-active-bg-hover)]"
-      : "border-[var(--ap-border)] bg-[var(--ap-inactive-surface)] hover:border-[var(--ap-border)]",
+      ? "[background:var(--ap-chip-active-bg)] hover:[background:var(--ap-chip-active-bg-hover)]"
+      : "border border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.03)]",
     canToggle
       ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ap-border)]"
       : "cursor-default",
@@ -155,23 +136,23 @@ export function AnalyticsPocChartToggleChip({
         {indicator}
         <span
           className={cn(
-            "truncate font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.09px]",
+            "truncate font-inter text-xs font-normal leading-[1] tracking-[-0.02em]",
             enabled
-              ? "text-[var(--ap-text-strong)]"
-              : "text-[var(--ap-text-secondary)]",
+              ? "text-page-text"
+              : "text-page-text-subtle",
           )}
         >
           {label}
         </span>
       </span>
 
-      <span className="shrink-0 font-inter text-[14px] leading-[1.2] tracking-[-0.09px]">
+      <span className="shrink-0 font-inter text-xs leading-[1] tracking-[-0.02em]">
         {(() => {
           const parts = value.split(" · ");
           if (parts.length < 2) {
             return (
               <span
-                className="font-semibold"
+                className={cn("font-medium", !enabled && "text-page-text-subtle")}
                 style={enabled ? { color: seriesColor } : undefined}
               >
                 {value}
@@ -181,7 +162,7 @@ export function AnalyticsPocChartToggleChip({
           return (
             <>
               <span
-                className="font-semibold"
+                className={cn("font-medium", !enabled && "text-page-text-subtle")}
                 style={enabled ? { color: seriesColor } : undefined}
               >
                 {parts[0]}

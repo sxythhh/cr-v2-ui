@@ -382,8 +382,8 @@ export function AnalyticsPocView() {
                 seriesColor={
                   metric.metricKey
                     ? (performanceSeriesColorByKey[metric.metricKey] ??
-                      "#4D81EE")
-                    : "#4D81EE"
+                      "#60A5FA")
+                    : "#60A5FA"
                 }
                 value={metric.value}
               />

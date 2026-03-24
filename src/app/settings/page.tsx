@@ -776,6 +776,263 @@ function DropdownItem({ item, index, registerItem, onAction }: { item: { label: 
   );
 }
 
+// ── Invite Team Member Modal ──────────────────────────────────────────────
+
+const INVITE_ROLES = [
+  { id: "admin", name: "Admin", description: "Full access to all campaigns, settings, and team management" },
+  { id: "manager", name: "Manager", description: "Manage campaigns, review submissions, message creators" },
+  { id: "brand-client", name: "Brand client", description: "View-only access to analytics and notifications for specific brands" },
+  { id: "viewer", name: "Viewer", description: "Read-only access to dashboards and reports" },
+] as const;
+
+const BRAND_PERMISSIONS = [
+  { allowed: true, text: "View high-level campaign analytics" },
+  { allowed: true, text: "See notifications and campaign status" },
+  { allowed: true, text: "Access messages for their brand" },
+  { allowed: false, text: "Cannot edit campaigns or settings" },
+  { allowed: false, text: "Cannot view individual creator details or CPM rates" },
+];
+
+function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [selectedRole, setSelectedRole] = useState("brand-client");
+  const [brand, setBrand] = useState("Cantina");
+
+  return (
+    <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]" showClose={false}>
+      <div className="flex max-h-[90vh] flex-col">
+        {/* Header */}
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Invite Team Member</span>
+          <button type="button" onClick={onClose} className="absolute right-4 top-3 flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" /></svg>
+          </button>
+        </div>
+
+        {/* Subtitle */}
+        <div className="px-5 pt-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Add someone to your organization</span>
+        </div>
+
+        {/* Scrollable content */}
+        <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4">
+          {/* Email */}
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Email</span>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="flex h-10 w-full items-center rounded-[14px] bg-foreground/[0.03] px-3.5 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
+            />
+          </div>
+
+          {/* Role */}
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Role</span>
+            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+              <div className="flex flex-col gap-2">
+                {INVITE_ROLES.map((role) => {
+                  const isSelected = selectedRole === role.id;
+                  return (
+                    <button
+                      key={role.id}
+                      type="button"
+                      onClick={() => setSelectedRole(role.id)}
+                      className={cn(
+                        "flex items-center gap-3 rounded-2xl border p-4 text-left transition-colors",
+                        isSelected
+                          ? "border-[rgba(251,146,60,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),rgba(224,224,224,0.03)]"
+                          : "border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.05]",
+                      )}
+                    >
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{role.name}</span>
+                        <span className="font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">{role.description}</span>
+                      </div>
+                      {/* Radio */}
+                      {isSelected ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                          <circle cx="12" cy="12" r="10" fill="#FB923C" />
+                          <circle cx="12" cy="12" r="9.5" stroke="rgba(224,224,224,0.03)" />
+                          <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      ) : (
+                        <div className="flex size-5 shrink-0 items-center justify-center rounded-full border border-foreground/20 bg-foreground/[0.03]" style={{ boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" }} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Assign to Brand (only for brand-client) */}
+          {selectedRole === "brand-client" && (
+            <div className="flex flex-col gap-2">
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Assign to Brand</span>
+              <div className="flex h-10 w-full items-center justify-between rounded-[14px] bg-foreground/[0.03] px-3.5">
+                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">{brand}</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-page-text-muted"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+            </div>
+          )}
+
+          {/* Brand client permissions */}
+          {selectedRole === "brand-client" && (
+            <div className="flex flex-col overflow-hidden rounded-[10px] border border-foreground/[0.03] bg-foreground/[0.03]">
+              <div className="border-b border-foreground/[0.03] px-3 py-2.5">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">Brand client permissions</span>
+              </div>
+              <div className="flex flex-col gap-3 px-3 py-3">
+                {BRAND_PERMISSIONS.map((perm) => (
+                  <div key={perm.text} className="flex items-center gap-1.5">
+                    {perm.allowed ? (
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="#34D399" /><path d="M4 6L5.5 7.5L8 4.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    ) : (
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="#FB7185" /><path d="M4.5 4.5L7.5 7.5M7.5 4.5L4.5 7.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" /></svg>
+                    )}
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{perm.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex shrink-0 items-center justify-end gap-2 px-5 pb-5">
+          <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]">
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className={cn(
+              "flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors dark:text-page-bg",
+              !email && "opacity-50 cursor-not-allowed",
+            )}
+            disabled={!email}
+          >
+            Send invite
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// ── Create Custom Role Modal ─────────────────────────────────────────────
+
+const ROLE_PERMISSIONS = [
+  ["View campaigns", "Edit campaigns"],
+  ["Create campaigns", "Delete campaigns"],
+  ["View submissions", "Review submissions"],
+  ["Manage creators", "View analytics"],
+  ["Export data", "Manage billing"],
+  ["Invite members", "Manage settings"],
+];
+
+function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [permissions, setPermissions] = useState<Set<string>>(new Set());
+
+  const togglePermission = (perm: string) => {
+    setPermissions((prev) => {
+      const next = new Set(prev);
+      if (next.has(perm)) next.delete(perm);
+      else next.add(perm);
+      return next;
+    });
+  };
+
+  return (
+    <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]" showClose={false}>
+      <div className="flex max-h-[90vh] flex-col">
+        {/* Header */}
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Create custom role</span>
+          <button type="button" onClick={onClose} className="absolute right-4 top-3 flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" /></svg>
+          </button>
+        </div>
+
+        {/* Scrollable content */}
+        <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-5">
+          {/* Name */}
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Name of role</span>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Campaign Manager"
+              className="flex h-10 w-full items-center rounded-[14px] bg-foreground/[0.03] px-3.5 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
+            />
+          </div>
+
+          {/* Description */}
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Description</span>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of this role"
+              rows={2}
+              className="flex w-full resize-none items-center rounded-[14px] bg-foreground/[0.03] px-3.5 py-3 font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
+            />
+          </div>
+
+          {/* Permissions */}
+          <div className="flex flex-col gap-2">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Permissions</span>
+            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+              <div className="flex flex-col gap-2">
+                {ROLE_PERMISSIONS.map((row, ri) => (
+                  <div key={ri} className="flex gap-2">
+                    {row.map((perm) => {
+                      const isChecked = permissions.has(perm);
+                      return (
+                        <button
+                          key={perm}
+                          type="button"
+                          onClick={() => togglePermission(perm)}
+                          className="flex flex-1 items-center gap-2 rounded-[14px] border border-foreground/[0.03] bg-foreground/[0.03] px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05]"
+                        >
+                          {/* Checkbox */}
+                          {isChecked ? (
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                              <circle cx="12" cy="12" r="10" fill="#FB923C" />
+                              <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          ) : (
+                            <div className="flex size-5 shrink-0 items-center justify-center rounded-full border border-foreground/20 bg-foreground/[0.03]" style={{ boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" }} />
+                          )}
+                          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{perm}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex shrink-0 items-center justify-end gap-2 px-5 pb-5">
+          <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]">
+            Cancel
+          </button>
+          <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
+            Create role
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 // ── Confirmation Modal ──────────────────────────────────────────────────────
 
 function ConfirmModal({
@@ -948,6 +1205,7 @@ function TeamTab() {
   const [banTarget, setBanTarget] = useState<string | null>(null);
   const [removeTarget, setRemoveTarget] = useState<string | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
 
   const activeTableRef = useRef<HTMLDivElement>(null);
   const activeHover = useProximityHover(activeTableRef);
@@ -1027,36 +1285,11 @@ function TeamTab() {
         }
       />
 
-      {/* Invite member modal */}
-      <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} size="sm">
-        <div className="flex flex-col gap-5 p-6">
-          <div className="flex flex-col gap-1">
-            <span className="font-inter text-[16px] font-medium tracking-[-0.02em] text-page-text">Invite team member</span>
-            <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">They&apos;ll receive an email invitation to join your organization.</span>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <span className={labelClass}>Email address</span>
-              <input className={inputClass} placeholder="name@company.com" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className={labelClass}>Role</span>
-              <div className={cn(inputClass, "cursor-pointer justify-between")}>
-                <span>Viewer</span>
-                <ChevronDown className="size-3 text-page-text-muted" />
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-end gap-2">
-            <button onClick={() => setInviteOpen(false)} className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
-              Cancel
-            </button>
-            <button onClick={() => setInviteOpen(false)} className="inline-flex h-9 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
-              Send invite
-            </button>
-          </div>
-        </div>
-      </Modal>
+      {/* Invite Team Member modal */}
+      <InviteTeamMemberModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
+
+      {/* Create Custom Role modal */}
+      <CreateCustomRoleModal open={roleModalOpen} onClose={() => setRoleModalOpen(false)} />
 
       {/* Header row */}
       <div className="flex w-full max-w-[1028px] items-center justify-between">
@@ -1066,12 +1299,16 @@ function TeamTab() {
             Manage who has access to your organization.
           </span>
         </div>
-        <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Invite member
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setRoleModalOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Create role
+          </button>
+          <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Invite member
+          </button>
+        </div>
       </div>
 
       {/* Active members table */}

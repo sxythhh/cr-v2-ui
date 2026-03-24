@@ -149,7 +149,7 @@ function AnalyticsPocToggleGroup({
   return (
     <ToggleGroupPrimitive
       className={cn(
-        "relative inline-flex h-9 w-fit items-center rounded-[100px] bg-[var(--ap-toggle-bg)]",
+        "relative inline-flex h-8 w-fit items-center gap-1 rounded-[10px] p-0.5 bg-[var(--ap-toggle-bg)]",
         className,
       )}
       data-orientation={orientation}
@@ -164,7 +164,7 @@ function AnalyticsPocToggleGroup({
       <AnalyticsPocToggleGroupContext.Provider value={{ orientation }}>
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-0 rounded-[40px] bg-[var(--ap-toggle-thumb)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.07),0px_1px_2px_0px_rgba(0,0,0,0.08)] transition-[transform,width] duration-[var(--ap-motion-duration-surface)] ease-[var(--ap-motion-ease-primary)] motion-reduce:transition-none"
+          className="pointer-events-none absolute inset-y-0.5 left-0.5 z-0 rounded-lg border border-foreground/[0.03] bg-[var(--ap-toggle-thumb)] shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-[transform,width] duration-[var(--ap-motion-duration-surface)] ease-[var(--ap-motion-ease-primary)] motion-reduce:transition-none"
           style={{
             transform: `translateX(${thumbPosition.offset}px)`,
             visibility: thumbPosition.visible ? "visible" : "hidden",
@@ -195,7 +195,7 @@ function AnalyticsPocToggleGroupItem({
   return (
     <TogglePrimitive
       className={cn(
-        "relative z-10 inline-flex h-full shrink-0 cursor-pointer items-center justify-center gap-[6px] rounded-[40px] px-[12px] py-[8px] font-inter-display text-[14px] font-medium leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)] dark:text-[var(--ap-text-tertiary)] transition-colors duration-[var(--ap-motion-duration-hover)] ease-[var(--ap-motion-ease-primary)] data-[pressed]:text-[var(--ap-text)] dark:data-[pressed]:text-[var(--ap-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ap-border)] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        "relative z-10 inline-flex h-7 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle transition-colors duration-150 data-[pressed]:text-page-text focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
         className,
       )}
       data-orientation={context.orientation}

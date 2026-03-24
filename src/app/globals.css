@@ -544,6 +544,17 @@ select:focus-visible,
   --af-watermark-opacity-end: 0.02;
 }
 
+.dark .end-campaign-modal {
+  background-color: #161616 !important;
+}
+
+.dark .campaign-completed-text {
+  background: linear-gradient(180deg, #F59E0B 0%, #F97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

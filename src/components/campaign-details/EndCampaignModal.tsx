@@ -51,7 +51,7 @@ function SegmentedControl({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-[rgba(255,255,255,0.06)]">
+    <div className="flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-card-bg">
       {options.map((opt) => (
         <button
           key={opt}
@@ -59,7 +59,7 @@ function SegmentedControl({
           className={cn(
             "flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[14px] font-medium tracking-[-0.02em] transition-colors",
             value === opt
-              ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.10)] dark:text-white"
+              ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:text-page-text"
               : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.5)]",
           )}
         >
@@ -89,7 +89,7 @@ function ConfirmStep({
         <span className="text-[14px] font-medium text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
           Are you sure you wish to end this campaign?
         </span>
-        <div className={cn("flex items-center gap-2 rounded-2xl bg-white p-3", cardBorder, cardShadow, "dark:bg-[rgba(255,255,255,0.02)]")}>
+        <div className={cn("flex items-center gap-2 rounded-2xl bg-white p-3", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
           <div className="h-10 w-[68px] shrink-0 overflow-hidden rounded-[10px] bg-[rgba(37,37,37,0.08)] dark:bg-[rgba(255,255,255,0.08)]">
             {campaign.thumbnail && <img src={campaign.thumbnail} alt="" className="h-full w-full object-cover" />}
           </div>
@@ -102,7 +102,7 @@ function ConfirmStep({
         </div>
       </div>
       <div className="flex items-center justify-center gap-2 px-5 py-5">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
+        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           No, take me back
         </button>
         <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
@@ -147,12 +147,12 @@ function CompletedStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-[#00994D]" style={{ boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
         </div>
 
         {/* Campaign name */}
@@ -164,7 +164,7 @@ function CompletedStep({
         {/* Stats row */}
         <div className="flex w-full gap-2">
           {STATS.map((s) => (
-            <div key={s.label} className={cn("flex h-[84px] flex-1 flex-col justify-between rounded-2xl bg-white p-3", cardBorder, "dark:bg-[rgba(255,255,255,0.02)]")}>
+            <div key={s.label} className={cn("flex h-[84px] flex-1 flex-col justify-between rounded-2xl bg-white p-3", cardBorder, "dark:bg-foreground/[0.03]")}>
               <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{s.value}</span>
               <div className="flex flex-col gap-2">
                 <span className={cn("text-[12px]", muted)}>{s.label}</span>
@@ -177,7 +177,7 @@ function CompletedStep({
         {/* Top creators */}
         <div className="flex w-full flex-col gap-2">
           <span className={cn("text-[12px]", muted)}>Top performing creators</span>
-          <div className={cn("flex flex-col rounded-2xl bg-white", cardBorder, cardShadow, "dark:bg-[rgba(255,255,255,0.02)]")}>
+          <div className={cn("flex flex-col rounded-2xl bg-white", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
             {TOP_CREATORS.map((c, i) => (
               <div key={c.name} className={cn("flex h-10 items-center justify-between px-1", i < TOP_CREATORS.length - 1 && "border-b border-[rgba(37,37,37,0.03)] dark:border-[rgba(255,255,255,0.03)]")}>
                 <div className="flex items-center gap-2 px-3">
@@ -192,11 +192,11 @@ function CompletedStep({
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 py-4">
+        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Cancel
         </button>
-        <button onClick={onContinue} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
+        <button onClick={onContinue} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Continue
         </button>
       </div>
@@ -229,12 +229,12 @@ function FeedbackStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-[#00994D]" style={{ boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>
@@ -253,7 +253,7 @@ function FeedbackStep({
                 key={opt.label}
                 onClick={() => setRating(opt.label)}
                 className={cn(
-                  "flex flex-1 cursor-pointer flex-col items-center gap-2 rounded-2xl border bg-white py-3 transition-colors dark:bg-[rgba(255,255,255,0.02)]",
+                  "flex flex-1 cursor-pointer flex-col items-center gap-2 rounded-2xl border bg-white py-3 transition-colors dark:bg-foreground/[0.03]",
                   rating === opt.label
                     ? "border-[#252525] dark:border-[#e5e5e5]"
                     : "border-border",
@@ -287,7 +287,7 @@ function FeedbackStep({
         {/* Would you run another campaign? */}
         <div className="flex w-full flex-col gap-2">
           <span className={cn("text-[12px]", muted)}>Would you run another campaign?</span>
-          <div className={cn("rounded-2xl bg-white p-5", cardBorder, cardShadow, "dark:bg-[rgba(255,255,255,0.02)]")}>
+          <div className={cn("rounded-2xl bg-white p-5", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
             <SegmentedControl options={["Yes, definitely", "Maybe", "No"]} value={runAgain} onChange={setRunAgain} />
           </div>
         </div>
@@ -295,8 +295,8 @@ function FeedbackStep({
         {/* NPS */}
         <div className="flex w-full flex-col gap-2">
           <span className={cn("text-[12px]", muted)}>How likely are you to recommend Content Rewards?</span>
-          <div className={cn("flex flex-col gap-2 rounded-2xl bg-white p-5", cardBorder, cardShadow, "dark:bg-[rgba(255,255,255,0.02)]")}>
-            <div className="flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-[rgba(255,255,255,0.06)]">
+          <div className={cn("flex flex-col gap-2 rounded-2xl bg-white p-5", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
+            <div className="flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-card-bg">
               {Array.from({ length: 11 }, (_, i) => (
                 <button
                   key={i}
@@ -304,7 +304,7 @@ function FeedbackStep({
                   className={cn(
                     "flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[14px] font-medium tracking-[-0.02em] transition-colors",
                     nps === i
-                      ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.10)] dark:text-white"
+                      ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:text-page-text"
                       : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.5)]",
                   )}
                 >
@@ -321,11 +321,11 @@ function FeedbackStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 pb-5 pt-4">
+        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
-        <button onClick={onSubmit} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
+        <button onClick={onSubmit} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Continue
         </button>
       </div>
@@ -341,8 +341,8 @@ const NEXT_ACTIONS = [
   {
     title: "Top Up & Relaunch",
     description: "Add more budget and keep momentum",
-    bg: "rgba(0,178,89,0.06)",
-    color: "#00B259",
+    bg: "rgba(52,211,153,0.08)",
+    color: "#34D399",
     icon: (
       <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
         <path fillRule="evenodd" clipRule="evenodd" d="M10.8333 10.7277L8.33333 12.8527V14.3288L10.4287 13.0716C10.6798 12.921 10.8333 12.6497 10.8333 12.357V10.7277ZM6.66667 12.8125L3.82149 9.96731H2.30516C1.00967 9.96731 0.20948 8.55402 0.876004 7.44315L2.13325 5.34773C2.58506 4.59472 3.39883 4.13397 4.27698 4.13397H7.34556C9.44936 1.90884 11.834 0.274712 14.9285 0.00607794C15.9028 -0.0784934 16.7125 0.731202 16.6279 1.70544C16.3593 4.80002 14.7251 7.18462 12.5 9.28841V12.357C12.5 13.2351 12.0393 14.0489 11.2862 14.5007L9.19083 15.758C8.07995 16.4245 6.66667 15.6243 6.66667 14.3288V12.8125ZM5.9063 5.80064H4.27698C3.98427 5.80064 3.71301 5.95422 3.56241 6.20523L2.30516 8.30064H3.7813L5.9063 5.80064ZM0 14.134C0 12.7533 1.11929 11.634 2.5 11.634C3.88071 11.634 5 12.7533 5 14.134C5 15.5147 3.88071 16.634 2.5 16.634H0.833333C0.373096 16.634 0 16.2609 0 15.8006V14.134Z" fill="currentColor"/>
@@ -352,8 +352,8 @@ const NEXT_ACTIONS = [
   {
     title: "Create similar campaign",
     description: "Launch a new campaign pre-filled with these settings",
-    bg: "rgba(1,98,255,0.04)",
-    color: "#0162FF",
+    bg: "rgba(96,165,250,0.08)",
+    color: "#60A5FA",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path d="M3.96249 4.29938C3.87488 4.12417 3.62485 4.12417 3.53724 4.29938L2.9929 5.38805C2.9699 5.43406 2.9326 5.47136 2.88659 5.49437L1.79791 6.03871C1.6227 6.12631 1.6227 6.37635 1.79791 6.46395L2.88659 7.00829C2.9326 7.03129 2.9699 7.0686 2.9929 7.1146L3.53724 8.20328C3.62485 8.37849 3.87488 8.37849 3.96249 8.20328L4.50682 7.1146C4.52983 7.0686 4.56713 7.03129 4.61314 7.00829L5.70181 6.46395C5.87702 6.37635 5.87702 6.12631 5.70181 6.0387L4.61314 5.49437C4.56713 5.47136 4.52983 5.43406 4.50682 5.38806L3.96249 4.29938Z" fill="currentColor"/>
@@ -366,8 +366,8 @@ const NEXT_ACTIONS = [
   {
     title: "Talk to account manager",
     description: "Personalized recommendations for your next campaign",
-    bg: "rgba(174,78,238,0.06)",
-    color: "#AE4EEE",
+    bg: "rgba(192,132,252,0.1)",
+    color: "#C084FC",
     icon: (
       <svg width="18" height="15" viewBox="0 0 18 15" fill="none">
         <path d="M8.75001 0C11.3039 0 13.4916 0.659673 15.0562 1.96409C16.639 3.28368 17.5 5.19456 17.5 7.5C17.5 9.80544 16.639 11.7163 15.0562 13.0359C13.4916 14.3403 11.3039 15 8.75001 15C7.40061 15 5.8812 14.8754 4.51313 14.2815C4.28054 14.4115 3.96028 14.5695 3.57997 14.7014C2.78729 14.9764 1.63253 15.1706 0.476601 14.623C0.249793 14.5156 0.0834838 14.3117 0.0238632 14.0679C-0.0357573 13.8241 0.0176643 13.5665 0.169287 13.3665C0.74295 12.6098 0.92373 12.0231 0.973794 11.6478C1.02198 11.2866 0.954523 11.0797 0.946704 11.0573L0.947251 11.0587C0.947251 11.0587 0.946757 11.0574 0.946023 11.0554L0.946704 11.0573C0.946704 11.0573 0.945826 11.0552 0.945079 11.0534L0.938683 11.0384L0.928034 11.0132C0.864214 10.8602 0.6384 10.3076 0.427163 9.64829C0.224451 9.01561 7.05314e-06 8.18041 7.05314e-06 7.5C7.05314e-06 5.19456 0.860976 3.28368 2.44382 1.96409C4.00846 0.659673 6.1961 0 8.75001 0Z" fill="currentColor"/>
@@ -377,8 +377,8 @@ const NEXT_ACTIONS = [
   {
     title: "View full campaign report",
     description: "Detailed analytics, creator breakdown, exportable data",
-    bg: "rgba(238,78,81,0.06)",
-    color: "#EE4E51",
+    bg: "rgba(251,113,133,0.08)",
+    color: "#FB7185",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path d="M18.097 11.9773C18.2514 11.3432 18.3332 10.6808 18.3332 9.99922C18.3332 5.6781 15.0443 2.12514 10.8332 1.70703V9.4099L18.097 11.9773Z" fill="currentColor"/>
@@ -405,12 +405,12 @@ function NextStepsStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-[#00994D]" style={{ boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>
@@ -427,7 +427,7 @@ function NextStepsStep({
                 "flex w-full cursor-pointer items-center gap-3 rounded-2xl border bg-white p-4 text-left transition-colors hover:bg-[rgba(37,37,37,0.02)]",
                 cardBorder,
                 cardShadow,
-                "dark:bg-[rgba(255,255,255,0.02)] dark:hover:bg-[rgba(255,255,255,0.04)]",
+                "dark:bg-foreground/[0.03] dark:hover:bg-[rgba(255,255,255,0.04)]",
               )}
             >
               <div
@@ -449,11 +449,11 @@ function NextStepsStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[rgba(37,37,37,0.06)] px-5 py-4 dark:border-[rgba(255,255,255,0.06)]">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 pb-5 pt-4">
+        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
-        <button onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#111111] dark:hover:bg-[#d5d5d5]">
+        <button onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Submit &amp; close
         </button>
       </div>
@@ -486,12 +486,13 @@ export function EndCampaignModal({ open, onOpenChange, campaign }: EndCampaignMo
           className={cn(
             "fixed left-1/2 top-1/2 z-50 flex w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
-            "bg-white dark:bg-page-bg shadow-xl",
+            "bg-white shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
+            "end-campaign-modal",
           )}
         >
           {/* Header */}
-          <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-border">
+          <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border">
             <span className="text-[14px] font-medium text-page-text">End Campaign</span>
             <DialogPrimitive.Close className="absolute right-3 top-1/2 -translate-y-1/2 flex size-7 cursor-pointer items-center justify-center rounded-full text-[rgba(37,37,37,0.5)] transition-colors hover:bg-[rgba(37,37,37,0.06)] hover:text-[#252525] dark:text-[rgba(255,255,255,0.45)] dark:hover:bg-[rgba(255,255,255,0.06)] dark:hover:text-[#e5e5e5]">
               <IconX size={14} stroke={2} />
