@@ -312,7 +312,7 @@ export function SupportChat() {
             <div className="px-2 pb-2">
               <div className="flex h-[44px] items-center gap-1.5 rounded-xl bg-foreground/[0.04] pr-1 pl-3.5">
                 <input
-                  ref={inputRef as React.RefObject<HTMLInputElement>}
+                  ref={inputRef as unknown as React.RefObject<HTMLInputElement>}
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}

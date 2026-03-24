@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BannerSlideIndicator } from "../discover/hero/BannerSlideIndicator";
+import { BannerSlideIndicator } from "./BannerSlideIndicator";
 
 import type { AgencyCampaign, CampaignStats } from "./types";
 
