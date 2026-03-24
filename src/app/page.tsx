@@ -1112,9 +1112,9 @@ function KpiCardActive({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-3">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
-        <div className="flex gap-1">
-          <span className="flex h-6 items-center rounded-full bg-[rgba(96,165,250,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#60A5FA]">3 CPM</span>
-          <span className="flex h-6 items-center rounded-full bg-[rgba(251,146,60,0.08)] px-2.5 font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB923C]">2 Retainer</span>
+        <div className="flex flex-wrap gap-1">
+          <span className="flex h-5 shrink-0 items-center whitespace-nowrap rounded-full bg-[rgba(96,165,250,0.08)] px-2 font-inter text-[11px] font-medium leading-none tracking-[-0.02em] text-[#60A5FA]">3 CPM</span>
+          <span className="flex h-5 shrink-0 items-center whitespace-nowrap rounded-full bg-[rgba(251,146,60,0.08)] px-2 font-inter text-[11px] font-medium leading-none tracking-[-0.02em] text-[#FB923C]">2 Retainer</span>
         </div>
       </div>
     </Link>
