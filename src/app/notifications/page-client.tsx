@@ -275,7 +275,7 @@ function NotificationList({
         className={cn(
           "flex w-[600px] max-w-full flex-col rounded-2xl border p-5",
           "border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-          "dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+          "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
         )}
       >
         <div className="flex flex-col gap-2">
@@ -288,28 +288,18 @@ function NotificationList({
                 className={cn(
                   "relative flex cursor-pointer gap-3 rounded-2xl border p-4",
                   notif.highlighted
-                    ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(255,144,37,0.25)]"
-                    : "border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+                    ? "border-[rgba(251,146,60,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+                    : "border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
                 )}
                 style={
                   notif.highlighted
                     ? {
                         background:
-                          "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.12) 0%, rgba(255,144,37,0) 50%), #FFFFFF",
+                          "radial-gradient(50% 50% at 50% 100%, rgba(251,146,60,0.12) 0%, rgba(251,146,60,0) 50%), var(--card-bg)",
                       }
                     : undefined
                 }
               >
-                {/* Dark-mode overlay for highlighted */}
-                {notif.highlighted && (
-                  <div
-                    className="pointer-events-none absolute inset-0 hidden rounded-2xl dark:block"
-                    style={{
-                      background:
-                        "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.08) 0%, rgba(255,144,37,0) 50%), rgba(255,255,255,0.04)",
-                    }}
-                  />
-                )}
 
                 {/* Unread dot */}
                 {notif.unread && (
