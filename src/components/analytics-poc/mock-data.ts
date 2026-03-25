@@ -101,7 +101,7 @@ const TOTAL_POSTS_STACKED_CHART: AnalyticsPocStackedBarChartData = {
     { color: "#34D399", key: "tiktok", label: "TikTok" },
     { color: "#E879F9", key: "instagram", label: "Instagram" },
     { color: "#FB7185", key: "youtube", label: "YouTube" },
-    { color: "currentColor", key: "x", label: "X" },
+    { color: "#8B8D98", key: "x", label: "X" },
   ],
   xTicks: CHART_TICKS,
   yLabels: ["100k", "75k", "50k", "25k", "10k", "0"],

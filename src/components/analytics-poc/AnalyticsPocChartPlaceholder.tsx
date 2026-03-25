@@ -1201,7 +1201,7 @@ function StackedBarChartBody({
                     className="absolute inset-x-0 bottom-0 cursor-pointer border-2 border-white dark:border-[var(--ap-panel-surface,var(--card-bg,#1C1C1C))]"
                     style={{
                       height: tallestPct > 0 && seg.cumHeight > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
-                      background: seg.color,
+                      background: (seg.color === "#8B8D98" && isDark) ? "#FFFFFF" : seg.color,
                       borderRadius: "8px 8px 0 0",
                       zIndex: i,
                       transition: "height 300ms ease-out",

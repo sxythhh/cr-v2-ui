@@ -309,12 +309,12 @@ export function AnalyticsPocDiscoverTab() {
     <div className="relative flex flex-col gap-2 md:gap-3">
       {/* AI Insights Bar */}
       <div className="flex items-center gap-2">
-        {/* Main insights card — single-row compact */}
+        {/* Main insights card — hidden on mobile */}
         <div
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,
             ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
-            "relative flex h-16 flex-1 items-center justify-between gap-4 p-4",
+            "relative hidden h-16 flex-1 items-center justify-between gap-4 p-4 md:flex",
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
@@ -385,7 +385,7 @@ export function AnalyticsPocDiscoverTab() {
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,
             ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
-            "flex h-16 shrink-0 items-center justify-between gap-4 p-4",
+            "flex h-16 w-full items-center justify-between gap-4 p-4 md:w-auto md:shrink-0",
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >

@@ -54,13 +54,41 @@ const cardClass = cn(
 
 // ── Select-like input with chevron ───────────────────────────────────────────
 
-function SelectInput({ value, label }: { value: string; label?: string; icon?: React.ReactNode }) {
+function SelectInput({ value, label, options, onChange }: { value: string; label?: string; options?: string[]; onChange?: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" ref={ref}>
       {label && <span className={labelClass}>{label}</span>}
-      <div className={cn(inputClass, "cursor-pointer justify-between")}>
-        <span>{value}</span>
-        <ChevronDown className="size-3 text-page-text-muted" />
+      <div className="relative">
+        <div className={cn(inputClass, "cursor-pointer justify-between")} onClick={() => options && setOpen(!open)}>
+          <span>{value}</span>
+          <ChevronDown className={cn("size-3 text-page-text-muted transition-transform", open && "rotate-180")} />
+        </div>
+        {open && options && (
+          <div className="absolute left-0 top-full z-20 mt-1 w-full rounded-xl border border-foreground/[0.06] bg-white py-1 shadow-lg dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+            {options.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => { onChange?.(opt); setOpen(false); }}
+                className={cn("flex w-full cursor-pointer items-center px-3 py-2 font-inter text-xs tracking-[-0.02em] transition-colors hover:bg-foreground/[0.04]", value === opt ? "font-medium text-page-text" : "text-foreground/70")}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -99,9 +127,14 @@ function ConnectedAccount({ name, detail, icon }: { name: string; detail: string
 
 // ── Tab Content Components ───────────────────────────────────────────────────
 
+const ROLE_OPTIONS = ["Designer", "Developer", "Manager", "Marketing", "Content Creator", "Admin"];
+const TIMEZONE_OPTIONS = ["EST (UTC-5)", "CST (UTC-6)", "MST (UTC-7)", "PST (UTC-8)", "GMT (UTC+0)", "CET (UTC+1)", "IST (UTC+5:30)", "JST (UTC+9)"];
+
 function ProfileTab() {
   const [dirty, setDirty] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [role, setRole] = useState("Designer");
+  const [timezone, setTimezone] = useState("EST (UTC-5)");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,14 +194,14 @@ function ProfileTab() {
                 </div>
               </div>
               <div className="flex flex-1 flex-col gap-2">
-                <SelectInput label="Role" value="Designer" />
+                <SelectInput label="Role" value={role} options={ROLE_OPTIONS} onChange={(v) => { setRole(v); setDirty(true); }} />
               </div>
             </div>
 
             {/* Row 3: Timezone */}
             <div className="flex">
               <div className="flex flex-1 flex-col gap-2">
-                <SelectInput label="Timezone" value="EST (UTC-5)" />
+                <SelectInput label="Timezone" value={timezone} options={TIMEZONE_OPTIONS} onChange={(v) => { setTimezone(v); setDirty(true); }} />
               </div>
               <div className="flex-1" />
             </div>
@@ -931,15 +964,16 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
                         <span className="font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">{role.description}</span>
                       </div>
                       {/* Radio */}
-                      {isSelected ? (
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                          <circle cx="12" cy="12" r="10" fill="#FB923C" />
-                          <circle cx="12" cy="12" r="9.5" stroke="rgba(224,224,224,0.03)" />
-                          <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      ) : (
-                        <div className="flex size-5 shrink-0 items-center justify-center rounded-full border border-foreground/20 bg-foreground/[0.03]" style={{ boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" }} />
-                      )}
+                      <div className={cn(
+                        "flex size-5 shrink-0 items-center justify-center rounded-full transition-colors",
+                        isSelected
+                          ? "bg-[#FB923C]"
+                          : "border border-foreground/20 bg-foreground/[0.03]",
+                      )} style={!isSelected ? { boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" } : undefined}>
+                        {isSelected && (
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        )}
+                      </div>
                     </button>
                   );
                 })}
@@ -981,7 +1015,7 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
         </div>
 
         {/* Footer */}
-        <div className="flex shrink-0 items-center justify-end gap-2 px-5 pb-5">
+        <div className="flex shrink-0 items-center justify-end gap-2 px-5 pb-5 pt-4">
           <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]">
             Cancel
           </button>
@@ -1059,7 +1093,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description of this role"
               rows={2}
-              className="flex w-full resize-none items-center rounded-[14px] bg-foreground/[0.03] px-3.5 py-3 font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
+              className="scrollbar-hide flex w-full resize-none items-center rounded-[14px] bg-foreground/[0.03] px-3.5 py-3 font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
             />
           </div>
 
@@ -1077,17 +1111,24 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
                           key={perm}
                           type="button"
                           onClick={() => togglePermission(perm)}
-                          className="flex flex-1 items-center gap-2 rounded-[14px] border border-foreground/[0.03] bg-foreground/[0.03] px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                          className={cn(
+                            "flex flex-1 items-center gap-2 rounded-[14px] border px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05]",
+                            isChecked
+                              ? "border-[#FB923C] bg-foreground/[0.03] dark:border-[#FB923C] dark:bg-[rgba(224,224,224,0.03)]"
+                              : "border-foreground/[0.03] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
+                          )}
                         >
                           {/* Checkbox */}
-                          {isChecked ? (
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                              <circle cx="12" cy="12" r="10" fill="#FB923C" />
-                              <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          ) : (
-                            <div className="flex size-5 shrink-0 items-center justify-center rounded-full border border-foreground/20 bg-foreground/[0.03]" style={{ boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" }} />
-                          )}
+                          <div className={cn(
+                            "flex size-5 shrink-0 items-center justify-center rounded-full transition-colors",
+                            isChecked
+                              ? "bg-foreground dark:bg-[#E0E0E0]"
+                              : "border border-foreground/20 bg-foreground/[0.03]",
+                          )} style={!isChecked ? { boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" } : undefined}>
+                            {isChecked && (
+                              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="dark:stroke-[#161616]" /></svg>
+                            )}
+                          </div>
                           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{perm}</span>
                         </button>
                       );
@@ -1100,7 +1141,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
         </div>
 
         {/* Footer */}
-        <div className="flex shrink-0 items-center gap-2 px-5 pb-4 pt-4 sm:justify-end sm:pb-5">
+        <div className="flex shrink-0 items-center gap-2 px-5 pb-4 pt-5 sm:justify-end sm:pb-5">
           <button type="button" onClick={onClose} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] sm:flex-none">
             Cancel
           </button>
@@ -1446,6 +1487,52 @@ function TeamTab() {
   );
 }
 
+// ── Permissions Tab ──────────────────────────────────────────────────────────
+
+function PermissionsTab() {
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-4 px-4 py-5 sm:px-5">
+      <CreateCustomRoleModal open={roleModalOpen} onClose={() => setRoleModalOpen(false)} />
+
+      {/* Header row */}
+      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-2">
+          <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">Role permissions</span>
+          <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
+            Manage who has access to your organization.
+          </span>
+        </div>
+        <button onClick={() => setRoleModalOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          Custom role
+        </button>
+      </div>
+
+      {/* Placeholder roles list */}
+      <div className="flex w-full max-w-[1028px] flex-col gap-2">
+        {["Admin", "Manager", "Brand Client", "Viewer"].map((role) => (
+          <div key={role} className={cn(cardClass, "flex-row items-center justify-between gap-4 p-4")}>
+            <div className="flex flex-col gap-1">
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{role}</span>
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+                {role === "Admin" ? "Full access to all campaigns, settings, and team management" :
+                 role === "Manager" ? "Manage campaigns, review submissions, message creators" :
+                 role === "Brand Client" ? "View-only access to analytics and notifications for specific brands" :
+                 "Read-only access to dashboards and reports"}
+              </span>
+            </div>
+            <button className="shrink-0 rounded-full bg-foreground/[0.06] px-3 py-1.5 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+              Edit
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Agency Profile Tab ────────────────────────────────────────────────────────
 
 const AGENCY_ACCORDION_SECTIONS = [
@@ -1622,19 +1709,19 @@ function AgencyProfileTab() {
                   9:41
                 </span>
                 <div className="flex items-center gap-[7px]">
-                  <svg width="19" height="13" viewBox="0 0 19 13" fill="none" className="text-page-text">
-                    <rect x="0.5" y="4.5" width="3" height="8" rx="1" fill="currentColor" />
-                    <rect x="5" y="3" width="3" height="10" rx="1" fill="currentColor" />
-                    <rect x="9.5" y="1" width="3" height="12" rx="1" fill="currentColor" />
-                    <rect x="14" y="0" width="3" height="13" rx="1" fill="currentColor" />
+                  {/* Signal */}
+                  <svg width="18" height="13" viewBox="0 0 18 13" fill="none" className="text-page-text">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M8.5713 2.46628C11.0584 2.46639 13.4504 3.38847 15.2529 5.04195C15.3887 5.1696 15.6056 5.16799 15.7393 5.03834L17.0368 3.77487C17.1045 3.70911 17.1422 3.62004 17.1417 3.52735C17.1411 3.43467 17.1023 3.34603 17.0338 3.28104C12.3028 -1.09368 4.83907 -1.09368 0.108056 3.28104C0.039524 3.34598 0.000639766 3.4346 7.82398e-06 3.52728C-0.000624118 3.61996 0.0370483 3.70906 0.104689 3.77487L1.40255 5.03834C1.53615 5.16819 1.75327 5.1698 1.88893 5.04195C3.69167 3.38836 6.08395 2.46628 8.5713 2.46628ZM8.56795 6.68656C9.92527 6.68647 11.2341 7.19821 12.2403 8.12234C12.3763 8.2535 12.5907 8.25065 12.7234 8.11593L14.0106 6.79663C14.0784 6.72742 14.1161 6.63355 14.1151 6.536C14.1141 6.43844 14.0746 6.34536 14.0054 6.27757C10.9416 3.38672 6.19688 3.38672 3.13305 6.27757C3.06384 6.34536 3.02435 6.43849 3.02345 6.53607C3.02254 6.63366 3.06028 6.72752 3.12822 6.79663L4.41513 8.11593C4.54778 8.25065 4.76215 8.2535 4.89823 8.12234C5.90368 7.19882 7.21152 6.68713 8.56795 6.68656ZM11.0924 9.48011C11.0943 9.58546 11.0572 9.68703 10.9899 9.76084L8.81327 12.2156C8.74946 12.2877 8.66247 12.3283 8.5717 12.3283C8.48093 12.3283 8.39394 12.2877 8.33013 12.2156L6.1531 9.76084C6.08585 9.68697 6.04886 9.58537 6.05085 9.48002C6.05284 9.37467 6.09365 9.27491 6.16364 9.20429C7.55374 7.8904 9.58966 7.8904 10.9798 9.20429C11.0497 9.27497 11.0904 9.37476 11.0924 9.48011Z" fill="currentColor"/>
                   </svg>
-                  <svg width="17" height="12" viewBox="0 0 17 12" fill="none" className="text-page-text">
-                    <path d="M8.5 3.5C10.57 3.5 12.45 4.32 13.83 5.67L15.25 4.25C13.49 2.53 11.11 1.5 8.5 1.5C5.89 1.5 3.51 2.53 1.75 4.25L3.17 5.67C4.55 4.32 6.43 3.5 8.5 3.5ZM8.5 7C9.61 7 10.62 7.44 11.37 8.16L12.79 6.74C11.66 5.65 10.16 5 8.5 5C6.84 5 5.34 5.65 4.21 6.74L5.63 8.16C6.38 7.44 7.39 7 8.5 7ZM8.5 10.5C7.95 10.5 7.45 10.72 7.08 11.08L8.5 12.5L9.92 11.08C9.55 10.72 9.05 10.5 8.5 10.5Z" fill="currentColor" />
+                  {/* WiFi */}
+                  <svg width="18" height="13" viewBox="0 0 18 13" fill="none" className="text-page-text">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M8.5713 2.46628C11.0584 2.46639 13.4504 3.38847 15.2529 5.04195C15.3887 5.1696 15.6056 5.16799 15.7393 5.03834L17.0368 3.77487C17.1045 3.70911 17.1422 3.62004 17.1417 3.52735C17.1411 3.43467 17.1023 3.34603 17.0338 3.28104C12.3028 -1.09368 4.83907 -1.09368 0.108056 3.28104C0.039524 3.34598 0.000639766 3.4346 7.82398e-06 3.52728C-0.000624118 3.61996 0.0370483 3.70906 0.104689 3.77487L1.40255 5.03834C1.53615 5.16819 1.75327 5.1698 1.88893 5.04195C3.69167 3.38836 6.08395 2.46628 8.5713 2.46628ZM8.56795 6.68656C9.92527 6.68647 11.2341 7.19821 12.2403 8.12234C12.3763 8.2535 12.5907 8.25065 12.7234 8.11593L14.0106 6.79663C14.0784 6.72742 14.1161 6.63355 14.1151 6.536C14.1141 6.43844 14.0746 6.34536 14.0054 6.27757C10.9416 3.38672 6.19688 3.38672 3.13305 6.27757C3.06384 6.34536 3.02435 6.43849 3.02345 6.53607C3.02254 6.63366 3.06028 6.72752 3.12822 6.79663L4.41513 8.11593C4.54778 8.25065 4.76215 8.2535 4.89823 8.12234C5.90368 7.19882 7.21152 6.68713 8.56795 6.68656ZM11.0924 9.48011C11.0943 9.58546 11.0572 9.68703 10.9899 9.76084L8.81327 12.2156C8.74946 12.2877 8.66247 12.3283 8.5717 12.3283C8.48093 12.3283 8.39394 12.2877 8.33013 12.2156L6.1531 9.76084C6.08585 9.68697 6.04886 9.58537 6.05085 9.48002C6.05284 9.37467 6.09365 9.27491 6.16364 9.20429C7.55374 7.8904 9.58966 7.8904 10.9798 9.20429C11.0497 9.27497 11.0904 9.37476 11.0924 9.48011Z" fill="currentColor"/>
                   </svg>
+                  {/* Battery */}
                   <svg width="28" height="13" viewBox="0 0 28 13" fill="none" className="text-page-text">
-                    <rect x="0.5" y="0.5" width="24" height="12" rx="3.8" stroke="currentColor" opacity="0.35" />
-                    <rect x="2" y="2" width="21" height="9" rx="2.5" fill="currentColor" />
-                    <path d="M26 4.5V8.5" stroke="currentColor" strokeWidth="1.33" opacity="0.4" strokeLinecap="round" />
+                    <rect opacity="0.35" x="0.5" y="0.5" width="24" height="12" rx="3.8" stroke="currentColor"/>
+                    <path opacity="0.4" d="M26 4.78125V8.85672C26.8047 8.51155 27.328 7.70859 27.328 6.81899C27.328 5.92938 26.8047 5.12642 26 4.78125Z" fill="currentColor"/>
+                    <rect x="2" y="2" width="21" height="9" rx="2.5" fill="currentColor"/>
                   </svg>
                 </div>
               </div>
@@ -2514,13 +2601,15 @@ export default function SettingsPage() {
 
         {/* Right actions */}
         <div className="flex shrink-0 items-center gap-2">
-          {/* Preview button */}
-          <button className="hidden h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] sm:inline-flex">
-            Preview
-          </button>
+          {/* Preview button — Agency Profile only */}
+          {activeTab === "Agency Profile" && (
+            <button className="hidden h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] sm:inline-flex">
+              Preview
+            </button>
+          )}
 
-          {/* Copy Link button */}
-          <button
+          {/* Copy Link button — Agency Profile only */}
+          {activeTab === "Agency Profile" && <button
             onClick={() => {
               navigator.clipboard.writeText("https://app.contentrewards.com/agency/virality");
               setCopied(true);
@@ -2542,7 +2631,7 @@ export default function SettingsPage() {
             ) : (
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.333 1.75H11.083C11.404 1.75 11.667 2.013 11.667 2.333V11.667C11.667 11.987 11.404 12.25 11.083 12.25H2.917C2.596 12.25 2.333 11.987 2.333 11.667V2.333C2.333 2.013 2.596 1.75 2.917 1.75H4.667" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /><rect x="4.667" y="0.583" width="4.667" height="2.333" rx="0.583" stroke="currentColor" strokeWidth="1.2" /></svg>
             )}
-          </button>
+          </button>}
 
           {/* User avatar pill */}
           <button className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] py-1 pl-1 pr-2 transition-colors hover:bg-foreground/[0.10]">
@@ -2557,9 +2646,10 @@ export default function SettingsPage() {
       {activeTab === "Notifications" && <NotificationsTab />}
       {activeTab === "Brands" && <BrandsTab />}
       {activeTab === "Team" && <TeamTab />}
+      {activeTab === "Permissions" && <PermissionsTab />}
       {activeTab === "Agency Profile" && <AgencyProfileTab />}
       {activeTab === "Client Onboarding" && <ClientOnboardingTab />}
-      {activeTab !== "Profile" && activeTab !== "Notifications" && activeTab !== "Brands" && activeTab !== "Team" && activeTab !== "Agency Profile" && activeTab !== "Client Onboarding" && <PlaceholderTab name={activeTab} />}
+      {activeTab !== "Profile" && activeTab !== "Notifications" && activeTab !== "Brands" && activeTab !== "Team" && activeTab !== "Permissions" && activeTab !== "Agency Profile" && activeTab !== "Client Onboarding" && <PlaceholderTab name={activeTab} />}
     </div>
   );
 }

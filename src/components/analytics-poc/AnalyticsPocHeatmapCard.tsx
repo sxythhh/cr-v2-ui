@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Heatmap, { type HeatmapData } from "@/components/blocks/heatmap";
 import {
@@ -38,8 +38,18 @@ export function AnalyticsPocHeatmapCard({
   endDate,
   className,
 }: AnalyticsPocHeatmapCardProps) {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const check = () => setIsDark(document.documentElement.classList.contains("dark"));
+    check();
+    const obs = new MutationObserver(check);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  const platformColor = platform ? getAnalyticsPocPlatformBrandColor(platform) : undefined;
   const toneColor =
-    (platform ? getAnalyticsPocPlatformBrandColor(platform) : undefined) ??
+    (platform === "x" ? (isDark ? "#FFFFFF" : "#8B8D98") : platformColor) ??
     HEATMAP_TONE_COLOR[tone];
   const showPlatformIcon = platform
     ? hasAnalyticsPocPlatformIcon(platform)
