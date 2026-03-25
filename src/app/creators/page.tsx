@@ -778,18 +778,20 @@ export default function CreatorsPage() {
       {/* Top nav */}
       <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         {/* Underline tabs */}
-        <ProximityTabs
-          tabs={NAV_TABS.map((t) => ({ label: t }))}
-          selectedIndex={activeNavTab}
-          onSelect={setActiveNavTab}
-        />
+        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
+          <ProximityTabs
+            tabs={NAV_TABS.map((t) => ({ label: t }))}
+            selectedIndex={activeNavTab}
+            onSelect={setActiveNavTab}
+          />
+        </div>
 
         {/* Right actions */}
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
           <button
             type="button"
             onClick={() => setScoresOpen(true)}
-            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent"
+            className="flex h-9 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent"
           >
             Understanding scores &amp; matches
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

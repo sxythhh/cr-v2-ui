@@ -735,20 +735,20 @@ function OnboardingView({
 // ── Transaction History ────────────────────────────────────────────
 
 const TRANSACTIONS = [
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#34D399]" },
   { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#34D399]" },
   { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#34D399]" },
   { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
-  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]" },
+  { date: "Feb 18", description: "Deposit via Stripe", amount: "+$1,500.00", color: "text-[#34D399]" },
   { date: "Jan 31", description: "Payout batch #1247 (12 creators)", amount: "-$834.20", color: "text-[#FF3355] dark:text-[#FB7185] dark:text-[#FB7185]" },
 ];
 
 function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <Modal open={open} onClose={onClose} size="md" showClose={false}>
-      <div className="relative flex flex-col items-center px-5 pb-0 pt-5">
+      <div className="relative flex max-h-[70vh] flex-col items-center overflow-y-auto px-5 pb-0 pt-5">
         <button
           type="button"
           onClick={onClose}
@@ -760,11 +760,11 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         </button>
         {/* Hero */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_var(--page-text)]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 12.5V5h2.667" />
-              <path d="M3.34 16A8 8 0 1 0 2 12" />
-              <path d="M12 7.5V12l3 2" />
+          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#fff]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 5V9H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.51172 15C4.74723 18.4956 8.08094 21 11.9996 21C16.9702 21 20.9996 16.9706 20.9996 12C20.9996 7.02944 16.9702 3 11.9996 3C8.27045 3 5.07102 5.26806 3.70551 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -808,7 +808,7 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
       </div>
 
       {/* Footer */}
-      <div className="px-5 pb-5">
+      <div className="shrink-0 px-5 pb-5 pt-3">
         <button
           type="button"
           onClick={onClose}
@@ -942,7 +942,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#34D399]">
                   +${numericAmount.toLocaleString()}
                 </span>
               </div>
@@ -990,12 +990,12 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           <div className="flex flex-col items-center gap-4 px-5 pb-5 pt-[60px]" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0, 153, 77, 0.24) 0%, rgba(0, 153, 77, 0) 100%)" }}>
             {/* Green checkmark */}
             <div className="flex flex-col items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-[#00994D] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
+              <div className="flex size-14 items-center justify-center rounded-full bg-[#34D399] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                   <path fillRule="evenodd" clipRule="evenodd" d="M14 2.333A11.667 11.667 0 1 0 14 25.667 11.667 11.667 0 0 0 14 2.333zm4.185 9.017a.833.833 0 0 0-1.203-1.153l-4.635 5.668-1.65-1.65a.833.833 0 0 0-1.178 1.178l2.333 2.334a.833.833 0 0 0 1.191.025l5.142-6.402z" fill="#FFFFFF" />
                 </svg>
               </div>
-              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">Top up successful</span>
+              <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#34D399]">Top up successful</span>
             </div>
 
             {/* View receipt link */}
@@ -1010,7 +1010,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <div className="w-full overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
               <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#00994D] dark:text-[#34D399] dark:text-[#34D399]">
+                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#34D399]">
                   +${numericAmount.toLocaleString()}
                 </span>
               </div>
@@ -1054,9 +1054,8 @@ function TopUpButton() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06]pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        className="flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.03] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]"
       >
-        <PlusIcon className="size-4" />
         Top up
       </button>
       <TopUpModal open={open} onClose={() => setOpen(false)} />
@@ -1130,7 +1129,7 @@ function KpiCardViews({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">10</span>
-        <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">+31% this week</span>
+        <span className="w-fit rounded-full bg-[rgba(52,211,153,0.08)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#34D399]">+31% this week</span>
       </div>
     </div>
   );
@@ -1145,7 +1144,7 @@ function KpiCardAvgCpm({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$0.67</span>
-        <span className="w-fit rounded-full bg-[rgba(0,178,89,0.1)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259]">-$0.05 (better)</span>
+        <span className="w-fit rounded-full bg-[rgba(52,211,153,0.08)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#34D399]">-$0.05 (better)</span>
       </div>
     </div>
   );

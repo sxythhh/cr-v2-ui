@@ -55,11 +55,11 @@ const MODELS: {
   {
     id: "cpm",
     label: "CPM",
-    subtitle: "Paid per 1k views per video",
+    subtitle: "Paid per 1K views on a video",
     footer: "Best for scale & performance",
     icon: CpmEyeIcon,
-    iconColor: "text-[#3B82F6] dark:text-[#ADCCFF]",
-    rgb: "59, 130, 246",
+    iconColor: "text-[#3B82F6] dark:text-[#60A5FA]",
+    rgb: "96, 165, 250",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADCCFF 100%)",
   },
   {
@@ -68,8 +68,8 @@ const MODELS: {
     subtitle: "Fixed amount per month",
     footer: "Best for ongoing partnerships",
     icon: RetainerIcon,
-    iconColor: "text-[#D97706] dark:text-[#FFE1AD]",
-    rgb: "252, 176, 43",
+    iconColor: "text-[#D97706] dark:text-[#FB923C]",
+    rgb: "251, 146, 60",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #FFE1AD 100%)",
   },
   {
@@ -78,8 +78,8 @@ const MODELS: {
     subtitle: "Flat fee for each video",
     footer: "Best for one\u2011offs/tests",
     icon: PerPostIcon,
-    iconColor: "text-[#16A34A] dark:text-[#ADFFCB]",
-    rgb: "34, 197, 94",
+    iconColor: "text-[#16A34A] dark:text-[#34D399]",
+    rgb: "52, 211, 153",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADFFCB 100%)",
   },
 ];
@@ -156,11 +156,12 @@ export function CampaignModelModal({
                   return (
                     <button
                       className={cn(
-                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 bg-foreground/[0.03] dark:bg-foreground/[0.03] overflow-hidden",
+                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 bg-foreground/[0.03] dark:bg-foreground/[0.03] overflow-hidden border",
                         isSelected
-                          ? "border border-[rgba(96,165,250,0.3)]"
-                          : "border border-foreground/[0.03]",
+                          ? ""
+                          : "border-foreground/[0.03]",
                       )}
+                      style={isSelected ? { borderColor: `rgba(${model.rgb}, 0.3)` } : undefined}
                       key={model.id}
                       onClick={() => setSelected((prev) => prev === model.id ? null : model.id)}
                       type="button"
