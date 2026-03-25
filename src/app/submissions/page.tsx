@@ -3126,7 +3126,7 @@ export default function SubmissionsPage() {
       {/* Content */}
       <div className="px-4 pb-6 pt-[21px] sm:px-6">
         {/* Toolbar */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Tabs */}
           <div className="overflow-x-auto scrollbar-hide">
             <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-max sm:w-fit">
@@ -3143,7 +3143,7 @@ export default function SubmissionsPage() {
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-[rgba(224,224,224,0.03)]">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
                 <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>

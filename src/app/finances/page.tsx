@@ -604,6 +604,8 @@ const BOTTOM_STATS = [
 const BAR_MONTHS = ["Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25","Jan '26","Feb '26","Mar '26"];
 const BAR_HEIGHTS = [108,142,156,88,168,168,204,192,171,142,168,192];
 const PROFIT_HEIGHTS = [77,97,105,112,105,105,108,108,108,97,105,108];
+const BAR_REVENUE = ["$18.9K","$24.8K","$27.3K","$15.4K","$29.4K","$29.4K","$35.7K","$33.6K","$29.9K","$24.8K","$29.4K","$33.6K"];
+const BAR_PROFIT = ["$13.5K","$17.0K","$18.4K","$19.6K","$18.4K","$18.4K","$18.9K","$18.9K","$18.9K","$17.0K","$18.4K","$18.9K"];
 
 const REVENUE_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
   datasets: {
@@ -909,28 +911,28 @@ function FinanceOverview() {
       </div>
 
       {/* Two-column: Revenue bar chart + Revenue by campaign */}
-      <div className="flex gap-2">
+      <div className="flex items-stretch gap-2">
         {/* Revenue/Profit bar chart */}
         <div className={cn(cardBase, "flex-1 gap-4 p-4")}>
           <div className="flex flex-col gap-2">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Avg revenue/profit by month</span>
             <div className="flex items-center gap-2">
-              <div className="flex h-6 items-center gap-1 rounded-full border border-foreground/[0.03] bg-foreground/[0.03] px-2">
-                <div className="size-2 rounded-full bg-[#F472B6]" />
+              <div className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-transparent">
+                <div className="size-2 rounded-full bg-[#ED1285]" />
                 <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">Revenue</span>
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#F472B6]">$35.4K</span>
+                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#ED1285]">$35.4K</span>
               </div>
-              <div className="flex h-6 items-center gap-1 rounded-full border border-foreground/[0.03] bg-foreground/[0.03] px-2">
-                <div className="size-2 rounded-full bg-[#34D399]" />
+              <div className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-transparent">
+                <div className="size-2 rounded-full bg-[#00994D]" />
                 <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">Net profit</span>
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">$23.3K</span>
+                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#00994D]">$23.3K</span>
               </div>
             </div>
           </div>
           {/* Bar chart */}
           <div className="flex gap-4">
             {/* Y-axis */}
-            <div className="flex h-[204px] flex-col justify-between">
+            <div className="flex h-[212px] flex-col justify-between">
               {["100k","75k","50k","25k","10k","0"].map((l) => (
                 <span key={l} className={cn("font-inter text-[10px] leading-[120%] text-right", muted)}>{l}</span>
               ))}
@@ -938,10 +940,22 @@ function FinanceOverview() {
             {/* Bars */}
             <div className="flex flex-1 items-end justify-between gap-6">
               {BAR_MONTHS.map((m, i) => (
-                <div key={m} className="flex flex-col items-center gap-2">
-                  <div className="relative w-7" style={{ height: BAR_HEIGHTS[i] }}>
-                    <div className="absolute inset-x-0 top-0 rounded-lg border border-card-bg" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.3)" }} />
-                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-card-bg" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.3)" }} />
+                <div key={m} className="group/bar relative flex flex-col items-center gap-2">
+                  {/* Tooltip */}
+                  <div className="pointer-events-none absolute -top-[68px] left-1/2 z-20 hidden -translate-x-1/2 flex-col gap-1 rounded-xl border border-foreground/[0.06] bg-white px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)] group-hover/bar:flex dark:border-[rgba(224,224,224,0.06)] dark:bg-[#232323]">
+                    <span className="whitespace-nowrap text-center font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-muted">{m}</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="size-1.5 rounded-full bg-[#ED1285]" />
+                      <span className="whitespace-nowrap font-inter text-[11px] font-medium tracking-[-0.02em] text-[#ED1285]">{BAR_REVENUE[i]}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="size-1.5 rounded-full bg-[#00994D]" />
+                      <span className="whitespace-nowrap font-inter text-[11px] font-medium tracking-[-0.02em] text-[#00994D]">{BAR_PROFIT[i]}</span>
+                    </div>
+                  </div>
+                  <div className="relative w-7 cursor-pointer transition-opacity group-hover/bar:opacity-100" style={{ height: BAR_HEIGHTS[i] }}>
+                    <div className="absolute inset-x-0 top-0 rounded-lg border border-white transition-[background] group-hover/bar:!bg-[rgba(237,18,133,0.5)] dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.3)" }} />
+                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-white transition-[background] group-hover/bar:!bg-[rgba(0,153,77,0.5)] dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.3)" }} />
                   </div>
                 </div>
               ))}
@@ -956,16 +970,15 @@ function FinanceOverview() {
         </div>
 
         {/* Revenue by campaign */}
-        <div className={cn(cardBase, "relative w-[400px] shrink-0 gap-4 overflow-hidden p-4")}>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
-          <div className="relative z-10 flex items-center justify-between">
+        <div className={cn(cardBase, "relative flex w-[400px] shrink-0 flex-col gap-4 p-4")}>
+          <div className="flex items-center justify-between">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Revenue by campaign</span>
             <div className="flex items-center gap-1">
               <span className={cn("font-inter text-[12px] tracking-[-0.02em]", muted)}>$836.50 fees</span>
               <svg width="12" height="12" viewBox="0 0 12 12" className="text-page-text-muted opacity-60"><circle cx="6" cy="6" r="5" fill="currentColor" fillRule="evenodd" clipRule="evenodd"/><path d="M6 5.5V8.5M6 3.5h.005" stroke="var(--card-bg, white)" strokeWidth="1" strokeLinecap="round"/></svg>
             </div>
           </div>
-          <div className="relative z-10 flex flex-col gap-2">
+          <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
             {CAMPAIGN_REVENUE.map((c, i) => (
               <div key={i} className={cn(cardBase, "gap-2 p-3")}>
                 <div className="flex items-start justify-between">

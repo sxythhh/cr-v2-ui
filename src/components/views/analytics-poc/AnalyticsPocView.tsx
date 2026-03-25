@@ -91,7 +91,7 @@ function PageTabBar({
 
 export function AnalyticsPocView() {
   const data = analyticsPocMockData;
-  const [activePageTab, setActivePageTab] = useState<PageTab>("Discover page");
+  const [activePageTab, setActivePageTab] = useState<PageTab>("Content");
   const [activePerformanceTab, setActivePerformanceTab] = useState(
     data.performance.activeTab,
   );

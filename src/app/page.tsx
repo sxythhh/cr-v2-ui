@@ -879,7 +879,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   };
 
   const handleQuickAmount = (val: string) => {
-    setAmount(val);
+    setAmount(val.replace("$", ""));
   };
 
   return (
@@ -938,21 +938,23 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               </div>
             </div>
 
-            {/* Summary card */}
-            <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-              <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#34D399]">
-                  +${numericAmount.toLocaleString()}
-                </span>
+            {/* Summary card — only show when an amount is entered */}
+            {numericAmount > 0 && (
+              <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
+                  <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#34D399]">
+                    +${numericAmount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between px-4 py-3">
+                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">New balance after deposit</span>
+                  <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-page-text">
+                    ${newBalance.toLocaleString()}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">New balance after deposit</span>
-                <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-page-text">
-                  ${newBalance.toLocaleString()}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Footer */}

@@ -35,8 +35,8 @@ const TOGGLE_OPACITY_TRANSITION_MS = 380;
 const HOVER_OPACITY_TRANSITION_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const LINE_START_FADE_OPACITY = 0.2;
 const LINE_START_FADE_END_OFFSET = "14%";
-const STACKED_BAR_MAX_SIZE = 34;
-const STACKED_BAR_CATEGORY_GAP = "14%";
+const STACKED_BAR_MAX_SIZE = 40;
+const STACKED_BAR_CATEGORY_GAP = "20%";
 
 // ── Animated Y-axis labels ──────────────────────────────────────────
 
@@ -324,7 +324,7 @@ function buildPerformanceSeriesLine({
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeOpacity={strokeOpacity}
-      strokeWidth={2}
+      strokeWidth={1.5}
       style={{
         transition: `stroke-opacity ${transitionDurationMs}ms ${HOVER_OPACITY_TRANSITION_EASING}`,
       }}
@@ -442,45 +442,7 @@ function StackedBarSegmentShape({
     return null;
   }
 
-  const radius = Math.max(0, Math.min(radiusProp, normalizedWidth / 2, normalizedHeight));
-  const right = normalizedX + normalizedWidth;
-  const bottom = normalizedY + normalizedHeight;
-
-  const fillPath =
-    radius > 0
-      ? [
-          `M${normalizedX},${bottom}`,
-          `L${normalizedX},${normalizedY + radius}`,
-          `Q${normalizedX},${normalizedY} ${normalizedX + radius},${normalizedY}`,
-          `L${right - radius},${normalizedY}`,
-          `Q${right},${normalizedY} ${right},${normalizedY + radius}`,
-          `L${right},${bottom}`,
-          "Z",
-        ].join(" ")
-      : [
-          `M${normalizedX},${bottom}`,
-          `L${normalizedX},${normalizedY}`,
-          `L${right},${normalizedY}`,
-          `L${right},${bottom}`,
-          "Z",
-        ].join(" ");
-
-  const strokePath =
-    radius > 0
-      ? [
-          `M${normalizedX},${bottom}`,
-          `L${normalizedX},${normalizedY + radius}`,
-          `Q${normalizedX},${normalizedY} ${normalizedX + radius},${normalizedY}`,
-          `L${right - radius},${normalizedY}`,
-          `Q${right},${normalizedY} ${right},${normalizedY + radius}`,
-          `L${right},${bottom}`,
-        ].join(" ")
-      : [
-          `M${normalizedX},${bottom}`,
-          `L${normalizedX},${normalizedY}`,
-          `L${right},${normalizedY}`,
-          `L${right},${bottom}`,
-        ].join(" ");
+  const r2 = Math.max(0, Math.min(radiusProp, normalizedWidth / 2, normalizedHeight / 2));
 
   return (
     <g
@@ -490,39 +452,8 @@ function StackedBarSegmentShape({
           : clampNumber(normalizedOpacity, 0, 1)
       }
     >
-      {/* Base fill */}
-      <rect
-        x={normalizedX}
-        y={normalizedY}
-        width={normalizedWidth}
-        height={normalizedHeight}
-        rx={radius}
-        ry={radius}
-        fill="var(--card-bg, #1C1C1C)"
-      />
-      {/* Colored overlay at 30% */}
-      <rect
-        x={normalizedX}
-        y={normalizedY}
-        width={normalizedWidth}
-        height={normalizedHeight}
-        rx={radius}
-        ry={radius}
-        fill={fill ?? "transparent"}
-        fillOpacity={0.3}
-      />
-      {/* Border mask to separate segments */}
-      <rect
-        x={normalizedX}
-        y={normalizedY}
-        width={normalizedWidth}
-        height={normalizedHeight}
-        rx={radius}
-        ry={radius}
-        fill="none"
-        stroke="var(--card-bg, #1C1C1C)"
-        strokeWidth={2}
-      />
+      <rect x={normalizedX} y={normalizedY} width={normalizedWidth} height={normalizedHeight} rx={r2} ry={r2} fill={fill ?? "transparent"} fillOpacity={0.3} />
+      <rect x={normalizedX} y={normalizedY} width={normalizedWidth} height={normalizedHeight} rx={r2} ry={r2} fill="none" stroke="var(--card-bg, #FFFFFF)" strokeWidth={1} />
     </g>
   );
 }
@@ -1086,6 +1017,8 @@ function StackedBarChartBody({
   );
   const renderedStackSeries = [...stackedBarChart.series].reverse();
   // Find the topmost VISIBLE series key (last in renderedStackSeries that is active)
+  const [hoveredBarIdx, setHoveredBarIdx] = useState<number | null>(null);
+
   const topVisibleSeriesKey = useMemo(() => {
     for (let i = renderedStackSeries.length - 1; i >= 0; i--) {
       if (activeMetricKeys.has(renderedStackSeries[i].key)) {
@@ -1195,110 +1128,81 @@ function StackedBarChartBody({
       </div>
 
       <div className="relative min-w-0 flex-1">
-        <div
-          className="absolute inset-x-0 bottom-7 top-0"
-          ref={chartPlotAreaRef}
-        >
-          <ResponsiveContainer height="100%" width="100%">
-            <BarChart
-              barCategoryGap={STACKED_BAR_CATEGORY_GAP}
-              data={chartPoints}
-              margin={{ bottom: 0, left: 0, right: 0, top: 0 }}
-              onClick={handleBarChartClick}
-              onMouseLeave={handleMouseLeave}
-              onMouseMove={handleMouseMove}
-              style={onDayClick ? { cursor: "pointer" } : undefined}
-            >
-              <CartesianGrid
-                horizontal
-                stroke="var(--ap-border, #ebebeb)"
-                strokeOpacity={0.6}
-                vertical={false}
-              />
-              <RechartsTooltip
-                content={() => null}
-                cursor={false}
-                isAnimationActive={false}
-                wrapperStyle={{ display: "none" }}
-              />
+        <div className="absolute inset-x-0 bottom-7 top-0 flex items-end gap-1" ref={chartPlotAreaRef}>
+          {chartPoints.map((point, pointIdx) => {
+            const record = point as unknown as Record<string, unknown>;
+            const label = String(record.label ?? pointIdx);
+            // Stack heights: each visible series contributes a segment
+            const segments = renderedStackSeries.map((series) => ({
+              key: series.key,
+              color: series.color,
+              value: Number(record[series.key]) || 0,
+              visible: activeMetricKeys.has(series.key),
+            }));
+            const totalVisible = segments.filter((s) => s.visible).reduce((sum, s) => sum + s.value, 0);
+            const totalHeight = maxValue > 0 ? (totalVisible / maxValue) * 100 : 0;
 
-              <XAxis dataKey="index" hide />
-              <YAxis domain={[0, maxValue]} hide />
+            // Build cumulative heights for overlapping bars (tallest in back)
+            const visibleSegments = segments
+              .filter((s) => s.visible && s.value > 0)
+              .map((s) => ({
+                ...s,
+                heightPct: maxValue > 0 ? (s.value / maxValue) * 100 : 0,
+              }))
+              .sort((a, b) => b.value - a.value); // tallest first (renders behind)
 
-              {renderedStackSeries.map(
-                (series: AnalyticsPocStackedBarSeries) => {
-                  return (
-                    <Bar
-                      animationDuration={400}
-                      animationEasing="ease-out"
-                      dataKey={series.key}
-                      fill={series.color}
-                      isAnimationActive={isAnimationEnabled}
-                      key={series.key}
-                      maxBarSize={STACKED_BAR_MAX_SIZE}
-                      shape={<StackedBarSegmentShape radius={8} />}
-                      stackId="posts"
-                      stroke="none"
-                      strokeWidth={0}
-                    />
-                  );
-                },
-              )}
-            </BarChart>
-          </ResponsiveContainer>
+            // Cumulative height for stacking — each series adds on top of previous
+            let cumValue = 0;
+            const stackedSegments = segments.filter((s) => s.visible && s.value > 0).map((s) => {
+              cumValue += s.value;
+              return { ...s, cumHeight: maxValue > 0 ? (cumValue / maxValue) * 100 : 0 };
+            }).reverse(); // reverse so tallest (cumulative) renders first (behind)
 
-          <div
-            className="absolute inset-x-0 top-0 z-10"
-            style={{
-              opacity: shouldShowHoverState ? 1 : 0,
-              pointerEvents: "none",
-              transition: "opacity 150ms ease-out",
-            }}
-          >
-            <div
-              className="absolute top-2"
-              style={{
-                left: tooltipLeft ?? 0,
-                transition: "left 120ms cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-            >
-              <AnalyticsPocChartTooltip
-                footerText={onDayClick ? "View Submissions" : undefined}
-                label={activeHoverLabel}
-                onFooterClick={
-                  onDayClick && activeHover
-                    ? () => onDayClick(activeHover.index, activeHoverLabel)
-                    : undefined
-                }
-                rows={tooltipRows}
-              />
-            </div>
-          </div>
+            const tallestPct = stackedSegments.length > 0 ? stackedSegments[0].cumHeight : 0;
 
-          {(() => {
-            const barCount = chartPoints.length || 1;
-            const barBandWidth = chartPlotWidth / barCount;
-            const padding = 0.14;
-            const colWidth = barBandWidth * (1 + padding * 2);
-            const colLeft = activeHoverX !== undefined
-              ? activeHoverX - colWidth / 2
-              : 0;
             return (
-              <span
-                className="pointer-events-none absolute bottom-0"
-                style={{
-                  background: "currentColor",
-                  borderRadius: 0,
-                  left: colLeft,
-                  opacity: shouldShowHoverState && activeHoverX !== undefined ? 0.05 : 0,
-                  top: 0,
-                  transition: "left 100ms cubic-bezier(0.22, 1, 0.36, 1), opacity 100ms ease-out",
-                  width: colWidth,
-                }}
-              />
-            );
-          })()}
+              <div
+                key={pointIdx}
+                className="group/bar relative flex-1 self-end"
+                style={{ maxWidth: 40, height: `${Math.max(tallestPct, 0.5)}%` }}
+                onMouseEnter={() => setHoveredBarIdx(pointIdx)}
+                onMouseLeave={() => setHoveredBarIdx(null)}
+              >
+                {/* Tooltip */}
+                {hoveredBarIdx === pointIdx && (
+                  <div className="pointer-events-none absolute -top-2 left-1/2 z-20 -translate-x-1/2 -translate-y-full">
+                    <AnalyticsPocChartTooltip
+                      label={label}
+                      rows={segments.filter((s) => s.visible && s.value > 0).map((seg) => {
+                        const seriesLabel = stackedBarChart.series.find((sr) => sr.key === seg.key)?.label ?? seg.key;
+                        return {
+                          key: seg.key,
+                          color: seg.color,
+                          label: seriesLabel,
+                          value: seg.value >= 1000 ? `${(seg.value / 1000).toFixed(1)}K` : String(seg.value),
+                        };
+                      })}
+                    />
+                  </div>
+                )}
 
+                {/* Overlapping bar pills — tallest behind, shortest in front */}
+                {stackedSegments.map((seg, i) => (
+                  <div
+                    key={seg.key}
+                    className="absolute inset-x-0 bottom-0 cursor-pointer border border-white transition-[background] group-hover/bar:[--bar-mix:35%] [--bar-mix:20%] dark:[--bar-mix:30%] dark:group-hover/bar:[--bar-mix:50%] dark:border-[var(--card-bg,#1C1C1C)]"
+                    style={{
+                      height: tallestPct > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
+                      background: `color-mix(in srgb, ${seg.color} var(--bar-mix), var(--card-bg, white))`,
+                      /* light: 20% default, 35% hover. dark: 30% default, 50% hover */
+                      borderRadius: "8px 8px 0 0",
+                      zIndex: i,
+                    }}
+                  />
+                ))}
+              </div>
+            );
+          })}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex h-6 items-center justify-between gap-2">

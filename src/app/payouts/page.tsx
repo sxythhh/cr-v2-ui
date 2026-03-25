@@ -892,7 +892,7 @@ export default function PayoutsPage() {
         </div>
 
         {/* Table */}
-        <div className="flex min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+        <div className="flex min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
           <div className="w-full overflow-x-auto">
           {/* Header row */}
           <div className="flex w-full min-w-[800px] items-center border-b border-foreground/[0.03] px-1">
