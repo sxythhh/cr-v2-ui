@@ -46,7 +46,7 @@ function SectionLabel({ title, description, badge }: { title: string; descriptio
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -54,8 +54,8 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors ", on ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+      <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
     </button>
   );
 }
@@ -64,11 +64,13 @@ function PresetRow({ label, on, onToggle, children }: { label: string; on: boole
   return (
     <div
       className={cn(
-        "flex rounded-2xl border px-4 py-3 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+        "flex rounded-2xl border px-4 py-3 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
         children ? "flex-col gap-3" : "",
-        on ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
+        on
+          ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+          : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.04)]",
       )}
-      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(251, 146, 60, 0.12) 0%, rgba(251, 146, 60, 0) 50%), var(--toggle-card-bg)" } : undefined}
     >
       <div className="flex w-full cursor-pointer items-center justify-between gap-4" onClick={onToggle}>
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{label}</span>
@@ -131,7 +133,7 @@ function FileCardIcon({ ext }: { ext: string }) {
 
 function FileCard({ name, size, ext, onRemove }: UploadedFile & { onRemove: () => void }) {
   return (
-    <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+    <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       <FileCardIcon ext={ext} />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
@@ -240,7 +242,7 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
           <div className="pointer-events-none absolute -inset-0.5 z-0 rounded-[18px]" style={{ background: "conic-gradient(from 0deg, rgba(255,144,37,0.4), rgba(174,78,238,0.25), rgba(59,130,246,0.2), rgba(255,144,37,0.4))", filter: "blur(3px)", opacity: 0.35, transform: "matrix(-1, 0, 0, 1, 0, 0)" }} />
 
           {/* White card on top */}
-          <div className="relative flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4">
+          <div className="relative flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
             <div className="flex gap-2">
               <span className="mt-0.5 shrink-0 text-page-text-muted"><SparkleIcon /></span>
               <div className="flex flex-col gap-1.5">
@@ -251,12 +253,12 @@ export function RequirementsStep({ data, onChange, showErrors }: { data: Require
 
             <div className="flex flex-col gap-2 pl-6">
               {suggestions.map((s, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+                <div key={i} className="flex items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                   <span className="flex-1 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{s}</span>
-                  <button type="button" onClick={() => setSuggestions((prev) => prev.filter((_, j) => j !== i))} className="flex size-6 items-center justify-center rounded-full text-page-text-subtle transition-colors hover:bg-foreground/[0.06]">
+                  <button type="button" onClick={() => setSuggestions((prev) => prev.filter((_, j) => j !== i))} className="flex size-6 items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06]">
                     <XIcon />
                   </button>
-                  <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(0,153,77,0.06)] text-[#00994D] dark:text-[#34D399]">
+                  <button type="button" className="flex size-6 items-center justify-center rounded-full bg-[rgba(52,211,153,0.06)] text-[#34D399]">
                     <CheckIcon />
                   </button>
                 </div>

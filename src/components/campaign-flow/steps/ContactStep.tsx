@@ -21,7 +21,7 @@ function ChevronDownIcon() {
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -63,7 +63,7 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
       {/* Info banner */}
       <Card>
         <div className="flex items-center gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)]">
             <span className="text-page-text-muted"><InfoIcon /></span>
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -89,13 +89,13 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Phone number</span>
             <div className="flex gap-2">
-              <div className="flex h-10 w-[104px] shrink-0 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
+              <button type="button" className="flex h-10 w-[104px] shrink-0 cursor-pointer items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 transition-colors hover:bg-foreground/[0.06]">
                 <span className="text-[10px]">🇺🇸</span>
                 <span className="font-inter text-sm tracking-[-0.02em] text-page-text">+1</span>
                 <ChevronDownIcon />
-              </div>
+              </button>
               <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="text" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(555) 123-4567" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+                <input type="tel" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(555) 123-4567" className="w-full flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
               </div>
             </div>
           </div>

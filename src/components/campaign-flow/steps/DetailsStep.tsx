@@ -50,7 +50,7 @@ function SectionLabel({ title, description }: { title: string; description?: str
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -58,8 +58,8 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors ", on ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+      <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
     </button>
   );
 }
@@ -191,12 +191,12 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
           onClick={() => setIsPublic((v) => !v)}
           className={cn(
             "flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-            isPublic ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
+            isPublic ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]" : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.04)]",
           )}
-          style={isPublic ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+          style={isPublic ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" } : undefined}
         >
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
-            <span className={isPublic ? "text-[#252525] dark:text-white" : "text-page-text-muted"}><EyeIcon /></span>
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)]">
+            <span className={isPublic ? "text-[#252525] dark:text-[#E0E0E0]" : "text-page-text-muted"}><EyeIcon /></span>
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Public campaign</span>

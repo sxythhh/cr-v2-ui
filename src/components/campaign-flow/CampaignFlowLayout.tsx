@@ -254,24 +254,41 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
 
       {/* Mobile step nav */}
       <div className="flex md:hidden px-5 py-1">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-xl bg-accent p-0.5">
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-full bg-foreground/[0.03] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
           {steps.map((step, i) => {
             const isActive = i === stepIndex;
+            const isCompleted = i < stepIndex;
             const isClickable = i <= stepIndex;
             return (
               <button
                 key={step}
                 type="button"
+                ref={(el) => {
+                  if (isActive && el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                  }
+                }}
                 onClick={() => isClickable && handleStepClick(i)}
                 disabled={!isClickable}
                 className={cn(
-                  "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-[10px] px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
                   isActive
-                    ? "bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
-                    : "text-page-text-subtle",
+                    ? "bg-foreground/[0.03] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                    : isCompleted
+                      ? "text-page-text-muted"
+                      : "text-page-text-subtle",
                   !isClickable && "cursor-default",
                 )}
               >
+                {isCompleted ? (
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM11.3536 6.35355C11.5488 6.15829 11.5488 5.84171 11.3536 5.64645C11.1583 5.45118 10.8417 5.45118 10.6464 5.64645L7 9.29289L5.35355 7.64645C5.15829 7.45118 4.84171 7.45118 4.64645 7.64645C4.45118 7.84171 4.45118 8.15829 4.64645 8.35355L6.64645 10.3536C6.84171 10.5488 7.15829 10.5488 7.35355 10.3536L11.3536 6.35355Z" fill="#34D399"/>
+                  </svg>
+                ) : (
+                  <span className={cn("flex size-4 shrink-0 items-center justify-center rounded-full text-[10px] font-medium", isActive ? "bg-foreground/[0.06] text-page-text" : "text-page-text-subtle")}>
+                    {i + 1}
+                  </span>
+                )}
                 {stepLabels[step]}
               </button>
             );

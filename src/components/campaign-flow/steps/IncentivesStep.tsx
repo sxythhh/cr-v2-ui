@@ -39,7 +39,7 @@ function SectionLabel({ title, description }: { title: string; description?: str
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -52,12 +52,12 @@ function RadioCard({ selected, onClick, icon, title, description }: { selected: 
       onClick={onClick}
       className={cn(
         "flex items-center gap-3 rounded-2xl border p-4 text-left transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-        selected ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02]",
+        selected ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]" : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
       )}
-      style={selected ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+      style={selected ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" } : undefined}
     >
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
-        <span className={selected ? "text-[#252525] dark:text-white" : "text-page-text-muted"}>{icon}</span>
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)]">
+        <span className={selected ? "text-[#252525] dark:text-[#E0E0E0]" : "text-page-text-muted"}>{icon}</span>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{title}</span>
@@ -71,7 +71,7 @@ function RadioCard({ selected, onClick, icon, title, description }: { selected: 
           </svg>
         ) : (
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" fill="var(--card-bg)" />
+            <circle cx="12" cy="12" r="10" fill="var(--toggle-card-bg)" />
             <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeOpacity="0.1" />
           </svg>
         )}
@@ -119,7 +119,7 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
       <div className="flex flex-col gap-2">
         <SectionLabel title="Bonus milestones" description="Reward creators for reaching view milestones." />
         {data.milestones.map((m, i) => (
-          <div key={i} className="flex flex-col gap-4 rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6">
+          <div key={i} className="flex flex-col gap-4 rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
             <div className="flex items-center justify-between">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Milestone {i + 1}</span>
               <button
@@ -178,7 +178,7 @@ export function IncentivesStep({ data, onChange }: { data: IncentivesData; onCha
           </div>
         ))}
         {/* Add milestone */}
-        <div className="rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6">
+        <div className="rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
           <button
             type="button"
             onClick={addMilestone}

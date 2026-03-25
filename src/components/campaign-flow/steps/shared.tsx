@@ -19,7 +19,7 @@ export function Field({ label, children, className }: FieldProps) {
 
 export function SectionCard({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl ${className ?? ""}`}>
+    <div className={`bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)] ${className ?? ""}`}>
       <div className="flex flex-col p-5 gap-4">
         {children}
       </div>

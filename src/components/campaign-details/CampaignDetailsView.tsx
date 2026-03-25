@@ -323,16 +323,16 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 
                   {/* Warning card */}
                   <div className="flex flex-col gap-3 rounded-xl bg-[rgba(229,113,0,0.08)] px-4 py-3">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(229,113,0,0.08)]">
-                      <svg width="20" height="20" viewBox="0 0 28 26" fill="none">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M11.8396 2.88086C12.8043 1.22719 15.1938 1.22719 16.1585 2.88086L22.0067 12.9066C22.9789 14.5732 21.7768 16.6662 19.8473 16.6662H8.15073C6.22127 16.6662 5.01912 14.5732 5.99135 12.9066L11.8396 2.88086ZM13.9998 6.66626C14.4601 6.66626 14.8332 7.03936 14.8332 7.49959V9.99959C14.8332 10.4598 14.4601 10.8329 13.9998 10.8329C13.5396 10.8329 13.1665 10.4598 13.1665 9.99959V7.49959C13.1665 7.03936 13.5396 6.66626 13.9998 6.66626ZM12.9582 12.4996C12.9582 11.9243 13.4245 11.4579 13.9998 11.4579C14.5751 11.4579 15.0415 11.9243 15.0415 12.4996C15.0415 13.0749 14.5751 13.5413 13.9998 13.5413C13.4245 13.5413 12.9582 13.0749 12.9582 12.4996Z" fill="#E57100"/>
+                    <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(251,146,60,0.08)]">
+                      <svg width="17" height="16" viewBox="0 0 17 16" fill="none">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M6.19259 1.24032C7.15729 -0.413439 9.54679 -0.413443 10.5115 1.24032L16.3598 11.2659C17.332 12.9326 16.1298 15.0256 14.2003 15.0256H2.50377C0.57429 15.0256 -0.62789 12.9326 0.344318 11.2659L6.19259 1.24032ZM8.35287 5.02563C8.8131 5.02563 9.1862 5.39873 9.1862 5.85897V8.35897C9.1862 8.8192 8.8131 9.1923 8.35287 9.1923C7.89263 9.1923 7.51953 8.8192 7.51953 8.35897V5.85897C7.51953 5.39873 7.89263 5.02563 8.35287 5.02563ZM7.3112 10.859C7.3112 10.2837 7.77757 9.8173 8.35287 9.8173C8.92816 9.8173 9.39453 10.2837 9.39453 10.859C9.39453 11.4343 8.92816 11.9006 8.35287 11.9006C7.77757 11.9006 7.3112 11.4343 7.3112 10.859Z" fill="#FB923C"/>
                       </svg>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-[#252525]">
+                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-page-text">
                         Running low
                       </span>
-                      <p className="font-inter text-sm leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.5)]">
+                      <p className="font-inter text-sm leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">
                         At current pace, budget runs out in ~4 days. Top up to keep creators submitting.
                       </p>
                     </div>
@@ -397,15 +397,15 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────── */}
-      <footer className="flex items-center justify-between border-t border-border px-5 py-3">
-        <span className="text-sm tracking-[-0.02em] text-page-text">
+      <footer className="flex items-center justify-between border-t border-border px-4 py-3 dark:border-[#161616] sm:px-5">
+        <span className="hidden text-sm tracking-[-0.02em] text-page-text sm:block">
           {c.title}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-1 items-center gap-2 sm:flex-none">
           <div ref={dotsRef} className="relative">
             <button
               onClick={() => setDotsOpen((v) => !v)}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border bg-white text-page-text-muted hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors"
+              className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] text-page-text-muted transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] dark:text-[#E0E0E0]"
             >
               <IconDots size={16} />
             </button>
@@ -426,18 +426,18 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
               )}
             </AnimatePresence>
           </div>
-          <button className="cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors">
+          <button className="hidden cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
             Edit
           </button>
-          <button onClick={() => setTopUpOpen(true)} className="cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] transition-colors">
+          <button onClick={() => setTopUpOpen(true)} className="hidden cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
             Top up
           </button>
-          <button onClick={() => setBoostOpen(true)} className="flex items-center gap-1.5 rounded-full bg-[#8B5CF6] px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-white hover:bg-[#7c3aed] transition-colors cursor-pointer">
+          <button onClick={() => setEndOpen(true)} className="flex h-9 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#252525] sm:flex-none">
+            End &amp; review
+          </button>
+          <button onClick={() => setBoostOpen(true)} className="flex h-9 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#8B5CF6] px-4 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#7c3aed] sm:flex-none">
             <svg width="13" height="15" viewBox="0 0 13 15" fill="none" className="shrink-0"><path d="M7.37884 1.00184C7.37884 0.0124272 6.09561 -0.37609 5.54679 0.447142L0.169631 8.51288C-0.273405 9.17744 0.202986 10.0676 1.00168 10.0676H4.71217V13.8C4.71217 14.7894 5.9954 15.1779 6.54423 14.3547L11.9214 6.28895C12.3644 5.6244 11.888 4.73425 11.0893 4.73425H7.37884V1.00184Z" fill="white"/></svg>
             Boost
-          </button>
-          <button onClick={() => setEndOpen(true)} className="rounded-full bg-[#252525] dark:bg-[#e5e5e5] px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-white dark:text-[#111111] hover:bg-[#333] dark:hover:bg-[#d5d5d5] transition-colors cursor-pointer">
-            End &amp; Review
           </button>
         </div>
       </footer>

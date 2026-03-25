@@ -142,7 +142,7 @@ interface Column {
 }
 
 const ALL_COLUMNS: Column[] = [
-  { key: "creator", label: "Creator", align: "left", width: "minmax(160px, 1fr)" },
+  { key: "creator", label: "Creator", align: "left", width: "minmax(240px, 1.5fr)" },
   { key: "platforms", label: "Platforms", align: "right", width: "140px" },
   { key: "earned", label: "Earned", align: "right", width: "80px" },
   { key: "views", label: "Views", align: "right", width: "68px" },

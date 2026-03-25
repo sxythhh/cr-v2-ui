@@ -328,7 +328,7 @@ function buildPerformanceSeriesLine({
       style={{
         transition: `stroke-opacity ${transitionDurationMs}ms ${HOVER_OPACITY_TRANSITION_EASING}`,
       }}
-      type="natural"
+      type="linear"
       yAxisId={series.axis}
     />
   );
@@ -699,12 +699,15 @@ function PerformanceMainLineChartBody({
     }
   };
 
-  const chartPlotWidth = measuredPlotWidth || (chartPlotAreaRef.current?.clientWidth ?? 0);
-  // Use Recharts' activeCoordinate.x directly — it correctly maps data points
-  // within the SVG coordinate system (including chart margins).
+  const chartContainerWidth = measuredPlotWidth || (chartPlotAreaRef.current?.clientWidth ?? 0);
+  const chartRightMargin = hasRightAxis ? 48 : 4;
+  const chartPlotWidth = Math.max(1, chartContainerWidth - chartRightMargin);
+  // Derive hover X from data index for reliable gradient alignment —
+  // Recharts' activeCoordinate.x can drift due to margin/padding discrepancies.
+  const dataLength = dataset.length;
   const activeHoverX =
-    activeHover && chartPlotWidth > 0
-      ? clampNumber(activeHover.x, 0, chartPlotWidth)
+    activeHover && chartPlotWidth > 0 && dataLength > 1
+      ? (activeHover.index / (dataLength - 1)) * chartPlotWidth
       : undefined;
   const tooltipLeft = resolveTooltipLeft({ activeHoverX, chartPlotWidth });
 
@@ -1036,7 +1039,7 @@ function PerformanceMainLineChartBody({
           className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center transition-opacity duration-100"
           style={{ right: hasRightAxis ? 47 : 4, transform: "translateX(50%)" }}
         >
-          <span className="whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-white/[0.08]">
+          <span className="whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-[rgba(224,224,224,0.03)]">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
           </span>
         </div>

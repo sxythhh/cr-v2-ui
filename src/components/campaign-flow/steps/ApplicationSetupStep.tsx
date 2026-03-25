@@ -16,7 +16,7 @@ function SectionLabel({ title, description }: { title: string; description?: str
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -24,8 +24,8 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors", on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20")}>
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+    <button type="button" onClick={(e) => { e.stopPropagation(); onToggle(); }} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors ", on ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+      <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
     </button>
   );
 }
@@ -34,10 +34,12 @@ function ToggleRow({ title, description, on, onToggle, titleColor, children }: {
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
-        on ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
+        "flex flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+        on
+          ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+          : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.04)]",
       )}
-      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+      style={on ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(251, 146, 60, 0.12) 0%, rgba(251, 146, 60, 0) 50%), var(--toggle-card-bg)" } : undefined}
     >
       <div className="flex cursor-pointer items-center gap-3" onClick={onToggle}>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -150,9 +152,9 @@ export function ApplicationSetupStep() {
             onClick={() => setRequirePortfolio((v) => !v)}
             className={cn(
               "flex cursor-pointer items-center justify-between rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-              requirePortfolio ? "border-[rgba(255,144,37,0.3)]" : "border-foreground/[0.06] bg-card-bg",
+              requirePortfolio ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]" : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.04)]",
             )}
-            style={requirePortfolio ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" } : undefined}
+            style={requirePortfolio ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" } : undefined}
           >
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Require portfolio link</span>
             <ToggleSwitch on={requirePortfolio} onToggle={() => setRequirePortfolio((v) => !v)} />

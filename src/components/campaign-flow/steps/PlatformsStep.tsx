@@ -37,10 +37,10 @@ function StopwatchIcon() {
 function LinkIcon() {
   return (
     <svg width="15" height="17" viewBox="0 0 15 17" fill="none">
-      <path d="M2.5 0C1.11929 0 0 1.11929 0 2.5V14.1667C0 15.5474 1.11929 16.6667 2.5 16.6667H7.93982C7.14809 15.7821 6.66667 14.6139 6.66667 13.3333V10.8333C6.66667 8.07191 8.90524 5.83333 11.6667 5.83333C12.2511 5.83333 12.812 5.93359 13.3333 6.11784V2.5C13.3333 1.11929 12.214 0 10.8333 0H2.5Z" fill="currentColor" fillOpacity="0.5" />
-      <path d="M10 10.8333C10 9.91286 10.7462 9.16667 11.6667 9.16667C12.5871 9.16667 13.3333 9.91286 13.3333 10.8333C13.3333 11.2936 13.7064 11.6667 14.1667 11.6667C14.6269 11.6667 15 11.2936 15 10.8333C15 8.99238 13.5076 7.5 11.6667 7.5C9.82572 7.5 8.33333 8.99238 8.33333 10.8333C8.33333 11.2936 8.70643 11.6667 9.16667 11.6667C9.6269 11.6667 10 11.2936 10 10.8333Z" fill="currentColor" fillOpacity="0.5" />
-      <path d="M12.5 11.6667C12.5 11.2064 12.1269 10.8333 11.6667 10.8333C11.2064 10.8333 10.8333 11.2064 10.8333 11.6667V12.5C10.8333 12.9602 11.2064 13.3333 11.6667 13.3333C12.1269 13.3333 12.5 12.9602 12.5 12.5V11.6667Z" fill="currentColor" fillOpacity="0.5" />
-      <path d="M10 13.3333C10 12.8731 9.6269 12.5 9.16667 12.5C8.70643 12.5 8.33333 12.8731 8.33333 13.3333C8.33333 15.1743 9.82572 16.6667 11.6667 16.6667C13.5076 16.6667 15 15.1743 15 13.3333C15 12.8731 14.6269 12.5 14.1667 12.5C13.7064 12.5 13.3333 12.8731 13.3333 13.3333C13.3333 14.2538 12.5871 15 11.6667 15C10.7462 15 10 14.2538 10 13.3333Z" fill="currentColor" fillOpacity="0.5" />
+      <path d="M2.5 0C1.11929 0 0 1.11929 0 2.5V14.1667C0 15.5474 1.11929 16.6667 2.5 16.6667H7.93982C7.14809 15.7821 6.66667 14.6139 6.66667 13.3333V10.8333C6.66667 8.07191 8.90524 5.83333 11.6667 5.83333C12.2511 5.83333 12.812 5.93359 13.3333 6.11784V2.5C13.3333 1.11929 12.214 0 10.8333 0H2.5Z" fill="currentColor" />
+      <path d="M10 10.8333C10 9.91286 10.7462 9.16667 11.6667 9.16667C12.5871 9.16667 13.3333 9.91286 13.3333 10.8333C13.3333 11.2936 13.7064 11.6667 14.1667 11.6667C14.6269 11.6667 15 11.2936 15 10.8333C15 8.99238 13.5076 7.5 11.6667 7.5C9.82572 7.5 8.33333 8.99238 8.33333 10.8333C8.33333 11.2936 8.70643 11.6667 9.16667 11.6667C9.6269 11.6667 10 11.2936 10 10.8333Z" fill="currentColor" />
+      <path d="M12.5 11.6667C12.5 11.2064 12.1269 10.8333 11.6667 10.8333C11.2064 10.8333 10.8333 11.2064 10.8333 11.6667V12.5C10.8333 12.9602 11.2064 13.3333 11.6667 13.3333C12.1269 13.3333 12.5 12.9602 12.5 12.5V11.6667Z" fill="currentColor" />
+      <path d="M10 13.3333C10 12.8731 9.6269 12.5 9.16667 12.5C8.70643 12.5 8.33333 12.8731 8.33333 13.3333C8.33333 15.1743 9.82572 16.6667 11.6667 16.6667C13.5076 16.6667 15 15.1743 15 13.3333C15 12.8731 14.6269 12.5 14.1667 12.5C13.7064 12.5 13.3333 12.8731 13.3333 13.3333C13.3333 14.2538 12.5871 15 11.6667 15C10.7462 15 10 14.2538 10 13.3333Z" fill="currentColor" />
     </svg>
   );
 }
@@ -58,7 +58,7 @@ function SectionLabel({ title, description }: { title: string; description?: str
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+    <div className="rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       {children}
     </div>
   );
@@ -70,11 +70,11 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       type="button"
       onClick={(e) => { e.stopPropagation(); onToggle(); }}
       className={cn(
-        "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors",
-        on ? "bg-[#252525] dark:bg-white" : "bg-foreground/20",
+        "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors ",
+        on ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]",
       )}
     >
-      <div className={cn("size-4 rounded-full bg-white dark:bg-[#161616] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5" : "translate-x-0")} />
+      <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", on ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
     </button>
   );
 }
@@ -93,28 +93,27 @@ function ToggleCard({
   onToggle: () => void;
 }) {
   return (
-    <button
-      type="button"
+    <div
       onClick={onToggle}
       className={cn(
-        "flex items-center gap-3 rounded-2xl border p-4 text-left transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+        "flex cursor-pointer items-center gap-3 rounded-2xl border p-4 text-left transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
         on
-          ? "border-[rgba(255,144,37,0.3)]"
-          : "border-foreground/[0.06] bg-card-bg",
+          ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+          : "border-foreground/[0.06] bg-card-bg hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.04)]",
       )}
       style={on ? {
-        background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
+        background: "radial-gradient(50% 50% at 50% 100%, rgba(251, 146, 60, 0.12) 0%, rgba(251, 146, 60, 0) 50%), var(--toggle-card-bg)",
       } : undefined}
     >
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:bg-white/10">
-        <span className={on ? "text-[#252525] dark:text-white" : "text-page-text-muted"}>{icon}</span>
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-[1.25px] border-foreground/[0.06] bg-white shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1.25px_2.5px_rgba(0,0,0,0.03)]">
+        <span className={on ? "text-[#252525] dark:text-[#E0E0E0]" : "text-page-text-muted"}>{icon}</span>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{title}</span>
         <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">{description}</span>
       </div>
       <ToggleSwitch on={on} onToggle={onToggle} />
-    </button>
+    </div>
   );
 }
 
@@ -160,13 +159,13 @@ export function PlatformsStep() {
                   type="button"
                   onClick={() => toggle(p.id)}
                   className={cn(
-                    "flex h-9 items-center gap-1.5 rounded-full border px-3 font-inter text-sm font-medium tracking-[-0.02em] transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+                    "flex h-9 items-center gap-1.5 rounded-full border px-3 font-inter text-sm font-medium tracking-[-0.02em] transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
                     isOn
-                      ? "border-[rgba(255,144,37,0.3)] text-page-text"
-                      : "border-foreground/[0.06] bg-card-bg text-page-text-subtle hover:bg-foreground/[0.02]",
+                      ? "border-[rgba(255,144,37,0.3)] text-page-text dark:border-[rgba(251,146,60,0.15)]"
+                      : "border-foreground/[0.06] bg-card-bg text-page-text-subtle hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
                   )}
                   style={isOn ? {
-                    background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)",
+                    background: "radial-gradient(50% 50% at 50% 100%, rgba(251, 146, 60, 0.12) 0%, rgba(251, 146, 60, 0) 50%), var(--toggle-card-bg)",
                   } : undefined}
                 >
                   <PlatformIcon platform={p.id} size={16} />

@@ -62,7 +62,7 @@ export function RetainerConfiguration({ data, update, togglePlatform }: { data: 
       {/* Posts amount */}
       <SectionCard>
         <SectionHeading title="Posts amount" description="Set a minimum number of posts per creator" />
-        <div className="flex items-center justify-between bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-[14px] px-4 py-3">
+        <div className="flex items-center justify-between bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-[14px] px-4 py-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
           <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Expected amount of posts</span>
           <Switch checked={data.expectedPostsEnabled} onCheckedChange={(v) => update({ expectedPostsEnabled: v })} />
         </div>

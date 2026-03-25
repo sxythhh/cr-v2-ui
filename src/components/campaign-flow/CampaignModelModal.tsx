@@ -14,28 +14,28 @@ interface CampaignModelModalProps {
 }
 
 /* Inline SVG icons matching clipper's cpm-eye and retainer icons */
-function CpmEyeIcon({ size = 24 }: { size?: number }) {
+function CpmEyeIcon({ size = 17 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 15 11" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M7.08659 1.77048e-10C9.76018 1.97499e-05 12.36 1.65151 14.0402 4.79945C14.2175 5.1315 14.2175 5.53519 14.0402 5.86724C12.36 9.01519 9.76017 10.6666 7.08658 10.6666C4.41299 10.6666 1.81317 9.01511 0.132928 5.86717C-0.0443094 5.53511 -0.0443093 5.13143 0.132928 4.79937C1.81318 1.65143 4.413 -1.97879e-05 7.08659 1.77048e-10ZM4.66992 5.33333C4.66992 3.99864 5.75189 2.91667 7.08658 2.91667C8.42127 2.91667 9.50325 3.99864 9.50325 5.33333C9.50325 6.66802 8.42127 7.75 7.08658 7.75C5.75189 7.75 4.66992 6.66802 4.66992 5.33333Z" fill="currentColor" />
+    <svg width={size} height={size} viewBox="0 0 17 17" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.08659 3.17048C10.7602 3.17002 13.36 4.82151 15.0402 7.96945C15.2175 8.3015 15.2175 8.70519 15.0402 9.03724C13.36 12.1852 10.7602 13.8366 8.08658 13.8366C5.41299 13.8366 2.81317 12.1851 1.13293 9.03717C0.955691 8.70511 0.955691 8.30143 1.13293 7.96937C2.81318 4.82143 5.413 3.17002 8.08659 3.17048ZM5.66992 8.50333C5.66992 7.16864 6.75189 6.08667 8.08658 6.08667C9.42127 6.08667 10.5033 7.16864 10.5033 8.50333C10.5033 9.83802 9.42127 10.92 8.08658 10.92C6.75189 10.92 5.66992 9.83802 5.66992 8.50333Z" fill="currentColor" />
     </svg>
   );
 }
 
-function RetainerIcon({ size = 24 }: { size?: number }) {
+function RetainerIcon({ size = 17 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 21" fill="none">
-      <path d="M4.75 0C5.16421 0 5.5 0.335786 5.5 0.75V2H12.5V0.75C12.5 0.335786 12.8358 0 13.25 0C13.6642 0 14 0.335786 14 0.75V2H16.25C17.2165 2 18 2.7835 18 3.75V7.25C18 7.66421 17.6642 8 17.25 8H1.5V17.25C1.5 17.3881 1.61193 17.5 1.75 17.5H7.25C7.66421 17.5 8 17.8358 8 18.25C8 18.6642 7.66421 19 7.25 19H1.75C0.783502 19 0 18.2165 0 17.25V3.75C0 2.7835 0.783502 2 1.75 2H4V0.75C4 0.335786 4.33579 0 4.75 0Z" fill="currentColor" />
-      <path d="M12.6397 12.0772C13.1818 11.7413 13.8227 11.5469 14.5 11.5469C16.1079 11.5469 17.461 12.6466 17.8444 14.1361C17.9541 14.5623 18.3885 14.8189 18.8147 14.7092C19.2409 14.5995 19.4975 14.1651 19.3878 13.7389C18.8276 11.5623 16.8527 9.95312 14.5 9.95312C13.3847 9.95312 12.3389 10.3156 11.4919 10.9294L10.6257 10.0632C10.291 9.72848 9.71875 9.96551 9.71875 10.4388V12.875C9.71875 13.4618 10.1944 13.9375 10.7812 13.9375H13.2174C13.6907 13.9375 13.9278 13.3653 13.5931 13.0306L12.6397 12.0772Z" fill="currentColor" />
-      <path d="M11.1556 15.8639C11.0459 15.4377 10.6115 15.1811 10.1853 15.2908C9.75904 15.4005 9.50246 15.8349 9.61216 16.2611C10.1724 18.4377 12.1473 20.0469 14.5 20.0469C15.6155 20.0469 16.6614 19.6842 17.5081 19.0706L18.3743 19.9368C18.709 20.2715 19.2812 20.0345 19.2812 19.5612V17.125C19.2812 16.5382 18.8056 16.0625 18.2188 16.0625H15.7826C15.3093 16.0625 15.0722 16.6347 15.4069 16.9694L16.3602 17.9227C15.818 18.2588 15.1771 18.4531 14.5 18.4531C12.8921 18.4531 11.539 17.3534 11.1556 15.8639Z" fill="currentColor" />
+    <svg width={size} height={size} viewBox="0 0 21 21" fill="none">
+      <path d="M5.25 0C5.66421 0 6 0.335786 6 0.75V2H13V0.75C13 0.335786 13.3358 0 13.75 0C14.1642 0 14.5 0.335786 14.5 0.75V2H16.75C17.7165 2 18.5 2.7835 18.5 3.75V7.25C18.5 7.66421 18.1642 8 17.75 8H2V17.25C2 17.3881 2.11193 17.5 2.25 17.5H7.75C8.16421 17.5 8.5 17.8358 8.5 18.25C8.5 18.6642 8.16421 19 7.75 19H2.25C1.2835 19 0.5 18.2165 0.5 17.25V3.75C0.5 2.7835 1.2835 2 2.25 2H4.5V0.75C4.5 0.335786 4.83579 0 5.25 0Z" fill="currentColor" />
+      <path d="M13.1397 12.0772C13.6818 11.7413 14.3227 11.5469 15 11.5469C16.6079 11.5469 17.961 12.6466 18.3444 14.1361C18.4541 14.5623 18.8885 14.8189 19.3147 14.7092C19.7409 14.5995 19.9975 14.1651 19.8878 13.7389C19.3276 11.5623 17.3527 9.95312 15 9.95312C13.8847 9.95312 12.8389 10.3156 11.9919 10.9294L11.1257 10.0632C10.791 9.72848 10.2188 9.96551 10.2188 10.4388V12.875C10.2188 13.4618 10.6944 13.9375 11.2812 13.9375H13.7174C14.1907 13.9375 14.4278 13.3653 14.0931 13.0306L13.1397 12.0772Z" fill="currentColor" />
+      <path d="M11.6556 15.8639C11.5459 15.4377 11.1115 15.1811 10.6853 15.2908C10.259 15.4005 10.0025 15.8349 10.1122 16.2611C10.6724 18.4377 12.6473 20.0469 15 20.0469C16.1155 20.0469 17.1614 19.6842 18.0081 19.0706L18.8743 19.9368C19.209 20.2715 19.7812 20.0345 19.7812 19.5612V17.125C19.7812 16.5382 19.3056 16.0625 18.7188 16.0625H16.2826C15.8093 16.0625 15.5722 16.6347 15.9069 16.9694L16.8602 17.9227C16.318 18.2588 15.6771 18.4531 15 18.4531C13.3921 18.4531 12.039 17.3534 11.6556 15.8639Z" fill="currentColor" />
     </svg>
   );
 }
 
-function PerPostIcon({ size = 24 }: { size?: number }) {
+function PerPostIcon({ size = 17 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 18" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 1C2 0.447715 2.44772 0 3 0H17C17.5523 0 18 0.447715 18 1C18 1.55228 17.5523 2 17 2H3C2.44772 2 2 1.55228 2 1ZM0 6C0 4.34315 1.34315 3 3 3H17C18.6569 3 20 4.34315 20 6V15C20 16.6569 18.6569 18 17 18H3C1.34315 18 0 16.6569 0 15V6ZM8.56681 7.5987C8.91328 7.43218 9.32452 7.479 9.62469 7.71913L12.1247 9.71913C12.3619 9.9089 12.5 10.1962 12.5 10.5C12.5 10.8038 12.3619 11.0911 12.1247 11.2809L9.62469 13.2809C9.32452 13.521 8.91328 13.5678 8.56681 13.4013C8.22034 13.2348 8 12.8844 8 12.5V8.5C8 8.11559 8.22034 7.76522 8.56681 7.5987Z" fill="currentColor" />
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M2 2C2 1.44772 2.44772 1 3 1H17C17.5523 1 18 1.44772 18 2C18 2.55228 17.5523 3 17 3H3C2.44772 3 2 2.55228 2 2ZM0 7C0 5.34315 1.34315 4 3 4H17C18.6569 4 20 5.34315 20 7V16C20 17.6569 18.6569 19 17 19H3C1.34315 19 0 17.6569 0 16V7ZM8.56681 8.5987C8.91328 8.43218 9.32452 8.479 9.62469 8.71913L12.1247 10.7191C12.3619 10.9089 12.5 11.1962 12.5 11.5C12.5 11.8038 12.3619 12.0911 12.1247 12.2809L9.62469 14.2809C9.32452 14.521 8.91328 14.5678 8.56681 14.4013C8.22034 14.2348 8 13.8844 8 13.5V9.5C8 9.11559 8.22034 8.76522 8.56681 8.5987Z" fill="currentColor" />
     </svg>
   );
 }
@@ -50,6 +50,7 @@ const MODELS: {
   icon: React.ComponentType<ModelIconProps>;
   iconColor: string;
   rgb: string;
+  gradientRgb: string;
   checkGradient: string;
 }[] = [
   {
@@ -60,6 +61,7 @@ const MODELS: {
     icon: CpmEyeIcon,
     iconColor: "text-[#3B82F6] dark:text-[#60A5FA]",
     rgb: "96, 165, 250",
+    gradientRgb: "26, 103, 229",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADCCFF 100%)",
   },
   {
@@ -70,6 +72,7 @@ const MODELS: {
     icon: RetainerIcon,
     iconColor: "text-[#D97706] dark:text-[#FB923C]",
     rgb: "251, 146, 60",
+    gradientRgb: "229, 113, 0",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #FFE1AD 100%)",
   },
   {
@@ -80,6 +83,7 @@ const MODELS: {
     icon: PerPostIcon,
     iconColor: "text-[#16A34A] dark:text-[#34D399]",
     rgb: "52, 211, 153",
+    gradientRgb: "0, 178, 89",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADFFCB 100%)",
   },
 ];
@@ -114,7 +118,7 @@ export function CampaignModelModal({
             Select campaign model
           </DialogPrimitive.Title>
 
-          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[608px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border">
+          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[608px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
             {/* Top bar */}
             <div className="relative flex items-center justify-center px-5 sm:px-6 h-10 sm:h-[41px] shrink-0 bg-foreground/[0.03] dark:bg-foreground/[0.03] border-b border-foreground/[0.03]">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text">
@@ -156,12 +160,12 @@ export function CampaignModelModal({
                   return (
                     <button
                       className={cn(
-                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 bg-foreground/[0.03] dark:bg-foreground/[0.03] overflow-hidden border",
-                        isSelected
-                          ? ""
-                          : "border-foreground/[0.03]",
+                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 overflow-hidden outline-none focus:outline-none focus-visible:outline-none",
                       )}
-                      style={isSelected ? { borderColor: `rgba(${model.rgb}, 0.3)` } : undefined}
+                      style={{
+                        background: `linear-gradient(0deg, rgba(224,224,224,0.03), rgba(224,224,224,0.03)), radial-gradient(100% 100% at 50% 0%, rgba(${model.gradientRgb}, 0) 30%, rgba(${model.gradientRgb}, 0.12) 100%)`,
+                        boxShadow: isSelected ? `inset 0 0 0 1px rgba(${model.rgb}, 0.3)` : "none",
+                      }}
                       key={model.id}
                       onClick={() => setSelected((prev) => prev === model.id ? null : model.id)}
                       type="button"
@@ -171,18 +175,17 @@ export function CampaignModelModal({
 
                       {/* Selection circle */}
                       <div
-                        className="absolute top-4 right-4 flex items-center justify-center size-6 sm:size-5 rounded-full transition-all z-10"
+                        className="absolute top-5 right-5 flex items-center justify-center size-6 sm:size-5 rounded-full transition-all z-10"
                         style={{
                           background: isSelected
                             ? model.checkGradient
-                            : "transparent",
+                            : "#161616",
                           border: isSelected
                             ? "none"
                             : "1px solid rgba(224,224,224,0.2)",
                           boxShadow: isSelected
                             ? "none"
-                            : "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)",
-                          backdropFilter: "blur(4px)",
+                            : "inset 0px 0.5px 2px rgba(0,0,0,0.12)",
                         }}
                       >
                         {isSelected && (
@@ -196,7 +199,7 @@ export function CampaignModelModal({
 
                       {/* Icon circle */}
                       <div
-                        className="z-[1] flex items-center justify-center size-10 rounded-full"
+                        className="z-[1] flex size-10 items-center justify-center rounded-full"
                         style={{
                           background: `rgba(${model.rgb}, 0.08)`,
                         }}
@@ -220,6 +223,14 @@ export function CampaignModelModal({
                       <span className="text-xs text-page-text-subtle z-[4]">
                         {model.footer}
                       </span>
+
+                      {/* Bottom colored gradient */}
+                      <div
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 z-[0]"
+                        style={{
+                          background: `linear-gradient(to top, rgba(${model.gradientRgb}, 0.08) 0%, transparent 100%)`,
+                        }}
+                      />
                     </button>
                   );
                 })}

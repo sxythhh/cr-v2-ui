@@ -7,7 +7,7 @@ import type { ConfigurationData, DetailsData } from "@/types/campaign-flow.types
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>
+    <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>
       {children}
     </div>
   );
@@ -15,7 +15,7 @@ function Card({ children, className }: { children: React.ReactNode; className?: 
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center rounded-[14px] border border-foreground/[0.06] px-3 py-3">
+    <div className="flex items-center rounded-[14px] border border-foreground/[0.06] px-3 py-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
       <span className="flex-1 font-inter text-sm tracking-[-0.02em] text-page-text-muted">{label}</span>
       <span className="font-inter text-sm font-medium leading-[120%] tracking-[-0.02em] text-page-text">{value}</span>
     </div>
@@ -79,20 +79,16 @@ export function PreviewStep({ configuration, details }: { configuration: Configu
   const category = details.category || "gaming";
 
   return (
-    <div className="flex h-full min-h-0 gap-8 overflow-hidden">
-      {/* Left — phone frame preview */}
-      <div className="flex flex-1 flex-col items-center justify-center min-h-0">
+    <div className="flex flex-col gap-6">
+      {/* Campaign card preview */}
+      <div className="flex flex-col">
         <div className="flex flex-col gap-1 self-start mb-3 shrink-0">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Preview</span>
-          <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">This is how creators will see your campaign.</span>
+          <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">This is how creators will see your campaign on the Discover page.</span>
         </div>
-        {/* Phone frame */}
-        <div className="flex w-full max-w-[393px] flex-col overflow-hidden rounded-[40px] border border-foreground/[0.08] bg-white shadow-[0_2px_20px_rgba(0,0,0,0.08)] dark:bg-[#1c1c1e] dark:shadow-[0_2px_20px_rgba(0,0,0,0.3)] min-h-0 max-h-full">
-          <div className="shrink-0"><MobileStatusBar /></div>
-          <div className="shrink-0"><MobileNavBar /></div>
-          <div className="shrink-0 border-b border-[rgba(37,37,37,0.06)] dark:border-white/[0.06]" />
-          <div className="flex-1 min-h-0 bg-white dark:bg-[#1c1c1e]">
-            <Card className="flex h-full flex-col overflow-hidden rounded-[20px] border-0 shadow-none m-2">
+        {/* Card preview — direct, no phone frame */}
+        <div className="hidden sm:block">
+          <Card className="flex flex-col overflow-hidden rounded-[20px]">
               {/* Thumbnail */}
               <div className="relative min-h-0 flex-1 overflow-hidden p-1">
                 <div
@@ -159,16 +155,76 @@ export function PreviewStep({ configuration, details }: { configuration: Configu
                 </div>
               </div>
             </Card>
-          </div>
-          {/* Home indicator */}
-          <div className="flex shrink-0 h-8 items-end justify-center pb-2">
-            <div className="h-[5px] w-[134px] rounded-full bg-black/20 dark:bg-white/20" />
-          </div>
         </div>
+
+        {/* Mobile card */}
+        <Card className="flex sm:hidden flex-col overflow-hidden rounded-[20px]">
+          {/* Thumbnail */}
+          <div className="relative overflow-hidden p-1">
+            <div
+              className="h-[192px] rounded-2xl"
+              style={{ background: details.thumbnailPreview ? `url(${details.thumbnailPreview}) center/cover, #1a1a1a` : "linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 30%), #2a2a2a" }}
+            >
+              <div className="flex items-start justify-between p-3">
+                <div className="flex items-center rounded-full bg-[#00B259] px-2.5 py-2 backdrop-blur-[12px]">
+                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-white">92% match</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {platforms.map((p) => (
+                    <div key={p} className="flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+                      <PlatformIcon platform={p} size={16} className="text-white [&_path]:fill-white" />
+                    </div>
+                  ))}
+                  <div className="flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-2 backdrop-blur-[12px] text-white [&_svg]:text-white [&_path]:fill-white [&_path]:stroke-white">
+                    <CategoryIcon category={category} />
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-white capitalize">{category}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Content */}
+          <div className="flex flex-col gap-3 px-5 py-3 pb-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="size-6 rounded-full bg-foreground/10" />
+                <div className="flex items-center gap-1.5">
+                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{brandName}</span>
+                  <img src="/icons/verified-check.svg" alt="Verified" width={14} height={14} />
+                  <span className="font-inter text-sm tracking-[-0.02em] text-foreground/20">·</span>
+                  <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">5d</span>
+                </div>
+              </div>
+              <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
+                {configuration.requireApplication ? "Application required" : "Open to all"}
+              </span>
+            </div>
+            <span className="font-inter text-base font-medium tracking-[-0.02em] text-page-text">{campaignName}</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-card-bg px-2.5 py-2">
+                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">121,4K</span>
+                </div>
+                <div className="flex items-center gap-[1px] rounded-full bg-[rgba(59,130,246,0.1)] px-2.5 py-2">
+                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#3B82F6]">${configuration.rewardPer1000Views || "1.50"}</span>
+                  <span className="font-inter text-sm tracking-[-0.02em] text-[rgba(59,130,246,0.7)]">/1K</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-[1px]">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">$8,677</span>
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text-subtle">/</span>
+                <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">${configuration.budget || "37,500"}</span>
+              </div>
+            </div>
+            <div className="h-1 w-full rounded-full bg-foreground/[0.06]">
+              <div className="h-1 w-[58%] rounded-full" style={{ background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, #FF3FD5 0%, rgba(255, 63, 213, 0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, #FF9025 0%, rgba(255, 144, 37, 0) 100%), var(--foreground)" }} />
+            </div>
+          </div>
+        </Card>
       </div>
 
-      {/* Right — campaign summary */}
-      <div className="flex flex-1 flex-col justify-center min-h-0">
+      {/* Campaign summary */}
+      <div className="flex flex-col">
         <div className="flex flex-col gap-2">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Campaign summary</span>
           <Card className="p-5">

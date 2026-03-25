@@ -25,7 +25,7 @@ function SectionLabel({ title, description }: { title: string; description?: str
 }
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]", className)}>{children}</div>;
+  return <div className={cn("rounded-2xl border border-foreground/[0.06] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]", className)}>{children}</div>;
 }
 
 const TOOLBAR = [
@@ -64,11 +64,11 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
           <div className="flex flex-col gap-4">
             {/* Stats row */}
             <div className="flex gap-2">
-              <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3">
+              <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">15,812</span>
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Total clippers</span>
               </div>
-              <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3">
+              <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">7,418</span>
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active (30d)</span>
               </div>
@@ -129,7 +129,7 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
       {/* 3. Invite creators */}
       <div className="flex flex-col gap-2">
         <SectionLabel title="Invite creators" description="Invite specific creators directly by their handle." />
-        <div className="flex flex-col gap-4 rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6">
+        <div className="flex flex-col gap-4 rounded-[20px] border border-foreground/[0.06] bg-card-bg p-6 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
           {/* Input */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Creator&apos;s username</span>
@@ -157,7 +157,7 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
                 <div
                   key={i}
                   className="flex h-9 items-center gap-1.5 rounded-full border border-[rgba(255,144,37,0.3)] px-2.5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)]"
-                  style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--card-bg)" }}
+                  style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" }}
                 >
                   <div className="size-4 rounded-full bg-foreground/10" />
                   <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{handle}</span>

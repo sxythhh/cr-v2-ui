@@ -1708,19 +1708,22 @@ function StatMiniCard({
   label,
   valueColor,
   variant = "filled",
+  className,
 }: {
   value: string;
   label: string;
   valueColor?: string;
   variant?: "filled" | "outlined";
+  className?: string;
 }) {
   return (
     <div
       className={cn(
-        "flex flex-1 flex-col justify-center gap-2 rounded-2xl p-3",
+        "flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-2xl p-3",
         variant === "filled"
           ? "bg-foreground/[0.04]"
           : "border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none",
+        className,
       )}
     >
       <span
@@ -1759,7 +1762,7 @@ function MetricPill({
       onClick={onClick}
       className={cn(
         "flex h-6 cursor-pointer items-center gap-1 rounded-full border py-2 pr-2 pl-1 transition-colors",
-        active ? "border-transparent" : "border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none",
+        active ? "border-transparent" : "border-[rgba(224,224,224,0.03)] bg-[rgba(224,224,224,0.03)] shadow-[0_1px_2px_rgba(0,0,0,0.03)]",
       )}
       style={{ backgroundColor: active ? bg : undefined }}
     >
@@ -2028,7 +2031,7 @@ function AIReviewPanel({ submission, scoreColor, onAction }: { submission: Submi
           onClick={() => onAction?.("reject")}
           className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
         >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg>
           <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
             Reject
           </span>
@@ -2423,9 +2426,9 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
 
         {/* Tab content */}
         {mobileTab === "Overview" && (
-          <div className="flex min-h-0">
+          <div className="flex" style={{ height: 328 }}>
             {/* Video preview — cropped/zoomed */}
-            <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210, height: 328 }}>
+            <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210 }}>
               <div className="h-full overflow-hidden rounded-xl">
                 <VideoPlayer
                   src={submission.videoUrl}
@@ -2435,7 +2438,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
               </div>
             </div>
             {/* Stats sidebar */}
-            <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-3">
+            <div className="flex flex-1 flex-col gap-2 p-3">
               <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
               <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
               <StatMiniCard
@@ -2444,7 +2447,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 valueColor={submission.botScoreColor}
                 variant="outlined"
               />
-              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
+              <div className="flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top country</span>
                 <div className="flex items-center gap-1.5">
                   <img
@@ -2457,7 +2460,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
+              <div className="flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top age</span>
                 <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                   {submission.topAge}
@@ -2499,7 +2502,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
         )}
 
         {mobileTab === "AI Quality" && !aiSummaryHidden && (
-          <div className="p-3">
+          <div className="p-3 [&>div]:!w-full [&>div]:!border-l-0">
             <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
           </div>
         )}
@@ -2510,7 +2513,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
             onClick={() => onAction?.("reject")}
             className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors"
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg>
             <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
               Reject
             </span>
@@ -2580,7 +2583,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 onClick={() => onAction?.("reject")}
                 className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#FB7185"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" strokeWidth="1.25" strokeLinecap="round"/></svg>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg>
                 <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
                   Reject
                 </span>

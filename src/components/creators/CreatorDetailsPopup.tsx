@@ -208,7 +208,7 @@ function MetricPill({
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="8" r="6" stroke={active ? color : "currentColor"} strokeWidth="1.5" fill={active ? color : "none"} className={active ? "" : "opacity-30"} />
         {active && (
-          <path d="M5.5 8L7.2 9.7L10.5 6.3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M5.5 8L7.2 9.7L10.5 6.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white dark:text-[#161616]" />
         )}
       </svg>
       <span className="flex items-center gap-1.5">
