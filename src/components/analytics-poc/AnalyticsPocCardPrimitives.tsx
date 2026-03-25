@@ -100,7 +100,7 @@ export function AnalyticsPocCardHeader({
           {icon ? (
             <span
               className={cn(
-                "relative inline-flex size-4 shrink-0 items-center justify-center",
+                "relative inline-flex size-4 shrink-0 items-center justify-center overflow-visible",
                 ANALYTICS_POC_CARD_HEADING_ICON_COLOR_CLASS,
                 iconClassName,
               )}

@@ -274,19 +274,6 @@ export function AnalyticsPocTopPostsTable({
             <GlassTooltip text={headerTooltipText} />
           )}
         </div>
-
-        <AnalyticsPocToggleGroup
-          value={mode}
-          onValueChange={(v) => {
-            const next = v as "top" | "bottom";
-            setMode(next);
-            setSortDirection(next === "top" ? "desc" : "asc");
-            setPage(1);
-          }}
-        >
-          <AnalyticsPocToggleGroupItem value="top">Top</AnalyticsPocToggleGroupItem>
-          <AnalyticsPocToggleGroupItem value="bottom">Bottom</AnalyticsPocToggleGroupItem>
-        </AnalyticsPocToggleGroup>
       </div>
 
       {/* Mobile: card layout */}

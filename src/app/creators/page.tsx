@@ -743,11 +743,14 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 export default function CreatorsPage() {
   const [activeNavTab, setActiveNavTab] = useState(0);
   const newContractRef = useRef<(() => void) | null>(null);
+  const quickReviewRef = useRef<(() => void) | null>(null);
+  const scoresRef = useRef<(() => void) | null>(null);
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [sortKey, setSortKey] = useState<ColumnKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [dubActiveFilters, setDubActiveFilters] = useState<ActiveFilter[]>([]);
   const [scoresOpen, setScoresOpen] = useState(false);
+  scoresRef.current = () => setScoresOpen(true);
   const [selectedCreator, setSelectedCreator] = useState<CreatorDetailsData | null>(null);
 
   const handleFilterSelect = useCallback((key: string, value: string | string[]) => {
@@ -788,13 +791,13 @@ export default function CreatorsPage() {
         </div>
 
         {/* Right actions */}
-        <div className="hidden shrink-0 items-center gap-2 md:flex">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={() => setScoresOpen(true)}
-            className="flex h-9 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent"
+            className="flex h-9 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full px-2 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent md:px-4"
           >
-            Understanding scores &amp; matches
+            <span className="hidden md:inline">Understanding scores &amp; matches</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" />
               <path d="M6.5 6.5C6.5 5.67 7.17 5 8 5C8.83 5 9.5 5.67 9.5 6.5C9.5 7.17 9.01 7.73 8.37 7.93C8.16 8 8 8.17 8 8.39V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -803,7 +806,7 @@ export default function CreatorsPage() {
           </button>
 
           {activeNavTab === 2 ? (
-            <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+            <button onClick={() => quickReviewRef.current?.()} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
               <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.16422 1.70985e-10C9.7987 -1.85163e-05 12.3579 1.51488 14.0687 4.38875C14.415 4.97056 14.415 5.69604 14.0687 6.27785C12.3579 9.15171 9.79871 10.6666 7.16423 10.6667C4.52975 10.6667 1.97052 9.15178 0.259753 6.27792C-0.0865845 5.69611 -0.0865842 4.97063 0.259753 4.38882C1.97051 1.51495 4.52975 1.8518e-05 7.16422 1.70985e-10ZM4.83089 5.33333C4.83089 4.04467 5.87556 3 7.16423 3C8.45289 3 9.49756 4.04467 9.49756 5.33333C9.49756 6.622 8.45289 7.66667 7.16423 7.66667C5.87556 7.66667 4.83089 6.622 4.83089 5.33333Z" fill="currentColor"/></svg>
               Quick review
             </button>
@@ -827,7 +830,7 @@ export default function CreatorsPage() {
       {activeNavTab === 1 ? (
         <AnalyticsPocCreatorInsightsTab />
       ) : activeNavTab === 2 ? (
-        <ApplicationsContent />
+        <ApplicationsContent onQuickReviewRef={quickReviewRef} onScoresRef={scoresRef} />
       ) : activeNavTab === 3 ? (
         <ContractsContent onNewContractRef={newContractRef} />
       ) : activeNavTab === 4 ? (

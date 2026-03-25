@@ -206,6 +206,7 @@ function ClawbackView({
   const [selectedReason, setSelectedReason] = useState<string>("Deleted video");
   const [note, setNote] = useState("");
   const [banUsers, setBanUsers] = useState(false);
+  const [sendToCR, setSendToCR] = useState(false);
 
   return (
     <>
@@ -234,10 +235,10 @@ function ClawbackView({
         </span>
 
         {/* Selected payouts card */}
-        <div className="flex w-full flex-col gap-3 rounded-2xl bg-foreground/[0.02] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-foreground/[0.04]">
+        <div className="flex w-full flex-col gap-3 rounded-2xl bg-[#FBFBFB] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
-              Selected Payouts
+              Selected payouts
             </span>
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
               {row.estPayout}
@@ -253,10 +254,10 @@ function ClawbackView({
             ].map((item) => (
               <div
                 key={item.name}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg px-3 py-4"
+                className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white px-3 py-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
               >
                 <div
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-medium text-white"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium text-white"
                   style={{ backgroundColor: AVATAR_COLORS[item.name.length % AVATAR_COLORS.length] }}
                 >
                   {item.name[0]}
@@ -278,7 +279,7 @@ function ClawbackView({
         </div>
 
         {/* Reason for selection */}
-        <div className="flex w-full flex-col gap-2 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="flex w-full flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
           <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
             Reason for selected
           </span>
@@ -292,13 +293,35 @@ function ClawbackView({
                   "flex cursor-pointer items-center justify-center rounded-full border px-3 py-2 font-inter text-xs font-medium tracking-[-0.02em] shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors",
                   selectedReason === reason
                     ? "border-foreground text-page-text"
-                    : "border-border bg-card-bg text-foreground/70 hover:border-foreground/20",
+                    : "border-foreground/[0.06] bg-white text-foreground/70 hover:border-foreground/20 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg",
                 )}
               >
                 {reason}
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Ban selected users toggle */}
+        <div className="flex w-full items-center justify-between rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+          <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
+            Ban selected users
+          </span>
+          <button
+            type="button"
+            onClick={() => setBanUsers(!banUsers)}
+            className={cn(
+              "relative flex h-5 w-10 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors",
+              banUsers ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]",
+            )}
+          >
+            <div
+              className={cn(
+                "size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform",
+                banUsers ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]",
+              )}
+            />
+          </button>
         </div>
 
         {/* Internal note */}
@@ -310,31 +333,19 @@ function ClawbackView({
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Add context for your team..."
-            className="h-[74px] w-full resize-none rounded-xl border border-border bg-card-bg p-4 font-inter text-xs tracking-[-0.02em] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] outline-none placeholder:text-foreground/30"
+            className="h-[74px] w-full resize-none rounded-xl border border-foreground/[0.06] bg-white p-4 font-inter text-xs tracking-[-0.02em] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] outline-none placeholder:text-foreground/30 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
           />
         </div>
 
-        {/* Ban toggle */}
-        <div className="flex w-full items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(255,37,37,0.06)] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-          <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
-            Ban selected users
+        {/* Send to CR team checkbox */}
+        <label className="flex w-full cursor-pointer items-center gap-2" onClick={() => setSendToCR((v) => !v)}>
+          <div className={cn("flex size-4 items-center justify-center rounded border transition-colors", sendToCR ? "border-foreground bg-foreground dark:border-[#E0E0E0] dark:bg-[#E0E0E0]" : "border-foreground/[0.12] bg-white shadow-[0px_0.457px_0.914px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]")}>
+            {sendToCR && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="dark:stroke-[#161616]" /></svg>}
+          </div>
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text">
+            Send clawback to Content Rewards team
           </span>
-          <button
-            type="button"
-            onClick={() => setBanUsers(!banUsers)}
-            className={cn(
-              "relative flex h-5 w-10 cursor-pointer items-center rounded-full p-0.5 transition-colors",
-              banUsers ? "bg-[#FF3355]" : "bg-foreground/[0.12]",
-            )}
-          >
-            <div
-              className={cn(
-                "size-4 rounded-full bg-white shadow-sm transition-transform",
-                banUsers ? "translate-x-5" : "translate-x-0",
-              )}
-            />
-          </button>
-        </div>
+        </label>
 
         {/* Info text */}
         <p className="text-center font-inter text-xs leading-[1.4] tracking-[-0.02em] text-foreground/70">

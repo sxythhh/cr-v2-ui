@@ -619,7 +619,16 @@ function OnboardingView({
   onSkip: () => void;
 }) {
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-2 self-stretch overflow-y-auto p-4 sm:px-8 sm:py-4">
+    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto">
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex h-14 w-full shrink-0 items-center justify-between border-b border-foreground/[0.06] bg-page-bg px-5">
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
+        <button type="button" onClick={onSkip} className="cursor-pointer font-inter text-sm font-medium tracking-[-0.02em] text-foreground/50 transition-colors hover:text-foreground/70">
+          Skip onboarding
+        </button>
+      </div>
+
+      <div className="relative flex min-h-0 flex-1 flex-col items-start gap-2 self-stretch p-4 sm:px-8 sm:py-4">
       {/* Radial gradient background with noise to prevent banding */}
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -716,17 +725,8 @@ function OnboardingView({
             })}
           </motion.div>
 
-          {/* Skip button */}
-          <motion.button
-            onClick={onSkip}
-            className="mt-4 cursor-pointer text-sm tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            I&apos;ll do this later
-          </motion.button>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -760,7 +760,7 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         </button>
         {/* Hero */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#fff]">
+          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#191919]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M3 5V9H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M3.51172 15C4.74723 18.4956 8.08094 21 11.9996 21C16.9702 21 20.9996 16.9706 20.9996 12C20.9996 7.02944 16.9702 3 11.9996 3C8.27045 3 5.07102 5.26806 3.70551 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -887,7 +887,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       {!success ? (
         <>
           {/* Header */}
-          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3 dark:border-[rgba(224,224,224,0.03)]">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Top up campaign</span>
           </div>
 
@@ -960,7 +960,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <button
               type="button"
               onClick={handleClose}
-              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06]px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
             >
               Cancel
             </button>
@@ -968,10 +968,10 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               type="button"
               onClick={handleDeposit}
               className={cn(
-                "flex h-10 cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors",
+                "flex h-10 cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors dark:text-[#111111]",
                 numericAmount > 0
-                  ? "bg-foreground hover:bg-foreground/90"
-                  : "bg-foreground/60 cursor-not-allowed",
+                  ? "bg-foreground hover:bg-foreground/90 dark:bg-white dark:hover:bg-white/90"
+                  : "bg-foreground/60 cursor-not-allowed dark:bg-white/60",
               )}
               disabled={numericAmount <= 0}
             >
@@ -982,7 +982,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       ) : (
         <>
           {/* Success header */}
-          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+          <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3 dark:border-[rgba(224,224,224,0.03)]">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Top up campaign</span>
           </div>
 
@@ -1555,7 +1555,6 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
 export default function Home() {
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [skipped, setSkipped] = useState(false);
-  const [hasCampaign, setHasCampaign] = useState(false);
 
   const onToggle = useCallback((key: string) => {
     setCompleted((prev) => ({ ...prev, [key]: true }));
@@ -1566,7 +1565,7 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn(showOnboarding || !hasCampaign ? "flex h-full flex-col" : "")}>
+    <div className={cn(showOnboarding ? "flex h-full flex-col" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div
@@ -1584,21 +1583,6 @@ export default function Home() {
               onToggle={onToggle}
               onSkip={() => setSkipped(true)}
             />
-          </motion.div>
-        ) : !hasCampaign ? (
-          <motion.div
-            key="empty"
-            className="flex min-h-0 flex-1 flex-col"
-            style={{ willChange: "transform, opacity" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{
-              opacity: 0,
-              x: -30,
-              transition: { duration: 0.2, ease: EASE_OUT },
-            }}
-          >
-            <EmptyHomeState onNewCampaign={() => setHasCampaign(true)} />
           </motion.div>
         ) : (
           <motion.div

@@ -722,7 +722,7 @@ function ApplicationSegmentedTabs({ activeFilter, onSelect }: { activeFilter: nu
 function ApplicationCard({ app, onClick }: { app: Application; onClick: () => void }) {
   return (
     <div
-      className="flex cursor-pointer flex-col rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-[border-color,box-shadow] duration-200 hover:border-foreground/[0.12] hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+      className="flex cursor-pointer flex-col rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
       onClick={onClick}
     >
       {/* Header */}
@@ -845,7 +845,7 @@ function ApplicationCard({ app, onClick }: { app: Application; onClick: () => vo
 
 // ── Page ─────────────────────────────────────────────────────────────
 
-export function ApplicationsContent() {
+export function ApplicationsContent({ onQuickReviewRef, onScoresRef }: { onQuickReviewRef?: React.MutableRefObject<(() => void) | null>; onScoresRef?: React.MutableRefObject<(() => void) | null> } = {}) {
   const [selectedAppId, setSelectedAppId] = useState<number | null>(null);
   const selectedApp = selectedAppId !== null ? APPLICATIONS.find((a) => a.id === selectedAppId) ?? null : null;
   const [quickReviewOpen, setQuickReviewOpen] = useState(false);
@@ -853,10 +853,11 @@ export function ApplicationsContent() {
   const pendingApps = APPLICATIONS; // all apps for quick review
   const currentReviewApp = pendingApps[quickReviewIndex] ?? null;
 
-  const gridContainerRef = useRef<HTMLDivElement>(null);
-  const { activeIndex, itemRects, sessionRef, handlers, registerItem, measureItems } = useProximityHover(gridContainerRef);
-  useEffect(() => { measureItems(); }, [measureItems]);
-  const activeRect = activeIndex !== null ? itemRects[activeIndex] : null;
+  // Expose quick review opener to parent via ref
+  if (onQuickReviewRef) {
+    onQuickReviewRef.current = () => { setQuickReviewIndex(0); setQuickReviewOpen(true); };
+  }
+
   const [activeFilter, setActiveFilter] = useState(0);
   const [filterPills, setFilterPills] = useState<string[]>(["Retainer"]);
 
@@ -866,11 +867,11 @@ export function ApplicationsContent() {
       <div className="flex flex-col gap-2 px-4 pt-4 sm:gap-4 sm:px-5">
         {/* Understanding + Quick review — mobile only */}
         <div className="flex items-center justify-between sm:hidden">
-          <button type="button" className="flex cursor-pointer items-center gap-1.5 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+          <button type="button" onClick={() => onScoresRef?.current?.()} className="flex cursor-pointer items-center gap-1.5 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
             Understanding scores &amp; matches
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" /><path d="M6.5 6.5C6.5 5.67 7.17 5 8 5C8.83 5 9.5 5.67 9.5 6.5C9.5 7.17 9.01 7.73 8.37 7.93C8.16 8 8 8.17 8 8.39V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><circle cx="8" cy="11" r="0.75" fill="currentColor" /></svg>
           </button>
-          <button type="button" className="flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.03] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]">
+          <button type="button" onClick={() => { setQuickReviewIndex(0); setQuickReviewOpen(true); }} className="flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.03] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]">
             <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.16422 1.70985e-10C9.7987 -1.85163e-05 12.3579 1.51488 14.0687 4.38875C14.415 4.97056 14.415 5.69604 14.0687 6.27785C12.3579 9.15171 9.79871 10.6666 7.16423 10.6667C4.52975 10.6667 1.97052 9.15178 0.259753 6.27792C-0.0865845 5.69611 -0.0865842 4.97063 0.259753 4.38882C1.97051 1.51495 4.52975 1.8518e-05 7.16422 1.70985e-10ZM4.83089 5.33333C4.83089 4.04467 5.87556 3 7.16423 3C8.45289 3 9.49756 4.04467 9.49756 5.33333C9.49756 6.622 8.45289 7.66667 7.16423 7.66667C5.87556 7.66667 4.83089 6.622 4.83089 5.33333Z" fill="currentColor"/></svg>
             Quick review
           </button>
@@ -882,7 +883,7 @@ export function ApplicationsContent() {
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.03] px-2.5 dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none sm:border sm:border-foreground/[0.06] sm:bg-white sm:dark:bg-card-bg">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
                 <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
@@ -911,12 +912,10 @@ export function ApplicationsContent() {
               }}
               searchPlaceholder="Filter..."
             >
-              <div className={cn("flex cursor-pointer items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-[rgba(224,224,224,0.03)]", filterPills.length > 0 && "pr-3")}>
-                <div className="flex size-9 items-center justify-center rounded-xl">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
-                  </svg>
-                </div>
+              <div className={cn("flex cursor-pointer items-center gap-1 rounded-xl bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]", filterPills.length > 0 ? "h-9 pl-2.5 pr-2.5" : "size-9 justify-center")}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
+                </svg>
                 {filterPills.length > 0 && (
                   <div className="flex size-3.5 items-center justify-center rounded-full bg-[#FB7185]">
                     <span className="font-inter text-[10px] font-semibold leading-none tracking-[-0.02em] text-white">{filterPills.length}</span>
@@ -955,31 +954,13 @@ export function ApplicationsContent() {
 
       {/* Content */}
       <div className="px-4 pb-6 pt-4 sm:px-5">
-        <div
-          ref={gridContainerRef}
-          onMouseMove={handlers.onMouseMove}
-          onMouseEnter={handlers.onMouseEnter}
-          onMouseLeave={handlers.onMouseLeave}
-          className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          <AnimatePresence>
-            {activeRect && (
-              <motion.div
-                className="pointer-events-none absolute z-0 rounded-2xl bg-accent"
-                initial={{ left: activeRect.left, width: activeRect.width, top: activeRect.top, height: activeRect.height, opacity: 0 }}
-                animate={{ left: activeRect.left, width: activeRect.width, top: activeRect.top, height: activeRect.height, opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                transition={{ ...springs.moderate, opacity: { duration: 0.15 } }}
-              />
-            )}
-          </AnimatePresence>
-          {APPLICATIONS.map((app, i) => (
-            <div key={app.id} ref={(el) => registerItem(i, el)} className="relative z-10">
-              <ApplicationCard
-                app={app}
-                onClick={() => setSelectedAppId(app.id)}
-              />
-            </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {APPLICATIONS.map((app) => (
+            <ApplicationCard
+              key={app.id}
+              app={app}
+              onClick={() => setSelectedAppId(app.id)}
+            />
           ))}
         </div>
       </div>

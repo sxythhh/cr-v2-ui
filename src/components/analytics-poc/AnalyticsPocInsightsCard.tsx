@@ -186,12 +186,12 @@ export function AnalyticsPocInsightsCard({
                 aria-label="Go to previous insight"
                 className={cn(
                   ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-                  "flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground",
+                  "flex size-6 cursor-pointer items-center justify-center rounded-full text-foreground/50 transition-colors hover:bg-foreground/[0.06] hover:text-foreground",
                 )}
                 onClick={handlePreviousSlide}
                 type="button"
               >
-                <ChevronLeft className="size-4" />
+                <ChevronLeft className="size-3.5" />
               </button>
               <span className="font-inter text-sm tracking-[-0.02em] text-foreground">
                 {activeSlideIndex + 1}/{dots}
@@ -200,12 +200,12 @@ export function AnalyticsPocInsightsCard({
                 aria-label="Go to next insight"
                 className={cn(
                   ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-                  "flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground",
+                  "flex size-6 cursor-pointer items-center justify-center rounded-full text-foreground/50 transition-colors hover:bg-foreground/[0.06] hover:text-foreground",
                 )}
                 onClick={handleNextSlide}
                 type="button"
               >
-                <ChevronRight className="size-4" />
+                <ChevronRight className="size-3.5" />
               </button>
             </div>
           ) : null

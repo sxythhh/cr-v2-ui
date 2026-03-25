@@ -101,6 +101,16 @@ function ConnectedAccount({ name, detail, icon }: { name: string; detail: string
 
 function ProfileTab() {
   const [dirty, setDirty] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setAvatarUrl(url);
+    setDirty(true);
+  }, []);
 
   return (
     <div className="flex justify-center px-5 py-5">
@@ -109,8 +119,11 @@ function ProfileTab() {
         <div className={cardClass}>
           {/* Avatar + change photo */}
           <div className="flex items-center gap-4">
-            <div className="size-14 rounded-full bg-[rgba(37,37,37,0.08)] dark:bg-foreground/[0.08]" />
-            <button className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+            <div className="size-14 overflow-hidden rounded-full bg-[rgba(37,37,37,0.08)] dark:bg-foreground/[0.08]">
+              {avatarUrl && <img src={avatarUrl} alt="Avatar" className="size-full object-cover" />}
+            </div>
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+            <button type="button" onClick={() => fileInputRef.current?.click()} className="inline-flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
               Change photo
             </button>
           </div>
@@ -501,7 +514,7 @@ const BRANDS_DATA = [
   },
 ];
 
-function BrandCard({ brand }: { brand: (typeof BRANDS_DATA)[number] }) {
+function BrandCard({ brand, onEdit, onRemove }: { brand: (typeof BRANDS_DATA)[number]; onEdit: () => void; onRemove: () => void }) {
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
       {/* Header */}
@@ -514,10 +527,10 @@ function BrandCard({ brand }: { brand: (typeof BRANDS_DATA)[number] }) {
           <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">{brand.description}</span>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <button className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+          <button type="button" onClick={onEdit} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
             Edit
           </button>
-          <button className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
+          <button type="button" onClick={onRemove} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
             Remove
           </button>
         </div>
@@ -564,6 +577,11 @@ function BrandCard({ brand }: { brand: (typeof BRANDS_DATA)[number] }) {
 }
 
 function BrandsTab() {
+  const [editBrandIndex, setEditBrandIndex] = useState<number | null>(null);
+  const [removeBrandIndex, setRemoveBrandIndex] = useState<number | null>(null);
+  const editBrand = editBrandIndex !== null ? BRANDS_DATA[editBrandIndex] : null;
+  const removeBrand = removeBrandIndex !== null ? BRANDS_DATA[removeBrandIndex] : null;
+
   return (
     <div className="flex flex-col items-center gap-4 px-5 py-5">
       {/* Header row */}
@@ -585,9 +603,44 @@ function BrandsTab() {
       {/* Brand cards */}
       <div className="flex w-full max-w-[1028px] flex-col gap-2">
         {BRANDS_DATA.map((brand, i) => (
-          <BrandCard key={i} brand={brand} />
+          <BrandCard key={i} brand={brand} onEdit={() => setEditBrandIndex(i)} onRemove={() => setRemoveBrandIndex(i)} />
         ))}
       </div>
+
+      {/* Edit Brand Modal */}
+      <Modal open={editBrandIndex !== null} onClose={() => setEditBrandIndex(null)}>
+        <div className="flex flex-col gap-5 p-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Edit Brand</span>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Brand name</span>
+              <input className="h-[38px] rounded-xl border border-foreground/[0.06] bg-card-bg px-3 font-inter text-xs tracking-[-0.02em] text-page-text outline-none dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]" defaultValue={editBrand?.name ?? ""} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Description</span>
+              <input className="h-[38px] rounded-xl border border-foreground/[0.06] bg-card-bg px-3 font-inter text-xs tracking-[-0.02em] text-page-text outline-none dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]" defaultValue={editBrand?.description ?? ""} />
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            <button type="button" onClick={() => setEditBrandIndex(null)} className="flex h-10 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">Cancel</button>
+            <button type="button" onClick={() => setEditBrandIndex(null)} className="flex h-10 cursor-pointer items-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:bg-white dark:text-[#111111] dark:hover:bg-white/90">Save</button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Remove Brand Confirmation */}
+      <Modal open={removeBrandIndex !== null} onClose={() => setRemoveBrandIndex(null)} size="sm">
+        <div className="flex flex-col gap-5 p-5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Remove Brand</span>
+          <p className="font-inter text-xs leading-[1.5] tracking-[-0.02em] text-foreground/70">
+            Are you sure you want to remove <strong className="text-page-text">{removeBrand?.name}</strong>? This will unlink all associated campaigns and creators.
+          </p>
+          <div className="flex items-center justify-end gap-2">
+            <button type="button" onClick={() => setRemoveBrandIndex(null)} className="flex h-10 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">Cancel</button>
+            <button type="button" onClick={() => setRemoveBrandIndex(null)} className="flex h-10 cursor-pointer items-center rounded-full bg-[#FB7185] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#FB7185]/90">Remove</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

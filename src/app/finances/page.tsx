@@ -1089,8 +1089,31 @@ function FinanceOverview() {
   );
 }
 
+function FinanceEmptyState() {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-20">
+      <div className="flex size-14 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_0_0_2px_#fff] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-[0_0_0_2px_#191919]">
+        <svg width="18" height="20" viewBox="0 0 18 20" fill="none" className="text-foreground/70">
+          <path d="M11.5634 11.5799C11.6 11.2593 11.4292 10.9316 11.1078 10.9024C11.102 10.9019 11.0961 10.9014 11.0903 10.9009L6.19669 10.5131C5.65686 10.4704 5.11351 10.5323 4.5996 10.6952L0.697834 11.932C0.28233 12.0637 0 12.4494 0 12.8852V18.0199C0 18.5721 0.447715 19.0199 1 19.0199H1.83831L1.85056 19.0237C1.95989 19.0574 2.11685 19.1047 2.31199 19.1604C2.70161 19.2716 3.24688 19.4174 3.87145 19.5561C5.09069 19.8267 6.72522 20.0966 8.0994 19.9661C9.56966 19.8264 11.3876 19.1358 12.958 18.4236C14.5608 17.6966 16.0337 16.8864 16.8515 16.4189C17.5815 16.0016 18 15.2562 18 14.472C18 12.9261 16.557 12.5558 15 13L12.5 13.75C11.5 15 10.9507 15.3157 9.37508 15.6528L8.11706 15.922C7.73686 16.0033 7.36136 15.7659 7.27184 15.3875C7.17955 14.9975 7.42596 14.6078 7.81793 14.5239L9.04581 14.2612C10.4015 13.9711 11.4132 12.8936 11.5634 11.5799Z" fill="currentColor"/>
+          <path d="M15 5.5C15 7.433 13.433 9 11.5 9C9.567 9 8 7.433 8 5.5C8 3.567 9.567 2 11.5 2C13.433 2 15 3.567 15 5.5Z" fill="currentColor"/>
+          <path d="M6.20355 6.98762C6.07093 6.51447 6 6.01551 6 5.5C6 3.48869 7.07963 1.72953 8.69097 0.770439C8.09124 0.288427 7.3293 0 6.5 0C4.567 0 3 1.567 3 3.5C3 5.33315 4.4093 6.83714 6.20355 6.98762Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div className="flex flex-col items-center gap-1.5">
+        <h2 className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">
+          No withdrawals yet
+        </h2>
+        <p className="max-w-[411px] text-center font-inter text-base leading-[150%] tracking-[-0.02em] text-foreground/70">
+          When you withdraw money from Content Rewards, it will be displayed here.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function BillingPage() {
   const [activeTab, setActiveTab] = useState<typeof TABS[number]>("Overview");
+  const [hasData] = useState(true);
 
   return (
     <PageShell
@@ -1098,20 +1121,26 @@ export default function BillingPage() {
       actions={<FinanceHeader activeTab={activeTab} onTabChange={setActiveTab} />}
       fullWidthActions
     >
-      {activeTab === "Overview" && <FinanceOverview />}
+      {!hasData ? (
+        <FinanceEmptyState />
+      ) : (
+        <>
+          {activeTab === "Overview" && <FinanceOverview />}
 
-      {activeTab === "Campaigns" && (
-        <div className="flex flex-col gap-5">
-          {/* Whop Integration Card */}
-          <WhopIntegrationCard />
+          {activeTab === "Campaigns" && (
+            <div className="flex flex-col gap-5">
+              {/* Whop Integration Card */}
+              <WhopIntegrationCard />
 
-          {/* Campaigns Table */}
-          <CampaignsTable />
-        </div>
-      )}
+              {/* Campaigns Table */}
+              <CampaignsTable />
+            </div>
+          )}
 
-      {activeTab === "Invoices" && (
-        <InvoicesTab />
+          {activeTab === "Invoices" && (
+            <InvoicesTab />
+          )}
+        </>
       )}
     </PageShell>
   );

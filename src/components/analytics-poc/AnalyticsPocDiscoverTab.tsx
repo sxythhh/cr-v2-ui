@@ -19,7 +19,7 @@ function SparkleIcon({ className }: { className?: string }) {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
       <path
-        d="M8 1.33L9.79 5.79L14.67 6.21L10.93 9.41L12.04 14.17L8 11.73L3.96 14.17L5.07 9.41L1.33 6.21L6.21 5.79L8 1.33Z"
+        d="M8 1L9.79 6.21L15 8L9.79 9.79L8 15L6.21 9.79L1 8L6.21 6.21L8 1Z"
         fill="currentColor"
       />
     </svg>
@@ -364,7 +364,7 @@ export function AnalyticsPocDiscoverTab() {
           <div className="relative z-10 flex shrink-0 items-center gap-1.5">
             <button
               type="button"
-              className="cursor-pointer text-page-text-muted hover:text-page-text"
+              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
               onClick={() => setInsightIdx((i) => (i - 1 + INSIGHTS.length) % INSIGHTS.length)}
             >
               <ChevronLeftIcon />
@@ -372,7 +372,7 @@ export function AnalyticsPocDiscoverTab() {
             <span className="tabular-nums text-sm tracking-[-0.02em] text-page-text">{insightIdx + 1}/{INSIGHTS.length}</span>
             <button
               type="button"
-              className="cursor-pointer text-page-text-muted hover:text-page-text"
+              className="flex size-6 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
               onClick={() => setInsightIdx((i) => (i + 1) % INSIGHTS.length)}
             >
               <ChevronRightIcon />

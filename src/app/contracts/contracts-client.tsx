@@ -363,12 +363,25 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
   const [contractType, setContractType] = useState("CPM");
   const [duration, setDuration] = useState("3 months");
   const [showDurationDropdown, setShowDurationDropdown] = useState(false);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["TikTok", "YouTube"]);
+  const [exclusivity, setExclusivity] = useState(false);
+  const [contentUsageRights, setContentUsageRights] = useState(true);
+  const [selectedUsageRights, setSelectedUsageRights] = useState<string[]>(["Repost", "Paid ads"]);
+  const [licenseLength, setLicenseLength] = useState("6 months");
+  const [draftApproval, setDraftApproval] = useState(true);
+  const [leadTime, setLeadTime] = useState("14 days");
+  const [revisions, setRevisions] = useState("2");
+  const [earlyTermination, setEarlyTermination] = useState(true);
+  const [noticePeriod, setNoticePeriod] = useState("14 days");
+  const [payCompleted, setPayCompleted] = useState(true);
+  const [nda, setNda] = useState(false);
+  const [ftc, setFtc] = useState(false);
 
   return (
     <Modal open={open} onClose={onClose} showClose={false}>
       <div className="relative flex max-h-[90vh] flex-col">
         {/* Header */}
-        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5">
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5 dark:border-[rgba(224,224,224,0.03)]">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
             New Creator Contract
           </span>
@@ -391,7 +404,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
           </p>
 
           {/* Contract type */}
-          <div className="flex w-full flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="flex w-full flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
             <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
               Contract type
             </span>
@@ -406,8 +419,8 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
                     className={cn(
                       "flex h-7 cursor-pointer items-center justify-center rounded-full px-3 font-inter text-xs font-medium tracking-[-0.02em] transition-colors",
                       isSelected
-                        ? "border border-[#1A67E5] text-[#1A67E5]"
-                        : "border border-foreground/[0.06] bg-card-bg text-foreground/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.04]",
+                        ? "border border-[#1A67E5] text-[#1A67E5] dark:border-[#60A5FA] dark:text-[#60A5FA]"
+                        : "border border-foreground/[0.06] bg-card-bg text-foreground/70 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.04] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
                     )}
                   >
                     {type}
@@ -422,7 +435,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
             <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
               Creator
             </span>
-            <div className="flex h-[38px] items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="flex h-[38px] items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <span className="font-inter text-xs tracking-[-0.02em] text-foreground/30">
                 Select a creator...
               </span>
@@ -439,7 +452,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
               <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
                 Monthly rate
               </span>
-              <div className="flex h-[38px] items-center rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+              <div className="flex h-[38px] items-center rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                 <span className="font-inter text-xs tracking-[-0.02em] text-foreground/30">$</span>
                 <span className="ml-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text">2,000</span>
               </div>
@@ -453,7 +466,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
               <button
                 type="button"
                 onClick={() => setShowDurationDropdown(!showDurationDropdown)}
-                className="flex h-[38px] cursor-pointer items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                className="flex h-[38px] cursor-pointer items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
               >
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{duration}</span>
                 <span className="text-foreground/50">
@@ -461,7 +474,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
                 </span>
               </button>
               {showDurationDropdown && (
-                <div className="absolute left-0 top-full z-20 mt-1 w-full rounded-xl border border-foreground/[0.06] bg-card-bg py-1 shadow-lg">
+                <div className="absolute left-0 top-full z-20 mt-1 w-full rounded-xl border border-foreground/[0.06] bg-card-bg py-1 shadow-lg dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   {DURATION_OPTIONS.map((opt) => (
                     <button
                       key={opt}
@@ -483,40 +496,134 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
             </div>
           </div>
 
-          {/* Selected Payouts */}
-          <div className="flex w-full flex-col gap-3 rounded-2xl bg-foreground/[0.02] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-            <div className="flex items-center justify-between">
-              <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
-                Selected Payouts
-              </span>
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                $1,293.00
-              </span>
+          {/* Platforms */}
+          <div className="flex w-full flex-col gap-2">
+            <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Platforms</span>
+            <div className="flex flex-wrap gap-2">
+              {["TikTok", "YouTube", "Instagram", "X"].map((p) => {
+                const isOn = selectedPlatforms.includes(p);
+                return (
+                  <button key={p} type="button" onClick={() => setSelectedPlatforms((prev) => isOn ? prev.filter((x) => x !== p) : [...prev, p])} className={cn("flex h-7 cursor-pointer items-center rounded-full px-3 font-inter text-xs font-medium tracking-[-0.02em] transition-colors", isOn ? "border border-foreground text-page-text dark:border-[#E0E0E0]" : "border border-foreground/[0.06] text-foreground/70 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]")}>
+                    {p}
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex flex-col gap-2">
-              {MOCK_SELECTED_PAYOUTS.map((payout) => (
-                <div
-                  key={payout.name}
-                  className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg px-3 py-4"
-                >
-                  <img
-                    src={payout.avatar}
-                    alt=""
-                    className="size-6 shrink-0 rounded-full object-cover"
-                  />
-                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                    <span className="truncate font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
-                      {payout.name}
-                    </span>
-                    <span className="truncate font-inter text-xs tracking-[-0.02em] text-foreground/50">
-                      {payout.campaign}
-                    </span>
+          </div>
+
+          {/* Terms card */}
+          <div className="flex w-full flex-col rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            {/* Exclusivity */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid rgba(224, 224, 224, 0.03)" }}>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/70">Exclusivity</span>
+              <button type="button" onClick={() => setExclusivity((v) => !v)} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors", exclusivity ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+                <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", exclusivity ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
+              </button>
+            </div>
+
+            {/* Content Usage Rights */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingBottom: 16, borderBottom: "1px solid rgba(224, 224, 224, 0.03)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px 0" }}>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/70">Content Usage Rights</span>
+                <button type="button" onClick={() => setContentUsageRights((v) => !v)} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors", contentUsageRights ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+                  <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", contentUsageRights ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
+                </button>
+              </div>
+              {contentUsageRights && (
+                <>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "0 16px" }}>
+                    {["Repost", "Paid ads", "Website", "Email", "Print / OOH"].map((r) => {
+                      const isOn = selectedUsageRights.includes(r);
+                      return (
+                        <button key={r} type="button" onClick={() => setSelectedUsageRights((prev) => isOn ? prev.filter((x) => x !== r) : [...prev, r])} className={cn("flex h-7 cursor-pointer items-center rounded-full px-3 font-inter text-xs font-medium tracking-[-0.02em] transition-colors", isOn ? "border border-foreground text-page-text dark:border-[#E0E0E0]" : "border border-foreground/[0.06] text-foreground/70 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]")}>
+                          {r}
+                        </button>
+                      );
+                    })}
                   </div>
-                  <span className="shrink-0 font-inter text-xs font-medium tracking-[-0.02em] text-foreground/70">
-                    {payout.amount}
-                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "0 16px" }}>
+                    <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">License</span>
+                    <div className="flex h-[38px] w-32 items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{licenseLength}</span>
+                      <ChevronDownSmallIcon />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Draft Approval */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingBottom: 16, borderBottom: "1px solid rgba(224, 224, 224, 0.03)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px 0" }}>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/70">Draft Approval</span>
+                <button type="button" onClick={() => setDraftApproval((v) => !v)} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors", draftApproval ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+                  <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", draftApproval ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
+                </button>
+              </div>
+              {draftApproval && (
+                <div style={{ display: "flex", gap: 16, padding: "0 16px" }}>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Lead time</span>
+                    <div className="flex h-[38px] items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{leadTime}</span>
+                      <ChevronDownSmallIcon />
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Revisions</span>
+                    <div className="flex h-[38px] items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{revisions}</span>
+                      <ChevronDownSmallIcon />
+                    </div>
+                  </div>
                 </div>
-              ))}
+              )}
+            </div>
+
+            {/* Early Termination */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingBottom: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px 0" }}>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/70">Early Termination</span>
+                <button type="button" onClick={() => setEarlyTermination((v) => !v)} className={cn("flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors", earlyTermination ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]")}>
+                  <div className={cn("size-4 rounded-full shadow-[0px_4px_12px_rgba(0,0,0,0.12)] transition-transform", earlyTermination ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#E0E0E0]")} />
+                </button>
+              </div>
+              {earlyTermination && (
+                <div style={{ display: "flex", gap: 16, padding: "0 16px" }}>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Notice</span>
+                    <div className="flex h-[38px] items-center justify-between rounded-xl border border-foreground/[0.06] bg-card-bg px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{noticePeriod}</span>
+                      <ChevronDownSmallIcon />
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Pay completed</span>
+                    <div className="flex h-9 items-center gap-0.5 rounded-xl bg-foreground/[0.03] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
+                      <button type="button" onClick={() => setPayCompleted(true)} className={cn("flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] font-inter text-xs font-medium tracking-[-0.02em] transition-colors", payCompleted ? "bg-foreground/[0.03] text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)]" : "text-foreground/70")}>Yes</button>
+                      <button type="button" onClick={() => setPayCompleted(false)} className={cn("flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] font-inter text-xs font-medium tracking-[-0.02em] transition-colors", !payCompleted ? "bg-foreground/[0.03] text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)]" : "text-foreground/70")}>No</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Checkboxes */}
+            <div style={{ display: "flex", alignItems: "center", gap: 24, padding: "12px 16px", borderTop: "1px solid rgba(224, 224, 224, 0.03)" }}>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input type="checkbox" checked={nda} onChange={() => setNda((v) => !v)} className="hidden" />
+                <div className={cn("flex size-4 items-center justify-center rounded border transition-colors", nda ? "border-foreground bg-foreground dark:border-[#E0E0E0] dark:bg-[#E0E0E0]" : "border-foreground/[0.08] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]")}>
+                  {nda && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke={nda ? "#161616" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                </div>
+                <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">NDA / Confidentiality</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input type="checkbox" checked={ftc} onChange={() => setFtc((v) => !v)} className="hidden" />
+                <div className={cn("flex size-4 items-center justify-center rounded border transition-colors", ftc ? "border-foreground bg-foreground dark:border-[#E0E0E0] dark:bg-[#E0E0E0]" : "border-foreground/[0.08] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]")}>
+                  {ftc && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke={ftc ? "#161616" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                </div>
+                <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">FTC Disclosure (#ad)</span>
+              </label>
             </div>
           </div>
 
@@ -525,7 +632,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
             <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">
               Additional information (optional)
             </span>
-            <div className="rounded-xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="rounded-xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <textarea
                 className="w-full resize-none bg-transparent font-inter text-xs tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/30"
                 placeholder="Notes, brand guidelines, posting schedule, special requirements..."
@@ -536,7 +643,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Footer — fixed at bottom */}
-        <div className="flex shrink-0 items-center justify-between gap-4 bg-card-bg px-5 pb-5 pt-4">
+        <div className="flex shrink-0 items-center justify-between gap-4 bg-card-bg px-5 pb-5 pt-4 dark:bg-page-bg">
           <p className="max-w-[215px] font-inter text-[10px] leading-[1.4] tracking-[-0.02em] text-foreground/70">
             The creator will receive this contract for review. They can accept, request changes, or decline.
           </p>

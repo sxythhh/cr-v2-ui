@@ -3117,9 +3117,9 @@ export default function SubmissionsPage() {
           <button
             type="button"
             onClick={() => setScoresOpen(true)}
-            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent"
+            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-2 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent sm:px-4"
           >
-            Understanding scores &amp; matches
+            <span className="hidden sm:inline">Understanding scores &amp; matches</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" />
               <path d="M6.5 6.5C6.5 5.67 7.17 5 8 5C8.83 5 9.5 5.67 9.5 6.5C9.5 7.17 9.01 7.73 8.37 7.93C8.16 8 8 8.17 8 8.39V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

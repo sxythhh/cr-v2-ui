@@ -57,23 +57,37 @@ export function AnalyticsPocHeatmapCard({
     [toneColor],
   );
 
+  // Parse "Best 6 PM EST" into prefix + value
+  const badgeParts = badge.trim().split(/\s+/);
+  const badgePrefix = badgeParts[0] || "";
+  const badgeValue = badgeParts.slice(1).join(" ") || badge;
+
   return (
     <AnalyticsPocPanel className={cn(className)}>
-      <AnalyticsPocCardHeader
-        helperText={subtitle}
-        icon={
-          platform && showPlatformIcon ? (
+      <div className="flex flex-col gap-3 pb-2">
+        {/* Platform label row */}
+        <div className="flex items-center gap-1.5">
+          {platform && showPlatformIcon && (
             <AnalyticsPocPlatformIcon
-              className={ANALYTICS_POC_CARD_HEADING_ICON_COLOR_CLASS}
+              className="text-foreground/50"
               platform={platform}
               size={16}
               tone="inherit"
             />
-          ) : undefined
-        }
-        rightContent={<AnalyticsPocBestTimePill label={badge} />}
-        title={title}
-      />
+          )}
+          <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">{title}</span>
+        </div>
+        {/* Best time + subtitle */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-1">
+            <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">{badgePrefix}</span>
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{badgeValue}</span>
+          </div>
+          {subtitle && (
+            <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">{subtitle}</span>
+          )}
+        </div>
+      </div>
 
       <Heatmap
         data={heatmapData}

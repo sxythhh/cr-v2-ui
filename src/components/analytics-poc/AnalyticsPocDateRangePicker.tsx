@@ -23,6 +23,8 @@ interface AnalyticsPocDateRangePickerProps {
   onValueChange: (value: string) => void;
   presets?: AnalyticsPocDateRangePreset[];
   className?: string;
+  /** Compact 32x32 icon-only mode for mobile card headers */
+  compact?: boolean;
 }
 
 export function AnalyticsPocDateRangePicker({
@@ -30,6 +32,7 @@ export function AnalyticsPocDateRangePicker({
   onValueChange,
   presets = DEFAULT_PRESETS,
   className,
+  compact = false,
 }: AnalyticsPocDateRangePickerProps) {
   const selectedPreset = presets.find((p) => p.value === value);
   const displayLabel = selectedPreset?.label ?? "Select range";
@@ -64,26 +67,37 @@ export function AnalyticsPocDateRangePicker({
       hideSearch
       className={className}
     >
-      <button
-        className={cn(
-          "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-3.5",
-          "border border-foreground/[0.06] dark:border-border",
-          "bg-white dark:bg-card-bg",
-          "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
-          "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
-          "outline-none transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.08]",
-          "focus-visible:outline-none",
-        )}
-        type="button"
-      >
-        <CalendarIcon
-          className="shrink-0 text-page-text"
-          height={16}
-          width={16}
-        />
-        <span className="whitespace-nowrap">{displayLabel}</span>
-        <ChevronDown className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-data-[open]:rotate-180" />
-      </button>
+      {compact ? (
+        <button
+          className="flex size-8 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.06] outline-none transition-colors hover:bg-foreground/[0.10] focus-visible:outline-none dark:bg-[rgba(224,224,224,0.03)]"
+          type="button"
+        >
+          <svg width="9" height="10" viewBox="0 0 9 10" fill="none" className="text-page-text">
+            <path fillRule="evenodd" clipRule="evenodd" d="M2.5 0C2.77614 0 3 0.223858 3 0.5V1H6V0.5C6 0.223858 6.22386 0 6.5 0C6.77614 0 7 0.223858 7 0.5V1H7.5C8.32843 1 9 1.67157 9 2.5V8C9 8.82843 8.32843 9.5 7.5 9.5H1.5C0.671573 9.5 0 8.82843 0 8V2.5C0 1.67157 0.671573 1 1.5 1H2V0.5C2 0.223858 2.22386 0 2.5 0ZM1 4.5V8C1 8.27614 1.22386 8.5 1.5 8.5H7.5C7.77614 8.5 8 8.27614 8 8V4.5H1Z" fill="currentColor"/>
+          </svg>
+        </button>
+      ) : (
+        <button
+          className={cn(
+            "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-3.5",
+            "border border-foreground/[0.06] dark:border-border",
+            "bg-white dark:bg-card-bg",
+            "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+            "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
+            "outline-none transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.08]",
+            "focus-visible:outline-none",
+          )}
+          type="button"
+        >
+          <CalendarIcon
+            className="shrink-0 text-page-text"
+            height={16}
+            width={16}
+          />
+          <span className="whitespace-nowrap">{displayLabel}</span>
+          <ChevronDown className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-data-[open]:rotate-180" />
+        </button>
+      )}
     </FilterSelect>
   );
 }

@@ -324,11 +324,11 @@ function buildPerformanceSeriesLine({
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeOpacity={strokeOpacity}
-      strokeWidth={1.5}
+      strokeWidth={2}
       style={{
         transition: `stroke-opacity ${transitionDurationMs}ms ${HOVER_OPACITY_TRANSITION_EASING}`,
       }}
-      type="linear"
+      type="monotone"
       yAxisId={series.axis}
     />
   );

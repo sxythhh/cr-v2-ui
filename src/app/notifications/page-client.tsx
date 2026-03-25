@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
@@ -608,11 +608,18 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
 export default function NotificationsPageClient() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [prefsOpen, setPrefsOpen] = useState(false);
+  const [notifications, setNotifications] = useState(NOTIFICATIONS);
+
+  const markAllAsRead = useCallback(() => {
+    setNotifications((prev) =>
+      prev.map((n) => ({ ...n, unread: false, highlighted: false })),
+    );
+  }, []);
 
   const filtered =
     activeCategory === "all"
-      ? NOTIFICATIONS
-      : NOTIFICATIONS.filter((n) => n.type === activeCategory);
+      ? notifications
+      : notifications.filter((n) => n.type === activeCategory);
 
   return (
     <div className="flex h-full flex-col">
@@ -623,7 +630,7 @@ export default function NotificationsPageClient() {
         </span>
 
         <div className="flex items-center gap-2">
-          <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+          <button type="button" onClick={markAllAsRead} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
             <DoubleCheckIcon />
             <span className="hidden sm:inline">Mark all as read</span>
           </button>
