@@ -175,22 +175,15 @@ export function CampaignModelModal({
 
                       {/* Selection circle */}
                       <div
-                        className="absolute top-5 right-5 flex items-center justify-center size-6 sm:size-5 rounded-full transition-all z-10"
-                        style={{
-                          background: isSelected
-                            ? model.checkGradient
-                            : "#161616",
-                          border: isSelected
-                            ? "none"
-                            : "1px solid rgba(224,224,224,0.2)",
-                          boxShadow: isSelected
-                            ? "none"
-                            : "inset 0px 0.5px 2px rgba(0,0,0,0.12)",
-                        }}
+                        className={cn(
+                          "absolute top-5 right-5 z-10 flex size-6 items-center justify-center rounded-full transition-all sm:size-5",
+                          !isSelected && "border border-[rgba(37,37,37,0.1)] bg-white dark:border-[rgba(224,224,224,0.2)] dark:bg-[#161616]",
+                        )}
+                        style={isSelected ? { background: model.checkGradient } : undefined}
                       >
                         {isSelected && (
                           <IconCheck
-                            className="text-[#252525]"
+                            className="text-white"
                             size={14}
                             strokeWidth={2.5}
                           />

@@ -291,7 +291,7 @@ function NotificationRow({
   onToggle: () => void;
 }) {
   return (
-    <div className={cn(cardClass, "gap-2 p-4")}>
+    <div className={cn(cardClass, "cursor-pointer gap-2 p-4 transition-colors hover:bg-foreground/[0.02]")} onClick={onToggle}>
       <div className="flex items-center gap-3">
         <div className="flex flex-1 flex-col gap-1.5">
           <span className="font-inter text-[14px] font-medium leading-[1] tracking-[-0.02em] text-page-text">
@@ -763,26 +763,22 @@ function MemberTable({
   sessionRef?: React.RefObject<number>;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="overflow-visible rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       {/* Header row */}
-      <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
-        {columns.map((col, i) => (
-          <div
-            key={col.label}
-            className={cn(
-              "shrink-0 px-3 py-3",
-              col.hidden && "opacity-0",
-              i === 0 && "flex-1",
-              /* Hide non-first, non-last columns on mobile */
-              i > 0 && i < columns.length - 1 && "hidden md:block",
-            )}
-            style={i === 0 ? undefined : { width: col.width }}
-          >
+      <div className="hidden items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)] md:grid" style={{ gridTemplateColumns: "1fr 96px 104px 104px 96px" }}>
+        {columns.map((col) => (
+          <div key={col.label} className={cn("px-3 py-3", col.hidden && "opacity-0")}>
             <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">{col.label}</span>
           </div>
         ))}
       </div>
-      <div ref={containerRef} {...handlers} className="relative overflow-hidden">
+      {/* Mobile header */}
+      <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)] md:hidden">
+        <div className="flex-1 px-3 py-3">
+          <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Member</span>
+        </div>
+      </div>
+      <div ref={containerRef} {...handlers} className="relative overflow-visible">
         <AnimatePresence>
           {activeRect && sessionRef && (
             <motion.div
@@ -943,7 +939,7 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
           {/* Role */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Role</span>
-            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <div className="flex flex-col gap-2">
                 {INVITE_ROLES.map((role) => {
                   const isSelected = selectedRole === role.id;
@@ -955,8 +951,8 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
                       className={cn(
                         "flex items-center gap-3 rounded-2xl border p-4 text-left transition-colors",
                         isSelected
-                          ? "border-[rgba(251,146,60,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),rgba(224,224,224,0.03)]"
-                          : "border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.05]",
+                          ? "border-[rgba(251,146,60,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),#FFFFFF] dark:bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),rgba(224,224,224,0.03)]"
+                          : "border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-[rgba(224,224,224,0.05)]",
                       )}
                     >
                       <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -968,8 +964,8 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
                         "flex size-5 shrink-0 items-center justify-center rounded-full transition-colors",
                         isSelected
                           ? "bg-[#FB923C]"
-                          : "border border-foreground/20 bg-foreground/[0.03]",
-                      )} style={!isSelected ? { boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" } : undefined}>
+                          : "border border-[rgba(37,37,37,0.1)] bg-white dark:border-foreground/20 dark:bg-foreground/[0.03]",
+                      )} >
                         {isSelected && (
                           <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         )}
@@ -1100,7 +1096,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
           {/* Permissions */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Permissions</span>
-            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:p-5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:p-5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <div className="flex flex-col gap-2">
                 {ROLE_PERMISSIONS.map((row, ri) => (
                   <div key={ri} className="flex flex-col gap-2 sm:flex-row">
@@ -1114,19 +1110,19 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
                           className={cn(
                             "flex flex-1 items-center gap-2 rounded-[14px] border px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05]",
                             isChecked
-                              ? "border-[#FB923C] bg-foreground/[0.03] dark:border-[#FB923C] dark:bg-[rgba(224,224,224,0.03)]"
-                              : "border-foreground/[0.03] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
+                              ? "border-[#FB923C] bg-white dark:border-[#FB923C] dark:bg-[rgba(224,224,224,0.03)]"
+                              : "border-foreground/[0.06] bg-white dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
                           )}
                         >
                           {/* Checkbox */}
                           <div className={cn(
                             "flex size-5 shrink-0 items-center justify-center rounded-full transition-colors",
                             isChecked
-                              ? "bg-foreground dark:bg-[#E0E0E0]"
-                              : "border border-foreground/20 bg-foreground/[0.03]",
-                          )} style={!isChecked ? { boxShadow: "0px -1px 3px rgba(0,0,0,0.06), inset 0px 0.5px 2px rgba(0,0,0,0.12)" } : undefined}>
+                              ? "bg-[#FB923C]"
+                              : "border border-[rgba(37,37,37,0.1)] bg-white dark:border-foreground/20 dark:bg-foreground/[0.03]",
+                          )} >
                             {isChecked && (
-                              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="dark:stroke-[#161616]" /></svg>
+                              <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                             )}
                           </div>
                           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{perm}</span>
@@ -1233,47 +1229,72 @@ function TeamMemberRow({ member, index, registerItem, onRevoke, onBan, onRemove 
   return (
     <div
       ref={rowRef}
-      className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0"
+      className="relative z-10 border-b border-foreground/[0.03] px-1 last:border-b-0"
     >
-      <div className={cn("flex min-w-0 flex-1 items-center gap-2 px-3 py-3", member.status === "pending" && "opacity-60")}>
-        <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{member.name}</span>
-          <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
-        </div>
-      </div>
-      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "96px" }}>
-        <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span>
-      </div>
-      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
-        <StatusBadge status={member.status} />
-      </div>
-      {member.status === "pending" ? (
-        <div className="flex shrink-0 items-center justify-end gap-2 px-3 py-3 md:px-6" style={{ width: "auto" }}>
-          <button onClick={() => onRevoke(member.name)} className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
-            Revoke
-          </button>
-          <button className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
-            Resend
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
-            <span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span>
+      {/* Desktop: grid row */}
+      <div className="hidden items-center md:grid" style={{ gridTemplateColumns: "1fr 96px 104px 104px 96px" }}>
+        <div className={cn("flex min-w-0 items-center gap-2 px-3 py-3", member.status === "pending" && "opacity-60")}>
+          <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{member.name}</span>
+            <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
           </div>
-          <div className="flex shrink-0 items-center justify-end px-3 py-3 md:justify-center md:pl-5" style={{ width: "auto" }}>
-            {member.isYou ? (
-              <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">You</span>
-            ) : (
-              <MemberDropdown onAction={(action) => {
-                if (action === "ban") onBan(member.name);
-                if (action === "remove") onRemove(member.name);
-              }} />
+        </div>
+        <div className="px-3 py-3">
+          <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span>
+        </div>
+        <div className="px-3 py-3">
+          <StatusBadge status={member.status} />
+        </div>
+        {member.status === "pending" ? (
+          <div className="col-span-2 flex items-center justify-end gap-2 px-3 py-3">
+            <button onClick={() => onRevoke(member.name)} className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
+              Revoke
+            </button>
+            <button className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
+              Resend
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="px-3 py-3">
+              <span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span>
+            </div>
+            <div className="flex items-center justify-end px-3 py-3">
+              {member.isYou ? (
+                <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">You</span>
+              ) : (
+                <MemberDropdown onAction={(action) => {
+                  if (action === "ban") onBan(member.name);
+                  if (action === "remove") onRemove(member.name);
+                }} />
             )}
           </div>
         </>
       )}
+      </div>
+      {/* Mobile: simple row */}
+      <div className="flex items-center md:hidden">
+        <div className={cn("flex min-w-0 flex-1 items-center gap-2 px-3 py-3", member.status === "pending" && "opacity-60")}>
+          <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{member.name}</span>
+            <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2 px-3 py-3">
+          {member.status === "pending" ? (
+            <>
+              <button onClick={() => onRevoke(member.name)} className="inline-flex h-[30px] cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text dark:bg-[rgba(224,224,224,0.03)]">Revoke</button>
+              <button className="inline-flex h-[30px] cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text dark:bg-[rgba(224,224,224,0.03)]">Resend</button>
+            </>
+          ) : member.isYou ? (
+            <span className="font-inter text-[12px] font-medium text-page-text">You</span>
+          ) : (
+            <MemberDropdown onAction={(action) => { if (action === "ban") onBan(member.name); if (action === "remove") onRemove(member.name); }} />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -1291,30 +1312,35 @@ function BannedMemberRow({ member, index, registerItem, onUnban }: {
   }, [index, registerItem]);
 
   return (
-    <div ref={rowRef} className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
-      <div className="flex min-w-0 flex-1 items-center gap-2 px-3 py-3">
-        <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">{member.name}</span>
-          <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
+    <div ref={rowRef} className="relative z-10 border-b border-foreground/[0.03] px-1 last:border-b-0">
+      {/* Desktop */}
+      <div className="hidden items-center md:grid" style={{ gridTemplateColumns: "1fr 96px 104px 104px 96px" }}>
+        <div className="flex min-w-0 items-center gap-2 px-3 py-3">
+          <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">{member.name}</span>
+            <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
+          </div>
+        </div>
+        <div className="px-3 py-3"><span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span></div>
+        <div className="px-3 py-3"><StatusBadge status="banned" /></div>
+        <div className="px-3 py-3"><span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span></div>
+        <div className="flex items-center justify-end px-3 py-3">
+          <button onClick={() => onUnban(member.name)} className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">Unban</button>
         </div>
       </div>
-      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "96px" }}>
-        <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span>
-      </div>
-      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
-        <StatusBadge status="banned" />
-      </div>
-      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
-        <span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span>
-      </div>
-      <div className="flex shrink-0 items-center justify-end px-3 py-3 md:px-6" style={{ width: "auto" }}>
-        <button
-          onClick={() => onUnban(member.name)}
-          className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]"
-        >
-          Unban
-        </button>
+      {/* Mobile */}
+      <div className="flex items-center md:hidden">
+        <div className="flex min-w-0 flex-1 items-center gap-2 px-3 py-3">
+          <div className="size-8 shrink-0 rounded-full bg-foreground/[0.12]" />
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <span className="truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">{member.name}</span>
+            <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
+          </div>
+        </div>
+        <div className="shrink-0 px-3 py-3">
+          <button onClick={() => onUnban(member.name)} className="inline-flex h-[30px] cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text dark:bg-[rgba(224,224,224,0.03)]">Unban</button>
+        </div>
       </div>
     </div>
   );
@@ -1326,7 +1352,6 @@ function TeamTab() {
   const [banTarget, setBanTarget] = useState<string | null>(null);
   const [removeTarget, setRemoveTarget] = useState<string | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [roleModalOpen, setRoleModalOpen] = useState(false);
 
   const activeTableRef = useRef<HTMLDivElement>(null);
   const activeHover = useProximityHover(activeTableRef);
@@ -1410,8 +1435,6 @@ function TeamTab() {
       <InviteTeamMemberModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
 
       {/* Create Custom Role modal */}
-      <CreateCustomRoleModal open={roleModalOpen} onClose={() => setRoleModalOpen(false)} />
-
       {/* Header row */}
       <div className="flex w-full max-w-[1028px] items-center justify-between gap-4 px-0">
         <div className="flex min-w-0 flex-col gap-2">
@@ -1421,10 +1444,6 @@ function TeamTab() {
           </span>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
-          <button onClick={() => setRoleModalOpen(true)} className="hidden h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06] sm:inline-flex">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            Create role
-          </button>
           <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             <span className="hidden sm:inline">Invite member</span>
@@ -1709,9 +1728,9 @@ function AgencyProfileTab() {
                   9:41
                 </span>
                 <div className="flex items-center gap-[7px]">
-                  {/* Signal */}
-                  <svg width="18" height="13" viewBox="0 0 18 13" fill="none" className="text-page-text">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M8.5713 2.46628C11.0584 2.46639 13.4504 3.38847 15.2529 5.04195C15.3887 5.1696 15.6056 5.16799 15.7393 5.03834L17.0368 3.77487C17.1045 3.70911 17.1422 3.62004 17.1417 3.52735C17.1411 3.43467 17.1023 3.34603 17.0338 3.28104C12.3028 -1.09368 4.83907 -1.09368 0.108056 3.28104C0.039524 3.34598 0.000639766 3.4346 7.82398e-06 3.52728C-0.000624118 3.61996 0.0370483 3.70906 0.104689 3.77487L1.40255 5.03834C1.53615 5.16819 1.75327 5.1698 1.88893 5.04195C3.69167 3.38836 6.08395 2.46628 8.5713 2.46628ZM8.56795 6.68656C9.92527 6.68647 11.2341 7.19821 12.2403 8.12234C12.3763 8.2535 12.5907 8.25065 12.7234 8.11593L14.0106 6.79663C14.0784 6.72742 14.1161 6.63355 14.1151 6.536C14.1141 6.43844 14.0746 6.34536 14.0054 6.27757C10.9416 3.38672 6.19688 3.38672 3.13305 6.27757C3.06384 6.34536 3.02435 6.43849 3.02345 6.53607C3.02254 6.63366 3.06028 6.72752 3.12822 6.79663L4.41513 8.11593C4.54778 8.25065 4.76215 8.2535 4.89823 8.12234C5.90368 7.19882 7.21152 6.68713 8.56795 6.68656ZM11.0924 9.48011C11.0943 9.58546 11.0572 9.68703 10.9899 9.76084L8.81327 12.2156C8.74946 12.2877 8.66247 12.3283 8.5717 12.3283C8.48093 12.3283 8.39394 12.2877 8.33013 12.2156L6.1531 9.76084C6.08585 9.68697 6.04886 9.58537 6.05085 9.48002C6.05284 9.37467 6.09365 9.27491 6.16364 9.20429C7.55374 7.8904 9.58966 7.8904 10.9798 9.20429C11.0497 9.27497 11.0904 9.37476 11.0924 9.48011Z" fill="currentColor"/>
+                  {/* Signal bars */}
+                  <svg width="20" height="13" viewBox="0 0 20 13" fill="none" className="text-page-text">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M19.2 1.14623C19.2 0.513183 18.7224 0 18.1333 0H17.0667C16.4776 0 16 0.513183 16 1.14623V11.0802C16 11.7132 16.4776 12.2264 17.0667 12.2264H18.1333C18.7224 12.2264 19.2 11.7132 19.2 11.0802V1.14623ZM11.7659 2.44528H12.8326C13.4217 2.44528 13.8992 2.97078 13.8992 3.61902V11.0527C13.8992 11.7009 13.4217 12.2264 12.8326 12.2264H11.7659C11.1768 12.2264 10.6992 11.7009 10.6992 11.0527V3.61902C10.6992 2.97078 11.1768 2.44528 11.7659 2.44528ZM7.43411 5.09433H6.36745C5.77834 5.09433 5.30078 5.62652 5.30078 6.28301V11.0377C5.30078 11.6942 5.77834 12.2264 6.36745 12.2264H7.43411C8.02322 12.2264 8.50078 11.6942 8.50078 11.0377V6.28301C8.50078 5.62652 8.02322 5.09433 7.43411 5.09433ZM2.13333 7.53962H1.06667C0.477563 7.53962 0 8.06421 0 8.71132V11.0547C0 11.7018 0.477563 12.2264 1.06667 12.2264H2.13333C2.72244 12.2264 3.2 11.7018 3.2 11.0547V8.71132C3.2 8.06421 2.72244 7.53962 2.13333 7.53962Z" fill="currentColor"/>
                   </svg>
                   {/* WiFi */}
                   <svg width="18" height="13" viewBox="0 0 18 13" fill="none" className="text-page-text">
