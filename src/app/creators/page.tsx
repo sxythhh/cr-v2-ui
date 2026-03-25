@@ -847,7 +847,7 @@ export default function CreatorsPage() {
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Filter tabs */}
-          <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="scrollbar-hide overflow-x-auto">
+          <div className="overflow-x-auto scrollbar-hide"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
             {FILTER_TABS.map((tab, i) => (
               <TabItem
                 key={tab.name}
@@ -856,7 +856,7 @@ export default function CreatorsPage() {
                 index={i}
               />
             ))}
-          </Tabs>
+          </Tabs></div>
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">

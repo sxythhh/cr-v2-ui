@@ -3087,20 +3087,7 @@ export default function SubmissionsPage() {
   }, []);
 
   const visibleSubmissions = SUBMISSIONS.filter((s) => !actions[s.id]);
-  const toolbarRef = useRef<HTMLDivElement>(null);
-  const [toolbarStuck, setToolbarStuck] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = toolbarRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setToolbarStuck(!entry.isIntersecting),
-      { threshold: 1, rootMargin: "-1px 0px 0px 0px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
 
   return (
@@ -3138,49 +3125,32 @@ export default function SubmissionsPage() {
 
       {/* Content */}
       <div className="px-4 pb-6 pt-[21px] sm:px-6">
-        {/* Toolbar — sticky on scroll */}
-        <div
-          ref={toolbarRef}
-          className={cn(
-            "sticky top-0 z-30 -mx-4 flex flex-col gap-3 px-4 py-3 sm:-mx-6 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-2",
-            toolbarStuck
-              ? "bg-page-bg shadow-[0_1px_0_0_var(--border),0_4px_12px_-2px_rgba(0,0,0,0.06)]"
-              : "bg-transparent shadow-none",
-          )}
-        >
+        {/* Toolbar */}
+        <div className="flex flex-col gap-3">
           {/* Tabs */}
-          <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="scrollbar-hide overflow-x-auto">
-            {TABS.map((tab, i) => (
-              <TabItem
-                key={tab.name}
-                label={tab.name}
-                count={tab.count}
-                index={i}
-              />
-            ))}
-          </Tabs>
+          <div className="overflow-x-auto scrollbar-hide">
+            <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-max sm:w-fit">
+              {TABS.map((tab, i) => (
+                <TabItem
+                  key={tab.name}
+                  label={tab.name}
+                  count={tab.count}
+                  index={i}
+                />
+              ))}
+            </Tabs>
+          </div>
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                className="shrink-0 text-page-text-subtle"
-              >
-                <path
-                  d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-[rgba(224,224,224,0.03)]">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
+                <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <input
                 type="text"
                 placeholder="Search"
-                className="flex-1 bg-transparent font-[family-name:var(--font-inter)] text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-subtle"
+                className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/70"
               />
             </div>
 
@@ -3191,7 +3161,7 @@ export default function SubmissionsPage() {
               onRemove={() => {}}
               searchPlaceholder="Filter..."
             >
-              <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl bg-accent text-page-text transition-colors hover:bg-accent dark:bg-[rgba(224,224,224,0.03)]">
+              <button className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
                 <FilterIcon />
               </button>
             </FilterSelect>

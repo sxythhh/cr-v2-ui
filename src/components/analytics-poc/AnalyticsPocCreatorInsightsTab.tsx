@@ -283,18 +283,18 @@ function TopCreatorsCard() {
               <div className="flex w-6 shrink-0 items-center justify-center py-3 pl-1 pr-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
               </div>
-              <div className="flex flex-1 items-center border-b border-foreground/[0.03] py-3">
-                <div className="flex flex-1 items-center gap-2 pr-3">
+              <div className="flex min-w-0 flex-1 items-center border-b border-foreground/[0.03] py-3">
+                <div className="flex min-w-0 flex-1 items-center gap-2 pr-3">
                   <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
                   <div className="flex min-w-0 flex-col gap-1.5">
                     <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
                     <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.subtitle}</span>
                   </div>
                 </div>
-                <div className="flex w-24 shrink-0 items-center justify-end px-3">
+                <div className="shrink-0 px-3 text-right">
                   <span className="font-inter text-xs tracking-[-0.02em] text-[#34D399]">{c.earned}</span>
                 </div>
-                <div className="flex w-20 shrink-0 items-center justify-end px-3">
+                <div className="shrink-0 px-3 text-right">
                   <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{c.cpm}</span>
                 </div>
               </div>
@@ -444,11 +444,11 @@ function PrivateTierTable() {
       {/* Table */}
       <div className="px-4">
         {/* Header row */}
-        <div className="flex items-center border-b border-border py-2.5 pr-8 pl-1">
-          <span className="w-12 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">#</span>
-          <span className="flex-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
-          <span className="w-24 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Views</span>
-          <span className="w-20 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">CPM</span>
+        <div className="flex items-center border-b border-border py-2.5 pl-1">
+          <span className="w-12 shrink-0 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">#</span>
+          <span className="min-w-0 flex-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
+          <span className="shrink-0 px-3 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Views</span>
+          <span className="shrink-0 px-3 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">CPM</span>
         </div>
 
         {/* Rows with proximity hover */}
@@ -476,18 +476,18 @@ function PrivateTierTable() {
             <div
               key={c.rank}
               ref={(el) => registerItem(i, el)}
-              className="relative z-[1] flex cursor-pointer items-center border-b border-foreground/[0.03] py-3 pr-8 pl-1"
+              className="relative z-[1] flex cursor-pointer items-center border-b border-foreground/[0.03] py-3 pl-1"
             >
-              <span className="w-12 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
-              <div className="flex flex-1 items-center gap-2">
-                <div className="size-6 rounded-full bg-foreground/[0.08]" />
-                <div className="flex flex-col gap-1.5">
-                  <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
-                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.subtitle}</span>
+              <span className="w-12 shrink-0 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
+                <div className="flex min-w-0 flex-col gap-1.5">
+                  <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                  <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.subtitle}</span>
                 </div>
               </div>
-              <span className="w-24 text-right font-inter text-xs tracking-[-0.02em] text-page-text">{c.views}</span>
-              <span className="w-20 text-right font-inter text-xs tracking-[-0.02em] text-[#34D399]">{c.cpm}</span>
+              <span className="shrink-0 px-3 text-right font-inter text-xs tracking-[-0.02em] text-page-text">{c.views}</span>
+              <span className="shrink-0 px-3 text-right font-inter text-xs tracking-[-0.02em] text-[#34D399]">{c.cpm}</span>
             </div>
           ))}
         </div>

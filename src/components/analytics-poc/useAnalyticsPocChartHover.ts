@@ -1,6 +1,6 @@
 "use client";
 
-import { type RefObject, useEffect, useMemo, useState } from "react";
+import { type RefObject, useEffect, useMemo, useState, useCallback, useRef } from "react";
 
 export interface AnalyticsPocChartHoverPoint {
   index: number;
@@ -100,6 +100,8 @@ export function useAnalyticsPocChartHover({
     useState<AnalyticsPocChartHoverPoint | null>(null);
   const [pinnedHover, setPinnedHover] =
     useState<AnalyticsPocChartHoverPoint | null>(null);
+  const [touchDragging, setTouchDragging] = useState(false);
+  const touchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (isEnabled) {
@@ -108,6 +110,7 @@ export function useAnalyticsPocChartHover({
 
     setTransientHover(null);
     setPinnedHover(null);
+    setTouchDragging(false);
   }, [isEnabled]);
 
   useEffect(() => {
@@ -144,14 +147,114 @@ export function useAnalyticsPocChartHover({
     if (!container || !isEnabled) return;
 
     const handleNativeLeave = () => {
-      if (!pinnedHover) {
+      if (!pinnedHover && !touchDragging) {
         setTransientHover(null);
       }
     };
 
     container.addEventListener("mouseleave", handleNativeLeave);
     return () => container.removeEventListener("mouseleave", handleNativeLeave);
-  }, [chartContainerRef, isEnabled, pinnedHover]);
+  }, [chartContainerRef, isEnabled, pinnedHover, touchDragging]);
+
+  // Touch drag support: long press activates, drag updates, release dismisses
+  useEffect(() => {
+    const container = chartContainerRef.current;
+    if (!container || !isEnabled) return;
+
+    // Find the Recharts SVG element inside the container
+    const findChartSvg = () => container.querySelector(".recharts-wrapper svg") as SVGSVGElement | null;
+
+    const getIndexFromTouch = (clientX: number): AnalyticsPocChartHoverPoint | null => {
+      const svg = findChartSvg();
+      if (!svg || data.length === 0) return null;
+
+      const rect = svg.getBoundingClientRect();
+      // Recharts default margins — approximate the plot area
+      const plotLeft = rect.left + 4;
+      const plotRight = rect.right - 4;
+      const plotWidth = plotRight - plotLeft;
+
+      if (plotWidth <= 0) return null;
+
+      const fraction = Math.max(0, Math.min(1, (clientX - plotLeft) / plotWidth));
+      const index = Math.round(fraction * (data.length - 1));
+      const clampedIndex = Math.max(0, Math.min(data.length - 1, index));
+      const x = plotLeft - rect.left + (clampedIndex / Math.max(1, data.length - 1)) * plotWidth;
+
+      return {
+        index: clampedIndex,
+        x,
+        label: data[clampedIndex]?.label ?? "",
+      };
+    };
+
+    let isLongPressing = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+
+      touchTimerRef.current = setTimeout(() => {
+        isLongPressing = true;
+        setTouchDragging(true);
+
+        const touch = e.touches[0];
+        if (touch) {
+          const point = getIndexFromTouch(touch.clientX);
+          if (point) {
+            setPinnedHover(null);
+            setTransientHover(point);
+          }
+        }
+
+        // Prevent scroll while dragging chart
+        const preventScroll = (ev: TouchEvent) => {
+          if (isLongPressing) ev.preventDefault();
+        };
+        container.addEventListener("touchmove", preventScroll, { passive: false });
+        const cleanup = () => {
+          container.removeEventListener("touchmove", preventScroll);
+        };
+        container.addEventListener("touchend", cleanup, { once: true });
+        container.addEventListener("touchcancel", cleanup, { once: true });
+      }, 200); // 200ms long press threshold
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isLongPressing) return;
+
+      const touch = e.touches[0];
+      if (touch) {
+        const point = getIndexFromTouch(touch.clientX);
+        if (point) {
+          setTransientHover(point);
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (touchTimerRef.current) {
+        clearTimeout(touchTimerRef.current);
+        touchTimerRef.current = null;
+      }
+      isLongPressing = false;
+      setTouchDragging(false);
+      setTransientHover(null);
+      setPinnedHover(null);
+    };
+
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchend", handleTouchEnd);
+    container.addEventListener("touchcancel", handleTouchEnd);
+
+    return () => {
+      if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
+      container.removeEventListener("touchcancel", handleTouchEnd);
+    };
+  }, [chartContainerRef, data, isEnabled]);
 
   useEffect(() => {
     if (pinnedHover && pinnedHover.index >= data.length) {
@@ -163,24 +266,24 @@ export function useAnalyticsPocChartHover({
     }
   }, [data.length, pinnedHover, transientHover]);
 
-  const handleMouseMove = (eventState: unknown) => {
-    if (!isEnabled || pinnedHover) {
+  const handleMouseMove = useCallback((eventState: unknown) => {
+    if (!isEnabled || pinnedHover || touchDragging) {
       return;
     }
 
     setTransientHover(normalizeHoverState(eventState, data));
-  };
+  }, [isEnabled, pinnedHover, touchDragging, data]);
 
-  const handleMouseLeave = () => {
-    if (!isEnabled || pinnedHover) {
+  const handleMouseLeave = useCallback(() => {
+    if (!isEnabled || pinnedHover || touchDragging) {
       return;
     }
 
     setTransientHover(null);
-  };
+  }, [isEnabled, pinnedHover, touchDragging]);
 
-  const handleChartClick = (eventState: unknown) => {
-    if (!isEnabled || !isTouchPointerEnvironment()) {
+  const handleChartClick = useCallback((eventState: unknown) => {
+    if (!isEnabled || !isTouchPointerEnvironment() || touchDragging) {
       return;
     }
 
@@ -199,7 +302,7 @@ export function useAnalyticsPocChartHover({
       return nextHoverPoint;
     });
     setTransientHover(null);
-  };
+  }, [isEnabled, touchDragging, data]);
 
   const activeHover = useMemo(
     () => pinnedHover ?? transientHover,

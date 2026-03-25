@@ -2,6 +2,9 @@
 
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { CampaignModelModal } from "@/components/campaign-flow/CampaignModelModal";
+import type { CampaignModel } from "@/types/campaign-flow.types";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import {
@@ -116,14 +119,14 @@ const STATUS_TABS = [
   { label: "Archived", count: 3 },
 ];
 
-function MobileActionButtons() {
+function MobileActionButtons({ onNewCampaign }: { onNewCampaign: () => void }) {
   return (
     <div className="flex items-center gap-2 px-5 sm:hidden">
-      <button className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
+      <button className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
         <HistoryIcon />
         History
       </button>
-      <button className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
+      <button type="button" onClick={onNewCampaign} className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] py-2 text-sm font-medium tracking-[-0.02em] text-page-text">
         <PlusIcon />
         New campaign
       </button>
@@ -564,15 +567,6 @@ export function AnalyticsPocCampaignHealthTab({
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      {/* Mobile: action buttons */}
-      <MobileActionButtons />
-
-      {/* Mobile: status tabs */}
-      <MobileStatusTabs activeTab={statusTab} onTabChange={setStatusTab} />
-
-      {/* Mobile: search bar */}
-      <MobileSearchBar />
-
       {/* 1. Filter toolbar (desktop only) */}
       <FilterToolbar dateRange={dateRange} setDateRange={setDateRange} platforms={platforms} onTogglePlatform={handleTogglePlatform} selectedCampaign={selectedCampaign} setSelectedCampaign={setSelectedCampaign} />
 
