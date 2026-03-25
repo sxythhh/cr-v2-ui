@@ -583,7 +583,7 @@ export function AnalyticsPocCampaignHealthTab({
       </div>
 
       {/* 3. Health + Financials side by side */}
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <HealthCard />
         <FinancialsCard />
       </div>

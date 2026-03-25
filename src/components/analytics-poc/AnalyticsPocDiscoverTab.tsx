@@ -407,7 +407,7 @@ export function AnalyticsPocDiscoverTab() {
             <MobileStatScroll stats={STATS} />
           </div>
           {/* Desktop: grid stats */}
-          <div className="hidden gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-5">
+          <div className="hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             {STATS.map((stat) => (
               <div
                 key={stat.label}

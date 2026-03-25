@@ -149,8 +149,6 @@ const FILTER_TABS = [
   { label: "CPM", count: 8 },
   { label: "Retainer", count: 8 },
   { label: "Per Video", count: 8 },
-  { label: "Blended", count: 8 },
-  { label: "Featured", count: 8 },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -181,15 +179,15 @@ function CategoryIcon({ type }: { type: "user" | "swords" | "music" }) {
 
 function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp?: () => void }) {
   return (
-    <div className="group relative flex flex-col sm:h-[185px] sm:flex-row cursor-pointer items-stretch sm:items-center gap-0 sm:gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03]">
+    <div className="group relative flex flex-col md:h-[185px] md:flex-row cursor-pointer items-stretch md:items-center gap-0 md:gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03]">
       {/* Left section: thumbnail + info */}
-      <div className="flex min-w-0 flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-0 sm:gap-4 sm:self-stretch sm:pr-8">
+      <div className="flex min-w-0 flex-1 flex-col md:flex-row items-stretch md:items-center gap-0 md:gap-4 md:self-stretch md:pr-8">
         {/* Thumbnail */}
-        <div className="relative shrink-0 sm:self-stretch p-1">
+        <div className="relative shrink-0 md:self-stretch p-1">
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-[160px] sm:h-full w-full sm:w-[200px] md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
+            className="h-[160px] md:h-full w-full md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
           />
           {/* CPM badge */}
           <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
@@ -200,7 +198,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
         </div>
 
         {/* Campaign info */}
-        <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 self-stretch py-4">
+        <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 self-stretch px-4 py-3 md:px-0 md:py-4">
           {/* Status + discover badges */}
           <div className="flex items-start gap-1">
             <div className="flex items-center gap-1.5 rounded-full bg-[rgba(52,211,153,0.08)] px-2 py-1.5">
@@ -210,7 +208,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
               </span>
             </div>
             <button className="group/btn flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5 dark:bg-foreground/[0.03]">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
+              <span className="hidden font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70 sm:inline">
                 View on Discover
               </span>
               <ArrowRightIcon className="size-3 shrink-0 text-page-text/70 transition-transform duration-200 ease-out group-hover/btn:translate-x-[3px]" />
@@ -223,7 +221,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
           </h3>
 
           {/* Meta row: type · platforms · category */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             <div className="flex items-center gap-1.5">
               <TypeIcon type={campaign.typeIcon} />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
@@ -242,7 +240,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
               ))}
               <div className="flex h-6 items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2 pr-2.5 backdrop-blur-[12px] dark:border dark:border-foreground/[0.03] dark:bg-foreground/[0.03]">
                 <CategoryIcon type={campaign.categoryIcon} />
-                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
+                <span className="whitespace-nowrap font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                   {campaign.category}
                 </span>
               </div>
@@ -265,11 +263,11 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
       </div>
 
       {/* Right section: stats + actions */}
-      <div className="flex shrink-0 flex-col items-end gap-4 self-stretch px-4 sm:p-4 sm:pl-8 pb-4">
+      <div className="flex shrink-0 flex-col items-start gap-4 self-stretch px-4 pb-4 md:items-end md:border-l md:border-foreground/[0.06] md:p-4 md:pl-8 dark:md:border-foreground/[0.03]">
         {/* Stats */}
-        <div className="flex flex-1 flex-col items-end gap-4">
+        <div className="flex flex-1 flex-col items-start gap-4 md:items-end">
           {/* Stat pills */}
-          <div className="flex items-start gap-1">
+          <div className="flex flex-wrap items-start gap-1">
             <div className="flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-foreground/[0.03] dark:bg-foreground/[0.03]">
               <UsersIcon className="size-3 text-page-text" />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
@@ -300,7 +298,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2.5 pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
             <ArchiveIcon className="size-3" />
             Archive
@@ -330,20 +328,20 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
 
   return (
     <div
-      className={`group relative flex flex-col sm:h-[189px] sm:flex-row cursor-pointer items-stretch sm:items-center gap-0 sm:gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] shadow-[0_1px_2px_rgba(0,0,0,0.03)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03] dark:border-foreground/[0.06] ${
+      className={`group relative flex flex-col md:h-[189px] md:flex-row cursor-pointer items-stretch md:items-center gap-0 md:gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] shadow-[0_1px_2px_rgba(0,0,0,0.03)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03] dark:border-foreground/[0.06] ${
         isCompleted
           ? "bg-white opacity-70 dark:bg-card-bg"
           : "bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] dark:bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),var(--card-bg)]"
       }`}
     >
       {/* Left: thumbnail + info */}
-      <div className="flex min-w-0 flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-0 sm:gap-4 sm:self-stretch sm:pr-8">
+      <div className="flex min-w-0 flex-1 flex-col md:flex-row items-stretch md:items-center gap-0 md:gap-4 md:self-stretch md:pr-8">
         {/* Thumbnail */}
-        <div className="relative shrink-0 sm:self-stretch p-1">
+        <div className="relative shrink-0 md:self-stretch p-1">
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-[160px] sm:h-full w-full sm:w-[200px] md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
+            className="h-[160px] md:h-full w-full md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
           />
           <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
             <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#DBEAFE]">
@@ -353,7 +351,7 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
         </div>
 
         {/* Info */}
-        <div className="flex min-w-0 flex-1 flex-col self-stretch py-3">
+        <div className="flex min-w-0 flex-1 flex-col self-stretch px-4 py-3 md:px-0">
           {/* Top section: badges + title */}
           <div className="flex flex-col gap-2">
             {/* Status badges */}
@@ -478,12 +476,12 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
       </div>
 
       {/* Divider */}
-      <div className="hidden sm:flex self-stretch py-4">
+      <div className="hidden md:flex self-stretch py-4">
         <div className="w-px bg-[rgba(37,37,37,0.06)] dark:bg-foreground/[0.06]" />
       </div>
 
       {/* Right section */}
-      <div className="flex shrink-0 flex-col items-end justify-end gap-4 self-stretch px-4 sm:p-4 sm:pl-8 pb-4">
+      <div className="flex shrink-0 flex-col items-start justify-end gap-4 self-stretch px-4 pb-4 md:items-end md:p-4 md:pl-8">
         <div className="flex flex-1 flex-col items-end gap-2">
           {isCompleted && (
             <div className="flex items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 py-1.5 dark:border-foreground/[0.03] dark:bg-foreground/[0.03]">

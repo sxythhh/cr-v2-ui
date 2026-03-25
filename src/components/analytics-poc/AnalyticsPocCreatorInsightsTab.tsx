@@ -525,7 +525,7 @@ export function AnalyticsPocCreatorInsightsTab({ className }: { className?: stri
       <FilterBar dateRange={dateRange} setDateRange={setDateRange} />
 
       {/* 2. Action cards row */}
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
         <ActionCard
           label="Dormant creators"
           value="42,184"
@@ -551,13 +551,13 @@ export function AnalyticsPocCreatorInsightsTab({ className }: { className?: stri
       </div>
 
       {/* 3. Funnel + Submission trend */}
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <ParticipationFunnelCard />
         <SubmissionTrendCard />
       </div>
 
       {/* 4. Top Creators + Retention */}
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <TopCreatorsCard />
         <CreatorRetentionCard />
       </div>

@@ -505,7 +505,7 @@ function FloatingChecklist({
 
   return (
     <motion.div
-      className="fixed bottom-5 right-5 z-50 w-[340px] overflow-hidden rounded-2xl border border-page-border bg-card-bg shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+      className="fixed bottom-5 right-5 z-50 w-[calc(100%-40px)] max-w-[340px] overflow-hidden rounded-2xl border border-page-border bg-card-bg shadow-[0_8px_30px_rgba(0,0,0,0.12)] sm:w-[340px]"
       initial={{ y: 80, opacity: 0, scale: 0.95 }}
       animate={{ y: 0, opacity: 1, scale: 1 }}
       transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.3 }}
@@ -1340,7 +1340,7 @@ function DashboardView() {
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
-                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
+                  <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
                 </div>
                 <ChevronRightIcon className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
@@ -1411,9 +1411,9 @@ function DashboardView() {
             </div>
 
             {/* Podium */}
-            <div className="flex items-end justify-center gap-2">
+            <div className="hidden items-end justify-center gap-2 sm:flex">
               {/* 2nd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[197px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(131,159,185,0.04)] p-4 transition-colors hover:bg-[rgba(131,159,185,0.08)]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(131,159,185,0.04)] p-4 transition-colors hover:bg-[rgba(131,159,185,0.08)] lg:h-[197px]">
                 <div className="flex size-[26px] items-center justify-center rounded-full bg-[#839FB9] font-inter text-[16px] font-medium text-white">2</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1424,7 +1424,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 1st place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[260px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(251,146,60,0.04)] p-4 transition-colors hover:bg-[rgba(251,146,60,0.08)]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[200px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(251,146,60,0.04)] p-4 transition-colors hover:bg-[rgba(251,146,60,0.08)] lg:h-[260px]">
                 <div className="flex h-6 items-center gap-2 rounded-full bg-[#FB923C] px-2">
                   <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
                   <span className="font-inter text-[16px] font-medium text-white">1</span>
@@ -1438,7 +1438,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 3rd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(158,82,0,0.04)] p-4 transition-colors hover:bg-[rgba(158,82,0,0.08)]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[130px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(158,82,0,0.04)] p-4 transition-colors hover:bg-[rgba(158,82,0,0.08)] lg:h-[160px]">
                 <div className="flex size-[27px] items-center justify-center rounded-full bg-[#9E5200] font-inter text-[16px] font-medium text-white">3</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1474,9 +1474,9 @@ function DashboardView() {
                   </svg>
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
+                  <span className="truncate font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.desc}</span>
+                    <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.desc}</span>
                     <span className="font-inter text-xs tracking-[-0.02em]" style={{ color: draft.badgeColor }}>{draft.badge}</span>
                   </div>
                 </div>

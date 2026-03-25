@@ -98,7 +98,7 @@ export default function EventsTab() {
           ref={filterRef}
           className={cn(
             "sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl p-1",
-            "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(255,255,255,0.04)]",
+            "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(224,224,224,0.03)]",
           )}
           onMouseEnter={handlers.onMouseEnter}
           onMouseMove={handlers.onMouseMove}
@@ -126,7 +126,7 @@ export default function EventsTab() {
               className={cn(
                 "relative z-10 flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 transition-colors",
                 activeFilter === f.key
-                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(255,255,255,0.1)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.2)]"
+                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.06)]"
                   : "",
               )}
             >
@@ -147,11 +147,12 @@ export default function EventsTab() {
       </div>
 
       {/* Right event feed */}
+      <div className="flex flex-1 justify-center">
       <div
         className={cn(
-          "flex w-[600px] flex-col rounded-2xl border p-5",
+          "flex w-full max-w-[600px] flex-col rounded-2xl border p-5",
           "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-          "dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+          "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
         )}
       >
         <div className="flex flex-col gap-2">
@@ -165,8 +166,8 @@ export default function EventsTab() {
                 className={cn(
                   "relative flex gap-3 rounded-2xl border p-4",
                   event.highlighted
-                    ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(255,144,37,0.25)]"
-                    : "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-inner-bg dark:border-card-inner-border dark:shadow-none",
+                    ? "border-[rgba(251,146,60,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+                    : "border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
                 )}
               >
                 {/* Background overlay for highlighted */}
@@ -183,7 +184,7 @@ export default function EventsTab() {
                       className="pointer-events-none absolute inset-0 hidden rounded-2xl dark:block"
                       style={{
                         background:
-                          "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.08) 0%, rgba(255,144,37,0) 50%), var(--card-bg)",
+                          "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.12) 0%, rgba(255,144,37,0) 50%), rgba(224,224,224,0.03)",
                       }}
                     />
                   </>
@@ -192,7 +193,7 @@ export default function EventsTab() {
                 {/* Unread dot */}
                 {event.unread && (
                   <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-[#161616]" />
+                    <span className="size-2 rounded-full border-2 border-white bg-[#FB7185] dark:border-[rgba(224,224,224,0.03)]" />
                   </span>
                 )}
 
@@ -224,6 +225,7 @@ export default function EventsTab() {
             );
           })}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -86,7 +86,7 @@ export default function SubmissionsTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Top stats row */}
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         <StatCard label="Total submissions" value="98" />
         <StatCard label="Pending review" value="9" />
         <StatCard label="Approved" value="89" valueColor="text-[#00994D] dark:text-[#34D399]" />
@@ -156,7 +156,8 @@ export default function SubmissionsTab() {
           <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">Submissions</span>
         </div>
         {/* Header row */}
-        <div className="grid grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] px-5 py-3 border-b border-border">
+        <div className="overflow-x-auto">
+        <div className="grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] px-5 py-3 border-b border-border">
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Date</span>
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Video</span>
@@ -189,7 +190,7 @@ export default function SubmissionsTab() {
             <div
               key={i}
               ref={(el) => tableRegisterItem(i, el)}
-              className="relative z-10 grid grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] items-center px-5 h-14 border-b border-border last:border-b-0"
+              className="relative z-10 grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] items-center px-5 h-14 border-b border-border last:border-b-0"
             >
               <span className="text-[13px] tracking-[-0.02em] text-page-text-muted whitespace-nowrap">{sub.date}</span>
               <div className="flex items-center gap-2 min-w-0">
@@ -209,6 +210,7 @@ export default function SubmissionsTab() {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

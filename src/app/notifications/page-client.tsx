@@ -214,14 +214,14 @@ function CategorySidebar({
     <div className="w-[186px] shrink-0">
       <div
         ref={containerRef}
-        className="sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl bg-accent p-1 dark:bg-card-bg"
+        className="sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl bg-accent p-1 dark:bg-[rgba(224,224,224,0.03)]"
         {...handlers}
       >
         <AnimatePresence>
           {activeRect && (
             <motion.div
               key={sessionRef.current}
-              className="pointer-events-none absolute rounded-xl bg-accent dark:bg-[#1f1f1f]"
+              className="pointer-events-none absolute rounded-xl bg-accent dark:bg-[rgba(224,224,224,0.04)]"
               initial={{ opacity: 0, ...activeRect }}
               animate={{ opacity: 1, ...activeRect }}
               exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -241,7 +241,7 @@ function CategorySidebar({
               className={cn(
                 "relative z-10 flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 font-inter text-[14px] font-medium leading-none tracking-[-0.02em] transition-colors",
                 isActive
-                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.06)]"
+                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.06)]"
                   : "bg-transparent",
                 isActive
                   ? "text-page-text"
@@ -270,10 +270,10 @@ function NotificationList({
   notifications: NotificationItem[];
 }) {
   return (
-    <div>
+    <div className="flex flex-1 justify-center">
       <div
         className={cn(
-          "flex w-[600px] max-w-full flex-col rounded-2xl border p-5",
+          "flex w-full max-w-[600px] flex-col rounded-2xl border p-5",
           "border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
           "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
         )}
@@ -288,14 +288,14 @@ function NotificationList({
                 className={cn(
                   "relative flex cursor-pointer gap-3 rounded-2xl border p-4",
                   notif.highlighted
-                    ? "border-[rgba(251,146,60,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+                    ? "border-[rgba(251,146,60,0.3)] shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(251,146,60,0.15)]"
                     : "border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
                 )}
                 style={
                   notif.highlighted
                     ? {
                         background:
-                          "radial-gradient(50% 50% at 50% 100%, rgba(251,146,60,0.12) 0%, rgba(251,146,60,0) 50%), var(--card-bg)",
+                          "radial-gradient(50% 50% at 50% 100%, rgba(251,146,60,0.12) 0%, rgba(251,146,60,0) 50%), var(--card-inner-bg, var(--card-bg))",
                       }
                     : undefined
                 }
@@ -304,14 +304,14 @@ function NotificationList({
                 {/* Unread dot */}
                 {notif.unread && (
                   <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-3 rounded-full border-2 border-white bg-[#FB7185] dark:border-page-bg" />
+                    <span className="size-2 rounded-full border-2 border-white bg-[#FB7185] dark:border-[rgba(224,224,224,0.03)]" />
                   </span>
                 )}
 
                 {/* Icon */}
                 <div
                   className={cn(
-                    "flex size-10 shrink-0 items-center justify-center rounded-full",
+                    "flex size-10 shrink-0 items-center justify-center rounded-full backdrop-blur-[15px]",
                     style.bg,
                     style.color,
                   )}

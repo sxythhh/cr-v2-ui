@@ -484,13 +484,13 @@ function MobileCreatorsTable() {
           {/* Content */}
           <div
             className={cn(
-              "flex flex-1 flex-col gap-2 py-3 pr-3",
+              "flex min-w-0 flex-1 flex-col gap-2 py-3 pr-3",
               i < CREATORS.length - 1 && "border-b border-[rgba(37,37,37,0.03)] dark:border-foreground/[0.03]",
             )}
           >
             {/* Row 1: avatar + name + last sub */}
             <div className="flex items-center">
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <div className="size-6 shrink-0 overflow-hidden rounded-full">
                   <img
                     src={`https://i.pravatar.cc/48?u=${creator.name}`}
@@ -498,8 +498,8 @@ function MobileCreatorsTable() {
                     className="size-full object-cover"
                   />
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text">
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <span className="truncate font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text">
                     {creator.name}
                   </span>
                   <span className="font-[family-name:var(--font-inter)] text-xs font-medium tracking-[-0.02em] text-page-text/20">·</span>

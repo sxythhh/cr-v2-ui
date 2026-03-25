@@ -172,7 +172,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           <div className="mx-auto max-w-[1200px] px-5 py-5">
             <div className="flex flex-col gap-5">
               {/* ── Hero row: info + thumbnail ─────────────────── */}
-              <div className="flex items-start gap-10">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
                 {/* Left: campaign info */}
                 <div className="flex flex-1 min-w-0 flex-col gap-6">
                   {/* Tags */}
@@ -233,7 +233,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                 </div>
 
                 {/* Right: thumbnail */}
-                <div className="relative w-[400px] shrink-0">
+                <div className="relative w-full shrink-0 lg:w-[400px]">
                   <div className="h-[232px] w-full overflow-hidden rounded-2xl bg-[rgba(37,37,37,0.08)] dark:bg-[rgba(255,255,255,0.08)]">
                     <div className="h-full w-full bg-gradient-to-br from-[rgba(37,37,37,0.06)] to-[rgba(37,37,37,0.12)] dark:from-[rgba(255,255,255,0.04)] dark:to-[rgba(255,255,255,0.08)]" />
                   </div>
@@ -247,7 +247,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
               <Divider />
 
               {/* ── Bottom: requirements + stats ───────────────── */}
-              <div className="flex gap-10">
+              <div className="flex flex-col gap-6 lg:flex-row lg:gap-10">
                 {/* Left: requirements */}
                 <div className="flex flex-1 min-w-0 flex-col gap-5">
                   {/* Creator requirements */}
@@ -296,7 +296,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                 </div>
 
                 {/* Right: stats card */}
-                <div className="w-[400px] shrink-0">
+                <div className="w-full shrink-0 lg:w-[400px]">
                 <div className="flex flex-col gap-4 rounded-2xl border border-border bg-white dark:bg-card-bg p-4">
                   {/* Budget card */}
                   <div className="flex flex-col gap-2 rounded-[10px] border border-border p-3">
@@ -397,7 +397,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────── */}
-      <footer className="flex items-center justify-between border-t border-border px-4 py-3 dark:border-[#161616] sm:px-5">
+      <footer className="flex items-center justify-between border-t border-border px-4 py-3 dark:border-[rgba(224,224,224,0.03)] sm:px-5">
         <span className="hidden text-sm tracking-[-0.02em] text-page-text sm:block">
           {c.title}
         </span>
@@ -405,7 +405,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           <div ref={dotsRef} className="relative">
             <button
               onClick={() => setDotsOpen((v) => !v)}
-              className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] text-page-text-muted transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] dark:text-[#E0E0E0]"
+              className="flex size-9 cursor-pointer items-center justify-center rounded-full border border-border bg-white text-page-text-muted transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)]"
             >
               <IconDots size={16} />
             </button>
