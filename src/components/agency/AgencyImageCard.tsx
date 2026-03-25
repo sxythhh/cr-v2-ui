@@ -57,10 +57,11 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
           onClick={(e) => e.stopPropagation()}
           className="absolute z-20 top-4 right-4 flex items-center justify-center size-10 rounded-full border border-white/15 hover:bg-white/10 hover:border-white/30 active:scale-[0.96] transition-[transform,background,border-color] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)]"
           aria-label="View campaign details"
+          title="View campaign details"
         >
           <Image
             src="/icons/svg/circle-info.svg"
-            alt=""
+            alt="Info"
             width={20}
             height={20}
             className="opacity-[0.72]"

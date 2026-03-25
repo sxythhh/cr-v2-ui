@@ -674,12 +674,12 @@ function ApplicationSegmentedTabs({ activeFilter, onSelect }: { activeFilter: nu
       onMouseMove={handlers.onMouseMove}
       onMouseEnter={handlers.onMouseEnter}
       onMouseLeave={handlers.onMouseLeave}
-      className="relative flex items-center gap-0.5 rounded-2xl bg-accent p-0.5 dark:bg-card-bg"
+      className="relative flex w-full items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-[rgba(224,224,224,0.03)] sm:w-auto"
     >
       {/* Active indicator */}
       {activeRect && (
         <motion.div
-          className="pointer-events-none absolute rounded-[10px] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+          className="pointer-events-none absolute rounded-[10px] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
           animate={{ left: activeRect.left, width: activeRect.width, top: activeRect.top, height: activeRect.height }}
           transition={{ type: "spring", duration: 0.25, bounce: 0.1 }}
         />
@@ -699,12 +699,12 @@ function ApplicationSegmentedTabs({ activeFilter, onSelect }: { activeFilter: nu
       </AnimatePresence>
 
       {FILTER_TABS.map((tab, i) => (
-        <div key={tab.label} ref={register(i)}>
+        <div key={tab.label} ref={register(i)} className="flex-1 sm:flex-none">
           <button
             type="button"
             onClick={() => onSelect(i)}
             className={cn(
-              "relative z-10 flex h-8 cursor-pointer items-center gap-1.5 rounded-[10px] px-4 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+              "relative z-10 flex h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[10px] px-4 font-inter text-sm font-medium tracking-[-0.02em] transition-colors sm:w-auto sm:justify-start",
               activeFilter === i ? "text-page-text" : "text-foreground/70",
             )}
           >
@@ -755,6 +755,7 @@ function ApplicationCard({ app, onClick }: { app: Application; onClick: () => vo
           <button
             className="flex size-9 items-center justify-center rounded-[14px] bg-accent text-page-text transition-colors hover:bg-accent"
             onClick={(e) => e.stopPropagation()}
+            title="View application details"
           >
             <InfoCircleIcon />
           </button>
@@ -862,14 +863,26 @@ export function ApplicationsContent() {
   return (
     <>
       {/* Toolbar */}
-      <div className="flex flex-col gap-4 px-4 pt-4 sm:px-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 px-4 pt-4 sm:gap-4 sm:px-5">
+        {/* Understanding + Quick review — mobile only */}
+        <div className="flex items-center justify-between sm:hidden">
+          <button type="button" className="flex cursor-pointer items-center gap-1.5 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+            Understanding scores &amp; matches
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" /><path d="M6.5 6.5C6.5 5.67 7.17 5 8 5C8.83 5 9.5 5.67 9.5 6.5C9.5 7.17 9.01 7.73 8.37 7.93C8.16 8 8 8.17 8 8.39V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><circle cx="8" cy="11" r="0.75" fill="currentColor" /></svg>
+          </button>
+          <button type="button" className="flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.03] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]">
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.16422 1.70985e-10C9.7987 -1.85163e-05 12.3579 1.51488 14.0687 4.38875C14.415 4.97056 14.415 5.69604 14.0687 6.27785C12.3579 9.15171 9.79871 10.6666 7.16423 10.6667C4.52975 10.6667 1.97052 9.15178 0.259753 6.27792C-0.0865845 5.69611 -0.0865842 4.97063 0.259753 4.38882C1.97051 1.51495 4.52975 1.8518e-05 7.16422 1.70985e-10ZM4.83089 5.33333C4.83089 4.04467 5.87556 3 7.16423 3C8.45289 3 9.49756 4.04467 9.49756 5.33333C9.49756 6.622 8.45289 7.66667 7.16423 7.66667C5.87556 7.66667 4.83089 6.622 4.83089 5.33333Z" fill="currentColor"/></svg>
+            Quick review
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {/* Segmented tabs */}
           <ApplicationSegmentedTabs activeFilter={activeFilter} onSelect={setActiveFilter} />
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-[300px] items-center gap-2 rounded-xl border border-foreground/[0.06] bg-white px-2.5 dark:bg-card-bg">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.03] px-2.5 dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none sm:border sm:border-foreground/[0.06] sm:bg-white sm:dark:bg-card-bg">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
                 <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
@@ -898,14 +911,14 @@ export function ApplicationsContent() {
               }}
               searchPlaceholder="Filter..."
             >
-              <div className={cn("flex cursor-pointer items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5", filterPills.length > 0 && "pr-3")}>
+              <div className={cn("flex cursor-pointer items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-[rgba(224,224,224,0.03)]", filterPills.length > 0 && "pr-3")}>
                 <div className="flex size-9 items-center justify-center rounded-xl">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
                   </svg>
                 </div>
                 {filterPills.length > 0 && (
-                  <div className="flex size-3.5 items-center justify-center rounded-full bg-[#FF3355]">
+                  <div className="flex size-3.5 items-center justify-center rounded-full bg-[#FB7185]">
                     <span className="font-inter text-[10px] font-semibold leading-none tracking-[-0.02em] text-white">{filterPills.length}</span>
                   </div>
                 )}

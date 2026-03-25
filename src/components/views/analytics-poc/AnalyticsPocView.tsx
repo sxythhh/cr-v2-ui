@@ -74,7 +74,7 @@ function PageTabBar({
   onTabChange: (tab: PageTab) => void;
 }) {
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-0 dark:border-foreground/[0.08] sm:pr-5 lg:pr-10">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-0 dark:border-foreground/[0.08] sm:pr-6">
       <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
         <ProximityTabs
           tabs={PAGE_TABS.map((t) => ({ label: t }))}
@@ -225,7 +225,7 @@ export function AnalyticsPocView() {
     return (
       <AnalyticsPocPageShell>
         <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
-        <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10" {...DRILLDOWN_TRANSITION}>
+        <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocViewsDetail
             rows={analyticsPocViewsDetailMockData}
             onBack={() => setShowViewsDetail(false)}
@@ -239,7 +239,7 @@ export function AnalyticsPocView() {
     return (
       <AnalyticsPocPageShell>
         <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
-        <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10" {...DRILLDOWN_TRANSITION}>
+        <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocDayDrilldown
             data={dayDrilldown}
             onBack={() => setDayDrilldown(null)}
@@ -253,7 +253,7 @@ export function AnalyticsPocView() {
     return (
       <AnalyticsPocPageShell>
         <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
           <AnalyticsPocCampaignHealthTab
             {...analyticsPocCampaignHealthMockData}
           />
@@ -266,7 +266,7 @@ export function AnalyticsPocView() {
     return (
       <AnalyticsPocPageShell>
         <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
           <AnalyticsPocFilterToolbar
             campaignLabel={data.filters.campaignLabel}
             campaignSlot={
@@ -301,7 +301,7 @@ export function AnalyticsPocView() {
     <AnalyticsPocPageShell>
       <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
 
-      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-5 sm:py-5 md:gap-3 lg:px-10">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
       <AnalyticsPocFilterToolbar
         campaignLabel={data.filters.campaignLabel}
         campaignSlot={

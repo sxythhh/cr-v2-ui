@@ -13,7 +13,7 @@ import { springs } from "@/lib/springs";
 function ActiveDotIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <circle cx="6" cy="6" r="5" fill="#00B259" />
+      <circle cx="6" cy="6" r="5" fill="#34D399" />
     </svg>
   );
 }
@@ -21,9 +21,9 @@ function ActiveDotIcon() {
 function ClockAlertIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-      <path d="M0.146447 1.64645C-0.0488155 1.84171 -0.0488155 2.15829 0.146447 2.35355C0.341709 2.54882 0.658291 2.54882 0.853554 2.35355L2.35355 0.853553C2.54882 0.658291 2.54882 0.341709 2.35355 0.146447C2.15829 -0.0488156 1.84171 -0.0488155 1.64645 0.146447L0.146447 1.64645Z" fill="#FF2525"/>
-      <path d="M9.35355 0.146447C9.15829 -0.0488155 8.84171 -0.0488155 8.64645 0.146447C8.45119 0.341709 8.45119 0.658291 8.64645 0.853554L10.1464 2.35355C10.3417 2.54882 10.6583 2.54882 10.8536 2.35355C11.0488 2.15829 11.0488 1.84171 10.8536 1.64645L9.35355 0.146447Z" fill="#FF2525"/>
-      <path fillRule="evenodd" clipRule="evenodd" d="M10.4999 5.375C10.4999 8.13643 8.26135 10.375 5.49993 10.375C2.7385 10.375 0.499925 8.13643 0.499925 5.375C0.499925 2.61358 2.7385 0.375 5.49993 0.375C8.26135 0.375 10.4999 2.61358 10.4999 5.375ZM5.49993 2.875C5.77607 2.875 5.99993 3.09886 5.99993 3.375V5.16789L7.10348 6.27145C7.29874 6.46671 7.29874 6.78329 7.10348 6.97855C6.90822 7.17382 6.59163 7.17382 6.39637 6.97855L5.14637 5.72855C5.0526 5.63479 4.99993 5.50761 4.99993 5.375V3.375C4.99993 3.09886 5.22378 2.875 5.49993 2.875Z" fill="#FF2525"/>
+      <path d="M0.146447 1.64645C-0.0488155 1.84171 -0.0488155 2.15829 0.146447 2.35355C0.341709 2.54882 0.658291 2.54882 0.853554 2.35355L2.35355 0.853553C2.54882 0.658291 2.54882 0.341709 2.35355 0.146447C2.15829 -0.0488156 1.84171 -0.0488155 1.64645 0.146447L0.146447 1.64645Z" fill="#FB7185"/>
+      <path d="M9.35355 0.146447C9.15829 -0.0488155 8.84171 -0.0488155 8.64645 0.146447C8.45119 0.341709 8.45119 0.658291 8.64645 0.853554L10.1464 2.35355C10.3417 2.54882 10.6583 2.54882 10.8536 2.35355C11.0488 2.15829 11.0488 1.84171 10.8536 1.64645L9.35355 0.146447Z" fill="#FB7185"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M10.4999 5.375C10.4999 8.13643 8.26135 10.375 5.49993 10.375C2.7385 10.375 0.499925 8.13643 0.499925 5.375C0.499925 2.61358 2.7385 0.375 5.49993 0.375C8.26135 0.375 10.4999 2.61358 10.4999 5.375ZM5.49993 2.875C5.77607 2.875 5.99993 3.09886 5.99993 3.375V5.16789L7.10348 6.27145C7.29874 6.46671 7.29874 6.78329 7.10348 6.97855C6.90822 7.17382 6.59163 7.17382 6.39637 6.97855L5.14637 5.72855C5.0526 5.63479 4.99993 5.50761 4.99993 5.375V3.375C4.99993 3.09886 5.22378 2.875 5.49993 2.875Z" fill="#FB7185"/>
     </svg>
   );
 }
@@ -31,7 +31,7 @@ function ClockAlertIcon() {
 function ClockIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FF9025"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C"/>
     </svg>
   );
 }
@@ -320,8 +320,8 @@ const CONTRACT_FILTERS = [
   { label: "Active", count: 5 },
   { label: "Pending", count: 6 },
   { label: "Expiring soon", count: 5 },
-  { label: "NDAs", count: 3 },
-  { label: "Expired", count: 3 },
+  { label: "Flagged", count: 3 },
+  { label: "Blocked", count: 3 },
 ];
 
 // ── Contract Types ───────────────────────────────────────────────────
@@ -564,11 +564,16 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
 
 // ── Page ─────────────────────────────────────────────────────────────
 
-export function ContractsContent() {
+export function ContractsContent({ onNewContractRef }: { onNewContractRef?: React.MutableRefObject<(() => void) | null> } = {}) {
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [sortKey, setSortKey] = useState<ContractSortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [newContractOpen, setNewContractOpen] = useState(false);
+
+  // Expose open function to parent via ref
+  if (onNewContractRef) {
+    onNewContractRef.current = () => setNewContractOpen(true);
+  }
 
   const handleSort = useCallback((key: ContractSortKey) => {
     if (sortKey === key) {
@@ -601,8 +606,14 @@ export function ContractsContent() {
   return (
     <>
       <div className="flex flex-col gap-3 px-4 py-4 sm:px-5 sm:py-5">
-        {/* Filter tabs - left aligned */}
-        <div className="flex">
+        {/* New contract button — mobile only */}
+        <button type="button" onClick={() => setNewContractOpen(true)} className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] sm:hidden">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3V13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          New contract
+        </button>
+
+        {/* Filter tabs */}
+        <div className="scrollbar-hide overflow-x-auto">
           <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter}>
             {CONTRACT_FILTERS.map((tab, i) => (
               <TabItem key={tab.label} label={tab.label} count={tab.count} index={i} />
@@ -610,8 +621,19 @@ export function ContractsContent() {
           </Tabs>
         </div>
 
+        {/* Search + filter — mobile */}
+        <div className="flex items-center gap-2 sm:hidden">
+          <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.03] px-3 dark:bg-[rgba(224,224,224,0.03)]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+            <input type="text" placeholder="Search" className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/70" />
+          </div>
+          <div className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.03] dark:bg-[rgba(224,224,224,0.03)]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" /></svg>
+          </div>
+        </div>
+
         {/* Table card */}
-        <div className="overflow-hidden rounded-[20px] border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="overflow-hidden rounded-[20px] border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none">
           {/* Table scrollable wrapper */}
           <div className="overflow-x-auto">
             <div style={{ minWidth: 1000 }}>

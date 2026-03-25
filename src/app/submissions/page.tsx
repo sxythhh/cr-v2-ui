@@ -3162,7 +3162,7 @@ export default function SubmissionsPage() {
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-2xl border border-border bg-card-bg px-3 md:w-[300px] md:flex-none">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
               <svg
                 width="16"
                 height="16"
@@ -3191,7 +3191,7 @@ export default function SubmissionsPage() {
               onRemove={() => {}}
               searchPlaceholder="Filter..."
             >
-              <button className="flex size-9 cursor-pointer items-center justify-center rounded-2xl bg-accent text-page-text transition-colors hover:bg-accent">
+              <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl bg-accent text-page-text transition-colors hover:bg-accent dark:bg-[rgba(224,224,224,0.03)]">
                 <FilterIcon />
               </button>
             </FilterSelect>

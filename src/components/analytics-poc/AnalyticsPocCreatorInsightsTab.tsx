@@ -8,8 +8,8 @@ import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 
-const CARD = "rounded-2xl border border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none";
-const CARD_SM = "rounded-[10px] border border-border bg-card-bg";
+const CARD = "rounded-2xl border border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none";
+const CARD_SM = "rounded-[10px] border border-border bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
 /* ── Filter Bar ───────────────────────────────────────────────────── */
 
@@ -65,13 +65,13 @@ function FunnelRow({ label, pct, count, barWidth, barColor }: {
   barColor: string;
 }) {
   return (
-    <div className="relative flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-foreground/[0.02]" style={{ isolation: "isolate" }}>
-      <div className="absolute inset-y-0 left-0 rounded-xl" style={{ width: barWidth, background: barColor }} />
+    <div className="group/funnel relative flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-foreground/[0.02]" style={{ isolation: "isolate" }}>
+      <div className="absolute inset-y-0 left-0 rounded-xl transition-all duration-200 group-hover/funnel:brightness-110" style={{ width: barWidth, background: barColor }} />
       <span className="relative z-10 flex-1 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{label}</span>
       <div className="relative z-10 flex items-center gap-1.5">
         <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">{pct}</span>
         <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">·</span>
-        <span className="font-inter text-sm tracking-[-0.02em] text-page-text">{count}</span>
+        <span className="font-inter text-sm tracking-[-0.02em] text-page-text transition-colors group-hover/funnel:text-page-text">{count}</span>
       </div>
     </div>
   );
@@ -137,11 +137,11 @@ function SubmissionTrendCard() {
       </div>
 
       {/* Bar chart */}
-      <div className="flex items-end gap-2 px-4" style={{ height: 116 }}>
+      <div className="group/chart flex items-end gap-2 px-4" style={{ height: 116 }}>
         {barHeights.map((h, i) => (
-          <div key={i} className="relative min-w-0 flex-1" style={{ height: 116 }}>
+          <div key={i} className="group/bar relative min-w-0 flex-1 cursor-pointer" style={{ height: 116 }}>
             <div
-              className="absolute inset-x-0 bottom-0 rounded-lg"
+              className="absolute inset-x-0 bottom-0 rounded-lg transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: h,
                 background: "linear-gradient(0deg, rgba(52,211,153,0.3), rgba(52,211,153,0.3)), rgba(224,224,224,0.03)",
@@ -151,6 +151,10 @@ function SubmissionTrendCard() {
                 borderRadius: 8,
               }}
             />
+            {/* Tooltip */}
+            <div className="pointer-events-none absolute -top-7 left-1/2 z-20 -translate-x-1/2 rounded-md bg-[#252525] px-2 py-1 opacity-0 shadow-lg transition-opacity group-hover/bar:opacity-100 dark:bg-[#333]">
+              <span className="whitespace-nowrap font-inter text-[10px] font-medium text-white">{Math.round(h * 2.4)} subs</span>
+            </div>
           </div>
         ))}
       </div>
@@ -168,8 +172,8 @@ function SubmissionTrendCard() {
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">By platform</span>
         </div>
         {platforms.map((p) => (
-          <div key={p.label} className="relative flex items-center gap-4 rounded-xl px-4 py-2.5" style={{ isolation: "isolate" }}>
-            <div className="absolute inset-y-0 left-0 rounded-xl" style={{ width: p.barWidth, background: p.color }} />
+          <div key={p.label} className="group/plat relative flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-foreground/[0.02]" style={{ isolation: "isolate" }}>
+            <div className="absolute inset-y-0 left-0 rounded-xl transition-all duration-200 group-hover/plat:brightness-110" style={{ width: p.barWidth, background: p.color }} />
             <div className="relative z-10 flex flex-1 items-center gap-2">
               <PlatformIcon platform={p.platform} size={16} style={{ color: p.iconColor }} />
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{p.label}</span>
@@ -194,7 +198,59 @@ const TOP_CREATORS = [
   { name: "StacksOnStacks", earnings: "$3,640", cpm: "$0.78", rank: 3 },
 ];
 
+const RANKED_CREATORS = [
+  { rank: 4, name: "xKaizen", subtitle: "Gaming · NCA signed · Last active 2d ago", earned: "$1,654.20", cpm: "$0.84 CPM" },
+  { rank: 5, name: "BetBoss", subtitle: "Gaming · NCA signed · Last active 2d ago", earned: "$1,654.20", cpm: "$0.84 CPM" },
+  { rank: 6, name: "MemeQueen", subtitle: "Gaming · NCA signed · Last active 2d ago", earned: "$1,654.20", cpm: "$0.84 CPM" },
+  { rank: 7, name: "SoloGrinder", subtitle: "Sports · Active · Last active 1d ago", earned: "$1,420.80", cpm: "$0.72 CPM" },
+  { rank: 8, name: "VibeCheck", subtitle: "Lifestyle · NCA signed · Last active 3d ago", earned: "$1,310.50", cpm: "$0.91 CPM" },
+  { rank: 9, name: "TopFrags", subtitle: "Gaming · Active · Last active 5h ago", earned: "$1,205.00", cpm: "$0.68 CPM" },
+  { rank: 10, name: "EditKing", subtitle: "Gaming · NCA signed · Last active 1w ago", earned: "$980.40", cpm: "$0.55 CPM" },
+];
+
+function PodiumCard({ rank, name, earnings, height, bgColor, hoverBgColor, badgeColor, badgeContent }: {
+  rank: number; name: string; earnings: string; height: string;
+  bgColor: string; hoverBgColor: string; badgeColor: string;
+  badgeContent: React.ReactNode;
+}) {
+  return (
+    <button type="button" className={cn("hidden cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] p-4 transition-colors sm:flex", `w-full`)} style={{ height, background: bgColor }} onMouseEnter={(e) => { e.currentTarget.style.background = hoverBgColor; }} onMouseLeave={(e) => { e.currentTarget.style.background = bgColor; }}>
+      <div className="flex items-center justify-center rounded-full px-2" style={{ background: badgeColor, minHeight: 24, gap: 8 }}>
+        {badgeContent}
+      </div>
+      <div className="flex flex-col items-center gap-2">
+        <div className={cn("rounded-full bg-foreground/[0.08]", rank === 1 ? "size-10" : "size-8")} />
+        <div className="flex flex-col items-center gap-1.5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{earnings}</span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function MobilePodiumRow({ rank, name, earnings, bgColor, badgeColor, badgeContent }: {
+  rank: number; name: string; earnings: string; bgColor: string; badgeColor: string; badgeContent: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-2xl border border-foreground/[0.06] p-4 sm:hidden" style={{ background: bgColor }}>
+      <div className="flex items-center justify-center rounded-full px-2" style={{ background: badgeColor, minHeight: 24, gap: 8 }}>
+        {badgeContent}
+      </div>
+      <div className="flex flex-1 items-center gap-2">
+        <div className={cn("shrink-0 rounded-full bg-foreground/[0.08]", rank === 1 ? "size-8" : "size-8")} />
+        <div className="flex flex-col gap-1.5">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{earnings}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TopCreatorsCard() {
+  const crownIcon = <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>;
+
   return (
     <div className={cn(CARD, "flex flex-col gap-2 p-4")}>
       <div className="flex items-center justify-between">
@@ -205,44 +261,61 @@ function TopCreatorsCard() {
         </button>
       </div>
 
-      {/* Podium — matches home page exactly */}
-      <div className="flex items-end justify-center gap-2">
-        {/* 2nd place */}
-        <button type="button" className="flex h-[197px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(131,159,185,0.04)] p-4 transition-colors hover:bg-[rgba(131,159,185,0.08)]">
-          <div className="flex size-[26px] items-center justify-center rounded-full bg-[#839FB9] font-inter text-[16px] font-medium text-white">2</div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="size-8 rounded-full bg-foreground/[0.08]" />
-            <div className="flex flex-col items-center gap-1.5">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{TOP_CREATORS[1].name}</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{TOP_CREATORS[1].earnings}</span>
+      {/* Desktop podium */}
+      <div className="hidden items-end justify-center gap-2 sm:flex">
+        <PodiumCard rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} height="197px" bgColor="rgba(131,159,185,0.04)" hoverBgColor="rgba(131,159,185,0.08)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} />
+        <PodiumCard rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} height="260px" bgColor="rgba(229,113,0,0.04)" hoverBgColor="rgba(229,113,0,0.08)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} />
+        <PodiumCard rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} height="160px" bgColor="rgba(158,82,0,0.04)" hoverBgColor="rgba(158,82,0,0.08)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} />
+      </div>
+
+      {/* Mobile podium — horizontal rows */}
+      <div className="flex flex-col gap-2 sm:hidden">
+        <MobilePodiumRow rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} bgColor="linear-gradient(0deg, rgba(229,113,0,0.08), rgba(229,113,0,0.08)), var(--card-bg)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} />
+        <MobilePodiumRow rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} bgColor="rgba(131,159,185,0.04)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} />
+        <MobilePodiumRow rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} bgColor="rgba(158,82,0,0.04)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} />
+      </div>
+
+      {/* Ranked list with floating Private Tier CTA */}
+      <div className="relative flex-1">
+        <div className="scrollbar-hide flex flex-col overflow-y-auto" style={{ maxHeight: 231 }}>
+          {RANKED_CREATORS.map((c) => (
+            <div key={c.rank} className="flex items-center">
+              <div className="flex w-6 shrink-0 items-center justify-center py-3 pl-1 pr-3">
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
+              </div>
+              <div className="flex flex-1 items-center border-b border-foreground/[0.03] py-3">
+                <div className="flex flex-1 items-center gap-2 pr-3">
+                  <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
+                  <div className="flex min-w-0 flex-col gap-1.5">
+                    <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                    <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{c.subtitle}</span>
+                  </div>
+                </div>
+                <div className="flex w-24 shrink-0 items-center justify-end px-3">
+                  <span className="font-inter text-xs tracking-[-0.02em] text-[#34D399]">{c.earned}</span>
+                </div>
+                <div className="flex w-20 shrink-0 items-center justify-end px-3">
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{c.cpm}</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </button>
-        {/* 1st place */}
-        <button type="button" className="flex h-[260px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(229,113,0,0.04)] p-4 transition-colors hover:bg-[rgba(229,113,0,0.08)]">
-          <div className="flex h-6 items-center gap-2 rounded-full bg-[#E57100] px-2">
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
-            <span className="font-inter text-[16px] font-medium text-white">1</span>
-          </div>
-          <div className="flex flex-col items-center gap-4">
-            <div className="size-10 rounded-full bg-foreground/[0.08]" />
-            <div className="flex flex-col items-center gap-1.5">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{TOP_CREATORS[0].name}</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{TOP_CREATORS[0].earnings}</span>
+          ))}
+        </div>
+        {/* Bottom fade */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[52px] bg-gradient-to-t from-card-bg to-transparent" />
+        {/* Private Tier floating CTA — positioned over the list */}
+        <div className="absolute inset-x-0 bottom-0 z-10 px-0">
+          <div className="flex items-center justify-between gap-2 rounded-[10px] border border-foreground/[0.06] bg-card-bg p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+            <div className="flex flex-col gap-2">
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">Private Tier</span>
+              <span className="font-inter text-xs leading-[133%] tracking-[-0.02em] text-page-text-muted">Your top 3 creators aren&apos;t in your Private Tier yet.</span>
             </div>
+            <button type="button" className="flex shrink-0 cursor-pointer items-center gap-2 rounded-full bg-foreground px-3 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#252525]">
+              <svg width="12" height="12" viewBox="0 0 14 11" fill="none"><path d="M0.08 1.47C0.05 1.6 0.03 1.74 0.02 1.87C0 2.12 0 2.42 0 2.77V7.89C0 8.24 0 8.55 0.02 8.8C0.04 9.06 0.09 9.32 0.22 9.57C0.41 9.95 0.72 10.26 1.09 10.45C1.34 10.58 1.61 10.62 1.87 10.65C2.12 10.67 2.42 10.67 2.77 10.67H10.56C10.91 10.67 11.21 10.67 11.46 10.65C11.73 10.62 11.99 10.58 12.24 10.45C12.62 10.26 12.92 9.95 13.12 9.57C13.24 9.32 13.29 9.06 13.31 8.8C13.33 8.55 13.33 8.24 13.33 7.89V2.77C13.33 2.42 13.33 2.12 13.31 1.87C13.3 1.74 13.28 1.6 13.25 1.47L7.93 5.83C7.2 6.43 6.14 6.43 5.4 5.83L0.08 1.47Z" fill="currentColor"/><path d="M12.49 0.37C12.41 0.31 12.33 0.26 12.24 0.22C11.99 0.09 11.73 0.04 11.46 0.02C11.21 0 10.91 0 10.56 0H2.77C2.42 0 2.12 0 1.87 0.02C1.61 0.04 1.34 0.09 1.09 0.22C1 0.26 0.92 0.31 0.84 0.37L6.24 4.79C6.49 4.99 6.84 4.99 7.09 4.79L12.49 0.37Z" fill="currentColor"/></svg>
+              Invite all
+            </button>
           </div>
-        </button>
-        {/* 3rd place */}
-        <button type="button" className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(158,82,0,0.04)] p-4 transition-colors hover:bg-[rgba(158,82,0,0.08)]">
-          <div className="flex size-[27px] items-center justify-center rounded-full bg-[#9E5200] font-inter text-[16px] font-medium text-white">3</div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="size-8 rounded-full bg-foreground/[0.08]" />
-            <div className="flex flex-col items-center gap-1.5">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{TOP_CREATORS[2].name}</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{TOP_CREATORS[2].earnings}</span>
-            </div>
-          </div>
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -329,7 +402,7 @@ function CreatorRetentionCard() {
           <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">Re-engagement bet</span>
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">2,341 &ldquo;Cooling Off&rdquo; creators are your best re-engagement bet</span>
         </div>
-        <button type="button" className="flex shrink-0 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.03] px-3 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]">
+        <button type="button" className="flex shrink-0 cursor-pointer items-center gap-2 rounded-full bg-foreground px-3 py-2 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#252525]">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.33317 0.666016V4.66602M13.9998 7.33268H9.99984M7.33317 9.99935V13.9993M4.6665 7.33268H0.666504M7.33317 11.9993C4.75584 11.9993 2.6665 9.91001 2.6665 7.33268C2.6665 4.75535 4.75584 2.66602 7.33317 2.66602C9.9105 2.66602 11.9998 4.75535 11.9998 7.33268C11.9998 9.91001 9.9105 11.9993 7.33317 11.9993Z" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round"/></svg>
           Target
         </button>
@@ -414,7 +487,7 @@ function PrivateTierTable() {
                 </div>
               </div>
               <span className="w-24 text-right font-inter text-xs tracking-[-0.02em] text-page-text">{c.views}</span>
-              <span className="w-20 text-right font-inter text-xs tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{c.cpm}</span>
+              <span className="w-20 text-right font-inter text-xs tracking-[-0.02em] text-[#34D399]">{c.cpm}</span>
             </div>
           ))}
         </div>

@@ -218,7 +218,7 @@ function MilestoneRewards() {
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text/50">
             Milestone Rewards
           </span>
-          <InfoCircleIcon className="size-4 text-page-text/40" />
+          <span title="Earn bonus rewards when you hit view milestones"><InfoCircleIcon className="size-4 text-page-text/40" /></span>
         </div>
         <div className="flex h-8 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3">
           <span className="font-inter text-sm font-medium tracking-[-0.09px] text-page-text">

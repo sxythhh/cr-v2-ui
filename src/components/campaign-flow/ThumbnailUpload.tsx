@@ -156,7 +156,7 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
       )}
 
       <div className="flex items-start gap-1">
-        <IconInfoCircle size={12} className="mt-px shrink-0 text-foreground/40" />
+        <span title="Thumbnail guidelines"><IconInfoCircle size={12} className="mt-px shrink-0 text-foreground/40" /></span>
         <span className="text-[10px] tracking-[-0.02em] text-foreground/40">
           Ratio 2:3 — shown on the Discovery page. The subject/face should be positioned in the center.
         </span>

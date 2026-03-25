@@ -742,6 +742,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
 
 export default function CreatorsPage() {
   const [activeNavTab, setActiveNavTab] = useState(0);
+  const newContractRef = useRef<(() => void) | null>(null);
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [sortKey, setSortKey] = useState<ColumnKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -801,12 +802,24 @@ export default function CreatorsPage() {
             </svg>
           </button>
 
-          <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 2.667V10M8 2.667L5.333 5.333M8 2.667L10.667 5.333M2.667 10.667V12C2.667 12.736 3.264 13.333 4 13.333H12C12.736 13.333 13.333 12.736 13.333 12V10.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Export
-          </button>
+          {activeNavTab === 2 ? (
+            <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+              <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.16422 1.70985e-10C9.7987 -1.85163e-05 12.3579 1.51488 14.0687 4.38875C14.415 4.97056 14.415 5.69604 14.0687 6.27785C12.3579 9.15171 9.79871 10.6666 7.16423 10.6667C4.52975 10.6667 1.97052 9.15178 0.259753 6.27792C-0.0865845 5.69611 -0.0865842 4.97063 0.259753 4.38882C1.97051 1.51495 4.52975 1.8518e-05 7.16422 1.70985e-10ZM4.83089 5.33333C4.83089 4.04467 5.87556 3 7.16423 3C8.45289 3 9.49756 4.04467 9.49756 5.33333C9.49756 6.622 8.45289 7.66667 7.16423 7.66667C5.87556 7.66667 4.83089 6.622 4.83089 5.33333Z" fill="currentColor"/></svg>
+              Quick review
+            </button>
+          ) : activeNavTab === 3 ? (
+            <button onClick={() => newContractRef.current?.()} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              New contract
+            </button>
+          ) : (
+            <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2.667V10M8 2.667L5.333 5.333M8 2.667L10.667 5.333M2.667 10.667V12C2.667 12.736 3.264 13.333 4 13.333H12C12.736 13.333 13.333 12.736 13.333 12V10.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Export
+            </button>
+          )}
         </div>
       </div>
 
@@ -816,7 +829,7 @@ export default function CreatorsPage() {
       ) : activeNavTab === 2 ? (
         <ApplicationsContent />
       ) : activeNavTab === 3 ? (
-        <ContractsContent />
+        <ContractsContent onNewContractRef={newContractRef} />
       ) : activeNavTab === 4 ? (
         <AffiliateDashboardView />
       ) : (
@@ -837,7 +850,7 @@ export default function CreatorsPage() {
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-2xl border border-border bg-card-bg px-3 md:w-[300px] md:flex-none">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
               <svg
                 width="16"
                 height="16"
@@ -874,8 +887,8 @@ export default function CreatorsPage() {
                     className={cn(
                       "flex cursor-pointer items-center gap-0.5 transition-colors",
                       hasActive
-                        ? "h-9 rounded-xl bg-foreground/[0.06] py-0.5 pl-0.5 pr-3 text-page-text"
-                        : "size-9 justify-center rounded-2xl bg-accent text-page-text hover:bg-accent",
+                        ? "h-9 rounded-xl bg-foreground/[0.06] py-0.5 pl-0.5 pr-3 text-page-text dark:bg-[rgba(224,224,224,0.03)]"
+                        : "size-9 justify-center rounded-xl bg-accent text-page-text hover:bg-accent dark:bg-[rgba(224,224,224,0.03)]",
                     )}
                   >
                     <span className={cn(
@@ -885,7 +898,7 @@ export default function CreatorsPage() {
                       <FilterIcon />
                     </span>
                     {hasActive && (
-                      <span className="flex size-[14px] items-center justify-center rounded-full bg-[#FF2525]">
+                      <span className="flex size-[14px] items-center justify-center rounded-full bg-[#FB7185]">
                         <span className="font-[family-name:var(--font-inter)] text-[10px] font-semibold leading-none tracking-[-0.02em] text-white">
                           {activeCount}
                         </span>

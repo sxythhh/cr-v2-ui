@@ -11,6 +11,7 @@ import {
   ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
 } from "./AnalyticsPocCardPrimitives";
 import { AnalyticsPocPanel } from "./AnalyticsPocPanel";
+import { AnalyticsPocToggleGroup, AnalyticsPocToggleGroupItem } from "./AnalyticsPocToggleGroup";
 
 // ── Icons ────────────────────────────────────────────────────────────
 
@@ -317,9 +318,33 @@ export function AnalyticsPocDiscoverTab() {
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
-          {/* Blurred border effect */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px]" />
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-[#EC3EFF] opacity-30 blur-[0.5px] scale-x-[-1]" />
+          {/* Pink/magenta gradient border */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-2xl"
+            style={{
+              opacity: 0.3,
+              filter: "blur(6px)",
+              transform: "matrix(-1, 0, 0, 1, 0, 0)",
+              background: "linear-gradient(95.54deg, rgba(255,63,213,0) 0%, #FF3FD5 25%, rgba(255,63,213,0) 50%, #FF3FD5 75%, rgba(255,63,213,0) 100%)",
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              maskComposite: "exclude",
+              WebkitMaskComposite: "xor",
+              padding: 1.5,
+            }}
+          />
+          {/* Orange gradient border */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-2xl"
+            style={{
+              opacity: 0.3,
+              filter: "blur(6px)",
+              background: "linear-gradient(95.54deg, rgba(255,144,37,0) 0%, #FF9025 25%, rgba(255,144,37,0) 50%, #FF9025 75%, rgba(255,144,37,0) 100%)",
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              maskComposite: "exclude",
+              WebkitMaskComposite: "xor",
+              padding: 1.5,
+            }}
+          />
 
           {/* Label */}
           <div className="relative z-10 flex shrink-0 items-center gap-1.5">
@@ -442,32 +467,10 @@ export function AnalyticsPocDiscoverTab() {
         {/* Table Header */}
         <div className="flex items-center justify-between px-4 py-4">
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">Pre-campaign breakdown</span>
-          <div className="flex items-center gap-0.5 rounded-lg bg-foreground/[0.06] p-0.5">
-            <button
-              type="button"
-              className={cn(
-                "rounded-md px-4 py-1.5 text-xs font-medium tracking-[-0.02em] cursor-pointer",
-                breakdownMode === "ctr"
-                  ? "bg-card-bg text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
-                  : "text-page-text-muted",
-              )}
-              onClick={() => setBreakdownMode("ctr")}
-            >
-              By CTR
-            </button>
-            <button
-              type="button"
-              className={cn(
-                "rounded-md px-4 py-1.5 text-xs font-medium tracking-[-0.02em] cursor-pointer",
-                breakdownMode === "volume"
-                  ? "bg-card-bg text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
-                  : "text-page-text-muted",
-              )}
-              onClick={() => setBreakdownMode("volume")}
-            >
-              By Volume
-            </button>
-          </div>
+          <AnalyticsPocToggleGroup value={breakdownMode} onValueChange={(v) => setBreakdownMode(v as "ctr" | "volume")}>
+            <AnalyticsPocToggleGroupItem value="ctr">By CTR</AnalyticsPocToggleGroupItem>
+            <AnalyticsPocToggleGroupItem value="volume">By Volume</AnalyticsPocToggleGroupItem>
+          </AnalyticsPocToggleGroup>
         </div>
 
         {/* Mobile: card layout */}

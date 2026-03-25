@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
-import { useProximityHover } from "@/hooks/use-proximity-hover";
-import { springs } from "@/lib/springs";
 import { Modal } from "@/components/ui/modal";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 
@@ -155,18 +152,18 @@ function Checkbox({ checked, onChange, indeterminate }: { checked: boolean; onCh
       className={cn(
         "flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-colors",
         isActive
-          ? "border-foreground/80 bg-foreground/80"
+          ? "border-foreground/80 bg-foreground/80 dark:border-white dark:bg-white"
           : "border-foreground/[0.08] bg-foreground/[0.03] shadow-[0_0.457px_0.914px_rgba(0,0,0,0.03)]",
       )}
     >
       {checked && (
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M2.5 5L4.5 7L7.5 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2.5 5L4.5 7L7.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white dark:text-page-bg" />
         </svg>
       )}
       {indeterminate && !checked && (
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M3 5H7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M3 5H7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-white dark:text-page-bg" />
         </svg>
       )}
     </button>
@@ -358,7 +355,7 @@ function ClawbackView({
         </button>
         <button
           type="button"
-          className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.10)]"
+          className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]"
         >
           {banUsers ? "Confirm Clawback & Ban (3 payouts)" : "Confirm Clawback (3 payouts)"}
         </button>
@@ -469,9 +466,9 @@ function PayoutDetailDialog({
                 </span>
 
                 {/* URL pill */}
-                <div className="flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+                <div className="group/url flex cursor-pointer items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
                   <PlatformIcon platform="tiktok" size={16} />
-                  <span className="flex-1 truncate font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text">
+                  <span className="flex-1 truncate font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text group-hover/url:underline">
                     https://www.tiktok.com/@{row.name.toLowerCase()}/video/7447157783801203990
                   </span>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-page-text-subtle">
@@ -635,15 +632,16 @@ function PayoutDetailDialog({
           <button
             type="button"
             onClick={() => setShowClawback(true)}
-            className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(255,37,37,0.06)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[rgba(255,37,37,0.10)]"
+            className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]"
           >
             Request clawback
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+            className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
           >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6.66667 0C2.98477 0 0 2.98477 0 6.66667C0 10.3486 2.98477 13.3333 6.66667 13.3333C10.3486 13.3333 13.3333 10.3486 13.3333 6.66667C13.3333 2.98477 10.3486 0 6.66667 0ZM9.05364 5.31662C9.22851 5.1029 9.19701 4.78788 8.98328 4.61302C8.76956 4.43816 8.45455 4.46966 8.27969 4.68338L5.62955 7.92244L4.68689 6.97978C4.49162 6.78452 4.17504 6.78452 3.97978 6.97978C3.78452 7.17504 3.78452 7.49162 3.97978 7.68689L5.31311 9.02022C5.413 9.12011 5.55048 9.17308 5.69157 9.16605C5.83266 9.15901 5.96419 9.09262 6.05365 8.98328L9.05364 5.31662Z" fill="currentColor" /></svg>
             Approve payout
           </button>
         </div>
@@ -660,7 +658,6 @@ function PayoutTableRow({
   isSelected,
   onToggle,
   onRowClick,
-  registerItem,
 }: {
   row: PayoutRow;
   index: number;
@@ -668,20 +665,12 @@ function PayoutTableRow({
   isSelected: boolean;
   onToggle: () => void;
   onRowClick: () => void;
-  registerItem: (index: number, element: HTMLElement | null) => void;
 }) {
   const status = STATUS_CONFIG[row.status];
   const isFlagged = row.flagged;
-  const rowRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    registerItem(index, rowRef.current);
-    return () => registerItem(index, null);
-  }, [index, registerItem]);
 
   return (
     <div
-      ref={rowRef}
       className={cn(
         "group relative z-10 flex w-full cursor-pointer items-center px-1 transition-colors",
         isFlagged && "bg-[rgba(255,37,37,0.03)] dark:bg-[rgba(255,37,37,0.06)]",
@@ -784,18 +773,6 @@ function PayoutTableRow({
           </div>
         </div>
 
-        {/* Chevron - visible on hover */}
-        <div className="flex h-14 w-20 items-center justify-end py-3 pl-5 pr-3 text-foreground">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-          >
-            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
       </div>
     </div>
   );
@@ -830,12 +807,6 @@ export default function PayoutsPage() {
     });
   }, [sortKey, sortDir]);
 
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-  const { activeIndex, itemRects, sessionRef, handlers, registerItem, measureItems } = useProximityHover(tableContainerRef);
-
-  useEffect(() => { measureItems(); }, [measureItems]);
-
-  const activeRect = activeIndex !== null ? itemRects[activeIndex] : null;
 
   const allIds = PAYOUT_ROWS.map((r) => r.id);
   const allSelected = allIds.length > 0 && allIds.every((id) => selectedIds.has(id));
@@ -964,25 +935,7 @@ export default function PayoutsPage() {
           </div>
 
           {/* Data rows */}
-          <div
-            className="relative w-full min-w-[800px] overflow-hidden"
-            ref={tableContainerRef}
-            onMouseEnter={handlers.onMouseEnter}
-            onMouseMove={handlers.onMouseMove}
-            onMouseLeave={handlers.onMouseLeave}
-          >
-            <AnimatePresence>
-              {activeRect && (
-                <motion.div
-                  key={sessionRef.current}
-                  className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
-                  initial={{ opacity: 0, top: activeRect.top, left: activeRect.left, width: activeRect.width, height: activeRect.height }}
-                  animate={{ opacity: 1, top: activeRect.top, left: activeRect.left, width: activeRect.width, height: activeRect.height }}
-                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
-                  transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
-                />
-              )}
-            </AnimatePresence>
+          <div className="w-full min-w-[800px]">
             {sortedRows.map((row, i) => (
               <PayoutTableRow
                 key={row.id}
@@ -992,7 +945,6 @@ export default function PayoutsPage() {
                 isSelected={selectedIds.has(row.id)}
                 onToggle={() => toggleRow(row.id)}
                 onRowClick={() => setDetailRow({ row, index: i })}
-                registerItem={registerItem}
               />
             ))}
           </div>

@@ -79,11 +79,12 @@ export function DiscoverButton({
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}
+      title="Campaign info"
       {...props}
     >
       <Image
         src="/icons/svg/circle-info.svg"
-        alt=""
+        alt="Info"
         width={20}
         height={20}
         className="relative block opacity-[0.72] invert dark:invert-0"

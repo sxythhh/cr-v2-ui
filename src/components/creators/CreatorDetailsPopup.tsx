@@ -493,12 +493,12 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
 
         {/* Rows */}
         {creator.submissions.map((sub, i) => (
-          <div key={i} className={cn("flex items-center px-1", i < creator.submissions.length - 1 && "border-b border-foreground/[0.03]")}>
+          <div key={i} className={cn("group/row flex cursor-pointer items-center px-1 transition-colors hover:bg-foreground/[0.02]", i < creator.submissions.length - 1 && "border-b border-foreground/[0.03]")}>
             <div className="flex w-12 items-center justify-center py-4">
               <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">{i + 1}</span>
             </div>
             <div className="flex flex-1 items-center py-4">
-              <span className="truncate text-sm font-medium tracking-[-0.02em] text-page-text">{sub.title}</span>
+              <span className="truncate text-sm font-medium tracking-[-0.02em] text-page-text underline-offset-2 group-hover/row:underline">{sub.title}</span>
             </div>
             <div className="flex w-[132px] items-center justify-end py-4 px-3">
               <div className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.03] backdrop-blur-[12px]">
