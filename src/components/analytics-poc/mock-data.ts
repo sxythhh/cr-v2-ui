@@ -99,9 +99,9 @@ const TOTAL_POSTS_STACKED_CHART: AnalyticsPocStackedBarChartData = {
   points: buildTotalPostsStackedPoints(),
   series: [
     { color: "#34D399", key: "tiktok", label: "TikTok" },
-    { color: "#C084FC", key: "instagram", label: "Instagram" },
+    { color: "#E879F9", key: "instagram", label: "Instagram" },
     { color: "#FB7185", key: "youtube", label: "YouTube" },
-    { color: "#60A5FA", key: "facebook", label: "Facebook" },
+    { color: "currentColor", key: "x", label: "X" },
   ],
   xTicks: CHART_TICKS,
   yLabels: ["100k", "75k", "50k", "25k", "10k", "0"],
@@ -126,7 +126,6 @@ const TOP_POST_PLATFORMS: AnalyticsPocPlatform[] = [
   "tiktok",
   "instagram",
   "youtube",
-  "facebook",
   "x",
 ];
 
@@ -364,16 +363,6 @@ function buildTotalPostsStackedPoints() {
   const labels = buildDateLabels("2026-01-07", TOTAL_POINTS);
 
   return labels.map((label, index) => ({
-    facebook: clamp(
-      Math.round(
-        3200 +
-          Math.sin(index / 1.7) * 1800 +
-          Math.cos((index + 1) / 2.9) * 1500 +
-          (index % 8 === 1 ? 2200 : 0),
-      ),
-      1500,
-      8200,
-    ),
     index,
     instagram: clamp(
       Math.round(
@@ -395,6 +384,16 @@ function buildTotalPostsStackedPoints() {
       ),
       22000,
       61000,
+    ),
+    x: clamp(
+      Math.round(
+        3200 +
+          Math.sin(index / 1.7) * 1800 +
+          Math.cos((index + 1) / 2.9) * 1500 +
+          (index % 8 === 1 ? 2200 : 0),
+      ),
+      1500,
+      8200,
     ),
     youtube: clamp(
       Math.round(
@@ -590,11 +589,11 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       "Average effective payout per thousand views split by platform.",
     items: [
       {
-        accentColor: "#60A5FA",
-        id: "ecpm-facebook",
-        label: "Facebook",
+        accentColor: "currentColor",
+        id: "ecpm-x",
+        label: "X",
         percentLabel: "",
-        platform: "facebook",
+        platform: "x",
         progress: 100,
         rightMetrics: [{ text: "$0.22" }],
         valueLabel: "$0.22",
@@ -668,11 +667,11 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "1.8%",
       },
       {
-        accentColor: "#60A5FA",
-        id: "er-facebook",
-        label: "Facebook",
+        accentColor: "currentColor",
+        id: "er-x",
+        label: "X",
         percentLabel: "",
-        platform: "facebook",
+        platform: "x",
         progress: 22,
         rightMetrics: [{ text: "0.9%" }],
         valueLabel: "0.9%",
@@ -752,10 +751,10 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
       footerLeft: "Less",
       footerRight: "More",
       heatmapData: buildHeatmapData(17),
-      platform: "facebook",
+      platform: "x",
       startDate: HEATMAP_START,
-      subtitle: "Most active on Sundays ~8 videos/week",
-      title: "Facebook",
+      subtitle: "Most active on Sundays ~8 posts/week",
+      title: "X",
       tone: "blue",
     },
   ],
@@ -938,11 +937,11 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "123",
       },
       {
-        accentColor: "#60A5FA",
-        id: "posts-facebook",
-        label: "Facebook",
+        accentColor: "currentColor",
+        id: "posts-x",
+        label: "X",
         percentLabel: "8%",
-        platform: "facebook",
+        platform: "x",
         progress: 8,
         rightMetrics: [{ text: "8%", tone: "muted" }, { text: "61" }],
         valueLabel: "61",
@@ -997,12 +996,12 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         value: "123 · 13%",
       },
       {
-        accentColor: "#60A5FA",
-        dotColorClass: "bg-[#60A5FA]",
+        accentColor: "currentColor",
+        dotColorClass: "bg-foreground",
         enabled: true,
-        label: "Facebook",
-        metricKey: "facebook",
-        platform: "facebook",
+        label: "X",
+        metricKey: "x",
+        platform: "x",
         selected: true,
         value: "61 · 8%",
       },
@@ -1047,11 +1046,11 @@ export const analyticsPocMockData: AnalyticsPocPageData = {
         valueLabel: "612K",
       },
       {
-        accentColor: "#60A5FA",
-        id: "views-facebook",
-        label: "Facebook",
+        accentColor: "currentColor",
+        id: "views-x",
+        label: "X",
         percentLabel: "7%",
-        platform: "facebook",
+        platform: "x",
         progress: 7,
         rightMetrics: [{ text: "7%", tone: "muted" }, { text: "354K" }],
         valueLabel: "354K",
@@ -1432,7 +1431,7 @@ export const analyticsPocCpmTooltipMockData: AnalyticsPocCpmTooltipData = {
     { platform: "tiktok", label: "TikTok", cpm: "$0.62", efficient: true },
     { platform: "instagram", label: "Instagram", cpm: "$0.91", efficient: true },
     { platform: "youtube", label: "YouTube", cpm: "$1.18", efficient: false },
-    { platform: "facebook", label: "Facebook", cpm: "$0.78", efficient: true },
+    { platform: "x", label: "X", cpm: "$0.78", efficient: true },
   ],
 };
 
@@ -1621,7 +1620,7 @@ export const analyticsPocCampaignHealthMockData: AnalyticsPocCampaignHealthTabPr
 const DAY_DRILLDOWN_CREATORS = [
   { name: "ContentCrazy", platform: "youtube" as const },
   { name: "StacksOnStacks", platform: "tiktok" as const },
-  { name: "BetBoss", platform: "facebook" as const },
+  { name: "BetBoss", platform: "x" as const },
   { name: "NeonEdits", platform: "instagram" as const },
   { name: "MemeQueen", platform: "tiktok" as const },
 ];

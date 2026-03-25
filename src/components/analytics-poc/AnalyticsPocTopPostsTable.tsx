@@ -113,12 +113,12 @@ function MobilePostCard({
               {row.author}
             </p>
           </div>
-          <div className="flex shrink-0 items-center justify-center rounded-full bg-foreground/[0.03] p-1.5 backdrop-blur-xl">
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-foreground/[0.03] backdrop-blur-xl">
             {hasAnalyticsPocPlatformIcon(normalizedPlatform) ? (
               <AnalyticsPocPlatformIcon
                 className="text-foreground/70"
                 platform={normalizedPlatform}
-                size={12}
+                size={14}
                 tone="inherit"
               />
             ) : null}

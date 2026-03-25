@@ -336,14 +336,11 @@ export default function Heatmap({
                 {legend.left}
               </text>
               {scale.map((c, i) => (
-                <rect
+                <circle
                   key={`legend-${i}`}
-                  x={dayLabelWidth + i * (legendBlockSize + legendBlockGap)}
-                  y={legendY}
-                  width={legendBlockSize}
-                  height={legendBlockSize}
-                  rx={2}
-                  ry={2}
+                  cx={dayLabelWidth + i * (legendBlockSize + legendBlockGap) + legendBlockSize / 2}
+                  cy={legendY + legendBlockSize / 2}
+                  r={legendBlockSize / 2}
                   fill={c}
                 />
               ))}

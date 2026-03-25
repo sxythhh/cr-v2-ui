@@ -67,13 +67,13 @@ export function AnalyticsPocChartTooltip({
               <div className="flex min-w-0 items-center gap-[6px]">
                 <span
                   className="inline-block size-[8px] shrink-0 rounded-[2px]"
-                  style={{ backgroundColor: row.color }}
+                  style={{ backgroundColor: row.color === "currentColor" ? "#fff" : row.color }}
                 />
                 <span className="truncate font-inter text-[12px] font-normal leading-[1.2] text-white">
                   {row.label}
                 </span>
               </div>
-              <span className="ml-auto shrink-0 whitespace-nowrap font-inter text-[12px] font-normal leading-[1.2] text-right text-white tabular-nums">
+              <span className="ml-auto shrink-0 whitespace-nowrap font-inter text-[12px] font-normal leading-[1.2] text-right text-white">
                 {row.value || "-"}
               </span>
             </div>

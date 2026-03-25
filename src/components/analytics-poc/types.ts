@@ -4,7 +4,6 @@ export type AnalyticsPocPlatform =
   | "instagram"
   | "tiktok"
   | "youtube"
-  | "facebook"
   | "x";
 
 export type AnalyticsPocTone = "neutral" | "success" | "warning" | "danger";
@@ -196,7 +195,7 @@ export type AnalyticsPocTotalPostsMetricKey =
   | "tiktok"
   | "instagram"
   | "youtube"
-  | "facebook";
+  | "x";
 
 export interface AnalyticsPocChartTick {
   index: number;
@@ -243,7 +242,7 @@ export interface AnalyticsPocStackedBarDataPoint {
   tiktok: number;
   instagram: number;
   youtube: number;
-  facebook: number;
+  x: number;
 }
 
 export interface AnalyticsPocStackedBarSeries {

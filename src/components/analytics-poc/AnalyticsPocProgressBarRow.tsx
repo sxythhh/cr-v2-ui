@@ -188,7 +188,7 @@ export function AnalyticsPocProgressBarRow({
         className="absolute inset-y-0 left-0 rounded-[12px]"
         style={{
           ...fillStyle,
-          backgroundColor: accentColor ? `color-mix(in srgb, ${accentColor} 10%, transparent)` : "var(--ap-pill-bg-solid)",
+          backgroundColor: accentColor ? `color-mix(in srgb, ${accentColor} 18%, transparent)` : "var(--ap-pill-bg-solid)",
         }}
       />
 

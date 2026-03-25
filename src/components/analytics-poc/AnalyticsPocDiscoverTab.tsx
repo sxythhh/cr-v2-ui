@@ -407,19 +407,19 @@ export function AnalyticsPocDiscoverTab() {
             <MobileStatScroll stats={STATS} />
           </div>
           {/* Desktop: grid stats */}
-          <div className="hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <div className="hidden gap-2 sm:flex">
             {STATS.map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
+                className="flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none lg:gap-2 lg:p-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
+                  <span className="text-xs font-medium tracking-[-0.02em] text-page-text tabular-nums lg:text-sm">{stat.value}</span>
                   {stat.showChange && (
-                    <span className="text-xs font-medium tracking-[-0.02em] text-[#34D399]">{stat.change}</span>
+                    <span className="text-[10px] font-medium tracking-[-0.02em] text-[#34D399] lg:text-xs">{stat.change}</span>
                   )}
                 </div>
-                <span className="text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
+                <span className="truncate text-[10px] tracking-[-0.02em] text-page-text-muted lg:text-xs">{stat.label}</span>
               </div>
             ))}
           </div>

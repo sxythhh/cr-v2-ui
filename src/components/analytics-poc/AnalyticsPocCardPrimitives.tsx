@@ -4,7 +4,7 @@ import { GlassTooltip } from "@/components/ui/glass-tooltip";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPocCardHeaderProps } from "./types";
 
-export const ANALYTICS_POC_CARD_CONTAINER_CLASS = "relative overflow-hidden";
+export const ANALYTICS_POC_CARD_CONTAINER_CLASS = "relative overflow-visible";
 export const ANALYTICS_POC_INTERACTIVE_CARD_CLASS = cn(
   "ap-card-interactive",
   "group/ap-card",

@@ -938,9 +938,9 @@ function FinanceOverview() {
               ))}
             </div>
             {/* Bars */}
-            <div className="flex flex-1 items-end justify-between gap-6">
+            <div className="group/bars flex flex-1 items-end justify-between gap-6">
               {BAR_MONTHS.map((m, i) => (
-                <div key={m} className="group/bar relative flex flex-col items-center gap-2">
+                <div key={m} className="group/bar relative flex flex-col items-center gap-2 transition-opacity duration-150 group-hover/bars:opacity-40 hover:!opacity-100">
                   {/* Tooltip */}
                   <div className="pointer-events-none absolute -top-[68px] left-1/2 z-20 hidden -translate-x-1/2 flex-col gap-1 rounded-xl border border-foreground/[0.06] bg-white px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)] group-hover/bar:flex dark:border-[rgba(224,224,224,0.06)] dark:bg-[#232323]">
                     <span className="whitespace-nowrap text-center font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-muted">{m}</span>
@@ -954,8 +954,8 @@ function FinanceOverview() {
                     </div>
                   </div>
                   <div className="relative w-7 cursor-pointer transition-opacity group-hover/bar:opacity-100" style={{ height: BAR_HEIGHTS[i] }}>
-                    <div className="absolute inset-x-0 top-0 rounded-lg border border-white transition-[background] group-hover/bar:!bg-[rgba(237,18,133,0.5)] dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.3)" }} />
-                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-white transition-[background] group-hover/bar:!bg-[rgba(0,153,77,0.5)] dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.3)" }} />
+                    <div className="absolute inset-x-0 top-0 rounded-lg border border-white dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.5)" }} />
+                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-white dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.5)" }} />
                   </div>
                 </div>
               ))}
@@ -1034,11 +1034,7 @@ function FinanceOverview() {
                 </div>
                 <div className="flex w-[128px] items-center justify-end py-3.5 pr-3">
                   <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: tx.statusBg }}>
-                    {tx.status === "Paid" ? (
-                      <StatusIcon status={tx.status} color={tx.statusColor} />
-                    ) : (
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill={tx.statusColor}><path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 100 10A5 5 0 006 1zm0 3a.5.5 0 01.5.5V6h.5a.5.5 0 010 1h-1a.5.5 0 01-.5-.5v-2A.5.5 0 016 4z"/></svg>
-                    )}
+                    <StatusIcon status={tx.status} color={tx.statusColor} />
                     <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: tx.statusColor }}>{tx.status}</span>
                   </span>
                 </div>

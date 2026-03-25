@@ -674,6 +674,22 @@ const BANNED_MEMBERS = [
   { name: "Derek Kim", email: "derek@outpacestudios.com", role: "Owner", lastSeen: "Feb 28, 2026" },
 ];
 
+function SettingsClockIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C" />
+    </svg>
+  );
+}
+
+function SettingsBannedIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM3.15 3.85711L3.85711 3.15L5 4.29289L6.14289 3.15L6.85 3.85711L5.70711 5L6.85 6.14289L6.14289 6.85L5 5.70711L3.85711 6.85L3.15 6.14289L4.29289 5L3.15 3.85711Z" fill="#FB7185" />
+    </svg>
+  );
+}
+
 function StatusBadge({ status }: { status: "active" | "pending" | "banned" }) {
   if (status === "active") {
     return (
@@ -685,14 +701,14 @@ function StatusBadge({ status }: { status: "active" | "pending" | "banned" }) {
   if (status === "pending") {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(229,113,0,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#E57100] dark:text-[#FB923C]">
-        <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#FB923C" /></svg>
+        <SettingsClockIcon />
         Pending
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(251,113,133,0.08)] py-1 pl-1.5 pr-2 font-inter text-[12px] font-medium tracking-[-0.02em] text-[#FB7185]">
-      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM3.15 3.85711L3.85711 3.15L5 4.29289L6.14289 3.15L6.85 3.85711L5.70711 5L6.85 6.14289L6.14289 6.85L5 5.70711L3.85711 6.85L3.15 6.14289L4.29289 5L3.15 3.85711Z" fill="#FB7185" /></svg>
+      <SettingsBannedIcon />
       Banned
     </span>
   );

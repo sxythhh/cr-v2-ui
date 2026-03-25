@@ -631,7 +631,7 @@ function PerformanceMainLineChartBody({
   };
 
   const chartContainerWidth = measuredPlotWidth || (chartPlotAreaRef.current?.clientWidth ?? 0);
-  const chartRightMargin = hasRightAxis ? 48 : 4;
+  const chartRightMargin = hasRightAxis ? 48 : 24;
   const chartPlotWidth = Math.max(1, chartContainerWidth - chartRightMargin);
   // Derive hover X from data index for reliable gradient alignment —
   // Recharts' activeCoordinate.x can drift due to margin/padding discrepancies.
@@ -744,7 +744,7 @@ function PerformanceMainLineChartBody({
           <ResponsiveContainer height="100%" width="100%">
             <LineChart
               data={dataset}
-              margin={{ bottom: 2, left: 0, right: hasRightAxis ? 48 : 4, top: 0 }}
+              margin={{ bottom: 2, left: 0, right: hasRightAxis ? 48 : 24, top: 0 }}
               onClick={handleLineChartClick}
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
@@ -928,7 +928,7 @@ function PerformanceMainLineChartBody({
         <div
           className="absolute top-0 bottom-0 transition-opacity duration-100"
           style={{
-            right: hasRightAxis ? 47 : 0,
+            right: hasRightAxis ? 47 : 24,
             width: 0,
             borderLeft: "1px solid var(--foreground)",
             opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 0.2,
@@ -968,7 +968,7 @@ function PerformanceMainLineChartBody({
         {/* Static end-date pill — fades when hover pill overlaps */}
         <div
           className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center transition-opacity duration-100"
-          style={{ right: hasRightAxis ? 47 : 4, transform: "translateX(50%)" }}
+          style={{ right: hasRightAxis ? 47 : 24, transform: "translateX(50%)" }}
         >
           <span className="hidden whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-[#2a2a2a] sm:inline">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
@@ -1008,13 +1008,37 @@ function StackedBarChartBody({
     () =>
       stackedBarChart.points.map((point) => ({
         ...point,
-        facebook: activeMetricKeys.has("facebook") ? point.facebook : 0,
         instagram: activeMetricKeys.has("instagram") ? point.instagram : 0,
         tiktok: activeMetricKeys.has("tiktok") ? point.tiktok : 0,
+        x: activeMetricKeys.has("x") ? point.x : 0,
         youtube: activeMetricKeys.has("youtube") ? point.youtube : 0,
       })),
     [activeMetricKeys, stackedBarChart.points],
   );
+  // On mobile, show fewer bars (weekly view ~7 points)
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark") || mq.matches);
+    checkDark();
+    const obs = new MutationObserver(checkDark);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  const displayPoints = useMemo(() => {
+    if (!isMobile || chartPoints.length <= 7) return chartPoints;
+    // Show last 7 data points for weekly view on mobile
+    return chartPoints.slice(-7);
+  }, [chartPoints, isMobile]);
+
   const renderedStackSeries = [...stackedBarChart.series].reverse();
   // Find the topmost VISIBLE series key (last in renderedStackSeries that is active)
   const [hoveredBarIdx, setHoveredBarIdx] = useState<number | null>(null);
@@ -1080,12 +1104,12 @@ function StackedBarChartBody({
     const visibleKeys = seriesKeys.filter((k) => activeMetricKeys.has(k));
     if (visibleKeys.length === 0) return 1;
     return Math.max(
-      ...chartPoints.map((point) =>
+      ...displayPoints.map((point) =>
         visibleKeys.reduce((sum, key) => sum + (Number((point as unknown as Record<string, unknown>)[key]) || 0), 0),
       ),
       1,
     );
-  }, [chartPoints, activeMetricKeys, stackedBarChart.series]);
+  }, [displayPoints, activeMetricKeys, stackedBarChart.series]);
 
   // Compute nice yLabels from dynamic max
   const dynamicYLabels = useMemo(() => {
@@ -1114,7 +1138,7 @@ function StackedBarChartBody({
   }, [dynamicYLabels, dynamicMax]);
 
   return (
-    <div className="absolute inset-0 flex gap-4 chart-no-focus-ring" ref={chartHoverRootRef}>
+    <div className="absolute inset-0 flex gap-4 overflow-visible chart-no-focus-ring" ref={chartHoverRootRef}>
       <div className="flex h-full w-16 shrink-0 flex-col justify-between pb-7 pt-[7px]">
         {animatedYLabels.map((label, i) => (
           <div className="flex items-center justify-end" key={`left-${i}`}>
@@ -1127,9 +1151,9 @@ function StackedBarChartBody({
         ))}
       </div>
 
-      <div className="relative min-w-0 flex-1">
-        <div className="absolute inset-x-0 bottom-7 top-0 flex items-end gap-1" ref={chartPlotAreaRef}>
-          {chartPoints.map((point, pointIdx) => {
+      <div className="relative z-10 min-w-0 flex-1 overflow-visible">
+        <div className="group/bars absolute inset-x-0 bottom-7 top-0 flex items-end gap-1" ref={chartPlotAreaRef} onMouseLeave={() => setHoveredBarIdx(null)}>
+          {displayPoints.map((point, pointIdx) => {
             const record = point as unknown as Record<string, unknown>;
             const label = String(record.label ?? pointIdx);
             // Stack heights: each visible series contributes a segment
@@ -1151,62 +1175,81 @@ function StackedBarChartBody({
               }))
               .sort((a, b) => b.value - a.value); // tallest first (renders behind)
 
-            // Cumulative height for stacking — each series adds on top of previous
+            // Cumulative height for stacking — all segments rendered, hidden ones get 0 height
             let cumValue = 0;
-            const stackedSegments = segments.filter((s) => s.visible && s.value > 0).map((s) => {
-              cumValue += s.value;
-              return { ...s, cumHeight: maxValue > 0 ? (cumValue / maxValue) * 100 : 0 };
+            const stackedSegments = segments.map((s) => {
+              if (s.visible && s.value > 0) cumValue += s.value;
+              return { ...s, cumHeight: s.visible && s.value > 0 ? (maxValue > 0 ? (cumValue / maxValue) * 100 : 0) : 0 };
             }).reverse(); // reverse so tallest (cumulative) renders first (behind)
 
-            const tallestPct = stackedSegments.length > 0 ? stackedSegments[0].cumHeight : 0;
+            const tallestPct = stackedSegments.length > 0 ? Math.max(...stackedSegments.map((s) => s.cumHeight)) : 0;
 
             return (
               <div
                 key={pointIdx}
-                className="group/bar relative flex-1 self-end"
-                style={{ maxWidth: 40, height: `${Math.max(tallestPct, 0.5)}%` }}
+                className="group/bar relative flex-1 self-end transition-[height,opacity] duration-300 ease-out group-hover/bars:opacity-40 hover:!opacity-100"
+                style={{
+                  maxWidth: 40,
+                  height: `${Math.max(tallestPct, 0.5)}%`,
+                }}
                 onMouseEnter={() => setHoveredBarIdx(pointIdx)}
-                onMouseLeave={() => setHoveredBarIdx(null)}
               >
-                {/* Tooltip */}
-                {hoveredBarIdx === pointIdx && (
-                  <div className="pointer-events-none absolute -top-2 left-1/2 z-20 -translate-x-1/2 -translate-y-full">
-                    <AnalyticsPocChartTooltip
-                      label={label}
-                      rows={segments.filter((s) => s.visible && s.value > 0).map((seg) => {
-                        const seriesLabel = stackedBarChart.series.find((sr) => sr.key === seg.key)?.label ?? seg.key;
-                        return {
-                          key: seg.key,
-                          color: seg.color,
-                          label: seriesLabel,
-                          value: seg.value >= 1000 ? `${(seg.value / 1000).toFixed(1)}K` : String(seg.value),
-                        };
-                      })}
-                    />
-                  </div>
-                )}
-
                 {/* Overlapping bar pills — tallest behind, shortest in front */}
                 {stackedSegments.map((seg, i) => (
                   <div
                     key={seg.key}
-                    className="absolute inset-x-0 bottom-0 cursor-pointer border border-white transition-[background] group-hover/bar:[--bar-mix:35%] [--bar-mix:20%] dark:[--bar-mix:30%] dark:group-hover/bar:[--bar-mix:50%] dark:border-[var(--card-bg,#1C1C1C)]"
+                    className="absolute inset-x-0 bottom-0 cursor-pointer border-2 border-white dark:border-[var(--ap-panel-surface,var(--card-bg,#1C1C1C))]"
                     style={{
-                      height: tallestPct > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
-                      background: `color-mix(in srgb, ${seg.color} var(--bar-mix), var(--card-bg, white))`,
-                      /* light: 20% default, 35% hover. dark: 30% default, 50% hover */
+                      height: tallestPct > 0 && seg.cumHeight > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
+                      background: seg.color,
                       borderRadius: "8px 8px 0 0",
                       zIndex: i,
+                      transition: "height 300ms ease-out",
                     }}
                   />
                 ))}
               </div>
             );
           })}
+          {/* Floating tooltip — two layers: outer fades, inner slides */}
+          {(() => {
+            const idx = hoveredBarIdx ?? 0;
+            const pt = displayPoints[idx];
+            const rec = pt ? (pt as unknown as Record<string, unknown>) : {};
+            const lbl = String(rec.label ?? idx);
+            const segs = renderedStackSeries
+              .map((sr) => ({ key: sr.key, color: sr.color, value: Number(rec[sr.key]) || 0, label: stackedBarChart.series.find((s) => s.key === sr.key)?.label ?? sr.key }))
+              .filter((s) => activeMetricKeys.has(s.key) && s.value > 0);
+            const barCount = displayPoints.length || 1;
+            const pct = ((idx + 0.5) / barCount) * 100;
+            return (
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 z-50"
+                style={{
+                  opacity: hoveredBarIdx !== null ? 1 : 0,
+                  transition: "opacity 150ms ease-out",
+                }}
+              >
+                <div
+                  className="absolute top-1"
+                  style={{
+                    left: `${pct}%`,
+                    transform: `translateX(${idx <= 1 ? '0%' : idx >= barCount - 2 ? '-100%' : '-50%'})`,
+                    transition: "left 120ms cubic-bezier(0.22, 1, 0.36, 1)",
+                  }}
+                >
+                  <AnalyticsPocChartTooltip
+                    label={lbl}
+                    rows={segs.map((s) => ({ key: s.key, color: s.color, label: s.label, value: s.value >= 1000 ? `${(s.value / 1000).toFixed(1)}K` : String(s.value) }))}
+                  />
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex h-6 items-center justify-between gap-2">
-          {stackedBarChart.xTicks.map((tick) => (
+          {(isMobile ? stackedBarChart.xTicks.slice(-7) : stackedBarChart.xTicks).map((tick) => (
             <span
               className="font-inter text-[10px] font-normal leading-[1.2] tracking-[0.1px] text-[var(--ap-text-tertiary)]"
               key={`tick-${tick.index}-${tick.label}`}

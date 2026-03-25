@@ -84,7 +84,7 @@ export function AnalyticsPocDateRangePicker({
             "bg-white dark:bg-card-bg",
             "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
             "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
-            "outline-none transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.08]",
+            "outline-none transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.05] dark:hover:border-white/[0.10]",
             "focus-visible:outline-none",
           )}
           type="button"

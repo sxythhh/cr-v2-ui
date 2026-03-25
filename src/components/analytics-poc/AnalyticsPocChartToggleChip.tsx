@@ -136,7 +136,7 @@ export function AnalyticsPocChartToggleChip({
         {indicator}
         <span
           className={cn(
-            "truncate font-inter text-xs font-normal leading-[1] tracking-[-0.02em]",
+            "truncate font-inter text-xs font-normal leading-[1.3] tracking-[-0.02em]",
             enabled
               ? "text-page-text"
               : "text-page-text-subtle",
@@ -146,7 +146,7 @@ export function AnalyticsPocChartToggleChip({
         </span>
       </span>
 
-      <span className="shrink-0 font-inter text-xs leading-[1] tracking-[-0.02em]">
+      <span className="shrink-0 font-inter text-xs leading-[1.3] tracking-[-0.02em]">
         {(() => {
           const parts = value.split(" · ");
           if (parts.length < 2) {

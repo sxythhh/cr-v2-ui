@@ -1,7 +1,6 @@
 import type { FC, SVGProps } from "react";
 import XIcon from "@/assets/icons/platforms/x.svg";
 import YoutubeIcon from "@/assets/icons/platforms/youtube.svg";
-import FacebookIcon from "./icons/facebook.svg";
 import InstagramIcon from "./icons/instagram.svg";
 import TiktokIcon from "./icons/tiktok.svg";
 
@@ -9,7 +8,6 @@ const ANALYTICS_POC_PLATFORM_ICON_MAP: Record<
   string,
   FC<SVGProps<SVGSVGElement>>
 > = {
-  facebook: FacebookIcon,
   instagram: InstagramIcon,
   tiktok: TiktokIcon,
   x: XIcon,
@@ -17,7 +15,6 @@ const ANALYTICS_POC_PLATFORM_ICON_MAP: Record<
 };
 
 export const ANALYTICS_POC_PLATFORM_LABELS: Record<string, string> = {
-  facebook: "Facebook",
   instagram: "Instagram",
   tiktok: "TikTok",
   x: "X",
@@ -25,9 +22,9 @@ export const ANALYTICS_POC_PLATFORM_LABELS: Record<string, string> = {
 };
 
 const ANALYTICS_POC_PLATFORM_BRAND_COLORS: Record<string, string> = {
-  facebook: "#60A5FA",
   instagram: "#C084FC",
   tiktok: "#34D399",
+  x: "#252525",
   youtube: "#FB7185",
 };
 
