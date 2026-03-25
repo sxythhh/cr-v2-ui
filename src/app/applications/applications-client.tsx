@@ -310,7 +310,7 @@ function ApplicationDetailsModal({
           </div>
 
           {/* Tabs */}
-          <div className="mt-4">
+          <div className="mt-4 overflow-x-auto scrollbar-hide">
             <Tabs selectedIndex={activeTabIndex} onSelect={setActiveTabIndex} variant="underline">
               <TabItem label="Application" index={0} />
               <TabItem label="Recent content" index={1} />

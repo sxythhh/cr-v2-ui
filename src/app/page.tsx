@@ -1266,11 +1266,11 @@ function DashboardView() {
       </div>
 
       {/* KPI Cards — Mobile carousel */}
-      <div className="sm:hidden">
+      <div className="sm:hidden [&_[class*=snap-center]]:h-[148px] [&_[class*=snap-center]>*]:h-full">
         <AnalyticsPocMobileCarousel>
           {[
-            <KpiCardActive key="active" />,
             <KpiCardBalance key="balance" />,
+            <KpiCardActive key="active" />,
             <KpiCardViews key="views" />,
             <KpiCardAvgCpm key="cpm" />,
             <KpiCardPaidOut key="paid" />,

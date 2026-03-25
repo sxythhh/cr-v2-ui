@@ -740,8 +740,15 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   );
 }
 
+function getCreatorTabFromHash(): number {
+  if (typeof window === "undefined") return 0;
+  const hash = window.location.hash.slice(1).toLowerCase();
+  const idx = NAV_TABS.findIndex((t) => t.toLowerCase() === hash);
+  return idx >= 0 ? idx : 0;
+}
+
 export default function CreatorsPage() {
-  const [activeNavTab, setActiveNavTab] = useState(0);
+  const [activeNavTab, setActiveNavTab] = useState(getCreatorTabFromHash);
   const newContractRef = useRef<(() => void) | null>(null);
   const quickReviewRef = useRef<(() => void) | null>(null);
   const scoresRef = useRef<(() => void) | null>(null);
@@ -786,7 +793,7 @@ export default function CreatorsPage() {
           <ProximityTabs
             tabs={NAV_TABS.map((t) => ({ label: t }))}
             selectedIndex={activeNavTab}
-            onSelect={setActiveNavTab}
+            onSelect={(i) => { setActiveNavTab(i); window.location.hash = NAV_TABS[i].toLowerCase(); }}
           />
         </div>
 

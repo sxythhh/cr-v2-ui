@@ -2458,9 +2458,21 @@ function PlaceholderTab({ name }: { name: string }) {
 
 // ── Main Settings Page ───────────────────────────────────────────────────────
 
+function getTabFromHash(): SettingsTab {
+  if (typeof window === "undefined") return "Profile";
+  const hash = window.location.hash.slice(1).replace(/-/g, " ");
+  const match = SETTINGS_TABS.find((t) => t.toLowerCase() === hash.toLowerCase());
+  return match ?? "Profile";
+}
+
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<SettingsTab>("Profile");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(getTabFromHash);
   const [copied, setCopied] = useState(false);
+
+  const handleTabChange = useCallback((tab: SettingsTab) => {
+    setActiveTab(tab);
+    window.location.hash = tab.toLowerCase().replace(/\s+/g, "-");
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col dark:bg-page-bg">
@@ -2469,7 +2481,7 @@ export default function SettingsPage() {
         <ProximityTabs
           tabs={SETTINGS_TABS.map((t) => ({ label: t }))}
           selectedIndex={SETTINGS_TABS.indexOf(activeTab)}
-          onSelect={(i) => setActiveTab(SETTINGS_TABS[i])}
+          onSelect={(i) => handleTabChange(SETTINGS_TABS[i])}
         />
 
         {/* Right actions */}

@@ -46,12 +46,21 @@ export function ProximityTabs({ tabs, selectedIndex, onSelect, className }: Prox
   const hoverRect = hoveredIndex !== null ? tabRects[hoveredIndex] : null;
   const isHoveringSelected = hoveredIndex === selectedIndex;
 
+  // Auto-scroll selected tab into view
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const selectedEl = container.querySelector(`[data-proximity-index="${selectedIndex}"]`) as HTMLElement | null;
+    if (!selectedEl) return;
+    selectedEl.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [selectedIndex]);
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn("relative flex h-14 items-stretch", className)}
+      className={cn("relative flex h-14 items-stretch overflow-x-auto scrollbar-hide", className)}
     >
       {/* Selected underline */}
       {selectedRect && (

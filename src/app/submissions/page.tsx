@@ -2471,7 +2471,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
         )}
 
         {mobileTab === "Stats" && (
-          <div className="flex flex-col gap-2 p-3">
+          <div className="flex flex-col gap-2 overflow-y-auto p-3" style={{ height: 328 }}>
             <div className="flex gap-2">
               <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
               <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
@@ -2502,13 +2502,13 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
         )}
 
         {mobileTab === "AI Quality" && !aiSummaryHidden && (
-          <div className="p-3 [&>div]:!w-full [&>div]:!border-l-0">
+          <div className="overflow-y-auto p-3 [&>div]:!w-full [&>div]:!border-l-0" style={{ height: 328 }}>
             <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
           </div>
         )}
 
-        {/* Action buttons */}
-        <div className="flex items-center gap-2 p-3">
+        {/* Action buttons — hide when AI Quality tab is showing (it has its own) */}
+        <div className={cn("flex items-center gap-2 p-3", mobileTab === "AI Quality" && !aiSummaryHidden && "hidden")}>
           <button
             onClick={() => onAction?.("reject")}
             className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors"

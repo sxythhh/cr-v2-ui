@@ -850,11 +850,13 @@ export default function PayoutsPage() {
         </div>
 
         {/* Time filter */}
-        <Tabs selectedIndex={activeFilter} onSelect={setActiveFilter}>
-          {TIME_FILTERS.map((label, i) => (
-            <TabItem key={label} label={label} index={i} />
-          ))}
-        </Tabs>
+        <div className="overflow-x-auto scrollbar-hide">
+          <Tabs selectedIndex={activeFilter} onSelect={setActiveFilter} className="w-max sm:w-fit">
+            {TIME_FILTERS.map((label, i) => (
+              <TabItem key={label} label={label} index={i} />
+            ))}
+          </Tabs>
+        </div>
       </div>
 
       {/* Content */}
@@ -881,8 +883,8 @@ export default function PayoutsPage() {
         </div>
 
         {/* Status filter tabs */}
-        <div className="flex">
-          <Tabs selectedIndex={activeStatusFilter} onSelect={setActiveStatusFilter}>
+        <div className="overflow-x-auto scrollbar-hide">
+          <Tabs selectedIndex={activeStatusFilter} onSelect={setActiveStatusFilter} className="w-max sm:w-fit">
             {STATUS_FILTERS.map((filter, i) => (
               <TabItem key={filter.label} label={`${filter.label} (${filter.count})`} index={i} />
             ))}

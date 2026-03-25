@@ -142,7 +142,7 @@ export function Modal({
     <AnimatePresence>
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center sm:justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
         >
           {/* Overlay */}
           <motion.div
@@ -157,7 +157,7 @@ export function Modal({
           <motion.div
             ref={cardRef}
             className={cn(
-              "relative flex w-full flex-col overflow-y-auto rounded-t-[20px] border border-border bg-card-bg shadow-xl dark:bg-page-bg sm:rounded-[20px]",
+              "relative flex w-full flex-col overflow-y-auto rounded-[20px] border border-border bg-card-bg shadow-xl dark:bg-page-bg",
               "max-h-[90dvh] scrollbar-hide",
               maxWidth ?? sizeClasses[size],
               className,
