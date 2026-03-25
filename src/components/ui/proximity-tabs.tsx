@@ -124,7 +124,7 @@ export function ProximityTabs({ tabs, selectedIndex, onSelect, className }: Prox
             }}
             onClick={() => onSelect(i)}
             className={cn(
-              "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 px-5 font-inter text-sm tracking-[-0.02em] font-medium transition-colors",
+              "relative z-10 flex shrink-0 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap px-5 font-inter text-sm tracking-[-0.02em] font-medium transition-colors",
               isSelected || isHovered
                 ? "text-page-text"
                 : "text-page-text/50",

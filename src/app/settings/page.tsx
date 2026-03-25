@@ -49,7 +49,7 @@ const labelClass = "font-inter text-[12px] leading-[1] tracking-[-0.02em] text-p
 const cardClass = cn(
   "flex flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-white p-4",
   "shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-  "dark:border-border dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+  "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
 );
 
 // ── Select-like input with chevron ───────────────────────────────────────────
@@ -516,24 +516,30 @@ const BRANDS_DATA = [
 
 function BrandCard({ brand, onEdit, onRemove }: { brand: (typeof BRANDS_DATA)[number]; onEdit: () => void; onRemove: () => void }) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       {/* Header */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-foreground/[0.06] p-4 sm:p-6">
-        <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-foreground/[0.06]">
+      <div className="flex items-center justify-between gap-3 border-b border-foreground/[0.06] p-4 dark:border-[rgba(224,224,224,0.03)]">
+        <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]">
           <img src={brand.logo} alt={brand.name} className="size-[27.5px] object-contain" />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <div className="hidden min-w-0 flex-1 flex-col gap-2 sm:flex">
           <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">{brand.name}</span>
           <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">{brand.description}</span>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <button type="button" onClick={onEdit} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+          <button type="button" onClick={onEdit} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
             Edit
           </button>
           <button type="button" onClick={onRemove} className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 font-inter text-[14px] font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
             Remove
           </button>
         </div>
+      </div>
+
+      {/* Brand name — mobile only */}
+      <div className="flex flex-col gap-2 px-4 pt-3 sm:hidden">
+        <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">{brand.name}</span>
+        <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">{brand.description}</span>
       </div>
 
       {/* Campaigns & creators */}
@@ -544,9 +550,9 @@ function BrandCard({ brand, onEdit, onRemove }: { brand: (typeof BRANDS_DATA)[nu
             <a
               key={i}
               href={`/campaigns/${encodeURIComponent(campaign.name.toLowerCase().replace(/\s+/g, "-"))}`}
-              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white px-4 py-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]"
+              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white px-4 py-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]"
             >
-              <div className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-foreground/[0.06]">
+              <div className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                 <img src={campaign.logo} alt={campaign.name} className="size-[15px] object-contain" />
               </div>
               <span className="min-w-0 flex-1 truncate font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text">{campaign.name}</span>
@@ -556,20 +562,19 @@ function BrandCard({ brand, onEdit, onRemove }: { brand: (typeof BRANDS_DATA)[nu
         </div>
 
         {/* Stats row */}
-        <div className="flex flex-wrap items-center gap-2">
-          {[
-            { label: "Total spend", value: brand.stats.totalSpend },
-            { label: "Avg CPM", value: brand.stats.avgCpm },
-            { label: "Total creators", value: String(brand.stats.totalCreators) },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="flex w-40 flex-col gap-1.5 rounded-xl border border-foreground/[0.06] bg-white p-3 dark:bg-card-bg"
-            >
-              <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
-              <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">{stat.value}</span>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col justify-between gap-1.5 rounded-xl border border-foreground/[0.06] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">Total spend</span>
+            <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">{brand.stats.totalSpend}</span>
+          </div>
+          <div className="flex flex-col justify-between gap-1.5 rounded-xl border border-foreground/[0.06] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">Avg CPM</span>
+            <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">{brand.stats.avgCpm}</span>
+          </div>
+          <div className="col-span-2 flex items-center justify-between rounded-xl border border-foreground/[0.06] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">Total creators</span>
+            <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">{brand.stats.totalCreators}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -583,16 +588,16 @@ function BrandsTab() {
   const removeBrand = removeBrandIndex !== null ? BRANDS_DATA[removeBrandIndex] : null;
 
   return (
-    <div className="flex flex-col items-center gap-4 px-5 py-5">
+    <div className="flex flex-col items-center gap-4 px-4 py-5 sm:px-5">
       {/* Header row */}
-      <div className="flex w-full max-w-[1028px] flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-col gap-2">
+      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-2">
           <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">My Brands</span>
-          <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
+          <span className="font-inter text-[12px] leading-[150%] tracking-[-0.02em] text-page-text-muted">
             Manage the brands your agency works with. Details stay private until a campaign goes live.
           </span>
         </div>
-        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
+        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -709,13 +714,19 @@ function MemberTable({
   sessionRef?: React.RefObject<number>;
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
+    <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       {/* Header row */}
-      <div className="flex items-center border-b border-foreground/[0.06] px-1">
+      <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
         {columns.map((col, i) => (
           <div
             key={col.label}
-            className={cn("shrink-0 px-3 py-3", col.hidden && "opacity-0", i === 0 && "flex-1")}
+            className={cn(
+              "shrink-0 px-3 py-3",
+              col.hidden && "opacity-0",
+              i === 0 && "flex-1",
+              /* Hide non-first, non-last columns on mobile */
+              i > 0 && i < columns.length - 1 && "hidden md:block",
+            )}
             style={i === 0 ? undefined : { width: col.width }}
           >
             <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">{col.label}</span>
@@ -855,7 +866,7 @@ function InviteTeamMemberModal({ open, onClose }: { open: boolean; onClose: () =
     <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]" showClose={false}>
       <div className="flex max-h-[90vh] flex-col">
         {/* Header */}
-        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5">
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5 dark:border-[rgba(224,224,224,0.03)]">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Invite Team Member</span>
           <button type="button" onClick={onClose} className="absolute right-4 top-3 flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" /></svg>
@@ -1004,7 +1015,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
     <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]" showClose={false}>
       <div className="flex max-h-[90vh] flex-col">
         {/* Header */}
-        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5">
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-page-border px-5 dark:border-[rgba(224,224,224,0.03)]">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Create custom role</span>
           <button type="button" onClick={onClose} className="absolute right-4 top-3 flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-colors hover:text-foreground">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.667 4.667L11.333 11.333M11.333 4.667L4.667 11.333" stroke="currentColor" strokeWidth="1.52381" strokeLinecap="round" /></svg>
@@ -1039,10 +1050,10 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
           {/* Permissions */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Permissions</span>
-            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:p-5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <div className="flex flex-col gap-2">
                 {ROLE_PERMISSIONS.map((row, ri) => (
-                  <div key={ri} className="flex gap-2">
+                  <div key={ri} className="flex flex-col gap-2 sm:flex-row">
                     {row.map((perm) => {
                       const isChecked = permissions.has(perm);
                       return (
@@ -1050,7 +1061,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
                           key={perm}
                           type="button"
                           onClick={() => togglePermission(perm)}
-                          className="flex flex-1 items-center gap-2 rounded-[14px] border border-foreground/[0.03] bg-foreground/[0.03] px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05]"
+                          className="flex flex-1 items-center gap-2 rounded-[14px] border border-foreground/[0.03] bg-foreground/[0.03] px-2 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.05] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                         >
                           {/* Checkbox */}
                           {isChecked ? (
@@ -1073,11 +1084,11 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
         </div>
 
         {/* Footer */}
-        <div className="flex shrink-0 items-center justify-end gap-2 px-5 pb-5">
-          <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]">
+        <div className="flex shrink-0 items-center gap-2 px-5 pb-4 pt-4 sm:justify-end sm:pb-5">
+          <button type="button" onClick={onClose} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] sm:flex-none">
             Cancel
           </button>
-          <button type="button" onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
+          <button type="button" onClick={onClose} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525] sm:flex-none">
             Create role
           </button>
         </div>
@@ -1174,27 +1185,27 @@ function TeamMemberRow({ member, index, registerItem, onRevoke, onBan, onRemove 
           <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
         </div>
       </div>
-      <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "96px" }}>
+      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "96px" }}>
         <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span>
       </div>
-      <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "104px" }}>
+      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
         <StatusBadge status={member.status} />
       </div>
       {member.status === "pending" ? (
-        <div className="flex shrink-0 items-center justify-end gap-2 px-6 py-3" style={{ width: "200px" }}>
-          <button onClick={() => onRevoke(member.name)} className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+        <div className="flex shrink-0 items-center justify-end gap-2 px-3 py-3 md:px-6" style={{ width: "auto" }}>
+          <button onClick={() => onRevoke(member.name)} className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
             Revoke
           </button>
-          <button className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+          <button className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]">
             Resend
           </button>
         </div>
       ) : (
         <>
-          <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "104px" }}>
+          <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
             <span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span>
           </div>
-          <div className="flex shrink-0 items-center justify-center px-3 py-3 pl-5" style={{ width: "96px" }}>
+          <div className="flex shrink-0 items-center justify-end px-3 py-3 md:justify-center md:pl-5" style={{ width: "auto" }}>
             {member.isYou ? (
               <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text">You</span>
             ) : (
@@ -1231,19 +1242,19 @@ function BannedMemberRow({ member, index, registerItem, onUnban }: {
           <span className="truncate font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">{member.email}</span>
         </div>
       </div>
-      <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "96px" }}>
+      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "96px" }}>
         <span className="font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.role}</span>
       </div>
-      <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "104px" }}>
+      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
         <StatusBadge status="banned" />
       </div>
-      <div className="shrink-0 px-3 py-3 pl-5" style={{ width: "104px" }}>
+      <div className="hidden shrink-0 px-3 py-3 pl-5 md:block" style={{ width: "104px" }}>
         <span className="whitespace-nowrap font-inter text-[12px] font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">{member.lastSeen}</span>
       </div>
-      <div className="flex shrink-0 items-center justify-end px-6 py-3" style={{ width: "96px" }}>
+      <div className="flex shrink-0 items-center justify-end px-3 py-3 md:px-6" style={{ width: "auto" }}>
         <button
           onClick={() => onUnban(member.name)}
-          className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+          className="inline-flex h-[30px] cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-[rgba(224,224,224,0.03)]"
         >
           Unban
         </button>
@@ -1272,7 +1283,7 @@ function TeamTab() {
   useEffect(() => { bannedHover.measureItems(); }, [bannedHover.measureItems]);
 
   return (
-    <div className="flex flex-col items-center gap-4 px-5 py-5">
+    <div className="flex flex-col items-center gap-4 px-4 py-5 sm:px-5">
       {/* Revoke invite modal */}
       <ConfirmModal
         open={!!revokeTarget}
@@ -1345,21 +1356,22 @@ function TeamTab() {
       <CreateCustomRoleModal open={roleModalOpen} onClose={() => setRoleModalOpen(false)} />
 
       {/* Header row */}
-      <div className="flex w-full max-w-[1028px] items-center justify-between">
-        <div className="flex flex-col gap-2">
+      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4 px-0">
+        <div className="flex min-w-0 flex-col gap-2">
           <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">Team Members</span>
-          <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
+          <span className="font-inter text-[12px] leading-[150%] tracking-[-0.02em] text-page-text-muted">
             Manage who has access to your organization.
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setRoleModalOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+        <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
+          <button onClick={() => setRoleModalOpen(true)} className="hidden h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06] sm:inline-flex">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             Create role
           </button>
           <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            Invite member
+            <span className="hidden sm:inline">Invite member</span>
+            <span className="sm:hidden">Invite</span>
           </button>
         </div>
       </div>
