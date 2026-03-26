@@ -10,8 +10,8 @@ import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { CreatorDetailsPopup, type CreatorDetailsData } from "@/components/creators/CreatorDetailsPopup";
 import { AnalyticsPocChartTooltip } from "./AnalyticsPocChartTooltip";
 
-const CARD = "rounded-2xl border border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none";
-const CARD_SM = "rounded-[10px] border border-border bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
+const CARD = "rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none";
+const CARD_SM = "rounded-[10px] border border-foreground/[0.06] bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
 /* ── Filter Bar ───────────────────────────────────────────────────── */
 
@@ -36,7 +36,7 @@ function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName
   onCtaClick?: () => void;
 }) {
   return (
-    <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
+    <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
       <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{label}</span>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
@@ -86,7 +86,7 @@ function FunnelRow({ label, pct, count, barWidth, barColor }: {
 function InsightCard({ text }: { text: string }) {
   return (
     <div className={cn(CARD_SM, "overflow-hidden transition-colors hover:bg-foreground/[0.02]")}>
-      <div className="flex items-center gap-1.5 border-b border-border px-3 py-2.5">
+      <div className="flex items-center gap-1.5 border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-3 py-2.5">
         <svg width="12" height="12" viewBox="0 -960 960 960" className="text-page-text-muted" fill="currentColor"><path d="M480-80q-26 0-47-12.5T400-126q-33 0-56.5-23.5T320-206v-142q-59-39-94.5-103T190-590q0-121 84.5-205.5T480-880q121 0 205.5 84.5T770-590q0 75-35.5 139T640-348v142q0 33-23.5 56.5T560-126q-12 21-33 33.5T480-80Z"/></svg>
         <span className="flex-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text">Insight</span>
       </div>
@@ -439,7 +439,7 @@ function CreatorRetentionCard() {
       {/* Legend pills */}
       <div className="flex flex-wrap gap-1">
         {retentionLegend.map((item) => (
-          <div key={item.label} className="flex items-center gap-1 rounded-full border border-border px-2 py-1">
+          <div key={item.label} className="flex items-center gap-1 rounded-full border border-foreground/[0.06] px-2 py-1 dark:border-[rgba(224,224,224,0.03)]">
             <span className="size-2 rounded-full" style={{ background: item.color }} />
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{item.label}</span>
             <span className="font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: item.color }}>{item.count}</span>
@@ -448,14 +448,14 @@ function CreatorRetentionCard() {
       </div>
 
       {/* Divider */}
-      <div className="border-t border-border" />
+      <div className="border-t border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]" />
 
       {/* Churn risk tiers */}
       <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Churn risk tiers</span>
       <div className="flex flex-col gap-1">
         {churnTiers.map((tier) => (
           <div key={tier.label} className={cn(CARD_SM, "cursor-pointer overflow-hidden transition-colors hover:bg-foreground/[0.02]")}>
-            <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
+            <div className="flex items-center justify-between border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-3 py-2.5">
               <div className="flex items-center gap-1.5">
                 {tier.icon}
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{tier.label}</span>

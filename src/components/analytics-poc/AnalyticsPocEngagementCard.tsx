@@ -21,7 +21,7 @@ import type {
 
 const FUNNEL_STEP_SURFACE_STYLE: CSSProperties = {
   background: "var(--card-bg)",
-  border: "1px solid var(--border)",
+  border: "1px solid var(--ap-card-border)",
   borderRadius: "12px",
 };
 

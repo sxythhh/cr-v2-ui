@@ -291,7 +291,7 @@ function DiscoverToast() {
 
   return createPortal(
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[9999] flex justify-center p-8">
-      <div className="pointer-events-auto flex items-center gap-2 rounded-xl border border-border bg-card-bg px-3.5 py-2.5 shadow-[0px_4px_12px_rgba(0,0,0,0.12)] dark:shadow-[0px_4px_12px_rgba(0,0,0,0.4)]">
+      <div className="pointer-events-auto flex items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3.5 py-2.5 shadow-[0px_4px_12px_rgba(0,0,0,0.12)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-[0px_4px_12px_rgba(0,0,0,0.4)]">
         <svg width="16" height="16" viewBox="0 -960 960 960" className="shrink-0 fill-page-text-muted"><path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Showing analytics for The Fall-Off x Superbowl</span>
       </div>
@@ -441,7 +441,7 @@ export function AnalyticsPocDiscoverTab() {
               {FUNNEL_SEGMENTS.map((seg) => (
                 <div
                   key={seg.label}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-card-bg px-2 py-1.5"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1.5 dark:border-[rgba(224,224,224,0.03)]"
                 >
                   <span className="size-2 rounded-full" style={{ backgroundColor: seg.dotColor }} />
                   <span className="text-xs tracking-[-0.02em] text-page-text">{seg.label}</span>

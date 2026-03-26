@@ -28,7 +28,7 @@ import type {
 
 /* ── Shared card style ────────────────────────────────────────────── */
 
-const CARD = "rounded-2xl border border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none";
+const CARD = "rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none";
 
 /* ── Cost-per-action SVG icons ────────────────────────────────────── */
 
@@ -337,10 +337,10 @@ function FinancialsCard() {
 
         {/* Stacked budget bar */}
         <div className="flex h-10 w-full overflow-hidden rounded-xl">
-          <div className="h-full border border-card-bg dark:border-border" style={{ width: "53.7%", background: "var(--ap-hover)" }} />
-          <div className="h-full flex-1 border border-card-bg dark:border-border" style={{ background: "rgba(0,153,77,0.6)" }} />
-          <div className="h-full w-[5%] border border-card-bg dark:border-border" style={{ background: "rgba(229,113,0,0.6)" }} />
-          <div className="h-full w-[2.5%] border border-card-bg dark:border-border" style={{ background: "rgba(255,51,85,0.6)" }} />
+          <div className="h-full border border-card-bg dark:border-card-bg" style={{ width: "53.7%", background: "var(--ap-hover)" }} />
+          <div className="h-full flex-1 border border-card-bg dark:border-card-bg" style={{ background: "rgba(0,153,77,0.6)" }} />
+          <div className="h-full w-[5%] border border-card-bg dark:border-card-bg" style={{ background: "rgba(229,113,0,0.6)" }} />
+          <div className="h-full w-[2.5%] border border-card-bg dark:border-card-bg" style={{ background: "rgba(255,51,85,0.6)" }} />
         </div>
 
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$3,781.50 remaining</span>
@@ -349,7 +349,7 @@ function FinancialsCard() {
       {/* Legend pills */}
       <div className="flex w-full flex-wrap gap-1">
         {legendItems.map((item) => (
-          <div key={item.label} className="flex items-center gap-1 rounded-full border border-border px-2 py-1">
+          <div key={item.label} className="flex items-center gap-1 rounded-full border border-foreground/[0.06] px-2 py-1 dark:border-[rgba(224,224,224,0.03)]">
             <span className="size-2 rounded-full" style={{ background: item.color }} />
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{item.label}</span>
             <span className="font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: item.color }}>{item.value}</span>
@@ -358,7 +358,7 @@ function FinancialsCard() {
       </div>
 
       {/* Divider */}
-      <div className="w-full border-t border-border" />
+      <div className="w-full border-t border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]" />
 
       {/* Cost per action */}
       <div className="flex w-full items-center justify-between pb-1">
@@ -366,7 +366,7 @@ function FinancialsCard() {
       </div>
       <div className="flex w-full flex-wrap gap-1">
         {costActions.map((action) => (
-          <div key={action.label} className="flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
+          <div key={action.label} className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2.5 py-1 dark:border-[rgba(224,224,224,0.03)]">
             <span className="text-page-text-muted">{COST_ACTION_ICONS[action.icon]}</span>
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{action.label}</span>
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{action.value}</span>

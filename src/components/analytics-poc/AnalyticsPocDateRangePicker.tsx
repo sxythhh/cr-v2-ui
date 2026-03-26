@@ -80,7 +80,7 @@ export function AnalyticsPocDateRangePicker({
         <button
           className={cn(
             "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-3.5",
-            "border border-foreground/[0.06] dark:border-border",
+            "border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]",
             "bg-white dark:bg-card-bg",
             "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
             "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",

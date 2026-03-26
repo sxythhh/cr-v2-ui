@@ -65,7 +65,7 @@ export function AnalyticsPocPlatformSelect({
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1.5 min-w-[200px] overflow-hidden rounded-2xl border border-border bg-card-bg shadow-lg">
+        <div className="absolute left-0 top-full z-50 mt-1.5 min-w-[200px] overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-lg dark:border-[rgba(224,224,224,0.03)]">
           <div className="flex flex-col">
             {platforms.map((p) => (
               <button

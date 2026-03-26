@@ -13,7 +13,7 @@ export const ANALYTICS_POC_INTERACTIVE_CARD_CLASS = cn(
 
 export const ANALYTICS_POC_CARD_SURFACE_STYLE: CSSProperties = {
   background: "var(--card-bg)",
-  border: "1px solid var(--border)",
+  border: "1px solid var(--ap-card-border)",
   borderRadius: "16px",
 };
 

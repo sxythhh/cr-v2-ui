@@ -69,7 +69,7 @@ export function AnalyticsPocCpmTooltip({
               top: pos.top,
               left: pos.left,
               background: "var(--card-bg)",
-              border: "1px solid var(--border)",
+              border: "1px solid var(--ap-card-border)",
             }}
           >
             <div className="flex items-center justify-between">

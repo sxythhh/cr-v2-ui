@@ -17,6 +17,7 @@ const AP_THEME_STYLES = `
   --ap-bg: #FBFBFB;
   --ap-surface: var(--card-bg);
   --ap-surface-border: var(--border);
+  --ap-card-border: rgba(37,37,37,0.06);
   --ap-text: oklch(0 0 0);
   --ap-text-secondary: oklch(0 0 0 / 0.56);
   --ap-text-tertiary: oklch(0 0 0 / 0.40);
@@ -61,6 +62,7 @@ html.dark {
   --ap-surface: var(--card-bg);
   --ap-panel-surface: var(--card-bg);
   --ap-surface-border: var(--border);
+  --ap-card-border: rgba(224,224,224,0.03);
   --ap-text: oklch(1 0 0 / 0.92);
   --ap-text-secondary: oklch(1 0 0 / 0.50);
   --ap-text-tertiary: oklch(1 0 0 / 0.34);

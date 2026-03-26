@@ -225,7 +225,7 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
 
 export function CampaignFlowLayout({ children }: { children: React.ReactNode }) {
   const {
-    steps, stepLabels, stepIndex, canContinue, continueBlockReason, isRestoring, editMode,
+    steps, stepLabels, stepIndex, canContinue, continueBlockReason, isRestoring, editMode, showErrors,
     handleContinue, handleBack, handleStepClick,
     handleBackToList, handleSaveDraft, portalContainer,
   } = useCampaignFlowContext();
@@ -244,7 +244,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
       {/* Top bar */}
       <div className="flex items-center h-14 px-5 border-b border-border">
         <button
-          className="flex items-center gap-2 py-3 text-sm font-medium tracking-[-0.02em] text-page-text transition-opacity hover:opacity-70"
+          className="relative z-10 flex cursor-pointer items-center gap-2 py-3 text-sm font-medium tracking-[-0.02em] text-page-text transition-opacity hover:opacity-70"
           onClick={() => setShowLeaveModal(true)}
           type="button"
         >
@@ -314,7 +314,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
       <div className="flex shrink-0 items-center justify-between border-t border-foreground/[0.06] px-5 py-4">
         {/* Block reason hint — left side */}
         <div className="min-w-0 flex-1">
-          {!canContinue && !isLastStep && continueBlockReason && (
+          {showErrors && !canContinue && !isLastStep && continueBlockReason && (
             <span className="flex items-center gap-1.5 font-inter text-xs tracking-[-0.02em] text-[#E57100]">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
                 <path fillRule="evenodd" clipRule="evenodd" d="M7 0C3.13401 0 0 3.13401 0 7C0 10.866 3.13401 14 7 14C10.866 14 14 10.866 14 7C14 3.13401 10.866 0 7 0ZM7 3.5C7.34518 3.5 7.625 3.77982 7.625 4.125V7.875C7.625 8.22018 7.34518 8.5 7 8.5C6.65482 8.5 6.375 8.22018 6.375 7.875V4.125C6.375 3.77982 6.65482 3.5 7 3.5ZM7 9.625C6.65482 9.625 6.375 9.90482 6.375 10.25C6.375 10.5952 6.65482 10.875 7 10.875C7.34518 10.875 7.625 10.5952 7.625 10.25C7.625 9.90482 7.34518 9.625 7 9.625Z" fill="#E57100"/>
