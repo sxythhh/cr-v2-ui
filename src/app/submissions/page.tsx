@@ -836,6 +836,157 @@ function FullscreenCommentInput({ formatTime, currentTime }: { formatTime: (s: n
   );
 }
 
+// ── Mobile Timeline Drawer ──────────────────────────────────────────
+
+function MobileTimelineDrawer({
+  highlightedComment,
+  formatTime,
+  currentTime,
+  onClose,
+}: {
+  highlightedComment: string | null;
+  formatTime: (s: number) => string;
+  currentTime: number;
+  onClose: () => void;
+}) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerHeight, setDrawerHeight] = useState(0.45); // 0–1, fraction of viewport
+  const dragStartY = useRef(0);
+  const dragStartHeight = useRef(0);
+
+  const handleDragStart = useCallback((clientY: number) => {
+    dragStartY.current = clientY;
+    dragStartHeight.current = drawerHeight;
+  }, [drawerHeight]);
+
+  const handleDrag = useCallback((clientY: number) => {
+    const delta = dragStartY.current - clientY;
+    const vh = window.innerHeight;
+    const newH = Math.max(0.15, Math.min(0.85, dragStartHeight.current + delta / vh));
+    setDrawerHeight(newH);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    // Snap: below 20% → close, above 65% → full, else half
+    if (drawerHeight < 0.2) {
+      setDrawerOpen(false);
+      setDrawerHeight(0.45);
+    } else if (drawerHeight > 0.65) {
+      setDrawerHeight(0.85);
+    } else {
+      setDrawerHeight(0.45);
+    }
+  }, [drawerHeight]);
+
+  // Touch handlers for the drag handle
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    handleDragStart(e.touches[0].clientY);
+  }, [handleDragStart]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    handleDrag(e.touches[0].clientY);
+  }, [handleDrag]);
+
+  const handleTouchEnd = useCallback(() => {
+    handleDragEnd();
+  }, [handleDragEnd]);
+
+  // Mouse handlers for desktop testing
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDragStart(e.clientY);
+    const onMove = (ev: MouseEvent) => handleDrag(ev.clientY);
+    const onUp = () => {
+      handleDragEnd();
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }, [handleDragStart, handleDrag, handleDragEnd]);
+
+  return (
+    <div className="absolute inset-x-0 bottom-0 z-[5] flex flex-col md:hidden">
+      {/* Expanded drawer */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+            className="flex flex-col overflow-hidden rounded-t-[20px] bg-card-bg dark:bg-[#161616]"
+            style={{ height: `${drawerHeight * 100}dvh` }}
+          >
+            {/* Drag handle + header */}
+            <div
+              className="flex shrink-0 cursor-grab flex-col items-center border-b border-foreground/[0.06] px-4 pb-3 pt-2 active:cursor-grabbing dark:border-[rgba(224,224,224,0.03)]"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+            >
+              <div className="mb-2 h-1 w-8 rounded-full bg-foreground/20" />
+              <div className="flex w-full items-center justify-between">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Timeline</span>
+                <div className="flex items-center gap-1">
+                  <button className="flex size-8 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.06]">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
+                    </svg>
+                  </button>
+                  <button
+                    className="flex size-8 cursor-pointer items-center justify-center rounded-xl"
+                    onClick={() => { setDrawerOpen(false); setDrawerHeight(0.45); }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Scrollable timeline events */}
+            <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 py-4">
+              <TimelineEvent id="event-posted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Tue 24 Feb 4:37 AM" highlighted={highlightedComment === "event-posted"} actionContent={<div className="flex items-center gap-1 pl-6"><PlatformIcon platform="tiktok" size={12} className="shrink-0 text-page-text-muted" /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Posted video</span></div>} connector="straight" />
+              <TimelineEvent id="event-submitted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Wed 25 Feb 12:37 AM" highlighted={highlightedComment === "event-submitted"} actionContent={<div className="flex items-center gap-1 pl-6"><TimelineUploadIcon /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Submitted video</span></div>} connector="straight" />
+              <TimelineEvent id="comment-00:08" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 1:21 AM" highlighted={highlightedComment === "comment-00:08"} actionContent={<div className="flex items-center gap-1 pl-6"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">You&apos;re mentioning the wrong competitor</span></div>} connector="l-shape" />
+              <TimelineEvent id="reply-00:08" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Wed 25 Feb 2:56 AM" indent highlighted={highlightedComment === "reply-00:08"} actionContent={<div className="flex items-center gap-1 pl-6"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Fixed!</span></div>} connector="reply-straight" />
+              <TimelineEvent id="reply-approve" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 3:18 AM" indent highlighted={highlightedComment === "reply-approve"} actionContent={<><div className="flex flex-col gap-0.5 pl-6"><div className="flex items-center gap-1"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:21</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Looking good now sir! approving and</span></div><span className="pl-0 font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">the payout should be otw.</span></div><div className="flex items-center gap-3 pl-6 pt-2"><InlinePdfThumb /><InlinePdfThumb /></div></>} />
+              <TimelineEvent id="event-approved" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 3:19 AM" highlighted={highlightedComment === "event-approved"} actionContent={<div className="flex items-center gap-1 pl-6"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg><span className="font-inter text-sm tracking-[-0.02em] text-[#34D399]">Approved video</span></div>} />
+            </div>
+
+            {/* Comment input + actions */}
+            <div className="flex shrink-0 flex-col gap-2 border-t border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)]">
+              <FullscreenCommentInput formatTime={formatTime} currentTime={currentTime} />
+              <div className="flex gap-2">
+                <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(251,113,133,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185]">Reject</span></button>
+                <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground/[0.03] transition-colors hover:bg-foreground/[0.06]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM11.3536 6.35355C11.5488 6.15829 11.5488 5.84171 11.3536 5.64645C11.1583 5.45118 10.8417 5.45118 10.6464 5.64645L7 9.29289L5.35355 7.64645C5.15829 7.45118 4.84171 7.45118 4.64645 7.64645C4.45118 7.84171 4.45118 8.15829 4.64645 8.35355L6.64645 10.3536C6.84171 10.5488 7.15829 10.5488 7.35355 10.3536L11.3536 6.35355Z" fill="currentColor"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Approve</span></button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Peek bar — visible when drawer is closed */}
+      {!drawerOpen && (
+        <div className="px-2 pb-2">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-[#1a1a1a]/80 px-4 py-3 backdrop-blur-[20px]"
+          >
+            <div className="flex flex-1 items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="white" strokeOpacity="0.6" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-white">Timeline</span>
+              <span className="font-inter text-xs tracking-[-0.02em] text-white/40">6 events</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 10L8 6L12 10" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Video Player ────────────────────────────────────────────────────
 
 function VideoPlayer({
@@ -1120,7 +1271,7 @@ function VideoPlayer({
           <video ref={fsBgVideoRef} src={src} className="pointer-events-none absolute inset-0 z-0 h-full w-full scale-110 object-cover" style={{ filter: "blur(50px)" }} muted playsInline loop />
           <div className="pointer-events-none absolute inset-0 z-0 bg-black/40" />
 
-          {/* Left/Top: Video */}
+          {/* Video — takes full screen on mobile, left side on desktop */}
           <div className="relative z-[1] flex min-h-0 flex-1 flex-col p-2">
             <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-[20px] bg-black">
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[120px]" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%)" }} />
@@ -1139,6 +1290,8 @@ function VideoPlayer({
                 loop
               />
               <div className="absolute left-3 top-3 z-[3]"><div className="flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]"><PlatformIcon platform={platform} size={16} className="text-white [&_path]:fill-white" /></div></div>
+              {/* Mobile close button */}
+              <button className="absolute right-3 top-3 z-[3] flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-[12px] md:hidden" onClick={() => setIsFullscreen(false)}><CloseIcon size={14} /></button>
               <div className="absolute inset-0 z-[2] cursor-pointer" onClick={togglePlay} />
               <div className="absolute inset-x-0 bottom-0 z-[3] flex flex-col gap-[6px]" onClick={(e) => e.stopPropagation()}>
                 {/* Progress bar */}
@@ -1207,10 +1360,10 @@ function VideoPlayer({
                   <div className="flex items-center gap-1.5">
                     {/* Play/Pause */}
                     <button onClick={togglePlay} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
-                      {isPlaying ? (
-                        <svg width="14" height="16" viewBox="0 0 8 9" fill="none"><path d="M0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5V7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5V1.5Z" fill="white"/><path d="M5 1.5C5 0.671573 5.67157 0 6.5 0C7.32843 0 8 0.671573 8 1.5V7.5C8 8.32843 7.32843 9 6.5 9C5.67157 9 5 8.32843 5 7.5V1.5Z" fill="white"/></svg>
-                      ) : (
-                        <svg width="16" height="18" viewBox="0 0 12 14" fill="none"><path d="M2 1L11 7L2 13V1Z" fill="white" /></svg>
+                      {isPlaying ? <PauseIcon /> : (
+                        <svg width="10" height="12" viewBox="-1 0 16 18" fill="none">
+                          <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="white" />
+                        </svg>
                       )}
                     </button>
                     {/* Volume with expandable slider */}
@@ -1282,139 +1435,30 @@ function VideoPlayer({
               </div>
             </div>
           </div>
-          {/* Right/Bottom: Timeline */}
-          <div className="relative z-[1] flex shrink-0 flex-col justify-end p-2 md:w-[320px] lg:w-[400px]">
+          {/* ── Desktop: Timeline sidebar ── */}
+          <div className="relative z-[1] hidden shrink-0 flex-col justify-end p-2 md:flex md:w-[320px] lg:w-[400px]">
             <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616]">
               <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4 dark:border-[rgba(224,224,224,0.03)]">
                 <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Timeline</span>
                 <div className="flex items-center gap-1">
-                  {/* Filter button */}
                   <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl bg-foreground/[0.06]">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text" />
                     </svg>
                   </button>
-                  {/* Close button */}
                   <button className="flex size-9 cursor-pointer items-center justify-center rounded-xl" onClick={() => setIsFullscreen(false)}><CloseIcon size={16} /></button>
                 </div>
               </div>
               <div className="scrollbar-hide flex flex-1 flex-col gap-5 overflow-y-auto px-4 py-4">
-                {/* Event: Posted video */}
-                <TimelineEvent
-                  id="event-posted"
-                  avatar="https://i.pravatar.cc/36?u=xkaizen"
-                  actorType="creator"
-                  name="xKaizen"
-                  time="Tue 24 Feb 4:37 AM"
-                  highlighted={highlightedComment === "event-posted"}
-                  actionContent={
-                    <div className="flex items-center gap-1 pl-6">
-                      <PlatformIcon platform="tiktok" size={12} className="shrink-0 text-page-text-muted" />
-                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Posted video</span>
-                    </div>
-                  }
-                  connector="straight"
-                />
-
-                {/* Event: Submitted video */}
-                <TimelineEvent
-                  id="event-submitted"
-                  avatar="https://i.pravatar.cc/36?u=xkaizen"
-                  actorType="creator"
-                  name="xKaizen"
-                  time="Wed 25 Feb 12:37 AM"
-                  highlighted={highlightedComment === "event-submitted"}
-                  actionContent={
-                    <div className="flex items-center gap-1 pl-6">
-                      <TimelineUploadIcon />
-                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Submitted video</span>
-                    </div>
-                  }
-                  connector="straight"
-                />
-
-                {/* Event: Brand comment */}
-                <TimelineEvent
-                  id="comment-00:08"
-                  avatar="https://i.pravatar.cc/36?u=outpace"
-                  actorType="brand"
-                  name="Outpace Studios"
-                  time="Wed 25 Feb 1:21 AM"
-                  highlighted={highlightedComment === "comment-00:08"}
-                  actionContent={
-                    <div className="flex items-center gap-1 pl-6">
-                      <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span>
-                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">You&apos;re mentioning the wrong competitor</span>
-                    </div>
-                  }
-                  connector="l-shape"
-                />
-
-                {/* Reply: Fixed! */}
-                <TimelineEvent
-                  id="reply-00:08"
-                  avatar="https://i.pravatar.cc/36?u=xkaizen"
-                  actorType="creator"
-                  name="xKaizen"
-                  time="Wed 25 Feb 2:56 AM"
-                  indent
-                  highlighted={highlightedComment === "reply-00:08"}
-                  actionContent={
-                    <div className="flex items-center gap-1 pl-6">
-                      <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span>
-                      <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Fixed!</span>
-                    </div>
-                  }
-                  connector="reply-straight"
-                />
-
-                {/* Reply: Approval comment with PDF */}
-                <TimelineEvent
-                  id="reply-approve"
-                  avatar="https://i.pravatar.cc/36?u=outpace"
-                  actorType="brand"
-                  name="Outpace Studios"
-                  time="Wed 25 Feb 3:18 AM"
-                  indent
-                  highlighted={highlightedComment === "reply-approve"}
-                  actionContent={
-                    <>
-                      <div className="flex flex-col gap-0.5 pl-6">
-                        <div className="flex items-center gap-1">
-                          <span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:21</span>
-                          <span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Looking good now sir! approving and</span>
-                        </div>
-                        <span className="pl-0 font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">the payout should be otw.</span>
-                      </div>
-                      <div className="flex items-center gap-3 pl-6 pt-2">
-                        <InlinePdfThumb />
-                        <InlinePdfThumb />
-                      </div>
-                    </>
-                  }
-                />
-
-                {/* Event: Approved */}
-                <TimelineEvent
-                  id="event-approved"
-                  avatar="https://i.pravatar.cc/36?u=outpace"
-                  actorType="brand"
-                  name="Outpace Studios"
-                  time="Wed 25 Feb 3:19 AM"
-                  highlighted={highlightedComment === "event-approved"}
-                  actionContent={
-                    <div className="flex items-center gap-1 pl-6">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg>
-                      <span className="font-inter text-sm tracking-[-0.02em] text-[#34D399]">Approved video</span>
-                    </div>
-                  }
-                />
+                <TimelineEvent id="event-posted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Tue 24 Feb 4:37 AM" highlighted={highlightedComment === "event-posted"} actionContent={<div className="flex items-center gap-1 pl-6"><PlatformIcon platform="tiktok" size={12} className="shrink-0 text-page-text-muted" /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Posted video</span></div>} connector="straight" />
+                <TimelineEvent id="event-submitted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Wed 25 Feb 12:37 AM" highlighted={highlightedComment === "event-submitted"} actionContent={<div className="flex items-center gap-1 pl-6"><TimelineUploadIcon /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Submitted video</span></div>} connector="straight" />
+                <TimelineEvent id="comment-00:08" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 1:21 AM" highlighted={highlightedComment === "comment-00:08"} actionContent={<div className="flex items-center gap-1 pl-6"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">You&apos;re mentioning the wrong competitor</span></div>} connector="l-shape" />
+                <TimelineEvent id="reply-00:08" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Wed 25 Feb 2:56 AM" indent highlighted={highlightedComment === "reply-00:08"} actionContent={<div className="flex items-center gap-1 pl-6"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Fixed!</span></div>} connector="reply-straight" />
+                <TimelineEvent id="reply-approve" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 3:18 AM" indent highlighted={highlightedComment === "reply-approve"} actionContent={<><div className="flex flex-col gap-0.5 pl-6"><div className="flex items-center gap-1"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:21</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Looking good now sir! approving and</span></div><span className="pl-0 font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">the payout should be otw.</span></div><div className="flex items-center gap-3 pl-6 pt-2"><InlinePdfThumb /><InlinePdfThumb /></div></>} />
+                <TimelineEvent id="event-approved" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 3:19 AM" highlighted={highlightedComment === "event-approved"} actionContent={<div className="flex items-center gap-1 pl-6"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0Zm2.83 4.71-3.17 3.17a.5.5 0 0 1-.71 0L3.17 6.1a.5.5 0 0 1 .71-.71l1.42 1.42 2.82-2.82a.5.5 0 0 1 .71.71Z" fill="#00994D" /></svg><span className="font-inter text-sm tracking-[-0.02em] text-[#34D399]">Approved video</span></div>} />
               </div>
-              {/* Comment input + actions */}
               <div className="flex flex-col gap-2 border-t border-foreground/[0.06] p-4 dark:border-[rgba(224,224,224,0.03)]">
-                {/* Comment — collapsed pill / expanded card */}
                 <FullscreenCommentInput formatTime={formatTime} currentTime={currentTime} />
-                {/* Reject / Approve */}
                 <div className="flex gap-2">
                   <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[rgba(255,37,37,0.06)] transition-colors hover:bg-[rgba(251,113,133,0.12)]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185]">Reject</span></button>
                   <button className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground/[0.03] transition-colors hover:bg-foreground/[0.06]"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM11.3536 6.35355C11.5488 6.15829 11.5488 5.84171 11.3536 5.64645C11.1583 5.45118 10.8417 5.45118 10.6464 5.64645L7 9.29289L5.35355 7.64645C5.15829 7.45118 4.84171 7.45118 4.64645 7.64645C4.45118 7.84171 4.45118 8.15829 4.64645 8.35355L6.64645 10.3536C6.84171 10.5488 7.15829 10.5488 7.35355 10.3536L11.3536 6.35355Z" fill="currentColor"/></svg><span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Approve</span></button>
@@ -1422,6 +1466,14 @@ function VideoPlayer({
               </div>
             </div>
           </div>
+
+          {/* ── Mobile: Timeline drawer (overlays from bottom) ── */}
+          <MobileTimelineDrawer
+            highlightedComment={highlightedComment}
+            formatTime={formatTime}
+            currentTime={currentTime}
+            onClose={() => setIsFullscreen(false)}
+          />
         </motion.div>
       )}
     </AnimatePresence>,
