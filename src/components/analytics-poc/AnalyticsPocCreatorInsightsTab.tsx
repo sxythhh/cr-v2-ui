@@ -23,7 +23,7 @@ function FilterBar({ dateRange, setDateRange }: { dateRange: string; setDateRang
 
 /* ── Action Card ──────────────────────────────────────────────────── */
 
-function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName, badge }: {
+function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName, badge, onCtaClick }: {
   label: string;
   value: string;
   valueColor?: string;
@@ -31,6 +31,7 @@ function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName
   ctaLabel: string;
   ctaClassName?: string;
   badge?: string;
+  onCtaClick?: () => void;
 }) {
   return (
     <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
@@ -43,6 +44,7 @@ function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName
         <p className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">{subtitle}</p>
         <button
           type="button"
+          onClick={onCtaClick}
           className={cn(
             "flex w-full cursor-pointer items-center justify-center rounded-full px-4 py-2.5 font-inter text-xs font-medium tracking-[-0.02em] transition-colors",
             ctaClassName ?? "bg-foreground/[0.03] text-page-text hover:bg-foreground/[0.06]",
@@ -442,9 +444,9 @@ function PrivateTierTable() {
       </div>
 
       {/* Table */}
-      <div className="px-4">
+      <div className="mx-4 overflow-hidden rounded-xl border border-foreground/[0.06]">
         {/* Header row */}
-        <div className="flex items-center border-b border-border py-2.5 pl-1">
+        <div className="flex items-center border-b border-foreground/[0.06] py-2.5 pl-1">
           <span className="w-12 shrink-0 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">#</span>
           <span className="min-w-0 flex-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
           <span className="shrink-0 px-3 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Views</span>
@@ -516,7 +518,7 @@ function PrivateTierTable() {
 
 /* ── Main Tab ─────────────────────────────────────────────────────── */
 
-export function AnalyticsPocCreatorInsightsTab({ className }: { className?: string }) {
+export function AnalyticsPocCreatorInsightsTab({ className, onReviewApplicants, onReviewQueue }: { className?: string; onReviewApplicants?: () => void; onReviewQueue?: () => void }) {
   const [dateRange, setDateRange] = useState("last-30-days");
 
   return (
@@ -540,6 +542,7 @@ export function AnalyticsPocCreatorInsightsTab({ className }: { className?: stri
           value="4"
           subtitle="Avg response time: 1.8 days. Faster reviews = higher creator sign-up conversion."
           ctaLabel="Review applicants"
+          onCtaClick={onReviewApplicants}
         />
         <ActionCard
           label="Submissions to review"
@@ -547,6 +550,7 @@ export function AnalyticsPocCreatorInsightsTab({ className }: { className?: stri
           badge="30+ days"
           subtitle="67.5% approval rate. Auto-approve timer starts in 4 days for the oldest batch."
           ctaLabel="Review queue"
+          onCtaClick={onReviewQueue}
         />
       </div>
 
