@@ -22,7 +22,7 @@ interface EndCampaignModalProps {
 /* ------------------------------------------------------------------ */
 
 const muted = "text-page-text-muted";
-const cardBorder = "border border-border";
+const cardBorder = "border border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)]";
 const cardShadow = "shadow-[0px_1px_2px_rgba(0,0,0,0.03)]";
 
 function StepDots({ current, total }: { current: number; total: number }) {

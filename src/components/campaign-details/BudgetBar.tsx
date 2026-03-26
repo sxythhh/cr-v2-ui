@@ -4,10 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const SEGMENTS = [
-  { label: "Paid out", amount: "$10,873", pct: 60, color: "#00994D", dotColor: "#00994D" },
-  { label: "Pending", amount: "$377", pct: 5, color: "#E57100", dotColor: "#E57100" },
-  { label: "Clawed back", amount: "$370.40", pct: 2.5, color: "#FF3355", dotColor: "#FF3355" },
-  { label: "Remaining", amount: "$3,750", pct: 32.5, color: "var(--budget-remaining)", dotColor: "#999999" },
+  { label: "Paid out", amount: "$10,873", pct: 60, color: "var(--bar-green)", dotColor: "var(--dot-green)" },
+  { label: "Pending", amount: "$377", pct: 5, color: "var(--bar-orange)", dotColor: "var(--dot-orange)" },
+  { label: "Clawed back", amount: "$370.40", pct: 2.5, color: "var(--bar-red)", dotColor: "var(--dot-red)" },
+  { label: "Remaining", amount: "$3,750", pct: 32.5, color: "var(--bar-remaining)", dotColor: "#999999" },
 ];
 
 export function BudgetBar() {
@@ -19,10 +19,7 @@ export function BudgetBar() {
     : 0;
 
   return (
-    <div className="relative w-full">
-      {/* CSS var for remaining segment color */}
-      <style>{`:root { --budget-remaining: rgba(37,37,37,0.1); } .dark { --budget-remaining: rgba(255,255,255,0.12); }`}</style>
-
+    <div className="relative w-full [--bar-green:rgba(0,153,77,0.6)] [--bar-orange:rgba(229,113,0,0.6)] [--bar-red:rgba(255,51,85,0.6)] [--bar-remaining:rgba(37,37,37,0.06)] [--dot-green:#00994D] [--dot-orange:#E57100] [--dot-red:#FF3355] dark:[--bar-green:rgba(52,211,153,0.6)] dark:[--bar-orange:rgba(251,146,60,0.6)] dark:[--bar-red:rgba(251,113,133,0.6)] dark:[--bar-remaining:rgba(224,224,224,0.03)] dark:[--dot-green:#34D399] dark:[--dot-orange:#FB923C] dark:[--dot-red:#FB7185]">
       {/* Floating tooltip */}
       <AnimatePresence>
         {tooltipSeg && (
@@ -32,7 +29,7 @@ export function BudgetBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 2 }}
             transition={{ duration: 0.1 }}
-            className="absolute -top-[38px] z-10 pointer-events-none"
+            className="absolute -top-[38px] z-10 pointer-events-none flex justify-center"
             style={{ left: `${tooltipLeft}%`, transform: "translateX(-50%)" }}
           >
             <div className="rounded-lg bg-tooltip-bg px-2.5 py-1.5 shadow-[0px_4px_12px_rgba(0,0,0,0.12)]">
@@ -54,15 +51,16 @@ export function BudgetBar() {
       </AnimatePresence>
 
       {/* Bar */}
-      <div className="flex h-10 overflow-hidden rounded-xl">
+      <div className="flex h-10 gap-px overflow-hidden rounded-xl bg-white dark:bg-[rgba(224,224,224,0.03)]">
         {SEGMENTS.map((seg, i) => (
           <motion.div
             key={seg.label}
             className="cursor-pointer h-full"
             style={{
-              width: `${seg.pct}%`,
+              flexGrow: i === 0 ? 1 : 0,
+              flexShrink: 0,
+              width: i === 0 ? undefined : `${seg.pct}%`,
               backgroundColor: seg.color,
-              borderRight: i < SEGMENTS.length - 1 ? "1px solid var(--budget-bar-divider)" : undefined,
             }}
             animate={{
               opacity: hoveredIndex !== null && hoveredIndex !== i ? 0.4 : 1,
@@ -73,36 +71,20 @@ export function BudgetBar() {
           />
         ))}
       </div>
-      <style>{`:root { --budget-bar-divider: #FFFFFF; } .dark { --budget-bar-divider: #1a1a1a; }`}</style>
-
-      {/* Label below */}
-      <div className="mt-2 h-5">
-        <AnimatePresence mode="wait">
-          {hoveredIndex !== null ? (
-            <motion.div
-              key={hoveredIndex}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.12 }}
-              className="flex items-center gap-1.5 text-[12px] tracking-[-0.02em]"
-            >
-              <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: SEGMENTS[hoveredIndex].dotColor }} />
-              <span className="text-page-text-muted">{SEGMENTS[hoveredIndex].label}</span>
-              <span className="font-medium text-page-text">{SEGMENTS[hoveredIndex].amount}</span>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="default"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-[12px] tracking-[-0.02em] text-page-text-muted"
-            >
-              $3,750 remaining
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Legend pills */}
+      <div className="mt-3 flex flex-wrap items-center gap-1">
+        {SEGMENTS.filter(s => s.label !== "Remaining").map((seg) => (
+          <span
+            key={seg.label}
+            className="inline-flex h-6 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
+          >
+            <span className="flex items-center gap-1.5">
+              <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: seg.dotColor }} />
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{seg.label}</span>
+            </span>
+            <span className="ml-1 font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: seg.dotColor }}>{seg.amount}</span>
+          </span>
+        ))}
       </div>
     </div>
   );

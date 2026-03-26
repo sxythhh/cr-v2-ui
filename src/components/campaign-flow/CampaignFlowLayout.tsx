@@ -254,7 +254,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
 
       {/* Mobile step nav */}
       <div className="flex md:hidden px-5 py-1">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-full bg-foreground/[0.03] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-xl bg-[rgba(37,37,37,0.04)] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
           {steps.map((step, i) => {
             const isActive = i === stepIndex;
             const isCompleted = i < stepIndex;
@@ -271,9 +271,9 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
                 onClick={() => isClickable && handleStepClick(i)}
                 disabled={!isClickable}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
                   isActive
-                    ? "bg-foreground/[0.03] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                    ? "border border-[rgba(37,37,37,0.06)] bg-white text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                     : isCompleted
                       ? "text-page-text-muted"
                       : "text-page-text-subtle",

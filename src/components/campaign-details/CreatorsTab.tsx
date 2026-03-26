@@ -95,34 +95,34 @@ export default function CreatorsTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* ── Participation Breakdown Card ─────────────────────────── */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
-        <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">
+      <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none [--part-green:rgba(0,153,77,0.6)] [--part-orange:rgba(229,113,0,0.6)] [--part-red:rgba(255,51,85,0.6)] [--part-remaining:rgba(37,37,37,0.06)] dark:[--part-green:rgba(52,211,153,0.6)] dark:[--part-orange:rgba(251,146,60,0.6)] dark:[--part-red:rgba(251,113,133,0.6)] dark:[--part-remaining:rgba(224,224,224,0.03)] [--part-dot-green:#00994D] [--part-dot-orange:#E57100] [--part-dot-red:#FF3355] dark:[--part-dot-green:#34D399] dark:[--part-dot-orange:#FB923C] dark:[--part-dot-red:#FB7185]">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
           Creator participation breakdown
         </span>
 
         {/* Stacked bar */}
-        <div className="flex h-10 overflow-hidden rounded-xl">
+        <div className="flex h-10 gap-px overflow-hidden rounded-xl bg-white dark:bg-[rgba(224,224,224,0.03)]">
           <div
-            className="flex items-center justify-center border-r border-white text-[12px] font-medium tracking-[-0.02em] text-white"
-            style={{ width: "25%", backgroundColor: "#00994D" }}
+            className="flex items-center justify-center font-inter text-xs font-medium tracking-[-0.02em] text-white"
+            style={{ width: "25%", backgroundColor: "var(--part-green)" }}
           >
             25%
           </div>
           <div
-            className="flex items-center justify-center border-r border-white text-[12px] font-medium tracking-[-0.02em] text-white"
-            style={{ width: "18%", backgroundColor: "#E57100" }}
+            className="flex items-center justify-center font-inter text-xs font-medium tracking-[-0.02em] text-white"
+            style={{ width: "18%", backgroundColor: "var(--part-orange)" }}
           >
             18%
           </div>
           <div
-            className="flex items-center justify-center border-r border-white text-[12px] font-medium tracking-[-0.02em] text-white"
-            style={{ width: "32%", backgroundColor: "#FF3355" }}
+            className="flex flex-1 items-center justify-center font-inter text-xs font-medium tracking-[-0.02em] text-white"
+            style={{ backgroundColor: "var(--part-red)" }}
           >
             32%
           </div>
           <div
-            className="flex items-center justify-center text-[12px] font-medium tracking-[-0.02em] text-white"
-            style={{ width: "25%", backgroundColor: "rgba(37,37,37,0.5)" }}
+            className="flex items-center justify-center font-inter text-xs font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-white/50"
+            style={{ width: "25%", backgroundColor: "var(--part-remaining)" }}
           >
             25%
           </div>
@@ -130,9 +130,9 @@ export default function CreatorsTab() {
 
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-2">
-          <LegendBadge color="#00994D" label="Active" count={12} />
-          <LegendBadge color="#E57100" label="Started" count={8} />
-          <LegendBadge color="#FF3355" label="Viewers" count={15} />
+          <LegendBadge color="var(--part-dot-green)" label="Active" count={12} />
+          <LegendBadge color="var(--part-dot-orange)" label="Started" count={8} />
+          <LegendBadge color="var(--part-dot-red)" label="Viewers" count={15} />
           <LegendBadge color="rgba(37,37,37,0.5)" label="Inactive" count={12} muted />
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function CreatorsTab() {
         {/* Segmented control */}
         <div
           ref={filterContainerRef}
-          className="relative flex items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap"
+          className="relative flex items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap sm:inline-flex"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}
@@ -188,7 +188,7 @@ export default function CreatorsTab() {
         </div>
 
         {/* Bulk nudge toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           {bulkMode && (
             <button
               type="button"
@@ -202,10 +202,10 @@ export default function CreatorsTab() {
             type="button"
             onClick={() => bulkMode ? exitBulkMode() : setBulkMode(true)}
             className={cn(
-              "flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[13px] font-medium tracking-[-0.02em] transition-colors",
+              "flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] transition-colors sm:h-8 sm:w-auto sm:px-3 sm:text-[13px]",
               bulkMode
                 ? "bg-[#252525] text-white dark:bg-[#e5e5e5] dark:text-[#1a1a1a]"
-                : "bg-[rgba(37,37,37,0.06)] text-[rgba(37,37,37,0.7)] hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[rgba(255,255,255,0.6)] dark:hover:bg-[rgba(255,255,255,0.10)]",
+                : "bg-[rgba(37,37,37,0.06)] text-[#252525] hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-page-text dark:hover:bg-[rgba(255,255,255,0.10)]",
             )}
           >
             {bulkMode ? "Cancel" : "Bulk nudge"}
@@ -275,7 +275,7 @@ function LegendBadge({
   muted?: boolean;
 }) {
   return (
-    <div className="flex h-6 items-center gap-1 rounded-full border border-[rgba(37,37,37,0.06)] px-2 dark:border-[rgba(255,255,255,0.06)]">
+    <div className="flex h-6 items-center gap-1 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
       <span
         className="h-2 w-2 shrink-0 rounded-full"
         style={{ backgroundColor: color }}

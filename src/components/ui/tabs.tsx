@@ -115,7 +115,7 @@ export const Tabs = forwardRef<
           onMouseLeave={handleMouseLeave}
           className={cn(
             "relative flex items-center select-none",
-            isContained && "w-fit gap-0.5 rounded-2xl bg-accent p-0.5 dark:bg-card-bg",
+            isContained && "w-fit gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-card-bg",
             isUnderline && "gap-0 border-b border-border",
             className,
           )}
@@ -146,7 +146,7 @@ export const Tabs = forwardRef<
             <AnimatePresence>
               {hoverRect && !isHoveringSelected && selectedRect && (
                 <motion.div
-                  className="pointer-events-none absolute rounded-[10px] bg-accent dark:bg-[#1f1f1f]"
+                  className="pointer-events-none absolute rounded-[10px] bg-[rgba(37,37,37,0.06)] dark:bg-[#1f1f1f]"
                   initial={{
                     left: selectedRect.left,
                     width: selectedRect.width,
@@ -293,7 +293,7 @@ export const TabItem = forwardRef<
       onClick={() => onSelect(index)}
       className={cn(
         "relative z-10 flex cursor-pointer items-center border-none bg-transparent font-[family-name:var(--font-inter)] tracking-[-0.02em] outline-none",
-        isContained && "h-8 gap-1.5 rounded-xl px-4",
+        isContained && "h-8 gap-1.5 rounded-[10px] px-4",
         isUnderline && "h-10 gap-1.5 px-3",
         className,
       )}

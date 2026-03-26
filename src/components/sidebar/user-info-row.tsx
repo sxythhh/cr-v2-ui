@@ -144,6 +144,88 @@ export function UserInfoRow() {
   );
 }
 
+// ── Compact avatar-only variant for headers ──────────────────
+
+export function UserAvatarDropdown() {
+  const [show, setShow] = useState(false);
+  const [themeSubmenuOpen, setThemeSubmenuOpen] = useState(false);
+  const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { refs, floatingStyles } = useFloating({
+    open: show,
+    placement: "bottom-end",
+    middleware: [offset(6), shift({ padding: 8 }), flip()],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const setFloatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      refs.setFloating(node);
+    },
+    [refs],
+  );
+
+  // Close on outside click
+  useEffect(() => {
+    if (!show) return;
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        const floating = document.querySelector("[data-user-dropdown-floating]");
+        if (floating && floating.contains(e.target as Node)) return;
+        setShow(false);
+        setThemeSubmenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [show]);
+
+  return (
+    <div ref={(node) => { containerRef.current = node; refs.setReference(node); }}>
+      <button
+        type="button"
+        onClick={() => setShow((v) => !v)}
+        className="flex size-9 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-foreground/[0.06]"
+      >
+        <img
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
+          alt=""
+          className="size-7 rounded-full border border-foreground/[0.06] object-cover"
+        />
+      </button>
+
+      <AnimatePresence>
+        {show && (
+          <FloatingPortal>
+            <div
+              ref={setFloatingRef}
+              style={floatingStyles}
+              className="pointer-events-none z-[200]"
+              data-user-dropdown-floating
+            >
+              <motion.div
+                className="pointer-events-auto"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.15 } }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              >
+                <ProfileDropdown
+                  themeSubmenuOpen={themeSubmenuOpen}
+                  onThemeEnter={() => { setThemeSubmenuOpen(true); }}
+                  onThemeLeave={() => { setTimeout(() => setThemeSubmenuOpen(false), 150); }}
+                  onAccountClick={() => { setShow(false); router.push("/settings"); }}
+                  onLogout={() => setShow(false)}
+                />
+              </motion.div>
+            </div>
+          </FloatingPortal>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ── Profile Dropdown with proximity hover ────────────────────
 
 function ProfileDropdown({
@@ -182,11 +264,11 @@ function ProfileDropdown({
     [registerItem],
   );
 
-  // Hide main hover when submenu is open
-  const effectiveRect = activeIndex !== null && !themeSubmenuOpen
-    ? itemRects[activeIndex]
-    : activeIndex === 1 && themeSubmenuOpen
-      ? itemRects[1]
+  // When submenu is open, always highlight Theme row (index 1)
+  const effectiveRect = themeSubmenuOpen
+    ? itemRects[1] ?? null
+    : activeIndex !== null
+      ? itemRects[activeIndex]
       : null;
 
   return (
@@ -291,7 +373,7 @@ function ProfileDropdown({
             className="relative z-10 flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2"
           >
             <LogoutIcon />
-            <span className="font-[family-name:var(--font-inter)] text-sm font-normal tracking-[-0.02em] text-[#FF3355] dark:text-[#FB7185]">
+            <span className="font-[family-name:var(--font-inter)] text-sm font-normal tracking-[-0.02em] text-[#FF2525] dark:text-[#FB7185]">
               Log out
             </span>
           </button>
@@ -471,7 +553,7 @@ function MonitorIcon() {
 function LogoutIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 1.33333C1.63181 1.33333 1.33333 1.63181 1.33333 2L1.33333 10C1.33333 10.3682 1.63181 10.6667 2 10.6667H5.5C5.86819 10.6667 6.16667 10.9651 6.16667 11.3333C6.16667 11.7015 5.86819 12 5.5 12H2C0.895431 12 -7.94729e-08 11.1046 0 10L3.57628e-07 2C3.97364e-07 0.89543 0.895431 -7.94729e-08 2 0L5.5 1.58946e-07C5.86819 1.58946e-07 6.16667 0.298477 6.16667 0.666667C6.16667 1.03486 5.86819 1.33333 5.5 1.33333L2 1.33333ZM7.86193 2.5286C8.12228 2.26825 8.54439 2.26825 8.80474 2.5286L11.8047 5.52859C12.0651 5.78894 12.0651 6.21105 11.8047 6.4714L8.80474 9.47141C8.54439 9.73175 8.12228 9.73176 7.86193 9.47141C7.60158 9.21106 7.60158 8.78895 7.86193 8.5286L9.72386 6.66666H3.83333C3.46514 6.66666 3.16667 6.36818 3.16667 5.99999C3.16667 5.6318 3.46514 5.33333 3.83333 5.33333L9.72386 5.33333L7.86193 3.47141C7.60158 3.21106 7.60158 2.78895 7.86193 2.5286Z" fill="#FF3355" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M2 1.33333C1.63181 1.33333 1.33333 1.63181 1.33333 2L1.33333 10C1.33333 10.3682 1.63181 10.6667 2 10.6667H5.5C5.86819 10.6667 6.16667 10.9651 6.16667 11.3333C6.16667 11.7015 5.86819 12 5.5 12H2C0.895431 12 -7.94729e-08 11.1046 0 10L3.57628e-07 2C3.97364e-07 0.89543 0.895431 -7.94729e-08 2 0L5.5 1.58946e-07C5.86819 1.58946e-07 6.16667 0.298477 6.16667 0.666667C6.16667 1.03486 5.86819 1.33333 5.5 1.33333L2 1.33333ZM7.86193 2.5286C8.12228 2.26825 8.54439 2.26825 8.80474 2.5286L11.8047 5.52859C12.0651 5.78894 12.0651 6.21105 11.8047 6.4714L8.80474 9.47141C8.54439 9.73175 8.12228 9.73176 7.86193 9.47141C7.60158 9.21106 7.60158 8.78895 7.86193 8.5286L9.72386 6.66666H3.83333C3.46514 6.66666 3.16667 6.36818 3.16667 5.99999C3.16667 5.6318 3.46514 5.33333 3.83333 5.33333L9.72386 5.33333L7.86193 3.47141C7.60158 3.21106 7.60158 2.78895 7.86193 2.5286Z" fill="currentColor" />
     </svg>
   );
 }

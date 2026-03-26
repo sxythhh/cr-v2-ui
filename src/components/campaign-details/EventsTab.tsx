@@ -97,7 +97,7 @@ export default function EventsTab() {
         <div
           ref={filterRef}
           className={cn(
-            "flex gap-1 rounded-2xl p-1 overflow-x-auto scrollbar-hide whitespace-nowrap md:sticky md:top-5 md:w-[186px] md:flex-col md:overflow-x-visible md:whitespace-normal",
+            "flex w-[287px] gap-1 rounded-xl p-0.5 md:sticky md:top-5 md:w-[186px] md:flex-col",
             "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(224,224,224,0.03)]",
           )}
           onMouseEnter={handlers.onMouseEnter}
@@ -109,7 +109,7 @@ export default function EventsTab() {
             {hoverRect && hoverIndex !== selectedIndex && (
               <motion.div
                 key={sessionRef.current}
-                className="pointer-events-none absolute rounded-xl bg-foreground/[0.04]"
+                className="pointer-events-none absolute rounded-[10px] bg-foreground/[0.04]"
                 initial={{ opacity: 0, ...hoverRect }}
                 animate={{ opacity: 1, ...hoverRect }}
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -124,9 +124,9 @@ export default function EventsTab() {
               ref={(el) => registerItem(i, el)}
               onClick={() => setActiveFilter(f.key)}
               className={cn(
-                "relative z-10 flex h-9 cursor-pointer items-center justify-between rounded-xl px-2.5 transition-colors",
+                "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-between rounded-[10px] px-3 transition-colors md:flex-none",
                 activeFilter === f.key
-                  ? "bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_2px_4px_rgba(0,0,0,0.06)]"
+                  ? "bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                   : "",
               )}
             >
@@ -151,8 +151,8 @@ export default function EventsTab() {
       <div
         className={cn(
           "flex w-full max-w-[600px] flex-col rounded-2xl border p-5",
-          "border-border bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-          "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+          "border-[rgba(37,37,37,0.06)] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
+          "dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
         )}
       >
         <div className="flex flex-col gap-2">
@@ -192,15 +192,15 @@ export default function EventsTab() {
 
                 {/* Unread dot */}
                 {event.unread && (
-                  <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-2 rounded-full border-2 border-white bg-[#FB7185] dark:border-[rgba(224,224,224,0.03)]" />
+                  <span className="absolute -right-1 -top-1 z-10 flex size-4 items-center justify-center">
+                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-card-bg" />
                   </span>
                 )}
 
                 {/* Icon */}
                 <div
                   className={cn(
-                    "flex size-10 shrink-0 items-center justify-center rounded-full",
+                    "relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full",
                     style.bg,
                   )}
                 >

@@ -274,12 +274,13 @@ export function BoostCampaignModal({
             <div className="flex flex-col items-center gap-4">
               <div className="flex flex-col items-center gap-4">
                 <div
-                  className="flex size-14 items-center justify-center rounded-full bg-[#8B5CF6]"
+                  className="relative flex size-14 items-center justify-center rounded-full bg-[#8B5CF6]"
                   style={{
                     border: "1px solid rgba(37,37,37,0.1)",
                     boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)",
                   }}
                 >
+                  <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
                   </svg>
@@ -299,7 +300,7 @@ export function BoostCampaignModal({
             </div>
 
             {/* Receipt card */}
-            <div className="w-full rounded-2xl border border-border bg-white dark:bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+            <div className="w-full rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
               <div className="flex items-center justify-between border-b border-[rgba(37,37,37,0.03)] dark:border-[rgba(255,255,255,0.03)] px-4 py-3">
                 <span className="text-xs font-medium text-page-text-muted">Paid amount</span>
                 <span className="text-xs font-medium text-page-text">${selected.price}</span>

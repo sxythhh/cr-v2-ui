@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { CampaignModel, ConfigurationData, Platform } from "@/types/campaign-flow.types";
-import { CpmPerVideoConfiguration, RetainerConfiguration } from "./configuration-parts";
+import { CpmPerVideoConfiguration, RetainerConfiguration, ProjectedViewsBar } from "./configuration-parts";
 
 // ── Icons ──────────────────────────────────────────────────────────
 
@@ -145,9 +145,9 @@ function ToggleSwitch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
       type="button"
-      onClick={onToggle}
+      onClick={(e) => { e.preventDefault(); onToggle(); }}
       className={cn(
-        "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors ",
+        "flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full p-0.5 backdrop-blur-[6px] transition-colors",
         on ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]",
       )}
     >
@@ -252,7 +252,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
       {model === "cpm" ? (
         <div className="flex flex-col gap-2">
           <SectionLabel title="Pricing" description="Set your CPM rate and total campaign budget." />
-          <Card>
+          <Card className="flex flex-col gap-4">
             <div className="flex gap-3">
               <div className="flex flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per 1,000 views</span>
@@ -269,6 +269,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
                 </div>
               </div>
             </div>
+            <ProjectedViewsBar rate={data.rewardPer1000Views} budget={data.budget} />
           </Card>
         </div>
       ) : model === "per-video" ? (
@@ -435,26 +436,31 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
       {/* 5. Creator earnings cap */}
       <div className="flex flex-col gap-2">
         <SectionLabel title="Creator earnings cap" description="Set a maximum amount a single creator can earn, or allow unlimited earnings." />
-        <div
-          className={cn(
-            "flex w-full flex-col gap-3 rounded-2xl border p-4 transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.03)]",
-            noEarningsCap ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]" : "border-foreground/[0.06] bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
-          )}
-          style={noEarningsCap ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" } : undefined}
-        >
-          <div className="flex cursor-pointer items-center gap-3" onClick={() => setNoEarningsCap((v) => !v)}>
+        <div className="flex w-full flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-5 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+          {/* Toggle card */}
+          <label
+            className={cn(
+              "flex cursor-pointer items-center gap-3 rounded-2xl border p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors",
+              noEarningsCap
+                ? "border-[rgba(255,144,37,0.3)] dark:border-[rgba(251,146,60,0.15)]"
+                : "border-[rgba(37,37,37,0.06)] bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]",
+            )}
+            style={noEarningsCap ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255, 144, 37, 0.12) 0%, rgba(255, 144, 37, 0) 50%), var(--toggle-card-bg)" } : undefined}
+          >
             <div className="flex min-w-0 flex-1 flex-col gap-1">
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Add limit</span>
-              <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">Cap the maximum a single creator can earn from this campaign.</span>
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">No limit</span>
+              <span className="font-inter text-sm font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">Creators can earn unlimited from this campaign.</span>
             </div>
             <ToggleSwitch on={noEarningsCap} onToggle={() => setNoEarningsCap((v) => !v)} />
-          </div>
+          </label>
+
+          {/* Max earnings input — only when toggled on */}
           {noEarningsCap && (() => {
             const val = parseInt(data.maxPayout.replace(/[^\d]/g, "")) || 0;
             const hasError = data.maxPayout.length > 0 && val < 50;
             return (
-              <div className="flex flex-col gap-1.5">
-                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Maximum earnings per creator</span>
+              <div className="flex flex-col gap-2">
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Max earnings per creator</span>
                 <div className={cn(
                   "flex h-10 items-center gap-1.5 rounded-[14px] px-3.5 transition-colors",
                   hasError ? "bg-[rgba(255,37,37,0.04)] ring-1 ring-[#FF2525]/30" : "bg-foreground/[0.04]",
@@ -464,9 +470,8 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
                     type="text"
                     value={data.maxPayout}
                     onChange={(e) => update({ maxPayout: e.target.value })}
-                    placeholder="500"
+                    placeholder="0"
                     className="flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted/60"
-                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 {hasError && (

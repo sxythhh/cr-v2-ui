@@ -90,17 +90,19 @@ export function CpmPerVideoConfiguration({ data, model, platformRewards, update,
       <SectionCard>
         <SectionHeading title="Rate and contract length" />
         <div className="flex gap-3">
-          <Field label="Rate" className="flex-1">
+          <Field label={labels.rateLabel} className="flex-1">
             {data.perPlatform ? (
               <CurrencyInput onChange={(v) => update({ rewardPer1000Views: v })} placeholder="0" value={data.rewardPer1000Views} />
             ) : (
               <PlatformRateInputs onRewardChange={updatePlatformReward} platforms={data.selectedPlatforms} rewards={platformRewards} />
             )}
           </Field>
-          <Field label="Total Budget" className="flex-1">
+          <Field label="Total budget" className="flex-1">
             <CurrencyInput onChange={(v) => update({ budget: v })} placeholder="0" value={data.budget} />
           </Field>
         </div>
+        {/* Projected views — only for CPM */}
+        {model === "cpm" && <ProjectedViewsBar rate={data.rewardPer1000Views} budget={data.budget} />}
         <div className="flex items-center gap-2">
           <Switch checked={data.perPlatform} onCheckedChange={(v) => update({ perPlatform: v })} />
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">{labels.toggleLabel}</span>
@@ -118,6 +120,48 @@ export function CpmPerVideoConfiguration({ data, model, platformRewards, update,
         </div>
       </SectionCard>
     </>
+  );
+}
+
+function formatCompactViews(num: number): string {
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (num >= 1_000) return `${(num / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
+  return num.toFixed(0);
+}
+
+export function ProjectedViewsBar({ rate, budget }: { rate: string; budget: string }) {
+  const rateNum = Number.parseFloat(rate) || 0;
+  const budgetNum = Number.parseFloat(budget) || 0;
+  const projectedViews = rateNum > 0 ? (budgetNum / rateNum) * 1000 : 0;
+  const display = projectedViews > 0 ? formatCompactViews(projectedViews) : "--";
+
+  return (
+    <div className="relative mt-4 h-10">
+      {/* Pink/magenta blurred rectangle */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-[14px]"
+        style={{
+          opacity: 0.3,
+          filter: "blur(2px)",
+          background: "linear-gradient(95.54deg, rgba(255,63,213,0) 0%, #FF3FD5 25%, rgba(255,63,213,0) 50%, #FF3FD5 75%, rgba(255,63,213,0) 100%)",
+        }}
+      />
+      {/* Orange blurred rectangle */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-[14px]"
+        style={{
+          opacity: 0.3,
+          filter: "blur(0.5px)",
+          transform: "matrix(-1, 0, 0, 1, 0, 0)",
+          background: "linear-gradient(95.54deg, rgba(255,144,37,0) 0%, #FF9025 25%, rgba(255,144,37,0) 50%, #FF9025 75%, rgba(255,144,37,0) 100%)",
+        }}
+      />
+      {/* Content */}
+      <div className="absolute inset-0 flex items-center justify-between gap-1.5 rounded-[14px] border border-[rgba(37,37,37,0.06)] bg-white px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+        <span className="font-inter text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Projected views</span>
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-page-text">{display}</span>
+      </div>
+    </div>
   );
 }
 

@@ -90,7 +90,7 @@ function PlatformCircle({ platform, size = 22 }: { platform: string; size?: numb
     <span
       className={cn(
         "inline-flex items-center justify-center rounded-full border",
-        "border-border",
+        "border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)]",
         "bg-white dark:bg-card-bg"
       )}
       style={{ width: size, height: size }}
@@ -147,9 +147,9 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
   const pct = Math.round((c.budget.spent / c.budget.total) * 100);
 
   return (
-    <div className="flex h-full flex-col bg-white dark:bg-[#161616]">
+    <div className="flex flex-col bg-white dark:bg-[#161616] md:h-full">
       {/* ── Top bar ─────────────────────────────────────────────── */}
-      <header className="flex items-center border-b border-border px-4 sm:px-5">
+      <header className="flex items-center border-b border-[rgba(37,37,37,0.06)] px-4 dark:border-[rgba(224,224,224,0.03)] sm:px-5">
         {/* Back – hidden on mobile, shown inline on desktop */}
         <button
           onClick={() => router.push("/campaigns")}
@@ -167,7 +167,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </header>
 
       {/* ── Content ─────────────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+      <div className="md:min-h-0 md:flex-1 md:overflow-y-auto" style={{ scrollbarWidth: "none" }}>
         {activeTab === "details" ? (
           <div className="mx-auto max-w-[1200px] px-5 py-5">
             <div className="flex flex-col gap-5">
@@ -185,20 +185,21 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                 {/* Left: campaign info */}
                 <div className="flex flex-1 min-w-0 flex-col gap-6">
                   {/* Tags */}
-                  <div className="flex items-center">
+                  <div className="flex items-end gap-1">
                     {c.tags.map((tag) =>
                       tag.color === "orange" ? (
                         <span
                           key={tag.label}
-                          className="z-[1] -mr-1 inline-flex h-6 items-center rounded-full bg-[rgba(229,113,0,0.12)] px-2 text-[10px] font-medium tracking-[-0.02em] text-[#E57100]"
+                          className="z-[1] inline-flex h-8 items-center gap-2 rounded-full border border-[rgba(37,37,37,0.06)] bg-white py-2.5 pl-2.5 pr-3.5 backdrop-blur-xl dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
                         >
-                          {tag.label}
+                          <svg width="16" height="16" viewBox="0 0 13 14" fill="none"><path d="M3.33333 0C3.70152 0 4 0.298477 4 0.666667V1.33333H8V0.666667C8 0.298477 8.29848 0 8.66667 0C9.03486 0 9.33333 0.298477 9.33333 0.666667V1.33333H10C11.1046 1.33333 12 2.22876 12 3.33333V4.66667C12 5.03486 11.7015 5.33333 11.3333 5.33333H1.33333V10.6667C1.33333 11.0349 1.63181 11.3333 2 11.3333H4.66667C5.03486 11.3333 5.33333 11.6318 5.33333 12C5.33333 12.3682 5.03486 12.6667 4.66667 12.6667H2C0.89543 12.6667 0 11.7712 0 10.6667V3.33333C0 2.22876 0.895431 1.33333 2 1.33333H2.66667V0.666667C2.66667 0.298477 2.96514 0 3.33333 0Z" fill="#E57100"/><path d="M9.33334 8.25C9.11151 8.25 8.89732 8.29107 8.69932 8.36599L9.09763 8.76431C9.30762 8.97429 9.1589 9.33334 8.86193 9.33334H7.33333C6.96514 9.33334 6.66667 9.03486 6.66667 8.66667V7.13808C6.66667 6.84111 7.02571 6.69239 7.2357 6.90238L7.70668 7.37335C8.18233 7.08371 8.74179 6.91667 9.33334 6.91667C10.7421 6.91667 11.9287 7.86095 12.2978 9.14979C12.3991 9.50375 12.1944 9.87287 11.8404 9.97424C11.4865 10.0756 11.1173 9.87084 11.016 9.51688C10.8063 8.78478 10.1314 8.25 9.33334 8.25Z" fill="#E57100"/><path d="M7.6507 10.4831C7.54933 10.1292 7.18021 9.9244 6.82625 10.0258C6.47229 10.1271 6.26752 10.4963 6.36889 10.8502C6.738 12.139 7.92453 13.0833 9.33334 13.0833C9.92502 13.0833 10.4845 12.9162 10.96 12.6267L11.431 13.0976C11.641 13.3076 12 13.1589 12 12.8619V11.3333C12 10.9651 11.7015 10.6667 11.3333 10.6667H9.80475C9.50778 10.6667 9.35905 11.0257 9.56904 11.2357L9.96736 11.634C9.7693 11.709 9.55512 11.75 9.33334 11.75C8.53526 11.75 7.86036 11.2152 7.6507 10.4831Z" fill="#E57100"/></svg>
+                          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#E57100]">{tag.label}</span>
                         </span>
                       ) : (
-                        <span key={tag.label} className="relative z-[2] inline-flex h-[26px] items-center rounded-full bg-white dark:bg-[#161616]" style={{ padding: "1px" }}>
-                          <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white pl-2 pr-2.5 text-[12px] font-medium tracking-[-0.02em] text-[#252525] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg dark:text-[#E0E0E0]">
+                        <span key={tag.label} className="inline-flex h-8 items-center gap-2 rounded-full border border-[rgba(37,37,37,0.06)] bg-white py-2.5 pl-2.5 pr-3.5 backdrop-blur-xl dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+                          <span className="inline-flex items-center gap-2 font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-[#E0E0E0]">
                             {tag.locked && (
-                              <svg width="12" height="12" viewBox="0 0 8 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M4 0C2.61929 0 1.5 1.11929 1.5 2.5V3.5C0.671573 3.5 0 4.17157 0 5V8.5C0 9.32843 0.671573 10 1.5 10H6.5C7.32843 10 8 9.32843 8 8.5V5C8 4.17157 7.32843 3.5 6.5 3.5V2.5C6.5 1.11929 5.38071 0 4 0ZM5.5 3.5V2.5C5.5 1.67157 4.82843 1 4 1C3.17157 1 2.5 1.67157 2.5 2.5V3.5H5.5ZM4 5.5C4.27614 5.5 4.5 5.72386 4.5 6V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V6C3.5 5.72386 3.72386 5.5 4 5.5Z" fill="currentColor" /></svg>
+                              <svg width="16" height="16" viewBox="0 0 8 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M4 0C2.61929 0 1.5 1.11929 1.5 2.5V3.5C0.671573 3.5 0 4.17157 0 5V8.5C0 9.32843 0.671573 10 1.5 10H6.5C7.32843 10 8 9.32843 8 8.5V5C8 4.17157 7.32843 3.5 6.5 3.5V2.5C6.5 1.11929 5.38071 0 4 0ZM5.5 3.5V2.5C5.5 1.67157 4.82843 1 4 1C3.17157 1 2.5 1.67157 2.5 2.5V3.5H5.5ZM4 5.5C4.27614 5.5 4.5 5.72386 4.5 6V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V6C3.5 5.72386 3.72386 5.5 4 5.5Z" fill="currentColor" /></svg>
                             )}
                             {tag.label}
                           </span>
@@ -306,35 +307,39 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 
                 {/* Right: stats card */}
                 <div className="w-full shrink-0 lg:w-[400px]">
-                <div className="flex flex-col gap-4 rounded-2xl border border-border bg-white dark:bg-card-bg p-4">
-                  {/* Budget card */}
-                  <div className="flex flex-col gap-2 rounded-[10px] border border-border p-3">
+                <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
+                  {/* Budget section */}
+                  <div className="flex flex-col gap-2">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-lg font-semibold tracking-[-0.02em] text-page-text">
-                        ${c.budget.monthly.toLocaleString()}/mo
+                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+                        ${c.budget.monthly.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/mo
                       </span>
-                      <span className="text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
-                        ${c.budget.spent.toLocaleString()} spent{" "}
-                        <span className="font-medium text-page-text">{pct}%</span>
+                      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
+                        ${c.budget.spent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} spent
                       </span>
                     </div>
                     {/* Progress bar */}
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)]">
+                    <div className="h-1 w-full overflow-hidden rounded-full bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)]">
                       <div
-                        className="h-full rounded-full bg-[#252525] dark:bg-[#e5e5e5] transition-all"
+                        className="h-full rounded-full bg-[#E57100] transition-all"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-xs tracking-[-0.02em] text-page-text-muted">
-                      of ${c.budget.total.toLocaleString()} total budget
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+                        of ${c.budget.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} total budget
+                      </span>
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+                        {pct}%
+                      </span>
+                    </div>
                   </div>
 
                   {/* Warning card */}
                   <div className="flex flex-col gap-3 rounded-xl bg-[rgba(229,113,0,0.08)] px-4 py-3">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(251,146,60,0.08)]">
-                      <svg width="17" height="16" viewBox="0 0 17 16" fill="none">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M6.19259 1.24032C7.15729 -0.413439 9.54679 -0.413443 10.5115 1.24032L16.3598 11.2659C17.332 12.9326 16.1298 15.0256 14.2003 15.0256H2.50377C0.57429 15.0256 -0.62789 12.9326 0.344318 11.2659L6.19259 1.24032ZM8.35287 5.02563C8.8131 5.02563 9.1862 5.39873 9.1862 5.85897V8.35897C9.1862 8.8192 8.8131 9.1923 8.35287 9.1923C7.89263 9.1923 7.51953 8.8192 7.51953 8.35897V5.85897C7.51953 5.39873 7.89263 5.02563 8.35287 5.02563ZM7.3112 10.859C7.3112 10.2837 7.77757 9.8173 8.35287 9.8173C8.92816 9.8173 9.39453 10.2837 9.39453 10.859C9.39453 11.4343 8.92816 11.9006 8.35287 11.9006C7.77757 11.9006 7.3112 11.4343 7.3112 10.859Z" fill="#FB923C"/>
+                    <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(229,113,0,0.08)]">
+                      <svg width="20" height="20" viewBox="0 0 17 16" fill="none">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M6.19259 1.24032C7.15729 -0.413439 9.54679 -0.413443 10.5115 1.24032L16.3598 11.2659C17.332 12.9326 16.1298 15.0256 14.2003 15.0256H2.50377C0.57429 15.0256 -0.62789 12.9326 0.344318 11.2659L6.19259 1.24032ZM8.35287 5.02563C8.8131 5.02563 9.1862 5.39873 9.1862 5.85897V8.35897C9.1862 8.8192 8.8131 9.1923 8.35287 9.1923C7.89263 9.1923 7.51953 8.8192 7.51953 8.35897V5.85897C7.51953 5.39873 7.89263 5.02563 8.35287 5.02563ZM7.3112 10.859C7.3112 10.2837 7.77757 9.8173 8.35287 9.8173C8.92816 9.8173 9.39453 10.2837 9.39453 10.859C9.39453 11.4343 8.92816 11.9006 8.35287 11.9006C7.77757 11.9006 7.3112 11.4343 7.3112 10.859Z" fill="#E57100"/>
                       </svg>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -345,7 +350,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                         At current pace, budget runs out in ~4 days. Top up to keep creators submitting.
                       </p>
                     </div>
-                    <button className="w-full rounded-full bg-[#E57100] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#cc6400]">
+                    <button onClick={() => setTopUpOpen(true)} className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full bg-[#E57100] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#cc6400]">
                       Top up $2,000 from balance
                     </button>
                   </div>
@@ -395,7 +400,9 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
         ) : activeTab === "events" ? (
           <EventsTab />
         ) : activeTab === "analytics" ? (
-          <AnalyticsTab />
+          <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-5">
+            <AnalyticsTab />
+          </div>
         ) : (
           <div className="flex flex-1 items-center justify-center py-32">
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">
@@ -406,7 +413,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────── */}
-      <footer className="flex items-center justify-between border-t border-border px-4 py-2 dark:border-[rgba(224,224,224,0.03)] sm:px-5 sm:py-3">
+      <footer className="fixed inset-x-0 bottom-[calc(60px+max(8px,env(safe-area-inset-bottom)))] z-20 flex items-center justify-between border-t border-[rgba(37,37,37,0.06)] bg-white px-4 py-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616] md:static md:inset-auto md:bottom-auto sm:px-5 sm:py-3">
         <span className="hidden text-sm tracking-[-0.02em] text-page-text sm:block">
           {c.title}
         </span>
@@ -414,7 +421,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           <div ref={dotsRef} className="relative">
             <button
               onClick={() => setDotsOpen((v) => !v)}
-              className="flex size-9 cursor-pointer items-center justify-center rounded-full border border-border bg-white text-page-text-muted transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)]"
+              className="flex size-9 cursor-pointer items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white text-page-text-muted transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)]"
             >
               <IconDots size={16} />
             </button>
@@ -435,10 +442,10 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
               )}
             </AnimatePresence>
           </div>
-          <button className="hidden cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
+          <button className="hidden cursor-pointer rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
             Edit
           </button>
-          <button onClick={() => setTopUpOpen(true)} className="hidden cursor-pointer rounded-full border border-border bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
+          <button onClick={() => setTopUpOpen(true)} className="hidden cursor-pointer rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-3.5 py-1.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:hover:bg-[rgba(255,255,255,0.12)] sm:block">
             Top up
           </button>
           <button onClick={() => setEndOpen(true)} className="flex h-9 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#252525] sm:flex-none">

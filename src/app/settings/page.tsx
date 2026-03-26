@@ -9,6 +9,7 @@ import { Modal } from "@/components/ui/modal";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { Rating } from "@/components/reui/rating";
+import { UserDropdown } from "@/components/sidebar/user-dropdown";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { IconUpload, IconPhoto } from "@tabler/icons-react";
 
@@ -2651,10 +2652,7 @@ export default function SettingsPage() {
           </button>}
 
           {/* User avatar pill */}
-          <button className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] py-1 pl-1 pr-2 transition-colors hover:bg-foreground/[0.10]">
-            <div className="size-7 rounded-full bg-foreground/[0.12]" />
-            <ChevronDown className="size-4 text-page-text" />
-          </button>
+          <UserDropdown variant="header" />
         </div>
       </header>
 

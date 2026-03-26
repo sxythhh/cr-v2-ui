@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/campaign-flow/PlatformButton";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
+import { SwipeableStatCards } from "./FinanceTab";
 
 const SUBMISSIONS = [
   { date: "2h ago", handle: "@clipstermafia", initials: "CM", color: "bg-violet-500", video: "Day in the life vlog #47", platform: "tiktok", views: "1.2M", amount: "$1,200.00", status: "approved" as const },
@@ -28,8 +29,8 @@ const FILTER_TABS = [
 
 function StatCard({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) {
   return (
-    <div className="flex-1 flex flex-col gap-3 bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl p-4">
-      <span className="text-[12px] tracking-[-0.02em] text-page-text-muted">{label}</span>
+    <div className="flex flex-1 flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
+      <span className="font-inter text-xs tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">{label}</span>
       <span className={cn("text-[24px] font-medium tracking-[-0.02em]", valueColor || "text-page-text")}>{value}</span>
     </div>
   );
@@ -86,18 +87,18 @@ export default function SubmissionsTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Top stats row */}
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-        <StatCard label="Total submissions" value="98" />
-        <StatCard label="Pending review" value="9" />
-        <StatCard label="Approved" value="89" valueColor="text-[#00994D] dark:text-[#34D399]" />
-        <StatCard label="Total views" value="2.4M" />
-      </div>
+      <SwipeableStatCards cards={[
+        { label: "Total submissions", value: "98" },
+        { label: "Pending review", value: "9" },
+        { label: "Approved", value: "89", valueColor: "text-[#00994D] dark:text-[#34D399]" },
+        { label: "Total views", value: "2.4M" },
+      ]} />
 
       {/* Filter bar */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div
           ref={filterContainerRef}
-          className="relative inline-flex items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap"
+          className="relative flex items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap sm:inline-flex"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}
@@ -144,20 +145,20 @@ export default function SubmissionsTab() {
         </div>
         <button
           type="button"
-          className="flex items-center gap-1.5 h-8 px-3.5 rounded-full bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)] text-[13px] font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)] hover:bg-[rgba(37,37,37,0.10)] dark:hover:bg-[rgba(255,255,255,0.10)] transition-colors"
+          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-page-text dark:hover:bg-[rgba(255,255,255,0.10)] sm:w-auto"
         >
           Open in Submissions Hub
         </button>
       </div>
 
       {/* Submissions table */}
-      <div className="relative overflow-hidden bg-white dark:bg-card-bg border border-border shadow-[0px_1px_2px_rgba(0,0,0,0.03)] rounded-2xl">
+      <div className="relative overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
         <div className="p-5 pb-0">
           <span className="text-[13px] font-medium tracking-[-0.02em] text-page-text-muted">Submissions</span>
         </div>
         {/* Header row */}
         <div className="overflow-x-auto">
-        <div className="grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] px-5 py-3 border-b border-border">
+        <div className="grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] px-5 py-3 border-b border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)]">
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Date</span>
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
           <span className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">Video</span>
@@ -178,7 +179,7 @@ export default function SubmissionsTab() {
             {tableActiveRect && (
               <motion.div
                 key={tableSessionRef.current}
-                className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
+                className="pointer-events-none absolute bg-foreground/[0.04]"
                 initial={{ opacity: 0, ...tableActiveRect }}
                 animate={{ opacity: 1, ...tableActiveRect }}
                 exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -190,7 +191,7 @@ export default function SubmissionsTab() {
             <div
               key={i}
               ref={(el) => tableRegisterItem(i, el)}
-              className="relative z-10 grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] items-center px-5 h-14 border-b border-border last:border-b-0"
+              className="relative z-10 grid min-w-[750px] grid-cols-[80px_1fr_1fr_96px_96px_96px_128px] items-center px-5 h-14 border-b border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)] last:border-b-0"
             >
               <span className="text-[13px] tracking-[-0.02em] text-page-text-muted whitespace-nowrap">{sub.date}</span>
               <div className="flex items-center gap-2 min-w-0">

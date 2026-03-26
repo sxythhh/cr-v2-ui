@@ -8,6 +8,7 @@ import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
 import { WorkspaceAvatar } from "@/components/sidebar/workspace-avatar";
 import { cn } from "@/lib/utils";
 import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
+import { UserDropdown } from "@/components/sidebar/user-dropdown";
 import { RichButton } from "@/components/rich-button";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
@@ -619,7 +620,7 @@ function OnboardingView({
   onSkip: () => void;
 }) {
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto">
+    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto bg-page-bg">
       {/* Header */}
       <div className="sticky top-0 z-10 flex h-14 w-full shrink-0 items-center justify-between border-b border-foreground/[0.06] bg-page-bg px-5">
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
@@ -695,7 +696,7 @@ function OnboardingView({
 
           {/* Checklist card */}
           <motion.div
-            className="flex w-full max-w-[720px] flex-col rounded-2xl border border-page-border bg-card-bg p-4 sm:p-6"
+            className="flex w-full max-w-[720px] flex-col rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:p-6"
             initial={{ opacity: 0, y: 20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
@@ -760,7 +761,8 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         </button>
         {/* Hero */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#191919]">
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#191919]">
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M3 5V9H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M3.51172 15C4.74723 18.4956 8.08094 21 11.9996 21C16.9702 21 20.9996 16.9706 20.9996 12C20.9996 7.02944 16.9702 3 11.9996 3C8.27045 3 5.07102 5.26806 3.70551 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -776,7 +778,7 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         </div>
 
         {/* Table */}
-        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-foreground/[0.03] dark:shadow-none">
           {/* Header */}
           <div className="flex items-center border-b border-foreground/[0.06] px-1">
             <div className="w-[61px] px-3 py-3">
@@ -992,7 +994,8 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           <div className="flex flex-col items-center gap-4 px-5 pb-5 pt-[60px]" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0, 153, 77, 0.24) 0%, rgba(0, 153, 77, 0) 100%)" }}>
             {/* Green checkmark */}
             <div className="flex flex-col items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-[#34D399] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
+              <div className="relative flex size-14 items-center justify-center rounded-full bg-[#34D399] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
+                <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                   <path fillRule="evenodd" clipRule="evenodd" d="M14 2.333A11.667 11.667 0 1 0 14 25.667 11.667 11.667 0 0 0 14 2.333zm4.185 9.017a.833.833 0 0 0-1.203-1.153l-4.635 5.668-1.65-1.65a.833.833 0 0 0-1.178 1.178l2.333 2.334a.833.833 0 0 0 1.191.025l5.142-6.402z" fill="#FFFFFF" />
                 </svg>
@@ -1009,7 +1012,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             </div>
 
             {/* Summary card */}
-            <div className="w-full overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+            <div className="w-full overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
               <div className="flex items-center justify-between border-b border-foreground/[0.03] px-4 py-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">Deposit amount</span>
                 <span className="font-inter text-xs font-medium tabular-nums tracking-[-0.02em] text-[#34D399]">
@@ -1072,7 +1075,7 @@ function DepositButton() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground px-3 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#111111]"
+        className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#252525] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#252525]/90 dark:bg-white dark:text-[#111111] dark:hover:bg-white/90"
       >
         <PlusIcon className="size-3" />
         Deposit
@@ -1084,7 +1087,7 @@ function DepositButton() {
 
 // ── KPI Card Components (shared between mobile carousel & desktop grid) ──
 
-const kpiCard = "flex w-full flex-col justify-between rounded-2xl border border-border bg-card-bg p-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
+const kpiCard = "flex w-full flex-col justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none";
 
 function KpiCardBalance({ className }: { className?: string }) {
   return (
@@ -1253,7 +1256,7 @@ function DashboardView() {
   return (
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-5">
       {/* AI Tip Banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card-bg p-4 sm:gap-4">
+      <div className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:gap-4">
         <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
         <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-3">
           <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
@@ -1292,7 +1295,7 @@ function DashboardView() {
       {/* Bottom Row: Active Campaigns + Needs Attention + Recent Activity */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {/* Active Campaigns */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg py-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           <div className="flex items-center justify-between px-4">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active campaigns</span>
             <Link href="/campaigns" className="group flex cursor-pointer items-center gap-1.5">
@@ -1305,7 +1308,7 @@ function DashboardView() {
               <Link
                 key={i}
                 href={`/campaigns/${campaign.slug}`}
-                className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] p-3 transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06] sm:px-4 sm:py-3"
+                className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-foreground/[0.03] dark:shadow-none dark:hover:bg-foreground/[0.06] sm:px-4 sm:py-3"
               >
                 <div className="flex items-center gap-3">
                   <div className="size-8 shrink-0 overflow-hidden rounded-[10px] bg-foreground/10" />
@@ -1326,7 +1329,7 @@ function DashboardView() {
         </div>
 
         {/* Needs Attention */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           <div className="flex items-center">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Needs attention</span>
           </div>
@@ -1335,23 +1338,23 @@ function DashboardView() {
               <Link
                 key={i}
                 href={item.href}
-                className="group flex items-center gap-3 rounded-2xl border border-foreground/[0.06] p-3 transition-colors hover:bg-foreground/[0.02] dark:border-card-inner-border dark:bg-card-inner-bg dark:hover:border-[#303030] dark:hover:bg-[#282828] sm:px-3 sm:py-4"
+                className="group flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white py-3 pl-3 pr-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-inner-bg dark:shadow-none dark:hover:border-[#303030] dark:hover:bg-[#282828]"
               >
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-full backdrop-blur-[12px]" style={{ background: item.iconBg }}>
                   <item.icon />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
-                  <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{item.subtitle}</span>
+                  <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">{item.title}</span>
+                  <span className="truncate font-inter text-xs leading-[1.2] tracking-[-0.02em] text-foreground/50">{item.subtitle}</span>
                 </div>
-                <ChevronRightIcon className="size-4 shrink-0 text-page-text-muted transition-transform duration-200 group-hover:translate-x-0.5" />
+                <ChevronRightIcon className="size-4 shrink-0 text-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             ))}
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] sm:col-span-2 lg:col-span-1">
+        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
@@ -1401,7 +1404,7 @@ function DashboardView() {
       {/* Bottom Row: Top Creators + Pending Drafts */}
       <div className="flex flex-col gap-2 sm:flex-row">
         {/* Top creators */}
-        <div className="flex flex-1 flex-col justify-between gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex flex-1 flex-col justify-between gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           <div className="flex flex-col gap-2">
             {/* Header */}
             <div className="flex items-center justify-between">
@@ -1415,7 +1418,7 @@ function DashboardView() {
             {/* Podium */}
             <div className="hidden items-end justify-center gap-2 sm:flex">
               {/* 2nd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(131,159,185,0.04)] p-4 transition-colors hover:bg-[rgba(131,159,185,0.08)] lg:h-[197px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(131,159,185,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(131,159,185,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[197px]">
                 <div className="flex size-[26px] items-center justify-center rounded-full bg-[#839FB9] font-inter text-[16px] font-medium text-white">2</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1426,7 +1429,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 1st place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[200px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.03] bg-[rgba(251,146,60,0.04)] p-4 transition-colors hover:bg-[rgba(251,146,60,0.08)] lg:h-[260px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[200px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(251,146,60,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(251,146,60,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[260px]">
                 <div className="flex h-6 items-center gap-2 rounded-full bg-[#FB923C] px-2">
                   <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
                   <span className="font-inter text-[16px] font-medium text-white">1</span>
@@ -1440,7 +1443,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 3rd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[130px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] bg-[rgba(158,82,0,0.04)] p-4 transition-colors hover:bg-[rgba(158,82,0,0.08)] lg:h-[160px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[130px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(158,82,0,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(158,82,0,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[160px]">
                 <div className="flex size-[27px] items-center justify-center rounded-full bg-[#9E5200] font-inter text-[16px] font-medium text-white">3</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1456,7 +1459,7 @@ function DashboardView() {
         </div>
 
         {/* Pending Drafts */}
-        <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
             <Link href="/submissions" className="group flex cursor-pointer items-center gap-1.5">
@@ -1469,7 +1472,7 @@ function DashboardView() {
               { name: "Lila Bennett", desc: "NFL UGC · Revision 2 uploaded", badge: "R2", badgeColor: "#FB923C" },
               { name: "Marcus Cole", desc: "Caffeine Exclusive - New draft", badge: "New", badgeColor: "#60A5FA" },
             ].map((draft) => (
-              <div key={draft.name} className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] p-4 transition-colors hover:bg-foreground/[0.02] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+              <div key={draft.name} className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-foreground/[0.03] dark:shadow-none dark:hover:bg-foreground/[0.06]">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.03] bg-foreground/[0.03] backdrop-blur-[12px]">
                   <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
                     <path fillRule="evenodd" clipRule="evenodd" d="M3 0C3.36819 0 3.66667 0.298477 3.66667 0.666667H5C5 0.298477 5.29848 0 5.66667 0C6.03486 0 6.33333 0.298477 6.33333 0.666667H7.66667C7.66667 0.298477 7.96514 0 8.33333 0C8.70152 0 9 0.298477 9 0.666667H9.33333C10.4379 0.666667 11.3333 1.5621 11.3333 2.66667V11.3333C11.3333 12.4379 10.4379 13.3333 9.33333 13.3333H2C0.895431 13.3333 0 12.4379 0 11.3333V2.66667C0 1.5621 0.895431 0.666667 2 0.666667H2.33333C2.33333 0.298477 2.63181 0 3 0ZM3 5.66667C3 5.29848 3.29848 5 3.66667 5H7.66667C8.03486 5 8.33333 5.29848 8.33333 5.66667C8.33333 6.03486 8.03486 6.33333 7.66667 6.33333H3.66667C3.29848 6.33333 3 6.03486 3 5.66667ZM3 8.33333C3 7.96514 3.29848 7.66667 3.66667 7.66667H6.33333C6.70152 7.66667 7 7.96514 7 8.33333C7 8.70152 6.70152 9 6.33333 9H3.66667C3.29848 9 3 8.70152 3 8.33333Z" fill="currentColor" fillOpacity="0.5"/>
@@ -1524,7 +1527,8 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
       <div className="flex flex-1 flex-col items-center px-5 pt-[160px]">
         <div className="flex flex-col items-center gap-4">
           {/* Icon circle */}
-          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-card-bg dark:shadow-[0_0_0_2px_#191919]">
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-card-bg dark:shadow-[0_0_0_2px_#191919]">
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
             <MegaphoneIcon className="size-6 text-page-text" width={24} height={24} />
           </div>
 
@@ -1603,6 +1607,7 @@ export default function Home() {
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
               <div className="flex items-center gap-2">
                 <NewCampaignButton />
+                <UserDropdown variant="header" />
               </div>
             </motion.div>
             <DashboardView />
@@ -1613,9 +1618,7 @@ export default function Home() {
       {/* Floating checklist for skipped users — portaled to body to escape contain:layout */}
       {typeof document !== "undefined" && createPortal(
         <AnimatePresence>
-          {showFloatingChecklist && (
-            <FloatingChecklist completed={completed} onToggle={onToggle} />
-          )}
+          {/* Floating checklist hidden */}
         </AnimatePresence>,
         document.body,
       )}

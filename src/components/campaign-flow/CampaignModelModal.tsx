@@ -52,6 +52,8 @@ const MODELS: {
   rgb: string;
   gradientRgb: string;
   checkGradient: string;
+  checkColor: string;
+  checkColorDark: string;
 }[] = [
   {
     id: "cpm",
@@ -63,6 +65,8 @@ const MODELS: {
     rgb: "96, 165, 250",
     gradientRgb: "26, 103, 229",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADCCFF 100%)",
+    checkColor: "#1A67E5",
+    checkColorDark: "#60A5FA",
   },
   {
     id: "retainer",
@@ -74,6 +78,8 @@ const MODELS: {
     rgb: "251, 146, 60",
     gradientRgb: "229, 113, 0",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #FFE1AD 100%)",
+    checkColor: "#E57100",
+    checkColorDark: "#FB923C",
   },
   {
     id: "per-video",
@@ -85,6 +91,8 @@ const MODELS: {
     rgb: "52, 211, 153",
     gradientRgb: "0, 178, 89",
     checkGradient: "linear-gradient(180deg, #FFFFFF 0%, #ADFFCB 100%)",
+    checkColor: "#00B259",
+    checkColorDark: "#34D399",
   },
 ];
 
@@ -118,7 +126,7 @@ export function CampaignModelModal({
             Select campaign model
           </DialogPrimitive.Title>
 
-          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[608px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
+          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[568px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
             {/* Top bar */}
             <div className="relative flex items-center justify-center px-5 sm:px-6 h-10 sm:h-[41px] shrink-0 bg-foreground/[0.03] dark:bg-foreground/[0.03] border-b border-foreground/[0.03]">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text">
@@ -140,9 +148,9 @@ export function CampaignModelModal({
             </div>
 
             {/* Content */}
-            <div className="flex flex-col px-5 sm:p-8 gap-4 sm:gap-8 flex-1 min-h-0">
+            <div className="flex flex-col px-5 gap-2 flex-1 min-h-0">
               {/* Title section */}
-              <div className="flex flex-col items-center gap-2 shrink-0 pt-3 sm:pt-0">
+              <div className="flex flex-col items-center gap-1 shrink-0 pt-3 sm:pt-3">
                 <h2 className="hidden sm:block text-xl font-semibold text-page-text tracking-[-0.02em]">
                   Campaign Model
                 </h2>
@@ -152,7 +160,7 @@ export function CampaignModelModal({
               </div>
 
               {/* Cards — vertical on mobile, horizontal on desktop */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 flex-1 min-h-0 pt-2 sm:pt-0">
+              <div className="flex flex-col sm:flex-row gap-2 flex-1 min-h-0">
                 {MODELS.map((model) => {
                   const isSelected = selected === model.id;
                   const Icon = model.icon;
@@ -160,70 +168,52 @@ export function CampaignModelModal({
                   return (
                     <button
                       className={cn(
-                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 rounded-[20px] sm:rounded-2xl text-left transition-all duration-200 overflow-hidden outline-none focus:outline-none focus-visible:outline-none",
+                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 overflow-hidden rounded-3xl text-left outline-none focus:outline-none focus-visible:outline-none cursor-pointer",
+                        !isSelected && "border border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)]",
                       )}
                       style={{
-                        background: `linear-gradient(0deg, rgba(224,224,224,0.03), rgba(224,224,224,0.03)), radial-gradient(100% 100% at 50% 0%, rgba(${model.gradientRgb}, 0) 30%, rgba(${model.gradientRgb}, 0.12) 100%)`,
-                        boxShadow: isSelected ? `inset 0 0 0 1px rgba(${model.rgb}, 0.3)` : "none",
+                        background: `radial-gradient(100% 100% at 50% 0%, rgba(${model.gradientRgb}, 0) 30%, rgba(${model.gradientRgb}, 0.12) 100%), var(--card-bg, #FFFFFF)`,
+                        border: isSelected ? `1px solid rgba(${model.rgb}, 0.3)` : undefined,
                       }}
                       key={model.id}
                       onClick={() => setSelected((prev) => prev === model.id ? null : model.id)}
                       type="button"
                     >
-                      {/* Decorative illustration */}
+                      {/* Illustration with gradient mask baked in */}
                       <CardIllustration model={model.id} />
 
                       {/* Selection circle */}
-                      <div
-                        className="absolute top-5 right-5 z-10 flex size-6 items-center justify-center rounded-full sm:size-5"
-                        style={{
-                          background: isSelected ? model.checkGradient : "white",
-                          border: isSelected ? "none" : "1px solid rgba(37,37,37,0.1)",
-                        }}
-                      >
-                        {isSelected && (
-                          <IconCheck
-                            className="text-[#252525]"
-                            size={14}
-                            strokeWidth={2.5}
-                          />
+                      <div className="absolute right-4 top-4 z-[5] flex size-5 items-center justify-center">
+                        {isSelected ? (
+                          <>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="dark:hidden">
+                              <circle cx="10" cy="10" r="10" fill="white"/>
+                              <path fillRule="evenodd" clipRule="evenodd" d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM13.5805 7.9749C13.8428 7.6543 13.7955 7.1818 13.4749 6.9195C13.1543 6.6572 12.6818 6.7045 12.4195 7.0251L8.4443 11.8837L7.0303 10.4697C6.73744 10.1768 6.26256 10.1768 5.96967 10.4697C5.67678 10.7626 5.67678 11.2374 5.96967 11.5303L7.96967 13.5303C8.11953 13.6802 8.32574 13.7596 8.53738 13.7491C8.74903 13.7385 8.94631 13.6389 9.08048 13.4749L13.5805 7.9749Z" fill={model.checkColor} />
+                              <circle cx="10" cy="10" r="9.5" stroke="#252525" strokeOpacity="0.1"/>
+                            </svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="hidden dark:block">
+                              <circle cx="10" cy="10" r="10" fill="#1C1C1C"/>
+                              <path fillRule="evenodd" clipRule="evenodd" d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM13.5805 7.9749C13.8428 7.6543 13.7955 7.1818 13.4749 6.9195C13.1543 6.6572 12.6818 6.7045 12.4195 7.0251L8.4443 11.8837L7.0303 10.4697C6.73744 10.1768 6.26256 10.1768 5.96967 10.4697C5.67678 10.7626 5.67678 11.2374 5.96967 11.5303L7.96967 13.5303C8.11953 13.6802 8.32574 13.7596 8.53738 13.7491C8.74903 13.7385 8.94631 13.6389 9.08048 13.4749L13.5805 7.9749Z" fill={model.checkColorDark} />
+                              <circle cx="10" cy="10" r="9.5" stroke="#E0E0E0" strokeOpacity="0.1"/>
+                            </svg>
+                          </>
+                        ) : (
+                          <>
+                            <div className="size-5 rounded-full dark:hidden" style={{ background: "#FFFFFF", border: "1px solid rgba(37,37,37,0.1)" }} />
+                            <div className="hidden size-5 rounded-full dark:block" style={{ background: "rgba(224,224,224,0.03)", border: "1px solid rgba(224,224,224,0.2)" }} />
+                          </>
                         )}
                       </div>
 
-                      {/* Icon circle */}
-                      <div
-                        className="z-[1] flex size-10 items-center justify-center rounded-full"
-                        style={{
-                          background: `rgba(${model.rgb}, 0.08)`,
-                        }}
-                      >
-                        <div className={model.iconColor}>
-                          <Icon size={17} />
-                        </div>
+                      {/* Content — all above gradient (z-4) */}
+                      <div className="relative z-[4] flex size-14 items-center justify-center rounded-full" style={{ background: `rgba(${model.rgb}, 0.06)` }}>
+                        <div className={model.iconColor}><Icon size={24} /></div>
                       </div>
-
-                      {/* Title + subtitle */}
-                      <div className="flex flex-col gap-1 flex-1 z-[3]">
-                        <span className="text-lg font-medium text-page-text tracking-[-0.02em]">
-                          {model.label}
-                        </span>
-                        <p className="text-sm text-page-text-muted tracking-[-0.02em]">
-                          {model.subtitle}
-                        </p>
+                      <div className="relative z-[4] flex flex-col gap-1 flex-1">
+                        <span className="text-2xl font-medium text-page-text tracking-[-0.02em]">{model.label}</span>
+                        <p className="text-sm leading-[150%] text-foreground/70 tracking-[-0.02em]">{model.subtitle}</p>
                       </div>
-
-                      {/* Footer */}
-                      <span className="text-xs text-page-text-subtle z-[4]">
-                        {model.footer}
-                      </span>
-
-                      {/* Bottom colored gradient */}
-                      <div
-                        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 z-[0]"
-                        style={{
-                          background: `linear-gradient(to top, rgba(${model.gradientRgb}, 0.08) 0%, transparent 100%)`,
-                        }}
-                      />
+                      <span className="relative z-[4] text-xs leading-[150%] text-foreground/50">{model.footer}</span>
                     </button>
                   );
                 })}
@@ -231,7 +221,7 @@ export function CampaignModelModal({
             </div>
 
             {/* Bottom bar */}
-            <div className="flex items-center justify-end sm:justify-between px-5 sm:px-6 h-20 sm:h-[68px] shrink-0">
+            <div className="flex items-center justify-end sm:justify-between p-5 shrink-0">
               {/* Left placeholder for centering — hidden on mobile */}
               <div className="hidden sm:block w-[150px] opacity-0 pointer-events-none">
                 <div className="rounded-full px-4 h-9 text-sm">Cancel</div>

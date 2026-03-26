@@ -59,8 +59,7 @@ export function MainNav({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <MobileBottomNav />
 
-      {/* Floating onboarding — only show on home page */}
-      {pathname === "/" && <OnboardingButton />}
+      {/* Floating onboarding — hidden */}
     </div>
   );
 }

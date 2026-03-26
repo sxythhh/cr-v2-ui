@@ -225,13 +225,13 @@ function ApplicationFormSection() {
         Application Form
       </span>
 
-      <div className="rounded-2xl border border-border p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none">
+      <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-inner-bg dark:shadow-none">
         {/* Existing fields */}
         <div className="flex flex-col gap-2">
           {fields.map((field) => (
             <div
               key={field.id}
-              className="flex items-center gap-3 rounded-2xl border border-border p-4 transition-colors hover:bg-foreground/[0.02] dark:border-card-inner-border"
+              className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)]"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <span className="truncate text-[14px] font-medium tracking-[-0.02em] text-page-text">

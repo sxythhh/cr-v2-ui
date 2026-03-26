@@ -148,30 +148,16 @@ export function NewCampaignButton() {
   };
 
   return (
-    <div className="relative" ref={(node) => { containerRef.current = node; refs.setReference(node); }}>
-      <RichButton
-        size="sm"
-        onClick={() => setOpen((v) => !v)}
-        className="rounded-full cursor-pointer"
+    <div className="relative">
+      <button
+        onClick={() => setModelModalOpen(true)}
+        className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#252525] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#333] dark:bg-white dark:text-[#252525] dark:hover:bg-[#e5e5e5]"
       >
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M6.08333 0.75V6.08333M6.08333 6.08333V11.4167M6.08333 6.08333H0.75M6.08333 6.08333H11.4167" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
         <span>New campaign</span>
-        <IconChevronDown
-          size={14}
-          className={cn(
-            "transition-transform duration-200",
-            open && "rotate-180",
-          )}
-        />
-      </RichButton>
-      {open && (
-        <NewCampaignDropdown
-          containerRef={containerRef}
-          floatingRef={setFloatingRef}
-          floatingStyles={floatingStyles}
-          onClose={() => setOpen(false)}
-          onFromScratch={() => setModelModalOpen(true)}
-        />
-      )}
+      </button>
       <CampaignModelModal
         open={modelModalOpen}
         onOpenChange={setModelModalOpen}

@@ -20,7 +20,6 @@ import {
 import { IconChevronDown, IconChevronLeft, IconLayoutSidebar, IconPlus } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { UserDropdown } from "./user-dropdown";
-import { UserInfoRow } from "./user-info-row";
 import { WorkspaceDropdown } from "./workspace-dropdown";
 import { NavGroupTooltip } from "./tooltip";
 
@@ -188,7 +187,7 @@ export function SidebarNav({
                   <Link
                     href={item.href}
                     className={cn(
-                      "relative flex size-10 cursor-pointer items-center justify-center rounded-xl transition-colors duration-75",
+                      "relative flex size-10 cursor-pointer items-center justify-center rounded-lg transition-colors duration-75",
                       "outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isActive
                         ? "bg-sidebar-active text-sidebar-text"
@@ -433,10 +432,6 @@ function SidebarAreasPanel({
           )}
         </AnimatePresence>
 
-        {/* User info row */}
-        <div className="shrink-0 p-3 pt-0">
-          <UserInfoRow />
-        </div>
     </div>
   );
 }
@@ -665,7 +660,7 @@ function ProximityNavSection({ children }: { children: ReactNode }) {
           {activeRect && (
             <motion.div
               key={sessionRef.current}
-              className="pointer-events-none absolute rounded-xl bg-sidebar-hover"
+              className="pointer-events-none absolute rounded-lg bg-sidebar-hover"
               initial={{
                 opacity: 0,
                 top: activeRect.top,
@@ -739,7 +734,7 @@ function NavItem({ item, index }: { item: NavItemType | NavSubItemType; index?: 
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
         className={cn(
-          "group flex h-8 cursor-pointer items-center justify-between rounded-xl px-[10px] py-2 text-sm leading-none transition-[color,background-color] duration-75 font-[family-name:var(--font-inter)] font-medium tracking-[-0.02em]",
+          "group flex h-8 cursor-pointer items-center justify-between rounded-lg px-[10px] py-2 text-sm leading-none transition-[color,background-color] duration-75 font-[family-name:var(--font-inter)] font-medium tracking-[-0.02em]",
           "outline-none focus-visible:ring-2 focus-visible:ring-ring",
           isActive && !items
             ? "bg-sidebar-active text-sidebar-text"

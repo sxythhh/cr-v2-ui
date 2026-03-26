@@ -4,6 +4,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Illustration mask utilities — need -webkit- prefix for Safari */
+.mask-fade-left {
+  mask-image: linear-gradient(to right, transparent, black 50%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 50%);
+}
+.mask-fade-top {
+  mask-image: linear-gradient(to top, transparent 0%, black 50%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 50%);
+}
+
 html, body {
   cursor: default;
 }
@@ -302,14 +312,6 @@ select:focus-visible,
   outline: none;
 }
 
-/* Apple-style smooth corners (superellipse/squircle) */
-.rounded-xl,
-.rounded-2xl,
-.rounded-lg,
-.rounded-\[10px\] {
-  corner-shape: squircle;
-}
-
 /* Rich Button — inverts in dark mode */
 .rich-button {
   color: #fff;
@@ -510,7 +512,7 @@ select:focus-visible,
   --card-border: #212121;
   --card-inner-bg: #232323;
   --card-inner-border: #282828;
-  --toggle-card-bg: #232323;
+  --toggle-card-bg: rgba(224, 224, 224, 0.03);
 
   /* Dropdown tokens */
   --dropdown-bg: #1C1C1C;
