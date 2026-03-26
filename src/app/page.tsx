@@ -620,18 +620,9 @@ function OnboardingView({
   onSkip: () => void;
 }) {
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto overflow-x-hidden bg-page-bg">
-      {/* Header */}
-      <div className="sticky top-0 z-10 flex h-14 w-full shrink-0 items-center justify-between border-b border-foreground/[0.06] bg-page-bg px-5">
-        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
-        <button type="button" onClick={onSkip} className="cursor-pointer font-inter text-sm font-medium tracking-[-0.02em] text-foreground/50 transition-colors hover:text-foreground/70">
-          Skip onboarding
-        </button>
-      </div>
-
-      <div className="relative flex min-h-0 flex-1 flex-col items-start gap-2 self-stretch p-4 sm:px-8 sm:py-4">
-      {/* Radial gradient background with noise to prevent banding */}
-      <div className="absolute inset-0 overflow-hidden">
+    <div className="relative flex flex-1 flex-col items-start gap-0 self-stretch overflow-hidden bg-page-bg">
+      {/* Radial gradient background — covers entire view */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0 blur-[80px] dark:blur-[120px]"
           style={{
@@ -649,8 +640,18 @@ function OnboardingView({
         </svg>
       </div>
 
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex h-14 w-full shrink-0 items-center justify-between border-b border-foreground/[0.06] bg-page-bg px-5">
+        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
+        <button type="button" onClick={onSkip} className="cursor-pointer font-inter text-sm font-medium tracking-[-0.02em] text-foreground/50 transition-colors hover:text-foreground/70">
+          Skip onboarding
+        </button>
+      </div>
+
+      <div className="relative flex flex-col items-start gap-2 self-stretch p-4 pb-24 sm:px-8 sm:py-4 sm:pb-8">
+
       <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-2 sm:py-4">
-        <div className="flex w-full max-w-[720px] flex-col items-center sm:my-auto">
+        <div className="flex w-full max-w-[720px] flex-col items-center">
           {/* Header */}
           <motion.div
             className="flex w-full max-w-[720px] flex-col items-center gap-4 pb-6"
@@ -1632,12 +1633,12 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn(showOnboarding ? "flex h-[100dvh] flex-col md:h-full" : "")}>
+    <div className="flex flex-1 flex-col bg-page-bg">
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div
             key="onboarding"
-            className="flex min-h-0 flex-1 flex-col"
+            className="flex flex-1 flex-col"
             style={{ willChange: "transform, opacity" }}
             exit={{
               opacity: 0,

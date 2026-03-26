@@ -853,22 +853,23 @@ export default function CreatorsPage() {
       ) : activeNavTab === 4 ? (
         <AffiliateDashboardView />
       ) : (
-      <div className="px-4 pb-6 pt-[21px] sm:px-6">
-        {/* Toolbar */}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
-          {/* Filter tabs */}
-          <div className="w-full overflow-x-auto scrollbar-hide"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-full">
-            {FILTER_TABS.map((tab, i) => (
-              <TabItem
-                key={tab.name}
-                label={tab.name}
-                count={tab.count}
-                index={i}
-              />
-            ))}
-          </Tabs></div>
+      <>
+      {/* Tabs — mobile: own row, desktop: inline with search */}
+      <div className="overflow-x-auto scrollbar-hide px-4 pt-3 sm:px-6 md:hidden">
+        <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max">
+          {FILTER_TABS.map((tab, i) => (
+            <TabItem key={tab.name} label={tab.name} count={tab.count} index={i} />
+          ))}
+        </Tabs>
+      </div>
+      <div className="hidden px-4 pt-[21px] sm:px-6 md:flex md:items-center md:justify-between md:gap-2">
+        <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-fit">
+          {FILTER_TABS.map((tab, i) => (
+            <TabItem key={tab.name} label={tab.name} count={tab.count} index={i} />
+          ))}
+        </Tabs>
 
-          {/* Search + Filter */}
+        {/* Search + Filter */}
           <div className="flex items-center gap-2">
             <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
               <svg
@@ -930,8 +931,9 @@ export default function CreatorsPage() {
             })()}
 
           </div>
-        </div>
+      </div>
 
+      <div className="px-4 pb-6 sm:px-6">
         {/* Filter chips */}
         {(() => {
           const chips = dubActiveFilters.filter((f) => !(f.key === "sort" && f.values[0] === "date"));
@@ -974,7 +976,7 @@ export default function CreatorsPage() {
           </div>
         </div>
       </div>
-
+      </>
       )}
 
       <ScoresModal open={scoresOpen} onClose={() => setScoresOpen(false)} />

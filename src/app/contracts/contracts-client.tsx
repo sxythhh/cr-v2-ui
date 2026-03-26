@@ -712,21 +712,21 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
 
   return (
     <>
-      <div className="flex flex-col gap-3 px-4 py-4 sm:px-5 sm:py-5">
+      {/* Filter tabs — full width like campaigns page */}
+      <div className="overflow-x-auto scrollbar-hide px-4 pt-3 sm:px-5 md:pt-4">
+        <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
+          {CONTRACT_FILTERS.map((tab, i) => (
+            <TabItem key={tab.label} label={tab.label} count={tab.count} index={i} />
+          ))}
+        </Tabs>
+      </div>
+
+      <div className="flex flex-col gap-3 px-4 py-3 sm:px-5 sm:py-4">
         {/* New contract button — mobile only */}
         <button type="button" onClick={() => setNewContractOpen(true)} className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] sm:hidden">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3V13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
           New contract
         </button>
-
-        {/* Filter tabs */}
-        <div className="w-full scrollbar-hide overflow-x-auto whitespace-nowrap">
-          <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-full">
-            {CONTRACT_FILTERS.map((tab, i) => (
-              <TabItem key={tab.label} label={tab.label} count={tab.count} index={i} />
-            ))}
-          </Tabs>
-        </div>
 
         {/* Search + filter — mobile */}
         <div className="flex items-center gap-2 sm:hidden">

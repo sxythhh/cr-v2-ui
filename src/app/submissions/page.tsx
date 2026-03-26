@@ -865,6 +865,7 @@ function MobileTimelineDrawer({
   const drawerOpen = open;
   const setDrawerOpen = onOpenChange;
   const [drawerHeight, setDrawerHeight] = useState(0.45);
+  const [locked, setLocked] = useState(false);
   const dragStartY = useRef(0);
   const dragStartHeight = useRef(0);
   const currentHeight = useRef(0.45);
@@ -872,26 +873,34 @@ function MobileTimelineDrawer({
   // Keep ref in sync
   useEffect(() => { currentHeight.current = drawerHeight; }, [drawerHeight]);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  // Lock when fully expanded
+  useEffect(() => { setLocked(drawerHeight >= 0.84); }, [drawerHeight]);
+
+  // Reset on close
+  useEffect(() => {
+    if (!drawerOpen) { setDrawerHeight(0.45); currentHeight.current = 0.45; setLocked(false); }
+  }, [drawerOpen]);
+
+  // Header drag — always works (to collapse from locked state)
+  const handleHeaderTouchStart = useCallback((e: React.TouchEvent) => {
     dragStartY.current = e.touches[0].clientY;
     dragStartHeight.current = currentHeight.current;
   }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleHeaderTouchMove = useCallback((e: React.TouchEvent) => {
     e.preventDefault();
     const delta = dragStartY.current - e.touches[0].clientY;
     const vh = window.innerHeight;
     const newH = Math.max(0.1, Math.min(0.85, dragStartHeight.current + delta / vh));
     currentHeight.current = newH;
     setDrawerHeight(newH);
+    if (newH < 0.84) setLocked(false);
   }, []);
 
-  const handleTouchEnd = useCallback(() => {
+  const handleHeaderTouchEnd = useCallback(() => {
     const h = currentHeight.current;
     if (h < 0.2) {
       setDrawerOpen(false);
-      setDrawerHeight(0.45);
-      currentHeight.current = 0.45;
     } else if (h > 0.65) {
       setDrawerHeight(0.85);
       currentHeight.current = 0.85;
@@ -900,6 +909,37 @@ function MobileTimelineDrawer({
       currentHeight.current = 0.45;
     }
   }, [setDrawerOpen]);
+
+  // Body drag — only when NOT locked (expands to full)
+  const handleBodyTouchStart = useCallback((e: React.TouchEvent) => {
+    if (locked) return; // let inner scroll handle it
+    dragStartY.current = e.touches[0].clientY;
+    dragStartHeight.current = currentHeight.current;
+  }, [locked]);
+
+  const handleBodyTouchMove = useCallback((e: React.TouchEvent) => {
+    if (locked) return;
+    e.preventDefault();
+    const delta = dragStartY.current - e.touches[0].clientY;
+    const vh = window.innerHeight;
+    const newH = Math.max(0.1, Math.min(0.85, dragStartHeight.current + delta / vh));
+    currentHeight.current = newH;
+    setDrawerHeight(newH);
+  }, [locked]);
+
+  const handleBodyTouchEnd = useCallback(() => {
+    if (locked) return;
+    const h = currentHeight.current;
+    if (h < 0.2) {
+      setDrawerOpen(false);
+    } else if (h > 0.55) {
+      setDrawerHeight(0.85);
+      currentHeight.current = 0.85;
+    } else {
+      setDrawerHeight(0.45);
+      currentHeight.current = 0.45;
+    }
+  }, [locked, setDrawerOpen]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -916,8 +956,6 @@ function MobileTimelineDrawer({
       const h = currentHeight.current;
       if (h < 0.2) {
         setDrawerOpen(false);
-        setDrawerHeight(0.45);
-        currentHeight.current = 0.45;
       } else if (h > 0.65) {
         setDrawerHeight(0.85);
         currentHeight.current = 0.85;
@@ -945,12 +983,12 @@ function MobileTimelineDrawer({
             className="flex flex-col overflow-hidden rounded-t-[20px] bg-card-bg dark:bg-[#161616]"
             style={{ height: `${drawerHeight * 100}dvh` }}
           >
-            {/* Drag handle + header */}
+            {/* Drag handle + header — always draggable to collapse */}
             <div
               className="flex shrink-0 cursor-grab flex-col items-center border-b border-foreground/[0.06] px-4 pb-3 pt-2 active:cursor-grabbing dark:border-[rgba(224,224,224,0.03)]"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
+              onTouchStart={handleHeaderTouchStart}
+              onTouchMove={handleHeaderTouchMove}
+              onTouchEnd={handleHeaderTouchEnd}
               onMouseDown={handleMouseDown}
             >
               <div className="mb-2 h-1 w-8 rounded-full bg-foreground/20" />
@@ -972,8 +1010,13 @@ function MobileTimelineDrawer({
               </div>
             </div>
 
-            {/* Scrollable timeline events */}
-            <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 py-4">
+            {/* Timeline events — scrollable only when locked/expanded */}
+            <div
+              className={cn("scrollbar-hide flex min-h-0 flex-1 flex-col gap-4 px-4 py-4", locked ? "overflow-y-auto" : "overflow-hidden")}
+              onTouchStart={handleBodyTouchStart}
+              onTouchMove={handleBodyTouchMove}
+              onTouchEnd={handleBodyTouchEnd}
+            >
               <TimelineEvent id="event-posted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Tue 24 Feb 4:37 AM" highlighted={highlightedComment === "event-posted"} actionContent={<div className="flex items-center gap-1 pl-6"><PlatformIcon platform="tiktok" size={12} className="shrink-0 text-page-text-muted" /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Posted video</span></div>} connector="straight" />
               <TimelineEvent id="event-submitted" avatar="https://i.pravatar.cc/36?u=xkaizen" actorType="creator" name="xKaizen" time="Wed 25 Feb 12:37 AM" highlighted={highlightedComment === "event-submitted"} actionContent={<div className="flex items-center gap-1 pl-6"><TimelineUploadIcon /><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">Submitted video</span></div>} connector="straight" />
               <TimelineEvent id="comment-00:08" avatar="https://i.pravatar.cc/36?u=outpace" actorType="brand" name="Outpace Studios" time="Wed 25 Feb 1:21 AM" highlighted={highlightedComment === "comment-00:08"} actionContent={<div className="flex items-center gap-1 pl-6"><span className="shrink-0 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle dark:bg-card-bg">00:08</span><span className="font-inter text-sm tracking-[-0.02em] text-page-text-subtle">You&apos;re mentioning the wrong competitor</span></div>} connector="l-shape" />
@@ -3278,24 +3321,22 @@ export default function SubmissionsPage() {
       </div>
 
       {/* Content */}
-      <div className="px-4 pb-6 pt-[21px] sm:px-6">
-        {/* Toolbar */}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
-          {/* Tabs */}
-          <div className="w-full overflow-x-auto scrollbar-hide">
-            <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-full">
-              {TABS.map((tab, i) => (
-                <TabItem
-                  key={tab.name}
-                  label={tab.name}
-                  count={tab.count}
-                  index={i}
-                />
-              ))}
-            </Tabs>
-          </div>
+      {/* Tabs — mobile: own row, desktop: inline with search */}
+      <div className="overflow-x-auto scrollbar-hide px-4 pt-3 sm:px-6 md:hidden">
+        <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-max">
+          {TABS.map((tab, i) => (
+            <TabItem key={tab.name} label={tab.name} count={tab.count} index={i} />
+          ))}
+        </Tabs>
+      </div>
+      <div className="hidden px-4 pt-[21px] sm:px-6 md:flex md:items-center md:justify-between md:gap-2">
+        <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-fit">
+          {TABS.map((tab, i) => (
+            <TabItem key={tab.name} label={tab.name} count={tab.count} index={i} />
+          ))}
+        </Tabs>
 
-          {/* Search + Filter */}
+        {/* Search + Filter */}
           <div className="flex items-center gap-2">
             <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-[rgba(224,224,224,0.03)] md:w-[300px] md:flex-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
@@ -3320,8 +3361,9 @@ export default function SubmissionsPage() {
               </button>
             </FilterSelect>
           </div>
-        </div>
+      </div>
 
+      <div className="px-4 pb-6 sm:px-6">
         {/* Submission cards — rendered per active variant */}
         {scrollVariant === "snap" && (
           <ScrollSnapList>
