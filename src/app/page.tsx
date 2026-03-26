@@ -1597,7 +1597,7 @@ function HomeKpiCarousel() {
         className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
       >
         {cards.map((card, i) => (
-          <div key={i} className="w-80 shrink-0 snap-center [&>*]:h-full">
+          <div key={i} className="w-80 shrink-0 snap-start [&>*]:h-full">
             {card}
           </div>
         ))}

@@ -521,7 +521,7 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
     <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 sm:hidden">
       <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5">
         {children.map((child, i) => (
-          <div key={i} className="w-80 shrink-0 snap-center">
+          <div key={i} className="w-80 shrink-0 snap-start">
             {child}
           </div>
         ))}

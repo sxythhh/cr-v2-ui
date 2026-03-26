@@ -83,7 +83,7 @@ function AnalyticsStatCards() {
       <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
         <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5">
           {STATS.map((s) => (
-            <div key={s.label} className="w-80 shrink-0 snap-center">
+            <div key={s.label} className="w-80 shrink-0 snap-start">
               <AnalyticsStatCard s={s} />
             </div>
           ))}
@@ -491,13 +491,7 @@ function PerformanceChartCard() {
 
   return (
     <div
-      className={cn(sectionCard)}
-      style={
-        {
-          "--ap-toggle-bg": "rgba(234,232,230,0.6)",
-          "--ap-toggle-thumb": "#FFFFFF",
-        } as React.CSSProperties
-      }
+      className={cn(sectionCard, "[--ap-toggle-bg:rgba(234,232,230,0.6)] [--ap-toggle-thumb:#FFFFFF] dark:[--ap-toggle-bg:rgba(224,224,224,0.06)] dark:[--ap-toggle-thumb:rgba(224,224,224,0.06)]")}
     >
       {/* Header row */}
       <div className="flex flex-wrap items-center gap-2">

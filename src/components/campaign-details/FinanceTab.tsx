@@ -64,7 +64,7 @@ export function SwipeableStatCards({ cards, columns = 4 }: { cards: StatCardData
           className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
         >
           {cards.map((card) => (
-            <div key={card.label} className="w-80 shrink-0 snap-center">
+            <div key={card.label} className="w-80 shrink-0 snap-start">
               <StatCard {...card} />
             </div>
           ))}

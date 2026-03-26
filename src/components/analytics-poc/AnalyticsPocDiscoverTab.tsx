@@ -220,7 +220,7 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="w-80 shrink-0 snap-center rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
+            className="w-80 shrink-0 snap-start rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>

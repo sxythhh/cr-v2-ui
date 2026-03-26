@@ -400,7 +400,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
         ) : activeTab === "events" ? (
           <EventsTab />
         ) : activeTab === "analytics" ? (
-          <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-5">
+          <div className="mx-auto max-w-[1200px] px-5 py-5">
             <AnalyticsTab />
           </div>
         ) : (
