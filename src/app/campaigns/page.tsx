@@ -763,9 +763,11 @@ export default function CampaignsPage() {
   return (
     <div className="min-h-full bg-page-bg">
       {/* Header with underline tabs */}
-      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
-        <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
-        <div className="flex items-center gap-2">
+      <div className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
+        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide scroll-fade-x">
+          <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={() => setHistoryOpen((v) => !v)}
@@ -779,7 +781,7 @@ export default function CampaignsPage() {
       </div>
 
       {/* Status filter tabs */}
-      <div className="overflow-x-auto scrollbar-hide px-4 pt-[21px] sm:px-5">
+      <div className="overflow-x-auto scrollbar-hide scroll-fade-x px-4 pt-[21px] sm:px-5">
         <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
           {STATUS_FILTER_TABS.map((tab, i) => (
             <TabItem

@@ -60,7 +60,7 @@ export function ProximityTabs({ tabs, selectedIndex, onSelect, className }: Prox
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn("relative flex h-14 items-stretch overflow-x-auto scrollbar-hide", className)}
+      className={cn("relative flex h-14 items-stretch overflow-x-auto scrollbar-hide scroll-fade-x", className)}
     >
       {/* Selected underline */}
       {selectedRect && (

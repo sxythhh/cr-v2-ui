@@ -143,7 +143,7 @@ function CompletedStep({
     <>
       <div
         className="flex flex-col items-center gap-6 px-5 pb-5 pt-[60px]"
-        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.24) 0%, rgba(0,153,77,0) 100%)" }}
+        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)" }}
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
@@ -152,7 +152,7 @@ function CompletedStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#FB923C]">Campaign Completed</span>
         </div>
 
         {/* Campaign name */}
@@ -234,7 +234,7 @@ function FeedbackStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#FB923C]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>
@@ -410,7 +410,7 @@ function NextStepsStep({
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
           </div>
-          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Campaign Completed</span>
+          <span className="campaign-completed-text text-[20px] font-medium tracking-[-0.02em] text-[#FB923C]">Campaign Completed</span>
         </div>
 
         <span className={cn("text-[14px] font-medium", muted)}>{campaign.title}</span>

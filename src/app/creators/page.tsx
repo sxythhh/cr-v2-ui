@@ -789,7 +789,7 @@ export default function CreatorsPage() {
       {/* Top nav */}
       <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         {/* Underline tabs */}
-        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
+        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide scroll-fade-x">
           <ProximityTabs
             tabs={NAV_TABS.map((t) => ({ label: t }))}
             selectedIndex={activeNavTab}
@@ -797,8 +797,8 @@ export default function CreatorsPage() {
           />
         </div>
 
-        {/* Right actions */}
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Right actions — hidden on mobile */}
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
           <button
             type="button"
             onClick={() => setScoresOpen(true)}
@@ -847,7 +847,7 @@ export default function CreatorsPage() {
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Filter tabs */}
-          <div className="overflow-x-auto scrollbar-hide"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
+          <div className="overflow-x-auto scrollbar-hide scroll-fade-x"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
             {FILTER_TABS.map((tab, i) => (
               <TabItem
                 key={tab.name}

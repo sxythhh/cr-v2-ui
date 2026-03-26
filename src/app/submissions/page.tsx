@@ -3128,7 +3128,7 @@ export default function SubmissionsPage() {
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Tabs */}
-          <div className="overflow-x-auto scrollbar-hide">
+          <div className="overflow-x-auto scrollbar-hide scroll-fade-x">
             <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-max sm:w-fit">
               {TABS.map((tab, i) => (
                 <TabItem

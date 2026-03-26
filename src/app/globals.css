@@ -143,6 +143,12 @@ nav [data-active="true"] svg path {
   display: none;
 }
 
+/* Horizontal scroll fade masks */
+.scroll-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+}
+
 /* ===== DISCOVER FILTER PILLS (inline filter bar) ===== */
 .discover-filter-pill,
 .discover-filter-pill-muted {

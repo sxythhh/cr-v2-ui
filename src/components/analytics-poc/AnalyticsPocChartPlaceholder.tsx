@@ -970,7 +970,7 @@ function PerformanceMainLineChartBody({
           className="pointer-events-none absolute inset-y-0 z-10 flex items-center justify-center transition-opacity duration-100"
           style={{ right: hasRightAxis ? 47 : 24, transform: "translateX(50%)" }}
         >
-          <span className="hidden whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-[#2a2a2a] sm:inline">
+          <span className="whitespace-nowrap rounded-full bg-[#EBEBEB] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] text-foreground/50 dark:bg-[#2a2a2a]">
             {lineChart.xTicks[lineChart.xTicks.length - 1]?.label ?? "Today"}
           </span>
         </div>

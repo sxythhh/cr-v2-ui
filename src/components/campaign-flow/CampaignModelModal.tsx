@@ -142,7 +142,7 @@ export function CampaignModelModal({
             {/* Content */}
             <div className="flex flex-col px-5 sm:p-8 gap-4 sm:gap-8 flex-1 min-h-0">
               {/* Title section */}
-              <div className="flex flex-col items-center gap-2 shrink-0 py-0 sm:py-0">
+              <div className="flex flex-col items-center gap-2 shrink-0 pt-3 sm:pt-0">
                 <h2 className="hidden sm:block text-xl font-semibold text-page-text tracking-[-0.02em]">
                   Campaign Model
                 </h2>
@@ -175,15 +175,15 @@ export function CampaignModelModal({
 
                       {/* Selection circle */}
                       <div
-                        className={cn(
-                          "absolute top-5 right-5 z-10 flex size-6 items-center justify-center rounded-full transition-all sm:size-5",
-                          !isSelected && "border border-[rgba(37,37,37,0.1)] bg-white dark:border-[rgba(224,224,224,0.2)] dark:bg-[#161616]",
-                        )}
-                        style={isSelected ? { background: model.checkGradient } : undefined}
+                        className="absolute top-5 right-5 z-10 flex size-6 items-center justify-center rounded-full sm:size-5"
+                        style={{
+                          background: isSelected ? model.checkGradient : "white",
+                          border: isSelected ? "none" : "1px solid rgba(37,37,37,0.1)",
+                        }}
                       >
                         {isSelected && (
                           <IconCheck
-                            className="text-white"
+                            className="text-[#252525]"
                             size={14}
                             strokeWidth={2.5}
                           />

@@ -613,14 +613,14 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
               <label className="flex cursor-pointer items-center gap-2">
                 <input type="checkbox" checked={nda} onChange={() => setNda((v) => !v)} className="hidden" />
                 <div className={cn("flex size-4 items-center justify-center rounded border transition-colors", nda ? "border-foreground bg-foreground dark:border-[#E0E0E0] dark:bg-[#E0E0E0]" : "border-foreground/[0.08] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]")}>
-                  {nda && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke={nda ? "#161616" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                  {nda && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="currentColor" className="text-white dark:text-black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
                 <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">NDA / Confidentiality</span>
               </label>
               <label className="flex cursor-pointer items-center gap-2">
                 <input type="checkbox" checked={ftc} onChange={() => setFtc((v) => !v)} className="hidden" />
                 <div className={cn("flex size-4 items-center justify-center rounded border transition-colors", ftc ? "border-foreground bg-foreground dark:border-[#E0E0E0] dark:bg-[#E0E0E0]" : "border-foreground/[0.08] bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]")}>
-                  {ftc && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke={ftc ? "#161616" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                  {ftc && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="currentColor" className="text-white dark:text-black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
                 <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">FTC Disclosure (#ad)</span>
               </label>
