@@ -1360,8 +1360,13 @@ function VideoPlayer({
                   <div className="flex items-center gap-1.5">
                     {/* Play/Pause */}
                     <button onClick={togglePlay} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
-                      {isPlaying ? <PauseIcon /> : (
-                        <svg width="10" height="12" viewBox="-1 0 16 18" fill="none">
+                      {isPlaying ? (
+                        <svg width="14" height="16" viewBox="0 0 8 9" fill="none">
+                          <path d="M0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5V7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5V1.5Z" fill="white"/>
+                          <path d="M5 1.5C5 0.671573 5.67157 0 6.5 0C7.32843 0 8 0.671573 8 1.5V7.5C8 8.32843 7.32843 9 6.5 9C5.67157 9 5 8.32843 5 7.5V1.5Z" fill="white"/>
+                        </svg>
+                      ) : (
+                        <svg width="14" height="16" viewBox="-1 0 16 18" fill="none">
                           <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="white" />
                         </svg>
                       )}
@@ -1434,6 +1439,53 @@ function VideoPlayer({
                 </div>
               </div>
             </div>
+            {/* Speed popup — outside overflow-hidden video container */}
+            <AnimatePresence>
+              {speedOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                  className="absolute bottom-16 right-4 z-[10] flex w-[128px] flex-col rounded-[12px] bg-[rgba(51,51,51,0.9)] p-1 backdrop-blur-[12px]"
+                  onMouseLeave={() => setHoveredSpeed(null)}
+                  data-speed-menu
+                >
+                  <div className="px-[10px] py-2">
+                    <span className="font-inter text-xs tracking-[-0.02em] text-white/50">Speed</span>
+                  </div>
+                  <div className="relative flex flex-col">
+                    {hoveredSpeed !== null && hoveredSpeed !== speed && (
+                      <motion.div
+                        className="pointer-events-none absolute inset-x-0 h-7 rounded-lg bg-white/10"
+                        layout
+                        transition={{ type: "spring", stiffness: 800, damping: 40 }}
+                        style={{ top: SPEEDS.indexOf(hoveredSpeed) * 28 }}
+                      />
+                    )}
+                    {SPEEDS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => handleSpeedChange(s)}
+                        onMouseEnter={() => setHoveredSpeed(s)}
+                        className={cn(
+                          "relative z-[1] flex cursor-pointer items-center gap-3 px-[10px] py-2 text-left",
+                          s === speed && "rounded-lg bg-white/20",
+                        )}
+                      >
+                        <div className="flex flex-1 items-center gap-[1px]">
+                          <span className="font-inter text-xs font-medium leading-none tracking-[0.1px] text-white">{s.toFixed(1)}</span>
+                          <span className="font-inter text-xs font-normal leading-none tracking-[0.1px] text-white/50">x</span>
+                        </div>
+                        {s === speed && (
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           {/* ── Desktop: Timeline sidebar ── */}
           <div className="relative z-[1] hidden shrink-0 flex-col justify-end p-2 md:flex md:w-[320px] lg:w-[400px]">
