@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} select-none overflow-x-hidden bg-page-outer-bg text-foreground antialiased`}>
+      <body className={`${inter.className} ${inter.variable} select-none overflow-x-hidden bg-page-outer-bg text-foreground antialiased`}>
         <ThemeProvider>
           <ToastProvider position="bottom-right">
             <SideNavProvider>

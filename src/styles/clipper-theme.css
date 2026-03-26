@@ -19,6 +19,7 @@ a {
   --animate-modal-content-in: modal-content-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 
   --font-sans: var(--font-inter-display), "Arial", "Helvetica", sans-serif;
+  /* --font-sf-pro-rounded is set by Next.js font loader in /creator layout */
   --font-inter-fallback: var(--font-inter), "Arial", "Helvetica", sans-serif;
   /* --font-inter is set by Next.js font loader on <body> */
 
@@ -46,6 +47,10 @@ a {
     0% { opacity: 0; transform: translateY(8px); }
     100% { opacity: 1; transform: translateY(0); }
   }
+}
+
+@utility font-sf-pro-rounded {
+  font-family: var(--font-sf-pro-rounded), "SF Pro Rounded", Arial, Helvetica, sans-serif;
 }
 
 @utility font-inter-display {

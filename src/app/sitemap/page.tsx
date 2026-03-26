@@ -27,12 +27,29 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Creator",
+    title: "Creator (Brand)",
     routes: [
       { path: "/creator", label: "Creator Home" },
+      { path: "/creator/dashboard", label: "Creator Dashboard" },
+      { path: "/creator/payouts", label: "Creator Payouts" },
       { path: "/onboard-creator", label: "Creator Onboarding" },
       { path: "/applications", label: "Applications" },
       { path: "/ranks", label: "Ranks" },
+    ],
+  },
+  {
+    title: "Creator Mobile App",
+    routes: [
+      { path: "/creator/intro", label: "Onboarding: Intro" },
+      { path: "/creator/niches", label: "Onboarding: Niches" },
+      { path: "/creator/sub-niches", label: "Onboarding: Sub-niches" },
+      { path: "/creator/formats", label: "Onboarding: Formats" },
+      { path: "/creator/languages", label: "Onboarding: Languages" },
+      { path: "/creator/feed", label: "Feed" },
+      { path: "/creator/discover", label: "Discover" },
+      { path: "/creator/campaign", label: "Campaign" },
+      { path: "/creator/campaign/submit", label: "Campaign Submit" },
+      { path: "/creator/profile", label: "Profile" },
     ],
   },
   {
