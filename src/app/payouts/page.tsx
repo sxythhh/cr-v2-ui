@@ -866,7 +866,7 @@ export default function PayoutsPage() {
           {STAT_CARDS.map((card) => (
             <div
               key={card.label}
-              className="flex min-w-0 flex-col items-start justify-center gap-2 rounded-2xl border border-card-border bg-card-bg p-3"
+              className="flex min-w-0 flex-col items-start justify-center gap-2 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none"
             >
               <div className="flex items-center gap-3">
                 <span className="font-[family-name:var(--font-inter)] text-sm font-medium leading-[120%] tracking-[-0.02em] text-page-text">

@@ -168,7 +168,7 @@ export function CampaignModelModal({
                   return (
                     <button
                       className={cn(
-                        "relative isolate flex flex-1 flex-col items-start p-6 gap-4 overflow-hidden rounded-3xl text-left outline-none focus:outline-none focus-visible:outline-none cursor-pointer",
+                        "relative isolate flex flex-1 flex-col items-start p-4 gap-2 overflow-hidden rounded-3xl text-left outline-none focus:outline-none focus-visible:outline-none cursor-pointer sm:p-6 sm:gap-4",
                         !isSelected && "border border-[rgba(37,37,37,0.06)] dark:border-[rgba(224,224,224,0.03)]",
                       )}
                       style={{
@@ -183,7 +183,7 @@ export function CampaignModelModal({
                       <CardIllustration model={model.id} />
 
                       {/* Selection circle */}
-                      <div className="absolute right-4 top-4 z-[5] flex size-5 items-center justify-center">
+                      <div className="absolute right-3 top-3 z-[5] flex size-5 items-center justify-center sm:right-4 sm:top-4">
                         {isSelected ? (
                           <>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="dark:hidden">
@@ -206,14 +206,14 @@ export function CampaignModelModal({
                       </div>
 
                       {/* Content — all above gradient (z-4) */}
-                      <div className="relative z-[4] flex size-14 items-center justify-center rounded-full" style={{ background: `rgba(${model.rgb}, 0.06)` }}>
-                        <div className={model.iconColor}><Icon size={24} /></div>
+                      <div className="relative z-[4] flex size-10 shrink-0 items-center justify-center rounded-full sm:size-14" style={{ background: `rgba(${model.rgb}, 0.06)` }}>
+                        <div className={cn(model.iconColor, "[&_svg]:size-[17px] sm:[&_svg]:size-6")}><Icon size={24} /></div>
                       </div>
-                      <div className="relative z-[4] flex flex-col gap-1 flex-1">
-                        <span className="text-2xl font-medium text-page-text tracking-[-0.02em]">{model.label}</span>
-                        <p className="text-sm leading-[150%] text-foreground/70 tracking-[-0.02em]">{model.subtitle}</p>
+                      <div className="relative z-[4] flex flex-col gap-0.5 flex-1 sm:gap-1">
+                        <span className="text-lg font-medium text-page-text tracking-[-0.02em] sm:text-2xl">{model.label}</span>
+                        <p className="text-xs leading-[150%] text-foreground/70 tracking-[-0.02em] sm:text-sm">{model.subtitle}</p>
                       </div>
-                      <span className="relative z-[4] text-xs leading-[150%] text-foreground/50">{model.footer}</span>
+                      <span className="relative z-[4] text-[11px] leading-[150%] text-foreground/50 sm:text-xs">{model.footer}</span>
                     </button>
                   );
                 })}

@@ -39,7 +39,7 @@ function MobileFinanceTabs({ activeTab, onTabChange }: { activeTab: typeof TABS[
   const actionBtnClass = "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
 
   return (
-    <div className="-mx-4 -mt-5 mb-4 flex flex-col sm:-mx-6 md:hidden">
+    <div className="-mx-4 -mt-5 mb-4 flex flex-col sm:-mx-6 md:hidden sticky top-0 z-20 bg-page-bg">
       {/* Underline tabs — full width */}
       <div className="flex border-b border-foreground/[0.06]">
         {TABS.map((tab) => (
@@ -107,8 +107,24 @@ function FinanceHeader({
         </div>
       </div>
 
-      {/* Mobile: title in header row */}
-      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text md:hidden">Finances</span>
+      {/* Mobile: show tabs in header bar */}
+      <div className="flex w-full md:hidden">
+        {TABS.map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => onTabChange(tab)}
+            className={cn(
+              "flex flex-1 cursor-pointer items-center justify-center font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+              activeTab === tab
+                ? "border-b border-foreground text-page-text"
+                : "text-page-text/70",
+            )}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -779,10 +795,10 @@ function FinanceOverview() {
 
       {/* Revenue Chart Card */}
       <div className={cn(cardBase, "gap-4 p-4")}>
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-4">
             {/* GMV / Total revenue toggle */}
-            <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5">
+            <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 self-start">
               {(["GMV", "Total revenue"] as const).map((t) => (
                 <button
                   key={t}
@@ -799,7 +815,7 @@ function FinanceOverview() {
                 </button>
               ))}
             </div>
-            <span className="font-inter text-[48px] font-medium leading-none tracking-[-0.02em] text-page-text">
+            <span className="font-inter text-[32px] font-medium leading-none tracking-[-0.02em] text-page-text sm:text-[48px]">
               $47.8K
             </span>
           </div>
@@ -840,9 +856,9 @@ function FinanceOverview() {
 
       {/* Recent Activity (Withdrawals) Table */}
       <div className={cn(cardBase, "p-0")}>
-        <div className="flex items-center justify-between px-4 py-4">
+        <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent activity</span>
-          <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5">
+          <div className="flex items-center gap-0.5 self-start rounded-xl bg-foreground/[0.06] p-0.5 overflow-x-auto scrollbar-hide">
             {(["Withdrawals", "Deposits", "Deductions"] as const).map((t) => (
               <button
                 key={t}
@@ -1171,8 +1187,6 @@ export default function BillingPage() {
       actions={<FinanceHeader activeTab={activeTab} onTabChange={setActiveTab} />}
       fullWidthActions
     >
-      {/* Mobile tabs + action buttons */}
-      <MobileFinanceTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       {!hasData ? (
         <FinanceEmptyState />

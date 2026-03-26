@@ -620,7 +620,7 @@ function OnboardingView({
   onSkip: () => void;
 }) {
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto bg-page-bg">
+    <div className="relative flex min-h-0 flex-1 flex-col items-start gap-0 self-stretch overflow-y-auto overflow-x-hidden bg-page-bg">
       {/* Header */}
       <div className="sticky top-0 z-10 flex h-14 w-full shrink-0 items-center justify-between border-b border-foreground/[0.06] bg-page-bg px-5">
         <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
@@ -1271,17 +1271,7 @@ function DashboardView() {
       </div>
 
       {/* KPI Cards — Mobile carousel */}
-      <div className="sm:hidden [&_[class*=snap-center]]:h-[148px] [&_[class*=snap-center]>*]:h-full">
-        <AnalyticsPocMobileCarousel>
-          {[
-            <KpiCardBalance key="balance" />,
-            <KpiCardActive key="active" />,
-            <KpiCardViews key="views" />,
-            <KpiCardAvgCpm key="cpm" />,
-            <KpiCardPaidOut key="paid" />,
-          ]}
-        </AnalyticsPocMobileCarousel>
-      </div>
+      <HomeKpiCarousel />
 
       {/* KPI Cards — Desktop grid */}
       <div className="hidden gap-2 sm:flex sm:flex-wrap lg:flex-nowrap">
@@ -1455,6 +1445,21 @@ function DashboardView() {
               </button>
             </div>
 
+            {/* Mobile: simple list */}
+            <div className="flex flex-col gap-2 sm:hidden">
+              {TOP_CREATORS.map((c, i) => (
+                <div key={c.name} className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
+                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full font-inter text-xs font-semibold text-white" style={{ background: ["#FB923C", "#839FB9", "#9E5200"][i] }}>
+                    {i + 1}
+                  </div>
+                  <div className="flex min-w-0 flex-1 items-center justify-between">
+                    <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                    <span className="shrink-0 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.earned}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
 
@@ -1556,6 +1561,62 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
   );
 }
 
+// ── Home KPI Carousel (mobile) ────────────────────────────────────
+
+function HomeKpiCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const cards = [
+    <KpiCardBalance key="balance" />,
+    <KpiCardActive key="active" />,
+    <KpiCardViews key="views" />,
+    <KpiCardAvgCpm key="cpm" />,
+    <KpiCardPaidOut key="paid" />,
+  ];
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || !el.children[0]) return;
+    const childWidth = (el.children[0] as HTMLElement).offsetWidth;
+    if (childWidth === 0) return;
+    const index = Math.round(el.scrollLeft / (childWidth + 8));
+    setActiveIndex(Math.min(index, cards.length - 1));
+  }, [cards.length]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  return (
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:hidden sm:-mx-5">
+      <div
+        ref={scrollRef}
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
+      >
+        {cards.map((card, i) => (
+          <div key={i} className="w-80 shrink-0 snap-center [&>*]:h-full">
+            {card}
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-1">
+        {cards.map((_, i) => (
+          <div
+            key={i}
+            className={cn(
+              "size-1.5 rounded-full transition-colors",
+              i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────────
 
 export default function Home() {
@@ -1571,7 +1632,7 @@ export default function Home() {
   const showFloatingChecklist = skipped && !allDone;
 
   return (
-    <div className={cn(showOnboarding ? "flex h-full flex-col" : "")}>
+    <div className={cn(showOnboarding ? "flex h-[100dvh] flex-col md:h-full" : "")}>
       <AnimatePresence mode="wait">
         {showOnboarding ? (
           <motion.div

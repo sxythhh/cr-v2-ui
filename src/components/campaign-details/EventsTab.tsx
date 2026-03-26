@@ -97,7 +97,7 @@ export default function EventsTab() {
         <div
           ref={filterRef}
           className={cn(
-            "flex w-[287px] gap-1 rounded-xl p-0.5 md:sticky md:top-5 md:w-[186px] md:flex-col",
+            "flex w-full gap-1 rounded-xl p-0.5 md:sticky md:top-5 md:w-[186px] md:flex-col",
             "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(224,224,224,0.03)]",
           )}
           onMouseEnter={handlers.onMouseEnter}
@@ -124,7 +124,7 @@ export default function EventsTab() {
               ref={(el) => registerItem(i, el)}
               onClick={() => setActiveFilter(f.key)}
               className={cn(
-                "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-between rounded-[10px] px-3 transition-colors md:flex-none",
+                "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] px-3 transition-colors md:justify-between md:flex-none",
                 activeFilter === f.key
                   ? "bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                   : "",

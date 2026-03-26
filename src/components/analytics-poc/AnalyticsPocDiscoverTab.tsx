@@ -212,15 +212,15 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
   }, [handleScroll]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5">
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide"
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
       >
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="w-full shrink-0 snap-center rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
+            className="w-80 shrink-0 snap-center rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
@@ -241,7 +241,7 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
               key={i}
               className={cn(
                 "size-1.5 rounded-full transition-colors duration-200",
-                i === activeIndex ? "bg-foreground" : "bg-foreground/[0.06]",
+                i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
               )}
             />
           ))}

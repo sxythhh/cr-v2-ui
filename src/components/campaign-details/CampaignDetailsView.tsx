@@ -413,7 +413,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────── */}
-      <footer className="fixed inset-x-0 bottom-[calc(60px+max(8px,env(safe-area-inset-bottom)))] z-20 flex items-center justify-between border-t border-[rgba(37,37,37,0.06)] bg-white px-4 py-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616] md:static md:inset-auto md:bottom-auto sm:px-5 sm:py-3">
+      <footer className="fixed inset-x-0 bottom-[calc(52px+env(safe-area-inset-bottom))] z-20 flex items-center justify-between border-t border-[rgba(37,37,37,0.06)] bg-white px-4 py-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616] md:static md:inset-auto md:bottom-auto sm:px-5 sm:py-3">
         <span className="hidden text-sm tracking-[-0.02em] text-page-text sm:block">
           {c.title}
         </span>
@@ -500,6 +500,16 @@ function HeaderTabs({
   useEffect(() => {
     measureTabs();
   }, [measureTabs]);
+
+  // Auto-scroll selected tab into view
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const tab = container.querySelector(`[data-proximity-index="${selectedIndex}"]`) as HTMLElement | null;
+    if (tab) {
+      tab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [selectedIndex]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {

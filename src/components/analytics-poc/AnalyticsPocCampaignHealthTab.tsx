@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { CampaignModelModal } from "@/components/campaign-flow/CampaignModelModal";
 import type { CampaignModel } from "@/types/campaign-flow.types";
@@ -498,11 +498,30 @@ function ChartSection({
 /* ── Mobile KPI Scroll ────────────────────────────────────────────── */
 
 function MobileKpiScroll({ children }: { children: ReactNode[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || !el.children[0]) return;
+    const childWidth = (el.children[0] as HTMLElement).offsetWidth;
+    if (childWidth === 0) return;
+    const index = Math.round(el.scrollLeft / (childWidth + 8));
+    setActiveIndex(Math.min(index, children.length - 1));
+  }, [children.length]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   return (
-    <div className="flex flex-col items-center gap-2 sm:hidden">
-      <div className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide">
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 sm:hidden">
+      <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5">
         {children.map((child, i) => (
-          <div key={i} className="w-full shrink-0 snap-center">
+          <div key={i} className="w-80 shrink-0 snap-center">
             {child}
           </div>
         ))}
@@ -512,7 +531,10 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
           {children.map((_, i) => (
             <div
               key={i}
-              className="size-1.5 rounded-full bg-foreground/[0.06] first:bg-foreground"
+              className={cn(
+                "size-1.5 rounded-full transition-colors",
+                i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
+              )}
             />
           ))}
         </div>
