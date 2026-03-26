@@ -251,8 +251,8 @@ function ApplicationDetailsModal({
           </button>
         </div>
 
-        {/* Scrollable content */}
-        <div className="scrollbar-hide flex min-h-0 flex-1 flex-col overflow-y-auto p-5">
+        {/* Creator info — non-scrolling */}
+        <div className="shrink-0 px-5 pt-5">
           {/* Creator info row */}
           <div className="flex items-center gap-2">
             <img
@@ -309,18 +309,22 @@ function ApplicationDetailsModal({
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="mt-4 overflow-x-auto scrollbar-hide">
-            <Tabs selectedIndex={activeTabIndex} onSelect={setActiveTabIndex} variant="underline">
-              <TabItem label="Application" index={0} />
-              <TabItem label="Recent content" index={1} />
-              <TabItem label="Social accounts" index={2} />
-            </Tabs>
-          </div>
+        </div>
 
+        {/* Tabs — fixed between scroll areas */}
+        <div className="shrink-0 overflow-x-auto border-b border-foreground/[0.06] px-5 scrollbar-hide">
+          <Tabs selectedIndex={activeTabIndex} onSelect={setActiveTabIndex} variant="underline" className="!border-b-0">
+            <TabItem label="Application" index={0} />
+            <TabItem label="Recent content" index={1} />
+            <TabItem label="Social accounts" index={2} />
+          </Tabs>
+        </div>
+
+        {/* Tab content — scrollable */}
+        <div className="scrollbar-hide min-h-0 flex-1 overflow-y-auto p-5">
           {/* Tab content */}
           {activeTab === "application" && (
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               {/* Stat cards row */}
               <div className="flex gap-2">
                 {/* Applied on */}
@@ -395,7 +399,7 @@ function ApplicationDetailsModal({
           )}
 
           {activeTab === "recent-content" && (
-            <div className="mt-4 flex gap-4">
+            <div className="flex gap-4">
               {[
                 { img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=500&fit=crop", views: "1.7M", likes: "147.2K", shares: "781" },
                 { img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&h=500&fit=crop", views: "1.7M", likes: "147.2K", shares: "781" },
@@ -434,7 +438,7 @@ function ApplicationDetailsModal({
           )}
 
           {activeTab === "social-accounts" && (
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               {app.socialAccounts.map((account, i) => (
                 <SocialAccountCard key={i} account={account} />
               ))}
@@ -478,21 +482,111 @@ function ApplicationDetailsModal({
 
 // ── Quick Review Modal ─────────────────────────────────────────────
 
-function QuickReviewModal({
-  app,
-  currentIndex,
-  totalCount,
-  onClose,
-  onAction,
-  onSkip,
-}: {
-  app: Application;
-  currentIndex: number;
-  totalCount: number;
-  onClose: () => void;
-  onAction: (action: "accept" | "reject") => void;
-  onSkip: () => void;
-}) {
+// ── Animated Stars (completion) ──────────────────────────────────────
+
+function QuickReviewAnimatedStars({ className }: { className?: string }) {
+  const paths = [
+    "M2.51191 8.05756L3.9974 6.04528L4.52339 8.47863L6.92511 9.24876L4.7389 10.4939L4.7377 12.9818L2.85955 11.318L0.45721 12.0858L1.48365 9.81196L0 7.79846L2.51191 8.05756Z",
+    "M1.91955 17.6938L1.03009 15.7235L3.11218 16.3893L4.73952 14.9468L4.74012 17.1031L6.63533 18.1821L4.55383 18.8496L4.09784 20.9592L2.81082 19.2149L0.633758 19.4393L1.91955 17.6938Z",
+    "M9.86563 22.4849L8.19142 22.3109L9.44189 21.2001L9.09244 19.5778L10.5511 20.4066L12.0098 19.5778L11.6604 21.2001L12.9114 22.3109L11.2367 22.4849L10.5511 24L9.86563 22.4849Z",
+    "M18.2605 19.1795L16.9929 20.8967L16.5436 18.8196L14.4944 18.1629L16.3604 17.1L16.361 14.9768L17.9634 16.3971L20.0138 15.7415L19.1377 17.6818L20.404 19.4001L18.2605 19.1795Z",
+    "M19.6131 9.80894L20.6397 12.0827L18.2373 11.315L16.3598 12.9788L16.3586 10.4909L14.1718 9.24573L16.5735 8.4756L17.0995 6.04225L18.585 8.05454L21.0969 7.79543L19.6131 9.80894Z",
+    "M11.9185 3.03014L15.2675 3.37862L12.766 5.59965L13.4649 8.84511L10.5475 7.18729L7.63071 8.84511L8.32902 5.59965L5.82744 3.37862L9.17647 3.03014L10.5475 0L11.9185 3.03014Z",
+  ];
+  const order = [5, 0, 4, 1, 3, 2];
+
+  return (
+    <div className={className}>
+      <svg viewBox="0 0 22 24" fill="none" width="128" height="140" className="size-full">
+        {paths.map((d, i) => (
+          <path
+            key={i}
+            d={d}
+            fill="currentColor"
+            style={{
+              opacity: 0,
+              transformOrigin: "center",
+              transformBox: "fill-box",
+              animation: `star-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) ${order[i] * 120}ms forwards`,
+            }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+// ── Swipe direction indicators ───────────────────────────────────────
+
+const SWIPE_THRESHOLD = 80;
+const SWIPE_Y_THRESHOLD = 60;
+
+function SwipeIndicator({ direction, opacity }: { direction: "left" | "right" | "up" | "down"; opacity: number }) {
+  if (opacity <= 0) return null;
+
+  const config = {
+    left: {
+      label: "Reject",
+      color: "#FF3355",
+      bg: "rgba(255,51,85,0.12)",
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.54 12.46a.75.75 0 1 1-1.08 1.08L12 13.08l-2.46 2.46a.75.75 0 0 1-1.08-1.08L10.92 12 8.46 9.54a.75.75 0 0 1 1.08-1.08L12 10.92l2.46-2.46a.75.75 0 0 1 1.08 1.08L13.08 12l2.46 2.46Z" fill="#FF3355" />
+        </svg>
+      ),
+    },
+    right: {
+      label: "Accept",
+      color: "#34D399",
+      bg: "rgba(52,211,153,0.12)",
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.03 8.03-5 5a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 0 1 1.06-1.06L10.5 13.44l4.47-4.47a.75.75 0 0 1 1.06 1.06Z" fill="#34D399" />
+        </svg>
+      ),
+    },
+    up: {
+      label: "Message",
+      color: "#60A5FA",
+      bg: "rgba(96,165,250,0.12)",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 21 18" fill="none">
+          <path fillRule="evenodd" clipRule="evenodd" d="M18.091 2.36647C16.2271 0.805067 13.6014 0 10.5 0C7.3986 0 4.77295 0.805067 2.90901 2.36647C1.0291 3.94126 0 6.22327 0 9C0 9.79492 0.264 10.7934 0.514 11.5754C0.771 12.3813 1.046 13.0568 1.122 13.2398L1.134 13.2682C1.166 13.3505 1.594 14.5191 0.151 16.431C0.016 16.6109 -0.032 16.8423 0.022 17.0611C0.075 17.28 0.224 17.4632 0.428 17.56C1.761 18.1944 3.102 17.9739 4.043 17.6457C4.52 17.4795 4.918 17.2781 5.197 17.1185C5.221 17.1047 5.244 17.0912 5.266 17.0781C6.93 17.8376 8.807 18 10.5 18C13.601 18 16.227 17.1949 18.091 15.6335C19.971 14.0587 21 11.7767 21 9C21 6.22327 19.971 3.94126 18.091 2.36647Z" fill="#60A5FA" />
+        </svg>
+      ),
+    },
+    down: {
+      label: "Skip",
+      color: "#FB923C",
+      bg: "rgba(251,146,60,0.12)",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M5 5v14l11-7L5 5ZM19 5v14h-2V5h2Z" fill="#FB923C" />
+        </svg>
+      ),
+    },
+  }[direction];
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center rounded-2xl"
+      style={{ backgroundColor: config.bg, opacity }}
+    >
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex size-16 items-center justify-center rounded-full" style={{ backgroundColor: config.bg }}>
+          {config.icon}
+        </div>
+        <span className="font-inter text-sm font-semibold tracking-[-0.02em]" style={{ color: config.color }}>
+          {config.label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ── Card content (shared between current and peek) ───────────────────
+
+function QuickReviewCardContent({ app }: { app: Application }) {
   const videos = [
     "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=500&fit=crop",
     "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&h=500&fit=crop",
@@ -500,8 +594,180 @@ function QuickReviewModal({
   ];
 
   return (
+    <>
+      {/* Creator row */}
+      <div className="flex items-center justify-between rounded-2xl border border-foreground/[0.06] p-4">
+        <div className="flex items-center gap-2">
+          <img src={app.avatar} alt={app.name} className="size-9 rounded-full object-cover" />
+          <div className="flex flex-col gap-1.5">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{app.name}</span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{app.campaign}</span>
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-1.5">
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Applied</span>
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">1w ago</span>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div className="flex gap-2">
+        {[
+          { value: "1.2M", label: "Followers" },
+          { value: "$53,879", label: "Earned" },
+          { value: "4.2%", label: "Engagement" },
+          { value: "142", label: "Videos" },
+        ].map((stat) => (
+          <div key={stat.label} className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{stat.value}</span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Platform breakdown bar */}
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-1">
+          <div className="h-1 flex-1 rounded-full bg-[#AE4EEE]" />
+          <div className="h-1 flex-1 rounded-full bg-[#EE4E51]" />
+          <div className="h-1 flex-1 rounded-full bg-[#00994D]" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#AE4EEE]">Instagram 33%</span>
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#EE4E51]">YouTube 33%</span>
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">TikTok 33%</span>
+        </div>
+      </div>
+
+      {/* Motivation */}
+      <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Motivation</span>
+        <p className="font-inter text-sm leading-[140%] tracking-[-0.02em] text-page-text">{app.motivation}</p>
+      </div>
+
+      {/* Recent content */}
+      <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
+        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent content</span>
+        <div className="flex gap-2">
+          {videos.map((src, i) => (
+            <div key={i} className="relative flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-foreground/[0.06]" style={{ aspectRatio: "9/16" }}>
+              <img src={src} alt="" className="absolute inset-0 size-full object-cover" style={{ filter: "brightness(0.8)" }} />
+              <div className="relative z-10 flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+                <svg width="14" height="16" viewBox="-1 0 16 18" fill="none">
+                  <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="rgba(255,255,255,0.88)" />
+                </svg>
+              </div>
+              <div className="absolute left-3 top-3 z-10">
+                <PlatformIcon platform="tiktok" size={20} className="text-page-text-muted/50" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Quick Review Modal ─────────────────────────────────────────────
+
+function QuickReviewModal({
+  app,
+  nextApp,
+  currentIndex,
+  totalCount,
+  onClose,
+  onAction,
+  onSkip,
+}: {
+  app: Application | null;
+  nextApp: Application | null;
+  currentIndex: number;
+  totalCount: number;
+  onClose: () => void;
+  onAction: (action: "accept" | "reject") => void;
+  onSkip: () => void;
+}) {
+  const [dragX, setDragX] = useState(0);
+  const [dragY, setDragY] = useState(0);
+  const [exiting, setExiting] = useState<"left" | "right" | "up" | "down" | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Reset drag state when app changes
+  useEffect(() => {
+    setDragX(0);
+    setDragY(0);
+    setExiting(null);
+  }, [app?.id]);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const handleDragEnd = useCallback((_: unknown, info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }) => {
+    const { offset, velocity } = info;
+    // Check up swipe (message — visual only, snap back)
+    if (offset.y < -SWIPE_Y_THRESHOLD || (offset.y < -30 && velocity.y < -200)) {
+      setExiting("up");
+      setTimeout(() => {
+        setExiting(null);
+        setDragX(0);
+        setDragY(0);
+      }, 300);
+      return;
+    }
+    // Check down swipe (skip)
+    if (offset.y > SWIPE_Y_THRESHOLD || (offset.y > 30 && velocity.y > 200)) {
+      setExiting("down");
+      setTimeout(() => onSkip(), 250);
+      return;
+    }
+    // Right swipe (accept)
+    if (offset.x > SWIPE_THRESHOLD || (offset.x > 40 && velocity.x > 300)) {
+      setExiting("right");
+      setTimeout(() => onAction("accept"), 250);
+      return;
+    }
+    // Left swipe (reject)
+    if (offset.x < -SWIPE_THRESHOLD || (offset.x < -40 && velocity.x < -300)) {
+      setExiting("left");
+      setTimeout(() => onAction("reject"), 250);
+      return;
+    }
+    // Snap back
+    setDragX(0);
+    setDragY(0);
+  }, [onAction, onSkip]);
+
+  // Compute indicator opacity based on drag
+  const absX = Math.abs(dragX);
+  const absY = Math.abs(dragY);
+  const isVerticalDrag = absY > absX * 0.8;
+  const leftOpacity = !isVerticalDrag && dragX < -20 ? Math.min((absX - 20) / 60, 1) : 0;
+  const rightOpacity = !isVerticalDrag && dragX > 20 ? Math.min((absX - 20) / 60, 1) : 0;
+  const upOpacity = isVerticalDrag && dragY < -20 ? Math.min((absY - 20) / 40, 1) : 0;
+  const downOpacity = isVerticalDrag && dragY > 20 ? Math.min((absY - 20) / 40, 1) : 0;
+  const rotation = dragX * 0.06; // subtle tilt
+
+  // Next card scale based on drag progress
+  const dragProgress = Math.min(Math.max(absX, absY) / SWIPE_THRESHOLD, 1);
+  const nextScale = 0.95 + dragProgress * 0.05;
+  const nextOpacity = 0.5 + dragProgress * 0.5;
+
+  const exitAnimations = {
+    left: { x: -500, opacity: 0, rotate: -20 },
+    right: { x: 500, opacity: 0, rotate: 20 },
+    up: { y: -300, opacity: 0, scale: 0.95 },
+    down: { y: 500, opacity: 0, scale: 0.9 },
+  };
+
+  const isDone = !app;
+
+  return (
     <Modal open onClose={onClose} size="md" showClose={false}>
-      <div className="flex max-h-[90vh] flex-col">
+      <div className="flex h-[80dvh] flex-col sm:h-[80vh] sm:max-h-[90vh]">
         {/* Header */}
         <div className="relative flex shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
           <div className="flex items-center gap-2">
@@ -515,122 +781,134 @@ function QuickReviewModal({
           </button>
         </div>
 
-        {/* Scrollable content */}
-        <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4">
-          {/* Creator row */}
-          <div className="flex items-center justify-between rounded-2xl border border-foreground/[0.06] p-4">
-            <div className="flex items-center gap-2">
-              <img src={app.avatar} alt={app.name} className="size-9 rounded-full object-cover" />
-              <div className="flex flex-col gap-1.5">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{app.name}</span>
-                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{app.campaign}</span>
-              </div>
-            </div>
-            <div className="flex flex-col items-end gap-1.5">
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Applied</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">1w ago</span>
-            </div>
-          </div>
-
-          {/* Stats row */}
-          <div className="flex gap-2">
-            {[
-              { value: "1.2M", label: "Followers" },
-              { value: "$53,879", label: "Earned" },
-              { value: "4.2%", label: "Engagement" },
-              { value: "142", label: "Videos" },
-            ].map((stat) => (
-              <div key={stat.label} className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{stat.value}</span>
-                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Platform breakdown bar */}
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-1">
-              <div className="h-1 flex-1 rounded-full bg-[#AE4EEE]" />
-              <div className="h-1 flex-1 rounded-full bg-[#EE4E51]" />
-              <div className="h-1 flex-1 rounded-full bg-[#00994D]" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#AE4EEE]">Instagram 33%</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#EE4E51]">YouTube 33%</span>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">TikTok 33%</span>
-            </div>
-          </div>
-
-          {/* Motivation */}
-          <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Motivation</span>
-            <p className="font-inter text-sm leading-[140%] tracking-[-0.02em] text-page-text">{app.motivation}</p>
-          </div>
-
-          {/* Recent content */}
-          <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-none">
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent content</span>
-            <div className="flex gap-2">
-              {videos.map((src, i) => (
-                <div key={i} className="relative flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-foreground/[0.06]" style={{ aspectRatio: "9/16" }}>
-                  <img src={src} alt="" className="absolute inset-0 size-full object-cover" style={{ filter: "brightness(0.8)" }} />
-                  {/* Play button */}
-                  <div className="relative z-10 flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
-                    <svg width="14" height="16" viewBox="-1 0 16 18" fill="none">
-                      <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="rgba(255,255,255,0.88)" />
-                    </svg>
-                  </div>
-                  {/* Platform icon */}
-                  <div className="absolute left-3 top-3 z-10">
-                    <PlatformIcon platform="tiktok" size={20} className="text-page-text-muted/50" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-
-        {/* Action buttons — sticky footer */}
-        <div className="flex shrink-0 items-center justify-center gap-6 border-t border-foreground/[0.06] px-5 py-5">
-            {/* Reject */}
+        {isDone ? (
+          /* Done screen — inside card area */
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 px-8">
+            <QuickReviewAnimatedStars className="size-16 text-page-text" />
             <div className="flex flex-col items-center gap-2">
-              <button type="button" onClick={() => onAction("reject")} className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.14)]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.54 12.46a.75.75 0 1 1-1.08 1.08L12 13.08l-2.46 2.46a.75.75 0 0 1-1.08-1.08L10.92 12 8.46 9.54a.75.75 0 0 1 1.08-1.08L12 10.92l2.46-2.46a.75.75 0 0 1 1.08 1.08L13.08 12l2.46 2.46Z" fill="#FF3355"/></svg>
+              <motion.h2
+                className="font-inter text-lg font-semibold tracking-[-0.02em] text-page-text"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                You&apos;re all set!
+              </motion.h2>
+              <motion.p
+                className="text-center font-inter text-sm tracking-[-0.02em] text-page-text-muted"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                You&apos;ve reviewed all {totalCount} applications
+              </motion.p>
+            </div>
+            <motion.button
+              type="button"
+              onClick={onClose}
+              className="cursor-pointer rounded-full bg-foreground px-6 py-2.5 font-inter text-sm font-medium tracking-[-0.02em] text-background transition-opacity hover:opacity-90"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              Done
+            </motion.button>
+          </div>
+        ) : isMobile ? (
+          /* Card stack area — mobile swipe */
+          <div className="relative min-h-0 flex-1 overflow-hidden">
+            {/* Next card (peek behind) */}
+            {nextApp && (
+              <motion.div
+                className="scrollbar-hide absolute inset-0 flex flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4"
+                animate={{ scale: nextScale, opacity: nextOpacity }}
+                transition={{ type: "tween", duration: 0 }}
+              >
+                <QuickReviewCardContent app={nextApp} />
+              </motion.div>
+            )}
+
+            {/* Current card (draggable) */}
+            <motion.div
+              key={app.id}
+              className="scrollbar-hide absolute inset-0 flex flex-col gap-4 overflow-y-auto rounded-b-2xl bg-card-bg px-5 pb-5 pt-4"
+              drag
+              dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+              dragElastic={0.9}
+              onDrag={(_, info) => {
+                setDragX(info.offset.x);
+                setDragY(info.offset.y);
+              }}
+              onDragEnd={handleDragEnd}
+              animate={
+                exiting
+                  ? exitAnimations[exiting]
+                  : { x: 0, y: 0, rotate: 0, opacity: 1 }
+              }
+              transition={
+                exiting
+                  ? { type: "spring", stiffness: 200, damping: 25 }
+                  : { type: "spring", stiffness: 500, damping: 30 }
+              }
+              style={{ rotate: exiting ? undefined : rotation, touchAction: "none" }}
+            >
+              <QuickReviewCardContent app={app} />
+
+              {/* Swipe direction overlays */}
+              <SwipeIndicator direction="left" opacity={leftOpacity} />
+              <SwipeIndicator direction="right" opacity={rightOpacity} />
+              <SwipeIndicator direction="up" opacity={upOpacity} />
+              <SwipeIndicator direction="down" opacity={downOpacity} />
+            </motion.div>
+
+          </div>
+        ) : (
+          /* Desktop: scrollable content (no swipe) */
+          <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4">
+            <QuickReviewCardContent app={app} />
+          </div>
+        )}
+
+        {/* Action buttons — desktop only */}
+        <div className="flex shrink-0 items-center justify-center gap-4 border-t border-foreground/[0.06] px-5 py-3 sm:gap-6 sm:py-5">
+            {/* Reject */}
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+              <button type="button" onClick={() => onAction("reject")} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.14)] sm:size-14">
+                <svg className="size-5 sm:size-6" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.54 12.46a.75.75 0 1 1-1.08 1.08L12 13.08l-2.46 2.46a.75.75 0 0 1-1.08-1.08L10.92 12 8.46 9.54a.75.75 0 0 1 1.08-1.08L12 10.92l2.46-2.46a.75.75 0 0 1 1.08 1.08L13.08 12l2.46 2.46Z" fill="#FF3355"/></svg>
               </button>
               <div className="flex items-center gap-1">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text-subtle">Reject</span>
-                <span className="inline-flex size-3 rotate-[-90deg] items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30">↑</span>
+                <span className="inline-flex size-3 rotate-[-90deg] items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30 sm:hidden">↑</span>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle sm:text-sm">Reject</span>
               </div>
             </div>
             {/* Message */}
-            <div className="flex flex-col items-center gap-2">
-              <button type="button" className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]">
-                <svg width="21" height="18" viewBox="0 0 21 18" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M18.091 2.36647C16.2271 0.805067 13.6014 0 10.5 0C7.3986 0 4.77295 0.805067 2.90901 2.36647C1.0291 3.94126 6.5367e-06 6.22327 6.5367e-06 9C6.5367e-06 9.79492 0.264226 10.7934 0.513766 11.5754C0.77093 12.3813 1.04586 13.0568 1.12187 13.2398L1.13379 13.2682L1.14195 13.2874C1.14624 13.2977 1.14764 13.3014 1.14764 13.3014C1.16561 13.3505 1.59394 14.5191 0.151315 16.431C0.0155991 16.6109 -0.0320598 16.8423 0.0215157 17.0611C0.0750931 17.28 0.224229 17.4632 0.427682 17.56C1.76058 18.1944 3.10162 17.9739 4.04319 17.6457C4.52 17.4795 4.91782 17.2781 5.19679 17.1185C5.22083 17.1047 5.24404 17.0912 5.2664 17.0781C6.92959 17.8376 8.80672 18 10.5 18C13.6014 18 16.2271 17.1949 18.091 15.6335C19.9709 14.0587 21 11.7767 21 9C21 6.22327 19.9709 3.94126 18.091 2.36647Z" fill="currentColor" className="text-page-text-subtle"/></svg>
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+              <button type="button" className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1] sm:size-14">
+                <svg className="size-5 sm:size-[21px]" viewBox="0 0 21 18" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M18.091 2.36647C16.2271 0.805067 13.6014 0 10.5 0C7.3986 0 4.77295 0.805067 2.90901 2.36647C1.0291 3.94126 6.5367e-06 6.22327 6.5367e-06 9C6.5367e-06 9.79492 0.264226 10.7934 0.513766 11.5754C0.77093 12.3813 1.04586 13.0568 1.12187 13.2398L1.13379 13.2682L1.14195 13.2874C1.14624 13.2977 1.14764 13.3014 1.14764 13.3014C1.16561 13.3505 1.59394 14.5191 0.151315 16.431C0.0155991 16.6109 -0.0320598 16.8423 0.0215157 17.0611C0.0750931 17.28 0.224229 17.4632 0.427682 17.56C1.76058 18.1944 3.10162 17.9739 4.04319 17.6457C4.52 17.4795 4.91782 17.2781 5.19679 17.1185C5.22083 17.1047 5.24404 17.0912 5.2664 17.0781C6.92959 17.8376 8.80672 18 10.5 18C13.6014 18 16.2271 17.1949 18.091 15.6335C19.9709 14.0587 21 11.7767 21 9C21 6.22327 19.9709 3.94126 18.091 2.36647Z" fill="currentColor" className="text-page-text-subtle"/></svg>
               </button>
               <div className="flex items-center gap-1">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text-subtle">Message</span>
-                <span className="inline-flex size-3 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30">↑</span>
+                <span className="inline-flex size-3 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30 sm:hidden">↑</span>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle sm:text-sm">Message</span>
               </div>
             </div>
             {/* Skip */}
-            <div className="flex flex-col items-center gap-2">
-              <button type="button" onClick={onSkip} className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 5v14l11-7L5 5ZM19 5v14h-2V5h2Z" fill="currentColor" className="text-page-text-subtle"/></svg>
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+              <button type="button" onClick={onSkip} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1] sm:size-14">
+                <svg className="size-5 sm:size-6" viewBox="0 0 24 24" fill="none"><path d="M5 5v14l11-7L5 5ZM19 5v14h-2V5h2Z" fill="currentColor" className="text-page-text-subtle"/></svg>
               </button>
               <div className="flex items-center gap-1">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text-subtle">Skip</span>
-                <span className="inline-flex size-3 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30">↓</span>
+                <span className="inline-flex size-3 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30 sm:hidden">↓</span>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle sm:text-sm">Skip</span>
               </div>
             </div>
             {/* Accept */}
-            <div className="flex flex-col items-center gap-2">
-              <button type="button" onClick={() => onAction("accept")} className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.03 8.03-5 5a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 0 1 1.06-1.06L10.5 13.44l4.47-4.47a.75.75 0 0 1 1.06 1.06Z" fill="currentColor" className="text-page-text"/></svg>
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+              <button type="button" onClick={() => onAction("accept")} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1] sm:size-14">
+                <svg className="size-5 sm:size-6" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.03 8.03-5 5a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 0 1 1.06-1.06L10.5 13.44l4.47-4.47a.75.75 0 0 1 1.06 1.06Z" fill="currentColor" className="text-page-text"/></svg>
               </button>
               <div className="flex items-center gap-1">
-                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text-subtle">Accept</span>
-                <span className="inline-flex size-3 rotate-90 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30">↑</span>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-subtle sm:text-sm">Accept</span>
+                <span className="inline-flex size-3 rotate-90 items-center justify-center font-inter text-xs leading-none tracking-[-0.02em] text-foreground/30 sm:hidden">↑</span>
               </div>
             </div>
           </div>
@@ -975,23 +1253,25 @@ export function ApplicationsContent({ onQuickReviewRef, onScoresRef }: { onQuick
       )}
 
       {/* Quick Review Modal */}
-      {quickReviewOpen && currentReviewApp && (
+      {quickReviewOpen && (
         <QuickReviewModal
           app={currentReviewApp}
+          nextApp={pendingApps[quickReviewIndex + 1] ?? null}
           currentIndex={quickReviewIndex}
           totalCount={pendingApps.length}
           onClose={() => setQuickReviewOpen(false)}
           onAction={(action) => {
-            // Move to next app after action
             if (quickReviewIndex < pendingApps.length - 1) {
               setQuickReviewIndex(quickReviewIndex + 1);
             } else {
-              setQuickReviewOpen(false);
+              setQuickReviewIndex(pendingApps.length); // triggers done state
             }
           }}
           onSkip={() => {
             if (quickReviewIndex < pendingApps.length - 1) {
               setQuickReviewIndex(quickReviewIndex + 1);
+            } else {
+              setQuickReviewIndex(pendingApps.length);
             }
           }}
         />

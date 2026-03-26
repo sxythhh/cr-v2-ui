@@ -2578,8 +2578,8 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
 
         {/* Tab content */}
         {mobileTab === "Overview" && (
-          <div className="flex" style={{ height: 328 }}>
-            {/* Video preview — cropped/zoomed */}
+          <div className="flex">
+            {/* Video preview — height matches stat cards */}
             <div className="shrink-0 overflow-hidden p-3 pr-0" style={{ width: 210 }}>
               <div className="h-full overflow-hidden rounded-xl">
                 <VideoPlayer
@@ -2589,7 +2589,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 />
               </div>
             </div>
-            {/* Stats sidebar */}
+            {/* Stats sidebar — drives the row height */}
             <div className="flex flex-1 flex-col gap-2 p-3">
               <StatMiniCard value={submission.payout} label="Payout" variant="filled" />
               <StatMiniCard value={submission.engRate} label="Eng. rate" variant="outlined" />
@@ -2599,7 +2599,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                 valueColor={submission.botScoreColor}
                 variant="outlined"
               />
-              <div className="flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top country</span>
                 <div className="flex items-center gap-1.5">
                   <img
@@ -2612,7 +2612,7 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                   </span>
                 </div>
               </div>
-              <div className="flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
+              <div className="flex flex-col justify-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg p-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">Top age</span>
                 <span className="font-inter text-xs font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                   {submission.topAge}
@@ -2654,13 +2654,15 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
         )}
 
         {mobileTab === "AI Quality" && !aiSummaryHidden && (
-          <div className="overflow-y-auto p-3 [&>div]:!w-full [&>div]:!border-l-0" style={{ height: 328 }}>
-            <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
+          <div className="flex flex-col" style={{ height: 328 }}>
+            <div className="min-h-0 flex-1 overflow-y-auto p-3 [&>div]:!w-full [&>div]:!border-l-0 [&>div]:!flex-col [&>div>div:last-child]:!hidden">
+              <AIReviewPanel submission={submission} scoreColor={scoreColor} onAction={onAction} />
+            </div>
           </div>
         )}
 
-        {/* Action buttons — hide when AI Quality tab is showing (it has its own) */}
-        <div className={cn("flex items-center gap-2 p-3", mobileTab === "AI Quality" && !aiSummaryHidden && "hidden")}>
+        {/* Action buttons — always visible as footer */}
+        <div className="flex items-center gap-2 border-t border-foreground/[0.03] p-3">
           <button
             onClick={() => onAction?.("reject")}
             className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors"
@@ -3280,7 +3282,7 @@ export default function SubmissionsPage() {
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Tabs */}
-          <div className="overflow-x-auto scrollbar-hide scroll-fade-x">
+          <div className="overflow-x-auto scrollbar-hide">
             <Tabs data-demo="submissions-filters" selectedIndex={selectedIndex} onSelect={setSelectedIndex} className="w-max sm:w-fit">
               {TABS.map((tab, i) => (
                 <TabItem

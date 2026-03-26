@@ -80,6 +80,9 @@ function normalizeHoverState(
     return null;
   }
 
+  // Clamp x to valid range — Recharts can report coordinates outside the plot area on touch
+  const clampedX = Math.max(0, x);
+
   const payloadLabel = activePayload?.[0]?.payload?.label;
   const fallbackLabel = data[index]?.label;
   const label = payloadLabel ?? fallbackLabel;
@@ -88,7 +91,7 @@ function normalizeHoverState(
     return null;
   }
 
-  return { index, label, x };
+  return { index, label, x: clampedX };
 }
 
 export function useAnalyticsPocChartHover({
@@ -224,6 +227,15 @@ export function useAnalyticsPocChartHover({
 
       const touch = e.touches[0];
       if (touch) {
+        // Dismiss if touch is far outside the chart container
+        const svg = findChartSvg();
+        if (svg) {
+          const rect = svg.getBoundingClientRect();
+          if (touch.clientX < rect.left - 20 || touch.clientX > rect.right + 20) {
+            setTransientHover(null);
+            return;
+          }
+        }
         const point = getIndexFromTouch(touch.clientX);
         if (point) {
           setTransientHover(point);

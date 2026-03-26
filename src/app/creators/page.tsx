@@ -458,7 +458,7 @@ const CREATOR_FILTERS: Filter[] = [
 
 // ── Mobile Creators Table ────────────────────────────────────────────
 
-function MobileCreatorsTable() {
+function MobileCreatorsTable({ onCreatorClick }: { onCreatorClick?: (creator: Creator) => void }) {
   return (
     <div className="flex flex-col rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.06]">
       {/* Title row */}
@@ -473,7 +473,7 @@ function MobileCreatorsTable() {
 
       {/* Creator rows */}
       {CREATORS.map((creator, i) => (
-        <div key={creator.name} className="flex items-center px-1">
+        <div key={creator.name} className="flex cursor-pointer items-center px-1" onClick={() => onCreatorClick?.(creator)}>
           {/* # */}
           <div className="flex w-8 shrink-0 items-center justify-center self-stretch py-3">
             <span className="font-[family-name:var(--font-inter)] text-xs font-medium tracking-[-0.02em] text-page-text-muted">
@@ -789,7 +789,7 @@ export default function CreatorsPage() {
       {/* Top nav */}
       <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         {/* Underline tabs */}
-        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide scroll-fade-x">
+        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
           <ProximityTabs
             tabs={NAV_TABS.map((t) => ({ label: t }))}
             selectedIndex={activeNavTab}
@@ -835,7 +835,17 @@ export default function CreatorsPage() {
 
       {/* Content */}
       {activeNavTab === 1 ? (
-        <AnalyticsPocCreatorInsightsTab />
+        <AnalyticsPocCreatorInsightsTab
+          onReviewApplicants={() => {
+            setActiveNavTab(2);
+            window.location.hash = NAV_TABS[2].toLowerCase();
+            setTimeout(() => quickReviewRef.current?.(), 100);
+          }}
+          onReviewQueue={() => {
+            setActiveNavTab(2);
+            window.location.hash = NAV_TABS[2].toLowerCase();
+          }}
+        />
       ) : activeNavTab === 2 ? (
         <ApplicationsContent onQuickReviewRef={quickReviewRef} onScoresRef={scoresRef} />
       ) : activeNavTab === 3 ? (
@@ -847,7 +857,7 @@ export default function CreatorsPage() {
         {/* Toolbar */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
           {/* Filter tabs */}
-          <div className="overflow-x-auto scrollbar-hide scroll-fade-x"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
+          <div className="overflow-x-auto scrollbar-hide"><Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
             {FILTER_TABS.map((tab, i) => (
               <TabItem
                 key={tab.name}
@@ -957,7 +967,7 @@ export default function CreatorsPage() {
         {/* Creators table */}
         <div className="mt-4 min-w-0">
           <div className="md:hidden">
-            <MobileCreatorsTable />
+            <MobileCreatorsTable onCreatorClick={(c) => setSelectedCreator(creatorToDetails(c))} />
           </div>
           <div className="hidden md:block">
             <CreatorsTable columns={visibleColumns} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} onCreatorClick={(c) => setSelectedCreator(creatorToDetails(c))} />

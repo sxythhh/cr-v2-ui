@@ -309,7 +309,6 @@ const METRIC_COLORS: Record<string, string> = {
 // ── Overview Tab ─────────────────────────────────────────────────────
 
 function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
-  const [chartMode, setChartMode] = useState(0); // 0 = Daily, 1 = Cumulative
   const [visibleMetrics, setVisibleMetrics] = useState<string[]>(["views", "likes", "comments"]);
 
   const toggleMetric = (key: string) => {
@@ -323,7 +322,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
   return (
     <div className="flex flex-col gap-2">
       {/* Stat cards row */}
-      <div className="flex items-center gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
         <StatCard value={creator.totalEarned} label="Total earned" />
         <StatCard
           value={String(creator.engagementScore)}
@@ -340,9 +339,9 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
       </div>
 
       {/* Middle cards row */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-2 md:flex-row md:items-stretch">
         {/* Connected accounts */}
-        <div className="flex h-[100px] w-[298px] shrink-0 flex-col justify-between rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
+        <div className="flex min-h-[100px] flex-col justify-between rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 md:w-[298px] md:shrink-0">
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">Connected accounts</span>
           <div className="flex flex-col gap-2">
             {creator.connectedAccounts.map((account) => (
@@ -358,7 +357,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
         </div>
 
         {/* Match Score */}
-        <div className="flex h-[100px] flex-1 flex-col rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
+        <div className="flex min-h-[100px] flex-1 flex-col rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">Campaigns & CPMs</span>
           <div className="mt-auto flex items-center gap-3">
             <ScoreCircleLarge value={creator.matchScore} />
@@ -378,7 +377,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
         </div>
 
         {/* Campaigns & CPMs */}
-        <div className="flex h-[100px] flex-1 flex-col justify-between rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
+        <div className="flex min-h-[100px] flex-1 flex-col justify-between rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">Campaigns & CPMs</span>
           <div className="flex flex-col gap-2">
             {creator.campaigns.map((campaign) => (
@@ -395,29 +394,9 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
       <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
         {/* Chart header */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center">
-            {/* Daily / Cumulative toggle */}
-            <div className="flex h-9 items-center gap-0.5 rounded-xl bg-foreground/[0.03] p-0.5">
-              {["Daily", "Cumulative"].map((label, i) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => setChartMode(i)}
-                  className={cn(
-                    "flex h-8 items-center px-4 rounded-[10px] text-sm font-medium tracking-[-0.02em] transition-colors",
-                    chartMode === i
-                      ? "bg-foreground/[0.03] text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
-                      : "text-page-text/70",
-                  )}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Metric toggles */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <MetricPill
               label="Views"
               value={creator.performanceStats.views}
@@ -454,20 +433,21 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
           variant="line"
           chartStylePreset="performance-main"
           lineChart={creator.performanceData}
-          activeLineDataset={chartMode === 0 ? "daily" : "cumulative"}
+          activeLineDataset="daily"
           visibleMetricKeys={visibleMetrics}
           heightClassName="h-[260px]"
         />
       </div>
 
       {/* Submissions table */}
-      <div className="flex flex-col rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
         <div className="px-4 pt-4 pb-2">
           <span className="text-xs tracking-[-0.02em] text-page-text-muted">Submissions</span>
         </div>
 
+        <div className="overflow-x-auto">
         {/* Header */}
-        <div className="flex items-center border-b border-foreground/[0.06] px-1">
+        <div className="flex items-center border-b border-foreground/[0.06] px-1" style={{ minWidth: 600 }}>
           <div className="flex w-12 items-center justify-center py-3">
             <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">#</span>
           </div>
@@ -493,7 +473,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
 
         {/* Rows */}
         {creator.submissions.map((sub, i) => (
-          <div key={i} className={cn("group/row flex cursor-pointer items-center px-1 transition-colors hover:bg-foreground/[0.02]", i < creator.submissions.length - 1 && "border-b border-foreground/[0.03]")}>
+          <div key={i} className={cn("group/row flex cursor-pointer items-center px-1 transition-colors hover:bg-foreground/[0.02]", i < creator.submissions.length - 1 && "border-b border-foreground/[0.03]")} style={{ minWidth: 600 }}>
             <div className="flex w-12 items-center justify-center py-4">
               <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">{i + 1}</span>
             </div>
@@ -519,6 +499,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
@@ -628,7 +609,7 @@ export function CreatorDetailsPopup({ open, onClose, creator }: CreatorDetailsPo
         <div className="flex flex-col gap-4">
           {/* Creator header */}
           <div className="flex flex-col gap-2">
-            {/* Row 1: avatar + name + joined + last active */}
+            {/* Row 1: avatar + name + joined */}
             <div className="flex items-center gap-2">
               <div className="size-6 shrink-0 overflow-hidden rounded-full">
                 <img
@@ -637,24 +618,17 @@ export function CreatorDetailsPopup({ open, onClose, creator }: CreatorDetailsPo
                   className="size-full object-cover"
                 />
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-1.5 gap-y-0.5">
                 <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{creator.name}</span>
                 <span className="text-xs font-medium tracking-[-0.02em] text-foreground/20">·</span>
                 <span className="text-xs tracking-[-0.02em] text-page-text-muted">joined {creator.joinedDate}</span>
+                <span className="hidden text-xs font-medium tracking-[-0.02em] text-foreground/20 sm:inline">·</span>
+                <span className="hidden text-xs tracking-[-0.02em] text-page-text-muted sm:inline">Last active {creator.lastActive}</span>
               </div>
-              <span className="flex-1 text-right text-xs tracking-[-0.02em] text-page-text-muted">Last active {creator.lastActive}</span>
             </div>
 
-            {/* Row 2: rating + followers + platforms + category + videos */}
-            <div className="flex items-center gap-1.5">
-              {/* Rating badge */}
-              <div className="flex h-6 items-center gap-1.5 rounded-full bg-[#60A5FA]/10 px-2.5 pl-2">
-                <StarRating count={creator.ratingStars} />
-                <span className="text-xs font-medium tracking-[-0.02em] text-[#60A5FA]">{creator.rating}</span>
-              </div>
-
-              <span className="text-xs font-medium tracking-[-0.02em] text-foreground/20">·</span>
-
+            {/* Row 2: followers + platforms + category + videos */}
+            <div className="flex flex-wrap items-center gap-1.5">
               {/* Followers */}
               <div className="flex h-6 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2.5 pl-2">
                 <svg width="12" height="9" viewBox="0 0 12 9" fill="none" className="text-page-text">
@@ -681,7 +655,7 @@ export function CreatorDetailsPopup({ open, onClose, creator }: CreatorDetailsPo
                 <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{creator.category}</span>
               </div>
 
-              <span className="flex-1 text-right text-xs tracking-[-0.02em] text-page-text-muted">{creator.videoCount} videos</span>
+              <span className="text-xs tracking-[-0.02em] text-page-text-muted">{creator.videoCount} videos</span>
             </div>
           </div>
 

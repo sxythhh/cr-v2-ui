@@ -720,7 +720,7 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
         </button>
 
         {/* Filter tabs */}
-        <div className="scrollbar-hide overflow-x-auto">
+        <div className="scrollbar-hide overflow-x-auto whitespace-nowrap">
           <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter}>
             {CONTRACT_FILTERS.map((tab, i) => (
               <TabItem key={tab.label} label={tab.label} count={tab.count} index={i} />
