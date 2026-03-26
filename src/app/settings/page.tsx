@@ -623,14 +623,14 @@ function BrandsTab() {
   return (
     <div className="flex flex-col items-center gap-4 px-4 py-5 sm:px-5">
       {/* Header row */}
-      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4">
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">My Brands</span>
-          <span className="font-inter text-[12px] leading-[150%] tracking-[-0.02em] text-page-text-muted">
+      <div className="flex w-full max-w-[1028px] items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="font-inter text-base font-medium leading-[1.2] tracking-[-0.02em] text-page-text">My Brands</span>
+          <span className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">
             Manage the brands your agency works with. Details stay private until a campaign goes live.
           </span>
         </div>
-        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
+        <button className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -1436,20 +1436,18 @@ function TeamTab() {
 
       {/* Create Custom Role modal */}
       {/* Header row */}
-      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4 px-0">
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">Team Members</span>
-          <span className="font-inter text-[12px] leading-[150%] tracking-[-0.02em] text-page-text-muted">
+      <div className="flex w-full max-w-[1028px] items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="font-inter text-base font-medium leading-[1.2] tracking-[-0.02em] text-page-text">Team Members</span>
+          <span className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">
             Manage who has access to your organization.
           </span>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
-          <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:text-page-bg">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <span className="hidden sm:inline">Invite member</span>
-            <span className="sm:hidden">Invite</span>
-          </button>
-        </div>
+        <button onClick={() => setInviteOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span className="hidden sm:inline">Invite member</span>
+          <span className="sm:hidden">Invite</span>
+        </button>
       </div>
 
       {/* Active members table */}
@@ -1516,14 +1514,14 @@ function PermissionsTab() {
       <CreateCustomRoleModal open={roleModalOpen} onClose={() => setRoleModalOpen(false)} />
 
       {/* Header row */}
-      <div className="flex w-full max-w-[1028px] items-center justify-between gap-4">
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-inter text-[16px] font-medium leading-[1] tracking-[-0.02em] text-page-text">Role permissions</span>
-          <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
+      <div className="flex w-full max-w-[1028px] items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="font-inter text-base font-medium leading-[1.2] tracking-[-0.02em] text-page-text">Role permissions</span>
+          <span className="font-inter text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">
             Manage who has access to your organization.
           </span>
         </div>
-        <button onClick={() => setRoleModalOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-[14px] font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
+        <button onClick={() => setRoleModalOpen(true)} className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground px-4 pl-3 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:opacity-90 dark:bg-[#E0E0E0] dark:text-[#252525]">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.667v10.666M2.667 8h10.666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
           Custom role
         </button>

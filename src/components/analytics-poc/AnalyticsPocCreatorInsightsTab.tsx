@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { AnalyticsPocDateRangePicker } from "./AnalyticsPocDateRangePicker";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
+import { CreatorDetailsPopup, type CreatorDetailsData } from "@/components/creators/CreatorDetailsPopup";
+import { AnalyticsPocChartTooltip } from "./AnalyticsPocChartTooltip";
 
 const CARD = "rounded-2xl border border-border bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none";
 const CARD_SM = "rounded-[10px] border border-border bg-card-bg dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
@@ -118,8 +120,22 @@ function ParticipationFunnelCard() {
 /* ── Submission Trend Card ────────────────────────────────────────── */
 
 function SubmissionTrendCard() {
-  const barHeights = [77, 97, 105, 112, 105, 105, 108, 108, 108, 97, 105, 108];
-  const maxBar = Math.max(...barHeights);
+  const barData = [
+    { height: 77, subs: 185 },
+    { height: 97, subs: 233 },
+    { height: 105, subs: 252 },
+    { height: 112, subs: 269 },
+    { height: 105, subs: 252 },
+    { height: 105, subs: 252 },
+    { height: 108, subs: 259 },
+    { height: 108, subs: 259 },
+    { height: 108, subs: 259 },
+    { height: 97, subs: 233 },
+    { height: 105, subs: 252 },
+    { height: 108, subs: 259 },
+  ];
+  const weekLabels = ["12w ago", "11w", "10w", "9w", "8w", "7w", "6w", "5w", "4w", "3w", "2w", "This week"];
+  const [hoveredBarIdx, setHoveredBarIdx] = useState<number | null>(null);
   const platforms = [
     { platform: "instagram", label: "Instagram", pct: "42%", count: "345", barWidth: "50%", color: "rgba(192,132,252,0.1)", iconColor: "#C084FC" },
     { platform: "tiktok", label: "TikTok", pct: "35%", count: "289", barWidth: "42%", color: "rgba(52,211,153,0.08)", iconColor: "#34D399" },
@@ -139,13 +155,13 @@ function SubmissionTrendCard() {
       </div>
 
       {/* Bar chart */}
-      <div className="group/chart flex items-end gap-2 px-4" style={{ height: 116 }}>
-        {barHeights.map((h, i) => (
-          <div key={i} className="group/bar relative min-w-0 flex-1 cursor-pointer" style={{ height: 116 }}>
+      <div className="group/chart relative flex items-end gap-2 px-4" style={{ height: 116 }} onMouseLeave={() => setHoveredBarIdx(null)}>
+        {barData.map((bar, i) => (
+          <div key={i} className="group/bar relative min-w-0 flex-1 cursor-pointer" style={{ height: 116 }} onMouseEnter={() => setHoveredBarIdx(i)}>
             <div
               className="absolute inset-x-0 bottom-0 rounded-lg transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
-                height: h,
+                height: bar.height,
                 background: "linear-gradient(0deg, rgba(52,211,153,0.3), rgba(52,211,153,0.3)), rgba(224,224,224,0.03)",
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
@@ -153,12 +169,38 @@ function SubmissionTrendCard() {
                 borderRadius: 8,
               }}
             />
-            {/* Tooltip */}
-            <div className="pointer-events-none absolute -top-7 left-1/2 z-20 -translate-x-1/2 rounded-md bg-[#252525] px-2 py-1 opacity-0 shadow-lg transition-opacity group-hover/bar:opacity-100 dark:bg-[#333]">
-              <span className="whitespace-nowrap font-inter text-[10px] font-medium text-white">{Math.round(h * 2.4)} subs</span>
-            </div>
           </div>
         ))}
+        {/* Floating tooltip */}
+        {(() => {
+          const idx = hoveredBarIdx ?? 0;
+          const bar = barData[idx];
+          const barCount = barData.length || 1;
+          const pct = ((idx + 0.5) / barCount) * 100;
+          return (
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-50"
+              style={{
+                opacity: hoveredBarIdx !== null ? 1 : 0,
+                transition: "opacity 150ms ease-out",
+              }}
+            >
+              <div
+                className="absolute top-1"
+                style={{
+                  left: `${pct}%`,
+                  transform: `translateX(${idx <= 1 ? '0%' : idx >= barCount - 2 ? '-100%' : '-50%'})`,
+                  transition: "left 120ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                <AnalyticsPocChartTooltip
+                  label={weekLabels[idx]}
+                  rows={[{ key: "subs", color: "#34D399", label: "Submissions", value: String(bar.subs) }]}
+                />
+              </div>
+            </div>
+          );
+        })()}
       </div>
       <div className="flex items-center justify-between px-4">
         <span className="font-inter text-[10px] text-page-text-muted">12w ago</span>
@@ -251,6 +293,21 @@ function MobilePodiumRow({ rank, name, earnings, bgColor, badgeColor, badgeConte
 }
 
 function TopCreatorsCard() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showTopGradient, setShowTopGradient] = useState(false);
+  const [showBottomGradient, setShowBottomGradient] = useState(true);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setShowTopGradient(el.scrollTop > 4);
+    setShowBottomGradient(el.scrollTop + el.clientHeight < el.scrollHeight - 4);
+  }, []);
+
+  useEffect(() => {
+    handleScroll();
+  }, [handleScroll]);
+
   const crownIcon = <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>;
 
   return (
@@ -279,7 +336,15 @@ function TopCreatorsCard() {
 
       {/* Ranked list with floating Private Tier CTA */}
       <div className="relative flex-1">
-        <div className="scrollbar-hide flex flex-col overflow-y-auto" style={{ maxHeight: 231 }}>
+        {/* Top scroll gradient */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[32px] transition-opacity duration-200"
+          style={{
+            opacity: showTopGradient ? 1 : 0,
+            background: "linear-gradient(to bottom, var(--card-bg), transparent)",
+          }}
+        />
+        <div ref={scrollRef} onScroll={handleScroll} className="scrollbar-hide flex flex-col overflow-y-auto" style={{ maxHeight: 231 }}>
           {RANKED_CREATORS.map((c) => (
             <div key={c.rank} className="flex items-center">
               <div className="flex w-6 shrink-0 items-center justify-center py-3 pl-1 pr-3">
@@ -303,8 +368,14 @@ function TopCreatorsCard() {
             </div>
           ))}
         </div>
-        {/* Bottom fade */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[52px] bg-gradient-to-t from-card-bg to-transparent" />
+        {/* Bottom scroll gradient */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[52px] transition-opacity duration-200"
+          style={{
+            opacity: showBottomGradient ? 1 : 0,
+            background: "linear-gradient(to top, var(--card-bg), transparent)",
+          }}
+        />
         {/* Private Tier floating CTA — positioned over the list */}
         <div className="absolute inset-x-0 bottom-0 z-10 px-0">
           <div className="flex items-center justify-between gap-2 rounded-[10px] border border-foreground/[0.06] bg-card-bg p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
@@ -423,8 +494,75 @@ const PRIVATE_TIER_CREATORS = Array.from({ length: 10 }, (_, i) => ({
   cpm: "$0.84",
 }));
 
+function buildCreatorDetails(c: typeof PRIVATE_TIER_CREATORS[number]): CreatorDetailsData {
+  return {
+    name: c.name,
+    joinedDate: "Jan 2025",
+    lastActive: "2d ago",
+    videoCount: 34,
+    platforms: ["youtube", "tiktok"],
+    category: "Gaming",
+    followers: "124K",
+    rating: "Rising",
+    ratingStars: 3,
+    totalEarned: "$4,280",
+    engagementScore: 78,
+    engagementRate: "6.2%",
+    sentiment: "Positive",
+    approvedVideos: 28,
+    approvalRate: "82%",
+    connectedAccounts: [
+      { platform: "youtube", handle: `@${c.name}`, followers: "98K" },
+      { platform: "tiktok", handle: `@${c.name}`, followers: "26K" },
+    ],
+    matchScore: 82,
+    scoreBreakdown: { niche: 90, audience: 78, pastPerformance: 74 },
+    campaigns: [
+      { name: "Summer Launch", cpm: c.cpm },
+      { name: "Holiday Push", cpm: "$0.92" },
+    ],
+    performanceData: {
+      datasets: {
+        daily: Array.from({ length: 30 }, (_, i) => ({
+          index: i,
+          label: `Day ${i + 1}`,
+          views: Math.round(800 + Math.random() * 400),
+          engagement: Math.round(60 + Math.random() * 40),
+          likes: Math.round(40 + Math.random() * 30),
+          comments: Math.round(5 + Math.random() * 10),
+          shares: Math.round(2 + Math.random() * 5),
+        })),
+        cumulative: Array.from({ length: 30 }, (_, i) => ({
+          index: i,
+          label: `Day ${i + 1}`,
+          views: Math.round((i + 1) * 900),
+          engagement: Math.round((i + 1) * 70),
+          likes: Math.round((i + 1) * 50),
+          comments: Math.round((i + 1) * 8),
+          shares: Math.round((i + 1) * 3),
+        })),
+      },
+      series: [
+        { key: "views" as const, label: "Views", color: "#60A5FA", axis: "left" as const },
+        { key: "likes" as const, label: "Likes", color: "#F9A8D4", axis: "right" as const },
+        { key: "comments" as const, label: "Comments", color: "#FB923C", axis: "right" as const },
+        { key: "shares" as const, label: "Shares", color: "#55B685", axis: "right" as const },
+      ],
+      xTicks: [{ index: 0, label: "Day 1" }, { index: 14, label: "Day 15" }, { index: 29, label: "Day 30" }],
+      yLabels: ["1.2K", "900", "600", "300", "0"],
+      rightYLabels: ["80", "60", "40", "20", "0"],
+    },
+    performanceStats: { views: "32.4K", likes: "1.8K", comments: "420", shares: "180" },
+    submissions: [
+      { title: "Top 10 Plays This Week", platform: "youtube", earned: "$120.40", views: "14.2K", engRate: "7.1%", cpm: "$0.84" },
+      { title: "Insane Clutch Compilation", platform: "tiktok", earned: "$89.20", views: "10.6K", engRate: "5.8%", cpm: "$0.84" },
+    ],
+  };
+}
+
 function PrivateTierTable() {
   const [page, setPage] = useState(1);
+  const [selectedCreator, setSelectedCreator] = useState<CreatorDetailsData | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { activeIndex, itemRects, sessionRef, handlers, registerItem, measureItems } = useProximityHover(containerRef);
 
@@ -479,6 +617,7 @@ function PrivateTierTable() {
               key={c.rank}
               ref={(el) => registerItem(i, el)}
               className="relative z-[1] flex cursor-pointer items-center border-b border-foreground/[0.03] py-3 pl-1"
+              onClick={() => setSelectedCreator(buildCreatorDetails(c))}
             >
               <span className="w-12 shrink-0 text-center font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
               <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -512,6 +651,15 @@ function PrivateTierTable() {
           </button>
         </div>
       </div>
+
+      {/* Creator Details Popup */}
+      {selectedCreator && (
+        <CreatorDetailsPopup
+          open={!!selectedCreator}
+          onClose={() => setSelectedCreator(null)}
+          creator={selectedCreator}
+        />
+      )}
     </div>
   );
 }

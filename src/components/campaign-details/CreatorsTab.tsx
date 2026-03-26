@@ -138,11 +138,11 @@ export default function CreatorsTab() {
       </div>
 
       {/* ── Filter Bar ───────────────────────────────────────────── */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Segmented control */}
         <div
           ref={filterContainerRef}
-          className="relative flex items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-card-bg"
+          className="relative flex items-center gap-0.5 rounded-xl bg-accent p-0.5 dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}

@@ -379,7 +379,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
 
   return (
     <Modal open={open} onClose={onClose} showClose={false}>
-      <div className="relative flex max-h-[90vh] flex-col">
+      <div className="relative flex max-h-[90vh] flex-col overflow-hidden">
         {/* Header */}
         <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5 dark:border-[rgba(224,224,224,0.03)]">
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
@@ -397,7 +397,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Scrollable content */}
-        <div className="scrollbar-hide flex flex-col items-center gap-4 overflow-y-auto p-5">
+        <div className="scrollbar-hide flex min-h-0 flex-1 flex-col items-center gap-4 overflow-y-auto p-5">
           {/* Subtitle */}
           <p className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
             Easily set up an agreement with a creator.
@@ -643,7 +643,7 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Footer — fixed at bottom */}
-        <div className="flex shrink-0 items-center justify-between gap-4 bg-card-bg px-5 pb-5 pt-4 dark:bg-page-bg">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-t border-foreground/[0.06] px-5 py-4 dark:border-[rgba(224,224,224,0.03)]">
           <p className="max-w-[215px] font-inter text-[10px] leading-[1.4] tracking-[-0.02em] text-foreground/70">
             The creator will receive this contract for review. They can accept, request changes, or decline.
           </p>

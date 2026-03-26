@@ -85,7 +85,7 @@ function ConfirmStep({
 }) {
   return (
     <>
-      <div className="flex flex-col items-center gap-5 px-5 py-5">
+      <div className="flex flex-col items-center gap-5 px-4 py-5 sm:px-5">
         <span className="text-[14px] font-medium text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
           Are you sure you wish to end this campaign?
         </span>
@@ -101,11 +101,11 @@ function ConfirmStep({
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center gap-2 px-5 py-5">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
+      <div className="flex flex-col-reverse items-center gap-2 px-4 py-5 sm:flex-row sm:justify-center sm:px-5">
+        <button onClick={onCancel} className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:w-auto dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           No, take me back
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)]">
+        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)] sm:w-auto">
           Yes, end campaign
         </button>
       </div>
@@ -142,7 +142,7 @@ function CompletedStep({
   return (
     <>
       <div
-        className="flex flex-col items-center gap-6 px-5 pb-5 pt-[60px]"
+        className="flex flex-col items-center gap-6 px-4 pb-5 pt-[60px] sm:px-5"
         style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)" }}
       >
         {/* Check icon + title */}
@@ -162,9 +162,9 @@ function CompletedStep({
         <StepDots current={0} total={3} />
 
         {/* Stats row */}
-        <div className="flex w-full gap-2">
+        <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-4">
           {STATS.map((s) => (
-            <div key={s.label} className={cn("flex h-[84px] flex-1 flex-col justify-between rounded-2xl bg-white p-3", cardBorder, "dark:bg-foreground/[0.03]")}>
+            <div key={s.label} className={cn("flex h-[84px] flex-col justify-between rounded-2xl bg-white p-3", cardBorder, "dark:bg-foreground/[0.03]")}>
               <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{s.value}</span>
               <div className="flex flex-col gap-2">
                 <span className={cn("text-[12px]", muted)}>{s.label}</span>
@@ -192,7 +192,7 @@ function CompletedStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 py-4">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 py-4 sm:px-5">
         <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Cancel
         </button>
@@ -224,7 +224,7 @@ function FeedbackStep({
   return (
     <>
       <div
-        className="flex flex-col items-center gap-6 overflow-y-auto px-5 pb-5 pt-[60px]"
+        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
         style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.24) 0%, rgba(0,153,77,0) 100%)", scrollbarWidth: "none" }}
       >
         {/* Check icon + title */}
@@ -295,14 +295,14 @@ function FeedbackStep({
         {/* NPS */}
         <div className="flex w-full flex-col gap-2">
           <span className={cn("text-[12px]", muted)}>How likely are you to recommend Content Rewards?</span>
-          <div className={cn("flex flex-col gap-2 rounded-2xl bg-white p-5", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
-            <div className="flex items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-card-bg">
+          <div className={cn("flex flex-col gap-2 rounded-2xl bg-white p-4 sm:p-5", cardBorder, cardShadow, "dark:bg-foreground/[0.03]")}>
+            <div className="flex flex-wrap items-center gap-0.5 rounded-xl bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-card-bg">
               {Array.from({ length: 11 }, (_, i) => (
                 <button
                   key={i}
                   onClick={() => setNps(i)}
                   className={cn(
-                    "flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[14px] font-medium tracking-[-0.02em] transition-colors",
+                    "flex h-8 min-w-[28px] flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[13px] font-medium tracking-[-0.02em] transition-colors sm:text-[14px]",
                     nps === i
                       ? "bg-white text-[#252525] shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:text-page-text"
                       : "text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.5)]",
@@ -321,7 +321,7 @@ function FeedbackStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 pb-5 pt-4">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:px-5">
         <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
@@ -400,7 +400,7 @@ function NextStepsStep({
   return (
     <>
       <div
-        className="flex flex-col items-center gap-6 overflow-y-auto px-5 pb-5 pt-[60px]"
+        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
         style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.24) 0%, rgba(0,153,77,0) 100%)", scrollbarWidth: "none" }}
       >
         {/* Check icon + title */}
@@ -449,7 +449,7 @@ function NextStepsStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-5 pb-5 pt-4">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:px-5">
         <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
@@ -484,7 +484,7 @@ export function EndCampaignModal({ open, onOpenChange, campaign }: EndCampaignMo
         <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60" />
         <DialogPrimitive.Popup
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 flex w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
+            "fixed left-1/2 top-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
             "bg-white shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",

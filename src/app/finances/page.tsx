@@ -35,6 +35,44 @@ function ExportIcon() {
   );
 }
 
+function MobileFinanceTabs({ activeTab, onTabChange }: { activeTab: typeof TABS[number]; onTabChange: (tab: typeof TABS[number]) => void }) {
+  const actionBtnClass = "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
+
+  return (
+    <div className="-mx-4 -mt-5 mb-4 flex flex-col sm:-mx-6 md:hidden">
+      {/* Underline tabs — full width */}
+      <div className="flex border-b border-foreground/[0.06]">
+        {TABS.map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => onTabChange(tab)}
+            className={cn(
+              "flex flex-1 cursor-pointer items-center justify-center py-4 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+              activeTab === tab
+                ? "border-b border-foreground text-page-text"
+                : "text-page-text/70",
+            )}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      {/* Action buttons */}
+      <div className="flex items-center justify-center gap-2 px-4 py-3 sm:px-5">
+        <button type="button" className={actionBtnClass}>
+          <ReceiptIcon />
+          Download invoice
+        </button>
+        <button type="button" className={actionBtnClass}>
+          <ExportIcon />
+          Export report
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function FinanceHeader({
   activeTab,
   onTabChange,
@@ -45,29 +83,32 @@ function FinanceHeader({
   const actionBtnClass = "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
 
   return (
-    <div className="flex w-full items-center justify-between">
-      <ProximityTabs
-        tabs={TABS.map((t) => ({ label: t }))}
-        selectedIndex={TABS.indexOf(activeTab)}
-        onSelect={(i) => onTabChange(TABS[i])}
-      />
-      <div className="flex items-center gap-2">
-        {/* Deposit */}
-        <button type="button" className={actionBtnClass}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
-            <path d="M2.66671 4.66602C2.66671 4.29783 2.96518 3.99935 3.33337 3.99935H5.33337C5.70156 3.99935 6.00004 3.70087 6.00004 3.33268C6.00004 2.96449 5.70156 2.66602 5.33337 2.66602H3.33337C2.2288 2.66602 1.33337 3.56145 1.33337 4.66602V11.3327C1.33337 12.4373 2.2288 13.3327 3.33337 13.3327H12.6667C13.7713 13.3327 14.6667 12.4373 14.6667 11.3327V5.99935C14.6667 5.63116 14.3682 5.33268 14 5.33268C13.6319 5.33268 13.3334 5.63116 13.3334 5.99935V11.3327C13.3334 11.7009 13.0349 11.9993 12.6667 11.9993H3.33337C2.96518 11.9993 2.66671 11.7009 2.66671 11.3327V4.66602Z" fill="currentColor"/>
-          </svg>
-          Deposit
-        </button>
-        {/* Withdraw */}
-        <button type="button" className={actionBtnClass}>
-          <ExportIcon />
-          Withdraw
-        </button>
-        {/* More menu */}
-        <FinanceMoreMenu />
+    <div className="flex w-full flex-col">
+      {/* Desktop: tabs + buttons in one row */}
+      <div className="hidden items-center justify-between md:flex">
+        <ProximityTabs
+          tabs={TABS.map((t) => ({ label: t }))}
+          selectedIndex={TABS.indexOf(activeTab)}
+          onSelect={(i) => onTabChange(TABS[i])}
+        />
+        <div className="flex items-center gap-2">
+          <button type="button" className={actionBtnClass}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
+              <path d="M2.66671 4.66602C2.66671 4.29783 2.96518 3.99935 3.33337 3.99935H5.33337C5.70156 3.99935 6.00004 3.70087 6.00004 3.33268C6.00004 2.96449 5.70156 2.66602 5.33337 2.66602H3.33337C2.2288 2.66602 1.33337 3.56145 1.33337 4.66602V11.3327C1.33337 12.4373 2.2288 13.3327 3.33337 13.3327H12.6667C13.7713 13.3327 14.6667 12.4373 14.6667 11.3327V5.99935C14.6667 5.63116 14.3682 5.33268 14 5.33268C13.6319 5.33268 13.3334 5.63116 13.3334 5.99935V11.3327C13.3334 11.7009 13.0349 11.9993 12.6667 11.9993H3.33337C2.96518 11.9993 2.66671 11.7009 2.66671 11.3327V4.66602Z" fill="currentColor"/>
+            </svg>
+            Deposit
+          </button>
+          <button type="button" className={actionBtnClass}>
+            <ExportIcon />
+            Withdraw
+          </button>
+          <FinanceMoreMenu />
+        </div>
       </div>
+
+      {/* Mobile: title in header row */}
+      <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text md:hidden">Finances</span>
     </div>
   );
 }
@@ -1130,6 +1171,9 @@ export default function BillingPage() {
       actions={<FinanceHeader activeTab={activeTab} onTabChange={setActiveTab} />}
       fullWidthActions
     >
+      {/* Mobile tabs + action buttons */}
+      <MobileFinanceTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
       {!hasData ? (
         <FinanceEmptyState />
       ) : (

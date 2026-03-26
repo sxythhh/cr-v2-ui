@@ -149,17 +149,17 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
   return (
     <div className="flex h-full flex-col bg-white dark:bg-[#161616]">
       {/* ── Top bar ─────────────────────────────────────────────── */}
-      <header className="flex items-center border-b border-border px-5">
-        {/* Back */}
+      <header className="flex items-center border-b border-border px-4 sm:px-5">
+        {/* Back – hidden on mobile, shown inline on desktop */}
         <button
           onClick={() => router.push("/campaigns")}
-          className="mr-4 flex items-center gap-1.5 text-sm tracking-[-0.02em] text-page-text-muted hover:text-[#252525] dark:hover:text-[#e5e5e5] transition-colors"
+          className="mr-4 hidden items-center gap-1.5 text-sm tracking-[-0.02em] text-page-text-muted hover:text-[#252525] dark:hover:text-[#e5e5e5] transition-colors md:flex"
         >
           <IconArrowLeft size={16} />
           <span>Back to campaigns</span>
         </button>
 
-        {/* Tabs – right aligned */}
+        {/* Tabs – scrollable on mobile, right-aligned on desktop */}
         <HeaderTabs
           selectedIndex={TABS.findIndex((t) => t.key === activeTab)}
           onSelect={(i) => setActiveTab(TABS[i].key)}
@@ -171,6 +171,15 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
         {activeTab === "details" ? (
           <div className="mx-auto max-w-[1200px] px-5 py-5">
             <div className="flex flex-col gap-5">
+              {/* Mobile-only back button */}
+              <button
+                onClick={() => router.push("/campaigns")}
+                className="flex items-center gap-1.5 text-sm tracking-[-0.02em] text-page-text-muted hover:text-[#252525] dark:hover:text-[#e5e5e5] transition-colors md:hidden"
+              >
+                <IconArrowLeft size={16} />
+                <span>Back to campaigns</span>
+              </button>
+
               {/* ── Hero row: info + thumbnail ─────────────────── */}
               <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
                 {/* Left: campaign info */}
@@ -397,7 +406,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────── */}
-      <footer className="flex items-center justify-between border-t border-border px-4 py-3 dark:border-[rgba(224,224,224,0.03)] sm:px-5">
+      <footer className="flex items-center justify-between border-t border-border px-4 py-2 dark:border-[rgba(224,224,224,0.03)] sm:px-5 sm:py-3">
         <span className="hidden text-sm tracking-[-0.02em] text-page-text sm:block">
           {c.title}
         </span>
@@ -507,7 +516,7 @@ function HeaderTabs({
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-1 h-14 items-stretch justify-end"
+      className="relative flex flex-1 h-14 items-stretch overflow-x-auto scrollbar-hide whitespace-nowrap md:justify-end"
     >
       {/* Selected underline */}
       {selectedRect && (

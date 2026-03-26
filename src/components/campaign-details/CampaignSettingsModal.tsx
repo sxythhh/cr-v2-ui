@@ -132,7 +132,7 @@ function SettingRow({
 }) {
   return (
     <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.06)] dark:bg-[rgba(255,255,255,0.02)]">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">
             {title}
@@ -381,7 +381,7 @@ export function CampaignSettingsModal({
         <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60" />
         <DialogPrimitive.Popup
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 flex w-[752px] -translate-x-1/2 -translate-y-1/2 flex-col",
+            "fixed left-1/2 top-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-[752px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
             "bg-white dark:bg-page-bg shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
@@ -399,7 +399,7 @@ export function CampaignSettingsModal({
 
           {/* ── Body ────────────────────────────────────────────── */}
           <div
-            className="flex flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4"
+            className="flex flex-col gap-4 overflow-y-auto px-4 pb-5 pt-4 sm:px-5"
             style={{ scrollbarWidth: "none" }}
           >
             {/* 1. General */}

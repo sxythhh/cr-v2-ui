@@ -91,13 +91,13 @@ export default function EventsTab() {
   const selectedIndex = FILTERS.findIndex((f) => f.key === activeFilter);
 
   return (
-    <div className="flex gap-4 p-5">
-      {/* Left sidebar filters — sticky within scroll container */}
-      <div className="w-[186px] shrink-0">
+    <div className="flex flex-col gap-4 p-4 sm:p-5 md:flex-row">
+      {/* Left sidebar filters — horizontal on mobile, vertical sidebar on desktop */}
+      <div className="w-full md:w-[186px] md:shrink-0">
         <div
           ref={filterRef}
           className={cn(
-            "sticky top-5 flex w-[186px] flex-col gap-1 rounded-2xl p-1",
+            "flex gap-1 rounded-2xl p-1 overflow-x-auto scrollbar-hide whitespace-nowrap md:sticky md:top-5 md:w-[186px] md:flex-col md:overflow-x-visible md:whitespace-normal",
             "bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(224,224,224,0.03)]",
           )}
           onMouseEnter={handlers.onMouseEnter}
@@ -147,7 +147,7 @@ export default function EventsTab() {
       </div>
 
       {/* Right event feed */}
-      <div className="flex flex-1 justify-center">
+      <div className="flex w-full flex-1 justify-center">
       <div
         className={cn(
           "flex w-full max-w-[600px] flex-col rounded-2xl border p-5",

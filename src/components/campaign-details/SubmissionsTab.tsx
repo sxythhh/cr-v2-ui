@@ -94,10 +94,10 @@ export default function SubmissionsTab() {
       </div>
 
       {/* Filter bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div
           ref={filterContainerRef}
-          className="relative inline-flex items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg"
+          className="relative inline-flex items-center p-0.5 gap-0.5 bg-accent rounded-xl dark:bg-card-bg overflow-x-auto scrollbar-hide whitespace-nowrap"
           onMouseEnter={filterHandlers.onMouseEnter}
           onMouseMove={filterHandlers.onMouseMove}
           onMouseLeave={filterHandlers.onMouseLeave}

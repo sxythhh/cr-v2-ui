@@ -52,7 +52,7 @@ export function BoostCampaignModal({
         />
         <DialogPrimitive.Popup
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 flex w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
+            "fixed left-1/2 top-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
             "rounded-[20px] border border-border",
             "bg-white dark:bg-page-bg shadow-xl",
             "max-h-[90dvh] tracking-[-0.02em]",
@@ -73,18 +73,18 @@ export function BoostCampaignModal({
           </div>
 
           {/* ── Subtitle ────────────────────────────────────────── */}
-          <p className="px-5 pt-4 text-center text-[13px] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
+          <p className="px-4 pt-4 text-center text-[13px] text-[rgba(37,37,37,0.7)] sm:px-5 dark:text-[rgba(255,255,255,0.6)]">
             Show your campaign at the top of the Discover page
           </p>
 
           {/* ── Scrollable content ──────────────────────────────── */}
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto scrollbar-hide px-5 pb-5 pt-4">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto scrollbar-hide px-4 pb-5 pt-4 sm:px-5">
             {/* Select boost duration */}
             <div className="flex flex-col gap-2">
               <span className="text-[12px] text-page-text-muted">
                 Select boost duration
               </span>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 {DURATIONS.map((d) => {
                   const isSelected = selectedDuration === d.id;
                   return (
@@ -192,7 +192,7 @@ export function BoostCampaignModal({
               </div>
 
               {/* Row 2 */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 <div className="rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg">
                   <div className="text-[14px] font-medium text-[#8B5CF6]">
                     6-10
@@ -228,16 +228,16 @@ export function BoostCampaignModal({
           </div>
 
           {/* ── Footer ──────────────────────────────────────────── */}
-          <div className="flex items-center justify-end gap-2 px-5 pb-5">
+          <div className="flex flex-col-reverse gap-2 px-4 pb-5 sm:flex-row sm:items-center sm:justify-end sm:px-5">
             <DialogPrimitive.Close
-              className="flex h-10 cursor-pointer items-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
+              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
             >
               Cancel
             </DialogPrimitive.Close>
             <button
               type="button"
               onClick={() => setSuccess(true)}
-              className="flex h-10 cursor-pointer items-center gap-1.5 rounded-full bg-[#8B5CF6] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#7C3AED]"
+              className="flex h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#8B5CF6] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#7C3AED]"
             >
               <BoltIcon />
               Boost for ${selected.price}
@@ -265,7 +265,7 @@ export function BoostCampaignModal({
 
           {/* Success content */}
           <div
-            className="flex flex-col items-center px-5 pb-5 pt-[60px] gap-4"
+            className="flex flex-col items-center px-4 pb-5 pt-[60px] gap-4 sm:px-5"
             style={{
               background: "radial-gradient(50% 53.47% at 50% 0%, rgba(139, 92, 246, 0.24) 0%, rgba(139, 92, 246, 0) 100%)",
             }}
@@ -323,7 +323,7 @@ export function BoostCampaignModal({
           </div>
 
           {/* Close button */}
-          <div className="px-5 pb-5">
+          <div className="px-4 pb-5 sm:px-5">
             <DialogPrimitive.Close
               className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[#252525] dark:bg-[#e5e5e5] text-sm font-medium text-white dark:text-[#111111] transition-colors hover:bg-[#333] dark:hover:bg-[#d5d5d5]"
             >
