@@ -186,28 +186,30 @@ export function useCampaignFlow(
   const handleBackToList = () => { router.push("/"); };
   const handleSaveDraft = () => { router.push("/"); };
 
-  const canContinue = (() => {
+  const { canContinue, continueBlockReason } = (() => {
     switch (step) {
-      case "configuration":
-        if (model === "retainer") {
-          return configuration.selectedPlatforms.length > 0 && configuration.rewardPer1000Views !== "" && Number.parseFloat(configuration.rewardPer1000Views) > 0;
-        }
-        return configuration.selectedPlatforms.length > 0 && configuration.rewardPer1000Views !== "" && Number.parseFloat(configuration.rewardPer1000Views) > 0 && configuration.budget !== "" && Number.parseFloat(configuration.budget) > 0;
+      case "configuration": {
+        if (configuration.selectedPlatforms.length === 0) return { canContinue: false, continueBlockReason: "Select at least one platform" };
+        if (configuration.rewardPer1000Views === "" || Number.parseFloat(configuration.rewardPer1000Views) <= 0) return { canContinue: false, continueBlockReason: "Set a CPM rate" };
+        if (model !== "retainer" && (configuration.budget === "" || Number.parseFloat(configuration.budget) <= 0)) return { canContinue: false, continueBlockReason: "Set a budget" };
+        return { canContinue: true, continueBlockReason: "" };
+      }
       case "details":
-        return details.name.trim().length > 0;
+        if (details.name.trim().length === 0) return { canContinue: false, continueBlockReason: "Enter a campaign name" };
+        return { canContinue: true, continueBlockReason: "" };
       case "requirements": {
         const p = requirements.presets;
-        if (p.specificSound && p.soundUrl.trim() === "") return false;
-        if (p.linkInBio && p.linkInBioUrl.trim() === "") return false;
-        return true;
+        if (p.specificSound && p.soundUrl.trim() === "") return { canContinue: false, continueBlockReason: "Add a sound URL" };
+        if (p.linkInBio && p.linkInBioUrl.trim() === "") return { canContinue: false, continueBlockReason: "Add a link in bio URL" };
+        return { canContinue: true, continueBlockReason: "" };
       }
       default:
-        return true;
+        return { canContinue: true, continueBlockReason: "" };
     }
   })();
 
   return {
-    canContinue, configuration, contact, creatorDetails, details,
+    canContinue, continueBlockReason, configuration, contact, creatorDetails, details,
     handleBack, handleBackToList, handleContinue, handleSaveDraft, handleStepClick,
     incentives, isRestoring, model, requirements,
     setConfiguration, setContact, setCreatorDetails, setDetails, setIncentives, setRequirements,

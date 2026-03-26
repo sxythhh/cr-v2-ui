@@ -101,11 +101,11 @@ function ConfirmStep({
           </div>
         </div>
       </div>
-      <div className="flex flex-col-reverse items-center gap-2 px-4 py-5 sm:flex-row sm:justify-center sm:px-5">
-        <button onClick={onCancel} className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:w-auto dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
+      <div className="flex items-center gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:justify-center sm:px-5">
+        <button onClick={onCancel} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           No, take me back
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)] sm:w-auto">
+        <button onClick={(e) => { e.stopPropagation(); onConfirm(); }} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] px-4 text-[14px] font-medium text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)] sm:flex-none">
           Yes, end campaign
         </button>
       </div>
@@ -147,7 +147,8 @@ function CompletedStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="relative flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
@@ -229,7 +230,8 @@ function FeedbackStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="relative flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>
@@ -405,7 +407,8 @@ function NextStepsStep({
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+          <div className="relative flex size-14 items-center justify-center rounded-full" style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 100%)", boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)" }}>
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
             </svg>

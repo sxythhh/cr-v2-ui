@@ -762,7 +762,7 @@ function TransactionHistoryModal({ open, onClose }: { open: boolean; onClose: ()
         {/* Hero */}
         <div className="flex flex-col items-center gap-4">
           <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-[0_0_0_2px_#191919]">
-            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M3 5V9H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M3.51172 15C4.74723 18.4956 8.08094 21 11.9996 21C16.9702 21 20.9996 16.9706 20.9996 12C20.9996 7.02944 16.9702 3 11.9996 3C8.27045 3 5.07102 5.26806 3.70551 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -995,7 +995,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             {/* Green checkmark */}
             <div className="flex flex-col items-center gap-4">
               <div className="relative flex size-14 items-center justify-center rounded-full bg-[#34D399] shadow-[0_0_0_2px_#fff,inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.1),inset_0_0.5px_2px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.36)]">
-                <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
+                <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                   <path fillRule="evenodd" clipRule="evenodd" d="M14 2.333A11.667 11.667 0 1 0 14 25.667 11.667 11.667 0 0 0 14 2.333zm4.185 9.017a.833.833 0 0 0-1.203-1.153l-4.635 5.668-1.65-1.65a.833.833 0 0 0-1.178 1.178l2.333 2.334a.833.833 0 0 0 1.191.025l5.142-6.402z" fill="#FFFFFF" />
                 </svg>
@@ -1274,12 +1274,12 @@ function DashboardView() {
       <HomeKpiCarousel />
 
       {/* KPI Cards — Desktop grid */}
-      <div className="hidden gap-2 sm:flex sm:flex-wrap lg:flex-nowrap">
-        <KpiCardBalance className="sm:w-[calc(50%-4px)] lg:w-[320px] lg:shrink-0" />
-        <KpiCardActive className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
-        <KpiCardViews className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
-        <KpiCardAvgCpm className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
-        <KpiCardPaidOut className="sm:w-[calc(50%-4px)] lg:min-w-0 lg:flex-1" />
+      <div className="hidden gap-2 sm:grid sm:grid-cols-2 xl:flex xl:flex-nowrap">
+        <KpiCardBalance className="sm:col-span-2 xl:w-[320px] xl:shrink-0" />
+        <KpiCardActive className="xl:min-w-0 xl:flex-1" />
+        <KpiCardViews className="xl:min-w-0 xl:flex-1" />
+        <KpiCardAvgCpm className="xl:min-w-0 xl:flex-1" />
+        <KpiCardPaidOut className="xl:min-w-0 xl:flex-1" />
       </div>
 
       {/* Bottom Row: Active Campaigns + Needs Attention + Recent Activity */}
@@ -1533,7 +1533,7 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
         <div className="flex flex-col items-center gap-4">
           {/* Icon circle */}
           <div className="relative flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-card-bg dark:shadow-[0_0_0_2px_#191919]">
-            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <MegaphoneIcon className="size-6 text-page-text" width={24} height={24} />
           </div>
 
@@ -1594,7 +1594,7 @@ function HomeKpiCarousel() {
     <div className="-mx-4 flex flex-col items-center gap-2 sm:hidden sm:-mx-5">
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 pr-4 scrollbar-hide sm:pl-5 sm:pr-5 [scroll-padding-inline:16px]"
       >
         {cards.map((card, i) => (
           <div key={i} className="w-80 shrink-0 snap-start [&>*]:h-full">
@@ -1668,7 +1668,7 @@ export default function Home() {
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Home</span>
               <div className="flex items-center gap-2">
                 <NewCampaignButton />
-                <UserDropdown variant="header" />
+                <div className="hidden sm:block"><UserDropdown variant="header" /></div>
               </div>
             </motion.div>
             <DashboardView />

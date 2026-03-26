@@ -4,8 +4,9 @@ import YoutubeIcon from "@/assets/icons/platforms/youtube.svg";
 import TiktokIcon from "@/assets/icons/platforms/tiktok.svg";
 import InstagramIcon from "@/assets/icons/platforms/instagram.svg";
 import XIcon from "@/assets/icons/platforms/x.svg";
+import FacebookIcon from "@/assets/icons/platforms/facebook.svg";
 
-export { YoutubeIcon, TiktokIcon, InstagramIcon, XIcon };
+export { YoutubeIcon, TiktokIcon, InstagramIcon, XIcon, FacebookIcon };
 
 // Canonical platforms — single source for IDs, labels, and icons.
 // "twitter" renders as the X icon (via ICON_MAP alias below) but is
@@ -14,6 +15,7 @@ const PLATFORMS = [
   { id: "youtube", label: "YouTube", icon: YoutubeIcon },
   { id: "tiktok", label: "TikTok", icon: TiktokIcon },
   { id: "instagram", label: "Instagram", icon: InstagramIcon },
+  { id: "facebook", label: "Facebook", icon: FacebookIcon },
   { id: "x", label: "X", icon: XIcon },
 ] as const;
 

@@ -58,10 +58,10 @@ export function SwipeableStatCards({ cards, columns = 4 }: { cards: StatCardData
   return (
     <>
       {/* Mobile: horizontal scroll — bleeds past page padding */}
-      <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+      <div className="-mr-5 flex flex-col items-center gap-2 md:hidden">
         <div
           ref={scrollRef}
-          className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
+          className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-5 scrollbar-hide"
         >
           {cards.map((card) => (
             <div key={card.label} className="w-80 shrink-0 snap-start">

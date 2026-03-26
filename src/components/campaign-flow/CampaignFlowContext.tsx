@@ -16,6 +16,7 @@ interface CampaignFlowContextValue {
   model: CampaignModel;
   isRestoring: boolean;
   canContinue: boolean;
+  continueBlockReason: string;
   showErrors: boolean;
   editMode: boolean;
   configuration: ConfigurationData;

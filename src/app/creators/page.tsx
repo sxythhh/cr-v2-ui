@@ -693,11 +693,11 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               <div
                 className="pointer-events-none absolute inset-0 rounded-full"
                 style={{
-                  background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)",
-                  mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  maskComposite: "exclude",
+                  padding: "1px",
+                  background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)",
+                  WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                   WebkitMaskComposite: "xor",
-                  padding: 1,
+                  maskComposite: "exclude",
                 }}
               />
             </div>

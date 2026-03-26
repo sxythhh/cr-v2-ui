@@ -228,16 +228,16 @@ export function BoostCampaignModal({
           </div>
 
           {/* ── Footer ──────────────────────────────────────────── */}
-          <div className="flex flex-col-reverse gap-2 px-4 pb-5 sm:flex-row sm:items-center sm:justify-end sm:px-5">
+          <div className="flex items-center gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:justify-end sm:px-5">
             <DialogPrimitive.Close
-              className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
+              className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
             >
               Cancel
             </DialogPrimitive.Close>
             <button
               type="button"
               onClick={() => setSuccess(true)}
-              className="flex h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#8B5CF6] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#7C3AED]"
+              className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[#8B5CF6] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#7C3AED] sm:flex-none"
             >
               <BoltIcon />
               Boost for ${selected.price}
@@ -277,10 +277,10 @@ export function BoostCampaignModal({
                   className="relative flex size-14 items-center justify-center rounded-full bg-[#8B5CF6]"
                   style={{
                     border: "1px solid rgba(37,37,37,0.1)",
-                    boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)",
+                    boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)",
                   }}
                 >
-                  <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", maskComposite: "exclude", WebkitMaskComposite: "xor", padding: 1 }} />
+                  <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
                   </svg>

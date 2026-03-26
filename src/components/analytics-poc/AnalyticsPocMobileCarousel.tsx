@@ -64,10 +64,10 @@ export function AnalyticsPocMobileCarousel({
   }, [handleScroll]);
 
   return (
-    <div className={cn("-mx-4 flex flex-col items-center gap-2 sm:-mx-5", className)}>
+    <div className={cn("-mr-4 flex flex-col items-center gap-2 sm:-mr-6", className)}>
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory overflow-x-auto px-4 scrollbar-hide sm:px-5"
+        className="flex w-full snap-x snap-mandatory overflow-x-auto pr-4 scrollbar-hide sm:pr-6"
         style={{ gap }}
       >
         {items.map((child, i) => (

@@ -111,35 +111,18 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
               draggable={false}
             />
             <div className="absolute right-3 top-3 flex items-center gap-2">
-              <button type="button" onClick={handleReplace} className="flex items-center justify-center size-8 rounded-full bg-black/40 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
-                <IconUpload size={14} />
+              <button type="button" onClick={handleReplace} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
+                <IconUpload size={16} />
               </button>
-              <button type="button" onClick={() => { setModalInitialFile(lastFile); setModalOpen(true); }} className="flex items-center justify-center size-8 rounded-full bg-black/40 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
-                <IconCrop size={14} />
+              <button type="button" onClick={() => { setModalInitialFile(lastFile); setModalOpen(true); }} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
+                <IconCrop size={16} />
+              </button>
+              <button type="button" onClick={onDelete} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3.91702 12.7554L4.58221 12.711L3.91702 12.7554ZM12.083 12.7554L11.4178 12.711L12.083 12.7554ZM2 4.66667H14V3.33333H2V4.66667ZM6 7.33333V10.6667H7.33333V7.33333H6ZM8.66667 7.33333V10.6667H10V7.33333H8.66667ZM3.99852 3.95565L3.25183 12.7997L4.58221 12.711L3.33333 4L3.99852 3.95565ZM5.2474 14.6667H10.7526V13.3333H5.2474V14.6667ZM12.7482 12.7997L12.0015 3.95565L12.6667 4L11.4178 12.711L12.7482 12.7997ZM3.33333 4.66667H12.6667V3.33333H3.33333V4.66667ZM10.7526 14.6667C11.8055 14.6667 12.6781 13.8503 12.7482 12.7997L11.4178 12.711C11.3944 13.0612 11.1036 13.3333 10.7526 13.3333V14.6667ZM3.25183 12.7997C3.32187 13.8503 4.19448 14.6667 5.2474 14.6667V13.3333C4.89643 13.3333 4.60556 13.0612 4.58221 12.711L3.25183 12.7997ZM9.93704 4.16617C9.71499 3.30342 8.93102 2.66667 8.00001 2.66667V1.33333C9.55413 1.33333 10.8583 2.39628 11.2283 3.83383L9.93704 4.16617ZM8.00001 2.66667C7.06901 2.66667 6.28504 3.30342 6.06298 4.16617L4.77173 3.83383C5.14173 2.39628 6.4459 1.33333 8.00001 1.33333V2.66667Z" fill="white"/>
+                </svg>
               </button>
             </div>
-          </div>
-
-          {/* File info row with flap icon */}
-          <div className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]">
-            <FileIcon preview={thumbnailPreview} ext={ext} />
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
-                {fileName}
-              </span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
-                {ext.toUpperCase()} Image
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={onDelete}
-              className="flex items-center justify-center size-7 rounded-full text-page-text-subtle transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
-            >
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
           </div>
         </div>
       ) : (

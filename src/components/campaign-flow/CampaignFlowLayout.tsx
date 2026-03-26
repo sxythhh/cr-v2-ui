@@ -122,7 +122,8 @@ function CampaignTopUpModal({ open, onClose, onSuccess }: { open: boolean; onClo
           <div className="scrollbar-hide flex flex-1 flex-col items-center gap-4 overflow-y-auto px-5 pb-5 pt-10" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.12) 0%, rgba(0,153,77,0) 100%)" }}>
             {/* Success icon */}
             <div className="flex flex-col items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-[#34D399]" style={{ boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)", border: "1px solid rgba(224,224,224,0.06)" }}>
+              <div className="relative flex size-14 items-center justify-center rounded-full bg-[#34D399]" style={{ boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)", border: "1px solid rgba(224,224,224,0.06)" }}>
+                <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11.67" fill="white" fillOpacity="0" /><path d="M9 14L12.5 17.5L19 10.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </div>
               <span className="font-inter text-xl font-medium tracking-[-0.02em] text-[#34D399]">Top up successful</span>
@@ -177,7 +178,7 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
       {/* Header */}
       <div className="flex flex-col items-center gap-4 px-5 pt-5">
         {/* Icon */}
-        <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+        <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]"><div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
           <svg width="24" height="24" viewBox="0 0 18 18" fill="none">
             <path d="M8.25 17H3C1.89543 17 1 16.1046 1 15L1 3C1 1.89543 1.89543 1 3 1L8.25 1M17 8.99999L5.75 8.99999M17 8.99999L12.5 13.5M17 8.99999L12.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text" />
           </svg>
@@ -224,7 +225,7 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
 
 export function CampaignFlowLayout({ children }: { children: React.ReactNode }) {
   const {
-    steps, stepLabels, stepIndex, canContinue, isRestoring, editMode,
+    steps, stepLabels, stepIndex, canContinue, continueBlockReason, isRestoring, editMode,
     handleContinue, handleBack, handleStepClick,
     handleBackToList, handleSaveDraft, portalContainer,
   } = useCampaignFlowContext();
@@ -253,8 +254,8 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Mobile step nav */}
-      <div className="flex md:hidden px-5 py-1">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-xl bg-[rgba(37,37,37,0.04)] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
+      <div className="flex md:hidden pl-5 pr-0 py-1">
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide rounded-l-xl bg-[rgba(37,37,37,0.04)] p-0.5 pr-5 dark:bg-[rgba(224,224,224,0.03)]">
           {steps.map((step, i) => {
             const isActive = i === stepIndex;
             const isCompleted = i < stepIndex;
@@ -271,7 +272,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
                 onClick={() => isClickable && handleStepClick(i)}
                 disabled={!isClickable}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+                  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 py-2 font-inter text-sm font-medium tracking-[-0.02em] outline-none ring-0 transition-colors focus:outline-none focus-visible:outline-none",
                   isActive
                     ? "border border-[rgba(37,37,37,0.06)] bg-white text-page-text shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                     : isCompleted
@@ -310,8 +311,18 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Fixed footer */}
-      <div className="flex shrink-0 items-center border-t border-foreground/[0.06] pr-5 py-4">
-        <div className="flex-1" />
+      <div className="flex shrink-0 items-center justify-between border-t border-foreground/[0.06] px-5 py-4">
+        {/* Block reason hint — left side */}
+        <div className="min-w-0 flex-1">
+          {!canContinue && !isLastStep && continueBlockReason && (
+            <span className="flex items-center gap-1.5 font-inter text-xs tracking-[-0.02em] text-[#E57100]">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                <path fillRule="evenodd" clipRule="evenodd" d="M7 0C3.13401 0 0 3.13401 0 7C0 10.866 3.13401 14 7 14C10.866 14 14 10.866 14 7C14 3.13401 10.866 0 7 0ZM7 3.5C7.34518 3.5 7.625 3.77982 7.625 4.125V7.875C7.625 8.22018 7.34518 8.5 7 8.5C6.65482 8.5 6.375 8.22018 6.375 7.875V4.125C6.375 3.77982 6.65482 3.5 7 3.5ZM7 9.625C6.65482 9.625 6.375 9.90482 6.375 10.25C6.375 10.5952 6.65482 10.875 7 10.875C7.34518 10.875 7.625 10.5952 7.625 10.25C7.625 9.90482 7.34518 9.625 7 9.625Z" fill="#E57100"/>
+              </svg>
+              {continueBlockReason}
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleSaveDraft}

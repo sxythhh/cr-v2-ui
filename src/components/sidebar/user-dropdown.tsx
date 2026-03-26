@@ -131,6 +131,7 @@ export function UserDropdown({ variant = "sidebar" }: { variant?: "sidebar" | "h
                     router.push("/account/settings");
                   }}
                   onLogout={() => setShow(false)}
+                  submenuDirection={variant === "header" ? "left" : "right"}
                 />
               </motion.div>
             </div>
@@ -149,12 +150,14 @@ function ProfileDropdownCompact({
   onThemeLeave,
   onAccountClick,
   onLogout,
+  submenuDirection = "right",
 }: {
   themeSubmenuOpen: boolean;
   onThemeEnter: () => void;
   onThemeLeave: () => void;
   onAccountClick: () => void;
   onLogout: () => void;
+  submenuDirection?: "left" | "right";
 }) {
   const { mode } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -278,11 +281,11 @@ function ProfileDropdownCompact({
           <AnimatePresence>
             {themeSubmenuOpen && (
               <motion.div
-                initial={{ opacity: 0, x: -4 }}
+                initial={{ opacity: 0, x: submenuDirection === "left" ? -4 : 4 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -4, transition: { duration: 0.1 } }}
+                exit={{ opacity: 0, x: submenuDirection === "left" ? -4 : 4, transition: { duration: 0.1 } }}
                 transition={{ duration: 0.15 }}
-                className="absolute top-0 right-full mr-2"
+                className={submenuDirection === "left" ? "absolute top-0 right-full mr-2" : "absolute top-0 left-full ml-2"}
                 onMouseMove={(e) => e.stopPropagation()}
                 onMouseEnter={(e) => {
                   e.stopPropagation();

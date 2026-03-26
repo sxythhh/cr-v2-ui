@@ -123,13 +123,14 @@ const PLATFORMS = [
   { id: "tiktok", label: "TikTok" },
   { id: "youtube", label: "YouTube" },
   { id: "instagram", label: "Instagram" },
+  { id: "facebook", label: "Facebook" },
   { id: "x", label: "X" },
 ] as const;
 
 // ── Main ───────────────────────────────────────────────────────────
 
 export function PlatformsStep() {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<Set<string>>(new Set(PLATFORMS.map((p) => p.id)));
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [allowHide, setAllowHide] = useState(false);
   const [trackingCutoff, setTrackingCutoff] = useState(false);

@@ -78,9 +78,9 @@ export function CreatorDetailsStep({ data, onChange }: { data: CreatorDetailsDat
             <div className="flex flex-col gap-3">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Regions breakdown</span>
               {/* Bar */}
-              <div className="flex h-10 overflow-hidden rounded-xl">
+              <div className="flex h-10 gap-px overflow-hidden rounded-2xl bg-white dark:bg-[rgba(224,224,224,0.03)]">
                 {REGIONS.map((r) => (
-                  <div key={r.name} className="border border-card-bg" style={{ width: `${r.pct}%`, background: `${r.color}99` }} />
+                  <div key={r.name} style={{ width: `${r.pct}%`, background: `${r.color}99` }} />
                 ))}
               </div>
               {/* Legend */}

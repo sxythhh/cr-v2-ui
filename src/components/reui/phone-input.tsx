@@ -180,7 +180,7 @@ function CountrySelect({
           No country found.
         </ComboboxEmpty>
         <ComboboxList>
-          <div className="max-h-[min(var(--available-height),24rem)] overflow-y-auto overscroll-contain scrollbar-none">
+          <div className="overscroll-contain">
             {filteredCountries.map((item: CountryEntry) =>
               item.value ? (
                 <ComboboxItem

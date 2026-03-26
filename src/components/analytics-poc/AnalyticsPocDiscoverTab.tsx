@@ -212,10 +212,10 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
   }, [handleScroll]);
 
   return (
-    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5">
+    <div className="-mr-4 flex flex-col items-center gap-2 sm:-mr-6">
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5"
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-4 scrollbar-hide sm:pr-6"
       >
         {stats.map((stat) => (
           <div

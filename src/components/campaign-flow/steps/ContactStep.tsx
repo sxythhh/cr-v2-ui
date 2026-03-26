@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
+import { PhoneInput as ReUIPhoneInput } from "@/components/reui/phone-input";
 import type { ChatPlatform, ContactData } from "@/types/campaign-flow.types";
 
 function InfoIcon() {
@@ -17,6 +18,80 @@ function InfoIcon() {
 
 function ChevronDownIcon() {
   return <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+const PHONE_CODES = [
+  { flag: "🇺🇸", code: "+1", label: "United States" },
+  { flag: "🇬🇧", code: "+44", label: "United Kingdom" },
+  { flag: "🇨🇦", code: "+1", label: "Canada" },
+  { flag: "🇦🇺", code: "+61", label: "Australia" },
+  { flag: "🇩🇪", code: "+49", label: "Germany" },
+  { flag: "🇫🇷", code: "+33", label: "France" },
+  { flag: "🇯🇵", code: "+81", label: "Japan" },
+  { flag: "🇮🇳", code: "+91", label: "India" },
+  { flag: "🇧🇷", code: "+55", label: "Brazil" },
+];
+
+function PhoneNumberInput({ phone, onPhoneChange }: { phone: string; onPhoneChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(PHONE_CODES[0]);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Phone number</span>
+      <div className="flex gap-2">
+        <div ref={ref} className="relative">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-10 w-[104px] shrink-0 cursor-pointer items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 outline-none transition-colors hover:bg-foreground/[0.06]"
+          >
+            <span className="text-sm">{selected.flag}</span>
+            <span className="font-inter text-sm tracking-[-0.02em] text-page-text">{selected.code}</span>
+            <ChevronDownIcon />
+          </button>
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                className="absolute left-0 top-full z-50 mt-1 w-[220px] overflow-hidden rounded-xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
+              >
+                <div className="scrollbar-hide flex max-h-[200px] flex-col overflow-y-auto py-1">
+                  {PHONE_CODES.map((item) => (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => { setSelected(item); setOpen(false); }}
+                      className="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-left font-inter text-sm tracking-[-0.02em] text-page-text outline-none transition-colors hover:bg-foreground/[0.04]"
+                    >
+                      <span className="text-sm">{item.flag}</span>
+                      <span className="flex-1">{item.label}</span>
+                      <span className="text-page-text-muted">{item.code}</span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
+          <input type="tel" value={phone} onChange={(e) => onPhoneChange(e.target.value)} placeholder="(555) 123-4567" className="w-full flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -47,11 +122,11 @@ const CHAT_OPTIONS: { value: ChatPlatform; label: string; icon: () => React.Reac
 
 export function ContactStep({ data, onChange }: { data: ContactData; onChange: (data: ContactData) => void }) {
   const update = (partial: Partial<ContactData>) => onChange({ ...data, ...partial });
-  const [address, setAddress] = useState("123 Creator Blvd, Suite 400");
-  const [city, setCity] = useState("Los Angeles");
-  const [state, setState] = useState("California");
-  const [country, setCountry] = useState("United States");
-  const [zip, setZip] = useState("90028");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [zip, setZip] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
   const chatHover = useProximityHover(chatRef, { axis: "x" });
   useEffect(() => { chatHover.measureItems(); }, [chatHover.measureItems]);
@@ -88,16 +163,13 @@ export function ContactStep({ data, onChange }: { data: ContactData; onChange: (
           {/* Phone */}
           <div className="flex flex-col gap-2">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Phone number</span>
-            <div className="flex gap-2">
-              <button type="button" className="flex h-10 w-[104px] shrink-0 cursor-pointer items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5 transition-colors hover:bg-foreground/[0.06]">
-                <span className="text-[10px]">🇺🇸</span>
-                <span className="font-inter text-sm tracking-[-0.02em] text-page-text">+1</span>
-                <ChevronDownIcon />
-              </button>
-              <div className="flex h-10 flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
-                <input type="tel" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(555) 123-4567" className="w-full flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted" />
-              </div>
-            </div>
+            <ReUIPhoneInput
+              defaultCountry="US"
+              placeholder="(555) 123-4567"
+              value={data.phone as never}
+              onChange={(v) => update({ phone: v as string ?? "" })}
+              className="gap-0 [&_button]:h-10 [&_button]:rounded-l-[14px] [&_button]:rounded-r-none [&_button]:border-0 [&_button]:bg-foreground/[0.04] [&_button]:shadow-none [&_button]:hover:bg-foreground/[0.06] [&_input]:h-10 [&_input]:rounded-l-none [&_input]:rounded-r-[14px] [&_input]:border-0 [&_input]:bg-foreground/[0.04] [&_input]:shadow-none [&_input]:ring-0 [&_input]:focus-visible:ring-0"
+            />
           </div>
 
           {/* Address */}
