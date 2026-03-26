@@ -526,6 +526,16 @@ function HeaderTabs({ selectedIndex, onSelect }: { selectedIndex: number; onSele
     measureTabs();
   }, [measureTabs]);
 
+  // Auto-scroll selected tab into view
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const tab = container.querySelector(`[data-proximity-index="${selectedIndex}"]`) as HTMLElement | null;
+    if (tab) {
+      tab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [selectedIndex]);
+
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       isMouseInside.current = true;
@@ -659,8 +669,8 @@ function HistoryModal({ onClose }: { onClose: () => void }) {
       <div className="flex flex-1 flex-col items-center overflow-y-auto px-5 pt-5">
         {/* Header icon + text */}
         <div className="flex flex-col items-center gap-4">
-          <div className="relative flex size-14 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_white] dark:shadow-[0_0_0_2px_var(--card-bg)]">
-            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_white] dark:shadow-none">
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             <HistoryIcon size={24} />
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -767,7 +777,8 @@ export default function CampaignsPage() {
         <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
           <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Action buttons — desktop only in header */}
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
           <button
             type="button"
             onClick={() => setHistoryOpen((v) => !v)}
@@ -780,8 +791,21 @@ export default function CampaignsPage() {
         </div>
       </div>
 
+      {/* Action buttons — mobile only, below header */}
+      <div className="flex items-center gap-2 px-4 pt-4 sm:px-5 md:hidden [&>*]:flex-1">
+        <button
+          type="button"
+          onClick={() => setHistoryOpen((v) => !v)}
+          className="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] py-2 pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+        >
+          <HistoryIcon />
+          <span>History</span>
+        </button>
+        <NewCampaignButton />
+      </div>
+
       {/* Status filter tabs */}
-      <div className="overflow-x-auto scrollbar-hide px-4 pt-[21px] sm:px-5">
+      <div className="overflow-x-auto scrollbar-hide px-4 pt-3 sm:px-5 md:pt-[21px]">
         <Tabs selectedIndex={selectedFilter} onSelect={setSelectedFilter} className="w-max sm:w-fit">
           {STATUS_FILTER_TABS.map((tab, i) => (
             <TabItem

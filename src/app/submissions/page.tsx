@@ -3176,7 +3176,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                 className="pointer-events-none absolute inset-0 rounded-full"
                 style={{
                   padding: "1px",
-                  background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)",
+                  background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)",
                   WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                   WebkitMaskComposite: "xor",
                   maskComposite: "exclude",

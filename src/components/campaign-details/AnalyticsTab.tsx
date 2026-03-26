@@ -80,8 +80,8 @@ function AnalyticsStatCards() {
   return (
     <>
       {/* Mobile */}
-      <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
-        <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto px-4 scrollbar-hide sm:px-5">
+      <div className="-mr-5 flex flex-col items-center gap-2 md:hidden">
+        <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-5 scrollbar-hide">
           {STATS.map((s) => (
             <div key={s.label} className="w-80 shrink-0 snap-start">
               <AnalyticsStatCard s={s} />
@@ -112,7 +112,7 @@ export default function AnalyticsTab() {
   };
 
   return (
-    <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
+    <div className="mx-auto max-w-[1200px]">
       <div className="flex flex-col gap-2">
         {/* Stat cards — swipeable on mobile */}
         <AnalyticsStatCards />

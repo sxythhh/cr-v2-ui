@@ -110,10 +110,15 @@ export function BoostCampaignModal({
                       </div>
 
                       {/* Right: radio + popular */}
-                      <div className="flex flex-col items-center gap-1">
+                      <div className="flex items-center gap-2">
+                        {"popular" in d && d.popular && isSelected && (
+                          <span className="text-[10px] font-medium text-[#8B5CF6]">
+                            Popular
+                          </span>
+                        )}
                         <div
                           className={cn(
-                            "flex size-4 items-center justify-center rounded-full",
+                            "flex size-4 shrink-0 items-center justify-center rounded-full",
                             isSelected
                               ? "bg-[#8B5CF6]"
                               : "border border-[rgba(37,37,37,0.15)] bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.15)] dark:bg-card-bg dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]",
@@ -123,11 +128,6 @@ export function BoostCampaignModal({
                             <div className="size-1.5 rounded-full bg-white" />
                           )}
                         </div>
-                        {"popular" in d && d.popular && isSelected && (
-                          <span className="text-[10px] font-medium text-[#8B5CF6]">
-                            Popular
-                          </span>
-                        )}
                       </div>
                     </button>
                   );
@@ -280,7 +280,7 @@ export function BoostCampaignModal({
                     boxShadow: "0px 0px 0px 2px var(--page-bg, #FFFFFF), inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)",
                   }}
                 >
-                  <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+                  <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} /><div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white" />
                   </svg>
