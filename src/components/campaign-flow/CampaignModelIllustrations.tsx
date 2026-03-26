@@ -42,15 +42,13 @@ export function CardIllustration({ model }: { model: CampaignModel }) {
           draggable={false}
           className="absolute max-w-none select-none sm:!hidden"
           style={{
-            width: 370,
-            height: 208,
-            top: -46,
-            left: 106,
+            width: 220,
+            height: 124,
+            top: 0,
+            right: 0,
           }}
         />
       )}
-      {/* Bottom fade mask so footer text is visible */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-card-bg dark:from-page-bg to-transparent" />
     </div>
   );
 }

@@ -735,102 +735,111 @@ const SUBMISSION_FILTERS: Filter[] = [
 
 // ── Fullscreen Comment Input ────────────────────────────────────────
 
-function FullscreenCommentInput({ formatTime, currentTime }: { formatTime: (s: number) => string; currentTime: number }) {
-  const [comment, setComment] = useState("");
-  const [attachments, setAttachments] = useState<{ id: string; type: "image" | "pdf"; src?: string }[]>([
-    { id: "img-1", type: "image", src: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=128&h=128&fit=crop" },
-    { id: "pdf-1", type: "pdf" },
-  ]);
+function AttachmentDropdown({ onSelect }: { onSelect: (type: "image" | "pdf") => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const removeAttachment = useCallback((id: string) => {
-    setAttachments((prev) => prev.filter((a) => a.id !== id));
-  }, []);
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener("click", handler, { capture: true });
+    return () => window.removeEventListener("click", handler, { capture: true });
+  }, [open]);
 
-  const addAttachment = useCallback(() => {
-    const types: ("image" | "pdf")[] = ["image", "pdf"];
-    const type = types[Math.floor(Math.random() * types.length)];
-    const id = `${type}-${Date.now()}`;
-    const src = type === "image"
-      ? `https://picsum.photos/128/128?random=${Date.now()}`
-      : undefined;
-    setAttachments((prev) => [...prev, { id, type, src }]);
-  }, []);
+  const PaperclipSvg = (
+    <svg width="9" height="14" viewBox="0 0 9 14" fill="none">
+      <path d="M0.75 4.75V9.41667C0.75 11.2576 2.24238 12.75 4.08333 12.75C5.92428 12.75 7.41667 11.2576 7.41667 9.41667V2.41667C7.41667 1.49619 6.67047 0.75 5.75 0.75C4.82953 0.75 4.08333 1.49619 4.08333 2.41667V8.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
 
   return (
-    <div className="flex items-start gap-2">
-      {/* Workspace avatar */}
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] text-[#252525] dark:bg-[rgba(224,224,224,0.03)] dark:text-[#E0E0E0]"
+      >
+        {PaperclipSvg}
+      </button>
+      {/* Dropdown — mobile only */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
+            className="absolute bottom-full left-0 mb-2 flex w-[256px] flex-col rounded-[12px] border border-foreground/[0.06] bg-white p-1 shadow-[0_2px_4px_rgba(0,0,0,0.06)] md:hidden dark:border-[rgba(224,224,224,0.03)] dark:bg-[#252525]"
+          >
+            <button
+              type="button"
+              onClick={() => { onSelect("image"); setOpen(false); }}
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-[10px] py-2 transition-colors hover:bg-foreground/[0.04] dark:hover:bg-white/[0.06]"
+            >
+              <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+                <path d="M7.5 2.66667C6.76362 2.66667 6.16667 3.26362 6.16667 4C6.16667 4.73638 6.76362 5.33333 7.5 5.33333C8.23638 5.33333 8.83333 4.73638 8.83333 4C8.83333 3.26362 8.23638 2.66667 7.5 2.66667Z" fill="currentColor" className="text-page-text-muted"/>
+                <path fillRule="evenodd" clipRule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2V10C0 11.1046 0.895431 12 2 12H10C11.1046 12 12 11.1046 12 10V2C12 0.895431 11.1046 0 10 0H2ZM7.80474 6.86193L10.6667 9.72386V2C10.6667 1.63181 10.3682 1.33333 10 1.33333H2C1.63181 1.33333 1.33333 1.63181 1.33333 2V7.05719L2.86193 5.5286C3.12228 5.26825 3.54439 5.26825 3.80474 5.5286L6 7.72386L6.86193 6.86193C7.12228 6.60158 7.54439 6.60158 7.80474 6.86193Z" fill="currentColor" className="text-page-text-muted"/>
+              </svg>
+              <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Media</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { onSelect("pdf"); setOpen(false); }}
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-[10px] py-2 transition-colors hover:bg-foreground/[0.04] dark:hover:bg-white/[0.06]"
+            >
+              <svg width="16" height="16" viewBox="0 0 12 14" fill="none">
+                <path fillRule="evenodd" clipRule="evenodd" d="M5 0H1.5C0.671573 0 0 0.671573 0 1.5V12.5C0 13.3284 0.671573 14 1.5 14H10.5C11.3284 14 12 13.3284 12 12.5V7H7.5C6.11929 7 5 5.88071 5 4.5V0ZM3 9.5C3 9.22386 3.22386 9 3.5 9H5.5C5.77614 9 6 9.22386 6 9.5C6 9.77614 5.77614 10 5.5 10H3.5C3.22386 10 3 9.77614 3 9.5ZM3.5 11C3.22386 11 3 11.2239 3 11.5C3 11.7761 3.22386 12 3.5 12H9C9.27614 12 9.5 11.7761 9.5 11.5C9.5 11.2239 9.27614 11 9 11H3.5Z" fill="currentColor" className="text-page-text-muted"/>
+                <path d="M11.7071 5.5L6.5 0.292893V4.5C6.5 5.05228 6.94772 5.5 7.5 5.5H11.7071Z" fill="currentColor" className="text-page-text-muted"/>
+              </svg>
+              <span className="font-inter text-sm tracking-[-0.02em] text-page-text">File</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function FullscreenCommentInput({ formatTime, currentTime }: { formatTime: (s: number) => string; currentTime: number }) {
+  const [comment, setComment] = useState("");
+
+  return (
+    <div className="flex items-center gap-2">
+      {/* Avatar */}
       <img
         src="https://i.pravatar.cc/36?u=outpace"
         alt="Outpace Studios"
         className="size-6 shrink-0 rounded-md border border-foreground/[0.06] object-cover"
       />
 
-      {/* Comment card */}
-      <div className="flex flex-1 flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg">
-        {/* Attachments row */}
-        {attachments.length > 0 && (
-          <div className="flex items-center gap-3">
-            {attachments.map((att) =>
-              att.type === "image" ? (
-                <div key={att.id} className="relative size-16 shrink-0">
-                  <img
-                    src={att.src}
-                    alt=""
-                    className="size-full rounded-[10px] border border-foreground/[0.06] object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeAttachment(att.id)}
-                    className="absolute -right-1 -top-1 flex size-5 cursor-pointer items-center justify-center rounded-full bg-[#F2F2F2] dark:bg-[#444]"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" strokeWidth="1.14" strokeLinecap="round" className="text-foreground/30" />
-                    </svg>
-                  </button>
-                </div>
-              ) : (
-                <InlinePdfThumb key={att.id} onRemove={() => removeAttachment(att.id)} />
-              ),
-            )}
-          </div>
-        )}
+      {/* Input pill */}
+      <div className="flex h-10 flex-1 items-center gap-2 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-1 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+        {/* Attachment button */}
+        <AttachmentDropdown onSelect={() => {}} />
 
         {/* Text input */}
-        <div className="relative py-1">
-          <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            rows={2}
-            className="scrollbar-hide w-full resize-none overflow-hidden bg-transparent font-inter text-sm leading-[100%] tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/40"
-            placeholder="Looking good now sir! approving and the payout should be otw."
-          />
-        </div>
+        <input
+          type="text"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Leave a comment..."
+          className="min-w-0 flex-1 bg-transparent font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-[rgba(37,37,37,0.4)] dark:placeholder:text-[rgba(224,224,224,0.4)]"
+        />
 
-        {/* Bottom bar */}
-        <div className="flex items-center justify-between">
-          {/* Attachment button */}
+        {/* Send button — only when there's text */}
+        {comment.trim() && (
           <button
             type="button"
-            onClick={addAttachment}
-            className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06]"
-          >
-            <PaperclipAttachIcon />
-          </button>
-
-          {/* Submit button */}
-          <button
-            type="button"
-            onClick={() => {
-              setComment("");
-              setAttachments([]);
-            }}
-            className="flex h-8 cursor-pointer items-center justify-center rounded-full bg-foreground px-3 dark:bg-white"
+            onClick={() => setComment("")}
+            className="flex h-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground px-3 dark:bg-white"
           >
             <span className="font-inter text-xs font-medium whitespace-nowrap tracking-[-0.02em] text-white dark:text-black">
-              Comment at {formatTime(currentTime)}
+              {formatTime(currentTime)}
             </span>
           </button>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -843,67 +852,85 @@ function MobileTimelineDrawer({
   formatTime,
   currentTime,
   onClose,
+  open,
+  onOpenChange,
 }: {
   highlightedComment: string | null;
   formatTime: (s: number) => string;
   currentTime: number;
   onClose: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerHeight, setDrawerHeight] = useState(0.45); // 0–1, fraction of viewport
+  const drawerOpen = open;
+  const setDrawerOpen = onOpenChange;
+  const [drawerHeight, setDrawerHeight] = useState(0.45);
   const dragStartY = useRef(0);
   const dragStartHeight = useRef(0);
+  const currentHeight = useRef(0.45);
 
-  const handleDragStart = useCallback((clientY: number) => {
-    dragStartY.current = clientY;
-    dragStartHeight.current = drawerHeight;
-  }, [drawerHeight]);
+  // Keep ref in sync
+  useEffect(() => { currentHeight.current = drawerHeight; }, [drawerHeight]);
 
-  const handleDrag = useCallback((clientY: number) => {
-    const delta = dragStartY.current - clientY;
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    dragStartY.current = e.touches[0].clientY;
+    dragStartHeight.current = currentHeight.current;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    const delta = dragStartY.current - e.touches[0].clientY;
     const vh = window.innerHeight;
-    const newH = Math.max(0.15, Math.min(0.85, dragStartHeight.current + delta / vh));
+    const newH = Math.max(0.1, Math.min(0.85, dragStartHeight.current + delta / vh));
+    currentHeight.current = newH;
     setDrawerHeight(newH);
   }, []);
 
-  const handleDragEnd = useCallback(() => {
-    // Snap: below 20% → close, above 65% → full, else half
-    if (drawerHeight < 0.2) {
+  const handleTouchEnd = useCallback(() => {
+    const h = currentHeight.current;
+    if (h < 0.2) {
       setDrawerOpen(false);
       setDrawerHeight(0.45);
-    } else if (drawerHeight > 0.65) {
+      currentHeight.current = 0.45;
+    } else if (h > 0.65) {
       setDrawerHeight(0.85);
+      currentHeight.current = 0.85;
     } else {
       setDrawerHeight(0.45);
+      currentHeight.current = 0.45;
     }
-  }, [drawerHeight]);
+  }, [setDrawerOpen]);
 
-  // Touch handlers for the drag handle
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    handleDragStart(e.touches[0].clientY);
-  }, [handleDragStart]);
-
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    handleDrag(e.touches[0].clientY);
-  }, [handleDrag]);
-
-  const handleTouchEnd = useCallback(() => {
-    handleDragEnd();
-  }, [handleDragEnd]);
-
-  // Mouse handlers for desktop testing
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    handleDragStart(e.clientY);
-    const onMove = (ev: MouseEvent) => handleDrag(ev.clientY);
+    dragStartY.current = e.clientY;
+    dragStartHeight.current = currentHeight.current;
+    const onMove = (ev: MouseEvent) => {
+      const delta = dragStartY.current - ev.clientY;
+      const vh = window.innerHeight;
+      const newH = Math.max(0.1, Math.min(0.85, dragStartHeight.current + delta / vh));
+      currentHeight.current = newH;
+      setDrawerHeight(newH);
+    };
     const onUp = () => {
-      handleDragEnd();
+      const h = currentHeight.current;
+      if (h < 0.2) {
+        setDrawerOpen(false);
+        setDrawerHeight(0.45);
+        currentHeight.current = 0.45;
+      } else if (h > 0.65) {
+        setDrawerHeight(0.85);
+        currentHeight.current = 0.85;
+      } else {
+        setDrawerHeight(0.45);
+        currentHeight.current = 0.45;
+      }
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
     };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
-  }, [handleDragStart, handleDrag, handleDragEnd]);
+  }, [setDrawerOpen]);
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-[5] flex flex-col md:hidden">
@@ -967,22 +994,6 @@ function MobileTimelineDrawer({
         )}
       </AnimatePresence>
 
-      {/* Peek bar — visible when drawer is closed */}
-      {!drawerOpen && (
-        <div className="px-2 pb-2">
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-[#1a1a1a]/80 px-4 py-3 backdrop-blur-[20px]"
-          >
-            <div className="flex flex-1 items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="white" strokeOpacity="0.6" strokeWidth="1.5" strokeLinecap="round" /></svg>
-              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-white">Timeline</span>
-              <span className="font-inter text-xs tracking-[-0.02em] text-white/40">6 events</span>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 10L8 6L12 10" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -1021,6 +1032,7 @@ function VideoPlayer({
     return () => clearTimeout(timer);
   }, [highlightedComment]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const volumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const volumeBarRef = useRef<HTMLDivElement>(null);
   const [isLandscape, setIsLandscape] = useState(false);
@@ -1098,6 +1110,28 @@ function VideoPlayer({
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
   }, [seekTo]);
+
+  // Touch handlers for progress bar (mobile scrubbing)
+  const handleBarTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    isDragging.current = true;
+    seekTo(e.touches[0].clientX);
+  }, [seekTo]);
+
+  const handleBarTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    seekTo(e.touches[0].clientX);
+    const bar = progressRef.current;
+    if (bar) {
+      const rect = bar.getBoundingClientRect();
+      setHoverPct(Math.max(0, Math.min(1, (e.touches[0].clientX - rect.left) / rect.width)));
+    }
+  }, [seekTo]);
+
+  const handleBarTouchEnd = useCallback(() => {
+    isDragging.current = false;
+    setHoverPct(null);
+  }, []);
 
   const handleBarMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const bar = progressRef.current;
@@ -1297,10 +1331,13 @@ function VideoPlayer({
                 {/* Progress bar */}
                 <div
                   ref={progressRef}
-                  className="group relative flex h-4 cursor-pointer items-center px-3"
+                  className="group relative flex h-6 cursor-pointer items-center px-3"
                   onMouseDown={handleMouseDown}
                   onMouseMove={handleBarMouseMove}
                   onMouseLeave={handleBarMouseLeave}
+                  onTouchStart={handleBarTouchStart}
+                  onTouchMove={handleBarTouchMove}
+                  onTouchEnd={handleBarTouchEnd}
                 >
                   {/* Hover preview tooltip */}
                   {hoverPct !== null && (
@@ -1413,8 +1450,11 @@ function VideoPlayer({
                         </AnimatePresence>
                       </motion.div>
                     </div>
-                    {/* Captions */}
-                    <button className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+                    {/* Comment / Timeline toggle */}
+                    <button
+                      className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]"
+                      onClick={() => setMobileDrawerOpen((o) => !o)}
+                    >
                       <svg width="16" height="16" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 1.5C10 0.671573 9.32843 0 8.5 0H1.5C0.671573 0 0 0.671573 0 1.5V6.5C0 7.32843 0.671573 8 1.5 8H2V9C2 9.18014 2.0969 9.34635 2.25365 9.4351C2.41041 9.52385 2.60278 9.52143 2.75725 9.42875L5.13849 8H8.5C9.32843 8 10 7.32843 10 6.5V1.5ZM2.1239 4C2.1239 4.34518 2.40372 4.625 2.7489 4.625C3.09408 4.625 3.3739 4.34518 3.3739 4C3.3739 3.65482 3.09408 3.375 2.7489 3.375C2.40372 3.375 2.1239 3.65482 2.1239 4ZM4.3739 4C4.3739 4.34518 4.65372 4.625 4.9989 4.625C5.34408 4.625 5.6239 4.34518 5.6239 4C5.6239 3.65482 5.34408 3.375 4.9989 3.375C4.65372 3.375 4.3739 3.65482 4.3739 4ZM7.2489 4.625C6.90372 4.625 6.6239 4.34518 6.6239 4C6.6239 3.65482 6.90372 3.375 7.2489 3.375C7.59408 3.375 7.8739 3.65482 7.8739 4C7.8739 4.34518 7.59408 4.625 7.2489 4.625Z" fill="white"/></svg>
                     </button>
                   </div>
@@ -1525,6 +1565,8 @@ function VideoPlayer({
             formatTime={formatTime}
             currentTime={currentTime}
             onClose={() => setIsFullscreen(false)}
+            open={mobileDrawerOpen}
+            onOpenChange={setMobileDrawerOpen}
           />
         </motion.div>
       )}
@@ -1591,10 +1633,13 @@ function VideoPlayer({
             {/* Progress bar */}
             <div
               ref={progressRef}
-              className="group relative flex h-3 cursor-pointer items-center"
+              className="group relative flex h-5 cursor-pointer items-center"
               onMouseDown={handleMouseDown}
               onMouseMove={handleBarMouseMove}
               onMouseLeave={handleBarMouseLeave}
+              onTouchStart={handleBarTouchStart}
+              onTouchMove={handleBarTouchMove}
+              onTouchEnd={handleBarTouchEnd}
             >
               {/* Hover preview tooltip */}
               {hoverPct !== null && (
@@ -1719,8 +1764,11 @@ function VideoPlayer({
                   </motion.div>
                 </div>
 
-                {/* Captions */}
-                <button className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+                {/* Chat — opens fullscreen + drawer on mobile */}
+                <button
+                  className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]"
+                  onClick={() => { setIsFullscreen(true); setMobileDrawerOpen(true); }}
+                >
                   <CaptionIcon />
                 </button>
               </div>
