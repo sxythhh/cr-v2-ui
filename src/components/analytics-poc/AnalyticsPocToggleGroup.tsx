@@ -149,7 +149,7 @@ function AnalyticsPocToggleGroup({
   return (
     <ToggleGroupPrimitive
       className={cn(
-        "relative inline-flex h-8 w-fit items-center gap-0 rounded-[10px] bg-[var(--ap-toggle-bg)]",
+        "relative inline-flex h-8 w-fit items-center gap-1 rounded-[10px] bg-[var(--ap-toggle-bg)] p-0.5",
         className,
       )}
       data-orientation={orientation}
@@ -164,7 +164,7 @@ function AnalyticsPocToggleGroup({
       <AnalyticsPocToggleGroupContext.Provider value={{ orientation }}>
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-0 rounded-[10px] bg-[var(--ap-toggle-thumb)] shadow-[0px_1px_2px_rgba(0,0,0,0.06)] transition-[transform,width] duration-[var(--ap-motion-duration-surface)] ease-[var(--ap-motion-ease-primary)] motion-reduce:transition-none"
+          className="pointer-events-none absolute inset-y-[2px] left-0 z-0 rounded-lg border border-[rgba(37,37,37,0.06)] bg-[var(--ap-toggle-thumb)] shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-[transform,width] duration-[var(--ap-motion-duration-surface)] ease-[var(--ap-motion-ease-primary)] dark:border-[rgba(224,224,224,0.03)] motion-reduce:transition-none"
           style={{
             transform: `translateX(${thumbPosition.offset}px)`,
             visibility: thumbPosition.visible ? "visible" : "hidden",

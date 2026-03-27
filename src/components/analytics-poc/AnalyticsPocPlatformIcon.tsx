@@ -24,7 +24,7 @@ export const ANALYTICS_POC_PLATFORM_LABELS: Record<string, string> = {
 const ANALYTICS_POC_PLATFORM_BRAND_COLORS: Record<string, string> = {
   instagram: "#C084FC",
   tiktok: "#34D399",
-  x: "#8B8D98",
+  x: "#60A5FA",
   youtube: "#FB7185",
 };
 

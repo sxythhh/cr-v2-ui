@@ -491,7 +491,7 @@ function PerformanceChartCard() {
 
   return (
     <div
-      className={cn(sectionCard, "[--ap-toggle-bg:rgba(234,232,230,0.6)] [--ap-toggle-thumb:#FFFFFF] dark:[--ap-toggle-bg:rgba(224,224,224,0.06)] dark:[--ap-toggle-thumb:rgba(224,224,224,0.06)]")}
+      className={cn(sectionCard, "[--ap-toggle-bg:rgba(37,37,37,0.04)] [--ap-toggle-thumb:#FFFFFF] dark:[--ap-toggle-bg:rgba(224,224,224,0.06)] dark:[--ap-toggle-thumb:rgba(224,224,224,0.06)]")}
     >
       {/* Header row */}
       <div className="flex flex-wrap items-center gap-2">

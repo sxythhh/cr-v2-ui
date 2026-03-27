@@ -327,7 +327,6 @@ const ACTIVITY_ITEMS = [
   { icon: DollarIcon, title: "Earnings credited", subtitle: "+ $42.50 from approved clips", time: "4h ago" },
   { icon: MegaphoneSmallIcon, title: "Campaign joined", subtitle: "Referral joined 'Spring Clips 2026'", time: "8h ago" },
   { icon: UserAddIcon, title: "New clipper", subtitle: "edit_wizard_99 joined", time: "1d ago" },
-  { icon: UserAddIcon, title: "New clipper", subtitle: "edit_wizard_99 joined", time: "1d ago" },
 ];
 
 const TOP_CREATORS = [
@@ -1119,8 +1118,8 @@ function KpiCardActive({ className }: { className?: string }) {
       <div className="flex flex-col gap-3">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">24</span>
         <div className="flex flex-wrap gap-1">
-          <span className="flex h-5 shrink-0 items-center whitespace-nowrap rounded-full bg-[rgba(96,165,250,0.08)] px-2 font-inter text-[11px] font-medium leading-none tracking-[-0.02em] text-[#60A5FA]">3 CPM</span>
-          <span className="flex h-5 shrink-0 items-center whitespace-nowrap rounded-full bg-[rgba(251,146,60,0.08)] px-2 font-inter text-[11px] font-medium leading-none tracking-[-0.02em] text-[#FB923C]">2 Retainer</span>
+          <span className="w-fit whitespace-nowrap rounded-full bg-[rgba(96,165,250,0.08)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#60A5FA]">3 CPM</span>
+          <span className="w-fit whitespace-nowrap rounded-full bg-[rgba(251,146,60,0.08)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#FB923C]">2 Retainer</span>
         </div>
       </div>
     </Link>
@@ -1166,7 +1165,7 @@ function KpiCardPaidOut({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text">$18.4k</span>
-        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">$10.7k spend this period</span>
+        <span className="w-fit rounded-full bg-[rgba(52,211,153,0.08)] px-2 py-1 font-inter text-xs font-medium tracking-[-0.02em] text-[#34D399]">-$0.05 (better)</span>
       </div>
     </Link>
   );
@@ -1292,7 +1291,7 @@ function DashboardView() {
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Active campaigns</span>
             <Link href="/campaigns" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
-              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+              <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
           <div className="flex flex-col gap-2 px-4">
@@ -1304,7 +1303,7 @@ function DashboardView() {
               >
                 <div className="flex items-center gap-3">
                   <div className="size-8 shrink-0 overflow-hidden rounded-[10px] bg-foreground/10" />
-                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{campaign.name}</span>
                     <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{campaign.subtitle}</span>
                   </div>
@@ -1351,7 +1350,7 @@ function DashboardView() {
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
-              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+              <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
           <div
@@ -1379,7 +1378,7 @@ function DashboardView() {
                 ref={(el) => activityHover.registerItem(i, el)}
                 className="relative z-[1] flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2"
               >
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-card-inner-border bg-card-inner-bg backdrop-blur-[16px]">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <item.icon className="size-4 text-page-text-muted" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -1403,7 +1402,7 @@ function DashboardView() {
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators</span>
               <Link href="/creators" className="group flex cursor-pointer items-center gap-1.5">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
-                <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+                <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </Link>
             </div>
 
@@ -1471,7 +1470,7 @@ function DashboardView() {
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Pending drafts</span>
             <Link href="/submissions" className="group flex cursor-pointer items-center gap-1.5">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
-              <ArrowRightIcon className="size-3 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text" />
+              <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
           <div className="flex flex-col gap-2">
@@ -1480,18 +1479,16 @@ function DashboardView() {
               { name: "Marcus Cole", desc: "Caffeine Exclusive - New draft", badge: "New", badgeColor: "#60A5FA" },
             ].map((draft) => (
               <div key={draft.name} className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-foreground/[0.03] dark:shadow-none dark:hover:bg-foreground/[0.06]">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.03] bg-foreground/[0.03] backdrop-blur-[12px]">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
                     <path fillRule="evenodd" clipRule="evenodd" d="M3 0C3.36819 0 3.66667 0.298477 3.66667 0.666667H5C5 0.298477 5.29848 0 5.66667 0C6.03486 0 6.33333 0.298477 6.33333 0.666667H7.66667C7.66667 0.298477 7.96514 0 8.33333 0C8.70152 0 9 0.298477 9 0.666667H9.33333C10.4379 0.666667 11.3333 1.5621 11.3333 2.66667V11.3333C11.3333 12.4379 10.4379 13.3333 9.33333 13.3333H2C0.895431 13.3333 0 12.4379 0 11.3333V2.66667C0 1.5621 0.895431 0.666667 2 0.666667H2.33333C2.33333 0.298477 2.63181 0 3 0ZM3 5.66667C3 5.29848 3.29848 5 3.66667 5H7.66667C8.03486 5 8.33333 5.29848 8.33333 5.66667C8.33333 6.03486 8.03486 6.33333 7.66667 6.33333H3.66667C3.29848 6.33333 3 6.03486 3 5.66667ZM3 8.33333C3 7.96514 3.29848 7.66667 3.66667 7.66667H6.33333C6.70152 7.66667 7 7.96514 7 8.33333C7 8.70152 6.70152 9 6.33333 9H3.66667C3.29848 9 3 8.70152 3 8.33333Z" fill="currentColor" fillOpacity="0.5"/>
                   </svg>
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <span className="truncate font-inter text-xs font-medium tracking-[-0.02em] text-page-text">{draft.name}</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.desc}</span>
-                    <span className="font-inter text-xs tracking-[-0.02em]" style={{ color: draft.badgeColor }}>{draft.badge}</span>
-                  </div>
+                  <span className="truncate font-inter text-xs tracking-[-0.02em] text-page-text-muted">{draft.desc}</span>
                 </div>
+                <span className="shrink-0 font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: draft.badgeColor }}>{draft.badge}</span>
               </div>
             ))}
           </div>
@@ -1596,10 +1593,14 @@ function HomeKpiCarousel() {
     <div className="-mx-4 flex flex-col items-center gap-2 md:hidden sm:-mx-5">
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 pr-4 scrollbar-hide sm:pl-5 sm:pr-5 [scroll-padding-inline:16px]"
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
       >
         {cards.map((card, i) => (
-          <div key={i} className="w-[calc(100vw-48px)] max-w-80 shrink-0 snap-start [&>*]:h-full">
+          <div key={i} className={cn(
+            "w-[calc(100vw-56px)] max-w-80 shrink-0 [&>*]:h-full",
+            i === 0 ? "snap-start" : "snap-center",
+            i === cards.length - 1 && "mr-4 sm:mr-5",
+          )}>
             {card}
           </div>
         ))}

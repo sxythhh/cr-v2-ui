@@ -51,7 +51,7 @@ export function AnalyticsPocHeatmapCard({
 
   const platformColor = platform ? getAnalyticsPocPlatformBrandColor(platform) : undefined;
   const toneColor =
-    (platform === "x" ? (isDark ? "#FFFFFF" : "#8B8D98") : platformColor) ??
+    (platform === "x" ? (isDark ? "#FFFFFF" : "#1A67E5") : platformColor) ??
     HEATMAP_TONE_COLOR[tone];
   const showPlatformIcon = platform
     ? hasAnalyticsPocPlatformIcon(platform)

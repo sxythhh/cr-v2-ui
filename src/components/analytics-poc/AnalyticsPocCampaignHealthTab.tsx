@@ -195,17 +195,18 @@ function FilterToolbar({ dateRange, setDateRange, platforms, onTogglePlatform, s
 
 /* ── Stat KPI Card ────────────────────────────────────────────────── */
 
-function StatCard({ value, change, label, sublabel, changeColor = "#34D399" }: {
+function StatCard({ value, change, label, sublabel, changeColor = "#34D399", valueColor }: {
   value: string;
   change?: string;
   label: string;
   sublabel?: string;
   changeColor?: string;
+  valueColor?: string;
 }) {
   return (
     <div className={cn(CARD, "flex flex-1 flex-col justify-center gap-2 p-3")}>
       <div className="flex items-center justify-between">
-        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{value}</span>
+        <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", !valueColor && "text-page-text")} style={valueColor ? { color: valueColor } : undefined}>{value}</span>
         {change && (
           <span className="font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: changeColor }}>{change}</span>
         )}
@@ -336,11 +337,11 @@ function FinancialsCard() {
         </div>
 
         {/* Stacked budget bar */}
-        <div className="flex h-10 w-full overflow-hidden rounded-xl">
-          <div className="h-full border border-card-bg dark:border-card-bg" style={{ width: "53.7%", background: "var(--ap-hover)" }} />
-          <div className="h-full flex-1 border border-card-bg dark:border-card-bg" style={{ background: "rgba(0,153,77,0.6)" }} />
-          <div className="h-full w-[5%] border border-card-bg dark:border-card-bg" style={{ background: "rgba(229,113,0,0.6)" }} />
-          <div className="h-full w-[2.5%] border border-card-bg dark:border-card-bg" style={{ background: "rgba(255,51,85,0.6)" }} />
+        <div className="flex h-10 w-full gap-[2px] overflow-hidden rounded-xl bg-foreground/[0.06]">
+          <div className="h-full" style={{ width: "53.7%", background: "var(--ap-hover)" }} />
+          <div className="h-full flex-1" style={{ background: "rgba(0,153,77,0.6)" }} />
+          <div className="h-full w-[5%]" style={{ background: "rgba(229,113,0,0.6)" }} />
+          <div className="h-full w-[2.5%]" style={{ background: "rgba(255,51,85,0.6)" }} />
         </div>
 
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$3,781.50 remaining</span>
@@ -367,7 +368,7 @@ function FinancialsCard() {
       <div className="flex w-full flex-wrap gap-1">
         {costActions.map((action) => (
           <div key={action.label} className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2.5 py-1 dark:border-[rgba(224,224,224,0.03)]">
-            <span className="text-page-text-muted">{COST_ACTION_ICONS[action.icon]}</span>
+            <span className="text-page-text">{COST_ACTION_ICONS[action.icon]}</span>
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{action.label}</span>
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{action.value}</span>
           </div>
@@ -583,8 +584,8 @@ export function AnalyticsPocCampaignHealthTab({
   const bottomKpiCards = [
     <StatCard key="subs" value="847" label="Total submissions" sublabel="All platforms" />,
     <StatCard key="creators" value="234" label="Unique creators" sublabel="Active in campaign" />,
-    <StatCard key="apps2" value="189" change="12 pending review" label="Applications" sublabel="6.6% conversion" changeColor="#FB923C" />,
-    <StatCard key="growth" value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" changeColor="#34D399" />,
+    <StatCard key="apps2" value="189" change="12 pending review" label="Applications" changeColor="#E57100" />,
+    <StatCard key="growth" value="+12.4%" label="7-day growth" sublabel="vs previous 7 days" valueColor="#00994D" />,
   ];
 
   return (

@@ -161,9 +161,9 @@ export function AnalyticsPocTopPostsTable({
       {
         header: "#",
         id: "position",
-        width: "w-[20px]",
+        width: "w-[48px]",
         renderCell: (_row, { absoluteIndex }) => (
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-secondary)]">
+          <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
             {absoluteIndex + 1}
           </span>
         ),
@@ -173,10 +173,10 @@ export function AnalyticsPocTopPostsTable({
         id: "post",
         renderCell: (row) => (
           <div className="flex flex-col gap-1">
-            <p className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.09px] text-[var(--ap-text)] group-hover:underline">
+            <p className="font-inter text-sm font-medium tracking-[-0.02em] text-[var(--ap-text)]">
               {row.post}
             </p>
-            <p className="font-inter text-[12px] font-normal leading-[1.2] text-[var(--ap-text-secondary)]">
+            <p className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text-secondary)]">
               {row.author}
             </p>
           </div>
@@ -189,70 +189,71 @@ export function AnalyticsPocTopPostsTable({
           const normalizedPlatform = row.platform.toLowerCase();
 
           return (
-            <span className="inline-flex items-center gap-1 font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]">
-              {hasAnalyticsPocPlatformIcon(normalizedPlatform) ? (
-                <AnalyticsPocPlatformIcon
-                  className="text-[var(--ap-text-strong)]"
-                  platform={normalizedPlatform}
-                  size={16}
-                  tone="inherit"
-                />
-              ) : (
-                <span className="size-1.5 rounded-full bg-[var(--ap-text-secondary)]" />
-              )}
-              {resolvePlatformLabel(normalizedPlatform)}
+            <span className="inline-flex items-center justify-end">
+              <span className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] backdrop-blur-xl">
+                {hasAnalyticsPocPlatformIcon(normalizedPlatform) ? (
+                  <AnalyticsPocPlatformIcon
+                    className="text-page-text-muted"
+                    platform={normalizedPlatform}
+                    size={12}
+                    tone="inherit"
+                  />
+                ) : (
+                  <span className="size-1.5 rounded-full bg-[var(--ap-text-secondary)]" />
+                )}
+              </span>
             </span>
           );
         },
-        width: "w-[120px]",
+        width: "w-[132px]",
+      },
+      {
+        getSortValue: (row) => parseMetricValue(row.payout),
+        header: "Earned",
+        id: "payout",
+        renderCell: (row) => (
+          <span className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text)]">
+            {formatCurrency(row.payout)}
+          </span>
+        ),
+        sortable: true,
+        width: "w-[96px]",
       },
       {
         getSortValue: (row) => parseMetricValue(row.views),
         header: "Views",
         id: "views",
         renderCell: (row) => (
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text)]">
+          <span className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text)]">
             {formatViews(row.views)}
           </span>
         ),
         sortable: true,
-        width: "w-[96px]",
+        width: "w-[80px]",
       },
       {
         getSortValue: (row) => parseMetricValue(row.engagement),
-        header: "Engagement",
+        header: "Eng. rate",
         id: "engagement",
         renderCell: (row) => (
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]">
+          <span className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text)]">
             {formatPercentage(row.engagement)}
           </span>
         ),
         sortable: true,
-        width: "w-[96px]",
-      },
-      {
-        getSortValue: (row) => parseMetricValue(row.payout),
-        header: "Payout",
-        id: "payout",
-        renderCell: (row) => (
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]">
-            {formatCurrency(row.payout)}
-          </span>
-        ),
-        sortable: true,
-        width: "w-[120px]",
+        width: "w-[88px]",
       },
       {
         getSortValue: (row) => parseMetricValue(row.cpm),
         header: "CPM",
         id: "cpm",
         renderCell: (row) => (
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]">
+          <span className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text)]">
             {formatCurrency(row.cpm)}
           </span>
         ),
         sortable: true,
-        width: "w-[96px]",
+        width: "w-[64px]",
       },
     ],
     [],
@@ -261,18 +262,13 @@ export function AnalyticsPocTopPostsTable({
   return (
     <AnalyticsPocPanel className={className} padding="none">
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <div className="flex items-center gap-[6px]">
-          <TopPostsIcon
-            className="text-[var(--ap-text-secondary)]"
-            width={16}
-            height={16}
-          />
-          <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-strong)]">
+        <div className="flex items-center gap-0.5">
+          <span className="font-inter text-xs font-normal tracking-[-0.02em] text-[var(--ap-text-secondary)]">
             {title}
           </span>
-          {headerTooltipText && (
-            <GlassTooltip text={headerTooltipText} />
-          )}
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-foreground/40">
+            <path fillRule="evenodd" clipRule="evenodd" d="M6 0.5C3.0 0.5 0.5 3.0 0.5 6C0.5 9.0 3.0 11.5 6 11.5C9.0 11.5 11.5 9.0 11.5 6C11.5 3.0 9.0 0.5 6 0.5ZM5.5 4C5.5 3.72 5.72 3.5 6 3.5C6.28 3.5 6.5 3.72 6.5 4C6.5 4.28 6.28 4.5 6 4.5C5.72 4.5 5.5 4.28 5.5 4ZM5.5 5.5H6.5V8.5H5.5V5.5Z" fill="currentColor"/>
+          </svg>
         </div>
       </div>
 

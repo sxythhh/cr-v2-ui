@@ -452,6 +452,7 @@ function StackedBarSegmentShape({
           : clampNumber(normalizedOpacity, 0, 1)
       }
     >
+      <rect x={normalizedX} y={normalizedY} width={normalizedWidth} height={normalizedHeight} rx={r2} ry={r2} fill="var(--card-bg, #FFFFFF)" />
       <rect x={normalizedX} y={normalizedY} width={normalizedWidth} height={normalizedHeight} rx={r2} ry={r2} fill={fill ?? "transparent"} fillOpacity={0.3} />
       <rect x={normalizedX} y={normalizedY} width={normalizedWidth} height={normalizedHeight} rx={r2} ry={r2} fill="none" stroke="var(--card-bg, #FFFFFF)" strokeWidth={1} />
     </g>
@@ -1026,7 +1027,7 @@ function StackedBarChartBody({
   }, []);
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark") || mq.matches);
+    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
     checkDark();
     const obs = new MutationObserver(checkDark);
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
@@ -1195,19 +1196,39 @@ function StackedBarChartBody({
                 onMouseEnter={() => setHoveredBarIdx(pointIdx)}
               >
                 {/* Overlapping bar pills — tallest behind, shortest in front */}
-                {stackedSegments.map((seg, i) => (
-                  <div
-                    key={seg.key}
-                    className="absolute inset-x-0 bottom-0 cursor-pointer border-2 border-white dark:border-[var(--ap-panel-surface,var(--card-bg,#1C1C1C))]"
-                    style={{
-                      height: tallestPct > 0 && seg.cumHeight > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
-                      background: (seg.color === "#8B8D98" && isDark) ? "#FFFFFF" : seg.color,
-                      borderRadius: "8px 8px 0 0",
-                      zIndex: i,
-                      transition: "height 300ms ease-out",
-                    }}
-                  />
-                ))}
+                {stackedSegments.map((seg, i) => {
+                  const lightColorMap: Record<string, string> = {
+                    "#00994D": "rgba(0,153,77,0.3)",
+                    "#AE4EEE": "rgba(174,78,238,0.3)",
+                    "#FF3355": "rgba(255,51,85,0.3)",
+                    "#1A67E5": "rgba(26,103,229,0.3)",
+                  };
+                  const darkColorMap: Record<string, string> = {
+                    "#00994D": "rgba(52,211,153,0.3)",
+                    "#AE4EEE": "rgba(192,132,252,0.3)",
+                    "#FF3355": "rgba(251,113,133,0.3)",
+                    "#1A67E5": "rgba(96,165,250,0.3)",
+                  };
+                  const base = isDark ? "#1C1C1C" : "#FFFFFF";
+                  const colorMap = isDark ? darkColorMap : lightColorMap;
+                  const segColor = colorMap[seg.color] ?? `color-mix(in srgb, ${seg.color} 30%, transparent)`;
+                  return (
+                    <div
+                      key={seg.key}
+                      className="absolute inset-x-0 bottom-0 cursor-pointer"
+                      style={{
+                        height: tallestPct > 0 && seg.cumHeight > 0 ? `${(seg.cumHeight / tallestPct) * 100}%` : 0,
+                        background: `linear-gradient(0deg, ${segColor}, ${segColor}), ${base}`,
+                        borderWidth: "1px 1px 0 1px",
+                        borderStyle: "solid",
+                        borderColor: base,
+                        borderRadius: 8,
+                        zIndex: i,
+                        transition: "height 300ms ease-out",
+                      }}
+                    />
+                  );
+                })}
               </div>
             );
           })}

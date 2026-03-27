@@ -158,14 +158,51 @@ function SubmissionTrendCard() {
       <div className="group/chart relative flex items-end gap-2 px-4" style={{ height: 116 }} onMouseLeave={() => setHoveredBarIdx(null)}>
         {barData.map((bar, i) => (
           <div key={i} className="group/bar relative min-w-0 flex-1 cursor-pointer" style={{ height: 116 }} onMouseEnter={() => setHoveredBarIdx(i)}>
+            {/* Green — full height */}
             <div
-              className="absolute inset-x-0 bottom-0 rounded-lg transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
+              className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: bar.height,
-                background: "linear-gradient(0deg, rgba(52,211,153,0.3), rgba(52,211,153,0.3)), rgba(224,224,224,0.03)",
+                background: "linear-gradient(0deg, rgba(0,153,77,0.3), rgba(0,153,77,0.3)), #FFFFFF",
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
-                borderColor: "rgba(224,224,224,0.03)",
+                borderColor: "#FFFFFF",
+                borderRadius: 8,
+              }}
+            />
+            {/* Purple — ~65% */}
+            <div
+              className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
+              style={{
+                height: Math.round(bar.height * 0.47),
+                background: "linear-gradient(0deg, rgba(174,78,238,0.3), rgba(174,78,238,0.3)), #FFFFFF",
+                borderWidth: "1px 1px 0 1px",
+                borderStyle: "solid",
+                borderColor: "#FFFFFF",
+                borderRadius: 8,
+              }}
+            />
+            {/* Red — ~26% */}
+            <div
+              className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
+              style={{
+                height: Math.round(bar.height * 0.26),
+                background: "linear-gradient(0deg, rgba(255,51,85,0.3), rgba(255,51,85,0.3)), #FFFFFF",
+                borderWidth: "1px 1px 0 1px",
+                borderStyle: "solid",
+                borderColor: "#FFFFFF",
+                borderRadius: 8,
+              }}
+            />
+            {/* Blue — ~10% */}
+            <div
+              className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
+              style={{
+                height: Math.round(bar.height * 0.10),
+                background: "linear-gradient(0deg, rgba(26,103,229,0.3), rgba(26,103,229,0.3)), #FFFFFF",
+                borderWidth: "1px 1px 0 1px",
+                borderStyle: "solid",
+                borderColor: "#FFFFFF",
                 borderRadius: 8,
               }}
             />

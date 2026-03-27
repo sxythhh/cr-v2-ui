@@ -29,7 +29,7 @@ const AP_THEME_STYLES = `
   --ap-border: oklch(0 0 0 / 0.08);
   --ap-hover: oklch(0 0 0 / 0.06);
   --ap-share-hover-bg: rgba(0, 0, 0, 0.04);
-  --ap-toggle-bg: rgba(234,232,230,0.6);
+  --ap-toggle-bg: rgba(37,37,37,0.04);
   --ap-toggle-thumb: #FFFFFF;
   --ap-pill-bg: rgba(255,255,255,0.60);
   --ap-pill-bg-solid: #F3F3F3;

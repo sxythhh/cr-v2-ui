@@ -63,7 +63,7 @@ const FluidTable = forwardRef<HTMLTableElement, FluidTableProps>(
             {activeRect && (
               <motion.div
                 key={sessionRef.current}
-                className="pointer-events-none absolute rounded-lg bg-[var(--ap-hover)]"
+                className="pointer-events-none absolute rounded-none bg-[var(--ap-hover)]"
                 initial={{
                   opacity: 0,
                   top: activeRect.top,
@@ -190,7 +190,7 @@ const FluidTableHead = forwardRef<
   <th
     ref={ref}
     className={cn(
-      "px-3 py-2 text-left font-inter text-[12px] font-normal leading-[1.2] text-[var(--ap-text-secondary)]",
+      "whitespace-nowrap px-3 py-3 text-left font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]",
       className,
     )}
     {...props}
@@ -208,7 +208,7 @@ const FluidTableCell = forwardRef<
   <td
     ref={ref}
     className={cn(
-      "px-3 py-2.5 font-inter text-[14px] leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-secondary)] transition-colors duration-75 group-[.is-active]/row:text-[var(--ap-text)]",
+      "px-3 py-3 font-inter text-xs tracking-[-0.02em] text-[var(--ap-text)] transition-colors duration-75",
       className,
     )}
     {...props}

@@ -133,7 +133,7 @@ export function AnalyticsPocTable<T>({
 
   return (
     <>
-      <div className="overflow-x-auto px-4">
+      <div className="overflow-x-auto">
         <FluidTable className="min-w-[980px] table-fixed">
           <FluidTableHeader>
             <FluidTableRow>
@@ -154,7 +154,7 @@ export function AnalyticsPocTable<T>({
                     {column.sortable ? (
                       <button
                         className={cn(
-                          "inline-flex cursor-pointer items-center gap-1.5 font-inter text-[12px] font-normal leading-[1.2] tracking-normal text-[var(--ap-text-secondary)] transition-opacity hover:opacity-70",
+                          "inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)] transition-opacity hover:opacity-70",
                           isActiveSort && "opacity-100 text-[var(--ap-text-strong)]",
                         )}
                         onClick={() => onSortKeyChange?.(column.id)}
@@ -172,7 +172,7 @@ export function AnalyticsPocTable<T>({
                         )}
                       </button>
                     ) : (
-                      <span className="font-inter text-[12px] font-normal leading-[1.2] text-[var(--ap-text-secondary)]">
+                      <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
                         {column.header}
                       </span>
                     )}
@@ -223,9 +223,9 @@ export function AnalyticsPocTable<T>({
         </FluidTable>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-4 px-4 pb-4 pt-2">
-        <span className="font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-secondary)]">
-          Showing {startRange}-{endRange} of {totalRows}
+      <div className="flex flex-wrap items-center justify-end gap-4 px-4 pb-4 pt-3">
+        <span className="font-inter text-xs tracking-[-0.02em] text-[var(--ap-text-secondary)]">
+          {startRange}-{endRange} of {totalRows}
         </span>
 
         <div className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export function AnalyticsPocTable<T>({
             aria-label="Previous page"
             className={cn(
               ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-              "flex size-6 items-center justify-center rounded-full bg-[var(--ap-input-bg)] text-[var(--ap-text-secondary)] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.08)] backdrop-blur-[12px] transition-colors",
+              "flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] text-[var(--ap-text-secondary)] transition-colors",
               currentPage > 1
                 ? "cursor-pointer hover:text-[var(--ap-text-strong)]"
                 : "cursor-not-allowed opacity-40",
@@ -249,7 +249,7 @@ export function AnalyticsPocTable<T>({
             if (typeof item !== "number") {
               return (
                 <span
-                  className="px-1 font-inter text-[14px] leading-[1.2] tracking-[-0.09px] text-[var(--ap-text-tertiary)]"
+                  className="px-1 font-inter text-xs tracking-[-0.02em] text-[var(--ap-text-secondary)]"
                   key={item}
                 >
                   ...
@@ -263,10 +263,10 @@ export function AnalyticsPocTable<T>({
               <button
                 className={cn(
                   ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-                  "flex size-6 cursor-pointer items-center justify-center rounded-full font-inter text-[14px] leading-[1.2] tracking-[-0.09px] transition-colors",
+                  "flex size-6 cursor-pointer items-center justify-center rounded-full font-inter text-xs tracking-[-0.02em] transition-colors",
                   isActive
-                    ? "bg-[var(--ap-hover)] font-normal text-[var(--ap-text-strong)]"
-                    : "font-normal text-[var(--ap-text-secondary)] hover:text-[var(--ap-text-strong)]",
+                    ? "font-normal text-page-text"
+                    : "font-normal text-[var(--ap-text-secondary)] hover:text-page-text",
                 )}
                 key={`table-page-${item}`}
                 onClick={() => onPageChange(item)}
@@ -281,7 +281,7 @@ export function AnalyticsPocTable<T>({
             aria-label="Next page"
             className={cn(
               ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS,
-              "flex size-6 items-center justify-center rounded-full bg-[var(--ap-input-bg)] text-[var(--ap-text-secondary)] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.08)] backdrop-blur-[12px] transition-colors",
+              "flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] text-[var(--ap-text-secondary)] transition-colors",
               currentPage < totalPages
                 ? "cursor-pointer hover:text-[var(--ap-text-strong)]"
                 : "cursor-not-allowed opacity-40",

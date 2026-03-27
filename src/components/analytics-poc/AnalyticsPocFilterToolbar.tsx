@@ -7,12 +7,10 @@ import type { AnalyticsPocFilterToolbarProps } from "./types";
 /** Shared pill button classes matching Figma spec */
 export const analyticsPillButtonClass = cn(
   "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-3.5",
-  "border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]",
-  "bg-white dark:bg-card-bg",
-  "shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]",
+  "bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]",
   "font-inter text-[14px] font-normal leading-[1.2] tracking-[-0.02em] text-page-text",
   "outline-none focus-visible:outline-none",
-  "transition-colors hover:bg-foreground/[0.03] dark:hover:bg-white/[0.05] dark:hover:border-white/[0.10]",
+  "transition-colors hover:bg-foreground/[0.10] dark:hover:bg-[rgba(224,224,224,0.06)]",
 );
 
 export function AnalyticsPocFilterToolbar({
