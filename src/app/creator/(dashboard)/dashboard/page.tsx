@@ -107,7 +107,7 @@ function CheckCircleIcon({ className }: { className?: string }) {
 // ── Card wrapper ────────────────────────────────────────────────────
 
 const cardClass =
-  "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg";
+  "rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none";
 
 // ── Mock data ───────────────────────────────────────────────────────
 
@@ -248,9 +248,9 @@ export default function CreatorDashboardPage() {
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[rgba(37,37,37,0.02)] font-[family-name:var(--font-inter)] dark:bg-page-bg">
+    <div className="min-h-screen bg-page-bg font-inter tracking-[-0.02em]">
       {/* Header */}
-      <div className="sticky top-0 z-30 flex h-14 items-center justify-center border-b border-page-border bg-page-bg">
+      <div className="sticky top-0 z-30 flex h-14 items-center justify-center border-b border-foreground/[0.06] bg-page-bg">
         <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Dashboard</span>
         <div className="absolute right-4 flex items-center gap-2">
           <button className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.10]">
@@ -271,9 +271,9 @@ export default function CreatorDashboardPage() {
             <div className={cn(cardClass, "flex flex-col gap-2 p-3")}>
               <div className="flex items-baseline justify-between">
                 <span className="text-sm font-medium tabular-nums text-page-text">94%</span>
-                <span className="text-xs tabular-nums text-foreground/70">18/20 clips</span>
+                <span className="text-xs tabular-nums text-page-text-muted">18/20 clips</span>
               </div>
-              <span className="text-xs text-foreground/50">Approval rate</span>
+              <span className="text-xs text-page-text-subtle">Approval rate</span>
             </div>
 
             {/* Earned */}
@@ -282,7 +282,7 @@ export default function CreatorDashboardPage() {
                 <span className="text-sm font-medium tabular-nums" style={{ color: "#00994D" }}>$148.50</span>
                 <span className="text-xs font-medium tabular-nums" style={{ color: "#00994D" }}>+$32</span>
               </div>
-              <span className="text-xs text-foreground/50">Earned this week</span>
+              <span className="text-xs text-page-text-subtle">Earned this week</span>
             </div>
 
             {/* Views */}
@@ -291,7 +291,7 @@ export default function CreatorDashboardPage() {
                 <span className="text-sm font-medium tabular-nums text-page-text">2.96M</span>
                 <span className="text-xs font-medium tabular-nums" style={{ color: "#FF3355" }}>-4%</span>
               </div>
-              <span className="text-xs text-foreground/50">Views</span>
+              <span className="text-xs text-page-text-subtle">Views</span>
             </div>
 
             {/* Streak */}
@@ -303,7 +303,7 @@ export default function CreatorDashboardPage() {
                 <FireIcon />
               </div>
               <span className="text-sm font-medium tabular-nums text-page-text">6 days</span>
-              <span className="text-xs text-foreground/50">Streak</span>
+              <span className="text-xs text-page-text-subtle">Streak</span>
             </div>
           </div>
 
@@ -314,8 +314,8 @@ export default function CreatorDashboardPage() {
               {/* Header */}
               <div className="relative z-[1] flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <SparkleIcon className="text-foreground/70" />
-                  <span className="text-sm tracking-[-0.02em] text-foreground/70">AI Insights</span>
+                  <SparkleIcon className="text-page-text-muted" />
+                  <span className="text-sm tracking-[-0.02em] text-page-text-muted">AI Insights</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm text-page-text">
                   <button className="flex size-4 cursor-pointer items-center justify-center">
@@ -331,7 +331,7 @@ export default function CreatorDashboardPage() {
               <div className="relative z-[1] mt-6 flex flex-col gap-3">
                 <div className="flex max-w-[320px] flex-col gap-1.5">
                   <h3 className="text-sm font-medium tracking-[-0.02em] text-page-text">3 clips under review</h3>
-                  <p className="text-sm leading-[140%] tracking-[-0.02em] text-foreground/70">
+                  <p className="text-sm leading-[140%] tracking-[-0.02em] text-page-text-muted">
                     3 of the 4 clips you&apos;ve submitted are currently under review. Keep up the great work!
                   </p>
                 </div>
@@ -363,8 +363,8 @@ export default function CreatorDashboardPage() {
             <div className={cn(cardClass, "flex flex-row items-start gap-4 p-4 lg:flex-[1]")}>
               <div className="flex flex-1 flex-col">
                 <div className="flex items-center gap-2">
-                  <HeartIcon className="text-foreground/70" />
-                  <span className="text-xs font-medium text-foreground/70">Trust score</span>
+                  <HeartIcon className="text-page-text-muted" />
+                  <span className="text-xs font-medium text-page-text-muted">Trust score</span>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-page-text-muted">
                   Your content quality and engagement authenticity. Higher scores unlock better CPM rates.
@@ -404,8 +404,8 @@ export default function CreatorDashboardPage() {
             <div className={cn(cardClass, "p-4")}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <TrophyIcon className="text-foreground/70" />
-                  <span className="text-sm font-medium text-foreground/70">Rewards</span>
+                  <TrophyIcon className="text-page-text-muted" />
+                  <span className="text-sm font-medium text-page-text-muted">Rewards</span>
                 </div>
                 <button className="flex items-center gap-0.5 text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">
                   View all <ArrowRightSmallIcon />
@@ -418,7 +418,7 @@ export default function CreatorDashboardPage() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium" style={{ color: "#1A67E5" }}>
-                      Challenger <span className="text-xs font-normal text-foreground/50">· 53 influence</span>
+                      Challenger <span className="text-xs font-normal text-page-text-subtle">· 53 influence</span>
                     </span>
                     <span className="text-sm font-medium" style={{ color: "#AE4EEE" }}>
                       Elite
@@ -427,7 +427,7 @@ export default function CreatorDashboardPage() {
                   <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-foreground/10">
                     <div className="h-full rounded-full" style={{ width: "76%", backgroundColor: "#1A67E5" }} />
                   </div>
-                  <span className="mt-1 block text-xs text-foreground/50">17 points to go</span>
+                  <span className="mt-1 block text-xs text-page-text-subtle">17 points to go</span>
                 </div>
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#AE4EEE" }}>
                   5
@@ -487,7 +487,7 @@ export default function CreatorDashboardPage() {
                     />
                     <div className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-page-text">{c.name}</span>
-                      <span className="block truncate text-xs text-foreground/50">{c.meta}</span>
+                      <span className="block truncate text-xs text-page-text-subtle">{c.meta}</span>
                     </div>
                     <span className="shrink-0 text-sm font-medium tabular-nums text-page-text">{c.earned}</span>
                   </div>
@@ -501,7 +501,7 @@ export default function CreatorDashboardPage() {
             <div className={cn(cardClass, "p-4")}>
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs tracking-[-0.02em] text-foreground/50">Earnings</span>
+                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Earnings</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-sm font-medium tabular-nums tracking-[-0.02em] text-page-text">$11,289.16</span>
                     <span className="text-xs font-medium tabular-nums tracking-[-0.02em]" style={{ color: "#00994D" }}>+18.3%</span>
@@ -526,7 +526,7 @@ export default function CreatorDashboardPage() {
                           onClick={() => { setDateRange(opt.value); setDateDropdownOpen(false); }}
                           className={cn(
                             "flex w-full cursor-pointer items-center px-3 py-2 text-sm tracking-[-0.02em] transition-colors hover:bg-foreground/[0.04]",
-                            dateRange === opt.value ? "font-medium text-page-text" : "text-foreground/70",
+                            dateRange === opt.value ? "font-medium text-page-text" : "text-page-text-muted",
                           )}
                         >
                           {opt.label}
@@ -555,7 +555,7 @@ export default function CreatorDashboardPage() {
             <div className={cn(cardClass, "p-4")}>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-page-text">Linked accounts</span>
-                <span className="text-xs text-foreground/50">2/4 connected</span>
+                <span className="text-xs text-page-text-subtle">2/4 connected</span>
               </div>
               <div className="mt-3 flex flex-col gap-2">
                 {linkedAccounts.map((a) => (
@@ -564,11 +564,11 @@ export default function CreatorDashboardPage() {
                     <div className="min-w-0 flex-1">
                       <span className="block text-xs font-medium text-page-text">{a.platform}</span>
                       {a.connected ? (
-                        <span className="block text-xs text-foreground/50">
+                        <span className="block text-xs text-page-text-subtle">
                           {a.handle} · {a.followers}
                         </span>
                       ) : (
-                        <span className="block text-xs text-foreground/50">Not connected</span>
+                        <span className="block text-xs text-page-text-subtle">Not connected</span>
                       )}
                     </div>
                     {a.connected ? (
@@ -595,9 +595,9 @@ export default function CreatorDashboardPage() {
                     <ActivityIcon type={a.icon} />
                     <div className="min-w-0 flex-1">
                       <span className="block text-xs font-medium text-page-text">{a.title}</span>
-                      <span className="block truncate text-xs text-foreground/50">{a.desc}</span>
+                      <span className="block truncate text-xs text-page-text-subtle">{a.desc}</span>
                     </div>
-                    <span className="shrink-0 text-xs text-foreground/50">{a.time}</span>
+                    <span className="shrink-0 text-xs text-page-text-subtle">{a.time}</span>
                   </div>
                 ))}
               </div>

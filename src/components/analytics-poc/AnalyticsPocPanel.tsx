@@ -27,7 +27,8 @@ export function AnalyticsPocPanel({
   children,
   className,
   padding = "md",
-}: AnalyticsPocPanelProps) {
+  onClick,
+}: AnalyticsPocPanelProps & { onClick?: () => void }) {
   return (
     <section
       className={cn(
@@ -37,6 +38,7 @@ export function AnalyticsPocPanel({
         className,
       )}
       style={ANALYTICS_POC_PANEL_SURFACE_STYLE}
+      onClick={onClick}
     >
       <div className="relative z-10">{children}</div>
     </section>

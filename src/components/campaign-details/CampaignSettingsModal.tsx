@@ -142,7 +142,7 @@ function SettingRow({
           </span>
           {extra}
         </div>
-        <div className="shrink-0">{children}</div>
+        <div className="shrink-0 self-start sm:self-auto">{children}</div>
       </div>
     </div>
   );

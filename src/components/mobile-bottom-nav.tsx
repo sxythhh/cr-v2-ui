@@ -173,7 +173,7 @@ export function MobileBottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-foreground/[0.06] bg-page-bg md:hidden">
-      <div className="relative flex items-stretch justify-around px-1 pb-[max(4px,env(safe-area-inset-bottom))]">
+      <div className="relative flex items-stretch justify-around px-2 pb-[max(8px,env(safe-area-inset-bottom))]">
         {/* Primary tabs */}
         {PRIMARY_TABS.map(({ href, icon: Icon, exact }) => {
           const isActive = exact ? pathname === href : pathname.startsWith(href);
@@ -181,7 +181,7 @@ export function MobileBottomNav() {
             <Link
               key={href}
               href={href}
-              className="flex flex-1 flex-col items-center justify-center gap-1 py-2"
+              className="flex flex-1 flex-col items-center justify-center gap-1 py-3"
             >
               <Icon
                 className={cn(
@@ -198,7 +198,7 @@ export function MobileBottomNav() {
           ref={btnRef}
           type="button"
           onClick={() => setMoreOpen((v) => !v)}
-          className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 py-2"
+          className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 py-3"
         >
           <MoreDotsIcon
             className={cn(

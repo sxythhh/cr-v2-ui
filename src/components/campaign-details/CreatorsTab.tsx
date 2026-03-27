@@ -7,6 +7,7 @@ import { PlatformIcon } from "@/components/campaign-flow/PlatformButton";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
+import { InviteCreatorModal } from "./InviteCreatorModal";
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -58,6 +59,7 @@ export default function CreatorsTab() {
   const [filter, setFilter] = useState<CreatorStatus | "all">("active");
   const [bulkMode, setBulkMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   // Filter tabs proximity hover (horizontal)
   const filterContainerRef = useRef<HTMLDivElement>(null);
@@ -187,8 +189,16 @@ export default function CreatorsTab() {
           ))}
         </div>
 
-        {/* Bulk nudge toggle */}
+        {/* Actions */}
         <div className="flex w-full items-center gap-2 sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setInviteOpen(true)}
+            className="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-[#111111] sm:h-8 sm:px-3 sm:text-[13px]"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0"><path d="M7 1V13M1 7H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+            Invite
+          </button>
           {bulkMode && (
             <button
               type="button"
@@ -257,6 +267,9 @@ export default function CreatorsTab() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Invite creator modal */}
+      <InviteCreatorModal open={inviteOpen} onOpenChange={setInviteOpen} />
     </div>
   );
 }

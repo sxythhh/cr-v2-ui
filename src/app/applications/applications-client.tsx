@@ -832,6 +832,7 @@ function QuickReviewModal({
             <motion.div
               key={app.id}
               className="scrollbar-hide absolute inset-0 flex flex-col gap-4 overflow-y-auto rounded-b-2xl bg-card-bg px-5 pb-5 pt-4"
+              initial={false}
               drag
               dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
               dragElastic={0.9}

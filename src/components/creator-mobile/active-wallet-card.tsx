@@ -3,7 +3,7 @@ function GoldCoin() {
     <svg width="73" height="60" viewBox="0 0 73 60" fill="none" style={{ transform: "rotate(-5deg)" }}>
       <ellipse cx="36.5" cy="30" rx="34" ry="28" fill="url(#coin-grad)" stroke="#DB9C00" strokeWidth="2" />
       <ellipse cx="36.5" cy="28" rx="24" ry="20" fill="url(#coin-inner)" opacity="0.3" />
-      <text x="36.5" y="35" textAnchor="middle" fill="#8B6914" fontSize="18" fontWeight="800" fontFamily="SF Pro Rounded, Inter, sans-serif">$</text>
+      <text x="36.5" y="35" textAnchor="middle" fill="#8B6914" fontSize="18" fontWeight="800" fontFamily="Inter, sans-serif">$</text>
       <defs>
         <radialGradient id="coin-grad" cx="0.5" cy="0.44" r="0.7">
           <stop offset="0.56" stopColor="#FFE070" stopOpacity="0.2" />

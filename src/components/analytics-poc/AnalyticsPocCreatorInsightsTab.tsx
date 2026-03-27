@@ -429,11 +429,11 @@ function CreatorRetentionCard() {
       </div>
 
       {/* Stacked bar */}
-      <div className="flex h-10 w-full overflow-hidden rounded-full">
+      <div className="flex h-10 w-full gap-[2px] overflow-hidden rounded-xl bg-foreground/[0.06]">
         {barSegments.map((seg, i) => (
-          <div key={i} className="h-full border border-card-bg" style={{ width: seg.width, background: seg.color }} />
+          <div key={i} className="h-full" style={{ width: seg.width, background: seg.color }} />
         ))}
-        <div className="h-full flex-1 border border-card-bg" style={{ background: "var(--foreground)", opacity: 0.06 }} />
+        <div className="h-full flex-1" />
       </div>
 
       {/* Legend pills */}

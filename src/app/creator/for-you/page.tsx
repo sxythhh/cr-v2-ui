@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Modal } from "@/components/ui/modal";
 
 // ── Inline Icons ────────────────────────────────────────────────────
 
@@ -136,7 +137,7 @@ function CpmIcon() {
 // ── Card wrapper ────────────────────────────────────────────────────
 
 const cardClass =
-  "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg";
+  "rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none";
 
 // ── Stat card data ──────────────────────────────────────────────────
 
@@ -249,9 +250,11 @@ const campaigns = [
 
 export default function CreatorForYouPage() {
   const [feedPage, setFeedPage] = useState(0);
+  const [trustScoreOpen, setTrustScoreOpen] = useState(false);
+  const [streakOpen, setStreakOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col font-[family-name:var(--font-inter)]">
+    <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
       {/* ── Header ─────────────────────────────────────────────── */}
       <header className="flex h-14 shrink-0 items-center justify-between px-4 sm:px-5">
         <h1 className="text-sm font-medium tracking-[-0.02em] text-page-text">
@@ -269,8 +272,8 @@ export default function CreatorForYouPage() {
           {/* Recruit pill */}
           <div className={cn(cardClass, "flex h-9 items-center gap-2 rounded-2xl px-3")}>
             <span className="text-xs font-medium text-[#E57100]">Recruit</span>
-            <span className="text-xs text-foreground/20 dark:text-white/20">&middot;</span>
-            <span className="text-xs text-foreground/40 dark:text-white/40">36%</span>
+            <span className="text-xs text-page-text-subtle">&middot;</span>
+            <span className="text-xs text-page-text-subtle">36%</span>
             <div className="size-5 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-500" />
           </div>
           {/* Avatar */}
@@ -281,7 +284,7 @@ export default function CreatorForYouPage() {
       {/* ── Content ────────────────────────────────────────────── */}
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pb-8 sm:px-5">
         {/* Summary text */}
-        <p className="text-base font-medium leading-none tracking-[-0.02em] text-foreground/40 dark:text-white/40">
+        <p className="text-base font-medium leading-none tracking-[-0.02em] text-page-text-subtle">
           You&apos;ve got 3 clips under review, $312 payouts pending and your 24.5k views this week are up from last. Not bad, Vlad.
         </p>
 
@@ -289,14 +292,33 @@ export default function CreatorForYouPage() {
         {/* Desktop: 4-col grid */}
         <div className="hidden sm:grid sm:grid-cols-4 sm:gap-2">
           {stats.map((stat) => (
-            <StatCard key={stat.label} stat={stat} />
+            <StatCard
+              key={stat.label}
+              stat={stat}
+              onClick={
+                stat.label === "Trust score"
+                  ? () => setTrustScoreOpen(true)
+                  : stat.label === "Streak"
+                    ? () => setStreakOpen(true)
+                    : undefined
+              }
+            />
           ))}
         </div>
         {/* Mobile: horizontal scroll */}
         <div className="flex gap-2 overflow-x-auto pb-1 sm:hidden">
           {stats.map((stat) => (
             <div key={stat.label} className="min-w-[160px] flex-1">
-              <StatCard stat={stat} />
+              <StatCard
+                stat={stat}
+                onClick={
+                  stat.label === "Trust score"
+                    ? () => setTrustScoreOpen(true)
+                    : stat.label === "Streak"
+                      ? () => setStreakOpen(true)
+                      : undefined
+                }
+              />
             </div>
           ))}
         </div>
@@ -348,7 +370,7 @@ export default function CreatorForYouPage() {
                   <h3 className="text-sm font-medium text-page-text">
                     {card.title}
                   </h3>
-                  <p className="text-xs leading-[150%] text-foreground/50 dark:text-white/50">
+                  <p className="text-xs leading-[150%] text-page-text-subtle">
                     {card.desc}
                   </p>
                 </div>
@@ -366,7 +388,7 @@ export default function CreatorForYouPage() {
             <h2 className="text-sm font-medium text-page-text">
               Active campaigns
             </h2>
-            <button className="text-xs font-medium text-foreground/50 transition-colors hover:text-foreground/70 dark:text-white/50 dark:hover:text-white/70">
+            <button className="text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">
               Browse more &rarr;
             </button>
           </div>
@@ -378,6 +400,12 @@ export default function CreatorForYouPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Trust Score Modal ──────────────────────────────────── */}
+      <TrustScoreModal open={trustScoreOpen} onClose={() => setTrustScoreOpen(false)} />
+
+      {/* ── Streak Modal ──────────────────────────────────────── */}
+      <StreakModal open={streakOpen} onClose={() => setStreakOpen(false)} />
     </div>
   );
 }
@@ -386,6 +414,7 @@ export default function CreatorForYouPage() {
 
 function StatCard({
   stat,
+  onClick,
 }: {
   stat: {
     value: string;
@@ -395,12 +424,16 @@ function StatCard({
     color: string;
     bg: string;
   };
+  onClick?: () => void;
 }) {
   return (
-    <div className={cn(cardClass, "flex h-[61px] items-center overflow-hidden")}>
+    <div
+      className={cn(cardClass, "flex h-[61px] items-center overflow-hidden", onClick && "cursor-pointer transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}
+      onClick={onClick}
+    >
       <div className="flex flex-1 flex-col justify-center gap-0.5 px-3">
         <span className="text-sm font-medium text-page-text">{stat.value}</span>
-        <span className="flex items-center gap-0.5 text-xs text-foreground/70 dark:text-white/70">
+        <span className="flex items-center gap-0.5 text-xs text-page-text-muted">
           {stat.label}
           {stat.hasHelp && <HelpIcon className="shrink-0" />}
         </span>
@@ -489,7 +522,7 @@ function CampaignRow({
           </span>
 
           {/* Stats text */}
-          <span className="text-xs text-foreground/40 dark:text-white/40">
+          <span className="text-xs text-page-text-subtle">
             Paid out {campaign.paidOut}
             <span className="mx-1">&middot;</span>
             <span className={campaign.pendingHighlight ? "text-[#E57100]" : ""}>
@@ -506,5 +539,298 @@ function CampaignRow({
         </div>
       </div>
     </div>
+  );
+}
+
+// ── Trust Score Modal ──────────────────────────────────────────────
+
+const trustBreakdown = [
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 1L9.5 5.5L14 6.5L10.5 9.5L11.5 14L8 11.5L4.5 14L5.5 9.5L2 6.5L6.5 5.5L8 1Z" fill="currentColor" fillOpacity="0.7" />
+      </svg>
+    ),
+    title: "Content quality",
+    desc: "Based on views, engagement, and clip approval rate",
+    score: 91,
+    color: "#00994D",
+  },
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M5.5 7.5C6.88071 7.5 8 6.38071 8 5C8 3.61929 6.88071 2.5 5.5 2.5C4.11929 2.5 3 3.61929 3 5C3 6.38071 4.11929 7.5 5.5 7.5ZM10.5 7.5C11.6046 7.5 12.5 6.60457 12.5 5.5C12.5 4.39543 11.6046 3.5 10.5 3.5C9.39543 3.5 8.5 4.39543 8.5 5.5C8.5 6.60457 9.39543 7.5 10.5 7.5ZM1 12C1 9.79086 2.79086 8 5 8H6C7.38071 8 8.59871 8.66068 9.35 9.68C9.72 9.56 10.1 9.5 10.5 9.5H11C12.6569 9.5 14 10.8431 14 12.5V13H1V12Z" fill="currentColor" fillOpacity="0.7" />
+      </svg>
+    ),
+    title: "Engagement authenticity",
+    desc: "Real audience interaction vs. bot/fake engagement",
+    score: 88,
+    color: "#00994D",
+  },
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path fillRule="evenodd" clipRule="evenodd" d="M1 4C1 2.89543 1.89543 2 3 2H9C10.1046 2 11 2.89543 11 4V5.38L13.1056 4.32764C13.2298 4.26559 13.3737 4.26802 13.4959 4.33408C13.618 4.40014 13.6953 4.52116 13.7046 4.65682L14 8.5L13.7046 12.3432C13.6953 12.4788 13.618 12.5999 13.4959 12.6659C13.3737 12.732 13.2298 12.7344 13.1056 12.6724L11 11.62V12C11 13.1046 10.1046 14 9 14H3C1.89543 14 1 13.1046 1 12V4Z" fill="currentColor" fillOpacity="0.7" />
+      </svg>
+    ),
+    title: "Delivery Rate",
+    desc: "Clips submitted on time and meeting requirements",
+    score: 82,
+    color: "#00994D",
+  },
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 13H14M3 11L5 7L8 9L11 4L13 6" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    title: "Account Age",
+    desc: "Time on platform and consistency of activity",
+    score: 78,
+    color: "#E57100",
+  },
+];
+
+const scoreHistory = [
+  { month: "Oct", height: 32 },
+  { month: "Nov", height: 72 },
+  { month: "Dec", height: 56 },
+  { month: "Jan", height: 80 },
+  { month: "Feb", height: 96 },
+  { month: "Mar", height: 116 },
+];
+
+function TrustScoreModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Modal open={open} onClose={onClose} size="md" showClose={false}>
+      {/* Header */}
+      <div className="flex items-center justify-center border-b border-foreground/[0.06] px-6 py-3.5 dark:border-white/[0.06]">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Trust score</span>
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-3.5 flex size-7 items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 3L9 9M9 3L3 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col items-center gap-5 px-5 py-6" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.12) 0%, rgba(0,153,77,0) 100%)" }}>
+        {/* Score ring */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="relative flex size-20 items-center justify-center">
+            <svg width="80" height="80" viewBox="0 0 80 80" className="absolute inset-0">
+              {/* Track */}
+              <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(0,153,77,0.2)" strokeWidth="4" />
+              {/* Progress - 92% of full circle */}
+              <circle
+                cx="40"
+                cy="40"
+                r="36"
+                fill="none"
+                stroke="#00994D"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray={`${0.92 * 2 * Math.PI * 36} ${2 * Math.PI * 36}`}
+                transform="rotate(-90 40 40)"
+              />
+            </svg>
+            <span className="text-[28px] font-semibold tracking-[-0.02em] text-page-text">92</span>
+          </div>
+          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#00994D]">Excellent</span>
+          <span className="flex items-center gap-1 text-xs font-medium text-page-text-subtle">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1.5 6C1.5 3.51472 3.51472 1.5 6 1.5C8.48528 1.5 10.5 3.51472 10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6Z" stroke="currentColor" strokeOpacity="0.5" />
+              <path d="M6 3.5V6L8 7.5" stroke="currentColor" strokeOpacity="0.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Updated daily based on your activity
+          </span>
+        </div>
+
+        {/* Breakdown card */}
+        <div className="w-full rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          {trustBreakdown.map((item, i) => (
+            <div
+              key={item.title}
+              className={cn(
+                "flex items-center gap-3 py-3",
+                i < trustBreakdown.length - 1 && "border-b border-foreground/[0.06] dark:border-white/[0.06]"
+              )}
+            >
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text-muted shadow-[0_0_0_2px_#fff] dark:border-white/[0.06] dark:shadow-[0_0_0_2px_#1C1C1C]">
+                {item.icon}
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{item.title}</span>
+                <span className="text-xs text-page-text-muted">{item.desc}</span>
+              </div>
+              <span className="text-[20px] font-medium tabular-nums tracking-[-0.02em]" style={{ color: item.color }}>
+                {item.score}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Score history card */}
+        <div className="w-full rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex items-baseline gap-1.5 px-4 pt-4 pb-3">
+            <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Score history</span>
+            <span className="text-sm font-medium text-[#00994D]">+30 points</span>
+            <span className="text-xs text-page-text-subtle">in the last 6 months</span>
+          </div>
+          <div className="flex items-end justify-between gap-2 px-4 pb-2">
+            {scoreHistory.map((bar) => (
+              <div key={bar.month} className="flex flex-1 flex-col items-center gap-1.5">
+                <div
+                  className="w-full rounded-t-md border-x border-t border-white dark:border-card-bg"
+                  style={{
+                    height: bar.height,
+                    background: "linear-gradient(0deg, rgba(0,153,77,0.3), rgba(0,153,77,0.3)), var(--color-card-bg, #FFFFFF)",
+                  }}
+                />
+                <span className="text-[10px] font-medium text-page-text-subtle">{bar.month}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 pb-5">
+        <button
+          onClick={onClose}
+          className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+        >
+          Close
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+// ── Streak Modal ───────────────────────────────────────────────────
+
+function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  // March 2026 calendar data
+  // March 2026 starts on Sunday (0-indexed: 0=Sun)
+  // We display M T W T F S S
+  // March 1 is Sunday → column index 6
+  const daysInMonth = 31;
+  const firstDayOfWeek = 6; // Sunday = column 6 (Mon-based grid)
+  const streakDays = [20, 21, 22, 23, 24, 25, 26]; // Mar 20-26
+
+  // Build calendar grid: 6 rows x 7 cols
+  const calendarCells: { day: number; inMonth: boolean; isStreak: boolean }[] = [];
+
+  // Previous month filler
+  const prevMonthDays = [23, 24, 25, 26, 27, 28];
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    calendarCells.push({ day: prevMonthDays[i] ?? 0, inMonth: false, isStreak: false });
+  }
+
+  // Current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    calendarCells.push({ day: d, inMonth: true, isStreak: streakDays.includes(d) });
+  }
+
+  // Next month filler
+  const remaining = 7 - (calendarCells.length % 7);
+  if (remaining < 7) {
+    for (let i = 1; i <= remaining; i++) {
+      calendarCells.push({ day: i, inMonth: false, isStreak: false });
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={onClose} size="md" showClose={false}>
+      {/* Header */}
+      <div className="flex items-center justify-center border-b border-foreground/[0.06] px-6 py-3.5 dark:border-white/[0.06]">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Streak</span>
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-3.5 flex size-7 items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 3L9 9M9 3L3 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Content */}
+      <div
+        className="flex flex-col items-center gap-5 px-5 py-6"
+        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(255,101,0,0.12) 0%, rgba(255,101,0,0) 100%)" }}
+      >
+        {/* Fire icon circle */}
+        <div className="flex flex-col items-center gap-2">
+          <div
+            className="flex size-14 items-center justify-center rounded-full border border-foreground/[0.10] shadow-[0_0_0_2px_#fff,inset_0_1px_2px_rgba(0,0,0,0.06)] dark:border-white/[0.10] dark:shadow-[0_0_0_2px_#1C1C1C,inset_0_1px_2px_rgba(0,0,0,0.2)]"
+            style={{ background: "linear-gradient(180deg, #F59E0B 0%, #F97316 271.34%)" }}
+          >
+            <svg width="24" height="28" viewBox="0 0 26 30" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd" d="M11.4863 1.26534C12.363 0.013032 14.1221 -0.439661 15.4959 0.504976C16.9234 1.4865 19.392 3.38354 21.5167 6.04663C23.6403 8.70841 25.5 12.2384 25.5 16.4471C25.5 23.9432 19.8717 29.9471 12.75 29.9471C5.62834 29.9471 0 23.9432 0 16.4471C0 13.3941 1.31112 9.49318 3.8663 6.37882C4.9858 5.01433 6.91749 5.09571 8.0461 6.17996L11.4863 1.26534ZM12.75 26.9471C14.9246 26.9471 16.6875 24.9348 16.6875 22.4526C16.6875 19.7889 14.6157 17.8297 13.4778 16.9544C13.0433 16.6203 12.4567 16.6203 12.0222 16.9544C10.8843 17.8297 8.8125 19.7889 8.8125 22.4526C8.8125 24.9348 10.5754 26.9471 12.75 26.9471Z" fill="white" />
+            </svg>
+          </div>
+          <span className="text-[20px] font-medium tracking-[-0.02em] text-[#E57100]">6 day streak</span>
+          <span className="max-w-[240px] text-center text-xs font-medium text-page-text-subtle">
+            Your streak is based on how many days in a row you submit a video
+          </span>
+        </div>
+
+        {/* Calendar card */}
+        <div className="w-full rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          {/* Calendar header */}
+          <div className="mb-3 flex items-center justify-between">
+            <button className="flex size-8 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.04] dark:border-white/[0.06] dark:hover:bg-white/[0.04]">
+              <ChevronLeftIcon />
+            </button>
+            <span className="text-sm font-medium tracking-[-0.02em] text-page-text">March 2026</span>
+            <button className="flex size-8 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.04] dark:border-white/[0.06] dark:hover:bg-white/[0.04]">
+              <ChevronRightIcon />
+            </button>
+          </div>
+
+          {/* Day headers */}
+          <div className="mb-1 grid grid-cols-7 gap-0">
+            {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+              <div key={`${d}-${i}`} className="flex h-9 items-center justify-center text-sm font-medium text-page-text-subtle">
+                {d}
+              </div>
+            ))}
+          </div>
+
+          {/* Date cells */}
+          <div className="grid grid-cols-7 gap-0">
+            {calendarCells.map((cell, i) => (
+              <div
+                key={i}
+                className="flex h-9 items-center justify-center"
+                style={{ opacity: cell.inMonth ? 1 : 0 }}
+              >
+                {cell.isStreak ? (
+                  <svg width="24" height="24" viewBox="0 0 26 30" fill="none">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M11.4863 1.26534C12.363 0.013032 14.1221 -0.439661 15.4959 0.504976C16.9234 1.4865 19.392 3.38354 21.5167 6.04663C23.6403 8.70841 25.5 12.2384 25.5 16.4471C25.5 23.9432 19.8717 29.9471 12.75 29.9471C5.62834 29.9471 0 23.9432 0 16.4471C0 13.3941 1.31112 9.49318 3.8663 6.37882C4.9858 5.01433 6.91749 5.09571 8.0461 6.17996L11.4863 1.26534ZM12.75 26.9471C14.9246 26.9471 16.6875 24.9348 16.6875 22.4526C16.6875 19.7889 14.6157 17.8297 13.4778 16.9544C13.0433 16.6203 12.4567 16.6203 12.0222 16.9544C10.8843 17.8297 8.8125 19.7889 8.8125 22.4526C8.8125 24.9348 10.5754 26.9471 12.75 26.9471Z" fill="#E57100" />
+                  </svg>
+                ) : (
+                  <span className="text-sm text-page-text-muted">{cell.day}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 pb-5">
+        <button
+          onClick={onClose}
+          className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+        >
+          Close
+        </button>
+      </div>
+    </Modal>
   );
 }

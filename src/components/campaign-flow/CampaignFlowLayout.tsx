@@ -215,7 +215,7 @@ function LeaveModal({ open, onSave, onKeepEditing, onDiscard, onClose }: { open:
         <button
           type="button"
           onClick={onDiscard}
-          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[rgba(251,113,133,0.08)] font-inter text-sm font-medium tracking-[-0.02em] text-[#FB7185] transition-colors hover:bg-[rgba(251,113,133,0.12)] active:scale-[0.98]"
+          className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-[#FF25250F] font-inter text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[#FF252518] active:scale-[0.98]"
         >
           Discard and leave
         </button>

@@ -180,10 +180,10 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                 <span>Back to campaigns</span>
               </button>
 
-              {/* ── Hero row: info + thumbnail ─────────────────── */}
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
-                {/* Left: campaign info */}
-                <div className="flex flex-1 min-w-0 flex-col gap-6">
+              {/* ── Two-column layout: content + sidebar ────────── */}
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-10">
+                {/* Left column: all campaign content */}
+                <div className="flex flex-1 min-w-0 flex-col gap-4">
                   {/* Tags */}
                   <div className="flex items-end gap-1">
                     {c.tags.map((tag) =>
@@ -240,26 +240,8 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   <p className="text-sm leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
                     {c.description}
                   </p>
-                </div>
 
-                {/* Right: thumbnail */}
-                <div className="relative w-full shrink-0 lg:w-[400px]">
-                  <div className="h-[232px] w-full overflow-hidden rounded-2xl bg-[rgba(37,37,37,0.08)] dark:bg-[rgba(255,255,255,0.08)]">
-                    <div className="h-full w-full bg-gradient-to-br from-[rgba(37,37,37,0.06)] to-[rgba(37,37,37,0.12)] dark:from-[rgba(255,255,255,0.04)] dark:to-[rgba(255,255,255,0.08)]" />
-                  </div>
-                  {/* CPM badge */}
-                  <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[rgba(26,103,229,0.4)] px-2.5 py-1.5 text-xs font-medium tracking-[-0.02em] text-[#DBEAFE] backdrop-blur-[8px]">
-                    CPM
-                  </span>
-                </div>
-              </div>
-
-              <Divider />
-
-              {/* ── Bottom: requirements + stats ───────────────── */}
-              <div className="flex flex-col gap-6 lg:flex-row lg:gap-10">
-                {/* Left: requirements */}
-                <div className="flex flex-1 min-w-0 flex-col gap-5">
+                  <Divider />
                   {/* Creator requirements */}
                   <div className="flex flex-col gap-3">
                     <h2 className="text-base font-medium tracking-[-0.02em] text-page-text">
@@ -305,8 +287,17 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   </div>
                 </div>
 
-                {/* Right: stats card */}
-                <div className="w-full shrink-0 lg:w-[400px]">
+                {/* Right column: sidebar */}
+                <div className="flex w-full shrink-0 flex-col gap-4 lg:w-[400px]">
+                  {/* Thumbnail */}
+                  <div className="relative overflow-hidden rounded-2xl">
+                    <div className="h-[210px] w-full bg-gradient-to-br from-[rgba(37,37,37,0.06)] to-[rgba(37,37,37,0.12)] dark:from-[rgba(255,255,255,0.04)] dark:to-[rgba(255,255,255,0.08)]" />
+                    <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[rgba(26,103,229,0.4)] px-2.5 py-1.5 text-xs font-medium tracking-[-0.02em] text-[#DBEAFE] backdrop-blur-[8px]">
+                      CPM
+                    </span>
+                  </div>
+
+                  {/* Budget + stats card */}
                 <div className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
                   {/* Budget section */}
                   <div className="flex flex-col gap-2">
@@ -382,8 +373,8 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
-          </div>
           </div>
         ) : activeTab === "finance" ? (
           <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">

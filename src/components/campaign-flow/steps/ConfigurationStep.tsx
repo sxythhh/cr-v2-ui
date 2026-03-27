@@ -217,7 +217,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
             onClick={() => { setAccessType("private"); update({ requireApplication: true }); }}
             icon={<LockIcon />}
             title="Private/invite only"
-            description="Hidden from discover. Only invited clippers can see and submit."
+            description="Hidden from Discover. Only invited creators can submit."
           />
         </Card>
       </div>
