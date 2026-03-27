@@ -151,7 +151,6 @@ const ALL_COLUMNS: Column[] = [
   { key: "engScore", label: "Eng. score", align: "right", width: "88px" },
   { key: "cpm", label: "CPM", align: "right", width: "56px" },
   { key: "sentiment", label: "Sentiment", align: "right", width: "80px" },
-  { key: "submissions", label: "Submissions", align: "right", width: "92px" },
 ];
 
 
@@ -252,13 +251,13 @@ function CreatorsTable({
       ref={tableRef}
       onMouseMove={handlers.onMouseMove}
       onMouseLeave={handlers.onMouseLeave}
-      className="scrollbar-hide relative overflow-x-auto rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
+      className="scrollbar-hide relative overflow-x-auto rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)]"
     >
       {/* Hover indicator */}
       <AnimatePresence>
         {hoverRect && (
           <motion.div
-            className="pointer-events-none absolute left-1 right-1 z-0 rounded-lg bg-accent"
+            className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.03]"
             initial={{ top: hoverRect.top, height: hoverRect.height, opacity: 0 }}
             animate={{ top: hoverRect.top, height: hoverRect.height, opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
@@ -269,7 +268,7 @@ function CreatorsTable({
 
       {/* Header */}
       <div
-        className="grid border-b border-border px-1 font-[family-name:var(--font-inter)]"
+        className="grid border-b border-foreground/[0.06] font-[family-name:var(--font-inter)] dark:border-[rgba(224,224,224,0.03)]"
         style={{ gridTemplateColumns: gridTemplate }}
       >
         <div className="flex items-center justify-center py-3 pr-3 pl-2">
@@ -304,13 +303,16 @@ function CreatorsTable({
       </div>
 
       {/* Rows */}
-      <div className="py-1">
+      <div>
       {sortedCreators.map((creator, i) => (
         <div
           key={creator.name}
           ref={(node) => { registerRow(i, node); }}
           data-proximity-index={i}
-          className="relative z-10 grid cursor-pointer px-1 font-[family-name:var(--font-inter)]"
+          className={cn(
+            "relative z-10 grid cursor-pointer font-[family-name:var(--font-inter)]",
+            i < sortedCreators.length - 1 && "border-b border-foreground/[0.04] dark:border-[rgba(224,224,224,0.03)]",
+          )}
           style={{ gridTemplateColumns: gridTemplate }}
           onClick={() => onCreatorClick?.(creator)}
         >
@@ -321,14 +323,14 @@ function CreatorsTable({
             <div
               key={col.key}
               className={cn(
-                "flex min-w-0 items-center border-b border-border/30 py-3",
+                "flex min-w-0 items-center py-3",
                 col.align === "right" ? "justify-end pl-3 pr-3" : "pr-3",
               )}
             >
               <CellContent colKey={col.key} creator={creator} />
             </div>
           ))}
-          <div className="border-b border-border/30" />
+          <div />
         </div>
       ))}
       </div>
@@ -462,7 +464,7 @@ function MobileCreatorsTable({ onCreatorClick }: { onCreatorClick?: (creator: Cr
   return (
     <div className="flex flex-col rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.06]">
       {/* Title row */}
-      <div className="flex h-9 items-center border-b border-[rgba(37,37,37,0.06)] px-1 dark:border-foreground/[0.06]">
+      <div className="flex h-9 items-center border-b border-[rgba(37,37,37,0.06)] px-3 dark:border-foreground/[0.06]">
         <div className="flex w-8 items-center justify-center">
           <span className="font-[family-name:var(--font-inter)] text-xs font-medium tracking-[-0.02em] text-page-text-muted">#</span>
         </div>
@@ -473,7 +475,7 @@ function MobileCreatorsTable({ onCreatorClick }: { onCreatorClick?: (creator: Cr
 
       {/* Creator rows */}
       {CREATORS.map((creator, i) => (
-        <div key={creator.name} className="flex cursor-pointer items-center px-1" onClick={() => onCreatorClick?.(creator)}>
+        <div key={creator.name} className="flex cursor-pointer items-center px-3" onClick={() => onCreatorClick?.(creator)}>
           {/* # */}
           <div className="flex w-8 shrink-0 items-center justify-center self-stretch py-3">
             <span className="font-[family-name:var(--font-inter)] text-xs font-medium tracking-[-0.02em] text-page-text-muted">

@@ -84,8 +84,8 @@ function ConfirmStep({
   onConfirm: () => void;
 }) {
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex flex-1 flex-col items-center justify-center gap-5 px-4 py-5 sm:px-5">
+    <div className="flex flex-col">
+      <div className="flex flex-col items-center gap-5 px-4 py-5 sm:px-5">
         <span className="text-[14px] font-medium text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
           Are you sure you wish to end this campaign?
         </span>
@@ -140,10 +140,10 @@ function CompletedStep({
   onContinue: () => void;
 }) {
   return (
-    <>
+    <div className="flex flex-col">
       <div
-        className="flex flex-col items-center gap-6 px-4 pb-5 pt-[60px] sm:px-5"
-        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)" }}
+        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] scrollbar-hide sm:px-5"
+        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)", scrollbarWidth: "none", maxHeight: "calc(90dvh - 120px)" }}
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
@@ -193,15 +193,15 @@ function CompletedStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 py-4 sm:px-5">
-        <button onClick={onCancel} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:px-5">
+        <button onClick={onCancel} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Cancel
         </button>
-        <button onClick={onContinue} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
+        <button onClick={onContinue} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] sm:flex-none dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Continue
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -488,8 +488,8 @@ export function EndCampaignModal({ open, onOpenChange, campaign }: EndCampaignMo
         <DialogPrimitive.Popup
           className={cn(
             "fixed left-1/2 top-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-[520px] -translate-x-1/2 -translate-y-1/2 flex-col",
-            "rounded-[20px] border border-border",
-            "bg-white shadow-xl",
+            "rounded-[20px] border border-border overflow-hidden",
+            "bg-white shadow-xl dark:bg-card-bg",
             "max-h-[90dvh] tracking-[-0.02em]",
             "end-campaign-modal",
           )}

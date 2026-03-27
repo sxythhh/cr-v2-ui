@@ -166,9 +166,9 @@ function PlatformBadgeSmall({ platform }: { platform: string }) {
 
 // ── Stat Card ────────────────────────────────────────────────────────
 
-function StatCard({ value, label, suffix }: { value: string; label: string; suffix?: React.ReactNode }) {
+function StatCard({ value, label, suffix, className }: { value: string; label: string; suffix?: React.ReactNode; className?: string }) {
   return (
-    <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3">
+    <div className={cn("flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3", className)}>
       <div className="flex items-center gap-1">
         <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{value}</span>
         {suffix}
@@ -323,7 +323,7 @@ function OverviewTab({ creator }: { creator: CreatorDetailsData }) {
     <div className="flex flex-col gap-2">
       {/* Stat cards row */}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-        <StatCard value={creator.totalEarned} label="Total earned" />
+        <StatCard value={creator.totalEarned} label="Total earned" className="col-span-2 sm:col-span-1" />
         <StatCard
           value={String(creator.engagementScore)}
           label="Engagement score"

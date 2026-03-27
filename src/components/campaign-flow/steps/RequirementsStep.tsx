@@ -133,7 +133,7 @@ function FileCardIcon({ ext }: { ext: string }) {
 
 function FileCard({ name, size, ext, onRemove }: UploadedFile & { onRemove: () => void }) {
   return (
-    <div className="relative flex w-[calc(50%-4px)] items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="relative flex w-full items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] sm:w-[calc(50%-4px)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.03)]">
       <FileCardIcon ext={ext} />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{name}</span>

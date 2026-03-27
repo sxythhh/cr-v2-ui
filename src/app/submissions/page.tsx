@@ -3213,18 +3213,10 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
           {/* Icon + Title + Description */}
           <div className="flex flex-col items-center gap-4">
             {/* Icon circle */}
-            <div className="relative flex size-14 items-center justify-center rounded-full bg-card-bg shadow-[0_0_0_2px_var(--card-bg)]">
+            <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:shadow-none">
               <LightBulbIcon />
-              <div
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{
-                  padding: "1px",
-                  background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)",
-                  WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
-                }}
-              />
+              <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+              <div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
             </div>
 
             {/* Text */}
@@ -3243,7 +3235,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             {SCORE_CARDS.map((card) => (
               <div
                 key={card.title}
-                className="flex flex-col gap-2 rounded-2xl border border-card-inner-border bg-card-inner-bg p-4"
+                className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] bg-foreground/[0.02] p-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
               >
                 <span className="font-inter text-sm font-medium leading-[1] tracking-[-0.02em] text-page-text">
                   {card.title}
@@ -3257,7 +3249,7 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         </div>
 
         {/* Footer — pinned */}
-        <div className="shrink-0 border-t border-border px-5 py-4">
+        <div className="shrink-0 border-t border-foreground/[0.06] px-5 py-4 dark:border-[rgba(224,224,224,0.03)]">
           <button
             type="button"
             onClick={onClose}

@@ -152,7 +152,7 @@ const APPLICATIONS: Application[] = [
 
 function SocialAccountCard({ account }: { account: SocialAccount }) {
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border bg-card-bg p-4 transition-colors hover:bg-foreground/[0.02]">
+    <div className="flex flex-col gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-4 transition-colors hover:bg-foreground/[0.02]">
       {/* Top row: platform + username + link | stat pills */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
@@ -239,7 +239,7 @@ function ApplicationDetailsModal({
         style={{ height: "min(560px, calc(100dvh - 120px))" }}
       >
         {/* Header */}
-        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-border px-5">
+        <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-5">
           <span className="font-inter text-sm font-medium leading-none tracking-[-0.02em] text-page-text">
             Application details
           </span>
@@ -281,7 +281,7 @@ function ApplicationDetailsModal({
           </div>
 
           {/* Creator stats */}
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:flex">
             {[
               { value: "1.2M", label: "Followers" },
               { value: "$53,879", label: "Earned" },
@@ -328,7 +328,7 @@ function ApplicationDetailsModal({
               {/* Stat cards row */}
               <div className="flex gap-2">
                 {/* Applied on */}
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-border bg-card-bg p-3">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
                   <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                     {app.appliedDate}
                   </span>
@@ -338,7 +338,7 @@ function ApplicationDetailsModal({
                 </div>
 
                 {/* Applied to */}
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-border bg-card-bg p-3">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
                   <span className="truncate font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                     {app.campaign}
                   </span>
@@ -348,7 +348,7 @@ function ApplicationDetailsModal({
                 </div>
 
                 {/* Applied with */}
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-border bg-card-bg p-3">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
                   <div className="flex items-center gap-1.5">
                     {tiktokCount > 0 && (
                       <div className="flex items-center gap-1">
@@ -385,7 +385,7 @@ function ApplicationDetailsModal({
               </div>
 
               {/* Motivation card */}
-              <div className="rounded-2xl border border-border bg-card-bg p-4">
+              <div className="rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-4">
                 <div className="flex flex-col gap-3">
                   <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                     Motivation
@@ -447,7 +447,7 @@ function ApplicationDetailsModal({
         </div>
 
         {/* Footer with actions */}
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-5 py-3">
+        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-5 py-3">
           <button
             className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] py-1.5 pl-2.5 pr-3 transition-colors hover:bg-foreground/[0.06]"
           >
@@ -1000,7 +1000,7 @@ function ApplicationSegmentedTabs({ activeFilter, onSelect }: { activeFilter: nu
 function ApplicationCard({ app, onClick }: { app: Application; onClick: () => void }) {
   return (
     <div
-      className="flex cursor-pointer flex-col rounded-2xl border border-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+      className="flex cursor-pointer flex-col rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
       onClick={onClick}
     >
       {/* Header */}
@@ -1058,7 +1058,7 @@ function ApplicationCard({ app, onClick }: { app: Application; onClick: () => vo
       </div>
 
       {/* Platform stats bar */}
-      <div className="border-y border-border px-4 py-3">
+      <div className="border-y border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             {app.platforms.map((p, i) => (
@@ -1161,7 +1161,7 @@ export function ApplicationsContent({ onQuickReviewRef, onScoresRef }: { onQuick
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
                 <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
@@ -1284,7 +1284,7 @@ export default function ApplicationsPage() {
   return (
     <div>
       {/* Top nav */}
-      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-page-bg px-4 sm:px-5">
+      <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-page-bg px-4 sm:px-5">
         <span className="font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text">
           Applications
         </span>

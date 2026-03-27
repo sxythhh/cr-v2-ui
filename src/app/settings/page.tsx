@@ -1718,8 +1718,8 @@ function AgencyProfileTab() {
           {/* Phone mockup frame */}
           <div className="flex items-start justify-center">
             <div
-              className="relative flex shrink-0 flex-col overflow-hidden rounded-[40px] border border-foreground/[0.16] bg-foreground/[0.02]"
-              style={{ width: 393, height: 852 }}
+              className="relative flex w-full max-w-[393px] shrink-0 flex-col overflow-hidden rounded-[40px] border border-foreground/[0.16] bg-foreground/[0.02]"
+              style={{ aspectRatio: "393/852" }}
             >
               {/* iOS Status bar */}
               <div className="flex h-[54px] w-full items-center justify-between px-8">

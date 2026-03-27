@@ -151,7 +151,7 @@ export function DetailsStep({ data, onChange }: { data: DetailsData; onChange: (
       <div className="flex flex-col gap-2">
         <SectionLabel title="Type and category" description="Classify your campaign so the right creators can find it." />
         <Card>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Type</span>
               <div className="relative">

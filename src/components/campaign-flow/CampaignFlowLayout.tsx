@@ -149,8 +149,11 @@ function CampaignTopUpModal({ open, onClose, onSuccess }: { open: boolean; onClo
 
             {/* Receipt email */}
             <div className="flex items-center gap-1.5">
-              <svg width="14" height="11" viewBox="0 0 14 11" fill="none"><path d="M0.080103 1.47237C0.0488083 1.60381 0.0312702 1.73672 0.0203819 1.86998C-1.96435e-05 2.11969-1.03164e-05 2.42284 4.95335e-07 2.77425V7.89236C-1.03164e-05 8.24377-1.96435e-05 8.54698 0.0203819 8.79669C0.0419159 9.06025 0.0894598 9.3224 0.217989 9.57465C0.409736 9.95097 0.715697 10.2569 1.09202 10.4487C1.34427 10.5772 1.60642 10.6248 1.86998 10.6463C2.11967 10.6667 2.42281 10.6667 2.7742 10.6667H10.559C10.9104 10.6667 11.2137 10.6667 11.4634 10.6463C11.7269 10.6248 11.9891 10.5772 12.2413 10.4487C12.6176 10.2569 12.9236 9.95097 13.1153 9.57465C13.2439 9.3224 13.2914 9.06025 13.313 8.79669C13.3334 8.54698 13.3333 8.2438 13.3333 7.89238V2.77429C13.3333 2.42286 13.3334 2.11969 13.313 1.86998C13.3021 1.73672 13.2845 1.60381 13.2532 1.47237L7.93314 5.82517C7.19641 6.42795 6.13692 6.42795 5.40019 5.82517L0.080103 1.47237Z" fill="currentColor" fillOpacity="0.5"/><path d="M12.4937 0.371039C12.4138 0.314127 12.3295 0.262922 12.2413 0.217989C11.9891 0.0894597 11.7269 0.0419157 11.4634 0.0203817C11.2136-1.99278e-05 10.9105-1.0464e-05 10.5591 5.06251e-07H2.77431C2.42289-1.0464e-05 2.11969-1.99278e-05 1.86998 0.0203817C1.60642 0.0419157 1.34427 0.0894597 1.09202 0.217989C1.00383 0.262922 0.919512 0.314128 0.839618 0.37104L6.24451 4.79322C6.49009 4.99415 6.84325 4.99415 7.08883 4.79322L12.4937 0.371039Z" fill="currentColor" fillOpacity="0.5"/></svg>
-              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">receipt sent to vlad@outpacestudios.com</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                <path d="M1.41311 4.14034C1.38182 4.27178 1.36428 4.40469 1.35339 4.53795C1.33299 4.78765 1.333 5.09081 1.33301 5.44222V10.5603C1.333 10.9117 1.33299 11.215 1.35339 11.4647C1.37492 11.7282 1.42247 11.9904 1.551 12.2426C1.74274 12.6189 2.04871 12.9249 2.42503 13.1166C2.67728 13.2452 2.93943 13.2927 3.20299 13.3143C3.45268 13.3347 3.75582 13.3346 4.1072 13.3346H11.892C12.2434 13.3346 12.5467 13.3347 12.7964 13.3143C13.0599 13.2927 13.3221 13.2452 13.5743 13.1166C13.9506 12.9249 14.2566 12.6189 14.4484 12.2426C14.5769 11.9904 14.6244 11.7282 14.646 11.4647C14.6664 11.2149 14.6664 10.9118 14.6663 10.5603V5.44226C14.6664 5.09083 14.6664 4.78766 14.646 4.53795C14.6351 4.40468 14.6175 4.27178 14.5862 4.14033L9.26615 8.49314C8.52942 9.09592 7.46993 9.09592 6.7332 8.49314L1.41311 4.14034Z" fill="currentColor" fillOpacity="0.5"/>
+                <path d="M13.8267 3.03901C13.7468 2.9821 13.6625 2.93089 13.5743 2.88596C13.3221 2.75743 13.0599 2.70988 12.7964 2.68835C12.5467 2.66795 12.2435 2.66796 11.8921 2.66797H4.10731C3.7559 2.66796 3.4527 2.66795 3.20299 2.68835C2.93943 2.70988 2.67728 2.75743 2.42503 2.88596C2.33684 2.93089 2.25252 2.9821 2.17263 3.03901L7.57752 7.46119C7.82309 7.66212 8.17626 7.66212 8.42183 7.46119L13.8267 3.03901Z" fill="currentColor" fillOpacity="0.5"/>
+              </svg>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Receipt sent to vlad@outpacestudios.com</span>
             </div>
           </div>
 
@@ -304,14 +307,14 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <div className="relative flex-1 flex flex-col items-center min-h-0 overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: "none" }}>
-          <div className="w-full max-w-[600px] px-5 py-6">
+          <div className="w-full max-w-[600px] px-4 py-6 sm:px-5">
             {children}
           </div>
         </div>
       </div>
 
       {/* Fixed footer */}
-      <div className="flex shrink-0 items-center justify-between border-t border-foreground/[0.06] px-5 py-4">
+      <div className="flex shrink-0 items-center justify-between border-t border-foreground/[0.06] px-4 py-4 sm:px-5">
         {/* Block reason hint — left side */}
         <div className="min-w-0 flex-1">
           {showErrors && !canContinue && !isLastStep && continueBlockReason && (

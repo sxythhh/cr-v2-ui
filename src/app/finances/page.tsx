@@ -968,7 +968,7 @@ function FinanceOverview() {
       </div>
 
       {/* Two-column: Revenue bar chart + Revenue by campaign */}
-      <div className="flex items-stretch gap-2">
+      <div className="flex flex-col items-stretch gap-2 lg:flex-row">
         {/* Revenue/Profit bar chart */}
         <div className={cn(cardBase, "flex-1 gap-4 p-4")}>
           <div className="flex flex-col gap-2">
@@ -1027,7 +1027,7 @@ function FinanceOverview() {
         </div>
 
         {/* Revenue by campaign */}
-        <div className={cn(cardBase, "relative flex w-[400px] shrink-0 flex-col gap-4 p-4")}>
+        <div className={cn(cardBase, "relative flex w-full shrink-0 flex-col gap-4 p-4 lg:w-[400px]")}>
           <div className="flex items-center justify-between">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Revenue by campaign</span>
             <div className="flex items-center gap-1">
@@ -1056,7 +1056,7 @@ function FinanceOverview() {
       </div>
 
       {/* Two-column: Recent transactions + Client payment health */}
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 lg:flex-row">
         {/* Recent transactions */}
         <div className={cn(cardBase, "relative flex-1 overflow-hidden p-0")}>
           <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
@@ -1101,7 +1101,7 @@ function FinanceOverview() {
         </div>
 
         {/* Client payment health */}
-        <div className={cn(cardBase, "relative w-[400px] shrink-0 gap-4 overflow-hidden p-4")}>
+        <div className={cn(cardBase, "relative w-full shrink-0 gap-4 overflow-hidden p-4 lg:w-[400px]")}>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-card-bg via-card-bg to-transparent" />
           <div className="relative z-10 flex items-center justify-between">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Client payment health</span>
@@ -1127,7 +1127,7 @@ function FinanceOverview() {
       {/* Upcoming Payouts */}
       <div className={cn(cardBase, "gap-4 p-4")}>
         <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Client payment health</span>
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           {UPCOMING_PAYOUTS.map((p, i) => (
             <div key={i} className={cn(cardBase, "flex-1 flex-row items-start justify-between gap-2 p-4")}>
               <div className="flex flex-1 flex-col gap-3">

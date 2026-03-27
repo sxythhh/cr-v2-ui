@@ -169,7 +169,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       {/* ── Content ─────────────────────────────────────────────── */}
       <div className="md:min-h-0 md:flex-1 md:overflow-y-auto" style={{ scrollbarWidth: "none" }}>
         {activeTab === "details" ? (
-          <div className="mx-auto max-w-[1200px] px-5 py-5">
+          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <div className="flex flex-col gap-5">
               {/* Mobile-only back button */}
               <button
@@ -386,21 +386,21 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           </div>
           </div>
         ) : activeTab === "finance" ? (
-          <div className="mx-auto max-w-[1200px] px-5 py-5">
+          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <FinanceTab />
           </div>
         ) : activeTab === "submissions" ? (
-          <div className="mx-auto max-w-[1200px] px-5 py-5">
+          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <SubmissionsTab />
           </div>
         ) : activeTab === "creators" ? (
-          <div className="mx-auto max-w-[1200px] px-5 py-5">
+          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <CreatorsTab />
           </div>
         ) : activeTab === "events" ? (
           <EventsTab />
         ) : activeTab === "analytics" ? (
-          <div className="mx-auto max-w-[1200px] px-5 py-5">
+          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <AnalyticsTab />
           </div>
         ) : (

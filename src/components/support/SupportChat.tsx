@@ -170,7 +170,7 @@ export function SupportChat() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed bottom-5 right-5 z-50 flex w-[380px] flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_8px_40px_rgba(0,0,0,0.12),0px_2px_8px_rgba(0,0,0,0.06)]"
+            className="fixed bottom-0 right-0 z-50 flex w-full flex-col overflow-hidden rounded-t-2xl border border-foreground/[0.06] bg-card-bg shadow-[0px_8px_40px_rgba(0,0,0,0.12),0px_2px_8px_rgba(0,0,0,0.06)] sm:bottom-5 sm:right-5 sm:w-[380px] sm:rounded-2xl"
             style={{ height: "min(580px, calc(100dvh - 100px))", transformOrigin: "bottom right" }}
           >
             {/* Header */}

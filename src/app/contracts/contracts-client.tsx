@@ -246,8 +246,7 @@ function ContractRow({
   const hideBorder = activeIndex !== null && (index === activeIndex || index === activeIndex - 1);
 
   return (
-    <div ref={rowRef} className="flex items-center px-1">
-      <div className={cn("flex flex-1 items-center transition-[border-color] duration-75", !isLast && cn("border-b", hideBorder ? "border-transparent" : "border-foreground/[0.03]"))}>
+    <div ref={rowRef} className={cn("flex items-center transition-[border-color] duration-75", !isLast && cn("border-b", hideBorder ? "border-transparent" : "border-foreground/[0.03]"))}>
         {/* Creator */}
         <div className={cn("flex w-[244px] shrink-0 items-center gap-2 px-3 py-3", rowOpacity)}>
           <img src={contract.avatar} alt="" className="size-6 shrink-0 rounded-full object-cover" />
@@ -308,7 +307,6 @@ function ContractRow({
         <div className="flex w-[104px] shrink-0 items-center justify-end px-3 py-3 pl-5">
           <ActionButton label={contract.actionLabel} variant={contract.actionVariant} />
         </div>
-      </div>
     </div>
   );
 }
@@ -740,12 +738,12 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
         </div>
 
         {/* Table card */}
-        <div className="overflow-hidden rounded-[20px] border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none">
+        <div className="overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           {/* Table scrollable wrapper */}
           <div className="overflow-x-auto">
             <div style={{ minWidth: 1000 }}>
               {/* Header */}
-              <div className="flex items-center border-b border-foreground/[0.06] px-1">
+              <div className="flex items-center border-b border-foreground/[0.06]">
                 <div className="flex flex-1 items-center">
                   {COLUMNS.map((col) => {
                     const isSorted = col.sortKey !== null && sortKey === col.sortKey;
@@ -804,9 +802,9 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
                   {activeRect && (
                     <motion.div
                       key={sessionRef.current}
-                      className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
-                      initial={{ opacity: 0, top: activeRect.top, left: activeRect.left, width: activeRect.width, height: activeRect.height }}
-                      animate={{ opacity: 1, top: activeRect.top, left: activeRect.left, width: activeRect.width, height: activeRect.height }}
+                      className="pointer-events-none absolute inset-x-0 bg-foreground/[0.03]"
+                      initial={{ opacity: 0, top: activeRect.top, height: activeRect.height }}
+                      animate={{ opacity: 1, top: activeRect.top, height: activeRect.height }}
                       exit={{ opacity: 0, transition: { duration: 0.12 } }}
                       transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
                     />

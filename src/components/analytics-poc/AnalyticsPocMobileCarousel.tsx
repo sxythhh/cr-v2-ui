@@ -71,7 +71,7 @@ export function AnalyticsPocMobileCarousel({
         style={{ gap }}
       >
         {items.map((child, i) => (
-          <div key={i} className="w-80 shrink-0 snap-start">
+          <div key={i} className="w-[calc(100vw-48px)] max-w-80 shrink-0 snap-start">
             {child}
           </div>
         ))}

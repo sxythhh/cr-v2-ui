@@ -526,9 +526,9 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Card 2: Notification matrix */}
-        <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+        <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-foreground/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
           {/* Header row */}
-          <div className="flex h-10 items-center border-b border-foreground/[0.06] px-4 dark:border-white/[0.06]">
+          <div className="flex h-10 min-w-[480px] items-center border-b border-foreground/[0.06] px-4 dark:border-white/[0.06]">
             <span className="flex-1 font-inter text-xs font-medium text-page-text-muted">
               Event
             </span>
@@ -552,7 +552,7 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
               <div
                 key={idx}
                 className={cn(
-                  "flex h-14 items-center px-4",
+                  "flex h-14 min-w-[480px] items-center px-4",
                   !isLast && "border-b border-foreground/[0.03] dark:border-white/[0.03]"
                 )}
               >

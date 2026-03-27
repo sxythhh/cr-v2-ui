@@ -253,7 +253,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
         <div className="flex flex-col gap-2">
           <SectionLabel title="Pricing" description="Set your CPM rate and total campaign budget." />
           <Card className="flex flex-col gap-4">
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <div className="flex flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per 1,000 views</span>
                 <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
@@ -276,7 +276,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
         <div className="flex flex-col gap-2">
           <SectionLabel title="Flat rate pricing" description="Set a fixed payout per delivered video and the maximum number of posts per creator." />
           <Card>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <div className="flex flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate per post</span>
                 <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">
@@ -298,7 +298,7 @@ export function ConfigurationStep({ data, onChange, model = "cpm" }: { data: Con
         <div className="flex flex-col gap-2">
           <SectionLabel title="Rate and contract length" />
           <Card>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <div className="flex flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Rate</span>
                 <div className="flex h-10 items-center gap-1.5 rounded-[14px] bg-foreground/[0.04] px-3.5">

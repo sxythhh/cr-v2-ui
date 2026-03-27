@@ -648,7 +648,7 @@ function OnboardingView({
         </button>
       </div>
 
-      <div className="relative flex flex-col items-start gap-2 self-stretch p-4 pb-24 sm:px-8 sm:py-4 sm:pb-8">
+      <div className="relative flex flex-col items-start gap-2 self-stretch p-4 pb-8 sm:px-8 sm:py-4 sm:pb-8">
 
       <div className="relative z-[1] flex flex-col items-center self-stretch rounded-[20px] px-0 py-2 sm:py-4">
         <div className="flex w-full max-w-[720px] flex-col items-center">
@@ -856,8 +856,9 @@ function DollarSignIcon() {
 
 function EnvelopeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-foreground/50">
-      <path d="M1.333 4.667A2 2 0 0 1 3.333 2.667h9.334a2 2 0 0 1 2 2v6.666a2 2 0 0 1-2 2H3.333a2 2 0 0 1-2-2V4.667zm1.474-.195a.667.667 0 0 0-.14.195v6.666c0 .369.298.667.666.667h9.334a.667.667 0 0 0 .666-.667V4.667a.667.667 0 0 0-.14-.195L8.39 7.942a.667.667 0 0 1-.78 0L2.807 4.472z" />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+      <path d="M1.41311 4.14034C1.38182 4.27178 1.36428 4.40469 1.35339 4.53795C1.33299 4.78765 1.333 5.09081 1.33301 5.44222V10.5603C1.333 10.9117 1.33299 11.215 1.35339 11.4647C1.37492 11.7282 1.42247 11.9904 1.551 12.2426C1.74274 12.6189 2.04871 12.9249 2.42503 13.1166C2.67728 13.2452 2.93943 13.2927 3.20299 13.3143C3.45268 13.3347 3.75582 13.3346 4.1072 13.3346H11.892C12.2434 13.3346 12.5467 13.3347 12.7964 13.3143C13.0599 13.2927 13.3221 13.2452 13.5743 13.1166C13.9506 12.9249 14.2566 12.6189 14.4484 12.2426C14.5769 11.9904 14.6244 11.7282 14.646 11.4647C14.6664 11.2149 14.6664 10.9118 14.6663 10.5603V5.44226C14.6664 5.09083 14.6664 4.78766 14.646 4.53795C14.6351 4.40468 14.6175 4.27178 14.5862 4.14033L9.26615 8.49314C8.52942 9.09592 7.46993 9.09592 6.7332 8.49314L1.41311 4.14034Z" fill="currentColor" fillOpacity="0.5"/>
+      <path d="M13.8267 3.03901C13.7468 2.9821 13.6625 2.93089 13.5743 2.88596C13.3221 2.75743 13.0599 2.70988 12.7964 2.68835C12.5467 2.66795 12.2435 2.66796 11.8921 2.66797H4.10731C3.7559 2.66796 3.4527 2.66795 3.20299 2.68835C2.93943 2.70988 2.67728 2.75743 2.42503 2.88596C2.33684 2.93089 2.25252 2.9821 2.17263 3.03901L7.57752 7.46119C7.82309 7.66212 8.17626 7.66212 8.42183 7.46119L13.8267 3.03901Z" fill="currentColor" fillOpacity="0.5"/>
     </svg>
   );
 }
@@ -1032,7 +1033,7 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <div className="flex items-center gap-1.5">
               <EnvelopeIcon />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-foreground/50">
-                receipt sent to vlad@outpacestudios.com
+                Receipt sent to vlad@outpacestudios.com
               </span>
             </div>
           </div>
@@ -1275,8 +1276,8 @@ function DashboardView() {
       <HomeKpiCarousel />
 
       {/* KPI Cards — Desktop grid */}
-      <div className="hidden gap-2 sm:grid sm:grid-cols-2 xl:flex xl:flex-nowrap">
-        <KpiCardBalance className="sm:col-span-2 xl:w-[320px] xl:shrink-0" />
+      <div className="hidden gap-2 md:grid md:grid-cols-2 xl:flex xl:flex-nowrap">
+        <KpiCardBalance className="md:col-span-2 xl:w-[320px] xl:shrink-0" />
         <KpiCardActive className="xl:min-w-0 xl:flex-1" />
         <KpiCardViews className="xl:min-w-0 xl:flex-1" />
         <KpiCardAvgCpm className="xl:min-w-0 xl:flex-1" />
@@ -1530,7 +1531,7 @@ function EmptyHomeState({ onNewCampaign }: { onNewCampaign: () => void }) {
       </div>
 
       {/* Empty content */}
-      <div className="flex flex-1 flex-col items-center px-5 pt-[160px]">
+      <div className="flex flex-1 flex-col items-center px-5 pt-[80px] sm:pt-[160px]">
         <div className="flex flex-col items-center gap-4">
           {/* Icon circle */}
           <div className="relative flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-card-bg dark:shadow-none">
@@ -1592,13 +1593,13 @@ function HomeKpiCarousel() {
   }, [handleScroll]);
 
   return (
-    <div className="-mx-4 flex flex-col items-center gap-2 sm:hidden sm:-mx-5">
+    <div className="-mx-4 flex flex-col items-center gap-2 md:hidden sm:-mx-5">
       <div
         ref={scrollRef}
         className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 pr-4 scrollbar-hide sm:pl-5 sm:pr-5 [scroll-padding-inline:16px]"
       >
         {cards.map((card, i) => (
-          <div key={i} className="w-80 shrink-0 snap-start [&>*]:h-full">
+          <div key={i} className="w-[calc(100vw-48px)] max-w-80 shrink-0 snap-start [&>*]:h-full">
             {card}
           </div>
         ))}
@@ -1618,6 +1619,164 @@ function HomeKpiCarousel() {
   );
 }
 
+// ── Floating Onboarding Checklist ──────────────────────────────────
+
+function FloatingProgressRing({ completed, total }: { completed: number; total: number }) {
+  const size = 36;
+  const stroke = 1.8;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = total > 0 ? completed / total : 0;
+  const dashOffset = circumference * (1 - progress);
+
+  return (
+    <div className="relative size-9 shrink-0">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0 -rotate-90">
+        {/* Track */}
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(52,211,153,0.2)" strokeWidth={stroke} />
+        {/* Progress */}
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#34D399" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={dashOffset} style={{ transition: "stroke-dashoffset 0.5s ease" }} />
+      </svg>
+      {/* Person icon */}
+      <svg width="16" height="16" viewBox="0 0 11 13" fill="none" className="absolute left-[10px] top-[10px]">
+        <path d="M5.40885 0C3.752 0 2.40885 1.34315 2.40885 3C2.40885 4.65685 3.752 6 5.40885 6C7.06571 6 8.40885 4.65685 8.40885 3C8.40885 1.34315 7.06571 0 5.40885 0Z" fill="#E0E0E0" fillOpacity="0.7" />
+        <path d="M5.40984 6.66667C2.85524 6.66667 0.900095 8.19748 0.10622 10.344C-0.120734 10.9577 0.0346501 11.5625 0.395422 11.9925C0.747004 12.4115 1.28974 12.6667 1.8744 12.6667H8.94528C9.52995 12.6667 10.0727 12.4115 10.4243 11.9925C10.785 11.5625 10.9404 10.9577 10.7135 10.344C9.91959 8.19748 7.96444 6.66667 5.40984 6.66667Z" fill="#E0E0E0" fillOpacity="0.7" />
+      </svg>
+    </div>
+  );
+}
+
+function FloatingOnboardingChecklist({
+  completed,
+  onToggle,
+  onResume,
+}: {
+  completed: Record<string, boolean>;
+  onToggle: (key: string) => void;
+  onResume: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const completedCount = STEPS.filter((s) => s.completed || completed[s.key]).length;
+  const nextStep = STEPS.find((s) => !s.completed && !completed[s.key]);
+
+  return (
+    <motion.div
+      className="fixed bottom-5 right-5 z-50 flex flex-col overflow-hidden rounded-2xl border border-[rgba(224,224,224,0.03)] bg-[#252525] shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+      style={{ width: 360, maxWidth: "calc(100vw - 40px)" }}
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 20, scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+    >
+      {/* Collapsed bar */}
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="flex cursor-pointer items-center gap-3 px-4 py-4"
+      >
+        <FloatingProgressRing completed={completedCount} total={STEPS.length} />
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5 overflow-hidden">
+          <div className="flex w-full min-w-0 items-center gap-1">
+            <span className="shrink-0 font-inter text-[12px] leading-none tracking-[-0.02em] text-[rgba(224,224,224,0.5)]">
+              {completedCount}/{STEPS.length}
+            </span>
+            <span className="min-w-0 truncate font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#E0E0E0]">
+              {nextStep ? nextStep.title : "Setup complete!"}
+            </span>
+          </div>
+          {nextStep?.description && (
+            <span className="w-full truncate font-inter text-[12px] leading-none tracking-[-0.02em] text-[rgba(224,224,224,0.5)]">
+              {nextStep.description}
+            </span>
+          )}
+        </div>
+        <motion.svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          className="shrink-0 text-white/40"
+          animate={{ rotate: expanded ? 90 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </motion.svg>
+      </button>
+
+      {/* Expanded steps list */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-0.5 border-t border-white/[0.06] px-3 py-2">
+              {STEPS.map((step) => {
+                const isComplete = step.completed || completed[step.key];
+                return (
+                  <button
+                    key={step.key}
+                    type="button"
+                    onClick={() => {
+                      if (!isComplete && !step.completed) onToggle(step.key);
+                    }}
+                    className={cn(
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
+                      isComplete
+                        ? ""
+                        : "cursor-pointer hover:bg-white/[0.04]",
+                    )}
+                    disabled={isComplete}
+                  >
+                    {/* Check circle */}
+                    <div className="flex size-5 shrink-0 items-center justify-center">
+                      {isComplete ? (
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                          <circle cx="9" cy="9" r="9" fill="#34D399" />
+                          <path d="M5.5 9.5L7.5 11.5L12.5 6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      ) : (
+                        <div className="size-[18px] rounded-full border-[1.5px] border-[rgba(52,211,153,0.2)]" />
+                      )}
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className={cn(
+                        "truncate text-[13px] font-medium leading-tight tracking-[-0.01em]",
+                        isComplete ? "text-white/50 line-through" : "text-white",
+                      )}>
+                        {step.title}
+                      </span>
+                      {!isComplete && step.description && (
+                        <span className="truncate text-[11px] leading-tight text-white/40">
+                          {step.description}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between border-t border-white/[0.06] px-4 py-3">
+              <button
+                type="button"
+                onClick={onResume}
+                className="cursor-pointer text-[12px] font-medium tracking-[-0.01em] text-white/40 transition-colors hover:text-white/60"
+              >
+                Back to setup
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────────
 
 export default function Home() {
@@ -1627,6 +1786,9 @@ export default function Home() {
   const onToggle = useCallback((key: string) => {
     setCompleted((prev) => ({ ...prev, [key]: true }));
   }, []);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const allDone = STEPS.every((s) => s.completed || completed[s.key]);
   const showOnboarding = !allDone && !skipped;
@@ -1678,9 +1840,15 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Floating checklist for skipped users — portaled to body to escape contain:layout */}
-      {typeof document !== "undefined" && createPortal(
+      {mounted && createPortal(
         <AnimatePresence>
-          {/* Floating checklist hidden */}
+          {showFloatingChecklist && (
+            <FloatingOnboardingChecklist
+              completed={completed}
+              onToggle={onToggle}
+              onResume={() => setSkipped(false)}
+            />
+          )}
         </AnimatePresence>,
         document.body,
       )}

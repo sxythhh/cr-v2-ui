@@ -133,7 +133,7 @@ export function ApplicationSetupStep() {
         <SectionLabel title="Applicant requirements" description="Define who's eligible to apply. Creators will see these before submitting their application." />
         <Card className="flex flex-col gap-2 p-5">
           <ToggleRow title="Require minimum followers" on={minFollowers} onToggle={() => setMinFollowers((v) => !v)}>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Min. followers (any platform)</span>
                 <div className="flex h-10 items-center rounded-[14px] bg-foreground/[0.04] px-3.5">
@@ -176,7 +176,7 @@ export function ApplicationSetupStep() {
       <div className="flex flex-col gap-2">
         <SectionLabel title="Application limits" description="Control how many creators can apply and how quickly you'll review them." />
         <Card className="flex flex-col gap-4 p-5">
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Max applicants</span>
               <div className="relative">

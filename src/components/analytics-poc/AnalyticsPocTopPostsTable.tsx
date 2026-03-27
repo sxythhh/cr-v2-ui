@@ -97,7 +97,7 @@ function MobilePostCard({
 }) {
   const normalizedPlatform = row.platform.toLowerCase();
   return (
-    <div className="flex items-center gap-0 border-b border-foreground/[0.03] px-1">
+    <div className="flex items-center gap-0 border-b border-foreground/[0.03] px-3">
       <div className="flex w-8 shrink-0 items-center justify-center self-stretch">
         <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
           {index + 1}
@@ -278,7 +278,7 @@ export function AnalyticsPocTopPostsTable({
 
       {/* Mobile: card layout */}
       <div className="md:hidden">
-        <div className="flex items-center justify-between border-b border-foreground/[0.03] px-1">
+        <div className="flex items-center justify-between border-b border-foreground/[0.03] px-3">
           <div className="flex w-8 shrink-0 items-center justify-center py-3">
             <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[var(--ap-text-secondary)]">
               #
