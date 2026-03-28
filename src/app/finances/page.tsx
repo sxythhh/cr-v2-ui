@@ -639,8 +639,8 @@ const cardBase =
 const muted = "text-page-text-muted";
 
 const OVERVIEW_STATS = [
-  { label: "Balance", value: "$50,000", change: "+18.3%", changeColor: "#34D399" },
-  { label: "Net profit", value: "$38.2K", valueColor: "#34D399", change: "+18.3%", changeColor: "#34D399" },
+  { label: "Balance", value: "$50,000", change: "+18.3%", changeColor: "#00994D" },
+  { label: "Net profit", value: "$38.2K", valueColor: "#00994D", change: "+18.3%", changeColor: "#00994D" },
   { label: "Avg campaign ROI", value: "5.4x", secondary: "2.1x industry avg" },
   { label: "Paid out", value: "$3.32k", secondary: "Across all campaigns" },
 ];
@@ -694,7 +694,7 @@ const REVENUE_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
     ],
   },
   series: [
-    { key: "views", label: "Revenue", color: "#E9A23B", axis: "left", tooltipValueType: "currency" },
+    { key: "views", label: "Revenue", color: "#ED1285", axis: "left", tooltipValueType: "currency" },
   ],
   xTicks: [
     { label: "Jan 5", index: 0 }, { label: "Jan 8", index: 1 }, { label: "Jan 11", index: 2 },
@@ -1011,8 +1011,8 @@ function FinanceOverview() {
                     </div>
                   </div>
                   <div className="relative w-7 cursor-pointer transition-opacity group-hover/bar:opacity-100" style={{ height: BAR_HEIGHTS[i] }}>
-                    <div className="absolute inset-x-0 top-0 rounded-lg border border-white dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: BAR_HEIGHTS[i], background: "rgba(237,18,133,0.5)" }} />
-                    <div className="absolute inset-x-0 bottom-0 rounded-lg border border-white dark:border-[var(--card-bg,#1C1C1C)]" style={{ height: PROFIT_HEIGHTS[i], background: "rgba(0,153,77,0.5)" }} />
+                    <div className="absolute inset-x-0 top-0" style={{ height: BAR_HEIGHTS[i], background: "linear-gradient(0deg, rgba(237,18,133,0.3), rgba(237,18,133,0.3)), #FFFFFF", borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: "#FFFFFF", borderRadius: 8 }} />
+                    <div className="absolute inset-x-0 bottom-0" style={{ height: PROFIT_HEIGHTS[i], background: "linear-gradient(0deg, rgba(0,153,77,0.3), rgba(0,153,77,0.3)), #FFFFFF", borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: "#FFFFFF", borderRadius: 8 }} />
                   </div>
                 </div>
               ))}
