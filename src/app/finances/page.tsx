@@ -860,7 +860,7 @@ function MobileStatCarousel({ stats }: { stats: typeof OVERVIEW_STATS }) {
             key={s.label}
             className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0",
-              "snap-start",
+              "snap-start snap-always",
               i === stats.length - 1 && "mr-4 sm:mr-5",
             )}
           >
@@ -888,7 +888,7 @@ function MobileBottomStatCarousel({ stats }: { stats: typeof BOTTOM_STATS }) {
             key={s.label}
             className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0",
-              "snap-start",
+              "snap-start snap-always",
               i === stats.length - 1 && "mr-4 sm:mr-5",
             )}
           >

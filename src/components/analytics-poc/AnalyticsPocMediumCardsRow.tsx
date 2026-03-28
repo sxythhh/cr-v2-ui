@@ -55,8 +55,8 @@ export function AnalyticsPocMediumCardsRow({
           ref={scrollRef}
           className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
         >
-          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start">{left}</div>
-          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start mr-4 sm:mr-5">{right}</div>
+          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start snap-always">{left}</div>
+          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start snap-always mr-4 sm:mr-5">{right}</div>
         </div>
         <DotIndicator total={2} active={activeIndex} onDotClick={(i) => {
           const child = scrollRef.current?.children[i] as HTMLElement | undefined;

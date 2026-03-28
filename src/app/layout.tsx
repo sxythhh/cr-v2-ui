@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.webp",
   },
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
 };
 
 export const viewport: Viewport = {

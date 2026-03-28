@@ -222,7 +222,7 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
             key={stat.label}
             className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none",
-              "snap-start",
+              "snap-start snap-always",
               i === stats.length - 1 && "mr-4 sm:mr-5",
             )}
           >

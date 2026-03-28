@@ -142,7 +142,7 @@ function CompletedStep({
   return (
     <div className="flex flex-col">
       <div
-        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] scrollbar-hide sm:px-5"
+        className="flex min-h-[520px] flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] scrollbar-hide sm:px-5"
         style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)", scrollbarWidth: "none", maxHeight: "calc(90dvh - 120px)" }}
       >
         {/* Check icon + title */}
@@ -225,8 +225,8 @@ function FeedbackStep({
   return (
     <>
       <div
-        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
-        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.24) 0%, rgba(0,153,77,0) 100%)", scrollbarWidth: "none" }}
+        className="flex min-h-[520px] flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
+        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)", scrollbarWidth: "none" }}
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">
@@ -402,8 +402,8 @@ function NextStepsStep({
   return (
     <>
       <div
-        className="flex flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
-        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(0,153,77,0.24) 0%, rgba(0,153,77,0) 100%)", scrollbarWidth: "none" }}
+        className="flex min-h-[520px] flex-col items-center gap-6 overflow-y-auto px-4 pb-5 pt-[60px] sm:px-5"
+        style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(251,146,60,0.24) 0%, rgba(251,146,60,0) 100%)", scrollbarWidth: "none" }}
       >
         {/* Check icon + title */}
         <div className="flex flex-col items-center gap-4">

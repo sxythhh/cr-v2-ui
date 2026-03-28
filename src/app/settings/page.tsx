@@ -1138,7 +1138,7 @@ function CreateCustomRoleModal({ open, onClose }: { open: boolean; onClose: () =
         </div>
 
         {/* Footer */}
-        <div className="flex shrink-0 items-center gap-2 px-5 pb-4 pt-5 sm:justify-end sm:pb-5">
+        <div className="flex shrink-0 items-center gap-2 border-t border-page-border px-5 py-4 dark:border-[rgba(224,224,224,0.03)] sm:justify-center">
           <button type="button" onClick={onClose} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.03] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)] sm:flex-none">
             Cancel
           </button>

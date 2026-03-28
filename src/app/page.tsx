@@ -1630,7 +1630,7 @@ function HomeKpiCarousel() {
         {cards.map((card, i) => (
           <div key={i} className={cn(
             "w-[calc(100vw-56px)] max-w-80 shrink-0 [&>*]:h-full",
-            "snap-start",
+            "snap-start snap-always",
             i === cards.length - 1 && "mr-4 sm:mr-5",
           )}>
             {card}

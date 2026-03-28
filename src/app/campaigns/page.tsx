@@ -178,7 +178,33 @@ function CategoryIcon({ type }: { type: "user" | "swords" | "music" }) {
 // ── Active Campaign Card ───────────────────────────────────────────
 
 function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp?: () => void }) {
+  const [pauseOpen, setPauseOpen] = useState(false);
+
   return (
+    <>
+    <Modal open={pauseOpen} onClose={() => setPauseOpen(false)} size="sm" showClose={false}>
+      <div className="flex flex-col items-center gap-4 px-5 pt-5">
+        <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03]">
+          <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+          <div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+          <PauseIcon className="size-5 text-page-text" />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-inter text-lg font-medium tracking-[-0.02em] text-page-text">Pause campaign</span>
+          <span className="max-w-[300px] text-center font-inter text-sm leading-[1.5] tracking-[-0.02em] text-page-text-muted">
+            Are you sure you want to pause <strong className="font-medium text-page-text">{campaign.title}</strong>? Creators will no longer be able to submit content while paused.
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 border-t border-foreground/[0.06] px-5 py-4 sm:justify-center dark:border-[rgba(224,224,224,0.03)]">
+        <button onClick={() => setPauseOpen(false)} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] sm:flex-none dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+          Cancel
+        </button>
+        <button onClick={() => setPauseOpen(false)} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(229,113,0,0.08)] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-[#E57100] transition-colors hover:bg-[rgba(229,113,0,0.12)] sm:flex-none">
+          Yes, pause campaign
+        </button>
+      </div>
+    </Modal>
     <div className="group relative flex flex-col md:h-[185px] md:flex-row cursor-pointer items-stretch md:items-center gap-0 md:gap-4 rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-[linear-gradient(86.46deg,rgba(255,255,255,0)_87.34%,rgba(0,178,110,0.07)_100%),#FFFFFF] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-foreground/[0.03] dark:bg-foreground/[0.03] before:pointer-events-none before:absolute before:inset-0 before:rounded-[20px] before:bg-foreground/0 before:transition-colors before:duration-200 hover:before:bg-foreground/[0.03]">
       {/* Left section: thumbnail + info */}
       <div className="flex min-w-0 flex-1 flex-col md:flex-row items-stretch md:items-center gap-0 md:gap-4 md:self-stretch md:pr-4">
@@ -307,7 +333,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
             <PencilIcon className="size-3" />
             Edit
           </button>
-          <button className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2.5 pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
+          <button onClick={(e) => { e.stopPropagation(); setPauseOpen(true); }} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-2.5 pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]">
             <PauseIcon className="size-3" />
             Pause
           </button>
@@ -317,6 +343,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
         </div>
       </div>
     </div>
+    </>
   );
 }
 

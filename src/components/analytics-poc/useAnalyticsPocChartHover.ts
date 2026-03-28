@@ -172,9 +172,25 @@ export function useAnalyticsPocChartHover({
       if (!svg || data.length === 0) return null;
 
       const rect = svg.getBoundingClientRect();
-      // Recharts default margins — approximate the plot area
-      const plotLeft = rect.left + 4;
-      const plotRight = rect.right - 4;
+      // Find the line paths to determine actual plot bounds
+      const linePaths = svg.querySelectorAll(".recharts-line-curve");
+      let plotLeft = rect.left + 4;
+      let plotRight = rect.right - 4;
+      if (linePaths.length > 0) {
+        let minX = Infinity;
+        let maxX = -Infinity;
+        linePaths.forEach((path) => {
+          const pathRect = path.getBoundingClientRect();
+          if (pathRect.width > 0) {
+            minX = Math.min(minX, pathRect.left);
+            maxX = Math.max(maxX, pathRect.right);
+          }
+        });
+        if (minX < Infinity && maxX > -Infinity) {
+          plotLeft = minX;
+          plotRight = maxX;
+        }
+      }
       const plotWidth = plotRight - plotLeft;
 
       if (plotWidth <= 0) return null;

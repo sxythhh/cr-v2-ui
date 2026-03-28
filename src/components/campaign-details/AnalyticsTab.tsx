@@ -85,7 +85,7 @@ function AnalyticsStatCards() {
           {STATS.map((s, i) => (
             <div key={s.label} className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0",
-              "snap-start",
+              "snap-start snap-always",
               i === STATS.length - 1 && "mr-4 sm:mr-5",
             )}>
               <AnalyticsStatCard s={s} />

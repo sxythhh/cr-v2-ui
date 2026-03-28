@@ -58,15 +58,15 @@ export function SwipeableStatCards({ cards, columns = 4 }: { cards: StatCardData
   return (
     <>
       {/* Mobile: horizontal scroll — bleeds past page padding */}
-      <div className="flex flex-col items-center gap-2 md:hidden">
+      <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
         <div
           ref={scrollRef}
-          className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide [scroll-padding-inline:16px]"
+          className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
         >
           {cards.map((card, i) => (
             <div key={card.label} className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0",
-              i === 0 ? "snap-start ml-4 sm:ml-5" : "snap-start",
+              "snap-start snap-always",
               i === cards.length - 1 && "mr-4 sm:mr-5",
             )}>
               <StatCard {...card} />

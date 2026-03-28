@@ -522,7 +522,7 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
         {children.map((child, i) => (
           <div key={i} className={cn(
             "w-[calc(100vw-56px)] max-w-80 shrink-0",
-            "snap-start",
+            "snap-start snap-always",
             i === children.length - 1 && "mr-4 sm:mr-5",
           )}>
             {child}
