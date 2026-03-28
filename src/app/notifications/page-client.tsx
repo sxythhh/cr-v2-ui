@@ -583,18 +583,18 @@ function PreferencesModal({ open, onClose }: { open: boolean; onClose: () => voi
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-2 px-5 pb-5">
+      <div className="flex items-center gap-2 border-t border-foreground/[0.06] px-5 py-4 sm:justify-end sm:border-t-0 sm:pb-5 sm:pt-0">
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10]"
+          className="flex h-10 flex-1 items-center justify-center rounded-full bg-foreground/[0.06] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] sm:flex-none"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full bg-foreground px-4 py-2 font-inter text-sm font-medium text-white transition-colors hover:bg-foreground/80 dark:text-page-bg"
+          className="flex h-10 flex-1 items-center justify-center rounded-full bg-foreground px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-foreground/90 dark:text-page-bg sm:flex-none"
         >
           Save preferences
         </button>
