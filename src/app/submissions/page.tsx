@@ -1917,7 +1917,7 @@ function StatMiniCard({
         "flex min-h-0 flex-1 flex-col justify-center gap-2 rounded-2xl p-3",
         variant === "filled"
           ? "bg-foreground/[0.04]"
-          : "border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none",
+          : "border border-[rgba(37,37,37,0.06)] bg-[#FBFBFB] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-inner-bg",
         className,
       )}
     >

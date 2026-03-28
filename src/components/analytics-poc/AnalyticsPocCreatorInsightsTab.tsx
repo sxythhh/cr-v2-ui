@@ -49,7 +49,7 @@ function ActionCard({ label, value, valueColor, subtitle, ctaLabel, ctaClassName
           onClick={onCtaClick}
           className={cn(
             "flex w-full cursor-pointer items-center justify-center rounded-full px-4 py-2.5 font-inter text-xs font-medium tracking-[-0.02em] transition-colors",
-            ctaClassName ?? "bg-foreground/[0.03] text-page-text hover:bg-foreground/[0.06]",
+            ctaClassName ?? "bg-foreground text-white hover:bg-foreground/90 dark:text-[#111]",
           )}
         >
           {ctaLabel}

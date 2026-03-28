@@ -176,10 +176,10 @@ function Checkbox({ checked, onChange, indeterminate }: { checked: boolean; onCh
 /* ── Payout Detail Dialog ──────────────────────────────────────────── */
 
 const METRIC_PILLS = [
-  { label: "Views", value: "171.9K", color: "#4D81EE", bg: "rgba(77, 129, 238, 0.1)" },
+  { label: "Views", value: "171.9K", color: "#1A67E5", bg: "rgba(26, 103, 229, 0.1)" },
   { label: "Likes", value: "7.6K", color: "#DA5597", bg: "rgba(218, 85, 151, 0.1)" },
-  { label: "Comments", value: "312", color: "#E9A23B", bg: "rgba(233, 162, 59, 0.1)" },
-  { label: "Shares", value: "1.1K", color: "#00B259", bg: "rgba(0, 178, 89, 0.1)" },
+  { label: "Comments", value: "312", color: "#E57100", bg: "rgba(229, 113, 0, 0.1)" },
+  { label: "Shares", value: "1.1K", color: "#00994D", bg: "rgba(0, 153, 77, 0.08)" },
 ];
 
 const PAYOUT_HISTORY = [
@@ -444,15 +444,15 @@ function PayoutDetailDialog({
             <div className="flex w-full flex-col gap-4 px-5 pb-5 pt-4 sm:min-h-[340px]">
               {/* Stat cards row */}
               <div className="flex items-center gap-2">
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-card-border bg-card-bg p-3">
-                  <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-[#00B259]">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+                  <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-[#00994D]">
                     {row.estPayout}
                   </span>
                   <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                     Est. payout
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-card-border bg-card-bg p-3">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                     N/A
                   </span>
@@ -460,7 +460,7 @@ function PayoutDetailDialog({
                     Flag deadline
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-card-border bg-card-bg p-3">
+                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <div className="flex items-center justify-between">
                     <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                       81
@@ -482,7 +482,7 @@ function PayoutDetailDialog({
                 </span>
 
                 {/* URL pill */}
-                <div className="group/url flex cursor-pointer items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+                <div className="group/url flex cursor-pointer items-center gap-2 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-3.5 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <PlatformIcon platform="tiktok" size={16} />
                   <span className="flex-1 truncate font-inter text-sm leading-[1.2] tracking-[-0.02em] text-page-text group-hover/url:underline">
                     https://www.tiktok.com/@{row.name.toLowerCase()}/video/7447157783801203990
@@ -493,7 +493,7 @@ function PayoutDetailDialog({
                 </div>
 
                 {/* Post preview card */}
-                <div className="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+                <div className="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   {/* Thumbnail */}
                   <div className="hidden sm:flex items-center p-1 pl-1">
                     <div
@@ -905,8 +905,60 @@ export default function PayoutsPage() {
           </Tabs>
         </div>
 
-        {/* Table */}
-        <div className="flex min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+        {/* Mobile table — card layout */}
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] md:hidden">
+          {/* Header */}
+          <div className="flex items-center border-b border-foreground/[0.06] px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Checkbox checked={allSelected} indeterminate={someSelected && !allSelected} onChange={toggleAll} />
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
+            </div>
+          </div>
+          {/* Rows */}
+          {sortedRows.map((row, i) => {
+            const status = STATUS_CONFIG[row.status];
+            const isFlagged = row.flagged;
+            return (
+              <div
+                key={row.id}
+                className={cn("flex items-start gap-3 px-4 py-3", i < sortedRows.length - 1 && "border-b border-foreground/[0.03]", isFlagged && "bg-[rgba(255,37,37,0.03)]")}
+                onClick={() => setDetailRow({ row, index: i })}
+              >
+                <div className="pt-1">
+                  <Checkbox checked={selectedIds.has(row.id)} onChange={() => toggleRow(row.id)} />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col gap-2">
+                  {/* Top: name + status */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded-full text-[9px] font-medium text-white" style={{ backgroundColor: AVATAR_COLORS[i % AVATAR_COLORS.length] }}>{row.name[0]}</div>
+                      <div className="flex flex-col gap-1">
+                        <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", isFlagged ? "text-[#FF3355]" : "text-page-text")}>{row.name}</span>
+                        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{row.campaign}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 rounded-full py-1 pl-1.5 pr-2" style={{ background: status.bg }}>
+                      {status.icon}
+                      <span className="font-inter text-xs font-medium tracking-[-0.02em]" style={{ color: status.color }}>{status.label}</span>
+                    </div>
+                  </div>
+                  {/* Bottom: platforms + payout */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      {row.platforms.map((p) => (
+                        <PlatformBadge key={p} platform={p} />
+                      ))}
+                    </div>
+                    <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]", isFlagged ? "text-[#FF3355] line-through" : "text-[#00994D]")}>{row.estPayout}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden min-w-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] md:flex">
           <div className="w-full overflow-x-auto">
           {/* Header row */}
           <div className="flex w-full min-w-[800px] items-center border-b border-foreground/[0.03] px-1">

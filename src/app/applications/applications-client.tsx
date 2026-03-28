@@ -326,7 +326,7 @@ function ApplicationDetailsModal({
           {activeTab === "application" && (
             <div className="flex flex-col gap-2">
               {/* Stat cards row */}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 {/* Applied on */}
                 <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
                   <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
@@ -349,31 +349,23 @@ function ApplicationDetailsModal({
 
                 {/* Applied with */}
                 <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     {tiktokCount > 0 && (
                       <div className="flex items-center gap-1">
-                        <PlatformIcon platform="tiktok" size={16} className="text-page-text-muted" />
-                        <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                        <PlatformIcon platform="tiktok" size={14} className="text-page-text-muted" />
+                        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                           {tiktokCount}
-                        </span>
-                        <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">
-                          Accounts
                         </span>
                       </div>
                     )}
                     {tiktokCount > 0 && instagramCount > 0 && (
-                      <span className="font-inter text-sm leading-[1.2] tracking-[-0.09px] text-page-text-muted">
-                        ·
-                      </span>
+                      <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">·</span>
                     )}
                     {instagramCount > 0 && (
                       <div className="flex items-center gap-1">
-                        <PlatformIcon platform="instagram" size={16} className="text-page-text-muted" />
-                        <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                        <PlatformIcon platform="instagram" size={14} className="text-page-text-muted" />
+                        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text">
                           {instagramCount}
-                        </span>
-                        <span className="font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text-muted">
-                          Accounts
                         </span>
                       </div>
                     )}
@@ -399,7 +391,7 @@ function ApplicationDetailsModal({
           )}
 
           {activeTab === "recent-content" && (
-            <div className="flex gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-4">
               {[
                 { img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=500&fit=crop", views: "1.7M", likes: "147.2K", shares: "781" },
                 { img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&h=500&fit=crop", views: "1.7M", likes: "147.2K", shares: "781" },
@@ -447,7 +439,7 @@ function ApplicationDetailsModal({
         </div>
 
         {/* Footer with actions */}
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-5 py-3">
+        <div className="flex shrink-0 items-center gap-2 border-t border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] px-4 py-3 sm:justify-end sm:px-5">
           <button
             className="flex h-9 cursor-pointer items-center gap-1.5 rounded-[32px] py-1.5 pl-2.5 pr-3 transition-colors hover:bg-foreground/[0.06]"
           >
@@ -1162,7 +1154,7 @@ export function ApplicationsContent({ onQuickReviewRef, onScoresRef }: { onQuick
 
           {/* Search + Filter */}
           <div className="flex items-center gap-2">
-            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg px-3 dark:border-transparent dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none">
+            <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.03] px-3 dark:bg-[rgba(224,224,224,0.03)] sm:w-[300px] sm:flex-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50">
                 <path d="M11.333 11.333L14 14M2 7.333A5.333 5.333 0 1012.667 7.333 5.333 5.333 0 002 7.333z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>

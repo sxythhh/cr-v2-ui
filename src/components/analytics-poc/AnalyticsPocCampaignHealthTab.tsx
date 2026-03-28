@@ -542,6 +542,77 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
   );
 }
 
+/* ── Pre-campaign Breakdown ──────────────────────────────────────── */
+
+const PRE_CAMPAIGN_DATA = [
+  { name: "FanDuel", impressions: "9,214", growth: 3.2, status: "apply" as const, count: "512 applied" },
+  { name: "DraftKings", impressions: "5,102", growth: 1.4, status: "open" as const, count: "347 joined" },
+  { name: "TikTok Only", impressions: "5,102", growth: 0.9, status: "open" as const, count: "347 joined" },
+  { name: "Q2 Push", impressions: "5,102", growth: 0, status: "open" as const, count: "347 joined" },
+  { name: "Holiday Special", impressions: "512", growth: -1.1, status: "apply" as const, count: "18 applied" },
+];
+
+function PreCampaignBreakdown() {
+  return (
+    <div className={cn(CARD, "flex flex-col overflow-hidden p-0")}>
+      {/* Header */}
+      <div className="flex items-center border-b border-foreground/[0.06] px-4 py-3">
+        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Pre-campaign breakdown</span>
+      </div>
+
+      {/* Rows */}
+      {PRE_CAMPAIGN_DATA.map((campaign, i) => (
+        <div key={campaign.name} className={cn("flex flex-col gap-2 px-4 py-3", i < PRE_CAMPAIGN_DATA.length - 1 && "border-b border-foreground/[0.03]")}>
+          {/* Top row: brand + growth */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
+              <div className="flex items-center gap-1.5">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{campaign.name}</span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-subtle">·</span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{campaign.impressions} impressions</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {campaign.growth > 0 ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.33 10L8 7.33L10.67 10M5.33 6.67L8 4L10.67 6.67" stroke="#00994D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-[#00994D]">{campaign.growth}%</span>
+                </>
+              ) : campaign.growth < 0 ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.33 6L8 8.67L10.67 6M5.33 9.33L8 12L10.67 9.33" stroke="#FF3355" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-[#FF3355]">{Math.abs(campaign.growth)}%</span>
+                </>
+              ) : (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.67 8H11.33" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                  <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">0.0%</span>
+                </>
+              )}
+            </div>
+          </div>
+          {/* Bottom row: status pill + count */}
+          <div className="flex items-center justify-between">
+            {campaign.status === "apply" ? (
+              <div className="flex items-center gap-1 rounded-full bg-[rgba(229,113,0,0.08)] py-1 pl-1.5 pr-2">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 0C4.07 0 2.5 1.57 2.5 3.5V4.5C1.67 4.5 1 5.17 1 6V9.5C1 10.33 1.67 11 2.5 11H9.5C10.33 11 11 10.33 11 9.5V6C11 5.17 10.33 4.5 9.5 4.5V3.5C9.5 1.57 7.93 0 6 0ZM8.5 4.5V3.5C8.5 2.12 7.38 1 6 1C4.62 1 3.5 2.12 3.5 3.5V4.5H8.5Z" fill="#E57100" /></svg>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#E57100]">Apply</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1 pl-1.5 pr-2">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#00994D" strokeWidth="1" /><path d="M6 1.5C6 1.5 3 3 3 6C3 9 6 10.5 6 10.5M6 1.5C6 1.5 9 3 9 6C9 9 6 10.5 6 10.5M6 1.5V10.5M1.5 6H10.5" stroke="#00994D" strokeWidth="0.8" /></svg>
+                <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">Open</span>
+              </div>
+            )}
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{campaign.count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function AnalyticsPocCampaignHealthTab({
   engagement,
   activityKpis,
@@ -612,6 +683,9 @@ export function AnalyticsPocCampaignHealthTab({
 
       {/* 5. Traffic sources */}
       <TrafficSourcesCard />
+
+      {/* Pre-campaign breakdown */}
+      <PreCampaignBreakdown />
 
       {/* 6. Bottom KPI row */}
       <MobileKpiScroll>{bottomKpiCards}</MobileKpiScroll>
