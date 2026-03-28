@@ -624,8 +624,8 @@ function HeaderTabs({ selectedIndex, onSelect }: { selectedIndex: number; onSele
             className={cn(
               "relative z-10 flex cursor-pointer items-center justify-center gap-2 px-5 font-inter text-sm tracking-[-0.02em] transition-colors",
               isSelected || isHovered
-                ? "text-page-text"
-                : "text-page-text/70",
+                ? "text-[#252525] dark:text-page-text"
+                : "text-[rgba(37,37,37,0.7)] dark:text-page-text/70",
             )}
           >
             <span className="font-medium">{tab.label}</span>
@@ -773,7 +773,7 @@ export default function CampaignsPage() {
   return (
     <div className="min-h-full bg-page-bg">
       {/* Header with underline tabs */}
-      <div className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
+      <div className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[rgba(37,37,37,0.06)] bg-[#FBFBFB] pr-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-page-bg sm:pr-5">
         <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
           <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
         </div>

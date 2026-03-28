@@ -148,6 +148,17 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 
   return (
     <div className="flex flex-col bg-white dark:bg-[#161616] md:h-full">
+      {/* ── Mobile back header ───────────────────────────────── */}
+      <div className="flex h-14 items-center border-b border-[rgba(37,37,37,0.06)] px-5 dark:border-[rgba(224,224,224,0.03)] md:hidden">
+        <button
+          onClick={() => router.push("/campaigns")}
+          className="flex cursor-pointer items-center gap-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:text-page-text-muted"
+        >
+          <IconArrowLeft size={16} />
+          <span>Back to campaigns</span>
+        </button>
+      </div>
+
       {/* ── Top bar ─────────────────────────────────────────────── */}
       <header className="flex items-center border-b border-[rgba(37,37,37,0.06)] px-4 dark:border-[rgba(224,224,224,0.03)] sm:px-5">
         {/* Back – hidden on mobile, shown inline on desktop */}
@@ -171,14 +182,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
         {activeTab === "details" ? (
           <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
             <div className="flex flex-col gap-5">
-              {/* Mobile-only back button */}
-              <button
-                onClick={() => router.push("/campaigns")}
-                className="flex items-center gap-1.5 text-sm tracking-[-0.02em] text-page-text-muted hover:text-[#252525] dark:hover:text-[#e5e5e5] transition-colors md:hidden"
-              >
-                <IconArrowLeft size={16} />
-                <span>Back to campaigns</span>
-              </button>
+
 
               {/* ── Two-column layout: content + sidebar ────────── */}
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-10">
