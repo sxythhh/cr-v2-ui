@@ -100,34 +100,34 @@ export function BoostCampaignModal({
                       )}
                     >
                       {/* Left: label + price */}
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-[14px] font-medium text-page-text">
+                      <div className="flex flex-col gap-2">
+                        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">
                           {d.label}
                         </span>
-                        <span className="text-[12px] text-page-text-muted">
+                        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">
                           ${d.price}
                         </span>
                       </div>
 
                       {/* Right: radio + popular */}
-                      <div className="flex items-center gap-2">
-                        {"popular" in d && d.popular && isSelected && (
-                          <span className="text-[10px] font-medium text-[#8B5CF6]">
-                            Popular
-                          </span>
-                        )}
+                      <div className="flex flex-col items-end gap-2">
                         <div
                           className={cn(
                             "flex size-4 shrink-0 items-center justify-center rounded-full",
                             isSelected
-                              ? "bg-[#8B5CF6]"
-                              : "border border-[rgba(37,37,37,0.15)] bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.15)] dark:bg-card-bg dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]",
+                              ? "bg-[#8B5CF6] shadow-[0_-0.8px_2.4px_rgba(0,0,0,0.06),0_1.6px_1.6px_#fff,inset_0_0.4px_1.6px_rgba(0,0,0,0.12)]"
+                              : "border-[0.8px] border-[rgba(37,37,37,0.1)] bg-white shadow-[0_-0.8px_2.4px_rgba(0,0,0,0.06),0_1.6px_1.6px_#fff,inset_0_0.4px_1.6px_rgba(0,0,0,0.12)]",
                           )}
                         >
                           {isSelected && (
                             <div className="size-1.5 rounded-full bg-white" />
                           )}
                         </div>
+                        {"popular" in d && d.popular && (
+                          <span className="font-inter text-[10px] tracking-[-0.02em] text-[#8B5CF6]">
+                            Popular
+                          </span>
+                        )}
                       </div>
                     </button>
                   );
