@@ -4,7 +4,7 @@ import { Check, Link2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import type { AffiliateCode } from "@/types/affiliate.types";
 import { ClipboardIcon } from "./icons";
-import { darkOrb, glassCard } from "./styles";
+import { darkOrb } from "./styles";
 
 interface ReferralLinkBarProps {
   codes: AffiliateCode[];
@@ -39,65 +39,35 @@ export function ReferralLinkBar({ codes }: ReferralLinkBarProps) {
         padding: 1,
       }}
     >
-      <div
-        className="relative flex flex-col sm:flex-row items-start sm:items-center"
-        style={{
-          ...glassCard,
-          gap: 12,
-          minHeight: 70,
-          padding: 16,
-        }}
-      >
+      <div className="relative flex min-h-[70px] flex-col items-start gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:flex-row sm:items-center">
         <div style={darkOrb(36)}>
           <Link2 color="#FFFFFF" size={20} />
         </div>
 
-        <div className="flex flex-col flex-1 min-w-0" style={{ gap: 4 }}>
-          <span
-            className="text-sm font-medium"
-            style={{
-              color: "var(--af-text)",
-              letterSpacing: "-0.09px",
-              lineHeight: "120%",
-            }}
-          >
+        <div className="flex flex-1 flex-col gap-1 min-w-0">
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text leading-[120%]">
             Your referral link
           </span>
-          <span
-            className="text-xs truncate"
-            style={{ color: "var(--af-text-secondary)", lineHeight: "145%" }}
-          >
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted truncate leading-[145%]">
             {referralUrl}
           </span>
         </div>
 
         <button
-          className="flex items-center justify-center shrink-0 transition-[transform,filter] duration-150 ease-out active:scale-[0.96] active:[filter:blur(0.5px)]"
+          className="flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-card-bg px-3 py-1.5 transition-[transform,filter] duration-150 ease-out active:scale-[0.96] active:[filter:blur(0.5px)] dark:border-[rgba(224,224,224,0.03)]"
           onClick={handleCopy}
           style={{
-            backgroundColor: "var(--af-bg-dropdown)",
-            border: "1px solid var(--af-border)",
-            borderRadius: 32,
-            gap: 6,
             height: 36,
             minWidth: 120,
-            padding: "6px 12px",
           }}
           type="button"
         >
           {copied ? (
-            <Check color="#15803D" size={16} />
+            <Check color="#00994D" size={16} />
           ) : (
-            <ClipboardIcon color="var(--af-text)" size={16} />
+            <ClipboardIcon color="currentColor" size={16} />
           )}
-          <span
-            className="text-sm font-semibold"
-            style={{
-              color: "var(--af-text)",
-              letterSpacing: "-0.09px",
-              lineHeight: "120%",
-            }}
-          >
+          <span className="font-inter text-sm font-semibold tracking-[-0.02em] text-page-text leading-[120%]">
             {copied ? "Copied!" : "Copy Link"}
           </span>
         </button>

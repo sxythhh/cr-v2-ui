@@ -16,7 +16,6 @@ import type {
 } from "@/types/affiliate.types";
 import { TIMEFRAME_LABELS } from "@/types/affiliate.types";
 import { UsersGroupIcon } from "./icons";
-import { glassCard } from "./styles";
 
 interface EarningsChartProps {
   chart: AffiliateChartPoint[];
@@ -41,22 +40,12 @@ export function EarningsChart({
   const hasData = chart.length >= 2;
 
   return (
-    <div
-      className="flex flex-col flex-1 min-w-0"
-      style={{ ...glassCard, gap: 16, padding: 16 }}
-    >
+    <div className="flex flex-1 min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center" style={{ gap: 6 }}>
+        <div className="flex items-center gap-1.5">
           <UsersGroupIcon color="var(--af-text-muted)" size={16} />
-          <span
-            className="text-sm"
-            style={{
-              color: "var(--af-text-secondary)",
-              letterSpacing: "-0.09px",
-              lineHeight: "120%",
-            }}
-          >
+          <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted leading-[120%]">
             Earnings over time
           </span>
         </div>
@@ -64,33 +53,14 @@ export function EarningsChart({
         {/* Timeframe dropdown */}
         <div className="relative">
           <button
-            className="flex items-center"
+            className="flex items-center gap-1 rounded-full bg-foreground/[0.06] px-3 py-1 font-inter text-xs tracking-[-0.02em] text-page-text-muted hover:bg-foreground/[0.10]"
             onClick={() => setOpenDropdown((o) => !o)}
-            style={{
-              backgroundColor: "var(--af-bg-input)",
-              border: "none",
-              borderRadius: 999,
-              color: "var(--af-text-secondary)",
-              fontSize: 12,
-              gap: 4,
-              padding: "4px 12px",
-            }}
             type="button"
           >
             {TIMEFRAME_LABELS[timeframe]}
           </button>
           {openDropdown && (
-            <div
-              className="absolute right-0 top-full mt-1 flex flex-col z-10"
-              style={{
-                backgroundColor: "var(--af-bg-dropdown)",
-                border: "1px solid var(--af-border-subtle)",
-                borderRadius: 8,
-                boxShadow: "var(--af-shadow-card)",
-                minWidth: 140,
-                overflow: "hidden",
-              }}
-            >
+            <div className="absolute right-0 top-full z-10 mt-1 flex min-w-[140px] flex-col overflow-hidden rounded-lg border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
               {TIMEFRAMES.map((tf) => (
                 <button
                   key={tf}
@@ -98,16 +68,7 @@ export function EarningsChart({
                     onTimeframeChange(tf);
                     setOpenDropdown(false);
                   }}
-                  style={{
-                    backgroundColor:
-                      tf === timeframe ? "var(--af-hover)" : "transparent",
-                    border: "none",
-                    color: "var(--af-text-secondary)",
-                    cursor: "pointer",
-                    fontSize: 13,
-                    padding: "8px 12px",
-                    textAlign: "left",
-                  }}
+                  className={`cursor-pointer border-none px-3 py-2 text-left font-inter text-[13px] tracking-[-0.02em] text-page-text-muted ${tf === timeframe ? "bg-foreground/[0.06]" : "bg-transparent hover:bg-foreground/[0.04]"}`}
                   type="button"
                 >
                   {TIMEFRAME_LABELS[tf]}
@@ -120,7 +81,7 @@ export function EarningsChart({
 
       {/* Chart body */}
       {hasData ? (
-        <div style={{ height: 220, width: "100%" }}>
+        <div className="h-[220px] w-full">
           <ResponsiveContainer height="100%" width="100%">
             <AreaChart
               data={chart}
@@ -189,43 +150,22 @@ export function EarningsChart({
           </ResponsiveContainer>
         </div>
       ) : (
-        <div
-          className="flex items-center justify-center"
-          style={{
-            color: "var(--af-text-faint)",
-            fontSize: 14,
-            height: 220,
-          }}
-        >
+        <div className="flex h-[220px] items-center justify-center font-inter text-sm tracking-[-0.02em] text-page-text-subtle">
           Not enough data to display chart
         </div>
       )}
 
       {/* Legend */}
-      <div className="flex items-center" style={{ gap: 16 }}>
-        <div className="flex items-center" style={{ gap: 6 }}>
-          <div
-            style={{
-              backgroundColor: "#9D5AEF",
-              borderRadius: 4,
-              height: 8,
-              width: 8,
-            }}
-          />
-          <span className="text-xs" style={{ color: "var(--af-text-muted)" }}>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded bg-[#9D5AEF]" />
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-subtle">
             Clicks
           </span>
         </div>
-        <div className="flex items-center" style={{ gap: 6 }}>
-          <div
-            style={{
-              backgroundColor: "#55B685",
-              borderRadius: 4,
-              height: 8,
-              width: 8,
-            }}
-          />
-          <span className="text-xs" style={{ color: "var(--af-text-muted)" }}>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded bg-[#55B685]" />
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-subtle">
             Referrals
           </span>
         </div>

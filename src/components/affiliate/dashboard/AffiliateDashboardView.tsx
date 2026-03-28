@@ -149,15 +149,15 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
   const isLocked = milestone.status === "locked";
 
   return (
-    <div className="flex flex-1 flex-col justify-center gap-4 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4">
+    <div className="flex flex-1 flex-col justify-center gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 dark:border-[rgba(224,224,224,0.03)]">
       <div className="flex gap-4">
         {/* Icon */}
         <div
           className={cn(
             "flex size-10 shrink-0 items-center justify-center rounded-full shadow-[0_0_0_2px_var(--card-bg)]",
             isCompleted
-              ? "bg-[#00B259]"
-              : "border border-foreground/[0.06] bg-card-bg",
+              ? "bg-[#00994D]"
+              : "border border-[rgba(37,37,37,0.06)] bg-card-bg dark:border-[rgba(224,224,224,0.03)]",
           )}
         >
           {isCompleted ? (
@@ -178,8 +178,8 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
             {milestone.description}
           </span>
           <div className="flex items-center gap-1">
-            <GiftIcon className={cn("size-4", isCompleted ? "text-[#00B259]" : "text-page-text")} />
-            <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]", isCompleted ? "text-[#00B259]" : "text-page-text")}>
+            <GiftIcon className={cn("size-4", isCompleted ? "text-[#00994D]" : "text-page-text")} />
+            <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]", isCompleted ? "text-[#00994D]" : "text-page-text")}>
               {milestone.reward}
             </span>
           </div>
@@ -188,17 +188,17 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
 
       {/* Progress */}
       <div className="flex flex-col gap-2">
-        <div className={cn("relative h-1 w-full overflow-hidden rounded-full", isCompleted ? "bg-[#00B259]" : "bg-foreground/10")}>
+        <div className={cn("relative h-1 w-full overflow-hidden rounded-full", isCompleted ? "bg-[#00994D]" : "bg-foreground/10")}>
           <div
-            className={cn("absolute inset-y-0 left-0 rounded-full", isCompleted ? "bg-[#00B259]" : "bg-foreground")}
+            className={cn("absolute inset-y-0 left-0 rounded-full", isCompleted ? "bg-[#00994D]" : "bg-foreground")}
             style={{ width: `${milestone.progress}%` }}
           />
         </div>
         <div className="flex items-center justify-between">
-          <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", isCompleted ? "text-[#00B259]" : "text-page-text")}>
+          <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", isCompleted ? "text-[#00994D]" : "text-page-text")}>
             {milestone.progressLabel}
           </span>
-          <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", isCompleted ? "text-[#00B259]" : "text-page-text/70")}>
+          <span className={cn("font-inter text-sm font-medium tracking-[-0.02em]", isCompleted ? "text-[#00994D]" : "text-page-text/70")}>
             {milestone.progress}%
           </span>
         </div>
@@ -211,7 +211,7 @@ function MilestoneRewards() {
   const completedCount = MILESTONES.filter((m) => m.status === "completed").length;
 
   return (
-    <div className="flex flex-col gap-4 self-stretch rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="flex flex-col gap-4 self-stretch rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
       {/* Header */}
       <div className="flex items-center justify-between pr-4">
         <div className="flex flex-1 items-center gap-1">
@@ -220,7 +220,7 @@ function MilestoneRewards() {
           </span>
           <span title="Earn bonus rewards when you hit view milestones"><InfoCircleIcon className="size-4 text-page-text/40" /></span>
         </div>
-        <div className="flex h-8 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3">
+        <div className="flex h-8 items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 hover:bg-foreground/[0.10]">
           <span className="font-inter text-sm font-medium tracking-[-0.09px] text-page-text">
             {completedCount}/{MILESTONES.length}
           </span>
@@ -256,58 +256,29 @@ export function AffiliateDashboardView() {
   const referredUsers = DEMO_REFERRED_USERS;
 
   return (
-    <div
-      className="flex flex-col items-center mx-auto w-full px-4 md:px-10"
-      style={{ gap: 32, paddingBottom: 40, paddingTop: 24 }}
-    >
+    <div className="mx-auto flex w-full flex-col items-center gap-8 px-4 pb-10 pt-6 md:px-10">
       {/* Header */}
-      <div
-        className="flex flex-col justify-center items-start self-stretch"
-        style={{ gap: 8 }}
-      >
-        <h1
-          className="text-[28px] font-semibold"
-          style={{
-            color: "var(--af-text)",
-            letterSpacing: "-0.6px",
-            lineHeight: "120%",
-          }}
-        >
+      <div className="flex flex-col items-start justify-center gap-2 self-stretch">
+        <h1 className="font-inter text-[28px] font-semibold tracking-[-0.6px] text-page-text leading-[120%]">
           Affiliates
         </h1>
-        <p
-          className="text-sm"
-          style={{
-            color: "var(--af-text-secondary)",
-            letterSpacing: "-0.09px",
-            lineHeight: "120%",
-          }}
-        >
+        <p className="font-inter text-sm tracking-[-0.02em] text-page-text-muted leading-[120%]">
           Monitor performance, creator activity, and payouts across all
           platforms.
         </p>
       </div>
 
       {/* Content */}
-      <div
-        className="flex flex-col items-start self-stretch"
-        style={{ gap: 24 }}
-      >
+      <div className="flex flex-col items-start gap-6 self-stretch">
         <MilestoneRewards />
 
         <ReferralLinkBar codes={codes} />
 
-        <div
-          className="flex flex-col items-start self-stretch"
-          style={{ gap: 8 }}
-        >
+        <div className="flex flex-col items-start gap-2 self-stretch">
           <StatsCards codes={codes} metrics={metrics} />
 
           {/* Chart + Activity */}
-          <div
-            className="flex flex-col md:flex-row items-stretch self-stretch"
-            style={{ gap: 8 }}
-          >
+          <div className="flex flex-col items-stretch gap-2 self-stretch md:flex-row">
             <EarningsChart
               chart={chart}
               onTimeframeChange={setTimeframe}

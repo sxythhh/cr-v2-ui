@@ -2,7 +2,6 @@
 
 import type { AffiliateCode, AffiliateMetrics } from "@/types/affiliate.types";
 import { MoneyBagIcon, BellIcon, ClickIcon, UsersGroupIcon } from "./icons";
-import { glassCard } from "./styles";
 
 interface StatsCardsProps {
   metrics: AffiliateMetrics;
@@ -19,31 +18,14 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div
-      className="flex flex-col justify-center flex-1 min-w-0"
-      style={{ ...glassCard, gap: 12, padding: 16 }}
-    >
-      <div className="flex items-center" style={{ gap: 6 }}>
+    <div className="flex flex-1 min-w-0 flex-col justify-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
+      <div className="flex items-center gap-1.5">
         {icon}
-        <span
-          className="text-sm"
-          style={{
-            color: "var(--af-text-secondary)",
-            letterSpacing: "-0.09px",
-            lineHeight: "120%",
-          }}
-        >
+        <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted leading-[120%]">
           {label}
         </span>
       </div>
-      <span
-        className="text-xl font-medium"
-        style={{
-          color: "var(--af-text)",
-          letterSpacing: "-0.33px",
-          lineHeight: "120%",
-        }}
-      >
+      <span className="font-inter text-xl font-medium tracking-[-0.02em] text-page-text leading-[120%]">
         {value}
       </span>
     </div>
@@ -59,10 +41,7 @@ export function StatsCards({ metrics, codes }: StatsCardsProps) {
   const activeCodes = codes.filter((c) => c.isActive).length;
 
   return (
-    <div
-      className="grid grid-cols-2 md:grid-cols-4 self-stretch"
-      style={{ gap: 8 }}
-    >
+    <div className="grid grid-cols-2 md:grid-cols-4 self-stretch gap-2">
       <StatCard
         icon={
           <MoneyBagIcon
