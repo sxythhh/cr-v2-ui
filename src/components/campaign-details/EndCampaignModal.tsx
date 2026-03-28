@@ -193,7 +193,7 @@ function CompletedStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:px-5">
+      <div className="flex shrink-0 items-center gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:justify-center sm:px-5">
         <button onClick={onCancel} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Cancel
         </button>
@@ -323,11 +323,11 @@ function FeedbackStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:px-5">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
+      <div className="flex shrink-0 items-center gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:justify-center sm:px-5">
+        <button onClick={onBack} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
-        <button onClick={onSubmit} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
+        <button onClick={onSubmit} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] sm:flex-none dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Continue
         </button>
       </div>
@@ -452,11 +452,11 @@ function NextStepsStep({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:px-5">
-        <button onClick={onBack} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
+      <div className="flex shrink-0 items-center gap-2 border-t border-page-border px-4 pb-5 pt-4 sm:justify-center sm:px-5">
+        <button onClick={onBack} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-foreground/[0.03] dark:text-page-text dark:hover:bg-foreground/[0.06]">
           Back
         </button>
-        <button onClick={onClose} className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
+        <button onClick={onClose} className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[#252525] px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#333] sm:flex-none dark:bg-foreground dark:text-page-bg dark:hover:bg-foreground/80">
           Submit &amp; close
         </button>
       </div>

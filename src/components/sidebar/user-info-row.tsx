@@ -372,7 +372,7 @@ function ProfileDropdown({
             onClick={onLogout}
             className="relative z-10 flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2"
           >
-            <LogoutIcon />
+            <span className="text-[#FF2525] dark:text-[#FB7185]"><LogoutIcon /></span>
             <span className="font-[family-name:var(--font-inter)] text-sm font-normal tracking-[-0.02em] text-[#FF2525] dark:text-[#FB7185]">
               Log out
             </span>

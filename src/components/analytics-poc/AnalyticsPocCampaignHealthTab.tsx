@@ -517,10 +517,14 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
   }, [handleScroll]);
 
   return (
-    <div className="-mr-4 flex flex-col items-center gap-2 sm:-mr-6 sm:hidden">
-      <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-4 scrollbar-hide sm:pr-6">
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 sm:hidden">
+      <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]">
         {children.map((child, i) => (
-          <div key={i} className="w-80 shrink-0 snap-start">
+          <div key={i} className={cn(
+            "w-[calc(100vw-56px)] max-w-80 shrink-0",
+            "snap-start",
+            i === children.length - 1 && "mr-4 sm:mr-5",
+          )}>
             {child}
           </div>
         ))}
@@ -528,10 +532,15 @@ function MobileKpiScroll({ children }: { children: ReactNode[] }) {
       {children.length > 1 && (
         <div className="flex items-center justify-center gap-1">
           {children.map((_, i) => (
-            <div
+            <button
               key={i}
+              type="button"
+              onClick={() => {
+                const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+                child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+              }}
               className={cn(
-                "size-1.5 rounded-full transition-colors",
+                "size-1.5 cursor-pointer rounded-full transition-colors",
                 i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
               )}
             />

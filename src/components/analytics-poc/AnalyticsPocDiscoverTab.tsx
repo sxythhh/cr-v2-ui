@@ -212,15 +212,19 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
   }, [handleScroll]);
 
   return (
-    <div className="-mr-4 flex flex-col items-center gap-2 sm:-mr-6">
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5">
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-4 scrollbar-hide sm:pr-6"
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
       >
-        {stats.map((stat) => (
+        {stats.map((stat, i) => (
           <div
             key={stat.label}
-            className="w-80 shrink-0 snap-start rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none"
+            className={cn(
+              "w-[calc(100vw-56px)] max-w-80 shrink-0 rounded-2xl border border-foreground/[0.03] bg-foreground/[0.03] p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-card-inner-border dark:bg-card-inner-bg dark:shadow-none",
+              "snap-start",
+              i === stats.length - 1 && "mr-4 sm:mr-5",
+            )}
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text tabular-nums">{stat.value}</span>
@@ -237,10 +241,15 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
       {stats.length > 1 && (
         <div className="flex items-center justify-center gap-1">
           {stats.map((_, i) => (
-            <div
+            <button
               key={i}
+              type="button"
+              onClick={() => {
+                const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+                child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+              }}
               className={cn(
-                "size-1.5 rounded-full transition-colors duration-200",
+                "size-1.5 cursor-pointer rounded-full transition-colors duration-200",
                 i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
               )}
             />
@@ -253,28 +262,33 @@ function MobileStatScroll({ stats }: { stats: typeof STATS }) {
 
 function MobileCampaignCard({ row }: { row: CampaignRow }) {
   return (
-    <div className="flex items-center gap-0 border-b border-foreground/[0.03] px-1">
-      <div className="flex flex-1 flex-col gap-3 py-3 pr-3 pl-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="size-6 overflow-hidden rounded-full border border-foreground/[0.06]">
-              <Image
-                src={row.avatar}
-                alt={row.name}
-                width={24}
-                height={24}
-                className="size-6 object-cover"
-              />
-            </div>
-            <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{row.name}</span>
+    <div className="flex flex-col gap-2 border-b border-foreground/[0.03] px-4 py-3">
+      {/* Top row: avatar + name · impressions + trend */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="size-6 shrink-0 overflow-hidden rounded-full border border-foreground/[0.06]">
+            <Image
+              src={row.avatar}
+              alt={row.name}
+              width={24}
+              height={24}
+              className="size-6 object-cover"
+            />
           </div>
-          <TypeBadge type={row.type} />
+          <div className="flex items-center gap-1.5">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{row.name}</span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-subtle">·</span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{row.impressions} impressions</span>
+          </div>
         </div>
-        <div className="flex items-center justify-between gap-2 text-xs tracking-[-0.02em] text-page-text-muted tabular-nums">
-          <span>Imp. {row.impressions}</span>
-          <span>Clicks {row.clicks}</span>
+        <TrendCell trend={row.trend} />
+      </div>
+      {/* Bottom row: type badge + stats */}
+      <div className="flex items-center justify-between">
+        <TypeBadge type={row.type} />
+        <div className="flex items-center gap-3 font-inter text-xs tracking-[-0.02em] text-page-text tabular-nums">
+          <span>{row.clicks} clicks</span>
           <span>CTR {row.ctr}</span>
-          <TrendCell trend={row.trend} />
         </div>
       </div>
     </div>
@@ -426,11 +440,11 @@ export function AnalyticsPocDiscoverTab() {
 
           {/* Funnel Bar */}
           <div className="flex flex-col gap-4">
-            <div className="flex h-10 w-full overflow-hidden rounded-xl">
+            <div className="flex h-10 w-full gap-0.5 overflow-hidden rounded-xl bg-white dark:bg-card-bg">
               {FUNNEL_SEGMENTS.map((seg) => (
                 <div
                   key={seg.label}
-                  className="h-full border border-white dark:border-white/10"
+                  className="h-full first:rounded-l-xl last:rounded-r-xl"
                   style={{ backgroundColor: seg.color, width: seg.width, flexGrow: seg.label === "Joined" ? 1 : 0 }}
                 />
               ))}

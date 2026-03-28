@@ -143,7 +143,7 @@ export function SupportChat() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="fixed bottom-5 right-5 z-50 flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full bg-[#FF8707] active:scale-95"
+            className="fixed bottom-20 right-5 z-50 flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full bg-[#FF8707] active:scale-95 md:bottom-5"
             aria-label="Open support chat"
           >
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none">

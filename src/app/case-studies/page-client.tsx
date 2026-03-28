@@ -258,9 +258,17 @@ function TestimonialCard() {
         {/* Carousel indicators */}
         <div className="relative mt-1 flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1.5">
           {TESTIMONIAL_SLIDES.map((_, i) => (
-            <div
+            <button
               key={i}
-              className={`rounded-full transition-all duration-300 ${i === index ? "h-1.5 w-5 bg-white" : "h-1.5 w-1.5 bg-white/30"}`}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (i !== index) {
+                  setShifting(true);
+                  setTimeout(() => { setIndex(i); setShifting(false); }, 250);
+                }
+              }}
+              className={`cursor-pointer rounded-full transition-all duration-300 ${i === index ? "h-1.5 w-5 bg-white" : "h-1.5 w-1.5 bg-white/30"}`}
             />
           ))}
         </div>

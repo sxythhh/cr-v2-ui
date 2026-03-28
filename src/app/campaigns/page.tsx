@@ -622,7 +622,7 @@ function HeaderTabs({ selectedIndex, onSelect }: { selectedIndex: number; onSele
             }}
             onClick={() => onSelect(i)}
             className={cn(
-              "relative z-10 flex cursor-pointer items-center justify-center gap-2 px-5 font-inter text-sm tracking-[-0.02em] transition-colors",
+              "relative z-10 flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap px-5 font-inter text-sm tracking-[-0.02em] transition-colors",
               isSelected || isHovered
                 ? "text-[#252525] dark:text-page-text"
                 : "text-[rgba(37,37,37,0.7)] dark:text-page-text/70",

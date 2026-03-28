@@ -318,6 +318,7 @@ function buildPerformanceSeriesLine({
       animationEasing="ease-out"
       dataKey={series.key}
       dot={false}
+      fill="none"
       isAnimationActive
       key={lineKey}
       stroke={stroke}
@@ -1153,7 +1154,34 @@ function StackedBarChartBody({
       </div>
 
       <div className="relative z-10 min-w-0 flex-1 overflow-visible">
-        <div className="group/bars absolute inset-x-0 bottom-7 top-0 flex items-end gap-1" ref={chartPlotAreaRef} onMouseLeave={() => setHoveredBarIdx(null)}>
+        <div
+          className="group/bars absolute inset-x-0 bottom-7 top-0 flex touch-none items-end gap-1"
+          ref={chartPlotAreaRef}
+          onMouseLeave={() => setHoveredBarIdx(null)}
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            const rect = chartPlotAreaRef.current?.getBoundingClientRect();
+            if (!touch || !rect) return;
+            e.preventDefault();
+            const x = touch.clientX - rect.left;
+            const barWidth = rect.width / displayPoints.length;
+            const idx = Math.min(Math.max(Math.floor(x / barWidth), 0), displayPoints.length - 1);
+            setHoveredBarIdx(idx);
+          }}
+          onTouchMove={(e) => {
+            const touch = e.touches[0];
+            const rect = chartPlotAreaRef.current?.getBoundingClientRect();
+            if (!touch || !rect) return;
+            e.preventDefault();
+            const x = touch.clientX - rect.left;
+            const barWidth = rect.width / displayPoints.length;
+            const idx = Math.min(Math.max(Math.floor(x / barWidth), 0), displayPoints.length - 1);
+            setHoveredBarIdx(idx);
+          }}
+          onTouchEnd={() => {
+            setTimeout(() => setHoveredBarIdx(null), 600);
+          }}
+        >
           {displayPoints.map((point, pointIdx) => {
             const record = point as unknown as Record<string, unknown>;
             const label = String(record.label ?? pointIdx);

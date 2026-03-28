@@ -80,17 +80,24 @@ function AnalyticsStatCards() {
   return (
     <>
       {/* Mobile */}
-      <div className="-mr-5 flex flex-col items-center gap-2 md:hidden">
-        <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pr-5 scrollbar-hide">
-          {STATS.map((s) => (
-            <div key={s.label} className="w-80 shrink-0 snap-start">
+      <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+        <div ref={scrollRef} className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]">
+          {STATS.map((s, i) => (
+            <div key={s.label} className={cn(
+              "w-[calc(100vw-56px)] max-w-80 shrink-0",
+              "snap-start",
+              i === STATS.length - 1 && "mr-4 sm:mr-5",
+            )}>
               <AnalyticsStatCard s={s} />
             </div>
           ))}
         </div>
         <div className="flex items-center gap-1">
           {STATS.map((_, i) => (
-            <div key={i} className={cn("size-1.5 rounded-full transition-colors", i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]")} />
+            <button key={i} type="button" onClick={() => {
+              const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+              child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+            }} className={cn("size-1.5 cursor-pointer rounded-full transition-colors", i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]")} />
           ))}
         </div>
       </div>

@@ -353,7 +353,7 @@ function TopCreatorsCard() {
         <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Top creators</span>
         <button type="button" className="group flex cursor-pointer items-center gap-1.5">
           <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors duration-150 group-hover:text-page-text">View all</span>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 text-page-text-muted transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-page-text"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </button>
       </div>
 

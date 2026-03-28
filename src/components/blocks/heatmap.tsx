@@ -252,12 +252,94 @@ export default function Heatmap({
     return { opacity: 1 };
   }, [colorMode]);
 
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Build a spatial lookup for touch → cell mapping
+  const cellLookup = useMemo(() => {
+    const map = new Map<string, CellData>();
+    for (const cell of cells) {
+      map.set(`${cell.week},${cell.day}`, cell);
+    }
+    return map;
+  }, [cells]);
+
+  const findCellFromTouch = useCallback(
+    (touch: React.Touch | Touch) => {
+      const svg = svgRef.current;
+      if (!svg) return null;
+
+      const rect = svg.getBoundingClientRect();
+      // Convert screen coords → SVG viewBox coords
+      const scaleX = totalWidth / rect.width;
+      const scaleY = totalHeight / rect.height;
+      const svgX = (touch.clientX - rect.left) * scaleX;
+      const svgY = (touch.clientY - rect.top) * scaleY;
+
+      // Determine which cell (week, day) the point falls in
+      const cellStep = CELL_SIZE + cellGap;
+      const col = Math.floor((svgX - dayLabelWidth) / cellStep);
+      const row = Math.floor(
+        (svgY - (showMonthLabels ? MONTH_LABEL_HEIGHT : 0)) / cellStep,
+      );
+
+      if (col < 0 || col >= totalWeeks || row < 0 || row > 6) return null;
+
+      const cell = cellLookup.get(`${col},${row}`);
+      return cell
+        ? { cell, clientX: touch.clientX, clientY: touch.clientY }
+        : null;
+    },
+    [cellLookup, totalWidth, totalHeight, cellGap, dayLabelWidth, showMonthLabels, totalWeeks],
+  );
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      const touch = e.touches[0];
+      const hit = findCellFromTouch(touch);
+      if (hit) {
+        // Prevent scroll while dragging across heatmap
+        e.preventDefault();
+        if (globalDismiss && globalDismiss !== dismiss) globalDismiss();
+        globalDismiss = dismiss;
+        setTooltip({ cell: hit.cell, x: hit.clientX, y: hit.clientY });
+      }
+    },
+    [findCellFromTouch, dismiss],
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      const touch = e.touches[0];
+      const hit = findCellFromTouch(touch);
+      if (hit) {
+        e.preventDefault();
+        setTooltip({ cell: hit.cell, x: hit.clientX, y: hit.clientY });
+      } else {
+        setTooltip(null);
+      }
+    },
+    [findCellFromTouch],
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    // Keep tooltip visible briefly so user can read it
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    hideTimeoutRef.current = setTimeout(() => {
+      setTooltip(null);
+      if (globalDismiss === dismiss) globalDismiss = null;
+    }, 600);
+  }, [dismiss]);
+
   return (
     <div ref={containerRef} className={cn("relative overflow-visible", className)}>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${totalWidth} ${totalHeight}`}
-        className="block w-full"
+        className="block w-full touch-none"
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {showMonthLabels &&
           monthLabels.map((m) => (

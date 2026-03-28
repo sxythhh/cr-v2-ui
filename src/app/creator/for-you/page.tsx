@@ -698,13 +698,17 @@ function TrustScoreModal({ open, onClose }: { open: boolean; onClose: () => void
       </div>
 
       {/* Footer */}
-      <div className="px-5 pb-5">
+      <div className="border-t border-foreground/[0.06] px-5 py-4 dark:border-white/[0.06]">
         <button
           onClick={onClose}
           className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
         >
-          Close
+          Got it
         </button>
+        <label className="mt-3 flex cursor-pointer items-center justify-center gap-2">
+          <input type="checkbox" className="size-3.5 accent-foreground" />
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Don&apos;t show this again</span>
+        </label>
       </div>
     </Modal>
   );
@@ -823,13 +827,17 @@ function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) 
       </div>
 
       {/* Footer */}
-      <div className="px-5 pb-5">
+      <div className="border-t border-foreground/[0.06] px-5 py-4 dark:border-white/[0.06]">
         <button
           onClick={onClose}
           className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
         >
-          Close
+          Got it
         </button>
+        <label className="mt-3 flex cursor-pointer items-center justify-center gap-2">
+          <input type="checkbox" className="size-3.5 accent-foreground" />
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Don&apos;t show this again</span>
+        </label>
       </div>
     </Modal>
   );

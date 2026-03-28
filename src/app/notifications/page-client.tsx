@@ -289,7 +289,7 @@ function NotificationList({
                   "relative flex cursor-pointer gap-3 rounded-2xl border p-4",
                   notif.highlighted
                     ? "border-[rgba(251,146,60,0.3)] shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(251,146,60,0.15)]"
-                    : "border-foreground/[0.06] bg-card-bg shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
+                    : "border-foreground/[0.06] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none",
                 )}
                 style={
                   notif.highlighted

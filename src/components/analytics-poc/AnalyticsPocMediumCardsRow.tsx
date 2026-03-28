@@ -4,15 +4,17 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPocMediumCardsRowProps } from "./types";
 
-function DotIndicator({ total, active }: { total: number; active: number }) {
+function DotIndicator({ total, active, onDotClick }: { total: number; active: number; onDotClick?: (i: number) => void }) {
   if (total <= 1) return null;
   return (
     <div className="flex items-center justify-center gap-1 md:hidden">
       {Array.from({ length: total }, (_, i) => (
-        <div
+        <button
           key={i}
+          type="button"
+          onClick={() => onDotClick?.(i)}
           className={cn(
-            "size-1.5 rounded-full transition-colors duration-200",
+            "size-1.5 cursor-pointer rounded-full transition-colors duration-200",
             i === active ? "bg-foreground" : "bg-foreground/[0.06]",
           )}
         />
@@ -48,14 +50,19 @@ export function AnalyticsPocMediumCardsRow({
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {/* Mobile: horizontal snap scroll */}
-      <div
-        ref={scrollRef}
-        className="flex snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide md:hidden"
-      >
-        <div className="w-full shrink-0 snap-center">{left}</div>
-        <div className="w-full shrink-0 snap-center">{right}</div>
+      <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+        <div
+          ref={scrollRef}
+          className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
+        >
+          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start">{left}</div>
+          <div className="w-[calc(100vw-56px)] max-w-80 shrink-0 snap-start mr-4 sm:mr-5">{right}</div>
+        </div>
+        <DotIndicator total={2} active={activeIndex} onDotClick={(i) => {
+          const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+          child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }} />
       </div>
-      <DotIndicator total={2} active={activeIndex} />
 
       {/* Desktop: grid layout */}
       <div className="hidden gap-2 md:grid md:grid-cols-2">

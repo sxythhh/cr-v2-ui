@@ -14,18 +14,22 @@ interface AnalyticsPocMobileCarouselProps {
 function DotIndicator({
   total,
   active,
+  onDotClick,
 }: {
   total: number;
   active: number;
+  onDotClick?: (i: number) => void;
 }) {
   if (total <= 1) return null;
   return (
     <div className="flex items-center justify-center gap-1">
       {Array.from({ length: total }, (_, i) => (
-        <div
+        <button
           key={i}
+          type="button"
+          onClick={() => onDotClick?.(i)}
           className={cn(
-            "size-1.5 rounded-full transition-colors duration-200",
+            "size-1.5 cursor-pointer rounded-full transition-colors duration-200",
             i === active
               ? "bg-foreground"
               : "bg-foreground/[0.10]",
@@ -73,14 +77,17 @@ export function AnalyticsPocMobileCarousel({
         {items.map((child, i) => (
           <div key={i} className={cn(
             "w-[calc(100vw-56px)] max-w-80 shrink-0",
-            i === 0 ? "snap-start ml-4 sm:ml-5" : "snap-center",
+            i === 0 ? "snap-start ml-4 sm:ml-5" : "snap-start",
             i === items.length - 1 && "mr-4 sm:mr-5",
           )}>
             {child}
           </div>
         ))}
       </div>
-      {showDots && <DotIndicator total={items.length} active={activeIndex} />}
+      {showDots && <DotIndicator total={items.length} active={activeIndex} onDotClick={(i) => {
+        const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+        child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }} />}
     </div>
   );
 }

@@ -1421,7 +1421,7 @@ function DashboardView() {
             {/* Podium */}
             <div className="hidden items-end justify-center gap-2 sm:flex">
               {/* 2nd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(131,159,185,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(131,159,185,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[197px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[160px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(131,159,185,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(131,159,185,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(131,159,185,0.06)] dark:shadow-none dark:hover:bg-[rgba(131,159,185,0.10)] lg:h-[197px]">
                 <div className="flex size-[26px] items-center justify-center rounded-full bg-[#839FB9] font-inter text-[16px] font-medium text-white">2</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1432,7 +1432,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 1st place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[200px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(251,146,60,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(251,146,60,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[260px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[200px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(251,146,60,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(251,146,60,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(251,146,60,0.06)] dark:shadow-none dark:hover:bg-[rgba(251,146,60,0.10)] lg:h-[260px]">
                 <div className="flex h-6 items-center gap-2 rounded-full bg-[#FB923C] px-2">
                   <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
                   <span className="font-inter text-[16px] font-medium text-white">1</span>
@@ -1446,7 +1446,7 @@ function DashboardView() {
                 </div>
               </button>
               {/* 3rd place */}
-              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[130px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(158,82,0,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(158,82,0,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none lg:h-[160px]">
+              <button type="button" onClick={() => setCreatorPopupOpen(true)} className="flex h-[130px] w-full cursor-pointer flex-col items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] bg-[rgba(158,82,0,0.04)] p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-[rgba(158,82,0,0.08)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(158,82,0,0.06)] dark:shadow-none dark:hover:bg-[rgba(158,82,0,0.10)] lg:h-[160px]">
                 <div className="flex size-[27px] items-center justify-center rounded-full bg-[#9E5200] font-inter text-[16px] font-medium text-white">3</div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="size-8 rounded-full bg-foreground/[0.08]" />
@@ -1461,17 +1461,17 @@ function DashboardView() {
             {/* Mobile: card list with colored backgrounds */}
             <div className="flex flex-col gap-2 sm:hidden">
               {TOP_CREATORS.map((c, i) => {
-                const colors = [
-                  { bg: "linear-gradient(0deg, rgba(229,113,0,0.04), rgba(229,113,0,0.04)), #FFFFFF", badge: "#E57100" },
-                  { bg: "rgba(131,159,185,0.04)", badge: "#839FB9" },
-                  { bg: "rgba(158,82,0,0.04)", badge: "#9E5200" },
+                const bgClasses = [
+                  "bg-[rgba(229,113,0,0.04)] dark:bg-[rgba(229,113,0,0.06)]",
+                  "bg-[rgba(131,159,185,0.04)] dark:bg-[rgba(131,159,185,0.06)]",
+                  "bg-[rgba(158,82,0,0.04)] dark:bg-[rgba(158,82,0,0.06)]",
                 ];
-                const { bg, badge } = colors[i] ?? colors[2];
+                const badges = ["#E57100", "#839FB9", "#9E5200"];
+                const badge = badges[i] ?? badges[2];
                 return (
                   <div
                     key={c.name}
-                    className="flex items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 dark:border-[rgba(224,224,224,0.03)]"
-                    style={{ background: bg }}
+                    className={cn("flex items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 dark:border-[rgba(224,224,224,0.03)]", bgClasses[i] ?? bgClasses[2])}
                   >
                     {/* Rank badge */}
                     <div className="flex items-center gap-2 rounded-full px-2 py-0" style={{ background: badge }}>
@@ -1630,7 +1630,7 @@ function HomeKpiCarousel() {
         {cards.map((card, i) => (
           <div key={i} className={cn(
             "w-[calc(100vw-56px)] max-w-80 shrink-0 [&>*]:h-full",
-            i === 0 ? "snap-start" : "snap-center",
+            "snap-start",
             i === cards.length - 1 && "mr-4 sm:mr-5",
           )}>
             {card}
@@ -1639,10 +1639,15 @@ function HomeKpiCarousel() {
       </div>
       <div className="flex items-center gap-1">
         {cards.map((_, i) => (
-          <div
+          <button
             key={i}
+            type="button"
+            onClick={() => {
+              const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+              child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+            }}
             className={cn(
-              "size-1.5 rounded-full transition-colors",
+              "size-1.5 cursor-pointer rounded-full transition-colors",
               i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
             )}
           />

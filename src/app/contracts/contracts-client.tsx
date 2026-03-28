@@ -363,15 +363,15 @@ function NewContractModal({ open, onClose }: { open: boolean; onClose: () => voi
   const [showDurationDropdown, setShowDurationDropdown] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["TikTok", "YouTube"]);
   const [exclusivity, setExclusivity] = useState(false);
-  const [contentUsageRights, setContentUsageRights] = useState(true);
+  const [contentUsageRights, setContentUsageRights] = useState(false);
   const [selectedUsageRights, setSelectedUsageRights] = useState<string[]>(["Repost", "Paid ads"]);
   const [licenseLength, setLicenseLength] = useState("6 months");
-  const [draftApproval, setDraftApproval] = useState(true);
+  const [draftApproval, setDraftApproval] = useState(false);
   const [leadTime, setLeadTime] = useState("14 days");
   const [revisions, setRevisions] = useState("2");
-  const [earlyTermination, setEarlyTermination] = useState(true);
+  const [earlyTermination, setEarlyTermination] = useState(false);
   const [noticePeriod, setNoticePeriod] = useState("14 days");
-  const [payCompleted, setPayCompleted] = useState(true);
+  const [payCompleted, setPayCompleted] = useState(false);
   const [nda, setNda] = useState(false);
   const [ftc, setFtc] = useState(false);
 
@@ -737,9 +737,50 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
           </div>
         </div>
 
-        {/* Table card */}
-        <div className="overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
-          {/* Table scrollable wrapper */}
+        {/* Mobile card layout */}
+        <div className="overflow-hidden rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none md:hidden">
+          <div className="flex items-center border-b border-foreground/[0.06] px-4 py-3">
+            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
+          </div>
+          {sortedContracts.map((contract, i) => (
+            <div key={contract.id} className={cn("flex flex-col gap-3 px-4 py-3", i < sortedContracts.length - 1 && "border-b border-foreground/[0.03]", contract.dimmed && "opacity-70")}>
+              {/* Top: creator + status */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <img src={contract.avatar} alt="" className="size-6 shrink-0 rounded-full object-cover" />
+                  <div className="flex flex-col gap-1">
+                    <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{contract.name}</span>
+                    <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{contract.handle}</span>
+                  </div>
+                </div>
+                <StatusBadge status={contract.status} />
+              </div>
+              {/* Middle: type · compensation · deliverables */}
+              <div className="flex items-center gap-1.5 font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+                <span>{contract.type}</span>
+                <span className="text-page-text-subtle">·</span>
+                <span className="text-page-text">{contract.compensation}</span>
+                <span className="text-page-text-subtle">·</span>
+                <span>{contract.deliverables}</span>
+              </div>
+              {/* Bottom: duration + action */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+                  <span>{contract.duration}</span>
+                  {contract.durationFraction > 0 && contract.durationFraction < 1 && (
+                    <DurationIndicator fraction={contract.durationFraction} />
+                  )}
+                  <span className="text-page-text-subtle">·</span>
+                  <span>Ends {contract.ends}</span>
+                </div>
+                <ActionButton label={contract.actionLabel} variant={contract.actionVariant} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none md:block">
           <div className="overflow-x-auto">
             <div>
               {/* Header */}

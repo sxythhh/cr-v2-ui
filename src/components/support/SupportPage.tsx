@@ -1084,18 +1084,17 @@ export function SupportPageClient() {
                       <a
                         key={cat.title}
                         href={cat.href}
-                        className="group flex flex-col gap-3 rounded-2xl border p-5 transition-colors hover:bg-foreground/[0.03]"
-                        style={{ borderColor: C.border }}
+                        className="group flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]"
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: C.surfaceBg, color: C.textMuted }}>
+                        <div className="flex size-10 items-center justify-center rounded-xl bg-foreground/[0.04] text-page-text-muted dark:bg-foreground/[0.06]">
                           {cat.icon}
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[15px] font-semibold tracking-[-0.4px]" style={{ color: C.textPrimary }}>{cat.title}</span>
-                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={C.textMuted} strokeWidth="1.5"><path d="M5 3h8v8" /><path d="M13 3L3 13" /></svg>
+                            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{cat.title}</span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-page-text-muted"><path d="M5 3h8v8" /><path d="M13 3L3 13" /></svg>
                           </div>
-                          <p className="text-[13px] font-medium mt-1" style={{ color: C.textMuted }}>{cat.description}</p>
+                          <p className="mt-1 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{cat.description}</p>
                         </div>
                       </a>
                     );
@@ -1105,15 +1104,14 @@ export function SupportPageClient() {
                       key={cat.title}
                       type="button"
                       onClick={() => setActiveCategory(cat.categoryId!)}
-                      className="group flex flex-col gap-3 rounded-2xl border p-5 text-left transition-colors hover:bg-foreground/[0.03] cursor-pointer"
-                      style={{ borderColor: C.border, background: "none" }}
+                      className="group flex cursor-pointer flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-card-bg p-4 text-left shadow-[0px_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.03] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0px_1px_2px_rgba(0,0,0,0.15)]"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: C.surfaceBg, color: C.textMuted }}>
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-foreground/[0.04] text-page-text-muted dark:bg-foreground/[0.06]">
                         {cat.icon}
                       </div>
                       <div>
-                        <span className="text-[15px] font-semibold tracking-[-0.4px]" style={{ color: C.textPrimary }}>{cat.title}</span>
-                        <p className="text-[13px] font-medium mt-1" style={{ color: C.textMuted }}>{cat.description}</p>
+                        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{cat.title}</span>
+                        <p className="mt-1 font-inter text-xs tracking-[-0.02em] text-page-text-muted">{cat.description}</p>
                       </div>
                     </button>
                   );

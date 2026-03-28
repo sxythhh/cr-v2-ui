@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "@/components/page-shell";
 import { cn } from "@/lib/utils";
@@ -35,41 +35,28 @@ function ExportIcon() {
   );
 }
 
-function MobileFinanceTabs({ activeTab, onTabChange }: { activeTab: typeof TABS[number]; onTabChange: (tab: typeof TABS[number]) => void }) {
-  const actionBtnClass = "flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
-
+function DepositIcon() {
   return (
-    <div className="-mx-4 -mt-5 mb-4 flex flex-col sm:-mx-6 md:hidden sticky top-0 z-20 bg-page-bg">
-      {/* Underline tabs — full width */}
-      <div className="flex">
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => onTabChange(tab)}
-            className={cn(
-              "flex h-14 flex-1 cursor-pointer items-center justify-center font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
-              activeTab === tab
-                ? "border-b border-[#252525] text-[#1E1E1E]"
-                : "text-[rgba(37,37,37,0.7)]",
-            )}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-      {/* Action buttons */}
-      <div className="flex items-center justify-center gap-2 px-4 py-3 sm:px-5">
-        <button type="button" className={actionBtnClass}>
-          <ReceiptIcon />
-          Download invoice
-        </button>
-        <button type="button" className={actionBtnClass}>
-          <ExportIcon />
-          Export report
-        </button>
-      </div>
-    </div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
+      <path d="M2.66671 4.66602C2.66671 4.29783 2.96518 3.99935 3.33337 3.99935H5.33337C5.70156 3.99935 6.00004 3.70087 6.00004 3.33268C6.00004 2.96449 5.70156 2.66602 5.33337 2.66602H3.33337C2.2288 2.66602 1.33337 3.56145 1.33337 4.66602V11.3327C1.33337 12.4373 2.2288 13.3327 3.33337 13.3327H12.6667C13.7713 13.3327 14.6667 12.4373 14.6667 11.3327V5.99935C14.6667 5.63116 14.3682 5.33268 14 5.33268C13.6319 5.33268 13.3334 5.63116 13.3334 5.99935V11.3327C13.3334 11.7009 13.0349 11.9993 12.6667 11.9993H3.33337C2.96518 11.9993 2.66671 11.7009 2.66671 11.3327V4.66602Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function WithdrawIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M5.333 5.333L8 2.667l2.667 2.666M8 2.667v6.666M3.333 10v2c0 .737.597 1.333 1.334 1.333h6.666c.737 0 1.334-.596 1.334-1.333v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ThreeDotVerticalIcon() {
+  return (
+    <svg width="3" height="14" viewBox="0 0 3 14" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 1.33333C0 0.596954 0.596954 0 1.33333 0C2.06971 0 2.66667 0.596954 2.66667 1.33333C2.66667 2.06971 2.06971 2.66667 1.33333 2.66667C0.596954 2.66667 0 2.06971 0 1.33333ZM0 6.66667C0 5.93029 0.596954 5.33333 1.33333 5.33333C2.06971 5.33333 2.66667 5.93029 2.66667 6.66667C2.66667 7.40305 2.06971 8 1.33333 8C0.596954 8 0 7.40305 0 6.66667ZM0 12C0 11.2636 0.596954 10.6667 1.33333 10.6667C2.06971 10.6667 2.66667 11.2636 2.66667 12C2.66667 12.7364 2.06971 13.3333 1.33333 13.3333C0.596954 13.3333 0 12.7364 0 12Z" fill="currentColor" />
+    </svg>
   );
 }
 
@@ -93,14 +80,11 @@ function FinanceHeader({
         />
         <div className="flex items-center gap-2">
           <button type="button" className={actionBtnClass}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M11.3334 2.66602C9.12424 2.66602 7.33337 4.45688 7.33337 6.66602V8.38987L5.97145 7.02794C5.7111 6.7676 5.28899 6.7676 5.02864 7.02794C4.76829 7.28829 4.76829 7.7104 5.02864 7.97075L7.52864 10.4708C7.78899 10.7311 8.2111 10.7311 8.47145 10.4708L10.9714 7.97075C11.2318 7.7104 11.2318 7.28829 10.9714 7.02794C10.7111 6.7676 10.289 6.7676 10.0286 7.02794L8.66671 8.38987V6.66602C8.66671 5.19326 9.86061 3.99935 11.3334 3.99935H14C14.3682 3.99935 14.6667 3.70087 14.6667 3.33268C14.6667 2.96449 14.3682 2.66602 14 2.66602H11.3334Z" fill="currentColor"/>
-              <path d="M2.66671 4.66602C2.66671 4.29783 2.96518 3.99935 3.33337 3.99935H5.33337C5.70156 3.99935 6.00004 3.70087 6.00004 3.33268C6.00004 2.96449 5.70156 2.66602 5.33337 2.66602H3.33337C2.2288 2.66602 1.33337 3.56145 1.33337 4.66602V11.3327C1.33337 12.4373 2.2288 13.3327 3.33337 13.3327H12.6667C13.7713 13.3327 14.6667 12.4373 14.6667 11.3327V5.99935C14.6667 5.63116 14.3682 5.33268 14 5.33268C13.6319 5.33268 13.3334 5.63116 13.3334 5.99935V11.3327C13.3334 11.7009 13.0349 11.9993 12.6667 11.9993H3.33337C2.96518 11.9993 2.66671 11.7009 2.66671 11.3327V4.66602Z" fill="currentColor"/>
-            </svg>
+            <DepositIcon />
             Deposit
           </button>
           <button type="button" className={actionBtnClass}>
-            <ExportIcon />
+            <WithdrawIcon />
             Withdraw
           </button>
           <FinanceMoreMenu />
@@ -796,6 +780,136 @@ function StatCardContent({ s }: { s: typeof OVERVIEW_STATS[number] }) {
   );
 }
 
+function useSnapCarousel(itemCount: number) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const scrollLeft = el.scrollLeft;
+      const cardWidth = el.scrollWidth / itemCount;
+      const index = Math.round(scrollLeft / cardWidth);
+      setActiveIndex(Math.min(index, itemCount - 1));
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [itemCount]);
+
+  const scrollTo = useCallback((index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const child = el.children[index] as HTMLElement | undefined;
+    child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, []);
+
+  return { scrollRef, activeIndex, scrollTo };
+}
+
+function DotPagination({ count, activeIndex, onDotClick }: { count: number; activeIndex: number; onDotClick?: (i: number) => void }) {
+  return (
+    <div className="flex items-center justify-center gap-1">
+      {Array.from({ length: count }).map((_, i) => (
+        <button
+          key={i}
+          type="button"
+          onClick={() => onDotClick?.(i)}
+          className={cn(
+            "size-1.5 rounded-full transition-colors cursor-pointer",
+            i === activeIndex ? "bg-foreground" : "bg-foreground/[0.10]",
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MobileActionButtons() {
+  const actionBtnClass = "flex h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]";
+  return (
+    <div className="flex items-center gap-2 md:hidden">
+      <button type="button" className={cn(actionBtnClass, "flex-1")}>
+        <DepositIcon />
+        Deposit
+      </button>
+      <button type="button" className={cn(actionBtnClass, "flex-1")}>
+        <WithdrawIcon />
+        Withdraw
+      </button>
+      <button
+        type="button"
+        className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] dark:bg-foreground/[0.03] dark:hover:bg-foreground/[0.06]"
+      >
+        <ThreeDotVerticalIcon />
+      </button>
+    </div>
+  );
+}
+
+function MobileStatCarousel({ stats }: { stats: typeof OVERVIEW_STATS }) {
+  const { scrollRef, activeIndex, scrollTo } = useSnapCarousel(stats.length);
+  return (
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+      <div
+        ref={scrollRef}
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
+      >
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={cn(
+              "w-[calc(100vw-56px)] max-w-80 shrink-0",
+              "snap-start",
+              i === stats.length - 1 && "mr-4 sm:mr-5",
+            )}
+          >
+            <div className={cn(cardBase, "h-20 gap-3")}>
+              <StatCardContent s={s} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <DotPagination count={stats.length} activeIndex={activeIndex} onDotClick={scrollTo} />
+    </div>
+  );
+}
+
+function MobileBottomStatCarousel({ stats }: { stats: typeof BOTTOM_STATS }) {
+  const { scrollRef, activeIndex, scrollTo } = useSnapCarousel(stats.length);
+  return (
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+      <div
+        ref={scrollRef}
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide sm:pl-5 [scroll-padding-inline:16px]"
+      >
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={cn(
+              "w-[calc(100vw-56px)] max-w-80 shrink-0",
+              "snap-start",
+              i === stats.length - 1 && "mr-4 sm:mr-5",
+            )}
+          >
+            <div className={cn(cardBase, "h-20 gap-3")}>
+              <div className="flex items-center justify-between">
+                <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>{s.label}</span>
+                <span className={cn("font-inter text-[12px] font-medium leading-none tracking-[-0.02em]", muted)}>{s.secondary}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-inter text-[24px] font-medium leading-none tracking-[-0.02em] text-page-text">{s.value}</span>
+                <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-[#00994D]">{s.change}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <DotPagination count={stats.length} activeIndex={activeIndex} onDotClick={scrollTo} />
+    </div>
+  );
+}
+
 function FinanceOverview() {
   const [chartToggle, setChartToggle] = useState<"GMV" | "Total revenue">("GMV");
   const [activityTab, setActivityTab] = useState<"Withdrawals" | "Deposits" | "Deductions">("Withdrawals");
@@ -818,11 +932,15 @@ function FinanceOverview() {
 
   return (
     <div className="flex flex-col gap-2">
+      {/* Mobile action buttons: Deposit, Withdraw, 3-dot menu */}
+      <MobileActionButtons />
+
       {/* Whop Integration Card */}
       <WhopIntegrationCard />
 
-      {/* 4 Stat Cards — grid on desktop */}
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      {/* 4 Stat Cards — carousel on mobile, grid on desktop */}
+      <MobileStatCarousel stats={OVERVIEW_STATS} />
+      <div className="hidden gap-2 md:grid md:grid-cols-4">
         {OVERVIEW_STATS.map((s) => (
           <div key={s.label} className={cn(cardBase, "h-20 flex-1 gap-3")}>
             <StatCardContent s={s} />
@@ -852,7 +970,7 @@ function FinanceOverview() {
                 </button>
               ))}
             </div>
-            <span className="font-inter text-[32px] font-medium leading-none tracking-[-0.02em] text-page-text sm:text-[48px]">
+            <span className="font-inter text-[40px] font-medium leading-none tracking-[-0.02em] text-page-text sm:text-[48px]">
               $47.8K
             </span>
           </div>
@@ -875,8 +993,9 @@ function FinanceOverview() {
         />
       </div>
 
-      {/* 3 Bottom Stat Cards */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      {/* 3 Bottom Stat Cards — carousel on mobile, grid on desktop */}
+      <MobileBottomStatCarousel stats={BOTTOM_STATS} />
+      <div className="hidden gap-2 sm:grid sm:grid-cols-3">
         {BOTTOM_STATS.map((s) => (
           <div key={s.label} className={cn(cardBase, "h-[61px] flex-1 gap-2 p-3")}>
             <div className="flex items-center justify-between">
@@ -891,7 +1010,7 @@ function FinanceOverview() {
         ))}
       </div>
 
-      {/* Recent Activity (Withdrawals) Table */}
+      {/* Recent Activity (Withdrawals) */}
       <div className={cn(cardBase, "p-0")}>
         <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent activity</span>
@@ -913,52 +1032,77 @@ function FinanceOverview() {
             ))}
           </div>
         </div>
-        {/* Table header */}
-        <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex min-w-[700px] border-b border-border dark:border-foreground/[0.03] px-1">
-          <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span></div>
-          <div className="flex w-[96px] items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
-          <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Sent to</span></div>
-          <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Initiated at</span></div>
-          <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Estimated arrival</span></div>
-          <div className="flex flex-1 items-center justify-end py-3 pr-5">
-            <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>Receipt</span>
+
+        {/* Mobile card layout */}
+        <div className="md:hidden">
+          <div className="flex border-b border-foreground/[0.06] px-4 py-3">
+            <span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span>
           </div>
-        </div>
-        {/* Table rows */}
-        <div ref={activityRef} className="relative min-w-[700px]">
-          {activityRect && (
-            <motion.div className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.04]" initial={false} animate={{ top: activityRect.top, height: activityRect.height, opacity: 1 }} transition={springs.moderate} />
-          )}
           {WITHDRAWAL_ROWS.map((row, i) => (
-            <div key={i} data-proximity-item className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
-              <div className="flex w-[128px] items-center px-3 py-3">
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{row.amount}</span>
-              </div>
-              <div className="flex w-[96px] items-center py-3">
+            <div key={i} className={cn("flex flex-col gap-4 px-4 py-3", i < WITHDRAWAL_ROWS.length - 1 && "border-b border-foreground/[0.03]")}>
+              <div className="flex items-center justify-between">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{row.amount}</span>
                 <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: row.statusBg }}>
                   <StatusIcon status={row.status} color={row.statusColor} />
                   <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: row.statusColor }}>{row.status}</span>
                 </span>
               </div>
-              <div className="flex w-[128px] items-center px-3 py-3">
-                <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{row.sentTo}</span>
-              </div>
-              <div className="flex w-[128px] items-center px-3 py-3">
-                <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{row.initiated}</span>
-              </div>
-              <div className="flex w-[128px] items-center px-3 py-3">
-                <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{row.arrival}</span>
-              </div>
-              <div className="flex flex-1 items-center justify-end py-3 pr-5">
+              <div className="flex items-center justify-between">
+                <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{row.sentTo}</span>
                 <span className="flex items-center gap-1.5">
                   <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>Download</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted opacity-60"><path d="M6 8l4-0M10 6l0 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted"><path d="M6.667 8h5.333M10 6l2 2-2 2" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.5"/></svg>
                 </span>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block">
+          <div className="flex border-b border-border dark:border-foreground/[0.03] px-1">
+            <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span></div>
+            <div className="flex w-[96px] items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
+            <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Sent to</span></div>
+            <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Initiated at</span></div>
+            <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Estimated arrival</span></div>
+            <div className="flex flex-1 items-center justify-end py-3 pr-5">
+              <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>Receipt</span>
+            </div>
+          </div>
+          <div ref={activityRef} className="relative">
+            {activityRect && (
+              <motion.div className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.04]" initial={false} animate={{ top: activityRect.top, height: activityRect.height, opacity: 1 }} transition={springs.moderate} />
+            )}
+            {WITHDRAWAL_ROWS.map((row, i) => (
+              <div key={i} data-proximity-item className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
+                <div className="flex w-[128px] items-center px-3 py-3">
+                  <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{row.amount}</span>
+                </div>
+                <div className="flex w-[96px] items-center py-3">
+                  <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: row.statusBg }}>
+                    <StatusIcon status={row.status} color={row.statusColor} />
+                    <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: row.statusColor }}>{row.status}</span>
+                  </span>
+                </div>
+                <div className="flex w-[128px] items-center px-3 py-3">
+                  <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{row.sentTo}</span>
+                </div>
+                <div className="flex w-[128px] items-center px-3 py-3">
+                  <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{row.initiated}</span>
+                </div>
+                <div className="flex w-[128px] items-center px-3 py-3">
+                  <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{row.arrival}</span>
+                </div>
+                <div className="flex flex-1 items-center justify-end py-3 pr-5">
+                  <span className="flex items-center gap-1.5">
+                    <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>Download</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted opacity-60"><path d="M6 8l4-0M10 6l0 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round"/></svg>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -1100,40 +1244,65 @@ function FinanceOverview() {
           <div className="relative z-10 px-4 py-4">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Recent transactions</span>
           </div>
-          {/* Table header */}
-          <div className="relative z-10 flex border-b border-border dark:border-foreground/[0.03] px-1">
-            <div className="flex w-20 items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Date</span></div>
-            <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client</span></div>
-            <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span></div>
-            <div className="flex w-24 items-center justify-end px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span></div>
-            <div className="flex w-[128px] items-center justify-end py-3 pr-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
-          </div>
-          <div ref={txRef} className="relative z-10">
-            {txRect && (
-              <motion.div className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.04]" initial={false} animate={{ top: txRect.top, height: txRect.height, opacity: 1 }} transition={springs.moderate} />
-            )}
+
+          {/* Mobile card layout */}
+          <div className="relative z-10 lg:hidden">
+            <div className="flex border-b border-foreground/[0.06] px-4 py-3">
+              <span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client</span>
+            </div>
             {RECENT_TX.map((tx, i) => (
-              <div key={i} data-proximity-item className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
-                <div className="flex w-20 items-center px-3 py-3.5">
-                  <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{tx.date}</span>
-                </div>
-                <div className="flex flex-1 items-center py-3.5">
-                  <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.desc}</span>
-                </div>
-                <div className="flex flex-1 items-center py-3.5">
-                  <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.campaign}</span>
-                </div>
-                <div className="flex w-24 items-center justify-end px-3 py-3.5">
-                  <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.amount}</span>
-                </div>
-                <div className="flex w-[128px] items-center justify-end py-3.5 pr-3">
+              <div key={i} className={cn("flex flex-col gap-4 px-4 py-3", i < RECENT_TX.length - 1 && "border-b border-foreground/[0.03]")}>
+                <div className="flex items-center justify-between">
+                  <span className="font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{tx.desc}</span>
                   <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: tx.statusBg }}>
                     <StatusIcon status={tx.status} color={tx.statusColor} />
                     <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: tx.statusColor }}>{tx.status}</span>
                   </span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className={cn("font-inter text-[12px] tracking-[-0.02em]", muted)}>{tx.date}</span>
+                  <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.amount}</span>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="relative z-10 hidden lg:block">
+            <div className="flex border-b border-border dark:border-foreground/[0.03] px-1">
+              <div className="flex w-20 items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Date</span></div>
+              <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client</span></div>
+              <div className="flex flex-1 items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span></div>
+              <div className="flex w-24 items-center justify-end px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Amount</span></div>
+              <div className="flex w-[128px] items-center justify-end py-3 pr-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
+            </div>
+            <div ref={txRef} className="relative">
+              {txRect && (
+                <motion.div className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.04]" initial={false} animate={{ top: txRect.top, height: txRect.height, opacity: 1 }} transition={springs.moderate} />
+              )}
+              {RECENT_TX.map((tx, i) => (
+                <div key={i} data-proximity-item className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
+                  <div className="flex w-20 items-center px-3 py-3.5">
+                    <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{tx.date}</span>
+                  </div>
+                  <div className="flex flex-1 items-center py-3.5">
+                    <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.desc}</span>
+                  </div>
+                  <div className="flex flex-1 items-center py-3.5">
+                    <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.campaign}</span>
+                  </div>
+                  <div className="flex w-24 items-center justify-end px-3 py-3.5">
+                    <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text">{tx.amount}</span>
+                  </div>
+                  <div className="flex w-[128px] items-center justify-end py-3.5 pr-3">
+                    <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: tx.statusBg }}>
+                      <StatusIcon status={tx.status} color={tx.statusColor} />
+                      <span className="font-inter text-[12px] font-medium tracking-[-0.02em]" style={{ color: tx.statusColor }}>{tx.status}</span>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

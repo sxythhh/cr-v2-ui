@@ -924,7 +924,7 @@ export default function PayoutsPage() {
                 className={cn("flex items-start gap-3 px-4 py-3", i < sortedRows.length - 1 && "border-b border-foreground/[0.03]", isFlagged && "bg-[rgba(255,37,37,0.03)]")}
                 onClick={() => setDetailRow({ row, index: i })}
               >
-                <div className="pt-1">
+                <div className="flex h-6 items-center pt-0.5">
                   <Checkbox checked={selectedIds.has(row.id)} onChange={() => toggleRow(row.id)} />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">

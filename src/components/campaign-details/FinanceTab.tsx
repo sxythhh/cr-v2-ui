@@ -66,7 +66,7 @@ export function SwipeableStatCards({ cards, columns = 4 }: { cards: StatCardData
           {cards.map((card, i) => (
             <div key={card.label} className={cn(
               "w-[calc(100vw-56px)] max-w-80 shrink-0",
-              i === 0 ? "snap-start ml-4 sm:ml-5" : "snap-center",
+              i === 0 ? "snap-start ml-4 sm:ml-5" : "snap-start",
               i === cards.length - 1 && "mr-4 sm:mr-5",
             )}>
               <StatCard {...card} />
@@ -75,10 +75,15 @@ export function SwipeableStatCards({ cards, columns = 4 }: { cards: StatCardData
         </div>
         <div className="flex items-center gap-1">
           {cards.map((_, i) => (
-            <div
+            <button
               key={i}
+              type="button"
+              onClick={() => {
+                const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+                child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+              }}
               className={cn(
-                "size-1.5 rounded-full transition-colors",
+                "size-1.5 cursor-pointer rounded-full transition-colors",
                 i === activeIndex ? "bg-[#252525] dark:bg-[#E0E0E0]" : "bg-[rgba(37,37,37,0.1)] dark:bg-[rgba(224,224,224,0.1)]",
               )}
             />
