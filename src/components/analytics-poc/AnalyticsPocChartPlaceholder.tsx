@@ -1201,13 +1201,13 @@ function StackedBarChartBody({
                     "#00994D": "rgba(0,153,77,0.3)",
                     "#AE4EEE": "rgba(174,78,238,0.3)",
                     "#FF3355": "rgba(255,51,85,0.3)",
-                    "#1A67E5": "rgba(26,103,229,0.3)",
+                    "#8B8D98": "rgba(139,141,152,0.3)",
                   };
                   const darkColorMap: Record<string, string> = {
                     "#00994D": "rgba(52,211,153,0.3)",
                     "#AE4EEE": "rgba(192,132,252,0.3)",
                     "#FF3355": "rgba(251,113,133,0.3)",
-                    "#1A67E5": "rgba(96,165,250,0.3)",
+                    "#8B8D98": "rgba(139,141,152,0.3)",
                   };
                   const base = isDark ? "#1C1C1C" : "#FFFFFF";
                   const colorMap = isDark ? darkColorMap : lightColorMap;

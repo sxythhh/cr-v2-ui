@@ -12,8 +12,8 @@ import { springs } from "@/lib/springs";
 
 function ActiveDotIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <circle cx="6" cy="6" r="5" fill="#34D399" />
+    <svg width="6" height="6" viewBox="0 0 6 6" fill="none">
+      <circle cx="3" cy="3" r="3" fill="#00B259" />
     </svg>
   );
 }
@@ -153,7 +153,7 @@ const CONTRACTS: Contract[] = [
 function StatusBadge({ status }: { status: ContractStatus }) {
   const config = {
     active: { icon: <ActiveDotIcon />, label: "Active", bg: "rgba(0,178,89,0.1)", color: "#00B259" },
-    expiring: { icon: <ClockAlertIcon />, label: "Expiring", bg: "rgba(255,37,37,0.1)", color: "#FF2525" },
+    expiring: { icon: <ClockAlertIcon />, label: "Expiring", bg: "rgba(229,113,0,0.1)", color: "#E57100" },
     pending: { icon: <ClockIcon />, label: "Pending", bg: "rgba(255,144,37,0.1)", color: "#FF9025" },
     negotiation: { icon: <ChatBubbleIcon />, label: "Negotiation", bg: "rgba(59,130,246,0.1)", color: "#3B82F6" },
     expired: { icon: null, label: "Expired", bg: "var(--ap-hover, rgba(37,37,37,0.06))", color: "var(--page-text-muted, rgba(37,37,37,0.5))" },
@@ -210,14 +210,14 @@ function getContractSortValue(c: Contract, key: ContractSortKey): number | strin
 }
 
 const COLUMNS = [
-  { label: "Creator", sortKey: "creator" as ContractSortKey | null, width: "w-[244px]", align: "text-left" as const, grow: false },
+  { label: "Creator", sortKey: "creator" as ContractSortKey | null, width: "w-[200px]", align: "text-left" as const, grow: false },
   { label: "Type", sortKey: "type" as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
-  { label: "Compensation", sortKey: "compensation" as ContractSortKey | null, width: "w-[128px]", align: "text-right" as const, grow: false },
-  { label: "Deliverables", sortKey: null as ContractSortKey | null, width: "w-[144px]", align: "text-right" as const, grow: false },
-  { label: "Status", sortKey: "status" as ContractSortKey | null, width: "w-[128px]", align: "text-right" as const, grow: false },
-  { label: "Duration", sortKey: "duration" as ContractSortKey | null, width: "w-[128px]", align: "text-right" as const, grow: false },
-  { label: "Ends", sortKey: "ends" as ContractSortKey | null, width: "w-[128px]", align: "text-right" as const, grow: false },
-  { label: "Actions", sortKey: null as ContractSortKey | null, width: "w-[104px]", align: "text-right" as const, grow: false },
+  { label: "Compensation", sortKey: "compensation" as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
+  { label: "Deliverables", sortKey: null as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
+  { label: "Status", sortKey: "status" as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
+  { label: "Duration", sortKey: "duration" as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
+  { label: "Ends", sortKey: "ends" as ContractSortKey | null, width: "", align: "text-right" as const, grow: true },
+  { label: "Actions", sortKey: null as ContractSortKey | null, width: "w-[100px]", align: "text-right" as const, grow: false },
 ];
 
 // ── Contract Row ─────────────────────────────────────────────────────
@@ -248,7 +248,7 @@ function ContractRow({
   return (
     <div ref={rowRef} className={cn("flex items-center transition-[border-color] duration-75", !isLast && cn("border-b", hideBorder ? "border-transparent" : "border-foreground/[0.03]"))}>
         {/* Creator */}
-        <div className={cn("flex w-[244px] shrink-0 items-center gap-2 px-3 py-3", rowOpacity)}>
+        <div className={cn("flex w-[200px] shrink-0 items-center gap-2 px-3 py-3", rowOpacity)}>
           <img src={contract.avatar} alt="" className="size-6 shrink-0 rounded-full object-cover" />
           <div className="flex min-w-0 flex-col gap-1.5">
             <span className="truncate font-inter text-sm font-medium leading-normal tracking-[-0.02em] text-page-text">
@@ -268,26 +268,26 @@ function ContractRow({
         </div>
 
         {/* Compensation */}
-        <div className={cn("flex w-[128px] shrink-0 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
+        <div className={cn("flex min-w-0 flex-1 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
           <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text text-right">
             {contract.compensation}
           </span>
         </div>
 
         {/* Deliverables */}
-        <div className={cn("flex w-[144px] shrink-0 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
+        <div className={cn("flex min-w-0 flex-1 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
           <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text text-right">
             {contract.deliverables}
           </span>
         </div>
 
         {/* Status */}
-        <div className={cn("flex w-[128px] shrink-0 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
+        <div className={cn("flex min-w-0 flex-1 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
           <StatusBadge status={contract.status} />
         </div>
 
         {/* Duration */}
-        <div className={cn("flex w-[128px] shrink-0 items-center justify-end gap-1.5 px-3 py-3 pl-5", rowOpacity)}>
+        <div className={cn("flex min-w-0 flex-1 items-center justify-end gap-1.5 px-3 py-3 pl-5", rowOpacity)}>
           <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text text-right">
             {contract.duration}
           </span>
@@ -297,14 +297,14 @@ function ContractRow({
         </div>
 
         {/* Ends */}
-        <div className={cn("flex w-[128px] shrink-0 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
+        <div className={cn("flex min-w-0 flex-1 items-center justify-end px-3 py-3 pl-5", rowOpacity)}>
           <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text text-right">
             {contract.ends}
           </span>
         </div>
 
         {/* Actions */}
-        <div className="flex w-[104px] shrink-0 items-center justify-end px-3 py-3 pl-5">
+        <div className="flex w-[100px] shrink-0 items-center justify-end px-3 py-3 pl-5">
           <ActionButton label={contract.actionLabel} variant={contract.actionVariant} />
         </div>
     </div>
@@ -741,53 +741,51 @@ export function ContractsContent({ onNewContractRef }: { onNewContractRef?: Reac
         <div className="overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
           {/* Table scrollable wrapper */}
           <div className="overflow-x-auto">
-            <div style={{ minWidth: 1000 }}>
+            <div>
               {/* Header */}
               <div className="flex items-center border-b border-foreground/[0.06]">
-                <div className="flex flex-1 items-center">
-                  {COLUMNS.map((col) => {
-                    const isSorted = col.sortKey !== null && sortKey === col.sortKey;
-                    const isSortable = col.sortKey !== null;
-                    return (
-                      <div
-                        key={col.label}
-                        className={cn(
-                          "flex shrink-0 items-center px-3 py-3",
-                          col.grow ? "min-w-0 flex-1 pl-5" : col.width,
-                          col.align === "text-right" && "justify-end",
-                          col.label === "Creator" ? "" : "pl-5",
-                        )}
-                      >
-                        {isSortable ? (
-                          <button
-                            type="button"
-                            onClick={() => handleSort(col.sortKey!)}
-                            className={cn(
-                              "flex cursor-pointer items-center gap-1 whitespace-nowrap font-inter text-xs font-medium leading-none tracking-[-0.02em] transition-colors",
-                              isSorted ? "text-page-text" : "text-page-text-muted hover:text-page-text",
-                            )}
-                          >
-                            {col.label}
-                            {isSorted && (
-                              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="shrink-0">
-                                <path
-                                  d={sortDir === "asc" ? "M2.5 6.5L5 3.5L7.5 6.5" : "M2.5 3.5L5 6.5L7.5 3.5"}
-                                  stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                                />
-                              </svg>
-                            )}
-                          </button>
-                        ) : (
-                          <span
-                            className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text-muted"
-                          >
-                            {col.label}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                {COLUMNS.map((col) => {
+                  const isSorted = col.sortKey !== null && sortKey === col.sortKey;
+                  const isSortable = col.sortKey !== null;
+                  return (
+                    <div
+                      key={col.label}
+                      className={cn(
+                        "flex shrink-0 items-center px-3 py-3",
+                        col.grow ? "min-w-0 flex-1 pl-5" : col.width,
+                        col.align === "text-right" && "justify-end",
+                        col.label === "Creator" ? "" : "pl-5",
+                      )}
+                    >
+                      {isSortable ? (
+                        <button
+                          type="button"
+                          onClick={() => handleSort(col.sortKey!)}
+                          className={cn(
+                            "flex cursor-pointer items-center gap-1 whitespace-nowrap font-inter text-xs font-medium leading-none tracking-[-0.02em] transition-colors",
+                            isSorted ? "text-page-text" : "text-page-text-muted hover:text-page-text",
+                          )}
+                        >
+                          {col.label}
+                          {isSorted && (
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="shrink-0">
+                              <path
+                                d={sortDir === "asc" ? "M2.5 6.5L5 3.5L7.5 6.5" : "M2.5 3.5L5 6.5L7.5 3.5"}
+                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      ) : (
+                        <span
+                          className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text-muted"
+                        >
+                          {col.label}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Rows */}

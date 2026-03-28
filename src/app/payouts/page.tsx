@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { Modal } from "@/components/ui/modal";
 import { Tabs, TabItem } from "@/components/ui/tabs";
+import { useProximityHover } from "@/hooks/use-proximity-hover";
+import { springs } from "@/lib/springs";
 
 const TIME_FILTERS = ["This week", "This month", "All Time"];
 
@@ -379,10 +382,12 @@ function PayoutDetailDialog({
   row,
   index,
   onClose,
+  onFlag,
 }: {
   row: PayoutRow;
   index: number;
   onClose: () => void;
+  onFlag?: () => void;
 }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [showClawback, setShowClawback] = useState(false);
@@ -508,14 +513,14 @@ function PayoutDetailDialog({
                           Posted Feb 18
                         </span>
                       </div>
-                      <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-foreground/[0.06] py-2 pl-2.5 pr-3">
-                        <svg width="8" height="10" viewBox="0 0 8 10" fill="none" className="text-page-text-muted">
+                      <button type="button" onClick={onFlag} className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-2 pl-2.5 pr-3 transition-colors hover:bg-[rgba(255,37,37,0.08)] hover:text-[#FF2525]">
+                        <svg width="8" height="10" viewBox="0 0 8 10" fill="none" className="text-current">
                           <path d="M3.86385 6.84551C2.8322 6.55356 1.96254 6.32022 1 6.68982V9.8644H0V0.554783L0.27717 0.416799C1.71923 -0.301105 3.00051 0.061716 4.09294 0.371061L4.13615 0.383293C5.26585 0.702988 6.20131 0.952399 7.27717 0.416799L8 0.0569506V6.67402L7.72283 6.812C6.28077 7.52991 4.99949 7.16708 3.90706 6.85774L3.86385 6.84551Z" fill="currentColor" />
                         </svg>
-                        <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
+                        <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em]">
                           Flag
                         </span>
-                      </div>
+                      </button>
                     </div>
 
                     {/* Metric pills */}
@@ -669,6 +674,7 @@ function PayoutTableRow({
   isSelected,
   onToggle,
   onRowClick,
+  registerHover,
 }: {
   row: PayoutRow;
   index: number;
@@ -676,14 +682,17 @@ function PayoutTableRow({
   isSelected: boolean;
   onToggle: () => void;
   onRowClick: () => void;
+  registerHover?: (index: number, el: HTMLElement | null) => void;
 }) {
   const status = STATUS_CONFIG[row.status];
   const isFlagged = row.flagged;
 
   return (
     <div
+      ref={(el) => registerHover?.(index, el)}
+      data-proximity-item
       className={cn(
-        "group relative z-10 flex w-full cursor-pointer items-center px-1 transition-colors",
+        "group relative z-10 flex w-full cursor-pointer items-center px-1",
         isFlagged && "bg-[rgba(255,37,37,0.03)] dark:bg-[rgba(255,37,37,0.06)]",
         isSelected && !isFlagged && "bg-foreground/[0.02]",
       )}
@@ -794,8 +803,13 @@ export default function PayoutsPage() {
   const [activeStatusFilter, setActiveStatusFilter] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [detailRow, setDetailRow] = useState<{ row: PayoutRow; index: number } | null>(null);
+  const [flagConfirmOpen, setFlagConfirmOpen] = useState(false);
   const [sortKey, setSortKey] = useState<PayoutSortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const tableRef = useRef<HTMLDivElement>(null);
+  const { activeIndex: hoverIdx, itemRects: hoverRects, sessionRef: hoverSession, handlers: hoverHandlers, registerItem: registerHoverItem } = useProximityHover(tableRef);
+  const hoverRect = hoverIdx !== null ? hoverRects[hoverIdx] : null;
 
   const handleSort = useCallback((key: PayoutSortKey) => {
     if (sortKey === key) {
@@ -911,7 +925,9 @@ export default function PayoutsPage() {
                     key={col.label}
                     className={cn(
                       "flex h-9 items-center py-3 pl-5 pr-3",
-                      idx === 0 ? "w-[180px] shrink-0 pl-0 lg:w-[240px]" : idx === 1 ? "w-[140px] shrink-0 justify-end" : "min-w-0 flex-1 justify-end",
+                      idx === 0 ? "w-[180px] shrink-0 pl-0 lg:w-[240px]"
+                        : idx === 1 ? "w-[140px] shrink-0 justify-end"
+                        : "min-w-0 flex-1 justify-end",
                     )}
                   >
                     {col.sortKey ? (
@@ -941,14 +957,29 @@ export default function PayoutsPage() {
                   </div>
                 );
               })}
-              <div className="flex h-9 w-20 items-center justify-end py-3 pl-5 pr-4">
-                <span className="text-page-text-muted opacity-0">Status</span>
-              </div>
             </div>
           </div>
 
           {/* Data rows */}
-          <div className="w-full min-w-[800px]">
+          <div
+            ref={tableRef}
+            className="relative w-full min-w-[800px] overflow-hidden"
+            onMouseEnter={hoverHandlers.onMouseEnter}
+            onMouseMove={hoverHandlers.onMouseMove}
+            onMouseLeave={hoverHandlers.onMouseLeave}
+          >
+            <AnimatePresence>
+              {hoverRect && (
+                <motion.div
+                  key={hoverSession.current}
+                  className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.02]"
+                  initial={{ opacity: 0, ...hoverRect }}
+                  animate={{ opacity: 1, ...hoverRect }}
+                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
+                />
+              )}
+            </AnimatePresence>
             {sortedRows.map((row, i) => (
               <PayoutTableRow
                 key={row.id}
@@ -958,6 +989,7 @@ export default function PayoutsPage() {
                 isSelected={selectedIds.has(row.id)}
                 onToggle={() => toggleRow(row.id)}
                 onRowClick={() => setDetailRow({ row, index: i })}
+                registerHover={registerHoverItem}
               />
             ))}
           </div>
@@ -971,8 +1003,45 @@ export default function PayoutsPage() {
           row={detailRow.row}
           index={detailRow.index}
           onClose={() => setDetailRow(null)}
+          onFlag={() => setFlagConfirmOpen(true)}
         />
       )}
+
+      {/* Flag confirmation dialog */}
+      <Modal open={flagConfirmOpen} onClose={() => setFlagConfirmOpen(false)} size="sm">
+        <div className="flex flex-col items-center gap-4 px-5 py-6">
+          {/* Icon */}
+          <div className="flex size-12 items-center justify-center rounded-full bg-[rgba(255,37,37,0.08)]">
+            <svg width="20" height="24" viewBox="0 0 8 10" fill="none">
+              <path d="M3.86385 6.84551C2.8322 6.55356 1.96254 6.32022 1 6.68982V9.8644H0V0.554783L0.27717 0.416799C1.71923 -0.301105 3.00051 0.061716 4.09294 0.371061L4.13615 0.383293C5.26585 0.702988 6.20131 0.952399 7.27717 0.416799L8 0.0569506V6.67402L7.72283 6.812C6.28077 7.52991 4.99949 7.16708 3.90706 6.85774L3.86385 6.84551Z" fill="#FF2525" />
+            </svg>
+          </div>
+          {/* Text */}
+          <div className="flex flex-col items-center gap-2">
+            <h3 className="font-inter text-base font-medium tracking-[-0.02em] text-page-text">Flag this payout?</h3>
+            <p className="text-center font-inter text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">
+              This will pause the payout and mark it for manual review. The creator will be notified.
+            </p>
+          </div>
+          {/* Buttons */}
+          <div className="flex w-full gap-2">
+            <button
+              type="button"
+              onClick={() => setFlagConfirmOpen(false)}
+              className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => setFlagConfirmOpen(false)}
+              className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[#FF2525] font-inter text-sm font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90"
+            >
+              Flag payout
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

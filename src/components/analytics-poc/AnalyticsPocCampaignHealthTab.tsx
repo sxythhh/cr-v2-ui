@@ -391,16 +391,15 @@ const TRAFFIC_SOURCES = [
 function TrafficSourcesCard() {
   return (
     <div className={cn(CARD, "flex flex-col gap-2 overflow-hidden p-4")}>
-      <div className="overflow-x-auto">
       {/* Header */}
-      <div className="flex min-w-[600px] items-center px-4 pb-2">
+      <div className="flex items-center px-4 pb-2">
         <div className="flex flex-1 items-center gap-1.5">
           <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Traffic sources</span>
-          <svg width="12" height="12" viewBox="0 -960 960 960" fill="currentColor" className="text-page-text-muted"><path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-foreground/40"><path fillRule="evenodd" clipRule="evenodd" d="M6 0.5C3.0 0.5 0.5 3.0 0.5 6C0.5 9.0 3.0 11.5 6 11.5C9.0 11.5 11.5 9.0 11.5 6C11.5 3.0 9.0 0.5 6 0.5ZM5.5 4C5.5 3.72 5.72 3.5 6 3.5C6.28 3.5 6.5 3.72 6.5 4C6.5 4.28 6.28 4.5 6 4.5C5.72 4.5 5.5 4.28 5.5 4ZM5.5 5.5H6.5V8.5H5.5V5.5Z" fill="currentColor"/></svg>
         </div>
-        <span className="w-[80px] text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Views</span>
-        <span className="w-[80px] text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Applications</span>
-        <span className="w-[66px] text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Joined</span>
+        <span className="hidden w-[80px] text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted sm:block">Views</span>
+        <span className="text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted sm:w-[80px]">Applications</span>
+        <span className="w-[50px] pl-3 text-right font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Joined</span>
       </div>
 
       {/* Rows */}
@@ -417,12 +416,11 @@ function TrafficSourcesCard() {
               <span className="size-2 rounded-full" style={{ background: source.color }} />
               <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{source.label}</span>
             </div>
-            <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.views}</span>
-            <span className="relative z-10 w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums">{source.applications}</span>
-            <span className="relative z-10 w-[66px] text-right font-inter text-sm tracking-[-0.02em] text-[#34D399] tabular-nums">{source.joined}</span>
+            <span className="relative z-10 hidden w-[80px] text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums sm:block">{source.views}</span>
+            <span className="relative z-10 text-right font-inter text-sm tracking-[-0.02em] text-page-text tabular-nums sm:w-[80px]">{source.applications}</span>
+            <span className="relative z-10 w-[50px] pl-3 text-right font-inter text-sm tracking-[-0.02em] text-[#00994D] tabular-nums">{source.joined}</span>
           </div>
         ))}
-      </div>
       </div>
     </div>
   );
@@ -575,10 +573,10 @@ export function AnalyticsPocCampaignHealthTab({
   }));
 
   const topKpiCards = [
-    <StatCard key="views" value="5.14M" change="+18.3%" label="Total views" />,
-    <StatCard key="visitors" value="8,420" change="+18.3%" label="Unique visitors" />,
-    <StatCard key="apps" value="847" change="+18.3%" label="Applications" sublabel="6.6% conversion" />,
-    <StatCard key="joined" value="423" change="+18.3%" label="Joined" sublabel="49.9% acceptance" />,
+    <StatCard key="views" value="5.14M" change="+18.3%" label="Total views" changeColor="#00994D" />,
+    <StatCard key="payouts" value="$4,218.50" change="+18.3%" label="Total payouts" sublabel="$832 pending" changeColor="#00994D" />,
+    <StatCard key="visitors" value="12,108" label="Unique visitors" />,
+    <StatCard key="subs" value="847" label="Submissions" sublabel="680 approved · 80.3%" />,
   ];
 
   const bottomKpiCards = [
@@ -589,7 +587,7 @@ export function AnalyticsPocCampaignHealthTab({
   ];
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div className={cn("flex flex-col gap-4 pb-8 md:pb-0", className)}>
       {/* 1. Filter toolbar (desktop only) */}
       <FilterToolbar dateRange={dateRange} setDateRange={setDateRange} platforms={platforms} onTogglePlatform={handleTogglePlatform} selectedCampaign={selectedCampaign} setSelectedCampaign={setSelectedCampaign} />
 

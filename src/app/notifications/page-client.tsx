@@ -304,7 +304,7 @@ function NotificationList({
                 {/* Unread dot */}
                 {notif.unread && (
                   <span className="absolute -right-1 -top-1 flex items-center justify-center">
-                    <span className="size-2 rounded-full border-2 border-white bg-[#FB7185] dark:border-[rgba(224,224,224,0.03)]" />
+                    <span className="size-2.5 rounded-full border-[2.5px] border-white bg-[#FF3355] dark:border-card-bg" />
                   </span>
                 )}
 

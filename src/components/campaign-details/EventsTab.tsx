@@ -193,7 +193,7 @@ export default function EventsTab() {
                 {/* Unread dot */}
                 {event.unread && (
                   <span className="absolute -right-1 -top-1 z-10 flex size-4 items-center justify-center">
-                    <span className="size-3 rounded-full border-2 border-white bg-[#FF3355] dark:border-card-bg" />
+                    <span className="size-2.5 rounded-full border-[2.5px] border-white bg-[#FF3355] dark:border-card-bg" />
                   </span>
                 )}
 

@@ -430,17 +430,15 @@ export function AnalyticsPocView() {
 
       <AnalyticsPocPanel>
         <div className="space-y-3">
-          {/* Mobile: simple label + date nav */}
-          <div className="flex items-center justify-between md:hidden">
-            <span className="font-inter text-xs tracking-[-0.02em] text-foreground/50">Total posts</span>
-            <div className="flex items-center gap-1.5">
-              <button type="button" className="flex size-4 cursor-pointer items-center justify-center text-foreground/50">
-                <svg width="7" height="13" viewBox="0 0 7 13" fill="none"><path d="M6.25 11.4167L1.38807 6.55473C1.12772 6.29438 1.12772 5.87227 1.38807 5.61192L6.25 0.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <span className="font-inter text-sm tracking-[-0.02em] text-foreground/70">01/05 - 01/11</span>
-              <button type="button" className="flex size-4 cursor-pointer items-center justify-center text-foreground/50">
-                <svg width="7" height="13" viewBox="0 0 7 13" fill="none"><path d="M0.75 0.75L5.61193 5.61192C5.87228 5.87227 5.87228 6.29438 5.61193 6.55473L0.75 11.4167" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
+          {/* Mobile: stats row + date nav */}
+          <div className="flex flex-col gap-2 md:hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{data.totalPosts.total}</span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">·</span>
+                <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{data.totalPosts.delta}</span>
+              </div>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#00994D]">{data.totalPosts.trend}</span>
             </div>
           </div>
           {/* Desktop: full header with trend stats */}
@@ -494,6 +492,9 @@ export function AnalyticsPocView() {
           />
         </div>
       </AnalyticsPocPanel>
+
+      {/* Best Posting Times heading */}
+      <h2 className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Best Posting Times</h2>
 
       {/* Mobile: carousel for heatmaps */}
       <div className="md:hidden">

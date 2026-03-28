@@ -1060,7 +1060,7 @@ function TopUpButton() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.03] px-3 font-inter text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.06]"
+        className="flex h-9 w-fit cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
       >
         Top up
       </button>
@@ -1256,18 +1256,30 @@ function DashboardView() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4 sm:px-5">
-      {/* AI Tip Banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:gap-4">
-        <SparkleIcon className="size-4 shrink-0 text-page-text-muted dark:text-white" />
-        <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-3">
-          <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">
+      {/* AI Insights Card */}
+      <div className="flex flex-col gap-6 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <SparkleIcon className="size-4 shrink-0 text-page-text-muted" />
+            <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">AI Insights</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button type="button" className="flex size-4 cursor-pointer items-center justify-center">
+              <ChevronLeftIcon className="size-4 text-page-text-muted" />
+            </button>
+            <span className="font-inter text-sm tabular-nums tracking-[-0.02em] text-page-text">1/3</span>
+            <button type="button" className="flex size-4 cursor-pointer items-center justify-center">
+              <ChevronRightIcon className="size-4 text-page-text-muted" />
+            </button>
+          </div>
+        </div>
+        {/* Body */}
+        <div className="flex flex-col gap-3">
+          <span className="font-inter text-sm leading-[140%] tracking-[-0.02em] text-page-text-muted">
             You&apos;ve spent <span className="font-semibold text-[#FF9025]">78%</span> of your budget in the <span className="font-semibold text-page-text">Caffeine AI</span> campaign, with <span className="font-semibold text-page-text">4 days left.</span>
           </span>
           <TopUpButton />
-        </div>
-        <div className="flex items-center gap-0 opacity-70">
-          <ChevronLeftIcon className="size-4 text-page-text" />
-          <ChevronRightIcon className="size-4 text-page-text" />
         </div>
       </div>
 
@@ -1344,8 +1356,8 @@ function DashboardView() {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:col-span-2 lg:col-span-1">
+        {/* Recent Activity — hidden on mobile */}
+        <div className="hidden min-w-0 flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none sm:flex sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Recent activity</span>
             <Link href="/notifications" className="group flex cursor-pointer items-center gap-1.5">
@@ -1446,19 +1458,39 @@ function DashboardView() {
               </button>
             </div>
 
-            {/* Mobile: simple list */}
+            {/* Mobile: card list with colored backgrounds */}
             <div className="flex flex-col gap-2 sm:hidden">
-              {TOP_CREATORS.map((c, i) => (
-                <div key={c.name} className="flex items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] p-3 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
-                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full font-inter text-xs font-semibold text-white" style={{ background: ["#FB923C", "#839FB9", "#9E5200"][i] }}>
-                    {i + 1}
+              {TOP_CREATORS.map((c, i) => {
+                const colors = [
+                  { bg: "linear-gradient(0deg, rgba(229,113,0,0.04), rgba(229,113,0,0.04)), #FFFFFF", badge: "#E57100" },
+                  { bg: "rgba(131,159,185,0.04)", badge: "#839FB9" },
+                  { bg: "rgba(158,82,0,0.04)", badge: "#9E5200" },
+                ];
+                const { bg, badge } = colors[i] ?? colors[2];
+                return (
+                  <div
+                    key={c.name}
+                    className="flex items-center justify-between rounded-2xl border border-[rgba(37,37,37,0.06)] p-4 dark:border-[rgba(224,224,224,0.03)]"
+                    style={{ background: bg }}
+                  >
+                    {/* Rank badge */}
+                    <div className="flex items-center gap-2 rounded-full px-2 py-0" style={{ background: badge }}>
+                      {i === 0 && (
+                        <svg width="12" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.91604 0.22265C5.82331 0.0835506 5.66719 0 5.50002 0C5.33284 0 5.17672 0.0835506 5.08399 0.22265L3.32883 2.85539L0.723624 1.55279C0.552173 1.46706 0.346803 1.4869 0.194933 1.60386C0.043064 1.72083 -0.0285686 1.91432 0.010527 2.10198L1.09468 7.30593C1.2396 8.00151 1.85264 8.5 2.56315 8.5H8.43688C9.14739 8.5 9.76044 8.00151 9.90535 7.30593L10.9895 2.10198C11.0286 1.91432 10.957 1.72083 10.8051 1.60386C10.6532 1.4869 10.4479 1.46706 10.2764 1.55279L7.6712 2.85539L5.91604 0.22265Z" fill="white" /></svg>
+                      )}
+                      <span className="font-inter text-base font-medium tracking-[-0.02em] text-white">{i + 1}</span>
+                    </div>
+                    {/* Creator info */}
+                    <div className="flex items-center gap-2">
+                      <div className="size-8 rounded-full bg-foreground/[0.08]" />
+                      <div className="flex flex-col gap-1.5">
+                        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.earned}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex min-w-0 flex-1 items-center justify-between">
-                    <span className="truncate font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
-                    <span className="shrink-0 font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.earned}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
           </div>
