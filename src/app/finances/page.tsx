@@ -41,17 +41,17 @@ function MobileFinanceTabs({ activeTab, onTabChange }: { activeTab: typeof TABS[
   return (
     <div className="-mx-4 -mt-5 mb-4 flex flex-col sm:-mx-6 md:hidden sticky top-0 z-20 bg-page-bg">
       {/* Underline tabs — full width */}
-      <div className="flex border-b border-foreground/[0.06]">
+      <div className="flex">
         {TABS.map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => onTabChange(tab)}
             className={cn(
-              "flex flex-1 cursor-pointer items-center justify-center py-4 font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
+              "flex h-14 flex-1 cursor-pointer items-center justify-center font-inter text-sm font-medium tracking-[-0.02em] transition-colors",
               activeTab === tab
-                ? "border-b border-foreground text-page-text"
-                : "text-page-text/70",
+                ? "border-b border-[#252525] text-[#1E1E1E]"
+                : "text-[rgba(37,37,37,0.7)]",
             )}
           >
             {tab}
@@ -294,7 +294,43 @@ function CampaignsTable() {
   useEffect(() => { hover.measureItems(); }, [hover.measureItems]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-foreground/[0.03] dark:bg-foreground/[0.03]">
+    <>
+    {/* Mobile card layout */}
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg md:hidden">
+      <div className="flex items-center border-b border-foreground/[0.06] px-4 py-3">
+        <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">Creator</span>
+      </div>
+      {CAMPAIGN_ROWS.map((row, i) => (
+        <div key={i} className={cn("flex items-center justify-between px-4 py-3", i < CAMPAIGN_ROWS.length - 1 && "border-b border-foreground/[0.03]")}>
+          <div className="flex items-center gap-2">
+            <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
+            <div className="flex flex-col gap-1.5">
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{row.name}</span>
+              <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{row.client}</span>
+              <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">{row.model}</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <span className={cn("inline-flex items-center gap-1 rounded-full py-1 pl-1.5 pr-2 font-inter text-xs font-medium tracking-[-0.02em]",
+              row.status === "Active" ? "bg-[rgba(0,153,77,0.08)] text-[#00994D]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]"
+            )}>
+              {row.status === "Active" ? (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 0C2.69 0 0 2.69 0 6s2.69 6 6 6 6-2.69 6-6S9.31 0 6 0zm2.65 4.85a.5.5 0 00-.8-.6L5.5 7.15 4.15 5.8a.5.5 0 10-.7.7l1.75 1.75a.5.5 0 00.72-.05l2.73-3.35z" fill="#00994D"/></svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.75" stroke="#E57100" strokeWidth="1.5"/><path d="M6 3.5V6.5H8" stroke="#E57100" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              )}
+              {row.status}
+            </span>
+            <span className={cn("font-inter text-xs font-medium tracking-[-0.02em]",
+              row.status === "Active" ? "text-[#00994D]" : "text-[#FF3355]"
+            )}>{row.monthlyValue}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Desktop table */}
+    <div className="hidden overflow-hidden rounded-2xl border border-border bg-card-bg dark:border-foreground/[0.03] dark:bg-foreground/[0.03] md:block">
       <div className="overflow-x-auto">
         <div className="min-w-[800px]">
       {/* Header */}
@@ -365,6 +401,7 @@ function CampaignsTable() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -482,9 +519,9 @@ function InvoicesTab() {
   return (
     <div className="flex flex-col gap-5">
       {/* Toolbar: filter tabs + search + sort */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Segmented filter */}
-        <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5">
+        <div className="flex items-center gap-0.5 overflow-x-auto rounded-xl bg-foreground/[0.06] p-0.5 scrollbar-hide">
           {INVOICE_FILTERS.map((f) => (
             <button
               key={f}
@@ -505,7 +542,7 @@ function InvoicesTab() {
 
         {/* Search + filter */}
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-[300px] items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]">
+          <div className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-2.5 sm:w-[300px] sm:flex-none">
             <SearchIcon />
             <span className="font-inter text-sm tracking-[-0.02em] text-foreground/70">Search</span>
           </div>
