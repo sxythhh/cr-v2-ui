@@ -8,6 +8,7 @@ import { AppSidebarNav } from "./app-sidebar-nav";
 import { MobileHeader } from "@/components/mobile-header";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { OnboardingButton } from "./onboarding-button";
+import { CreatorAiFab } from "@/components/creator-ai-fab";
 
 export function MainNav({ children }: { children: ReactNode }) {
   const { isOpen, setIsOpen, collapsed } = useSideNav();
@@ -59,7 +60,8 @@ export function MainNav({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <MobileBottomNav />
 
-      {/* Floating onboarding — hidden */}
+      {/* Floating AI assistant (creator pages only) */}
+      <CreatorAiFab />
     </div>
   );
 }

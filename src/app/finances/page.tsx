@@ -1107,8 +1107,33 @@ function FinanceOverview() {
       </div>
 
       {/* Campaign row from Figma spec */}
-      <div className={cn(cardBase, "p-0")}>
-        {/* Table header */}
+      {/* Mobile card */}
+      <div className={cn(cardBase, "p-0 md:hidden")}>
+        <div className="flex items-center border-b border-foreground/[0.06] px-4 py-3">
+          <span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span>
+        </div>
+        <div className="flex flex-col gap-2 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1.5">
+              <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">Gambling Summer Push</span>
+              <span className={cn("font-inter text-xs tracking-[-0.02em]", muted)}>BetKing Corp</span>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-2" style={{ background: "rgba(0,153,77,0.08)" }}>
+              <StatusIcon status="Active" color="#34D399" />
+              <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-[#34D399]">Active</span>
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 font-inter text-xs tracking-[-0.02em] text-page-text-muted">
+            <span>$1,000 Per video</span>
+            <span className="text-page-text-subtle">·</span>
+            <span className="text-page-text">$20,000/mo</span>
+            <span className="text-page-text-subtle">·</span>
+            <span className="text-[#34D399]">$10,000 collected</span>
+          </div>
+        </div>
+      </div>
+      {/* Desktop table */}
+      <div className={cn(cardBase, "hidden p-0 md:block")}>
         <div className="flex border-b border-border dark:border-foreground/[0.03] px-1">
           <div className="flex w-[240px] items-center px-5 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Campaign</span></div>
           <div className="flex w-[200px] items-center py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client email</span></div>
@@ -1118,7 +1143,6 @@ function FinanceOverview() {
           <div className="flex w-[128px] items-center px-3 py-3"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Outstanding</span></div>
           <div className="flex flex-1 items-center justify-end py-3 pr-5"><span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Status</span></div>
         </div>
-        {/* Campaign row */}
         <div className="flex items-center border-b border-foreground/[0.03] px-1">
           <div className="flex w-[240px] flex-col justify-center gap-1.5 px-5 py-3">
             <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">Gambling Summer Push</span>
@@ -1168,15 +1192,15 @@ function FinanceOverview() {
             </div>
           </div>
           {/* Bar chart */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide">
             {/* Y-axis */}
-            <div className="flex h-[212px] flex-col justify-between">
+            <div className="flex h-[212px] shrink-0 flex-col justify-between">
               {["100k","75k","50k","25k","10k","0"].map((l) => (
                 <span key={l} className={cn("font-inter text-[10px] leading-[120%] text-right", muted)}>{l}</span>
               ))}
             </div>
             {/* Bars */}
-            <div className="group/bars flex flex-1 items-end justify-between gap-6">
+            <div className="group/bars flex flex-1 items-end justify-between gap-2 sm:gap-6">
               {BAR_MONTHS.map((m, i) => (
                 <div key={m} className="group/bar relative flex flex-col items-center gap-2 transition-opacity duration-150 group-hover/bars:opacity-40 hover:!opacity-100">
                   {/* Tooltip */}
@@ -1200,9 +1224,9 @@ function FinanceOverview() {
             </div>
           </div>
           {/* X-axis labels */}
-          <div className="flex justify-between pl-9">
+          <div className="flex justify-between overflow-x-auto pl-9 scrollbar-hide">
             {BAR_MONTHS.map((m) => (
-              <span key={m} className={cn("font-inter text-[10px] leading-[120%] text-center", muted)}>{m}</span>
+              <span key={m} className={cn("shrink-0 font-inter text-[10px] leading-[120%] text-center", muted)}>{m}</span>
             ))}
           </div>
         </div>

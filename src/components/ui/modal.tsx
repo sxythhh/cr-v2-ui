@@ -172,7 +172,7 @@ export function Modal({
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute right-4 top-4 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
+                className="absolute right-4 top-3 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path

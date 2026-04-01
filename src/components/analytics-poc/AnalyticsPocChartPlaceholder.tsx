@@ -962,7 +962,7 @@ function PerformanceMainLineChartBody({
             transition: "left 100ms cubic-bezier(0.22, 1, 0.36, 1), opacity 100ms ease-out",
           }}
         >
-          <span className="whitespace-nowrap rounded-full border border-foreground/[0.06] bg-card-bg dark:border-[rgba(224,224,224,0.03)] px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] tracking-[0.1px] text-page-text-muted">
+          <span className="whitespace-nowrap rounded-full border border-foreground/[0.06] bg-card-bg px-[10px] py-[6px] font-inter text-[10px] font-medium leading-[1.2] tracking-[0.1px] text-page-text-muted dark:border-transparent dark:bg-[#2a2a2a]">
             {activeHoverLabel}
           </span>
         </div>

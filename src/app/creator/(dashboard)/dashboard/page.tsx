@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
-import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
+import { Modal, ModalHeader, ModalBody } from "@/components/ui/modal";
+import { CreatorHeader } from "@/components/creator-header";
+import { CheckCircleIcon } from "@/components/submissions/icons";
 
 // ── Inline Icons ────────────────────────────────────────────────────
 
@@ -23,34 +24,43 @@ function BellIcon({ className }: { className?: string }) {
   );
 }
 
-function SparkleIcon({ className }: { className?: string }) {
+function FireStatIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-      <path d="M8 0L9.79 6.21L16 8L9.79 9.79L8 16L6.21 9.79L0 8L6.21 6.21L8 0Z" fill="currentColor" />
+    <svg width="24" height="28" viewBox="0 0 26 30" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M11.4863 1.26534C12.363 0.013032 14.1221 -0.439661 15.4959 0.504976C16.9234 1.4865 19.392 3.38354 21.5167 6.04663C23.6403 8.70841 25.5 12.2384 25.5 16.4471C25.5 23.9432 19.8717 29.9471 12.75 29.9471C5.62834 29.9471 0 23.9432 0 16.4471C0 13.3941 1.31112 9.49318 3.8663 6.37882C4.9858 5.01433 6.91749 5.09571 8.0461 6.17996L11.4863 1.26534ZM12.75 26.9471C14.9246 26.9471 16.6875 24.9348 16.6875 22.4526C16.6875 19.7889 14.6157 17.8297 13.4778 16.9544C13.0433 16.6203 12.4567 16.6203 12.0222 16.9544C10.8843 17.8297 8.8125 19.7889 8.8125 22.4526C8.8125 24.9348 10.5754 26.9471 12.75 26.9471Z" fill="#E57100" />
     </svg>
   );
 }
 
-function HeartIcon({ className }: { className?: string }) {
+function DollarStatIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-      <path d="M8 14.4L6.84 13.36C2.72 9.6 0 7.12 0 4.08C0 1.6 1.936 0 4.08 0C5.296 0 6.464 0.56 8 2.08C9.536 0.56 10.704 0 11.92 0C14.064 0 16 1.6 16 4.08C16 7.12 13.28 9.6 9.16 13.36L8 14.4Z" fill="currentColor" />
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 3.5C10.5523 3.5 11 3.94772 11 4.5V5.12367C11.804 5.32711 12.5135 5.77457 12.9759 6.41405C13.2995 6.86159 13.199 7.48674 12.7515 7.81035C12.304 8.13396 11.6788 8.03349 11.3552 7.58595C11.1379 7.28549 10.6534 7 10 7H9.72222C8.82744 7 8.5 7.54492 8.5 7.77778V7.8541C8.5 8.05137 8.64913 8.38262 9.15254 8.58398L11.5902 9.55906C12.6572 9.98584 13.5 10.9386 13.5 12.1459C13.5 13.6189 12.323 14.6144 11 14.9091V15.5C11 16.0523 10.5523 16.5 10 16.5C9.44771 16.5 9 16.0523 9 15.5V14.8763C8.19595 14.6729 7.4865 14.2254 7.02411 13.586C6.7005 13.1384 6.80096 12.5133 7.24851 12.1897C7.69605 11.866 8.32119 11.9665 8.6448 12.414C8.86206 12.7145 9.34658 13 10 13H10.1824C11.1298 13 11.5 12.4209 11.5 12.1459C11.5 11.9486 11.3509 11.6174 10.8475 11.416L8.40976 10.4409C7.34283 10.0142 6.5 9.0614 6.5 7.8541V7.77778C6.5 6.31377 7.68936 5.33904 9 5.07331V4.5C9 3.94772 9.44771 3.5 10 3.5Z" fill="#AE4EEE" />
     </svg>
   );
 }
 
-function TrophyIcon({ className }: { className?: string }) {
+function WreathIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-      <path d="M12.5 1H3.5V2H1V5C1 6.1 1.9 7 3 7H3.2C3.6 8.4 4.8 9.5 6.3 9.8V12H4V14H12V12H9.7V9.8C11.2 9.5 12.4 8.4 12.8 7H13C14.1 7 15 6.1 15 5V2H12.5V1ZM3 5V3.5H3.5V5.6C3.2 5.4 3 5.2 3 5ZM13 5C13 5.2 12.8 5.4 12.5 5.6V3.5H13V5Z" fill="currentColor" />
+    <svg width="21" height="20" viewBox="0 0 21 20" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M6.15185 0.398214C5.83573 -0.021243 5.24898 -0.124653 4.80851 0.161462C3.64505 0.917211 2.7985 1.87374 2.58347 3.0844C2.49544 3.58001 2.5215 4.07168 2.64012 4.55546C2.40785 4.47621 2.16601 4.40802 1.91633 4.34989C1.40358 4.23053 0.886086 4.52916 0.732878 5.03284C0.329995 6.35734 0.301512 7.63221 0.920415 8.69641C1.07322 8.95916 1.2569 9.19428 1.4673 9.40412C1.21855 9.45133 0.966763 9.51389 0.713027 9.58996C0.206053 9.74194 -0.0947008 10.2626 0.0269667 10.7777C0.345352 12.1256 0.96251 13.2412 2.0308 13.8535C2.40105 14.0657 2.79671 14.201 3.2112 14.2704C3.02946 14.4129 2.85067 14.5708 2.67563 14.7446C2.29037 15.127 2.28061 15.747 2.65364 16.1414C3.5122 17.0492 4.48241 17.6728 5.57176 17.7882C6.42119 17.8783 7.21999 17.6471 7.95403 17.1907C7.86525 17.4664 7.62204 17.8042 7.01732 18.1043C6.52263 18.3499 6.32066 18.95 6.56622 19.4447C6.81177 19.9394 7.41186 20.1413 7.90656 19.8958C9.12843 19.2893 9.85307 18.3421 9.98048 17.2377C10.2188 15.1719 8.35922 13.4348 6.40378 13.2546C6.42689 13.1242 6.42433 12.9872 6.39207 12.8506C6.14777 11.8163 5.72755 10.9188 5.06258 10.2805C5.12043 10.1971 5.16641 10.1035 5.19744 10.0015C5.55499 8.82602 5.61765 7.68963 5.19459 6.7049C6.26357 5.96894 7.03341 5.05043 7.23702 3.90405C7.45219 2.69263 6.98575 1.50472 6.15185 0.398214Z" fill="#00994D" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M16.1919 0.161462C15.7514 -0.124653 15.1647 -0.021243 14.8485 0.398214C14.0146 1.50472 13.5482 2.69262 13.7634 3.90405C13.967 5.05043 14.7368 5.96895 15.8058 6.7049C15.3827 7.68963 15.4454 8.82602 15.8029 10.0015C15.834 10.1035 15.88 10.1971 15.9378 10.2805C15.2728 10.9188 14.8526 11.8163 14.6083 12.8506C14.576 12.9872 14.5735 13.1242 14.5966 13.2546C12.6412 13.4348 10.7816 15.1719 11.0199 17.2377C11.1473 18.3421 11.8719 19.2893 13.0938 19.8958C13.5885 20.1413 14.1886 19.9394 14.4342 19.4447C14.6797 18.95 14.4778 18.3499 13.9831 18.1043C13.3783 17.8042 13.1351 17.4664 13.0463 17.1907C13.7804 17.6471 14.5792 17.8783 15.4286 17.7882C16.518 17.6728 17.4882 17.0492 18.3467 16.1414C18.7198 15.747 18.71 15.127 18.3248 14.7446C18.1497 14.5708 17.9709 14.4129 17.7892 14.2704C18.2037 14.201 18.5993 14.0657 18.9696 13.8535C20.0379 13.2412 20.655 12.1256 20.9734 10.7777C21.0951 10.2626 20.7943 9.74194 20.2874 9.58996C20.0336 9.51389 19.7818 9.45133 19.5331 9.40412C19.7435 9.19428 19.9272 8.95916 20.08 8.69641C20.6989 7.63221 20.6704 6.35734 20.2675 5.03284C20.1143 4.52916 19.5968 4.23053 19.0841 4.34989C18.8344 4.40802 18.5925 4.47621 18.3603 4.55546C18.4789 4.07168 18.5049 3.58001 18.4169 3.0844C18.2019 1.87374 17.3553 0.917211 16.1919 0.161462Z" fill="#00994D" />
     </svg>
   );
 }
 
-function FireIcon({ className }: { className?: string }) {
+function EyeStatIcon() {
   return (
-    <svg width="36" height="36" viewBox="0 0 26 30" fill="none" className={className}>
-      <path fillRule="evenodd" clipRule="evenodd" d="M11.4863 1.26534C12.363 0.013032 14.1221 -0.439661 15.4959 0.504976C16.9234 1.4865 19.392 3.38354 21.5167 6.04663C23.6403 8.70841 25.5 12.2384 25.5 16.4471C25.5 23.9432 19.8717 29.9471 12.75 29.9471C5.62834 29.9471 0 23.9432 0 16.4471C0 13.3941 1.31112 9.49318 3.8663 6.37882C4.9858 5.01433 6.91749 5.09571 8.0461 6.17996L11.4863 1.26534ZM12.75 26.9471C14.9246 26.9471 16.6875 24.9348 16.6875 22.4526C16.6875 19.7889 14.6157 17.8297 13.4778 16.9544C13.0433 16.6203 12.4567 16.6203 12.0222 16.9544C10.8843 17.8297 8.8125 19.7889 8.8125 22.4526C8.8125 24.9348 10.5754 26.9471 12.75 26.9471Z" fill="#FB923C"/>
+    <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M10.7463 2.56478e-10C14.698 -2.77745e-05 18.5369 2.27233 21.1031 6.58313C21.6226 7.45583 21.6226 8.54406 21.1031 9.41677C18.5369 13.7276 14.6981 16 10.7463 16C6.79463 16 2.95577 13.7277 0.38963 9.41687C-0.129877 8.54417 -0.129876 7.45594 0.389629 6.58323C2.95577 2.27243 6.79462 2.7777e-05 10.7463 2.56478e-10ZM7.24634 8C7.24634 6.067 8.81334 4.5 10.7463 4.5C12.6793 4.5 14.2463 6.067 14.2463 8C14.2463 9.933 12.6793 11.5 10.7463 11.5C8.81334 11.5 7.24634 9.933 7.24634 8Z" fill="#1A67E5" />
+    </svg>
+  );
+}
+
+function HelpIcon({ className }: { className?: string }) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className={className}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0ZM5 3.5C4.81134 3.5 4.64632 3.6043 4.56074 3.76076C4.42823 4.00303 4.12441 4.09201 3.88214 3.95949C3.63986 3.82698 3.55089 3.52316 3.6834 3.28089C3.93732 2.81665 4.43132 2.5 5 2.5C5.75738 2.5 6.28345 3.00321 6.43322 3.5945C6.58379 4.18893 6.35504 4.8815 5.67082 5.22361C5.56613 5.27595 5.5 5.38295 5.5 5.5C5.5 5.77614 5.27615 6 5 6C4.72386 6 4.5 5.77614 4.5 5.5C4.5 5.00418 4.78014 4.55092 5.22361 4.32918C5.45098 4.21549 5.50939 4.01987 5.46384 3.84005C5.41749 3.65709 5.26416 3.5 5 3.5ZM5 7.5C5.27614 7.5 5.5 7.27614 5.5 7C5.5 6.72386 5.27614 6.5 5 6.5C4.72386 6.5 4.5 6.72386 4.5 7C4.5 7.27614 4.72386 7.5 5 7.5Z" fill="#252525" fillOpacity="0.4" />
     </svg>
   );
 }
@@ -71,35 +81,84 @@ function ChevronRightIcon() {
   );
 }
 
-function ArrowRightSmallIcon() {
+function ArrowUpIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 3V13M8 3L4 7M8 3L12 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function CalendarIcon() {
+function VideoIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M1 4C1 2.89543 1.89543 2 3 2H9C10.1046 2 11 2.89543 11 4V5.38L13.1056 4.32764C13.2298 4.26559 13.3737 4.26802 13.4959 4.33408C13.618 4.40014 13.6953 4.52116 13.7046 4.65682L14 8.5L13.7046 12.3432C13.6953 12.4788 13.618 12.5999 13.4959 12.6659C13.3737 12.732 13.2298 12.7344 13.1056 12.6724L11 11.62V12C11 13.1046 10.1046 14 9 14H3C1.89543 14 1 13.1046 1 12V4Z" fill="currentColor" fillOpacity="0.7" />
+    </svg>
+  );
+}
+
+function MoneybagIcon() {
+  return (
+    <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+      <path d="M0.567487 11.3535C0.19617 10.7936 5.6031e-06 10.1187 0 9.33334C0.300044 7.23302 1.68041 5.67287 3.16866 4.16667H8.90142C10.2937 5.64371 11.6971 7.21336 12 9.33333C12 10.1187 11.8038 10.7936 11.4325 11.3535C11.0638 11.9095 10.5486 12.3127 9.96957 12.6017C8.83122 13.1699 7.37236 13.3333 6 13.3333C4.62764 13.3333 3.16878 13.1699 2.03044 12.6017C1.45144 12.3127 0.936236 11.9095 0.567487 11.3535Z" fill="currentColor" fillOpacity="0.5"/>
+      <path d="M8.60073 2.08518C8.88036 1.33948 8.5969 0.472331 7.83294 0.247323C7.2636 0.0796353 6.65171 0 6 0C5.34829 0 4.7364 0.0796353 4.16706 0.247323C3.4031 0.472331 3.11964 1.33948 3.39927 2.08518L3.8015 3.15777L3.77778 3.16667H8.22222L8.1985 3.15777L8.60073 2.08518Z" fill="currentColor" fillOpacity="0.5"/>
+    </svg>
+  );
+}
+
+function VideoPlaylistIcon() {
+  return (
+    <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M1.33333 0.666667C1.33333 0.298477 1.63181 0 2 0H11.3333C11.7015 0 12 0.298477 12 0.666667C12 1.03486 11.7015 1.33333 11.3333 1.33333H2C1.63181 1.33333 1.33333 1.03486 1.33333 0.666667ZM0 4C0 2.89543 0.895431 2 2 2H11.3333C12.4379 2 13.3333 2.89543 13.3333 4V10C13.3333 11.1046 12.4379 12 11.3333 12H2C0.895431 12 0 11.1046 0 10V4ZM5.71121 5.0658C5.94218 4.95478 6.21635 4.986 6.41646 5.14609L8.08313 6.47942C8.24127 6.60594 8.33333 6.79748 8.33333 7C8.33333 7.20252 8.24127 7.39406 8.08313 7.52058L6.41646 8.85391C6.21635 9.014 5.94218 9.04522 5.71121 8.9342C5.48023 8.82319 5.33333 8.5896 5.33333 8.33333V5.66667C5.33333 5.4104 5.48023 5.17681 5.71121 5.0658Z" fill="currentColor" fillOpacity="0.5"/>
+    </svg>
+  );
+}
+
+function StarIcon() {
+  return (
+    <svg width="11" height="10" viewBox="0 0 11 10" fill="none">
+      <path d="M5.93698 0.431091C5.66086 -0.143696 4.84062 -0.143698 4.56449 0.431091L3.3835 2.8895L0.663268 3.24567C0.0326199 3.32825 -0.229974 4.10751 0.239584 4.55027L2.22744 6.42466L1.72856 9.1008C1.61012 9.73617 2.28277 10.2072 2.8385 9.9076L5.25074 8.60713L7.66298 9.9076C8.2187 10.2072 8.89136 9.73617 8.77292 9.1008L8.27404 6.42466L10.2619 4.55027C10.7315 4.10751 10.4689 3.32825 9.83821 3.24567L7.11798 2.8895L5.93698 0.431091Z" fill="#E57100"/>
+    </svg>
+  );
+}
+
+function PaperclipIcon() {
+  return (
+    <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
+      <path d="M6.3 0C4.367 0 2.8 1.567 2.8 3.5V9.09999C2.8 10.2598 3.7402 11.2 4.9 11.2C6.05979 11.2 6.99999 10.2598 6.99999 9.09999V3.5C6.99999 3.1134 6.68659 2.8 6.3 2.8C5.9134 2.8 5.6 3.1134 5.6 3.5V9.09999C5.6 9.48659 5.2866 9.79999 4.9 9.79999C4.5134 9.79999 4.2 9.48659 4.2 9.09999V3.5C4.2 2.3402 5.1402 1.4 6.3 1.4C7.45979 1.4 8.39999 2.3402 8.39999 3.5V9.09999C8.39999 11.033 6.83299 12.6 4.9 12.6C2.967 12.6 1.4 11.033 1.4 9.09999V6.3C1.4 5.9134 1.0866 5.6 0.699999 5.6C0.3134 5.6 0 5.9134 0 6.3V9.09999C0 11.8062 2.1938 14 4.9 14C7.60619 14 9.79999 11.8062 9.79999 9.09999V3.5C9.79999 1.567 8.23299 0 6.3 0Z" fill="currentColor" fillOpacity="0.5"/>
+    </svg>
+  );
+}
+
+function VerifiedBadge() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M4.5 1.5V3M9.5 1.5V3M1.5 5.5H12.5M2.5 2.25H11.5C12.0523 2.25 12.5 2.69772 12.5 3.25V11.5C12.5 12.0523 12.0523 12.5 11.5 12.5H2.5C1.94772 12.5 1.5 12.0523 1.5 11.5V3.25C1.5 2.69772 1.94772 2.25 2.5 2.25Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.8 0.8C6.5 0.1 7.5 0.1 8.2 0.8L8.9 1.5L9.9 1.3C10.8 1.1 11.7 1.7 11.9 2.6L12.1 3.6L13 4.1C13.8 4.5 14.1 5.5 13.7 6.3L13.2 7.2L13.7 8.1C14.1 8.9 13.8 9.9 13 10.3L12.1 10.8L11.9 11.8C11.7 12.7 10.8 13.3 9.9 13.1L8.9 12.9L8.2 13.6C7.5 14.3 6.5 14.3 5.8 13.6L5.1 12.9L4.1 13.1C3.2 13.3 2.3 12.7 2.1 11.8L1.9 10.8L1 10.3C0.2 9.9 -0.1 8.9 0.3 8.1L0.8 7.2L0.3 6.3C-0.1 5.5 0.2 4.5 1 4.1L1.9 3.6L2.1 2.6C2.3 1.7 3.2 1.1 4.1 1.3L5.1 1.5L5.8 0.8Z" fill="url(#gold_gradient)" />
+      <path d="M5 7L6.5 8.5L9.5 5.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <defs>
+        <linearGradient id="gold_gradient" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFD700" />
+          <stop offset="1" stopColor="#F0A500" />
+        </linearGradient>
+      </defs>
     </svg>
   );
 }
 
-function ChevronDownIcon() {
+function RetainerIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
+      <path d="M2.526 0c.279 0 .505.226.505.505v.505h3.031V.505C6.062.226 6.289 0 6.568 0c.279 0 .505.226.505.505v.505h.505c.837 0 1.516.679 1.516 1.516v1.01c0 .28-.226.506-.505.506H1.01v4.041c0 .28.226.506.506.506h2.02c.28 0 .506.226.506.505 0 .28-.226.506-.505.506H1.516C.678 9.599 0 8.92 0 8.083V2.526C0 1.69.679 1.01 1.516 1.01h.505V.505C2.021.226 2.247 0 2.526 0Z" fill="#E57100"/>
+      <path d="M7.073 6.252a1.92 1.92 0 0 0-.48.088l.301.302c.16.16.047.431-.178.431H5.557a.505.505 0 0 1-.505-.505V5.41c0-.225.272-.338.431-.179l.357.357a2.323 2.323 0 0 1 1.233-.346c1.067 0 1.967.716 2.246 1.692a.505.505 0 0 1-.346.625.505.505 0 0 1-.625-.347 1.32 1.32 0 0 0-1.275-.96Z" fill="#E57100"/>
+      <path d="M5.798 7.944a.505.505 0 0 0-.971.278 2.323 2.323 0 0 0 2.246 1.692c.449 0 .873-.127 1.233-.346l.357.357c.16.159.431.047.431-.179V8.588a.505.505 0 0 0-.505-.505h-1.158c-.225 0-.338.272-.179.431l.302.302a1.92 1.92 0 0 1-.481.088 1.32 1.32 0 0 1-1.275-.96Z" fill="#E57100"/>
     </svg>
   );
 }
 
-function CheckCircleIcon({ className }: { className?: string }) {
+function CpmIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-      <circle cx="8" cy="8" r="8" fill="#00994D" />
-      <path d="M5 8L7 10L11 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="12" height="12" viewBox="0 0 11 8" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M5.373 0c1.976 0 3.895 1.136 5.178 3.292.26.436.26.98 0 1.417C9.268 6.864 7.349 8 5.373 8 3.397 8 1.478 6.864.195 4.708a1.36 1.36 0 0 1 0-1.417C1.478 1.136 3.397 0 5.373 0Zm-1.75 4a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0Z" fill="#1A67E5"/>
     </svg>
   );
 }
@@ -109,502 +168,1132 @@ function CheckCircleIcon({ className }: { className?: string }) {
 const cardClass =
   "rounded-2xl border border-[rgba(37,37,37,0.06)] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none";
 
-// ── Mock data ───────────────────────────────────────────────────────
+// ── Stat card data ──────────────────────────────────────────────────
+
+const stats = [
+  {
+    value: "4 days",
+    label: "Streak",
+    hasHelp: true,
+    icon: <FireStatIcon />,
+    color: "#E57100",
+    bg: "rgba(229,113,0,0.08)",
+  },
+  {
+    value: "$148.50",
+    label: "Earned this week",
+    hasHelp: false,
+    icon: <DollarStatIcon />,
+    color: "#AE4EEE",
+    bg: "rgba(174,78,238,0.10)",
+  },
+  {
+    value: "92",
+    label: "Trust score",
+    hasHelp: true,
+    icon: <WreathIcon />,
+    color: "#00994D",
+    bg: "rgba(0,153,77,0.08)",
+  },
+  {
+    value: "24.5k",
+    label: "Views",
+    hasHelp: false,
+    icon: <EyeStatIcon />,
+    color: "#1A67E5",
+    bg: "rgba(26,103,229,0.08)",
+  },
+];
+
+// ── Feed cards data ─────────────────────────────────────────────────
+
+const feedCards: {
+  icon: React.ReactNode;
+  topRight: React.ReactNode;
+  title: string;
+  desc: string;
+  buttons: { label: string; primary?: boolean }[];
+}[] = [
+  {
+    icon: <MoneybagIcon />,
+    topRight: <span className="text-sm font-medium tracking-[-0.28px] text-[#00994D]">$2,862</span>,
+    title: "Withdraw your earnings",
+    desc: "You have $2,862 available. Withdraw it to your account anytime.",
+    buttons: [
+      { label: "Withdraw", primary: true },
+      { label: "Share" },
+    ],
+  },
+  {
+    icon: <VideoPlaylistIcon />,
+    topRight: (
+      <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] py-1 pl-1.5 pr-2 dark:border-white/[0.06]">
+        <StarIcon />
+        <span className="text-xs font-medium tracking-[-0.24px] text-page-text">50 XP</span>
+      </span>
+    ),
+    title: "Submit a new clip",
+    desc: "Keep the momentum going. Your campaigns are waiting for content.",
+    buttons: [{ label: "Submit clip" }],
+  },
+  {
+    icon: <PaperclipIcon />,
+    topRight: null,
+    title: "Application expiring soon",
+    desc: "Your CoD BO7 application closes in 2 days. Don\u2019t miss it.",
+    buttons: [{ label: "View application" }],
+  },
+];
+
+// ── Campaign data ───────────────────────────────────────────────────
 
 const campaigns = [
-  { name: "Cantina - TikTok Clips", meta: "46 clips · $3.50 CPM · 5.1M views", earned: "$27,910", color: "#FF6B6B" },
-  { name: "NovaBrew Coffee", meta: "12 clips · $4.20 CPM · 1.8M views", earned: "$7,560", color: "#4ECDC4" },
-  { name: "FitPulse Wearables", meta: "8 clips · $5.00 CPM · 920K views", earned: "$4,600", color: "#45B7D1" },
-  { name: "UrbanBite Delivery", meta: "22 clips · $2.80 CPM · 3.2M views", earned: "$8,960", color: "#96CEB4" },
-  { name: "SkyTravel Promo", meta: "5 clips · $6.00 CPM · 410K views", earned: "$2,460", color: "#FFEAA7" },
-];
-
-const activities = [
-  { icon: "thumbup", title: "Clip approved", desc: "Street interview #45 · Cantina", time: "4h ago" },
-  { icon: "dollar", title: "Payout received", desc: "+ $42.50 via PayPal", time: "4h ago" },
-  { icon: "eye", title: "Viral clip!", desc: "1.2M views on Flooz Clipping", time: "2h ago" },
-  { icon: "heart", title: "Trust score updated", desc: "92 (+2 from last week)", time: "4h ago" },
-  { icon: "video", title: "Clip submitted", desc: "Street interview #46 · The Ritz", time: "1d ago" },
-];
-
-const linkedAccounts = [
-  { platform: "TikTok", handle: "@vladclips", followers: "224K followers", connected: true },
-  { platform: "Instagram", handle: "@vladclips", followers: "224K followers", connected: true },
-  { platform: "YouTube", handle: null, followers: null, connected: false },
-  { platform: "X (Twitter)", handle: null, followers: null, connected: false },
-];
-
-// ── Earnings chart data ──────────────────────────────────────────────
-
-const EARNINGS_CHART_POINTS = [
-  { index: 0, label: "Jan 5", views: 4200, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 1, label: "Jan 8", views: 3800, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 2, label: "Jan 11", views: 5100, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 3, label: "Jan 14", views: 4600, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 4, label: "Jan 17", views: 6200, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 5, label: "Jan 20", views: 5800, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 6, label: "Jan 23", views: 7100, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 7, label: "Jan 27", views: 8200, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 8, label: "Jan 30", views: 9100, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 9, label: "Feb 2", views: 10200, engagement: 0, likes: 0, comments: 0, shares: 0 },
-  { index: 10, label: "Feb 5", views: 11289, engagement: 0, likes: 0, comments: 0, shares: 0 },
-];
-
-const EARNINGS_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
-  datasets: {
-    daily: EARNINGS_CHART_POINTS,
-    cumulative: EARNINGS_CHART_POINTS,
+  {
+    brand: "Sound Network",
+    brandLogo: "/creator-home/brand-logo-1.png",
+    title: "Harry Styles Podcast x Shania Twain Clipping [7434]",
+    model: "Retainer",
+    modelColor: "#E57100",
+    modelIcon: "retainer" as const,
+    paidOut: "$3,561",
+    pending: "$210",
+    pendingHighlight: true,
+    submissions: "7/21",
+    thumbnail: "/creator-home/campaign-thumb-1.png",
   },
-  leftDomain: [0, 12000],
-  rightDomain: [0, 12000],
-  yLabels: ["$12k", "$9k", "$6k", "$3k", "$0"],
-  rightYLabels: [],
-  series: [
-    { axis: "left" as const, color: "#00994D", domain: [0, 12000], key: "views" as const, label: "Earnings", tooltipValueType: "currency" as const, yLabels: ["$12k", "$9k", "$6k", "$3k", "$0"] },
-  ],
-  xTicks: [
-    { index: 0, label: "Jan 5" },
-    { index: 2, label: "Jan 11" },
-    { index: 4, label: "Jan 17" },
-    { index: 6, label: "Jan 23" },
-    { index: 8, label: "Jan 30" },
-    { index: 10, label: "Feb 5" },
-  ],
-};
-
-const DATE_RANGE_OPTIONS = [
-  { value: "last-week", label: "Last week" },
-  { value: "last-month", label: "Last month" },
-  { value: "last-3-months", label: "Last 3 months" },
-  { value: "last-year", label: "Last year" },
+  {
+    brand: "Clipping Culture",
+    brandLogo: "/creator-home/brand-logo-2.png",
+    title: "Call of Duty BO7 Official Clipping Campaign",
+    model: "CPM",
+    modelColor: "#1A67E5",
+    modelIcon: "cpm" as const,
+    paidOut: "$114",
+    pending: "$0",
+    pendingHighlight: false,
+    submissions: "2/10",
+    thumbnail: "/creator-home/campaign-thumb-2.png",
+  },
+  {
+    brand: "Scene Society",
+    brandLogo: "/creator-home/brand-logo-3.png",
+    title: "Mumford & Sons | Prizefighter Clipping",
+    model: "CPM",
+    modelColor: "#1A67E5",
+    modelIcon: "cpm" as const,
+    paidOut: "$1,240",
+    pending: "$58",
+    pendingHighlight: true,
+    submissions: "5/8",
+    thumbnail: "/creator-home/campaign-thumb-3.png",
+  },
 ];
-
-// ── Activity icon helper ────────────────────────────────────────────
-
-function ActivityIcon({ type }: { type: string }) {
-  const iconContent: Record<string, React.ReactNode> = {
-    thumbup: (
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path d="M5.55904 0.0118772C5.34084 -0.0410324 5.1252 0.0880534 5.03864 0.295224C4.5 2.23792 3 3.26542 3 4.62287V7.85053C3 8.42375 3.33181 8.98816 3.9178 9.20155C5.24322 9.68419 6.11676 9.7824 7.47978 9.66428C8.5252 9.57368 9.31106 8.77216 9.52885 7.8042L9.95122 5.92697C10.2326 4.67657 9.28167 3.48795 8 3.48795L6.5 3.48792C6.73464 2.08008 7.30751 0.435851 5.55904 0.0118772Z" fill="currentColor"/>
-        <path d="M0 4.48792C0 4.0737 0.335787 3.73792 0.75 3.73792H1.75C2.16421 3.73792 2.5 4.0737 2.5 4.48792V8.48792C2.5 8.90213 2.16421 9.23792 1.75 9.23792H0.75C0.335787 9.23792 0 8.90213 0 8.48792V4.48792Z" fill="currentColor"/>
-      </svg>
-    ),
-    dollar: (
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM5 1.75C5.27614 1.75 5.5 1.97386 5.5 2.25V2.56183C5.90202 2.66355 6.25675 2.88729 6.48795 3.20702C6.64975 3.4308 6.59952 3.74337 6.37575 3.90517C6.15198 4.06698 5.83941 4.01675 5.6776 3.79298C5.56897 3.64274 5.32671 3.5 5 3.5H4.86111C4.41372 3.5 4.25 3.77246 4.25 3.88889V3.92705C4.25 4.02568 4.32456 4.19131 4.57627 4.29199L5.79512 4.77953C6.32859 4.99292 6.75 5.4693 6.75 6.07295C6.75 6.80947 6.1615 7.3072 5.5 7.45453V7.75C5.5 8.02614 5.27614 8.25 5 8.25C4.72386 8.25 4.5 8.02614 4.5 7.75V7.43817C4.09798 7.33645 3.74325 7.11271 3.51205 6.79298C3.35025 6.56921 3.40048 6.25663 3.62425 6.09483C3.84802 5.93302 4.1606 5.98325 4.3224 6.20703C4.43103 6.35726 4.67329 6.5 5 6.5H5.09119C5.56492 6.5 5.75 6.21045 5.75 6.07295C5.75 5.97432 5.67544 5.80869 5.42373 5.70801L4.20488 5.22047C3.67141 5.00708 3.25 4.5307 3.25 3.92705V3.88889C3.25 3.15689 3.84468 2.66952 4.5 2.53666V2.25C4.5 1.97386 4.72386 1.75 5 1.75Z" fill="currentColor"/>
-      </svg>
-    ),
-    eye: (
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M5 2C2.90909 2 1.18182 3.36364 0 5C1.18182 6.63636 2.90909 8 5 8C7.09091 8 8.81818 6.63636 10 5C8.81818 3.36364 7.09091 2 5 2ZM5 7C6.10457 7 7 6.10457 7 5C7 3.89543 6.10457 3 5 3C3.89543 3 3 3.89543 3 5C3 6.10457 3.89543 7 5 7Z" fill="currentColor"/>
-      </svg>
-    ),
-    heart: (
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path d="M5 8.5L1.5 5C0.5 4 0.5 2.5 1.5 1.5C2.5 0.5 4 0.5 5 1.5C6 0.5 7.5 0.5 8.5 1.5C9.5 2.5 9.5 4 8.5 5L5 8.5Z" fill="currentColor"/>
-      </svg>
-    ),
-    video: (
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd" d="M0 2.5C0 1.39543 0.895431 0.5 2 0.5H6C7.10457 0.5 8 1.39543 8 2.5V3.38L9.55279 2.60361C9.67698 2.54151 9.82258 2.54391 9.94474 2.60997C10.0669 2.67603 10.1459 2.79705 10.1584 2.93341L10.5 7.06659C10.5125 7.20295 10.4565 7.33602 10.3502 7.42328C10.2438 7.51054 10.1012 7.54076 9.96821 7.5046L8 7V7.5C8 8.60457 7.10457 9.5 6 9.5H2C0.895431 9.5 0 8.60457 0 7.5V2.5Z" fill="currentColor"/>
-      </svg>
-    ),
-  };
-  return (
-    <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-white backdrop-blur-[16px] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
-      <span className="text-page-text-muted">{iconContent[type] || iconContent.thumbup}</span>
-    </div>
-  );
-}
-
-// ── Platform icon helper ────────────────────────────────────────────
-
-function LinkedPlatformIcon({ platform }: { platform: string }) {
-  const icons: Record<string, React.ReactNode> = {
-    TikTok: (
-      <svg width="12" height="12" viewBox="0 0 9 10" fill="none"><path d="M8.71705 4.10671C7.82723 4.10671 7.00339 3.82398 6.33063 3.34349V6.83632C6.33063 8.58357 4.91349 10 3.16538 10C2.51313 10 1.9069 9.80288 1.40329 9.4649C0.55712 8.89703 0 7.9315 0 6.83629C0 5.08914 1.41718 3.67271 3.16543 3.67275C3.31072 3.67268 3.45582 3.68255 3.59975 3.70221V5.452C3.46114 5.40806 3.31346 5.38422 3.16023 5.38422C2.36052 5.38422 1.71235 6.03217 1.71235 6.83135C1.71235 7.39641 2.03634 7.88571 2.50881 8.12405C2.70471 8.22282 2.92596 8.27845 3.16025 8.27845C3.95832 8.27845 4.60538 7.63314 4.60813 6.83629V0H6.33061V0.220145C6.33669 0.285959 6.34545 0.351524 6.35685 0.416659C6.4764 1.09819 6.88411 1.68047 7.45002 2.03343C7.83003 2.27052 8.26916 2.39585 8.71706 2.39517L8.71705 4.10671Z" fill="#000000"/></svg>
-    ),
-    Instagram: (
-      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M4.75 0.855864C6.01825 0.855864 6.16852 0.860614 6.66943 0.8835C6.97056 0.887137 7.26883 0.942495 7.55121 1.04716C7.75756 1.12331 7.94422 1.24475 8.09746 1.40255C8.25525 1.55578 8.37669 1.74244 8.45284 1.9488C8.55751 2.23117 8.61286 2.52944 8.6165 2.83057C8.63939 3.33148 8.64414 3.48175 8.64414 4.75C8.64414 6.01825 8.63939 6.16852 8.6165 6.66943C8.61286 6.97056 8.55751 7.26883 8.45284 7.55121C8.37382 7.7561 8.25276 7.94219 8.09747 8.09747C7.94219 8.25276 7.7561 8.37382 7.55121 8.45284C7.26883 8.55751 6.97056 8.61286 6.66943 8.6165C6.16852 8.63939 6.01825 8.64414 4.75 8.64414C3.48175 8.64414 3.33148 8.63939 2.83057 8.6165C2.52929 8.61291 2.23088 8.55756 1.94836 8.45284C1.74216 8.37663 1.55566 8.2552 1.40255 8.09746C1.24475 7.94422 1.12331 7.75756 1.04716 7.55121C0.942495 7.26883 0.887137 6.97056 0.8835 6.66943C0.860614 6.16852 0.855864 6.01825 0.855864 4.75C0.855864 3.48175 0.860614 3.33148 0.8835 2.83057C0.887137 2.52944 0.942495 2.23117 1.04716 1.9488C1.12331 1.74244 1.24475 1.55578 1.40255 1.40255C1.55578 1.24475 1.74244 1.12331 1.9488 1.04716C2.23117 0.942495 2.52944 0.887137 2.83057 0.8835C3.33148 0.860614 3.48175 0.855864 4.75 0.855864ZM4.75 0C3.46016 0 3.29823 0.00561363 2.7917 0.0285C2.39768 0.0363607 2.00783 0.110971 1.63875 0.249159C1.32165 0.368548 1.03443 0.555706 0.797136 0.797568C0.555482 1.03478 0.368477 1.32185 0.249159 1.63875C0.111118 2.00786 0.0366543 2.3977 0.0289318 2.7917C0.00518183 3.29823 0 3.46016 0 4.75C0 6.03984 0.00561363 6.20177 0.0285 6.7083C0.0363607 7.10232 0.110971 7.49217 0.249159 7.86125C0.368548 8.17835 0.555706 8.46557 0.797568 8.70286C1.03478 8.94452 1.32185 9.13152 1.63875 9.25084C2.00786 9.38888 2.3977 9.46335 2.7917 9.47107C3.29823 9.49482 3.46016 9.5 4.75 9.5C6.03984 9.5 6.20177 9.49439 6.7083 9.4715C7.10232 9.46364 7.49217 9.38903 7.86125 9.25084C8.1769 9.1288 8.46356 8.94215 8.70285 8.70285C8.94215 8.46356 9.1288 8.1769 9.25084 7.86125C9.38888 7.49214 9.46335 7.1023 9.47107 6.7083C9.49482 6.20177 9.5 6.03984 9.5 4.75C9.5 3.46016 9.49439 3.29823 9.4715 2.7917C9.46364 2.39768 9.38903 2.00783 9.25084 1.63875C9.13145 1.32165 8.9443 1.03443 8.70243 0.797136C8.46522 0.555482 8.17816 0.368477 7.86125 0.249159C7.49214 0.111118 7.1023 0.0366543 6.7083 0.0289318C6.20177 0.00518183 6.03984 0 4.75 0ZM4.75 2.31066C3.40269 2.31066 2.31066 3.40269 2.31066 4.75C2.31066 6.09731 3.40269 7.18934 4.75 7.18934C6.09731 7.18934 7.18934 6.09731 7.18934 4.75C7.18934 3.40269 6.09731 2.31066 4.75 2.31066ZM4.75 6.33348C3.87478 6.33348 3.16652 5.62522 3.16652 4.75C3.16652 3.87478 3.87478 3.16652 4.75 3.16652C5.62522 3.16652 6.33348 3.87478 6.33348 4.75C6.33348 5.62522 5.62522 6.33348 4.75 6.33348Z" fill="#962FBF"/></svg>
-    ),
-    YouTube: (
-      <svg width="12" height="12" viewBox="0 0 12 9" fill="none"><path d="M11.7519 1.40906C11.6155 0.889053 11.211 0.479798 10.6974 0.341535C9.76619 0.09375 6 0.09375 6 0.09375C6 0.09375 2.23381 0.09375 1.30262 0.341535C0.789015 0.479813 0.384525 0.889053 0.248085 1.40906C0.00244141 2.3507 0.00244141 4.3125 0.00244141 4.3125C0.00244141 4.3125 0.00244141 6.2743 0.248085 7.21594C0.384525 7.73594 0.789015 8.12769 1.30262 8.26594C2.23381 8.50312 6 8.50312 6 8.50312C6 8.50312 9.76619 8.50312 10.6974 8.26594C11.211 8.12769 11.6155 7.73594 11.7519 7.21594C11.9976 6.2743 11.9976 4.3125 11.9976 4.3125C11.9976 4.3125 11.9976 2.3507 11.7519 1.40906ZM4.79297 6.21094V2.41406L7.90234 4.3125L4.79297 6.21094Z" fill="#FF0000"/></svg>
-    ),
-    "X (Twitter)": (
-      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M5.94831 4.23544L9.67493 0H8.7951L5.55942 3.67608L2.97512 0H0L3.90029 5.55962L0 10H0.879893L4.28904 6.11898L7.02488 10H10L5.94831 4.23544ZM4.73396 5.61132L4.3414 5.05626L1.19672 0.65H2.55554L5.08309 4.20841L5.47564 4.76347L8.7951 9.38H7.43628L4.73396 5.61132Z" fill="#000000"/></svg>
-    ),
-  };
-  return (
-    <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_0_0_1.14px_#fff] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-[0_0_0_1.14px_#1C1C1C]">
-      {icons[platform] || <span className="text-xs text-page-text-muted">{platform[0]}</span>}
-    </div>
-  );
-}
 
 // ── Page Component ──────────────────────────────────────────────────
 
-export default function CreatorDashboardPage() {
-  const [dateRange, setDateRange] = useState("last-month");
-  const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
+export default function CreatorForYouPage() {
+  const [feedPage, setFeedPage] = useState(0);
+  const [trustScoreOpen, setTrustScoreOpen] = useState(false);
+  const [streakOpen, setStreakOpen] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
+  const [submitOpen, setSubmitOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-page-bg font-inter tracking-[-0.02em]">
-      {/* Header */}
-      <div className="sticky top-0 z-30 flex h-14 items-center justify-center border-b border-foreground/[0.06] bg-page-bg">
-        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Dashboard</span>
-        <div className="absolute right-4 flex items-center gap-2">
-          <button className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.10]">
-            <ChatIcon />
-          </button>
-          <button className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.10]">
-            <BellIcon />
+    <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <CreatorHeader title="Dashboard" />
+
+      {/* ── Content ────────────────────────────────────────────── */}
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pb-8 pt-6 sm:px-5">
+        {/* Balance + Stat cards wrapper */}
+        <div className="relative flex flex-col items-center gap-4 rounded-t-2xl pt-4">
+          {/* Gradient bg + border overlay */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-t-2xl"
+            style={{ background: "linear-gradient(180deg, var(--card-bg) 15.35%, transparent 61.39%)" }}
+          />
+          <div
+            className="pointer-events-none absolute inset-0 rounded-t-2xl"
+            style={{
+              background: "linear-gradient(180deg, var(--page-border) 15.35%, transparent 61.39%)",
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              maskComposite: "exclude",
+              WebkitMaskComposite: "xor",
+              padding: "1px",
+            }}
+          />
+          {/* Your balance */}
+          <div className="relative flex w-full flex-col gap-3 px-4">
+            <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Your balance</span>
+            <div className="flex items-center gap-4">
+              <div className="flex flex-1 items-center gap-3">
+                <span className="text-2xl font-medium tracking-[-0.02em] text-page-text">$2,862.15</span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-white py-1 pl-1.5 pr-2 dark:border-white/[0.06] dark:bg-card-bg">
+                  <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="#E57100"/></svg>
+                  <span className="text-xs font-medium tracking-[-0.02em] text-page-text">$326.15 pending</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+                  Withdraw
+                </button>
+                <button onClick={() => setActivityOpen(true)} className="flex size-8 items-center justify-center rounded-full bg-foreground/[0.06] text-page-text transition-colors hover:bg-foreground/[0.10]">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1.333 2.667v4h4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/><path d="M2.34 10A5.667 5.667 0 1 0 3.28 4.613L1.333 6.667" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/><path d="M8 4.667V8l2.333 1.333" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Stat cards */}
+          <div className="relative hidden w-full sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-4">
+            {stats.map((stat) => (
+              <StatCard
+                key={stat.label}
+                stat={stat}
+                onClick={
+                  stat.label === "Trust score"
+                    ? () => setTrustScoreOpen(true)
+                    : stat.label === "Streak"
+                      ? () => setStreakOpen(true)
+                      : undefined
+                }
+              />
+            ))}
+          </div>
+          <div className="relative flex w-full gap-2 overflow-x-auto pb-1 sm:hidden">
+            {stats.map((stat) => (
+              <div key={stat.label} className="min-w-[140px] flex-1">
+                <StatCard
+                  stat={stat}
+                  onClick={
+                    stat.label === "Trust score"
+                      ? () => setTrustScoreOpen(true)
+                      : stat.label === "Streak"
+                        ? () => setStreakOpen(true)
+                        : undefined
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Feed card ────────────────────────────────────────── */}
+        <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium text-page-text">Feed</h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFeedPage(Math.max(0, feedPage - 1))}
+                className="flex size-6 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.04] dark:border-[rgba(224,224,224,0.06)] dark:hover:bg-white/[0.04]"
+              >
+                <ChevronLeftIcon />
+              </button>
+              <span className="text-xs tabular-nums text-page-text-muted">
+                {feedPage + 1}/3
+              </span>
+              <button
+                onClick={() => setFeedPage(Math.min(2, feedPage + 1))}
+                className="flex size-6 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.04] dark:border-[rgba(224,224,224,0.06)] dark:hover:bg-white/[0.04]"
+              >
+                <ChevronRightIcon />
+              </button>
+            </div>
+          </div>
+
+          {/* Feed cards: row on desktop, stack on mobile */}
+          <div className="flex flex-col gap-2 sm:flex-row">
+            {feedCards.map((card) => (
+              <div
+                key={card.title}
+                className={cn(
+                  cardClass,
+                  "flex flex-1 flex-col justify-center gap-3 p-3 px-4 sm:h-[172px]"
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] text-page-text shadow-[0_0_0_2px_#fff] dark:border-[rgba(224,224,224,0.06)] dark:shadow-[0_0_0_2px_#1C1C1C]">
+                    {card.icon}
+                  </div>
+                  {card.topRight}
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <h3 className="text-sm font-medium tracking-[-0.28px] text-page-text">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs leading-[18px] tracking-[-0.24px] text-page-text-subtle">
+                    {card.desc}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  {card.buttons.map((btn) => (
+                    <button
+                      key={btn.label}
+                      className={cn(
+                        "flex-1 rounded-full px-3 py-2 text-xs font-medium tracking-[-0.24px] transition-colors",
+                        btn.primary
+                          ? "bg-page-text text-white hover:bg-page-text/90 dark:bg-white dark:text-page-bg dark:hover:bg-white/90"
+                          : "bg-foreground/[0.06] text-page-text hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+                      )}
+                    >
+                      {btn.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Streak + Tier row ─────────────────────────────── */}
+        <div className="flex flex-col gap-2 sm:flex-row">
+          {/* Your streak */}
+          <div className={cn(cardClass, "flex flex-1 flex-col gap-4 p-4")}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-page-text">Your streak</span>
+              <span className="cursor-pointer text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">Learn more</span>
+            </div>
+            <div className="flex flex-1 flex-col justify-end gap-4">
+              <div className="flex flex-col gap-2 pb-1">
+                <span className="text-5xl font-medium tracking-[-0.02em] text-page-text" style={{ lineHeight: "48px" }}>4d</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-page-text-muted">Next reward</span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-white px-2 py-[6px] dark:border-white/[0.06] dark:bg-card-bg">
+                    <svg width="11" height="10" viewBox="0 0 11 10" fill="none"><path d="M5.937.431C5.66-.144 4.84-.144 4.564.431L3.384 2.89.663 3.246C.033 3.328-.23 4.108.24 4.55L2.227 6.425 1.729 9.1c-.119.636.554 1.107 1.11.807L5.25 8.607l2.413 1.3c.555.3 1.228-.17 1.11-.807L8.274 6.425l1.988-1.875c.47-.443.207-1.222-.394-1.305L7.118 2.89 5.937.431Z" fill="#E57100"/></svg>
+                    <span className="text-xs font-medium text-page-text">100 XP</span>
+                  </span>
+                  <span className="text-xs text-page-text-muted">in 3 days.</span>
+                </div>
+              </div>
+              {/* Day tracker */}
+              <div className="flex items-center gap-2">
+                {[
+                  { day: "Mon", active: false, current: false, future: false },
+                  { day: "Tue", active: true, current: false, future: false },
+                  { day: "Wed", active: true, current: false, future: false },
+                  { day: "Thu", active: true, current: false, future: false },
+                  { day: "Fri", active: false, current: true, future: false },
+                  { day: "Sat", active: false, current: false, future: true },
+                  { day: "Sun", active: false, current: false, future: true },
+                ].map((d) => (
+                  <div key={d.day} onClick={() => setStreakOpen(true)} className="flex flex-1 cursor-pointer flex-col items-center gap-3">
+                    <div
+                      className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full transition-transform hover:scale-110"
+                      style={{
+                        border: d.current ? "1px solid #E57100" : d.future ? "1px solid rgba(37,37,37,0.12)" : "1px solid rgba(37,37,37,0.06)",
+                        boxShadow: !d.future ? "0 1px 2px 0 rgba(0,0,0,0.03)" : undefined,
+                      }}
+                    >
+                      <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39l-.001.001C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27l.001.001C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? "#E57100" : "rgba(37,37,37,0.20)"}/></svg>
+                    </div>
+                    <span
+                      className="text-xs text-center tracking-[-0.02em]"
+                      style={{
+                        color: d.active || d.current ? "#E57100" : "rgba(37,37,37,0.50)",
+                        fontWeight: d.active || d.current ? 500 : 400,
+                      }}
+                    >
+                      {d.day}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Your tier */}
+          <div className={cn(cardClass, "flex flex-1 flex-col gap-4 p-4")}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-page-text">Your tier</span>
+              <span className="cursor-pointer text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">View perks</span>
+            </div>
+            <div className="flex flex-1 flex-col justify-center gap-3">
+              {/* Current vs next tier */}
+              <div className="flex gap-2">
+                {/* Current tier */}
+                <div className="flex flex-1 flex-col gap-3">
+                  <div className="relative h-10 w-10">
+                    <svg width="43" height="43" viewBox="0 0 43 43" fill="none" className="absolute -left-[1.5px] -top-[1.5px]">
+                      <defs>
+                        <linearGradient id="tierStarGrad" x1="21.5" y1="-1.15" x2="21.5" y2="46.1" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#FF8B1A"/><stop offset="1" stopColor="#E57100"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M18.56 1.95C19.59.87 20.1.33 20.69.13 21.22-.04 21.78-.04 22.31.13c.6.2 1.11.74 2.13 1.82l6.26 6.6c.19.2.29.31.39.4.1.08.2.15.3.22.12.07.25.13.5.25l8.22 3.92c1.34.64 2.01.96 2.39 1.46.33.44.5.98.5 1.54-.01.63-.36 1.28-1.07 2.59l-4.34 8c-.13.25-.2.37-.25.5-.05.11-.09.23-.12.35-.03.14-.05.28-.08.55l-1.19 9.03c-.19 1.47-.29 2.21-.66 2.72-.32.45-.78.78-1.3.95-.6.19-1.33.05-2.79-.22l-8.95-1.66c-.28-.05-.41-.08-.55-.09-.12-.01-.25-.01-.37 0-.14.01-.28.04-.55.09l-8.95 1.66c-1.46.27-2.19.41-2.79.22-.53-.17-.99-.5-1.31-.95-.36-.51-.46-1.25-.66-2.72L5.87 28.33c-.04-.28-.05-.42-.09-.55-.03-.12-.07-.24-.12-.35-.05-.13-.12-.25-.25-.5l-4.34-8C.36 17.62.01 16.97 0 16.34c-.01-.55.17-1.09.5-1.54.37-.5 1.04-.82 2.39-1.46l8.22-3.92c.25-.12.38-.18.5-.25.1-.07.21-.14.3-.22.1-.09.2-.19.4-.4l6.26-6.6Z" fill="url(#tierStarGrad)" stroke="rgba(37,37,37,0.06)"/>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex h-[33px] w-[33px] items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)]">
+                        <svg width="18" height="16" viewBox="0 0 21 18" fill="none">
+                          <path d="M13.49.11c.32-.16.7-.14 1 .05.31.19.49.52.49.88v1.88l.01.02 4.32-2.48c.41-.24.86.27.57.65l-3.41 4.45 1.46 2.55c.32.57.5 1.21.5 1.86v.63c0 1.73-1.4 3.12-3.12 3.12-.48 0-.96-.11-1.4-.33l-1.75-.88c.14.76.24 1.68.24 2.76 0 .57-.46 1.03-1.03 1.03-.57 0-1.04-.46-1.04-1.03 0-1.41-.2-2.5-.4-3.23-.09-.34-.18-.6-.25-.78-.59-.37-1.07-.89-1.38-1.51-.39-.81-.5-1.73-.28-2.6l.19-.74c.14-.55.7-.89 1.25-.75.55.14.89.7.75 1.25l-.19.74c-.1.39-.05.81.13 1.18.17.33.43.6.76.76l3.91 1.96c.15.07.31.11.47.11.58 0 1.06-.47 1.06-1.06v-.63c0-.29-.08-.58-.22-.84l-3.09-5.4c-.09-.16-.14-.33-.14-.51v-.48l-1.09.54c-.19.09-.4.13-.61.1-2.59-.37-4.61.71-6.04 2.52-1.45 1.84-2.25 4.41-2.25 6.79 0 .57-.46 1.03-1.03 1.03-.57 0-1.04-.46-1.04-1.03 0-2.79.92-5.82 2.7-8.07C5.3 2.38 7.9.91 11.19 1.26l2.3-1.15Z" fill="rgba(37,37,37,0.80)"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-sm font-medium text-page-text">Recruit</span>
+                    <span className="text-xs font-medium text-page-text">8% platform fee</span>
+                  </div>
+                </div>
+                {/* Next tier */}
+                <div className="flex flex-1 flex-col items-end gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(37,37,37,0.12)]">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6.8 0C4.453 0 2.55 1.903 2.55 4.25V5.95C1.142 5.95 0 7.092 0 8.5V14.45C0 15.858 1.142 17 2.55 17H11.05C12.458 17 13.6 15.858 13.6 14.45V8.5C13.6 7.092 12.458 5.95 11.05 5.95V4.25C11.05 1.903 9.147 0 6.8 0ZM9.35 5.95V4.25C9.35 2.842 8.208 1.7 6.8 1.7 5.392 1.7 4.25 2.842 4.25 4.25V5.95H9.35ZM6.8 9.35C7.269 9.35 7.65 9.73 7.65 10.2V12.75C7.65 13.219 7.269 13.6 6.8 13.6 6.331 13.6 5.95 13.219 5.95 12.75V10.2C5.95 9.73 6.331 9.35 6.8 9.35Z" fill="rgba(37,37,37,0.20)"/></svg>
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-sm font-medium text-page-text-muted">Next: Operator</span>
+                    <span className="text-xs font-medium text-page-text-muted">7% platform fee</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress bars */}
+              <div className={cn(cardClass, "flex items-center gap-3 p-3")}>
+                {/* XP progress */}
+                <div className="flex flex-1 flex-col gap-2.5">
+                  <span className="inline-flex items-center gap-1 self-start rounded-full border border-foreground/[0.06] bg-white px-2 py-[6px] dark:border-white/[0.06] dark:bg-card-bg">
+                    <svg width="11" height="10" viewBox="0 0 11 10" fill="none"><path d="M5.937.431C5.66-.144 4.84-.144 4.564.431L3.384 2.89.663 3.246C.033 3.328-.23 4.108.24 4.55L2.227 6.425 1.729 9.1c-.119.636.554 1.107 1.11.807L5.25 8.607l2.413 1.3c.555.3 1.228-.17 1.11-.807L8.274 6.425l1.988-1.875c.47-.443.207-1.222-.394-1.305L7.118 2.89 5.937.431Z" fill="#E57100"/></svg>
+                    <span className="text-xs font-medium text-page-text">320/500 XP</span>
+                  </span>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-[rgba(229,113,0,0.08)]">
+                    <div className="h-full rounded-full bg-[#E57100]" style={{ width: "64%" }} />
+                  </div>
+                </div>
+                {/* Divider */}
+                <div className="h-full w-px self-stretch bg-foreground/[0.06] dark:bg-white/[0.06]" />
+                {/* Badges progress */}
+                <div className="flex flex-1 flex-col gap-2.5">
+                  <span className="inline-flex items-center gap-1 self-start rounded-full border border-foreground/[0.06] bg-white px-2 py-[6px] dark:border-white/[0.06] dark:bg-card-bg">
+                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M0 4C0 1.791 1.791 0 4 0s4 1.791 4 4c0 1.263-.586 2.39-1.5 3.123V10.018c0 .65-.685 1.073-1.266.783L4 10.183l-1.234.617C2.185 11.091 1.5 10.668 1.5 10.018V7.123C.586 6.39 0 5.263 0 4Zm2.5 3.71v2.105l1.109-.554a.75.75 0 0 1 .782 0L5.5 9.815V7.71A4.48 4.48 0 0 1 4 8a4.48 4.48 0 0 1-1.5-.29Z" fill="#ED1285"/></svg>
+                    <span className="text-xs font-medium text-page-text">3/5 badges</span>
+                  </span>
+                  <div className="flex h-2 w-full gap-1 overflow-hidden rounded-full">
+                    <div className="flex-1 rounded-full bg-[#ED1285]" />
+                    <div className="flex-1 rounded-full bg-[#ED1285]" />
+                    <div className="flex-1 rounded-full bg-[#ED1285]" />
+                    <div className="flex-1 rounded-full bg-[rgba(237,18,133,0.10)]" />
+                    <div className="flex-1 rounded-full bg-[rgba(237,18,133,0.10)]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Active campaigns card ────────────────────────────── */}
+        <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium text-page-text">
+              Active campaigns
+            </h2>
+            <button className="text-xs font-medium tracking-[-0.24px] text-page-text-subtle transition-colors hover:text-page-text">
+              Browse more
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            {campaigns.map((campaign) => (
+              <CampaignRow key={campaign.title} campaign={campaign} onSubmit={() => setSubmitOpen(true)} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Trust Score Modal ──────────────────────────────────── */}
+      <TrustScoreModal open={trustScoreOpen} onClose={() => setTrustScoreOpen(false)} />
+
+      {/* ── Streak Modal ──────────────────────────────────────── */}
+      <StreakModal open={streakOpen} onClose={() => setStreakOpen(false)} />
+
+      {/* ── Recent Activity Modal ─────────────────────────────── */}
+      <RecentActivityModal open={activityOpen} onClose={() => setActivityOpen(false)} />
+
+      {/* ── Submit Clip Modal ─────────────────────────────────── */}
+      <SubmitClipModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
+    </div>
+  );
+}
+
+// ── Stat Card component ─────────────────────────────────────────────
+
+function StatCard({
+  stat,
+  onClick,
+}: {
+  stat: {
+    value: string;
+    label: string;
+    hasHelp: boolean;
+    icon: React.ReactNode;
+    color: string;
+    bg: string;
+  };
+  onClick?: () => void;
+}) {
+  return (
+    <div
+      className={cn(cardClass, "flex h-[61px] items-center gap-3 overflow-hidden pr-3", onClick && "cursor-pointer transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}
+      onClick={onClick}
+    >
+      <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+        <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+          <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={stat.bg} />
+        </svg>
+        <div className="relative flex h-full w-full items-center justify-center">
+          {stat.icon}
+        </div>
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+        <span className="text-sm font-medium tracking-[-0.28px] text-page-text">{stat.value}</span>
+        <span className="flex items-center gap-1 text-xs tracking-[-0.24px] text-page-text-muted">
+          {stat.label}
+          {stat.hasHelp && <HelpIcon className="shrink-0" />}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ── Campaign Row component ──────────────────────────────────────────
+
+function CampaignRow({
+  campaign,
+  onSubmit,
+}: {
+  campaign: {
+    brand: string;
+    brandLogo: string;
+    title: string;
+    model: string;
+    modelColor: string;
+    modelIcon: "retainer" | "cpm";
+    paidOut: string;
+    pending: string;
+    pendingHighlight: boolean;
+    submissions: string;
+    thumbnail: string;
+  };
+  onSubmit: () => void;
+}) {
+  return (
+    <div
+      className={cn(
+        cardClass,
+        "flex cursor-pointer flex-col overflow-hidden transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02] sm:h-[102px] sm:flex-row sm:items-center"
+      )}
+    >
+      {/* Thumbnail */}
+      <div className="p-1 pb-0 sm:w-[167px] sm:shrink-0 sm:self-stretch sm:pb-1 sm:pr-0">
+        <div
+          className="h-[100px] w-full rounded-xl bg-cover bg-center sm:h-full sm:w-[163px]"
+          style={{ backgroundImage: `url(${campaign.thumbnail})` }}
+        />
+      </div>
+
+      {/* Content + Submit */}
+      <div className="flex flex-1 items-center gap-4 p-3 sm:py-3 sm:pl-4 sm:pr-4">
+        <div className="flex flex-1 flex-col gap-3">
+          {/* Brand row + Title */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5">
+              <img
+                src={campaign.brandLogo}
+                alt={campaign.brand}
+                className="size-4 shrink-0 rounded-full border border-foreground/[0.06] object-cover"
+              />
+              <span className="text-xs font-medium tracking-[-0.24px] text-page-text">
+                {campaign.brand}
+              </span>
+              <VerifiedBadge />
+            </div>
+            <h3 className="min-w-0 truncate text-sm font-medium tracking-[-0.28px] text-page-text">
+              {campaign.title}
+            </h3>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap items-center gap-3">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 py-1 text-xs font-medium tracking-[-0.24px] dark:border-white/[0.06] dark:bg-card-bg"
+              style={{ color: campaign.modelColor }}
+            >
+              {campaign.modelIcon === "retainer" ? <RetainerIcon /> : <CpmIcon />}
+              {campaign.model}
+            </span>
+            <div className="flex items-center gap-1.5 text-xs tracking-[-0.24px]">
+              <span className="text-page-text-subtle">Paid out</span>
+              <span className="font-medium text-page-text">{campaign.paidOut}</span>
+              <span className="text-foreground/20 dark:text-white/20">&middot;</span>
+              <span className="text-page-text-subtle">Pending</span>
+              <span className={cn("font-medium", campaign.pendingHighlight ? "text-[#E57100]" : "text-foreground/40 dark:text-white/40")}>
+                {campaign.pending}
+              </span>
+              <span className="text-foreground/20 dark:text-white/20">&middot;</span>
+              <span className="text-page-text-subtle">Submissions</span>
+              <span className="font-medium text-page-text">{campaign.submissions}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Submit button */}
+        <div className="hidden w-16 shrink-0 self-stretch sm:flex sm:flex-col sm:items-end sm:justify-between">
+          <button onClick={(e) => { e.stopPropagation(); onSubmit(); }} className="w-full rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.24px] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">
+            Submit
           </button>
         </div>
+      </div>
+
+      {/* Mobile submit */}
+      <div className="px-3 pb-3 sm:hidden">
+        <button onClick={(e) => { e.stopPropagation(); onSubmit(); }} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.24px] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Trust Score Modal ──────────────────────────────────────────────
+
+const trustPerks = [
+  { title: "10% CPM bonus", desc: "Applied to all active campaigns automatically" },
+  { title: "Priority review queue", desc: "Your clips are reviewed in 12h, vs 48h standard." },
+  { title: "Featured in Discovery", desc: "Brands see you first when browsing creators." },
+];
+
+const scoreHistory = [
+  { month: "Oct", height: 32, opacity: 0.2 },
+  { month: "Nov", height: 72, opacity: 0.4 },
+  { month: "Dec", height: 56, opacity: 0.3 },
+  { month: "Jan", height: 80, opacity: 0.6 },
+  { month: "Feb", height: 96, opacity: 0.8 },
+  { month: "Mar", height: 116, opacity: 1 },
+];
+
+function TrustScoreModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]">
+      {/* Header */}
+      <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Trust score</span>
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-[1068px] p-5">
-        <div className="flex flex-col gap-4">
-          {/* ── 1. KPI Cards ──────────────────────────────────── */}
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            {/* Approval Rate */}
-            <div className={cn(cardClass, "flex flex-col gap-2 p-3")}>
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm font-medium tabular-nums text-page-text">94%</span>
-                <span className="text-xs tabular-nums text-page-text-muted">18/20 clips</span>
-              </div>
-              <span className="text-xs text-page-text-subtle">Approval rate</span>
-            </div>
+      <div className="relative flex flex-1 flex-col items-center gap-6 overflow-hidden px-5 pb-5 pt-8">
+        {/* Decorative particles (green) */}
+        <div className="pointer-events-none relative z-10 flex h-[120px] w-[130px] items-center justify-center sm:h-[160px] sm:w-[173px]">
+          <svg className="absolute inset-0" width="173" height="153" viewBox="0 0 173 153" fill="none">
+            <g opacity="0.3" filter="url(#tpf0)"><circle cx="83.9" cy="88.4" r="1.3" fill="#00994D"/><circle cx="77.4" cy="6.6" r="1.3" fill="#00994D"/><circle cx="126.8" cy="147.5" r="1.3" fill="#00994D"/><circle cx="135.2" cy="124.1" r="1.3" fill="#00994D"/><circle cx="105.3" cy="34.5" r="1.3" fill="#00994D"/><circle cx="69" cy="46.9" r="1.3" fill="#00994D"/><circle cx="37.8" cy="58.5" r="1.3" fill="#00994D"/><circle cx="59.2" cy="72.8" r="1.3" fill="#00994D"/><circle cx="38.4" cy="20.9" r="1.3" fill="#00994D"/><circle cx="68.3" cy="5.3" r="1.3" fill="#00994D"/><circle cx="111.8" cy="31.9" r="1.3" fill="#00994D"/></g>
+            <g opacity="0.3" filter="url(#tpf1)"><circle cx="132.6" cy="69.4" r=".97" fill="#00994D"/><circle cx="127.7" cy="8" r=".97" fill="#00994D"/><circle cx="164.7" cy="113.7" r=".97" fill="#00994D"/><circle cx="171" cy="96.2" r=".97" fill="#00994D"/><circle cx="148.6" cy="29" r=".97" fill="#00994D"/><circle cx="121.4" cy="38.2" r=".97" fill="#00994D"/><circle cx="98" cy="47" r=".97" fill="#00994D"/><circle cx="114" cy="57.7" r=".97" fill="#00994D"/><circle cx="98.5" cy="18.8" r=".97" fill="#00994D"/><circle cx="120.9" cy="7.1" r=".97" fill="#00994D"/><circle cx="153.5" cy="27" r=".97" fill="#00994D"/></g>
+            <g opacity="0.3" filter="url(#tpf2)"><circle cx="40.4" cy="51.4" r=".97" transform="rotate(180 40.4 51.4)" fill="#00994D"/><circle cx="45.3" cy="112.8" r=".97" transform="rotate(180 45.3 112.8)" fill="#00994D"/><circle cx="8.3" cy="7.1" r=".97" transform="rotate(180 8.3 7.1)" fill="#00994D"/><circle cx="2" cy="24.6" r=".97" transform="rotate(180 2 24.6)" fill="#00994D"/><circle cx="24.4" cy="91.8" r=".97" transform="rotate(180 24.4 91.8)" fill="#00994D"/><circle cx="51.6" cy="82.6" r=".97" transform="rotate(180 51.6 82.6)" fill="#00994D"/><circle cx="75" cy="73.8" r=".97" transform="rotate(180 75 73.8)" fill="#00994D"/><circle cx="59" cy="63.1" r=".97" transform="rotate(180 59 63.1)" fill="#00994D"/><circle cx="74.5" cy="102" r=".97" transform="rotate(180 74.5 102)" fill="#00994D"/><circle cx="52.1" cy="113.7" r=".97" transform="rotate(180 52.1 113.7)" fill="#00994D"/><circle cx="19.5" cy="93.8" r=".97" transform="rotate(180 19.5 93.8)" fill="#00994D"/></g>
+            <defs>
+              <filter id="tpf0" x="32.5" y="0" width="108" height="152.8" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="2" result="b"/></filter>
+              <filter id="tpf1" x="96" y="5.1" width="77" height="110.6" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="0.5" result="b"/></filter>
+              <filter id="tpf2" x="0" y="5.1" width="77" height="110.6" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="0.5" result="b"/></filter>
+            </defs>
+          </svg>
 
-            {/* Earned */}
-            <div className={cn(cardClass, "flex flex-col gap-2 p-3")}>
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm font-medium tabular-nums" style={{ color: "#00994D" }}>$148.50</span>
-                <span className="text-xs font-medium tabular-nums" style={{ color: "#00994D" }}>+$32</span>
-              </div>
-              <span className="text-xs text-page-text-subtle">Earned this week</span>
-            </div>
-
-            {/* Views */}
-            <div className={cn(cardClass, "flex flex-col gap-2 p-3")}>
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm font-medium tabular-nums text-page-text">2.96M</span>
-                <span className="text-xs font-medium tabular-nums" style={{ color: "#FF3355" }}>-4%</span>
-              </div>
-              <span className="text-xs text-page-text-subtle">Views</span>
-            </div>
-
-            {/* Streak */}
-            <div
-              className={cn(cardClass, "relative flex flex-col gap-2 overflow-hidden border-0 p-3")}
-              style={{ background: "linear-gradient(82.38deg, rgba(255,255,255,0.2) 75%, rgba(253,186,116,0.2) 100%)" }}
-            >
-              <div className="absolute right-3 top-3 opacity-80">
-                <FireIcon />
-              </div>
-              <span className="text-sm font-medium tabular-nums text-page-text">6 days</span>
-              <span className="text-xs text-page-text-subtle">Streak</span>
+          {/* Wreath icon — hidden behind score ring */}
+          {/* Score ring */}
+          <div className="absolute flex flex-col items-center gap-0">
+            <div className="relative flex size-[74px] items-center justify-center">
+              <svg width="74" height="74" viewBox="0 0 74 74" className="absolute inset-0">
+                <circle cx="37" cy="37" r="35" fill="none" stroke="rgba(0,153,77,0.2)" strokeWidth="4" />
+                <circle
+                  cx="37"
+                  cy="37"
+                  r="35"
+                  fill="none"
+                  stroke="#00994D"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray={`${0.92 * 2 * Math.PI * 35} ${2 * Math.PI * 35}`}
+                  transform="rotate(-90 37 37)"
+                />
+              </svg>
+              <span className="text-[28px] font-medium tracking-[-0.02em] text-[#00994D]">92</span>
             </div>
           </div>
+        </div>
 
-          {/* ── 2. AI Insights + Trust Score ──────────────────── */}
-          <div className="flex flex-col gap-4 lg:flex-row">
-            {/* AI Insights */}
-            <div className={cn(cardClass, "relative isolate min-h-[184px] flex-1 overflow-hidden p-4 lg:flex-[1.28]")}>
-              {/* Header */}
-              <div className="relative z-[1] flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <SparkleIcon className="text-page-text-muted" />
-                  <span className="text-sm tracking-[-0.02em] text-page-text-muted">AI Insights</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm text-page-text">
-                  <button className="flex size-4 cursor-pointer items-center justify-center">
-                    <ChevronLeftIcon />
-                  </button>
-                  <span className="tabular-nums text-sm tracking-[-0.02em]">1/3</span>
-                  <button className="flex size-4 cursor-pointer items-center justify-center">
-                    <ChevronRightIcon />
-                  </button>
-                </div>
-              </div>
-              {/* Body */}
-              <div className="relative z-[1] mt-6 flex flex-col gap-3">
-                <div className="flex max-w-[320px] flex-col gap-1.5">
-                  <h3 className="text-sm font-medium tracking-[-0.02em] text-page-text">3 clips under review</h3>
-                  <p className="text-sm leading-[140%] tracking-[-0.02em] text-page-text-muted">
-                    3 of the 4 clips you&apos;ve submitted are currently under review. Keep up the great work!
-                  </p>
-                </div>
-                <button className="flex h-9 w-fit cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] px-3 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
-                  View status
-                </button>
-              </div>
-              {/* Stacked video thumbnails — fanned out */}
-              <div className="pointer-events-none absolute right-4 top-[41px] hidden h-[160px] w-[198px] sm:block" style={{ zIndex: 2 }}>
-                {/* Back card — slight left tilt */}
-                <div
-                  className="absolute rounded-xl border border-[rgba(37,37,37,0.1)] bg-gradient-to-br from-[#E8D5F5] to-[#D5C0EA] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.1)] dark:from-[#3a2d4a] dark:to-[#2d2340]"
-                  style={{ width: 120, height: 190, left: 0, top: 0, transform: "matrix(1, -0.07, 0.07, 1, 0, 0)" }}
-                />
-                {/* Middle card — slight right tilt */}
-                <div
-                  className="absolute rounded-xl border border-[rgba(37,37,37,0.1)] bg-gradient-to-br from-[#D5E8F5] to-[#C0D5EA] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.1)] dark:from-[#2d3a4a] dark:to-[#233040]"
-                  style={{ width: 120, height: 190, left: 18, top: 20, transform: "matrix(0.99, 0.14, -0.14, 0.99, 0, 0)" }}
-                />
-                {/* Front card — more right tilt */}
-                <div
-                  className="absolute rounded-xl border border-[rgba(37,37,37,0.1)] bg-gradient-to-br from-[#F5E8D5] to-[#EAD5C0] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(255,255,255,0.1)] dark:from-[#4a3a2d] dark:to-[#403023]"
-                  style={{ width: 120, height: 190, left: 30, top: 39, transform: "matrix(0.96, 0.28, -0.28, 0.96, 0, 0)" }}
-                />
-              </div>
-            </div>
+        {/* "Excellent" label */}
+        <span className="relative z-10 text-sm font-medium tracking-[-0.02em] text-[#00994D]">Excellent</span>
 
-            {/* Trust Score */}
-            <div className={cn(cardClass, "flex flex-row items-start gap-4 p-4 lg:flex-[1]")}>
-              <div className="flex flex-1 flex-col">
-                <div className="flex items-center gap-2">
-                  <HeartIcon className="text-page-text-muted" />
-                  <span className="text-xs font-medium text-page-text-muted">Trust score</span>
+        {/* Your perks card */}
+        <div className="relative z-10 w-full rounded-2xl border border-foreground/[0.06] bg-white py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+          <div className="px-4 pb-4">
+            <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Your perks</span>
+          </div>
+          <div className="flex flex-col gap-3 px-4">
+            {trustPerks.map((perk, i) => (
+              <div key={perk.title}>
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_0_0_1.8px_#fff] dark:border-white/[0.06] dark:bg-card-bg dark:shadow-[0_0_0_1.8px_#1C1C1C]">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M3.33 8L6.67 11.33 12.67 5.33" stroke="#00994D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{perk.title}</span>
+                    <span className="text-xs leading-[150%] tracking-[-0.02em] text-foreground/50">{perk.desc}</span>
+                  </div>
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-page-text-muted">
-                  Your content quality and engagement authenticity. Higher scores unlock better CPM rates.
-                </p>
-                <button className="mt-4 w-fit rounded-full bg-foreground/[0.06] px-3 py-1.5 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10]">
-                  View breakdown
-                </button>
+                {i < trustPerks.length - 1 && (
+                  <div className="mt-3 pl-12"><div className="h-px w-full bg-foreground/[0.06] dark:bg-white/[0.06]" /></div>
+                )}
               </div>
-              <div className="relative flex h-[148px] w-[148px] shrink-0 items-center justify-center">
-                <svg width="148" height="148" viewBox="0 0 148 148" className="absolute inset-0">
-                  <circle cx="74" cy="74" r="70" fill="none" stroke="currentColor" strokeOpacity="0.06" strokeWidth="4" />
-                  <circle
-                    cx="74"
-                    cy="74"
-                    r="70"
-                    fill="none"
-                    stroke="#00994D"
-                    strokeWidth="4"
-                    strokeDasharray={`${2 * Math.PI * 70 * 0.92} ${2 * Math.PI * 70 * 0.08}`}
-                    strokeLinecap="round"
-                    transform="rotate(-90 74 74)"
+            ))}
+          </div>
+        </div>
+
+        {/* Score history card */}
+        <div className="relative z-10 w-full rounded-2xl border border-foreground/[0.06] bg-white py-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+          <div className="flex items-center justify-between px-4 pb-4">
+            <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Score history</span>
+            <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D]">+30 points in the last 6 months</span>
+          </div>
+          <div className="flex items-end gap-10 px-4">
+            <div className="flex flex-1 items-end gap-10">
+              {scoreHistory.map((bar) => (
+                <div key={bar.month} className="flex flex-1 flex-col items-center gap-2">
+                  <div
+                    className="w-full rounded-2xl border-x border-t border-white dark:border-card-bg"
+                    style={{
+                      height: bar.height,
+                      background: bar.opacity === 1
+                        ? "#00994D"
+                        : `rgba(0,153,77,${bar.opacity})`,
+                    }}
                   />
-                </svg>
-                <div className="flex flex-col items-center">
-                  <span className="text-5xl font-semibold tabular-nums tracking-tight text-page-text">92</span>
-                  <span className="text-xs font-medium" style={{ color: "#00994D" }}>
-                    Excellent
-                  </span>
+                  <span className="text-[10px] leading-[120%] text-foreground/40">{bar.month}</span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ── 3. Rewards + Badges ──────────────────────────── */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_280px]">
-            {/* Rewards */}
-            <div className={cn(cardClass, "p-4")}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <TrophyIcon className="text-page-text-muted" />
-                  <span className="text-sm font-medium text-page-text-muted">Rewards</span>
-                </div>
-                <button className="flex items-center gap-0.5 text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">
-                  View all <ArrowRightSmallIcon />
-                </button>
-              </div>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#1A67E5" }}>
-                  4
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium" style={{ color: "#1A67E5" }}>
-                      Challenger <span className="text-xs font-normal text-page-text-subtle">· 53 influence</span>
-                    </span>
-                    <span className="text-sm font-medium" style={{ color: "#AE4EEE" }}>
-                      Elite
-                    </span>
-                  </div>
-                  <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-foreground/10">
-                    <div className="h-full rounded-full" style={{ width: "76%", backgroundColor: "#1A67E5" }} />
-                  </div>
-                  <span className="mt-1 block text-xs text-page-text-subtle">17 points to go</span>
-                </div>
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#AE4EEE" }}>
-                  5
-                </div>
-              </div>
-            </div>
-
-            {/* Badges */}
-            <div className={cn(cardClass, "flex flex-col items-center overflow-hidden p-4")}>
-              <div className="relative flex items-center gap-4">
-                {/* Left gradient fade */}
-                <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-white dark:from-card-bg" />
-                {/* Left side badge */}
-                <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center rounded-full bg-foreground/[0.04] opacity-50">
-                  <span className="text-2xl">🏅</span>
-                </div>
-                {/* Center badge */}
-                <div className="flex h-[136px] w-[136px] shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]">
-                  <span className="text-5xl">🎖️</span>
-                </div>
-                {/* Right side badge */}
-                <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center rounded-full bg-foreground/[0.04] opacity-50">
-                  <span className="text-2xl">⭐</span>
-                </div>
-                {/* Right gradient fade */}
-                <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-white dark:from-card-bg" />
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-foreground/[0.06]">
-                  <ChevronLeftIcon />
-                </button>
-                <span className="text-xs font-medium text-page-text">Two Week Warrior</span>
-                <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-foreground/[0.06]">
-                  <ChevronRightIcon />
-                </button>
-              </div>
-              <span className="mt-1 text-[11px] text-page-text-muted">14-day submission streak</span>
-            </div>
-          </div>
-
-          {/* ── 4. Active Campaigns + Earnings ───────────────── */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-[400px_1fr]">
-            {/* Active Campaigns */}
-            <div className={cn(cardClass, "relative overflow-hidden px-0 py-4")}>
-              <div className="flex items-center justify-between px-4">
-                <span className="text-xs font-medium text-page-text">Active campaigns</span>
-                <button className="flex items-center gap-0.5 text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">
-                  View all <ArrowRightSmallIcon />
-                </button>
-              </div>
-              <div className="mt-3 flex flex-col gap-2 px-4">
-                {campaigns.map((c) => (
-                  <div key={c.name} className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] px-4 py-3 dark:border-[rgba(224,224,224,0.03)]">
-                    <div
-                      className="size-8 shrink-0 rounded-[10px]"
-                      style={{ backgroundColor: c.color }}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-page-text">{c.name}</span>
-                      <span className="block truncate text-xs text-page-text-subtle">{c.meta}</span>
-                    </div>
-                    <span className="shrink-0 text-sm font-medium tabular-nums text-page-text">{c.earned}</span>
-                  </div>
-                ))}
-              </div>
-              {/* Bottom fade */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white dark:from-card-bg" />
-            </div>
-
-            {/* Earnings Chart */}
-            <div className={cn(cardClass, "p-4")}>
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Earnings</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-medium tabular-nums tracking-[-0.02em] text-page-text">$11,289.16</span>
-                    <span className="text-xs font-medium tabular-nums tracking-[-0.02em]" style={{ color: "#00994D" }}>+18.3%</span>
-                  </div>
-                </div>
-                {/* Date range dropdown */}
-                <div className="relative">
-                  <button
-                    onClick={() => setDateDropdownOpen((o) => !o)}
-                    className="flex h-9 cursor-pointer items-center gap-2 rounded-full bg-foreground/[0.06] pl-[10px] pr-3 text-sm tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]"
-                  >
-                    <CalendarIcon />
-                    <span>{DATE_RANGE_OPTIONS.find((o) => o.value === dateRange)?.label}</span>
-                    <ChevronDownIcon />
-                  </button>
-                  {dateDropdownOpen && (
-                    <div className="absolute right-0 top-full z-20 mt-1 w-44 rounded-xl border border-foreground/[0.06] bg-white py-1 shadow-lg dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
-                      {DATE_RANGE_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => { setDateRange(opt.value); setDateDropdownOpen(false); }}
-                          className={cn(
-                            "flex w-full cursor-pointer items-center px-3 py-2 text-sm tracking-[-0.02em] transition-colors hover:bg-foreground/[0.04]",
-                            dateRange === opt.value ? "font-medium text-page-text" : "text-page-text-muted",
-                          )}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="mt-4">
-                <AnalyticsPocChartPlaceholder
-                  variant="line"
-                  chartStylePreset="performance-main"
-                  lineChart={EARNINGS_CHART_DATA}
-                  activeLineDataset="daily"
-                  visibleMetricKeys={["earnings"]}
-                  heightClassName="h-[200px]"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* ── 5. Linked Accounts + Recent Activity ─────────── */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {/* Linked Accounts */}
-            <div className={cn(cardClass, "p-4")}>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-page-text">Linked accounts</span>
-                <span className="text-xs text-page-text-subtle">2/4 connected</span>
-              </div>
-              <div className="mt-3 flex flex-col gap-2">
-                {linkedAccounts.map((a) => (
-                  <div key={a.platform} className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)]">
-                    <LinkedPlatformIcon platform={a.platform} />
-                    <div className="min-w-0 flex-1">
-                      <span className="block text-xs font-medium text-page-text">{a.platform}</span>
-                      {a.connected ? (
-                        <span className="block text-xs text-page-text-subtle">
-                          {a.handle} · {a.followers}
-                        </span>
-                      ) : (
-                        <span className="block text-xs text-page-text-subtle">Not connected</span>
-                      )}
-                    </div>
-                    {a.connected ? (
-                      <CheckCircleIcon />
-                    ) : (
-                      <ChevronRightIcon />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className={cn(cardClass, "p-4")}>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-page-text">Recent activity</span>
-                <button className="flex items-center gap-0.5 text-xs font-medium text-page-text-muted transition-colors hover:text-page-text">
-                  View all <ArrowRightSmallIcon />
-                </button>
-              </div>
-              <div className="mt-3 flex flex-col">
-                {activities.map((a) => (
-                  <div key={a.title} className="flex items-center gap-3 py-1.5">
-                    <ActivityIcon type={a.icon} />
-                    <div className="min-w-0 flex-1">
-                      <span className="block text-xs font-medium text-page-text">{a.title}</span>
-                      <span className="block truncate text-xs text-page-text-subtle">{a.desc}</span>
-                    </div>
-                    <span className="shrink-0 text-xs text-page-text-subtle">{a.time}</span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <div className="px-5 pb-5">
+        <button
+          onClick={onClose}
+          className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+        >
+          Got it
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+// ── Streak Modal ───────────────────────────────────────────────────
+
+function getWeekDays(weekOffset: number) {
+  // "Today" is anchored to March 27 (Thu) for demo; offset shifts by 7 days
+  const anchor = new Date(2026, 2, 27); // March 27 2026
+  const today = new Date(anchor);
+  // Start of anchor's week (Monday)
+  const anchorDay = (today.getDay() + 6) % 7; // 0=Mon
+  const anchorMonday = new Date(today);
+  anchorMonday.setDate(today.getDate() - anchorDay);
+  // Shift by weekOffset
+  const monday = new Date(anchorMonday);
+  monday.setDate(anchorMonday.getDate() + weekOffset * 7);
+
+  const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
+  // Fake streak: active days are consecutive days before today starting from March 24
+  const streakStart = new Date(2026, 2, 24);
+  // XP milestones on specific streak days (3rd and 7th day of any week)
+  return DAY_LABELS.map((label, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const isCurrent = d.getTime() === anchor.getTime();
+    const isFuture = d > anchor;
+    const isActive = !isFuture && d >= streakStart && d <= anchor;
+    const dayOfWeek = i; // 0=Mon … 6=Sun
+    const xp = dayOfWeek === 2 ? "50 XP" : dayOfWeek === 6 ? "100 XP" : undefined;
+    return { date: d.getDate(), label, active: isActive, current: isCurrent, future: isFuture, xp };
+  });
+}
+
+function formatWeekRange(weekOffset: number) {
+  const anchor = new Date(2026, 2, 27);
+  const anchorDay = (anchor.getDay() + 6) % 7;
+  const anchorMonday = new Date(anchor);
+  anchorMonday.setDate(anchor.getDate() - anchorDay);
+  const monday = new Date(anchorMonday);
+  monday.setDate(anchorMonday.getDate() + weekOffset * 7);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  if (monday.getMonth() === sunday.getMonth()) {
+    return `${months[monday.getMonth()]} ${monday.getDate()} - ${sunday.getDate()}`;
+  }
+  return `${months[monday.getMonth()]} ${monday.getDate()} - ${months[sunday.getMonth()]} ${sunday.getDate()}`;
+}
+
+function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [weekOffset, setWeekOffset] = useState(0);
+  const weekDays = getWeekDays(weekOffset);
+  const isCurrent = weekOffset === 0;
+  const streakCount = weekDays.filter((d) => d.active).length;
+  const isBroken = streakCount === 0;
+
+  return (
+    <Modal open={open} onClose={onClose} maxWidth="max-w-[600px]">
+      <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Streak</span>
+      </div>
+
+      <div className="relative flex flex-col items-center gap-6 overflow-hidden px-5 py-5">
+        {/* Decorative particles */}
+        <div className="pointer-events-none relative z-10 flex h-[110px] w-[130px] items-center justify-center sm:h-[145px] sm:w-[173px]">
+          <svg className="absolute inset-0" width="173" height="153" viewBox="0 0 173 153" fill="none">
+            <g opacity="0.3" filter="url(#pf0)"><circle cx="83.9" cy="88.4" r="1.3" fill="#252525"/><circle cx="77.4" cy="6.6" r="1.3" fill="#252525"/><circle cx="126.8" cy="147.5" r="1.3" fill="#252525"/><circle cx="135.2" cy="124.1" r="1.3" fill="#252525"/><circle cx="105.3" cy="34.5" r="1.3" fill="#252525"/><circle cx="69" cy="46.9" r="1.3" fill="#252525"/><circle cx="37.8" cy="58.5" r="1.3" fill="#252525"/><circle cx="59.2" cy="72.8" r="1.3" fill="#252525"/><circle cx="38.4" cy="20.9" r="1.3" fill="#252525"/><circle cx="68.3" cy="5.3" r="1.3" fill="#252525"/><circle cx="111.8" cy="31.9" r="1.3" fill="#252525"/></g>
+            <g opacity="0.3" filter="url(#pf1)"><circle cx="132.6" cy="69.4" r=".97" fill="#252525"/><circle cx="127.7" cy="8" r=".97" fill="#252525"/><circle cx="164.7" cy="113.7" r=".97" fill="#252525"/><circle cx="171" cy="96.2" r=".97" fill="#252525"/><circle cx="148.6" cy="29" r=".97" fill="#252525"/><circle cx="121.4" cy="38.2" r=".97" fill="#252525"/><circle cx="98" cy="47" r=".97" fill="#252525"/><circle cx="114" cy="57.7" r=".97" fill="#252525"/><circle cx="98.5" cy="18.8" r=".97" fill="#252525"/><circle cx="120.9" cy="7.1" r=".97" fill="#252525"/><circle cx="153.5" cy="27" r=".97" fill="#252525"/></g>
+            <g opacity="0.3" filter="url(#pf2)"><circle cx="40.4" cy="51.4" r=".97" transform="rotate(180 40.4 51.4)" fill="#252525"/><circle cx="45.3" cy="112.8" r=".97" transform="rotate(180 45.3 112.8)" fill="#252525"/><circle cx="8.3" cy="7.1" r=".97" transform="rotate(180 8.3 7.1)" fill="#252525"/><circle cx="2" cy="24.6" r=".97" transform="rotate(180 2 24.6)" fill="#252525"/><circle cx="24.4" cy="91.8" r=".97" transform="rotate(180 24.4 91.8)" fill="#252525"/><circle cx="51.6" cy="82.6" r=".97" transform="rotate(180 51.6 82.6)" fill="#252525"/><circle cx="75" cy="73.8" r=".97" transform="rotate(180 75 73.8)" fill="#252525"/><circle cx="59" cy="63.1" r=".97" transform="rotate(180 59 63.1)" fill="#252525"/><circle cx="74.5" cy="102" r=".97" transform="rotate(180 74.5 102)" fill="#252525"/><circle cx="52.1" cy="113.7" r=".97" transform="rotate(180 52.1 113.7)" fill="#252525"/><circle cx="19.5" cy="93.8" r=".97" transform="rotate(180 19.5 93.8)" fill="#252525"/></g>
+            <defs>
+              <filter id="pf0" x="32.5" y="0" width="108" height="152.8" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="2" result="b"/></filter>
+              <filter id="pf1" x="96" y="5.1" width="77" height="110.6" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="0.5" result="b"/></filter>
+              <filter id="pf2" x="0" y="5.1" width="77" height="110.6" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feGaussianBlur stdDeviation="0.5" result="b"/></filter>
+            </defs>
+          </svg>
+
+          {/* Big fire icon */}
+          {isBroken ? (
+            <svg className="absolute" width="88" height="88" viewBox="0 0 88 88" fill="none" style={{ filter: "drop-shadow(0px 2px 4px rgba(37,37,37,0.12))" }}>
+              <g filter="url(#bf0)">
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" fill="#252525" fillOpacity="0.4"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#bp1)" strokeOpacity="0.1" strokeWidth="0.5"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#bp2)" strokeWidth="0.5"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#bp3)" strokeWidth="0.5"/>
+                <g filter="url(#bf1)">
+                  <path d="M44.047 7.694c-.878-.677-2.035-.873-3.088-.523-1.052.35-1.861 1.2-2.159 2.268-1.792 6.431-5.467 9.971-10.19 14.521-.636.613-1.292 1.244-1.964 1.904l-.002.002c-2.1 2.063-4.267 4.399-6.047 7.047-5.283 7.863-6.581 16.77-2.626 25.724l.002.003c6.593 14.88 21.352 19.167 33.682 15.395 12.377-3.787 22.527-15.708 20.393-32.888-.659-5.351-2.468-10.884-6.939-15.246-.702-.685-1.67-1.025-2.647-.931-.976.094-1.861.613-2.42 1.42-.467.674-1.53 1.974-2.806 3.477-.22-2.675-.777-5.248-1.723-7.733-2.074-5.45-5.897-10.148-11.468-14.443Z" fill="url(#bp4)" fillOpacity="0.2"/>
+                  <path d="M44.047 7.694c-.878-.677-2.035-.873-3.088-.523-1.052.35-1.861 1.2-2.159 2.268-1.792 6.431-5.467 9.971-10.19 14.521-.636.613-1.292 1.244-1.964 1.904l-.002.002c-2.1 2.063-4.267 4.399-6.047 7.047-5.283 7.863-6.581 16.77-2.626 25.724l.002.003c6.593 14.88 21.352 19.167 33.682 15.395 12.377-3.787 22.527-15.708 20.393-32.888-.659-5.351-2.468-10.884-6.939-15.246-.702-.685-1.67-1.025-2.647-.931-.976.094-1.861.613-2.42 1.42-.467.674-1.53 1.974-2.806 3.477-.22-2.675-.777-5.248-1.723-7.733-2.074-5.45-5.897-10.148-11.468-14.443Z" fill="url(#bp5)"/>
+                  <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#bp6)" strokeWidth="0.5"/>
+                  <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#bp7)" strokeWidth="0.5"/>
+                </g>
+              </g>
+              <defs>
+                <filter id="bf0" x="0" y="0" width="88" height="88" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="ha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0.145 0 0 0 0 0.145 0 0 0 0 0.145 0 0 0 0.12 0"/><feBlend in2="bg" result="ds"/><feBlend in="SourceGraphic" in2="ds" result="shape"/></filter>
+                <filter id="bf1" x="15.2" y="6.5" width="57.7" height="70.3" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="1"/><feGaussianBlur stdDeviation="2"/><feComposite in2="ha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/><feBlend mode="plus-lighter" in2="s" result="is"/></filter>
+                <linearGradient id="bp1" x1="44" y1="7" x2="44" y2="75.3" gradientUnits="userSpaceOnUse"><stop/><stop offset="0.5"/><stop offset="1"/></linearGradient>
+                <radialGradient id="bp2" cx="0" cy="0" r="1" gradientTransform="matrix(-2.267 -37.188 -17.896 21.079 34.286 76.915)" gradientUnits="userSpaceOnUse"><stop stopColor="#252525"/><stop offset="1" stopColor="#252525" stopOpacity="0"/></radialGradient>
+                <radialGradient id="bp3" cx="0" cy="0" r="1" gradientTransform="matrix(2.104 -34.518 17.995 21.197 52.42 75.682)" gradientUnits="userSpaceOnUse"><stop stopColor="#252525"/><stop offset="1" stopColor="#252525" stopOpacity="0"/></radialGradient>
+                <linearGradient id="bp4" x1="44" y1="7" x2="44" y2="75.3" gradientUnits="userSpaceOnUse"><stop stopColor="#252525"/><stop offset="1" stopColor="#252525" stopOpacity="0.2"/></linearGradient>
+                <radialGradient id="bp5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(44 7.854) rotate(180) scale(28.334 43.959)"><stop stopColor="#252525" stopOpacity="0.2"/><stop offset="1" stopColor="#252525" stopOpacity="0"/></radialGradient>
+                <radialGradient id="bp6" cx="0" cy="0" r="1" gradientTransform="matrix(-2.267 -37.188 -17.896 21.079 34.286 76.915)" gradientUnits="userSpaceOnUse"><stop stopColor="#252525"/><stop offset="1" stopColor="#252525" stopOpacity="0"/></radialGradient>
+                <radialGradient id="bp7" cx="0" cy="0" r="1" gradientTransform="matrix(2.104 -34.518 17.995 21.197 52.42 75.682)" gradientUnits="userSpaceOnUse"><stop stopColor="#252525"/><stop offset="1" stopColor="#252525" stopOpacity="0"/></radialGradient>
+              </defs>
+            </svg>
+          ) : (
+            <svg className="absolute" width="88" height="88" viewBox="0 0 88 88" fill="none" style={{ filter: "drop-shadow(0px 2px 4px rgba(37,37,37,0.12))" }}>
+              <g filter="url(#af0)">
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" fill="#E57100"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#ap1)" strokeOpacity="0.1" strokeWidth="0.5"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#ap2)" strokeWidth="0.5"/>
+                <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#ap3)" strokeWidth="0.5"/>
+                <g filter="url(#af1)">
+                  <path d="M44.047 7.694c-.878-.677-2.035-.873-3.088-.523-1.052.35-1.861 1.2-2.159 2.268-1.792 6.431-5.467 9.971-10.19 14.521-.636.613-1.292 1.244-1.964 1.904l-.002.002c-2.1 2.063-4.267 4.399-6.047 7.047-5.283 7.863-6.581 16.77-2.626 25.724l.002.003c6.593 14.88 21.352 19.167 33.682 15.395 12.377-3.787 22.527-15.708 20.393-32.888-.659-5.351-2.468-10.884-6.939-15.246-.702-.685-1.67-1.025-2.647-.931-.976.094-1.861.613-2.42 1.42-.467.674-1.53 1.974-2.806 3.477-.22-2.675-.777-5.248-1.723-7.733-2.074-5.45-5.897-10.148-11.468-14.443Z" fill="url(#ap4)" fillOpacity="0.2"/>
+                  <path d="M44.047 7.694c-.878-.677-2.035-.873-3.088-.523-1.052.35-1.861 1.2-2.159 2.268-1.792 6.431-5.467 9.971-10.19 14.521-.636.613-1.292 1.244-1.964 1.904l-.002.002c-2.1 2.063-4.267 4.399-6.047 7.047-5.283 7.863-6.581 16.77-2.626 25.724l.002.003c6.593 14.88 21.352 19.167 33.682 15.395 12.377-3.787 22.527-15.708 20.393-32.888-.659-5.351-2.468-10.884-6.939-15.246-.702-.685-1.67-1.025-2.647-.931-.976.094-1.861.613-2.42 1.42-.467.674-1.53 1.974-2.806 3.477-.22-2.675-.777-5.248-1.723-7.733-2.074-5.45-5.897-10.148-11.468-14.443Z" fill="url(#ap5)"/>
+                  <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#ap6)" strokeWidth="0.5"/>
+                  <path d="M40.88 6.934c1.13-.377 2.375-.167 3.32.56 5.597 4.316 9.453 9.05 11.548 14.554.884 2.322 1.43 4.72 1.683 7.202 1.1-1.307 1.994-2.406 2.406-3 .6-.867 1.553-1.424 2.602-1.526 1.05-.1 2.09.266 2.846 1.001 4.526 4.412 6.35 10.008 7.013 15.392 2.149 17.31-8.085 29.338-20.568 33.157-12.432 3.803-27.333-.52-33.985-15.532l-.001-.004c-3.994-9.041-2.678-18.039 2.646-25.965 1.794-2.668 3.974-5.018 6.078-7.085l.003-.003c.673-.66 1.329-1.293 1.965-1.906 4.726-4.553 8.352-8.05 10.123-14.408.32-1.148 1.19-2.061 2.32-2.438Z" stroke="url(#ap7)" strokeWidth="0.5"/>
+                </g>
+              </g>
+              <defs>
+                <filter id="af0" x="0" y="0" width="88" height="88" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="ha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0.145 0 0 0 0 0.145 0 0 0 0 0.145 0 0 0 0.12 0"/><feBlend in2="bg" result="ds"/><feBlend in="SourceGraphic" in2="ds" result="shape"/></filter>
+                <filter id="af1" x="15.2" y="6.5" width="57.7" height="70.3" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="bg"/><feBlend in="SourceGraphic" in2="bg" result="s"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="ha"/><feOffset dy="1"/><feGaussianBlur stdDeviation="2"/><feComposite in2="ha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/><feBlend mode="plus-lighter" in2="s" result="is"/></filter>
+                <linearGradient id="ap1" x1="44" y1="7" x2="44" y2="75.3" gradientUnits="userSpaceOnUse"><stop/><stop offset="0.5"/><stop offset="1"/></linearGradient>
+                <radialGradient id="ap2" cx="0" cy="0" r="1" gradientTransform="matrix(-2.267 -37.188 -17.896 21.079 34.286 76.915)" gradientUnits="userSpaceOnUse"><stop stopColor="#E57100"/><stop offset="1" stopColor="#E57100" stopOpacity="0"/></radialGradient>
+                <radialGradient id="ap3" cx="0" cy="0" r="1" gradientTransform="matrix(2.104 -34.518 17.995 21.197 52.42 75.682)" gradientUnits="userSpaceOnUse"><stop stopColor="#E57100"/><stop offset="1" stopColor="#E57100" stopOpacity="0"/></radialGradient>
+                <linearGradient id="ap4" x1="44" y1="7" x2="44" y2="75.3" gradientUnits="userSpaceOnUse"><stop stopColor="#E57100"/><stop offset="1" stopColor="#E57100" stopOpacity="0.2"/></linearGradient>
+                <radialGradient id="ap5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(44 7.854) rotate(180) scale(28.334 43.959)"><stop stopColor="#F59E0B"/><stop offset="1" stopColor="#F59E0B" stopOpacity="0"/></radialGradient>
+                <radialGradient id="ap6" cx="0" cy="0" r="1" gradientTransform="matrix(-2.267 -37.188 -17.896 21.079 34.286 76.915)" gradientUnits="userSpaceOnUse"><stop stopColor="#E57100"/><stop offset="1" stopColor="#E57100" stopOpacity="0"/></radialGradient>
+                <radialGradient id="ap7" cx="0" cy="0" r="1" gradientTransform="matrix(2.104 -34.518 17.995 21.197 52.42 75.682)" gradientUnits="userSpaceOnUse"><stop stopColor="#E57100"/><stop offset="1" stopColor="#E57100" stopOpacity="0"/></radialGradient>
+              </defs>
+            </svg>
+          )}
+        </div>
+
+        {/* Streak count + description */}
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <span className={cn("text-5xl font-medium tracking-[-0.02em]", isBroken ? "text-foreground/50" : "text-[#E57100]")}>{streakCount} days</span>
+          <div className="flex items-center gap-1">
+            <span className={cn("text-sm", isBroken ? "text-foreground/50" : "text-page-text-subtle")}>Submit a video every day to earn extra</span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-white px-2 py-1 dark:border-white/[0.06] dark:bg-card-bg">
+              <svg width="12" height="10" viewBox="0 0 11 10" fill="none"><path d="M5.937.431C5.66-.144 4.84-.144 4.564.431L3.384 2.89.663 3.246C.033 3.328-.23 4.108.24 4.55L2.227 6.425 1.729 9.1c-.119.636.554 1.107 1.11.807L5.25 8.607l2.413 1.3c.555.3 1.228-.17 1.11-.807L8.274 6.425l1.988-1.875c.47-.443.207-1.222-.394-1.305L7.118 2.89 5.937.431Z" fill={isBroken ? "rgba(37,37,37,0.2)" : "#E57100"}/></svg>
+              <span className="text-xs font-medium text-page-text">XP</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Weekly calendar card */}
+        <div className="relative z-10 w-full rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+          {/* Week navigation */}
+          <div className="mb-4 flex items-center justify-between">
+            <button onClick={() => setWeekOffset((o) => o - 1)} className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10]">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 9L4.5 6l3-3" stroke="rgba(37,37,37,0.5)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{formatWeekRange(weekOffset)}</span>
+              {isCurrent && (
+                <div className="flex items-center gap-2">
+                  <div className="size-1.5 rounded-full bg-[#E57100]" />
+                  <span className="text-sm font-medium text-[#E57100]">Current</span>
+                </div>
+              )}
+            </div>
+            <button onClick={() => setWeekOffset((o) => o + 1)} className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10]">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3l3 3-3 3" stroke="rgba(37,37,37,0.5)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+
+          <div className="h-px w-full bg-foreground/[0.06]" />
+
+          {/* Day labels */}
+          <div className="mt-3 flex justify-between">
+            {weekDays.map((d, i) => (
+              <div key={i} className="flex flex-1 items-center justify-center">
+                <span className="text-xs font-medium text-foreground/40">{d.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Day circles */}
+          <div className="mt-3 flex justify-between">
+            {weekDays.map((d, i) => (
+              <div key={i} className="flex flex-col items-center gap-2">
+                <div
+                  className={cn(
+                    "flex size-[52px] items-center justify-center rounded-full",
+                    d.current
+                      ? "border border-[#E57100] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                      : d.future
+                        ? "border border-dashed border-foreground/[0.12] bg-white"
+                        : "border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                  )}
+                >
+                  <span className={cn(
+                    "text-base font-medium",
+                    isBroken ? (d.current ? "text-page-text" : "text-page-text-subtle") : (d.active || d.current ? "text-[#E57100]" : "text-page-text-subtle")
+                  )}>
+                    {d.date}
+                  </span>
+                </div>
+                {/* Fire icon */}
+                <div className="flex size-4 items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? "#E57100" : "rgba(37,37,37,0.2)"} />
+                  </svg>
+                </div>
+                {/* XP badge */}
+                {d.xp && (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 shadow-[0_0_0_2px_#fff,0_1px_2px_rgba(0,0,0,0.03)]">
+                    <svg width="12" height="10" viewBox="0 0 11 10" fill="none"><path d="M5.937.431C5.66-.144 4.84-.144 4.564.431L3.384 2.89.663 3.246C.033 3.328-.23 4.108.24 4.55L2.227 6.425 1.729 9.1c-.119.636.554 1.107 1.11.807L5.25 8.607l2.413 1.3c.555.3 1.228-.17 1.11-.807L8.274 6.425l1.988-1.875c.47-.443.207-1.222-.394-1.305L7.118 2.89 5.937.431Z" fill={isBroken ? "rgba(37,37,37,0.2)" : "#E57100"}/></svg>
+                    <span className="text-xs font-medium text-page-text">{d.xp}</span>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 pb-5">
+        <button
+          onClick={onClose}
+          className="flex h-10 w-full items-center justify-center rounded-full bg-foreground/[0.06] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+        >
+          Got it
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+// ── Recent Activity Modal ────────────────────────────────────────
+
+const ACTIVITY_ROWS = Array.from({ length: 8 }, () => ({
+  amount: "$20,000",
+  status: "Withdrawn",
+  sentTo: "Chase Bank",
+  initiated: "Fri 13 Mar 2026, 1:21pm",
+}));
+
+function RecentActivityModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Modal open={open} onClose={onClose} maxWidth="max-w-[800px]" showClose={false}>
+      <div className="relative flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Recent activity</span>
+        <button onClick={onClose} className="absolute right-4 top-3 flex size-4 items-center justify-center">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M.762.762l9.333 9.333M10.095.762L.762 10.095" stroke="#252525" strokeOpacity="0.5" strokeWidth="1.524" strokeLinecap="round"/></svg>
+        </button>
+      </div>
+
+      <div className="flex flex-col p-4 sm:p-5">
+        {/* Mobile card layout */}
+        <div className="flex flex-col gap-3 md:hidden">
+          {ACTIVITY_ROWS.map((row, i) => (
+            <div key={i} className="flex flex-col gap-3 rounded-xl border border-foreground/[0.03] p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-page-text">{row.amount}</span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1.5 pl-1.5 pr-2">
+                  <CheckCircleIcon color="#00994D" size={12} />
+                  <span className="text-xs font-medium text-[#00994D]">{row.status}</span>
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs text-foreground/50">
+                <span className="font-medium text-page-text">{row.sentTo}</span>
+                <span>{row.initiated}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden flex-col md:flex">
+          <div className="flex items-center border-b border-foreground/[0.06] px-1">
+            <div className="flex w-[128px] items-center p-3"><span className="text-xs font-medium tracking-[-0.02em] text-foreground/50">Amount</span></div>
+            <div className="flex w-[96px] items-center py-3 pr-3"><span className="text-xs font-medium tracking-[-0.02em] text-foreground/50">Status</span></div>
+            <div className="flex w-[128px] items-center p-3"><span className="text-xs font-medium tracking-[-0.02em] text-foreground/50">Sent to</span></div>
+            <div className="flex items-center p-3"><span className="whitespace-nowrap text-xs font-medium tracking-[-0.02em] text-foreground/50">Initiated at</span></div>
+            <div className="flex flex-1 items-center justify-end py-3 pr-5"><span className="text-xs font-medium leading-[120%] tracking-[-0.02em] text-foreground/50">Receipt</span></div>
+          </div>
+          {ACTIVITY_ROWS.map((row, i) => (
+            <div key={i} className="flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
+              <div className="flex w-[128px] items-center p-3"><span className="text-xs font-medium tracking-[-0.02em] text-page-text">{row.amount}</span></div>
+              <div className="flex w-[96px] items-center py-3 pr-3">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-2 pl-1.5 pr-2">
+                  <CheckCircleIcon color="#00994D" size={12} />
+                  <span className="text-xs font-medium tracking-[-0.02em] text-[#00994D]">{row.status}</span>
+                </span>
+              </div>
+              <div className="flex w-[128px] items-center p-3"><span className="text-xs font-medium tracking-[-0.02em] text-page-text">{row.sentTo}</span></div>
+              <div className="flex items-center p-3"><span className="whitespace-nowrap text-xs font-medium leading-[120%] tracking-[-0.02em] text-foreground/50">{row.initiated}</span></div>
+              <div className="flex flex-1 items-center justify-end py-3 pr-5">
+                <button className="group flex items-center gap-1.5 text-xs font-medium leading-[120%] tracking-[-0.02em] text-foreground/50 transition-colors duration-150 hover:text-page-text">
+                  Download
+                  <svg width="12" height="10" viewBox="0 0 12 10" fill="none" className="transition-all duration-200 ease-out group-hover:translate-x-0.5"><path d="M7.334.667l4 4-4 4M10.667 4.667H.667" stroke="currentColor" strokeWidth="1.333" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// ── Submit Clip Modal ────────────────────────────────────────────
+
+const submitCampaigns = [
+  { name: "Flooz Clipping Campaign", detail: "CPM · $2.50 per 1K views" },
+  { name: "Cantina - All formats", detail: "Retainer · $500/month" },
+  { name: "Cantina - All formats", detail: "Per post · $100/video" },
+];
+
+function SubmitClipModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [step, setStep] = useState<"select" | "pick">("select");
+  const [tab, setTab] = useState<"feed" | "link">("feed");
+
+  const handleClose = () => { onClose(); setStep("select"); };
+
+  return (
+    <Modal open={open} onClose={handleClose} size="md">
+      <ModalHeader>Submit clip</ModalHeader>
+      <ModalBody>
+        {step === "select" ? (
+          <div className="flex flex-col gap-6 p-5">
+            <div className="flex items-center gap-1.5 pb-2">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3l4.5 3.5L1 10V3Z" fill="rgba(37,37,37,0.5)"/><path d="M6.5 3l4.5 3.5L6.5 10V3Z" fill="rgba(37,37,37,0.5)"/></svg>
+              <span className="text-xs font-medium text-page-text-subtle">Select a campaign you want to submit to</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              {submitCampaigns.map((c, i) => (
+                <button key={i} onClick={() => setStep("pick")} className={cn(cardClass, "flex items-center gap-3 px-3 py-4 transition-colors hover:bg-foreground/[0.02]")}>
+                  <div className="size-9 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
+                  <div className="flex flex-1 flex-col gap-1.5 text-left">
+                    <span className="text-xs font-medium text-page-text">{c.name}</span>
+                    <span className="text-xs text-page-text-subtle">{c.detail}</span>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(37,37,37,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-1.5 pt-2">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 11a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-.375-6.875a.375.375 0 0 0-.375.375.125.125 0 0 1-.25 0 .625.625 0 0 1 .625-.625h.525a.975.975 0 0 1 .6 1.725l-.355.298v.227a.125.125 0 0 1-.25 0v-.5a.25.25 0 0 1 .068-.182l.558-.472a.725.725 0 0 0-.446-1.096h-.525ZM6 7.875a.375.375 0 1 0 0-.75.375.375 0 0 0 0 .75Z" fill="rgba(37,37,37,0.5)"/></svg>
+              <span className="text-xs font-medium text-page-text-subtle">Don&apos;t see your campaign? Browse campaigns</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col gap-6 p-5">
+              <div className="flex items-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3l4.5 3.5L1 10V3Z" fill="rgba(37,37,37,0.5)"/><path d="M6.5 3l4.5 3.5L6.5 10V3Z" fill="rgba(37,37,37,0.5)"/></svg>
+                <span className="text-xs font-medium text-page-text-subtle">Submit a clip to Cantina - All formats · <button onClick={() => setStep("select")} className="underline">Change</button></span>
+              </div>
+
+              {/* Tab switcher */}
+              <div className="flex rounded-xl bg-foreground/[0.06] p-0.5">
+                <button onClick={() => setTab("feed")} className={cn("flex-1 rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", tab === "feed" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}>From feed</button>
+                <button onClick={() => setTab("link")} className={cn("flex-1 rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", tab === "link" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}>Link</button>
+              </div>
+
+              {tab === "feed" ? (
+                <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-1 items-center gap-1.5 rounded-xl bg-foreground/[0.04] px-3 py-2.5">
+                      <svg width="16" height="16" viewBox="0 0 15 17" fill="none"><path d="M14.528 6.845c-1.483 0-2.856-.472-3.977-1.272v5.821c0 2.912-2.362 5.273-5.276 5.273a5.26 5.26 0 0 1-2.937-.892A5.273 5.273 0 0 1 0 11.394c0-2.912 2.362-5.273 5.276-5.273.242 0 .484.017.724.05v2.916a2.425 2.425 0 0 0-.733-.113 2.413 2.413 0 0 0-2.413 2.413 2.42 2.42 0 0 0 1.327 2.154c.327.165.696.257 1.086.257 1.33 0 2.409-1.075 2.413-2.404V0h2.871v.367c.01.11.025.219.044.328a4.416 4.416 0 0 0 1.822 2.694c.633.395 1.365.604 2.112.603v2.853Z" fill="currentColor"/></svg>
+                      <span className="text-sm text-page-text">@vladclips</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="rgba(37,37,37,0.5)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                    <div className="flex flex-1 items-center gap-1.5 rounded-xl bg-foreground/[0.04] px-3 py-2.5">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="rgba(37,37,37,0.5)" strokeWidth="1.5" fill="none"/><path d="M11 11l3 3" stroke="rgba(37,37,37,0.5)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      <span className="text-sm text-page-text-muted">Search by caption...</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {[1, 2, 3].map((v) => (
+                      <div key={v} className={cn(cardClass, "flex w-[140px] shrink-0 flex-col gap-3 p-1 pb-3 sm:w-[179px]")}>
+                        <div className="h-[220px] w-full rounded-xl bg-cover bg-center sm:h-[280px]" style={{ backgroundImage: `linear-gradient(180deg, transparent 68%, rgba(0,0,0,0.4) 100%), url(/creator-home/campaign-thumb-${v}.png)` }} />
+                        <div className="flex flex-col gap-1.5 px-2">
+                          <span className="text-xs font-medium text-page-text">Cantina review clip</span>
+                          <span className="text-xs text-page-text-subtle">2h ago · 12.4K views</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs text-page-text-subtle">Video URLs (one per line)</span>
+                    <div className="relative rounded-[14px] bg-foreground/[0.04]">
+                      <textarea className="w-full resize-none bg-transparent px-3.5 py-3 text-sm text-page-text-muted outline-none" rows={5} placeholder="https://www.tiktok.com/@username/video..." />
+                      <span className="absolute bottom-3.5 right-3.5 text-xs text-page-text-subtle">0/300</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["Links 0", "Valid 0", "Invalid 0", "TikTok 0", "YouTube 0", "Instagram 0", "X 0"].map((s) => (
+                      <span key={s} className="flex items-center gap-1 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium text-page-text">
+                        {s.split(" ")[0]} <span className="text-page-text">{s.split(" ")[1]}</span>
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1.5 pt-2">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 11a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-.375-6.875a.375.375 0 0 0-.375.375.125.125 0 0 1-.25 0 .625.625 0 0 1 .625-.625h.525a.975.975 0 0 1 .6 1.725l-.355.298v.227a.125.125 0 0 1-.25 0v-.5a.25.25 0 0 1 .068-.182l.558-.472a.725.725 0 0 0-.446-1.096h-.525ZM6 7.875a.375.375 0 1 0 0-.75.375.375 0 0 0 0 .75Z" fill="rgba(37,37,37,0.5)"/></svg>
+                    <span className="text-xs font-medium text-page-text-subtle">Paste up to 50 URLs</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-end gap-2 bg-white px-5 pb-5 dark:bg-card-bg">
+              <button onClick={handleClose} className="rounded-full bg-foreground/[0.06] px-4 py-2.5 text-sm font-medium text-page-text">Cancel</button>
+              <button className="rounded-full bg-page-text px-4 py-2.5 text-sm font-medium text-white opacity-40">Submit for review</button>
+            </div>
+          </>
+        )}
+      </ModalBody>
+    </Modal>
   );
 }

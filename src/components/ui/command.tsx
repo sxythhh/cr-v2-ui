@@ -105,20 +105,20 @@ function Command({
 
 function CommandInput({
   className,
-  placeholder = undefined,
+  placeholder = "Search...",
   ...props
-}: React.ComponentProps<typeof AutocompleteInput>) {
+}: React.ComponentProps<"input">) {
   return (
-    <div className="px-2.5 py-1">
-      <AutocompleteInput
+    <div className="relative px-4 py-3">
+      <IconSearch size={14} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-page-text-muted" />
+      <input
         autoFocus
+        placeholder={placeholder}
         className={cn(
-          "border-transparent! bg-transparent! shadow-none before:hidden has-focus-visible:ring-0 [&_input]:pl-8",
+          "w-full border-none bg-transparent pl-6 text-sm text-page-text outline-none placeholder:text-page-text-muted",
           className,
         )}
-        placeholder={placeholder}
-        size="lg"
-        startAddon={<IconSearch size={16} />}
+        data-slot="command-input"
         {...props}
       />
     </div>
