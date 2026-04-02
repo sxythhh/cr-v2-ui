@@ -172,13 +172,13 @@ export function Modal({
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute right-4 top-3 z-10 flex size-7 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text"
+                className="absolute right-4 top-3 z-10 flex size-4 cursor-pointer items-center justify-center text-foreground/50 transition-opacity hover:opacity-80"
               >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                   <path
-                    d="M3 3L9 9M9 3L3 9"
+                    d="M0.762 0.762L10.095 10.095M10.095 0.762L0.762 10.095"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="1.524"
                     strokeLinecap="round"
                   />
                 </svg>

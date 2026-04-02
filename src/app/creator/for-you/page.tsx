@@ -107,8 +107,8 @@ function VerifiedBadge() {
 function SkipIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M2.568 0.279712C1.4715 -0.450506 0 0.333566 0 1.65375V11.6821C0 13.0023 1.4715 13.7864 2.568 13.0561L10.0974 8.04196C11.0787 7.38847 11.0787 5.94739 10.0974 5.29389L2.568 0.279712Z" fill="#252525" fillOpacity="0.5"/>
-      <path d="M13.3333 0.834596C13.3333 0.374358 12.9602 0.00126212 12.5 0.00126212C12.0398 0.00126212 11.6667 0.374358 11.6667 0.834596V12.5013C11.6667 12.9615 12.0398 13.3346 12.5 13.3346C12.9602 13.3346 13.3333 12.9615 13.3333 12.5013V0.834596Z" fill="#252525" fillOpacity="0.5"/>
+      <path d="M2.568 0.279712C1.4715 -0.450506 0 0.333566 0 1.65375V11.6821C0 13.0023 1.4715 13.7864 2.568 13.0561L10.0974 8.04196C11.0787 7.38847 11.0787 5.94739 10.0974 5.29389L2.568 0.279712Z" fill="currentColor" fillOpacity="0.5"/>
+      <path d="M13.3333 0.834596C13.3333 0.374358 12.9602 0.00126212 12.5 0.00126212C12.0398 0.00126212 11.6667 0.374358 11.6667 0.834596V12.5013C11.6667 12.9615 12.0398 13.3346 12.5 13.3346C12.9602 13.3346 13.3333 12.9615 13.3333 12.5013V0.834596Z" fill="currentColor" fillOpacity="0.5"/>
     </svg>
   );
 }
@@ -124,7 +124,7 @@ function PlusIcon() {
 function InfoIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M8.33333 0C3.73096 0 0 3.73096 0 8.33333C0 12.9357 3.73096 16.6667 8.33333 16.6667C12.9357 16.6667 16.6667 12.9357 16.6667 8.33333C16.6667 3.73096 12.9357 0 8.33333 0ZM6.66667 7.5C6.66667 7.03976 7.03976 6.66667 7.5 6.66667H8.33333C8.79357 6.66667 9.16667 7.03976 9.16667 7.5V11.6667C9.16667 12.1269 8.79357 12.5 8.33333 12.5C7.8731 12.5 7.5 12.1269 7.5 11.6667V8.33333C7.03976 8.33333 6.66667 7.96024 6.66667 7.5ZM8.33333 4.16667C7.8731 4.16667 7.5 4.53976 7.5 5C7.5 5.46024 7.8731 5.83333 8.33333 5.83333C8.79357 5.83333 9.16667 5.46024 9.16667 5C9.16667 4.53976 8.79357 4.16667 8.33333 4.16667Z" fill="#252525" fillOpacity="0.5"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.33333 0C3.73096 0 0 3.73096 0 8.33333C0 12.9357 3.73096 16.6667 8.33333 16.6667C12.9357 16.6667 16.6667 12.9357 16.6667 8.33333C16.6667 3.73096 12.9357 0 8.33333 0ZM6.66667 7.5C6.66667 7.03976 7.03976 6.66667 7.5 6.66667H8.33333C8.79357 6.66667 9.16667 7.03976 9.16667 7.5V11.6667C9.16667 12.1269 8.79357 12.5 8.33333 12.5C7.8731 12.5 7.5 12.1269 7.5 11.6667V8.33333C7.03976 8.33333 6.66667 7.96024 6.66667 7.5ZM8.33333 4.16667C7.8731 4.16667 7.5 4.53976 7.5 5C7.5 5.46024 7.8731 5.83333 8.33333 5.83333C8.79357 5.83333 9.16667 5.46024 9.16667 5C9.16667 4.53976 8.79357 4.16667 8.33333 4.16667Z" fill="currentColor" fillOpacity="0.5"/>
     </svg>
   );
 }
@@ -132,7 +132,7 @@ function InfoIcon() {
 function ArrowUpIcon() {
   return (
     <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-      <path d="M0.666626 4.66675L4.66661 0.666748L8.66663 4.66675M4.66661 1.33341V11.3334" stroke="#252525" strokeOpacity="0.5" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M0.666626 4.66675L4.66661 0.666748L8.66663 4.66675M4.66661 1.33341V11.3334" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -140,7 +140,7 @@ function ArrowUpIcon() {
 function ArrowDownIcon() {
   return (
     <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-      <path d="M8.66663 7.33341L4.66664 11.3334L0.666626 7.33341M4.66664 10.6667V0.666748" stroke="#252525" strokeOpacity="0.5" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8.66663 7.33341L4.66664 11.3334L0.666626 7.33341M4.66664 10.6667V0.666748" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -148,22 +148,21 @@ function ArrowDownIcon() {
 
 function TikTokIcon() {
   return (
-    <svg width="15" height="17" viewBox="0 0 15 17" fill="none"><path d="M14.5284 6.84452C13.0454 6.84452 11.6723 6.3733 10.5511 5.57248V11.3939C10.5511 14.306 8.18915 16.6667 5.27564 16.6667C4.18856 16.6667 3.17816 16.3381 2.33882 15.7748C0.928533 14.8284 0 13.2192 0 11.3938C0 8.4819 2.36196 6.12119 5.27572 6.12125C5.51786 6.12113 5.7597 6.13758 5.99958 6.17035V6.81669L5.99944 9.08666C5.76856 9.01344 5.52243 8.9737 5.26706 8.9737C3.9342 8.9737 2.85391 10.0536 2.85391 11.3856C2.85391 12.3273 3.39391 13.1428 4.18135 13.5401C4.50785 13.7047 4.87659 13.7974 5.26708 13.7974C6.59719 13.7974 7.67563 12.7219 7.68022 11.3938V0H10.551V0.366908C10.5611 0.476599 10.5757 0.585873 10.5948 0.694432C10.794 1.83031 11.4735 2.80079 12.4167 3.38904C13.0501 3.78419 13.7819 3.99309 14.5284 3.99196L14.5284 6.84452Z" fill="#252525" fillOpacity="0.5"/></svg>
+    <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M11.623 5.476C10.436 5.476 9.338 5.099 8.44 4.458V9.115C8.44 11.445 6.551 13.333 4.22 13.333c-.87 0-1.678-.263-2.35-.714C.743 11.863 0 10.575 0 9.115 0 6.786 1.89 4.897 4.22 4.897c.194 0 .388.013.58.039v.517l-.001 1.816c-.185-.059-.38-.09-.586-.09-1.066 0-1.931.865-1.931 1.93 0 .753.432 1.406 1.073 1.724.261.132.555.206.858.206 1.064 0 1.928-.86 1.932-1.923V0h2.296v.294c.009.087.02.175.035.262.16.909.704 1.687 1.458 2.158.507.317 1.093.484 1.69.483v1.78Z" fill="currentColor"/></svg>
   );
 }
 
 function InstagramIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3.51c2.114 0 2.364.008 3.199.046.502.006.999.098 1.47.273.344.127.655.33.91.593.263.255.465.566.592.91.175.471.267.968.273 1.47.038.835.046 1.085.046 3.199s-.008 2.364-.046 3.199a4.499 4.499 0 0 1-.273 1.469 3.016 3.016 0 0 1-.592.91 3.016 3.016 0 0 1-.91.593c-.471.174-.968.267-1.47.273-.835.038-1.085.046-3.199.046s-2.364-.008-3.199-.046a4.499 4.499 0 0 1-1.469-.273 3.016 3.016 0 0 1-.91-.593 3.016 3.016 0 0 1-.593-.91 4.499 4.499 0 0 1-.273-1.469c-.038-.835-.046-1.085-.046-3.199s.008-2.364.046-3.199c.006-.502.098-.999.273-1.47.127-.344.33-.655.593-.91.255-.263.566-.465.91-.592.471-.175.968-.267 1.47-.273.835-.038 1.085-.046 3.199-.046Zm0-1.427C7.85 2.083 7.58 2.093 6.736 2.13a5.937 5.937 0 0 0-1.922.368 3.778 3.778 0 0 0-2.402 2.402 5.937 5.937 0 0 0-.368 1.922c-.04.844-.048 1.114-.048 3.178s.008 2.334.048 3.178c.013.657.137 1.306.368 1.922a3.778 3.778 0 0 0 2.402 2.402c.616.231 1.265.355 1.922.368.844.04 1.114.048 3.178.048s2.334-.008 3.178-.048a5.937 5.937 0 0 0 1.922-.368 3.778 3.778 0 0 0 2.402-2.402c.231-.616.355-1.265.368-1.922.04-.844.048-1.114.048-3.178s-.008-2.334-.048-3.178a5.937 5.937 0 0 0-.368-1.922 3.778 3.778 0 0 0-2.402-2.402 5.937 5.937 0 0 0-1.922-.368c-.844-.04-1.114-.048-3.178-.048Zm0 3.851a4.066 4.066 0 1 0 0 8.132 4.066 4.066 0 0 0 0-8.132Zm0 6.706a2.64 2.64 0 1 1 0-5.28 2.64 2.64 0 0 1 0 5.28Zm4.226-7.816a.95.95 0 1 0 0 1.9.95.95 0 0 0 0-1.9Z" fill="#252525" fillOpacity="0.5"/></svg>
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.333 1.141c1.691 0 1.891.007 2.56.037.4.005.8.079 1.175.218.275.102.524.264.728.474.21.204.372.453.474.728.14.377.213.774.218 1.176.03.675.037.876.037 2.566s-.006 1.891-.037 2.56a3.6 3.6 0 0 1-.218 1.175 2.16 2.16 0 0 1-.474.728 2.16 2.16 0 0 1-.728.474c-.377.14-.774.213-1.176.218-.675.03-.876.037-2.559.037s-1.891-.006-2.56-.037a3.6 3.6 0 0 1-1.175-.218 2.16 2.16 0 0 1-.728-.474 2.16 2.16 0 0 1-.474-.728 3.6 3.6 0 0 1-.218-1.176c-.03-.675-.037-.876-.037-2.559s.007-1.891.037-2.56c.005-.4.079-.8.218-1.175.102-.275.264-.524.474-.728a2.16 2.16 0 0 1 .728-.474c.377-.14.774-.213 1.176-.218.675-.03.876-.037 2.559-.037Zm0-1.141C4.614 0 4.398.007 3.722.038A4.75 4.75 0 0 0 2.185.332a3.3 3.3 0 0 0-1.122.731A3.3 3.3 0 0 0 .332 2.185 4.75 4.75 0 0 0 .039 3.722C.007 4.398 0 4.614 0 6.333s.007 1.936.038 2.611c.01.526.11 1.045.294 1.537.16.423.409.806.731 1.122.316.322.7.572 1.122.731.493.184 1.012.284 1.537.294.676.032.891.039 2.611.039s1.936-.008 2.611-.038a4.75 4.75 0 0 0 1.537-.294 3.3 3.3 0 0 0 1.122-.731c.322-.316.572-.7.731-1.122.184-.493.284-1.012.294-1.537.032-.676.039-.891.039-2.611s-.008-1.936-.038-2.611a4.75 4.75 0 0 0-.294-1.537 3.3 3.3 0 0 0-.731-1.122A3.3 3.3 0 0 0 10.482.332 4.75 4.75 0 0 0 8.944.039C8.269.007 8.053 0 6.333 0Zm0 3.08a3.253 3.253 0 1 0 0 6.506 3.253 3.253 0 0 0 0-6.505Zm0 5.364a2.111 2.111 0 1 1 0-4.222 2.111 2.111 0 0 1 0 4.222Zm3.381-6.252a.76.76 0 1 0 0 1.52.76.76 0 0 0 0-1.52Z" fill="currentColor"/></svg>
   );
 }
 
 
 function MatchCircleIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="6.67" stroke="#00994D" strokeWidth="1.33" fill="none" />
-      <circle cx="8" cy="8" r="3" fill="#00994D" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M8.665.665c1.948 0 3.83.71 5.29 2C15.417 3.952 16.358 5.73 16.602 7.662c.244 1.933-.225 3.888-1.32 5.5a8.003 8.003 0 0 1-4.627 3.251 8.003 8.003 0 0 1-5.622-.62 8.003 8.003 0 0 1-3.806-4.183 8.003 8.003 0 0 1-.089-5.655A8.003 8.003 0 0 1 4.811 1.654" stroke="#34D399" strokeWidth="1.33" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -280,7 +279,7 @@ function SparkleStarBg() {
 function ClockIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 1 0 0 10A5 5 0 0 0 6 1ZM6.5 3.5a.5.5 0 0 0-1 0V6c0 .18.1.34.25.43l2 1.2a.5.5 0 0 0 .5-.86L6.5 5.72V3.5Z" fill="rgba(37,37,37,0.4)" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M6 1a5 5 0 1 0 0 10A5 5 0 0 0 6 1ZM6.5 3.5a.5.5 0 0 0-1 0V6c0 .18.1.34.25.43l2 1.2a.5.5 0 0 0 .5-.86L6.5 5.72V3.5Z" fill="currentColor" fillOpacity="0.4" />
     </svg>
   );
 }
@@ -465,26 +464,26 @@ const questionToStep = [0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3];
 
 const quizQuestions = [
   // ── You (step 0) ──
-  { question: "What\u2019s your age range?", subtitle: null, options: ["14-17", "18-24", "25-34", "35-44", "45-54", "55+"] },
-  { question: "Where are you based?", subtitle: null, options: ["United States", "United Kingdom", "Canada", "Germany", "Brazil", "India", "Philippines", "Nigeria", "Mexico", "Australia", "France", "Japan", "South Korea", "Other"] },
+  { question: "What\u2019s your age range?", subtitle: null, options: ["14-17", "18-24", "25-34", "35-44", "45-54", "55+"], multi: false },
+  { question: "Where are you based?", subtitle: null, options: ["United States", "United Kingdom", "Canada", "Germany", "Brazil", "India", "Philippines", "Nigeria", "Mexico", "Australia", "France", "Japan", "South Korea", "Other"], multi: false },
   // ── Content (step 1) ──
-  { question: "What language(s) do you create content in?", subtitle: "Pick at least one", options: ["English", "Spanish", "Portuguese", "French", "German", "Arabic", "Hindi", "Japanese", "Korean", "Other"] },
-  { question: "What niches best describe your content?", subtitle: "Select up to 5", options: ["Entertainment", "Gaming", "Tech", "Lifestyle", "Sports", "Beauty", "Music", "Health", "News", "Crypto"] },
-  { question: "What type of gaming content do you create?", subtitle: "Pick at least one", options: ["FPS/Battle Royal", "Sports games", "RPG/MMO", "Mobile gaming", "Strategy/Sim", "Fighting games", "Retro/Indy"] },
-  { question: "What content formats do you create?", subtitle: "Pick at least one", options: ["Short clips (<60s)", "Mid-form (1-3min)", "Long form (10+ min)", "Livestreams", "Stories/Reels"] },
+  { question: "What language(s) do you create content in?", subtitle: "Pick at least one", options: ["English", "Spanish", "Portuguese", "French", "German", "Arabic", "Hindi", "Japanese", "Korean", "Other"], multi: true },
+  { question: "What niches best describe your content?", subtitle: "Select up to 5", options: ["Entertainment", "Gaming", "Tech", "Lifestyle", "Sports", "Beauty", "Music", "Health", "News", "Crypto"], multi: true },
+  { question: "What type of gaming content do you create?", subtitle: "Pick at least one", options: ["FPS/Battle Royal", "Sports games", "RPG/MMO", "Mobile gaming", "Strategy/Sim", "Fighting games", "Retro/Indy"], multi: true },
+  { question: "What content formats do you create?", subtitle: "Pick at least one", options: ["Short clips (<60s)", "Mid-form (1-3min)", "Long form (10+ min)", "Livestreams", "Stories/Reels"], multi: true },
   // ── Experience (step 2) ──
-  { question: "How long have you been creating content?", subtitle: null, options: ["Less than 6 months", "6 months - 1 year", "1-3 years", "3-5 years", "5+ years"] },
-  { question: "Have you done paid brand collaborations?", subtitle: null, options: ["Yes, regularly", "A few times", "Never, but interested", "Not yet"] },
-  { question: "Have you done clipping/reposting campaigns before?", subtitle: "Clipping = taking brand content and reposting to your channels for views", options: ["Yes, I\u2019m experienced", "I\u2019ve tried it once or twice", "No, but I\u2019m interested", "What\u2019s clipping?"] },
-  { question: "How much have you earned total from content creation?", subtitle: "Include all sources: creator funds, brand deals, tips, etc.", options: ["$0 (haven\u2019t earned yet)", "Under $100", "$100-$1,000", "$1,000-$5,000", "$5,000-$25,000", "$25,000-$100,000", "$100,000+"] },
-  { question: "What other creator programs or platforms have you used?", subtitle: "Select at least one", options: ["TikTok Creator Fund", "Youtube Partner Program", "Instagram bonuses/Reels play", "Kick/Twitch", "Whop", "Patreon/Ko-fi", "Clipping networks", "Fiverr/Upwork", "Brand deal platforms", "None yet"] },
+  { question: "How long have you been creating content?", subtitle: null, options: ["Less than 6 months", "6 months - 1 year", "1-3 years", "3-5 years", "5+ years"], multi: false },
+  { question: "Have you done paid brand collaborations?", subtitle: null, options: ["Yes, regularly", "A few times", "Never, but interested", "Not yet"], multi: false },
+  { question: "Have you done clipping/reposting campaigns before?", subtitle: "Clipping = taking brand content and reposting to your channels for views", options: ["Yes, I\u2019m experienced", "I\u2019ve tried it once or twice", "No, but I\u2019m interested", "What\u2019s clipping?"], multi: false },
+  { question: "How much have you earned total from content creation?", subtitle: "Include all sources: creator funds, brand deals, tips, etc.", options: ["$0 (haven\u2019t earned yet)", "Under $100", "$100-$1,000", "$1,000-$5,000", "$5,000-$25,000", "$25,000-$100,000", "$100,000+"], multi: false },
+  { question: "What other creator programs or platforms have you used?", subtitle: "Select at least one", options: ["TikTok Creator Fund", "Youtube Partner Program", "Instagram bonuses/Reels play", "Kick/Twitch", "Whop", "Patreon/Ko-fi", "Clipping networks", "Fiverr/Upwork", "Brand deal platforms", "None yet"], multi: true },
   // ── Goals (step 3) ──
-  { question: "What\u2019s your primary goal on Content Rewards?", subtitle: null, options: ["Earn money from my content", "Grow my audience", "Work with top brands", "Build my content portfolio", "All of the above"] },
-  { question: "What monthly earning target would motivate you?", subtitle: null, options: ["$50-$100", "$100-$500", "$500-$2,000", "$2,000-$5,000", "$5,000+"] },
-  { question: "How do you prefer to get paid?", subtitle: "Clipping campaigns pay per view (CPM). Retainers pay a fixed monthly rate for ongoing work.", options: ["CPM - I want to earn per view", "Retainer - I want steady monthly income", "Both - I\u2019ll take either", "Not sure yet"] },
-  { question: "What type of content work are you open to?", subtitle: "Select at least one", options: ["Clipping/reposting brand content", "UGC - creating original videos for brands", "Posting content on my accounts", "Live streaming sponsored content", "Review/unboxing products"] },
-  { question: "What brand categories interest you?", subtitle: "Select at least one", options: ["Entertainment", "Gaming", "Tech", "Lifestyle", "Sports", "Beauty", "Music", "Health", "News", "Crypto"] },
-  { question: "How many hours per week do you spend on content?", subtitle: null, options: ["Less than 5 hours", "5-15 hours", "15-30 hours", "30+ hours", "Full-time creator"] },
+  { question: "What\u2019s your primary goal on Content Rewards?", subtitle: null, options: ["Earn money from my content", "Grow my audience", "Work with top brands", "Build my content portfolio", "All of the above"], multi: false },
+  { question: "What monthly earning target would motivate you?", subtitle: null, options: ["$50-$100", "$100-$500", "$500-$2,000", "$2,000-$5,000", "$5,000+"], multi: false },
+  { question: "How do you prefer to get paid?", subtitle: "Clipping campaigns pay per view (CPM). Retainers pay a fixed monthly rate for ongoing work.", options: ["CPM - I want to earn per view", "Retainer - I want steady monthly income", "Both - I\u2019ll take either", "Not sure yet"], multi: false },
+  { question: "What type of content work are you open to?", subtitle: "Select at least one", options: ["Clipping/reposting brand content", "UGC - creating original videos for brands", "Posting content on my accounts", "Live streaming sponsored content", "Review/unboxing products"], multi: true },
+  { question: "What brand categories interest you?", subtitle: "Select at least one", options: ["Entertainment", "Gaming", "Tech", "Lifestyle", "Sports", "Beauty", "Music", "Health", "News", "Crypto"], multi: true },
+  { question: "How many hours per week do you spend on content?", subtitle: null, options: ["Less than 5 hours", "5-15 hours", "15-30 hours", "30+ hours", "Full-time creator"], multi: false },
 ];
 
 export default function CreatorForYouPage() {
@@ -518,9 +517,7 @@ export default function CreatorForYouPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
-          <div className="relative isolate flex w-full max-w-[400px] flex-col items-center gap-6 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
-            {/* Decorative particles */}
-            <QuizParticles />
+          <div className="relative isolate flex w-full max-w-[400px] flex-col items-center gap-6 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
 
             {/* Subtle ellipse glow — inside card, anchored to bottom */}
             <div
@@ -539,8 +536,8 @@ export default function CreatorForYouPage() {
             {/* Text */}
             <div className="relative z-[3] flex flex-col items-center gap-4">
               <div className="flex flex-col items-center gap-2">
-                <h2 className="text-lg font-medium tracking-[-0.02em] text-page-text">Find your perfect fit</h2>
-                <p className="max-w-[320px] text-center text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">
+                <h2 className="text-lg font-medium tracking-[-0.02em] text-page-text dark:text-[#E0E0E0]">Find your perfect fit</h2>
+                <p className="max-w-[320px] text-center text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle dark:text-[rgba(224,224,224,0.5)]">
                   Answer a few quick questions and we will match you with campaigns that fit your style, audience, and goals.
                 </p>
               </div>
@@ -549,7 +546,7 @@ export default function CreatorForYouPage() {
               <div className="flex flex-col items-center gap-2.5">
                 <button
                   onClick={() => setStage("quiz-questions")}
-                  className="rounded-full px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-105"
+                  className="rounded-full px-5 py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-transform hover:scale-105 dark:text-[#252525]"
                   style={{
                     background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207",
                   }}
@@ -558,7 +555,7 @@ export default function CreatorForYouPage() {
                 </button>
                 <div className="flex items-center gap-1">
                   <ClockIcon />
-                  <span className="text-xs tracking-[-0.02em] text-foreground/40">Takes about 2 min</span>
+                  <span className="text-xs tracking-[-0.02em] text-foreground/40 dark:text-[rgba(224,224,224,0.4)]">Takes about 2 min</span>
                 </div>
               </div>
             </div>
@@ -604,7 +601,11 @@ export default function CreatorForYouPage() {
     const toggleOption = (opt: string) => {
       setQuizAnswers((prev) => {
         const curr = prev[quizStep] ?? [];
-        return { ...prev, [quizStep]: curr.includes(opt) ? curr.filter((o) => o !== opt) : [...curr, opt] };
+        if (q.multi) {
+          return { ...prev, [quizStep]: curr.includes(opt) ? curr.filter((o) => o !== opt) : [...curr, opt] };
+        }
+        // Single select — replace
+        return { ...prev, [quizStep]: curr.includes(opt) ? [] : [opt] };
       });
     };
 
@@ -631,14 +632,14 @@ export default function CreatorForYouPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
-          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-4 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
+          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-4 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
             {/* Back button */}
             <button
               onClick={goBack}
               className="absolute left-6 top-6 z-[4] flex size-5 items-center justify-center rounded-full bg-foreground/[0.12] transition-colors hover:bg-foreground/[0.20]"
             >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M7.5 9L4.5 6L7.5 3" stroke="#252525" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
@@ -650,8 +651,6 @@ export default function CreatorForYouPage() {
               Skip quiz
             </button>
 
-            {/* Decorative particles */}
-            <QuizParticles />
 
             {/* Subtle ellipse glow */}
             <div
@@ -690,11 +689,11 @@ export default function CreatorForYouPage() {
                               "flex size-7 shrink-0 items-center justify-center rounded-full sm:size-9",
                               isActiveOrPast
                                 ? "shadow-[inset_0_0_0_0.9px_rgba(229,113,0,0.08),0_1px_2px_rgba(0,0,0,0.03)]"
-                                : "bg-white shadow-[inset_0_0_0_0.9px_rgba(37,37,37,0.06)] dark:bg-card-bg dark:shadow-[inset_0_0_0_0.9px_rgba(255,255,255,0.06)]"
+                                : "bg-white shadow-[inset_0_0_0_0.9px_rgba(37,37,37,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[inset_0_0_0_0.9px_rgba(224,224,224,0.06)]"
                             )}
-                            style={isActiveOrPast ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.2) 0%, rgba(255,144,37,0) 90.69%), #FFFFFF" } : undefined}
+                            style={isActiveOrPast ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.2) 0%, rgba(255,144,37,0) 90.69%), var(--card-bg, #FFFFFF)" } : undefined}
                           >
-                            <span className={isActiveOrPast ? "text-[#E57100]" : "text-page-text-subtle"}>{stepIcons[i]}</span>
+                            <span className={isActiveOrPast ? "text-[#E57100] dark:text-[#FB923C]" : "text-page-text-subtle"}>{stepIcons[i]}</span>
                           </div>
                           <span className={cn(
                             "text-xs font-medium tracking-[-0.02em]",
@@ -744,7 +743,7 @@ export default function CreatorForYouPage() {
                         "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-medium tracking-[-0.02em] transition-colors",
                         selected.includes(opt)
                           ? "border-[rgba(255,144,37,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),#FFFFFF] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-                          : "border-foreground/[0.06] bg-white text-page-text-muted hover:bg-foreground/[0.02] dark:border-white/[0.06] dark:bg-card-bg"
+                          : "border-foreground/[0.06] bg-white text-page-text-muted hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                       )}
                     >
                       {optionFlags[opt]}
@@ -779,7 +778,27 @@ export default function CreatorForYouPage() {
 
   // ── Campaign feed stage ───────────────────────────────────────
   return (
-    <div className="relative flex min-h-screen flex-col bg-page-bg font-inter tracking-[-0.02em]">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-page-bg font-inter tracking-[-0.02em]">
+      {/* Blurred campaign thumbnail background */}
+      <div
+        className="pointer-events-none absolute left-0 top-1/2 z-0 h-[700px] w-full -translate-y-1/2 opacity-50"
+        style={{
+          filter: "blur(50px)",
+          backdropFilter: "blur(100px)",
+          WebkitBackdropFilter: "blur(100px)",
+          maskImage: "radial-gradient(84.57% 84.57% at 50% 50%, #FFFFFF 0%, rgba(255,255,255,0) 35%)",
+          WebkitMaskImage: "radial-gradient(84.57% 84.57% at 50% 50%, #FFFFFF 0%, rgba(255,255,255,0) 35%)",
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${campaign.thumbnail})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      </div>
 
       {/* ── Header ─────────────────────────────────────────────── */}
       <CreatorHeader title="For you" className="relative z-10 border-transparent bg-transparent" />
@@ -799,12 +818,12 @@ export default function CreatorForYouPage() {
                 {campaign.platforms.map((p) => (
                   <span
                     key={p}
-                    className="flex size-6 items-center justify-center rounded-full border border-foreground/[0.06] bg-white text-page-text dark:border-white/[0.06] dark:bg-card-bg"
+                    className="flex size-6 items-center justify-center rounded-full border border-foreground/[0.06] bg-white text-page-text dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
                   >
                     {platformIcon(p)}
                   </span>
                 ))}
-                <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 text-page-text dark:border-white/[0.06] dark:bg-card-bg">
+                <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 text-page-text dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                   <GamepadIcon className="size-3 text-page-text" />
                   <span className="text-xs font-medium">{campaign.category}</span>
                 </span>
@@ -812,7 +831,7 @@ export default function CreatorForYouPage() {
             </div>
 
             {/* Main card */}
-            <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+            <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               {/* Thumbnail area */}
               <div className="relative isolate flex items-center justify-center overflow-hidden" style={{ height: "294px" }}>
                 {/* Blurred bg behind image */}
@@ -841,7 +860,7 @@ export default function CreatorForYouPage() {
                       <img
                         src={campaign.brandLogo}
                         alt={campaign.brand}
-                        className="size-4 rounded-full border border-foreground/[0.06] object-cover"
+                        className="size-4 rounded-full border border-foreground/[0.06] object-cover dark:border-[rgba(224,224,224,0.03)]"
                       />
                       <span className="text-xs font-medium tracking-[-0.24px] text-page-text">{campaign.brand}</span>
                       {campaign.verified && <VerifiedBadge />}
@@ -865,18 +884,18 @@ export default function CreatorForYouPage() {
             </div>
 
             {/* Stats bar */}
-            <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+            <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               <div className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-4">
                 <div className="flex flex-1 flex-wrap items-center gap-1">
                   {/* Creators pill */}
-                  <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-white/[0.06] dark:bg-card-bg">
+                  <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                     <UsersIcon />
                     <span className="text-xs font-medium text-page-text">{campaign.creators}</span>
                   </span>
                   {/* CPM pill */}
-                  <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-white/[0.06] dark:bg-card-bg">
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333C4.364 1.333 1.227 3.63 0 7.333c1.227 3.703 4.364 6 8 6s6.773-2.297 8-6c-1.227-3.703-4.364-6-8-6Zm0 9.667a3.667 3.667 0 1 0 0-7.333 3.667 3.667 0 0 0 0 7.333Zm0-1.833a1.833 1.833 0 1 0 0-3.667 1.833 1.833 0 0 0 0 3.667Z" fill="#1A67E5"/></svg>
-                    <span className="text-xs font-medium text-[#1A67E5]">{campaign.cpmRate}</span>
+                  <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                    <svg width="12" height="12" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#60A5FA"/></svg>
+                    <span className="text-xs font-medium text-[#1A67E5] dark:text-[#60A5FA]">{campaign.cpmRate}</span>
                   </span>
                 </div>
                 {/* Budget */}
@@ -967,7 +986,7 @@ export default function CreatorForYouPage() {
 
 // ── Campaign Detail Panel ──────────────────────────────────────────
 
-const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg";
+const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
 const DETAIL_CHART_POINTS = [
   { index: 0, label: "Jan 5", views: 20000, engagement: 120, likes: 0, comments: 0, shares: 0 },
@@ -1102,7 +1121,7 @@ function CampaignDetail({
                 <img
                   src={campaign.brandLogo}
                   alt={campaign.brand}
-                  className="size-6 rounded-full shadow-[0_0_0_1.2px_rgba(255,255,255,0.4)]"
+                  className="size-6 rounded-full shadow-[0_0_0_1.2px_rgba(255,255,255,0.4)] dark:shadow-[0_0_0_1.2px_rgba(224,224,224,0.1)]"
                 />
                 <div className="flex flex-1 items-center gap-1.5">
                   <span className="text-sm font-medium text-page-text">{campaign.brand}</span>
@@ -1121,22 +1140,22 @@ function CampaignDetail({
               {/* Pills row */}
               <div className="flex items-center gap-2">
                 <div className="flex flex-1 flex-wrap items-center gap-2">
-                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-white/[0.06]">
+                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                     <UsersIcon className="size-4 text-page-text" />
                     <span className="text-sm font-medium text-page-text">{campaign.creators}</span>
                   </span>
-                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-white/[0.06]">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333C4.364 1.333 1.227 3.63 0 7.333c1.227 3.703 4.364 6 8 6s6.773-2.297 8-6c-1.227-3.703-4.364-6-8-6Zm0 9.667a3.667 3.667 0 1 0 0-7.333 3.667 3.667 0 0 0 0 7.333Zm0-1.833a1.833 1.833 0 1 0 0-3.667 1.833 1.833 0 0 0 0 3.667Z" fill="#1A67E5"/></svg>
-                    <span className="text-sm font-medium text-[#1A67E5]">{campaign.cpmRate}</span>
+                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                    <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#60A5FA"/></svg>
+                    <span className="text-sm font-medium text-[#1A67E5] dark:text-[#60A5FA]">{campaign.cpmRate}</span>
                   </span>
                   <span className="text-xs text-foreground/20">&middot;</span>
-                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-white/[0.06]">
+                  <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                     <GamepadIcon className="size-4 text-page-text" />
                     <span className="text-sm font-medium text-page-text">{campaign.category}</span>
                   </span>
                   <span className="text-xs text-foreground/20">&middot;</span>
                   {["YouTube", "TikTok", "Instagram"].map((p) => (
-                    <span key={p} className="flex size-8 items-center justify-center rounded-full border border-foreground/[0.06] bg-white text-page-text dark:border-white/[0.06]">
+                    <span key={p} className="flex size-8 items-center justify-center rounded-full border border-foreground/[0.06] bg-white text-page-text dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                       {p === "TikTok" ? <TikTokIcon /> : p === "Instagram" ? <InstagramIcon /> : <YouTubeIcon />}
                     </span>
                   ))}
@@ -1148,7 +1167,7 @@ function CampaignDetail({
                     <span className="text-page-text-muted">/</span>
                     <span className="text-page-text-muted">{campaign.budgetTotal}</span>
                   </div>
-                  <div className="h-1 w-32 overflow-hidden rounded-full bg-foreground/[0.06]">
+                  <div className="h-1 w-32 overflow-hidden rounded-full bg-foreground/[0.06] dark:bg-white/[0.06]">
                     <div className="h-full rounded-full" style={{ width: `${campaign.budgetPercent}%`, background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }} />
                   </div>
                 </div>
@@ -1166,7 +1185,7 @@ function CampaignDetail({
               <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
                 <span className="text-sm font-medium text-page-text">Creator requirements</span>
                 <div className="flex gap-1">
-                  <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12]" />
+                  <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12] dark:bg-white/[0.12]" />
                   <div className="flex flex-col gap-1 pl-2">
                     <div className="flex items-center gap-1.5">
                       <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
@@ -1186,7 +1205,7 @@ function CampaignDetail({
                 <div className="flex flex-col gap-3">
                   <span className="text-sm font-semibold text-page-text">Some title:</span>
                   <div className="flex gap-1">
-                    <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12]" />
+                    <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12] dark:bg-white/[0.12]" />
                     <div className="flex flex-col gap-1 pl-2">
                       <div className="flex items-center gap-1.5">
                         <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
@@ -1206,7 +1225,7 @@ function CampaignDetail({
                 {platforms.map((p) => (
                   <div key={p.name} className={cn(cardCls, "flex flex-col justify-center gap-4 p-4")}>
                     <div className="flex items-center gap-3">
-                      <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)]">
+                      <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">
                         {p.name === "YouTube" ? <YouTubeIcon /> : p.name === "TikTok" ? <TikTokIcon /> : <InstagramIcon />}
                       </div>
                       <div className="flex flex-col gap-1">
@@ -1215,8 +1234,8 @@ function CampaignDetail({
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <span className="rounded-full border border-foreground/[0.06] px-2.5 py-2 text-sm font-medium text-page-text">{p.min}</span>
-                      <span className="rounded-full border border-foreground/[0.06] px-2.5 py-2 text-sm font-medium text-page-text">{p.max}</span>
+                      <span className="rounded-full border border-foreground/[0.06] bg-white px-2.5 py-2 text-sm font-medium text-page-text dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">{p.min}</span>
+                      <span className="rounded-full border border-foreground/[0.06] bg-white px-2.5 py-2 text-sm font-medium text-page-text dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">{p.max}</span>
                     </div>
                   </div>
                 ))}
@@ -1228,7 +1247,7 @@ function CampaignDetail({
                 <div className="grid grid-cols-2 gap-2">
                   {resources.map((r) => (
                     <div key={r.name + r.desc} className={cn(cardCls, "flex cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}>
-                      <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)]">
+                      <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)]">
                         {r.name === "Google Drive" ? (
                           <svg width="20" height="18" viewBox="0 0 20 18" fill="none"><path d="M1.512 15.314l.882 1.524c.183.32.447.573.756.756L6.3 12.141H0c0 .355.092.71.275 1.031l1.237 2.142Z" fill="#0066DA"/><path d="M10 5.727L6.85.275a1.87 1.87 0 0 0-.756.756L.275 11.111A1.85 1.85 0 0 0 0 12.142h6.3L10 5.727Z" fill="#00AC47"/><path d="M16.85 17.594c.31-.184.573-.448.756-.756l.366-.63 1.753-3.035c.183-.32.275-.676.275-1.031h-6.3l1.34 2.634 1.81 2.818Z" fill="#EA4335"/><path d="M10 5.727l3.15-5.452A1.84 1.84 0 0 0 12.12 0H7.882c-.366 0-.721.103-1.031.275L10 5.727Z" fill="#00832D"/><path d="M13.699 12.141H6.3L3.149 17.594c.31.183.665.275 1.031.275h11.638c.366 0 .722-.103 1.031-.275l-3.15-5.453Z" fill="#2684FC"/><path d="M16.816 6.071l-2.91-5.04a1.871 1.871 0 0 0-.756-.756L10 5.727l3.7 6.415h6.289c0-.355-.091-.71-.275-1.031l-2.898-5.04Z" fill="#FFBA00"/></svg>
                         ) : r.name === "Dropbox" ? (
@@ -1242,7 +1261,7 @@ function CampaignDetail({
                         <span className="text-xs text-page-text-subtle">{r.desc}</span>
                       </div>
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M9.333 3.333a.667.667 0 0 1 0-1.333h4a.667.667 0 0 1 .667.667v4a.667.667 0 1 1-1.333 0V4.276l-4.862 4.862a.667.667 0 0 1-.943-.943l4.862-4.862H9.333ZM4.774 3.333H6a.667.667 0 0 1 0 1.334H4.8c-.384 0-.633 0-.822.016-.181.015-.248.04-.281.057a.667.667 0 0 0-.291.291c-.017.033-.042.1-.057.281-.016.19-.016.438-.016.822v5.067c0 .384 0 .632.016.821.015.181.04.249.057.282a.667.667 0 0 0 .291.29c.033.018.1.043.281.058.19.016.438.016.822.016h5.067c.384 0 .632 0 .821-.016.181-.015.249-.04.282-.057a.667.667 0 0 0 .29-.291c.018-.033.043-.1.058-.282.016-.189.016-.437.016-.821V10a.667.667 0 1 1 1.334 0v1.226c0 .352 0 .655-.02.905-.024.264-.071.526-.2.778a2 2 0 0 1-.874.874c-.252.129-.514.176-.778.2-.25.02-.553.02-.905.02H4.774c-.351 0-.654 0-.904-.02a2.019 2.019 0 0 1-.778-.2 2 2 0 0 1-.874-.874 2.019 2.019 0 0 1-.2-.778c-.02-.25-.02-.553-.02-.905V6.108c0-.352 0-.655.02-.905.024-.264.072-.526.2-.778a2 2 0 0 1 .874-.874c.252-.129.514-.176.778-.2.25-.02.553-.02.905-.02Z" fill="#252525" fillOpacity="0.5"/>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M9.333 3.333a.667.667 0 0 1 0-1.333h4a.667.667 0 0 1 .667.667v4a.667.667 0 1 1-1.333 0V4.276l-4.862 4.862a.667.667 0 0 1-.943-.943l4.862-4.862H9.333ZM4.774 3.333H6a.667.667 0 0 1 0 1.334H4.8c-.384 0-.633 0-.822.016-.181.015-.248.04-.281.057a.667.667 0 0 0-.291.291c-.017.033-.042.1-.057.281-.016.19-.016.438-.016.822v5.067c0 .384 0 .632.016.821.015.181.04.249.057.282a.667.667 0 0 0 .291.29c.033.018.1.043.281.058.19.016.438.016.822.016h5.067c.384 0 .632 0 .821-.016.181-.015.249-.04.282-.057a.667.667 0 0 0 .29-.291c.018-.033.043-.1.058-.282.016-.189.016-.437.016-.821V10a.667.667 0 1 1 1.334 0v1.226c0 .352 0 .655-.02.905-.024.264-.071.526-.2.778a2 2 0 0 1-.874.874c-.252.129-.514.176-.778.2-.25.02-.553.02-.905.02H4.774c-.351 0-.654 0-.904-.02a2.019 2.019 0 0 1-.778-.2 2 2 0 0 1-.874-.874 2.019 2.019 0 0 1-.2-.778c-.02-.25-.02-.553-.02-.905V6.108c0-.352 0-.655.02-.905.024-.264.072-.526.2-.778a2 2 0 0 1 .874-.874c.252-.129.514-.176.778-.2.25-.02.553-.02.905-.02Z" fill="currentColor" fillOpacity="0.5"/>
                       </svg>
                     </div>
                   ))}
@@ -1287,16 +1306,16 @@ function CampaignDetail({
               <div className={cn(cardCls, "flex flex-col justify-center gap-4 p-4")}>
                 <div className="flex flex-col gap-4">
                   {/* Tab switcher */}
-                  <div className="flex rounded-xl bg-foreground/[0.06] p-0.5" style={{ width: "fit-content" }}>
+                  <div className="flex rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-[rgba(224,224,224,0.03)]" style={{ width: "fit-content" }}>
                     <button
                       onClick={() => { setChartTab("views"); setMetricState({ views: true, engagement: false }); }}
-                      className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "views" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}
+                      className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "views" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
                     >
                       Views
                     </button>
                     <button
                       onClick={() => { setChartTab("submissions"); setMetricState({ views: false, engagement: true }); }}
-                      className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "submissions" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}
+                      className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "submissions" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
                     >
                       Submissions
                     </button>
@@ -1320,11 +1339,11 @@ function CampaignDetail({
           </div>
 
           {/* Bottom fade inside scroll area */}
-          <div className="pointer-events-none sticky bottom-0 -mt-8 h-8 bg-gradient-to-t from-white to-transparent dark:from-card-bg" />
+          <div className="pointer-events-none sticky bottom-0 -mt-8 h-8 bg-gradient-to-t from-white to-transparent dark:from-page-bg" />
         </div>
 
         {/* Bottom action bar */}
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] bg-white px-5 py-3 dark:border-white/[0.06] dark:bg-card-bg">
+        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] bg-white px-5 py-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-page-bg">
           <button onClick={handleCopy} className={cn("flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors", copied ? "bg-[#00994D]/10 text-[#00994D]" : "bg-foreground/[0.06] text-page-text hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]")}>
             {copied ? (
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.333 8L6.667 11.333 12.667 5.333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -1349,6 +1368,6 @@ function CampaignDetail({
 
 function YouTubeIcon() {
   return (
-    <svg width="18" height="15" viewBox="0 0 18 15" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M15.587.423c.753.233 1.345.918 1.547 1.79C17.499 3.79 17.5 7.083 17.5 7.083s0 3.294-.366 4.871c-.202.871-.794 1.556-1.547 1.79C14.223 14.166 8.75 14.166 8.75 14.166s-5.473 0-6.837-.422c-.753-.234-1.345-.919-1.547-1.79C0 10.378 0 7.084 0 7.084s0-3.294.366-4.871C.568 1.341 1.16.656 1.913.423 3.277 0 8.75 0 8.75 0s5.473 0 6.837.423ZM11.678 7.084 6.915 9.833V4.334l4.763 2.75Z" fill="#252525" fillOpacity="0.5"/></svg>
+    <svg width="14" height="12" viewBox="0 0 14 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M12.47.339c.602.186 1.076.734 1.237 1.431C14 3.032 14 5.667 14 5.667s0 2.635-.293 3.897c-.161.697-.635 1.245-1.238 1.431C11.378 11.333 7 11.333 7 11.333s-4.378 0-5.47-.338C.928 10.808.454 10.26.293 9.563 0 8.301 0 5.667 0 5.667S0 3.032.293 1.77C.454 1.073.928.525 1.53.339 2.622 0 7 0 7 0s4.378 0 5.47.339ZM9.342 5.667 5.532 7.867V3.467l3.81 2.2Z" fill="currentColor"/></svg>
   );
 }

@@ -52,6 +52,7 @@ import { Compass } from "./icons/compass";
 import { Contracts } from "./icons/contracts";
 import { UsersIcon as UsersGroupIcon } from "./icons/users";
 import { Help } from "./icons/help";
+import { Trophy } from "./icons/trophy";
 
 import { WorkspaceCard } from "./workspace-card";
 import { SidebarWalletCard } from "./sidebar-wallet-card";
@@ -137,6 +138,7 @@ const NAV_AREAS: SidebarNavAreas = {
           { name: "Discover", icon: Compass, href: "/creator/discover", description: "Browse available campaigns." },
           { name: "My clips", icon: Submissions, href: "/creator/submissions", description: "Your content submissions." },
           { name: "Insights", icon: PieChart, href: "/creator/analytics", description: "Your performance metrics." },
+          { name: "Rewards", icon: Trophy, href: "/creator/rewards", description: "XP, tiers, quests, and streaks." },
           { name: "Community", icon: UsersGroupIcon, href: "/creator/community", description: "Creator community." },
           { name: "Help", icon: Help, href: "/creator/help", description: "Help and support." },
           { name: "Settings", icon: Gear, href: "/creator/settings", description: "Profile and account settings." },

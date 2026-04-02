@@ -16,7 +16,7 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "notifications", label: "Notifications" },
 ];
 
-const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg";
+const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
 // ── Niche icons ────────────────────────────────────────────────────
 
@@ -86,6 +86,16 @@ export default function CreatorSettingsPage() {
   const [autoApply, setAutoApply] = useState(false);
   const [shareAnalytics, setShareAnalytics] = useState(true);
   const [showHistory, setShowHistory] = useState(true);
+  const [selectedNiches, setSelectedNiches] = useState<Set<string>>(
+    () => new Set(niches.filter((n) => n.selected).map((n) => n.label))
+  );
+  const toggleNiche = (label: string) => {
+    setSelectedNiches((prev) => {
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label); else next.add(label);
+      return next;
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
@@ -93,7 +103,7 @@ export default function CreatorSettingsPage() {
 
       <div className="mx-auto flex w-full max-w-[756px] flex-col gap-4 px-4 py-4 sm:px-5 md:px-4">
         {/* Tab bar */}
-        <div className="flex overflow-x-auto border-b border-foreground/[0.06] scrollbar-hide">
+        <div className="flex overflow-x-auto border-b border-foreground/[0.06] scrollbar-hide dark:border-[rgba(224,224,224,0.03)]">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -114,10 +124,10 @@ export default function CreatorSettingsPage() {
         {activeTab === "profile" && (
           <div className="flex flex-col gap-2 md:flex-row">
             {/* Left: Profile info */}
-            <div className={cn(cardCls, "flex flex-1 flex-col gap-4 p-4")}>
+            <div className={cn(cardCls, "flex flex-1 flex-col gap-4 self-start p-4")}>
               {/* Avatar + name */}
               <div className="flex items-center gap-4">
-                <div className="size-14 shrink-0 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500" />
+                <div className="size-14 shrink-0 overflow-hidden rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500 dark:border-[rgba(224,224,224,0.03)]" />
                 <div className="flex flex-col gap-1">
                   <div className="flex items-baseline gap-1">
                     <span className="text-sm font-medium text-page-text">Vlad Shapoval</span>
@@ -127,7 +137,7 @@ export default function CreatorSettingsPage() {
                       <defs><linearGradient id="sg" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse"><stop stopColor="#FDDC87"/><stop offset="1" stopColor="#FCB02B"/></linearGradient></defs>
                     </svg>
                   </div>
-                  <span className="text-xs text-[#00994D]">Verified creator</span>
+                  <span className="text-xs text-[#00994D] dark:text-[#34D399]">Verified creator</span>
                 </div>
               </div>
 
@@ -135,32 +145,32 @@ export default function CreatorSettingsPage() {
               <div className="flex flex-col gap-4">
                 {/* Email */}
                 <div className="flex flex-col gap-2">
-                  <span className="text-xs text-page-text-subtle">Email</span>
-                  <div className="flex items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5 py-3">
-                    <span className="text-sm text-page-text-subtle">vlad@outpacestudios.com</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333A3.333 3.333 0 0 0 4.667 4.667V6A2 2 0 0 0 2.667 8v4.667a2 2 0 0 0 2 2h6.666a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2V4.667A3.333 3.333 0 0 0 8 1.333ZM10 6V4.667a2 2 0 1 0-4 0V6h4Zm-2 2.667a.667.667 0 0 1 .667.666v2a.667.667 0 1 1-1.334 0v-2A.667.667 0 0 1 8 8.667Z" fill="#252525" fillOpacity="0.5"/></svg>
+                  <span className="text-xs text-foreground/50 dark:text-[rgba(224,224,224,0.5)]">Email</span>
+                  <div className="flex items-center justify-between rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 dark:bg-[rgba(224,224,224,0.03)]">
+                    <span className="text-sm text-foreground/50 dark:text-[rgba(224,224,224,0.5)]">vlad@outpacestudios.com</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-foreground/50 dark:text-[rgba(224,224,224,0.5)]"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333A3.333 3.333 0 0 0 4.667 4.667V6A2 2 0 0 0 2.667 8v4.667a2 2 0 0 0 2 2h6.666a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2V4.667A3.333 3.333 0 0 0 8 1.333ZM10 6V4.667a2 2 0 1 0-4 0V6h4Zm-2 2.667a.667.667 0 0 1 .667.666v2a.667.667 0 1 1-1.334 0v-2A.667.667 0 0 1 8 8.667Z" fill="currentColor"/></svg>
                   </div>
-                  <span className="text-xs text-foreground/40">Managed by your Whop account</span>
+                  <span className="text-xs text-foreground/40 dark:text-[rgba(224,224,224,0.4)]">Managed by your Whop account</span>
                 </div>
 
                 {/* Bio */}
                 <div className="flex flex-col gap-2">
-                  <span className="text-xs text-page-text-subtle">Bio</span>
-                  <div className="relative rounded-[14px] bg-foreground/[0.04]">
+                  <span className="text-xs text-foreground/50 dark:text-[rgba(224,224,224,0.5)]">Bio</span>
+                  <div className="relative rounded-[14px] bg-foreground/[0.04] dark:bg-[rgba(224,224,224,0.03)]">
                     <textarea
-                      className="w-full resize-none bg-transparent px-3.5 py-3 text-sm text-page-text outline-none"
+                      className="w-full resize-none bg-transparent px-3.5 py-3 text-sm text-page-text outline-none dark:text-[#E0E0E0]"
                       rows={3}
                       defaultValue="Content creator specializing in gaming, tech, and lifestyle content. 350K+ followers across platforms."
                     />
-                    <span className="absolute bottom-3.5 right-3.5 text-xs text-page-text-subtle">0/300</span>
+                    <span className="absolute bottom-3.5 right-3.5 text-xs text-foreground/50 dark:text-[rgba(224,224,224,0.5)]">0/300</span>
                   </div>
                 </div>
 
                 {/* City */}
                 <div className="flex flex-col gap-2">
-                  <span className="text-xs text-page-text-subtle">City</span>
+                  <span className="text-xs text-foreground/50 dark:text-[rgba(224,224,224,0.5)]">City</span>
                   <input
-                    className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none"
+                    className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none dark:bg-[rgba(224,224,224,0.03)] dark:text-[#E0E0E0]"
                     defaultValue="Los Angeles, CA"
                   />
                 </div>
@@ -168,7 +178,7 @@ export default function CreatorSettingsPage() {
 
               {/* Save */}
               <div className="flex justify-end">
-                <button className="rounded-full bg-page-text px-4 py-2 text-sm font-medium text-white opacity-30">
+                <button className="rounded-full bg-page-text px-4 py-2 text-sm font-medium text-white opacity-30 dark:bg-[#E0E0E0] dark:text-[#252525]">
                   Save changes
                 </button>
               </div>
@@ -181,27 +191,31 @@ export default function CreatorSettingsPage() {
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-page-text">Content niches</span>
-                    <span className="text-xs text-[#00994D]">4 selected</span>
+                    <span className="text-xs text-[#00994D] dark:text-[#34D399]">{selectedNiches.size} selected</span>
                   </div>
                   <span className="text-xs leading-[150%] text-page-text-muted">
                     Select categories that match your content. This helps us recommend relevant campaigns.
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {niches.map((n) => (
-                    <span
-                      key={n.label}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
-                        n.selected
-                          ? "border border-[rgba(255,144,37,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),#FFFFFF] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-                          : "border border-foreground/[0.06] bg-white text-page-text-muted"
-                      )}
-                    >
-                      <span className={n.selected ? "text-page-text" : "text-foreground/50"}>{nicheIcons[n.label]}</span>
-                      {n.label}
-                    </span>
-                  ))}
+                  {niches.map((n) => {
+                    const active = selectedNiches.has(n.label);
+                    return (
+                      <button
+                        key={n.label}
+                        onClick={() => toggleNiche(n.label)}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                          active
+                            ? "border border-[rgba(255,144,37,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),#FFFFFF] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),rgba(224,224,224,0.03)]"
+                            : "border border-foreground/[0.06] bg-white text-page-text-muted dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                        )}
+                      >
+                        <span className={active ? "text-page-text" : "text-foreground/50"}>{nicheIcons[n.label]}</span>
+                        {n.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -244,20 +258,20 @@ export default function CreatorSettingsPage() {
             <div className="flex flex-col gap-2">
               {connectedAccounts.map((a) => (
                 <div key={a.platform} className={cn(cardCls, "flex cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}>
-                  <div className="flex size-9 items-center justify-center rounded-full border border-foreground/[0.06]">
+                  <div className="flex size-9 items-center justify-center rounded-full border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                     {platformIcons[a.platform]}
                   </div>
                   <div className="flex flex-1 flex-col gap-2">
                     <span className="text-sm font-medium text-page-text">{a.platform}</span>
                     <span className="text-xs text-page-text-subtle">{a.handle}</span>
                   </div>
-                  <span className="text-xs font-medium text-[#00994D]">Connected</span>
+                  <span className="text-xs font-medium text-[#00994D] dark:text-[#34D399]">Connected</span>
                 </div>
               ))}
               {/* Add new */}
-              <div className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-foreground/[0.12] p-4 transition-colors hover:border-foreground/[0.25] hover:bg-foreground/[0.02] dark:hover:border-white/[0.15] dark:hover:bg-white/[0.02]">
-                <div className="flex size-9 items-center justify-center rounded-full bg-foreground/[0.06]">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="rgba(37,37,37,0.7)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <div className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-foreground/[0.12] p-4 transition-colors hover:border-foreground/[0.25] hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:border-[rgba(224,224,224,0.15)] dark:hover:bg-white/[0.04]">
+                <div className="flex size-9 items-center justify-center rounded-full bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="text-foreground/70"><path d="M9 3v12M3 9h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </div>
                 <span className="text-sm font-medium text-page-text">Connect another account</span>
               </div>
@@ -281,7 +295,7 @@ export default function CreatorSettingsPage() {
                     <span className="text-sm font-medium text-page-text">{c.name}</span>
                     <span className="text-xs text-page-text-subtle">{c.detail}</span>
                   </div>
-                  <span className="text-xs font-medium text-[#00994D]">{c.status}</span>
+                  <span className="text-xs font-medium text-[#00994D] dark:text-[#34D399]">{c.status}</span>
                 </div>
               ))}
             </div>
@@ -357,9 +371,9 @@ export default function CreatorSettingsPage() {
                   <span className="text-sm font-medium text-page-text">Email summary frequency</span>
                   <span className="text-xs text-page-text-subtle">How often should we bundle your notifications into a digest?</span>
                 </div>
-                <div className="flex rounded-xl bg-foreground/[0.06] p-0.5">
+                <div className="flex rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-[rgba(224,224,224,0.03)]">
                   {["Instant", "Daily", "Weekly", "Off"].map((opt, i) => (
-                    <button key={opt} className={cn("flex-1 rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", i === 0 ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}>
+                    <button key={opt} className={cn("flex-1 rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", i === 0 ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}>
                       {opt}
                     </button>
                   ))}
@@ -395,13 +409,13 @@ function ToggleRow({
       <div
         className={cn(
           "flex h-5 w-10 shrink-0 items-center rounded-full p-0.5 transition-colors",
-          enabled ? "bg-page-text" : "bg-foreground/20"
+          enabled ? "bg-page-text dark:bg-[#E0E0E0]" : "bg-foreground/20 dark:bg-[rgba(224,224,224,0.2)]"
         )}
       >
         <div
           className={cn(
-            "size-4 rounded-full bg-white transition-transform",
-            enabled ? "translate-x-5" : "translate-x-0"
+            "size-4 rounded-full transition-transform",
+            enabled ? "translate-x-5 bg-white dark:bg-[#252525]" : "translate-x-0 bg-white dark:bg-[#252525]"
           )}
         />
       </div>

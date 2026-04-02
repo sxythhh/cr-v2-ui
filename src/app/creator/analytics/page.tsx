@@ -1,14 +1,24 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { CreatorHeader } from "@/components/creator-header";
 import { MoneybagIcon, EyeIcon, MegaphoneIcon, VideoPlaylistIcon } from "@/components/creator-icons";
 import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
 import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
 import { MetricPill } from "@/components/submissions";
+import { PlatformIcon } from "@/components/icons/PlatformIcon";
+import { useProximityHover } from "@/hooks/use-proximity-hover";
+import { springs } from "@/lib/springs";
 
-const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg";
+const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
+
+const TYPE_ICONS: Record<string, React.ReactNode> = {
+  CPM: <svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5.37 0C7.35 0 9.27 1.14 10.55 3.29c.26.44.26.98 0 1.42C9.27 6.86 7.35 8 5.37 8 3.4 8 1.48 6.86.19 4.71a1.5 1.5 0 0 1 0-1.42C1.48 1.14 3.4 0 5.37 0Zm-1.75 4a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0Z" fill="currentColor"/></svg>,
+  "Per video": <svg width="10" height="9" viewBox="0 0 10 9" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 .5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 1 .5ZM0 3c0-.83.67-1.5 1.5-1.5h7C9.33 1.5 10 2.17 10 3v4.5c0 .83-.67 1.5-1.5 1.5h-7C.67 9 0 8.33 0 7.5V3Zm4.28.8a.5.5 0 0 1 .53.06l1.25 1a.5.5 0 0 1 0 .78l-1.25 1A.5.5 0 0 1 4 6.25v-2a.5.5 0 0 1 .28-.45Z" fill="currentColor"/></svg>,
+  Retainer: <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 0a.5.5 0 0 1 .5.5V1h3V.5a.5.5 0 0 1 1 0V1h.5C8.33 1 9 1.67 9 2.5v1a.5.5 0 0 1-.5.5H1v4c0 .28.22.5.5.5h2a.5.5 0 0 1 0 1h-2C.67 9.5 0 8.83 0 8V2.5C0 1.67.67 1 1.5 1H2V.5a.5.5 0 0 1 .5-.5Z" fill="currentColor"/><path d="M7 6.19a1.81 1.81 0 0 0-.48.09l.3.3a.25.25 0 0 1-.18.42H5.5a.5.5 0 0 1-.5-.5v-1.15a.25.25 0 0 1 .43-.18l.35.35A2.31 2.31 0 0 1 7 5.19a2.32 2.32 0 0 1 2.22 1.67.5.5 0 0 1-.97.26A1.32 1.32 0 0 0 7 6.19Z" fill="currentColor"/><path d="M5.74 7.86a.5.5 0 0 0-.96.26A2.32 2.32 0 0 0 7 9.81c.44 0 .86-.13 1.22-.34l.35.35a.25.25 0 0 0 .43-.18V8.5a.5.5 0 0 0-.5-.5h-1.15a.25.25 0 0 0-.18.43l.3.3A1.81 1.81 0 0 1 7 8.81c-.6 0-1.1-.4-1.26-.95Z" fill="currentColor"/></svg>,
+};
 
 const stats = [
   { value: "$3,528.00", label: "Payouts", color: "#00994D", bg: "rgba(0,153,77,0.08)", icon: <MoneybagIcon color="#00994D" /> },
@@ -26,10 +36,10 @@ const campaignRows = [
 ];
 
 const platforms = [
-  { name: "Instagram", icon: "IG", color: "#AE4EEE", bg: "rgba(174,78,238,0.1)", clips: "98 clips", views: "2.8M", barWidth: "80%" },
-  { name: "TikTok", icon: "TT", color: "#00994D", bg: "rgba(0,153,77,0.08)", clips: "74 clips", views: "1.9M", barWidth: "47%" },
-  { name: "YouTube", icon: "YT", color: "#FF3355", bg: "rgba(255,51,85,0.1)", clips: "38 clips", views: "780K", barWidth: "23%" },
-  { name: "X (Twitter)", icon: "X", color: "#000000", bg: "rgba(37,37,37,0.06)", clips: "8 clips", views: "120K", barWidth: "6%" },
+  { name: "Instagram", platformId: "instagram", bg: "rgba(174,78,238,0.1)", clips: "98 clips", views: "2.8M", barWidth: "80%" },
+  { name: "TikTok", platformId: "tiktok", bg: "rgba(0,153,77,0.08)", clips: "74 clips", views: "1.9M", barWidth: "47%" },
+  { name: "YouTube", platformId: "youtube", bg: "rgba(255,51,85,0.1)", clips: "38 clips", views: "780K", barWidth: "23%" },
+  { name: "X (Twitter)", platformId: "x", bg: "rgba(224,224,224,0.06)", clips: "8 clips", views: "120K", barWidth: "6%" },
 ];
 
 const INSIGHTS_CHART_POINTS = [
@@ -68,6 +78,11 @@ export default function CreatorAnalyticsPage() {
   const toggleMetric = useCallback((key: string) => { setMetricState((prev) => ({ ...prev, [key]: !prev[key] })); }, []);
   const visibleMetricKeys = useMemo(() => Object.entries(metricState).filter(([, on]) => on).map(([k]) => k), [metricState]);
 
+  const campaignTableRef = useRef<HTMLDivElement>(null);
+  const campaignHover = useProximityHover(campaignTableRef);
+  const campaignActiveRect = campaignHover.activeIndex !== null ? campaignHover.itemRects[campaignHover.activeIndex] : null;
+  useEffect(() => { campaignHover.measureItems(); }, [campaignHover.measureItems]);
+
   return (
     <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
       <CreatorHeader title="Insights" />
@@ -97,16 +112,16 @@ export default function CreatorAnalyticsPage() {
         <div className={cn(cardCls, "flex flex-col justify-center gap-4 p-4")}>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-2xl font-medium tracking-[-0.02em] text-page-text">5.6M</span>
-            <div className="flex self-start rounded-[10px] bg-foreground/[0.06] p-0.5 sm:self-auto">
+            <div className="flex self-start rounded-[10px] bg-foreground/[0.06] p-0.5 dark:bg-white/[0.06] sm:self-auto">
               <button
                 onClick={() => { setChartTab("views"); setMetricState({ views: true, engagement: false }); }}
-                className={cn("rounded-lg px-3 py-1.5 text-xs font-medium", chartTab === "views" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}
+                className={cn("rounded-lg px-3 py-1.5 text-xs font-medium", chartTab === "views" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
               >
                 Views
               </button>
               <button
                 onClick={() => { setChartTab("payouts"); setMetricState({ views: false, engagement: true }); }}
-                className={cn("rounded-lg px-3 py-1.5 text-xs font-medium", chartTab === "payouts" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)]" : "text-page-text-muted")}
+                className={cn("rounded-lg px-3 py-1.5 text-xs font-medium", chartTab === "payouts" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
               >
                 Payouts
               </button>
@@ -125,7 +140,7 @@ export default function CreatorAnalyticsPage() {
         {/* Campaign table */}
         <div className={cn(cardCls, "flex flex-col overflow-x-auto")}>
           {/* Header */}
-          <div className="flex min-w-[600px] items-center border-b border-foreground/[0.06] px-1">
+          <div className="flex min-w-[600px] items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
             <div className="flex flex-1 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Campaign</span></div>
             <div className="flex w-28 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Type</span></div>
             <div className="flex w-16 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Views</span></div>
@@ -135,24 +150,49 @@ export default function CreatorAnalyticsPage() {
             <div className="flex w-20 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Rate</span></div>
           </div>
           {/* Rows */}
-          {campaignRows.map((r, i) => (
-            <div key={i} className="flex min-w-[600px] items-center border-b border-foreground/[0.03] px-1">
-              <div className="flex flex-1 items-center gap-2 p-3">
-                <div className="size-6 shrink-0 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500" />
-                <span className="text-xs font-medium text-page-text">{r.name}</span>
+          <div
+            ref={campaignTableRef}
+            className="relative flex flex-col overflow-hidden"
+            onMouseEnter={campaignHover.handlers.onMouseEnter}
+            onMouseMove={campaignHover.handlers.onMouseMove}
+            onMouseLeave={campaignHover.handlers.onMouseLeave}
+          >
+            <AnimatePresence>
+              {campaignActiveRect && (
+                <motion.div
+                  key={campaignHover.sessionRef.current}
+                  className="pointer-events-none absolute z-0 bg-foreground/[0.04]"
+                  initial={{ opacity: 0, ...campaignActiveRect }}
+                  animate={{ opacity: 1, ...campaignActiveRect }}
+                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
+                />
+              )}
+            </AnimatePresence>
+            {campaignRows.map((r, i) => (
+              <div
+                key={i}
+                ref={(el) => campaignHover.registerItem(i, el)}
+                className="relative z-[1] flex min-w-[600px] cursor-pointer items-center border-b border-foreground/[0.03] px-1 dark:border-[rgba(224,224,224,0.01)]"
+              >
+                <div className="flex flex-1 items-center gap-2 p-3">
+                  <div className="size-6 shrink-0 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500 dark:border-[rgba(224,224,224,0.03)]" />
+                  <span className="text-xs font-medium text-page-text">{r.name}</span>
+                </div>
+                <div className="flex w-28 items-center p-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium dark:border-[rgba(224,224,224,0.03)]" style={{ color: r.typeColor }}>
+                    {TYPE_ICONS[r.type]}
+                    {r.type}
+                  </span>
+                </div>
+                <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.views}</span></div>
+                <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.clips}</span></div>
+                <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.approved}</span></div>
+                <div className="flex w-24 items-center p-3"><span className="text-xs text-[#00994D] dark:text-[#34D399]">{r.earned}</span></div>
+                <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.rate}</span></div>
               </div>
-              <div className="flex w-28 items-center p-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium" style={{ color: r.typeColor }}>
-                  {r.type}
-                </span>
-              </div>
-              <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.views}</span></div>
-              <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.clips}</span></div>
-              <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.approved}</span></div>
-              <div className="flex w-24 items-center p-3"><span className="text-xs" style={{ color: r.earnedColor }}>{r.earned}</span></div>
-              <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.rate}</span></div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* By platform */}
@@ -163,7 +203,7 @@ export default function CreatorAnalyticsPage() {
               <div key={p.name} className="relative flex items-center gap-4 rounded-xl px-4 py-2.5">
                 <div className="absolute inset-y-0 left-0 rounded-xl" style={{ width: p.barWidth, background: p.bg }} />
                 <div className="relative flex items-center gap-1.5">
-                  <div className="flex size-4 items-center justify-center rounded-sm text-[8px] font-bold" style={{ color: p.color }}>{p.icon}</div>
+                  <PlatformIcon platform={p.platformId} size={16} className="shrink-0" />
                   <span className="text-sm font-medium text-page-text">{p.name}</span>
                 </div>
                 <div className="relative flex items-center gap-1.5 text-sm">

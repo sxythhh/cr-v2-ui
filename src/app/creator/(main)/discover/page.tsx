@@ -84,7 +84,7 @@ function CampaignCard({ campaign, description, beforeStats, afterPlatformPills, 
 
 function VerifiedCard({ campaign, onClick, style }: { campaign: Campaign; onClick: () => void; style?: React.CSSProperties }) {
   return (
-    <div className="group/card relative cursor-pointer text-left focus-visible:outline-none lg:hover:z-30" onClick={onClick} style={style}>
+    <div className="group/card relative cursor-pointer text-left focus-visible:outline-none sm:h-full lg:hover:z-30" onClick={onClick} style={style}>
       <CampaignCard
         campaign={campaign}
         className="w-full lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[320px] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:transition-shadow lg:duration-200 lg:group-hover/card:shadow-xl"
@@ -193,7 +193,7 @@ function HeroBanner({ campaigns, onSlideClick }: { campaigns: Campaign[]; onSlid
                 <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 px-3 pb-4">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-1">
-                      <div className="relative size-5 shrink-0 overflow-hidden rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.1)]">
+                      <div className="relative size-5 shrink-0 overflow-hidden rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
                         <img src={c.avatar} alt={c.brand} className="size-full object-cover" />
                       </div>
                       <span className="text-xs font-medium leading-[1.2] text-page-text">{c.brand}</span>
@@ -238,61 +238,40 @@ function HeroBanner({ campaigns, onSlideClick }: { campaigns: Campaign[]; onSlid
 
 // ── Filter Bar ───────────────────────────────────────────────────────
 
-function FilterBar({ search, onSearch, category, onCategory, sort, onSort, platforms, onTogglePlatform }: {
+function FilterBar({ search, onSearch, viewMode, onViewMode }: {
   search: string; onSearch: (v: string) => void;
-  category: string; onCategory: (v: string) => void;
-  sort: string; onSort: (v: string) => void;
-  platforms: Platform[]; onTogglePlatform: (p: Platform) => void;
+  viewMode: "list" | "grid"; onViewMode: (v: "list" | "grid") => void;
 }) {
-  const [sortOpen, setSortOpen] = useState(false);
-  const [catOpen, setCatOpen] = useState(false);
-  const allPlatforms: Platform[] = ["youtube", "tiktok", "instagram", "x"];
-
   return (
-    <div className="flex items-center gap-2 overflow-x-auto py-2 scrollbar-hide">
+    <div className="flex items-center justify-between gap-4 py-2">
       {/* Search */}
-      <div className="flex h-9 min-w-[120px] flex-1 items-center gap-2 rounded-full bg-foreground/[0.04] px-3 sm:min-w-[160px] dark:bg-white/[0.04]">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 text-foreground/40"><path d="M13 13l-3.5-3.5M10 5.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-        <input value={search} onChange={(e) => onSearch(e.target.value)} placeholder="Search campaigns..." className="w-full bg-transparent text-sm text-page-text outline-none placeholder:text-foreground/40" />
+      <div className="flex h-9 max-w-[300px] flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-white/[0.04]">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M14 14l-3.5-3.5M10.5 6a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+        <input value={search} onChange={(e) => onSearch(e.target.value)} placeholder="Search campaigns..." className="w-full bg-transparent text-sm text-page-text outline-none placeholder:text-foreground/[0.7] dark:placeholder:text-white/40" />
       </div>
-      {/* Sort */}
-      <div className="relative">
-        <button onClick={() => setSortOpen(!sortOpen)} className="flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium text-page-text discover-filter-pill">
-          {sort}
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className={cn("transition-transform", sortOpen && "rotate-180")}><path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+
+      <div className="flex items-center gap-2">
+        {/* View toggle */}
+        <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-white/[0.06]">
+          <button
+            onClick={() => onViewMode("list")}
+            className={cn("flex size-8 items-center justify-center rounded-[10px] transition-all", viewMode === "list" ? "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "")}
+          >
+            <svg width="12" height="11" viewBox="0 0 12 11" fill="none"><path d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M6.66667 1.33333C6.29848 1.33333 6 1.63181 6 2C6 2.36819 6.29848 2.66667 6.66667 2.66667H11.3333C11.7015 2.66667 12 2.36819 12 2C12 1.63181 11.7015 1.33333 11.3333 1.33333H6.66667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M2 6.66667C0.895431 6.66667 0 7.5621 0 8.66667C0 9.77124 0.895431 10.6667 2 10.6667C3.10457 10.6667 4 9.77124 4 8.66667C4 7.5621 3.10457 6.66667 2 6.66667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M6.66667 8C6.29848 8 6 8.29848 6 8.66667C6 9.03486 6.29848 9.33333 6.66667 9.33333H11.3333C11.7015 9.33333 12 9.03486 12 8.66667C12 8.29848 11.7015 8 11.3333 8H6.66667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/></svg>
+          </button>
+          <button
+            onClick={() => onViewMode("grid")}
+            className={cn("flex size-8 items-center justify-center rounded-[10px] transition-all", viewMode === "grid" ? "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "")}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.77431 2C4.42287 1.99999 4.1197 1.99998 3.86998 2.02038C3.60642 2.04191 3.34427 2.08946 3.09202 2.21799C2.7157 2.40973 2.40973 2.7157 2.21799 3.09202C2.08946 3.34427 2.04191 3.60642 2.02038 3.86998C1.99998 4.1197 1.99999 4.42287 2 4.7743L2 6.66667C2 7.03486 2.29848 7.33333 2.66667 7.33333H6.66667C7.03486 7.33333 7.33333 7.03486 7.33333 6.66667V2.66667C7.33333 2.29848 7.03486 2 6.66667 2L4.77431 2Z" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><path d="M12.908 2.21799C12.6557 2.08946 12.3936 2.04191 12.13 2.02038C11.8803 1.99998 11.5771 1.99999 11.2257 2L9.33333 2C8.96514 2 8.66667 2.29848 8.66667 2.66667V6.66667C8.66667 7.03486 8.96514 7.33333 9.33333 7.33333H13.3333C13.7015 7.33333 14 7.03486 14 6.66667V4.77429C14 4.42286 14 4.11969 13.9796 3.86998C13.9581 3.60642 13.9105 3.34427 13.782 3.09202C13.5903 2.7157 13.2843 2.40973 12.908 2.21799Z" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><path d="M2.66667 8.66667C2.29848 8.66667 2 8.96514 2 9.33333L2 11.2257C1.99999 11.5771 1.99998 11.8803 2.02038 12.13C2.04191 12.3936 2.08946 12.6557 2.21799 12.908C2.40973 13.2843 2.7157 13.5903 3.09202 13.782C3.34427 13.9105 3.60642 13.9581 3.86998 13.9796C4.11969 14 4.42286 14 4.77429 14H6.66667C7.03486 14 7.33333 13.7015 7.33333 13.3333V9.33333C7.33333 8.96514 7.03486 8.66667 6.66667 8.66667H2.66667Z" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><path d="M9.33333 8.66667C8.96514 8.66667 8.66667 8.96514 8.66667 9.33333V13.3333C8.66667 13.7015 8.96514 14 9.33333 14H11.2257C11.5771 14 11.8803 14 12.13 13.9796C12.3936 13.9581 12.6557 13.9105 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C13.9105 12.6557 13.9581 12.3936 13.9796 12.13C14 11.8803 14 11.5771 14 11.2257V9.33333C14 8.96514 13.7015 8.66667 13.3333 8.66667H9.33333Z" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/></svg>
+          </button>
+        </div>
+
+        {/* Filter button */}
+        <button className="flex size-9 items-center justify-center rounded-xl bg-foreground/[0.06] dark:bg-white/[0.06]">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
         </button>
-        {sortOpen && (
-          <div className="absolute left-0 top-full z-50 mt-1 w-[200px] sm:left-auto sm:right-0 rounded-2xl border border-foreground/[0.06] bg-white p-1 shadow-xl dark:border-white/[0.1] dark:bg-[#1C1C1C]">
-            {SORT_OPTIONS.map((s) => (
-              <button key={s} onClick={() => { onSort(s); setSortOpen(false); }} className={cn("flex w-full items-center rounded-xl px-3 py-2.5 text-sm", sort === s ? "bg-foreground/[0.04] font-medium text-page-text" : "text-foreground/60 hover:bg-foreground/[0.02]")}>
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
-      {/* Category */}
-      <div className="relative">
-        <button onClick={() => setCatOpen(!catOpen)} className={cn("flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium", category === "All" ? "text-foreground/60 discover-filter-pill-muted" : "text-page-text discover-filter-pill")}>
-          {category === "All" ? "Category" : category}
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className={cn("transition-transform", catOpen && "rotate-180")}><path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-        {catOpen && (
-          <div className="absolute left-0 top-full z-50 mt-1 w-[200px] sm:left-auto sm:right-0 rounded-2xl border border-foreground/[0.06] bg-white p-1 shadow-xl dark:border-white/[0.1] dark:bg-[#1C1C1C]">
-            {ALL_CATEGORIES.map((c) => (
-              <button key={c} onClick={() => { onCategory(c); setCatOpen(false); }} className={cn("flex w-full items-center rounded-xl px-3 py-2.5 text-sm", category === c ? "bg-foreground/[0.04] font-medium text-page-text" : "text-foreground/60 hover:bg-foreground/[0.02]")}>
-                {c}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-      {/* Platform toggles */}
-      {allPlatforms.map((p) => (
-        <button key={p} onClick={() => onTogglePlatform(p)} className={cn("flex size-9 shrink-0 items-center justify-center rounded-full transition-[transform,background] duration-150 active:scale-[0.95]", platforms.includes(p) ? "text-page-text discover-filter-pill" : "text-foreground/30 discover-filter-pill-muted")}>
-          <PlatformIcon platform={p} size={16} />
-        </button>
-      ))}
     </div>
   );
 }
@@ -321,14 +300,21 @@ function CampaignGridSection({ campaigns, onCardClick }: { campaigns: Campaign[]
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-lg font-semibold tracking-tight text-page-text md:text-xl">All campaigns</h3>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] sm:gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {campaigns.map((c, i) => (
-          <div key={c.id} className="card-enter-anim relative" style={{ "--enter-d": `${Math.min(i * 25, 200)}ms` } as React.CSSProperties}>
-            {/* Invisible spacer */}
-            <div className="invisible hidden sm:block"><div className="aspect-video w-full" /><div className="h-[120px]" /></div>
-            <div className="sm:absolute sm:inset-0">
-              <VerifiedCard campaign={c} onClick={() => onCardClick(c)} />
-            </div>
+          <div key={c.id} className="card-enter-anim" style={{ "--enter-d": `${Math.min(i * 25, 200)}ms` } as React.CSSProperties}>
+            <CampaignCard
+              campaign={c}
+              className="cursor-pointer transition-shadow hover:shadow-lg"
+              afterPlatformPills={
+                <div className="ml-1 max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity] duration-200 lg:group-hover/card:max-w-[160px] lg:group-hover/card:opacity-100">
+                  <div className="relative flex h-6 items-center gap-1 whitespace-nowrap rounded-full px-2 py-[3px] text-page-text verified-pill-glass">
+                    <span className="pointer-events-none absolute inset-0 rounded-full verified-pill-border" style={PILL_MASK} />
+                    <span className="text-xs font-semibold leading-[1.2]">{c.category}</span>
+                  </div>
+                </div>
+              }
+            />
           </div>
         ))}
       </div>
@@ -355,7 +341,7 @@ function CampaignDetailModal({ campaign, open, onClose }: { campaign: Campaign |
           <div className="flex flex-col gap-4 px-5 pb-5 pt-5 sm:px-8">
             {/* Brand */}
             <div className="flex items-center gap-2">
-              <div className="relative size-6 shrink-0 overflow-hidden rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.1)]">
+              <div className="relative size-6 shrink-0 overflow-hidden rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
                 <img src={campaign.avatar} alt={campaign.brand} className="size-full object-cover" />
               </div>
               <span className="text-sm font-medium tracking-[-0.09px] text-page-text">{campaign.brand}</span>
@@ -405,11 +391,12 @@ export default function CreatorDiscoverPage() {
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("Featured");
   const [activePlatforms, setActivePlatforms] = useState<Platform[]>([]);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
   const router = useRouter();
   const [detailCampaign, setDetailCampaign] = useState<Campaign | null>(null);
 
   const openCampaign = useCallback((c: Campaign) => {
-    openCampaign(c);
+    setDetailCampaign(c);
     window.history.pushState(null, "", `/creator/discover/${c.id}`);
   }, []);
 
@@ -442,15 +429,13 @@ export default function CreatorDiscoverPage() {
       <HeroBanner campaigns={BANNER_CAMPAIGNS} onSlideClick={(c) => openCampaign(c)} />
 
       {/* Divider */}
-      <div className="mx-3 h-px bg-foreground/[0.06] sm:mx-12" />
+      <div className="mx-3 h-px bg-foreground/[0.06] dark:bg-white/[0.06] sm:mx-12" />
 
       {/* Filter bar (sticky) */}
       <div className="sticky top-0 z-40 bg-page-bg px-3 sm:px-12">
         <FilterBar
           search={search} onSearch={setSearch}
-          category={category} onCategory={setCategory}
-          sort={sort} onSort={setSort}
-          platforms={activePlatforms} onTogglePlatform={togglePlatform}
+          viewMode={viewMode} onViewMode={setViewMode}
         />
       </div>
 

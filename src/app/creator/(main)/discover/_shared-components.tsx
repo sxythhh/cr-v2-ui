@@ -20,7 +20,7 @@ export function PlatformPills({ platforms }: { platforms: Platform[] }) {
       {platforms.map((p, i) => (
         <div key={p} className="relative flex size-6 items-center justify-center rounded-full verified-pill-glass text-page-text" style={{ marginLeft: i > 0 ? -4 : 0, zIndex: platforms.length - i }}>
           <span className="pointer-events-none absolute inset-0 rounded-full verified-pill-border" style={PILL_MASK} />
-          <PlatformIcon platform={p} size={14} className="relative z-[1]" />
+          <PlatformIcon platform={p} size={14} className="relative z-[1] dark:invert" />
         </div>
       ))}
     </div>

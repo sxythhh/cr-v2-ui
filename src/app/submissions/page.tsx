@@ -1233,10 +1233,6 @@ function ScoresModal({ open, onClose }: { open: boolean; onClose: () => void }) 
           >
             Got it
           </button>
-          <label className="mt-3 flex cursor-pointer items-center justify-center gap-2">
-            <input type="checkbox" className="size-3.5 accent-foreground" />
-            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Don&apos;t show this again</span>
-          </label>
         </div>
       </div>
     </Modal>

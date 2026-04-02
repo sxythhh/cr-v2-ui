@@ -139,6 +139,11 @@ input, textarea, [contenteditable] {
   100% { background-position: -100% 0; }
 }
 
+@keyframes shimmer-text {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* Active nav item icons: override SVG fill-opacity (scoped to sidebar nav) */
 nav [data-active="true"] svg path {
   fill-opacity: 1 !important;
@@ -184,6 +189,15 @@ nav [data-active="true"] svg path {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
+:is(.dark .discover-filter-pill)::before,
+:is(.dark .discover-filter-pill-muted)::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
 
 /* Active — Figma glass bubble */
 .discover-filter-pill {
@@ -214,6 +228,16 @@ nav [data-active="true"] svg path {
     #333333;
   background-blend-mode: normal, plus-darker, normal, color-dodge;
 }
+:is(.dark .discover-filter-pill) {
+  background: rgba(255, 255, 255, 0.1);
+  background-blend-mode: normal;
+  filter: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+:is(.dark .discover-filter-pill):hover {
+  background: rgba(255, 255, 255, 0.14);
+  background-blend-mode: normal;
+}
 
 /* Muted — same glass bubble, icon color distinguishes state */
 .discover-filter-pill-muted {
@@ -232,6 +256,12 @@ nav [data-active="true"] svg path {
     drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.07))
     drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.08));
 }
+:is(.dark .discover-filter-pill-muted) {
+  background: rgba(255, 255, 255, 0.06);
+  background-blend-mode: normal;
+  filter: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
 .discover-filter-pill-muted:hover {
   background:
     radial-gradient(
@@ -247,6 +277,11 @@ nav [data-active="true"] svg path {
     drop-shadow(0px 9px 5px rgba(0, 0, 0, 0.04))
     drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.07))
     drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.08));
+}
+:is(.dark .discover-filter-pill-muted):hover {
+  background: rgba(255, 255, 255, 0.1);
+  background-blend-mode: normal;
+  filter: none;
 }
 
 /* ===== DISCOVER CARDS & HERO ===== */
@@ -322,8 +357,8 @@ nav [data-active="true"] svg path {
   transition-delay: var(--expand-stagger, 0ms);
 }
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 @keyframes card-enter {
   from { opacity: 0; transform: translateY(8px); }

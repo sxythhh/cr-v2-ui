@@ -93,7 +93,7 @@ function FullscreenCommentInput({ formatTime, currentTime }: { formatTime: (s: n
       <img
         src="https://i.pravatar.cc/36?u=outpace"
         alt="Outpace Studios"
-        className="size-6 shrink-0 rounded-md border border-foreground/[0.06] object-cover"
+        className="size-6 shrink-0 rounded-md border border-foreground/[0.06] object-cover dark:border-[rgba(224,224,224,0.03)]"
       />
 
       {/* Input pill */}
@@ -329,10 +329,12 @@ export function VideoPlayer({
   src,
   platform,
   duration,
+  showChat,
 }: {
   src: string;
   platform: "tiktok" | "instagram";
   duration: string;
+  showChat?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const bgVideoRef = useRef<HTMLVideoElement>(null);
@@ -900,7 +902,7 @@ export function VideoPlayer({
     )}
 
     <div className="flex h-full flex-col p-1 pl-1">
-      <div className="relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[20px] bg-black">
+      <div className="relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[20px]">
         {/* Blurred background for landscape videos */}
         {isLandscape && (
           <>
@@ -942,14 +944,14 @@ export function VideoPlayer({
         {/* Overlay controls — hidden when fullscreen to avoid ref conflicts */}
         {!isFullscreen && <div className="absolute inset-0 z-[2] flex cursor-pointer flex-col justify-between p-2" onClick={togglePlay}>
           {/* Top bar */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-white/20 px-2 py-[3px] backdrop-blur-[12px]">
-              <span className="font-inter text-xs tracking-[-0.02em] text-white">
-                {formatTime(currentTime)} / {duration}
-              </span>
-            </div>
-            <div className="flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+          <div className="relative flex items-center justify-center gap-2">
+            {/* Platform icon — absolute left */}
+            <div className="absolute left-0 top-0 z-[1] flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
               <PlatformIcon platform={platform} size={12} className="text-white [&_path]:fill-white" />
+            </div>
+            {/* Duration pill — centered */}
+            <div className="flex items-center rounded-full bg-white/20 px-2 py-[3px] backdrop-blur-[12px]">
+              <span className="font-inter text-xs tracking-[-0.02em] text-white">{formatTime(currentTime)} / {formatTime(totalDuration)}</span>
             </div>
           </div>
 
@@ -991,32 +993,18 @@ export function VideoPlayer({
                 </div>
               )}
 
-              {/* Track */}
-              <div className="relative h-1 w-full rounded-full bg-white/20">
-                {/* Buffer / hover-ahead zone */}
-                {hoverPct !== null && hoverPct * 100 > progress && (
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full"
-                    style={{
-                      width: `${hoverPct * 100}%`,
-                      background: "rgba(255, 255, 255, 0.4)",
-                    }}
-                  />
-                )}
-                {/* Progress fill */}
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full bg-white"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              {/* Thumb */}
-              <div
-                className="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${progress}%` }}
-              >
-                <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="6" height="12" rx="3" fill="white"/>
-                </svg>
+              {/* Segmented track */}
+              <div className="flex h-1 w-full items-center gap-[2px]">
+                {/* Played segment */}
+                <div className="relative h-full rounded-full bg-white/[0.08]" style={{ width: `${progress}%` }}>
+                  <div className="h-full w-full rounded-full bg-white" style={{ borderRadius: "999px 0 0 999px" }} />
+                </div>
+                {/* Thumb */}
+                <div className="shrink-0">
+                  <div className="h-3 w-[6px] rounded-full bg-white" />
+                </div>
+                {/* Remaining segment */}
+                <div className="h-full flex-1 rounded-full bg-white/20" style={{ borderRadius: "1px 10px 10px 1px" }} />
               </div>
             </div>
 
@@ -1089,13 +1077,13 @@ export function VideoPlayer({
                   </motion.div>
                 </div>
 
-                {/* Chat — opens fullscreen + drawer on mobile */}
-                <button
-                  className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]"
-                  onClick={() => { setIsFullscreen(true); setMobileDrawerOpen(true); }}
-                >
-                  <CaptionIcon />
-                </button>
+                {/* Chat button — only in card view */}
+                {showChat && (
+                  <button className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/20 backdrop-blur-[12px]">
+                    <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 1.5C10 .672 9.328 0 8.5 0h-7C.672 0 0 .672 0 1.5v5C0 7.328.672 8 1.5 8H2v1c0 .18.097.346.254.435a.5.5 0 0 0 .503-.006L5.138 8H8.5C9.328 8 10 7.328 10 6.5v-5ZM2.124 4a.625.625 0 1 0 1.25 0 .625.625 0 0 0-1.25 0Zm2.25 0a.625.625 0 1 0 1.25 0 .625.625 0 0 0-1.25 0ZM7.249 4.625a.625.625 0 1 1 0-1.25.625.625 0 0 1 0 1.25Z" fill="white"/></svg>
+                  </button>
+                )}
+
               </div>
               <div className="flex items-center gap-1">
                 {/* Speed with popup menu — hidden on mobile */}

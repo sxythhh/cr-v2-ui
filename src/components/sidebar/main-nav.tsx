@@ -15,7 +15,7 @@ export function MainNav({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   // Routes that bypass the sidebar entirely
-  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/articles")) {
+  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/articles") || pathname?.startsWith("/discord")) {
     return <>{children}</>;
   }
 

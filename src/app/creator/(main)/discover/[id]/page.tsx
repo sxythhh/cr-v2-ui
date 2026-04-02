@@ -142,7 +142,7 @@ export default function CampaignPage() {
           <div className="rounded-2xl border border-foreground/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
             <h3 className="mb-4 text-base font-semibold text-page-text">Creator requirements</h3>
             <div className="flex gap-1">
-              <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12]" />
+              <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12] dark:bg-white/[0.12]" />
               <div className="flex flex-col gap-2 pl-3">
                 <div className="flex items-start gap-2">
                   <div className="mt-2 size-1 shrink-0 rounded-full bg-page-text" />
@@ -167,8 +167,8 @@ export default function CampaignPage() {
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {campaign.platforms.map((p) => (
               <div key={p} className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
-                <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                  <PlatformIcon platform={p} size={20} className="text-foreground/50" />
+                <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06]">
+                  <PlatformIcon platform={p} size={20} className="text-foreground/50 dark:invert" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-medium text-page-text capitalize">{p}</span>
