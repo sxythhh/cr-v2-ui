@@ -7,7 +7,7 @@ import { CreatorHeader } from "@/components/creator-header";
 import { CheckCircleIcon } from "@/components/submissions/icons";
 import { TrustScoreModal } from "@/components/trust-score-modal";
 import { TransactionShareModal } from "@/components/transaction-share-modal";
-import { PerksDrawer } from "@/app/creator/rewards/page";
+import { PerksDrawer } from "@/components/perks-drawer";
 
 // ── Inline Icons ────────────────────────────────────────────────────
 

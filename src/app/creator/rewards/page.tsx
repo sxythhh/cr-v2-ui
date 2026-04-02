@@ -367,7 +367,7 @@ const TIER_PERKS = [
 ];
 
 /* ─── Perks drawer ─── */
-export function PerksDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+function PerksDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <Modal open={open} onClose={onClose} maxWidth="max-w-[520px]">
       <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3 dark:border-[rgba(224,224,224,0.03)]">
