@@ -103,7 +103,7 @@ const clips = [
     topCountry: "UK",
     topAge: "18-24",
     hasViewPayout: true,
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     platform: "tiktok" as const,
     videoDuration: "01:15",
   },
@@ -126,7 +126,7 @@ const clips = [
     topCountry: "UK",
     topAge: "18-24",
     hasViewPayout: false,
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     platform: "tiktok" as const,
     videoDuration: "01:15",
   },
@@ -165,6 +165,7 @@ export default function CreatorSubmissionsPage() {
   const [submitStep, setSubmitStep] = useState<"select" | "pick">("select");
   const [submitTab, setSubmitTab] = useState<"feed" | "link">("feed");
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
+  const feedCarouselRef = useRef<HTMLDivElement>(null);
   // fullscreen clip removed — video plays inline
   const [metricState, setMetricState] = useState<Record<string, boolean>>({
     views: true, likes: true, comments: true, shares: false,
@@ -526,7 +527,7 @@ export default function CreatorSubmissionsPage() {
         <div className="flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3 dark:border-[rgba(224,224,224,0.03)]">
           <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Submit clip</span>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto scrollbar-hide">
+        <div className={cn("overflow-y-auto scrollbar-hide", submitStep === "pick" ? "h-[70vh]" : "max-h-[70vh]")}>
             {submitStep === "select" ? (
               <div className="flex flex-col gap-3 p-5 tracking-[-0.02em]">
                 <div className="flex items-center justify-center gap-1.5 pb-1">
@@ -571,12 +572,12 @@ export default function CreatorSubmissionsPage() {
                       <div className="flex items-center gap-2">
                         <AccountDropdown />
                         <div className="flex flex-1 items-center gap-1.5 rounded-xl bg-foreground/[0.04] px-3 py-2.5 dark:bg-white/[0.04]">
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-foreground/50"><circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" fill="none"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                          <span className="text-sm text-page-text-muted">Search by caption...</span>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" fill="none"/><path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                          <input type="text" placeholder="Search by caption..." className="flex-1 bg-transparent text-sm text-page-text outline-none placeholder:text-page-text-muted" />
                         </div>
                       </div>
                       {/* Video grid */}
-                      <div className="-mr-4 flex gap-2 overflow-x-auto scrollbar-hide">
+                      <div ref={feedCarouselRef} className="-mr-4 flex gap-2 overflow-x-auto scroll-smooth scrollbar-hide">
                         {[1, 2, 3].map((v) => (
                           <div key={v} onClick={() => setSelectedVideo(selectedVideo === v ? null : v)} className={cn(cardCls, "flex w-[171px] shrink-0 cursor-pointer flex-col gap-3 pb-3 transition-all", selectedVideo === v && "ring-2 ring-page-text ring-offset-2 ring-offset-[var(--card-bg)]")}>
                             <div className="relative h-[280px] w-full overflow-hidden rounded-t-2xl [&>div]:p-0 [&>div>div]:rounded-none">
@@ -590,9 +591,10 @@ export default function CreatorSubmissionsPage() {
                                 }}
                               />
                               <VideoPlayer
-                                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                                src="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4"
                                 platform="tiktok"
                                 duration="01:15"
+                                hideSpeed
                               />
                             </div>
                             <div className="flex flex-col gap-1.5 px-2">
@@ -604,8 +606,8 @@ export default function CreatorSubmissionsPage() {
                       </div>
                       {/* Pagination arrows */}
                       <div className="flex items-center gap-2">
-                        <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/50 opacity-30 dark:bg-white/[0.06]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 9L4.5 6l3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-                        <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/50 dark:bg-white/[0.06]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+                        <button onClick={() => feedCarouselRef.current?.scrollBy({ left: -180, behavior: "smooth" })} className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/50 transition-opacity hover:bg-foreground/[0.10] dark:bg-white/[0.06]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 9L4.5 6l3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+                        <button onClick={() => feedCarouselRef.current?.scrollBy({ left: 180, behavior: "smooth" })} className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/50 transition-opacity hover:bg-foreground/[0.10] dark:bg-white/[0.06]"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
                       </div>
                     </div>
                   ) : (
@@ -636,7 +638,7 @@ export default function CreatorSubmissionsPage() {
                         ))}
                       </div>
                       <div className="flex items-center gap-1.5 pt-2">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-foreground/50"><path fillRule="evenodd" clipRule="evenodd" d="M6 11a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-.375-6.875a.375.375 0 0 0-.375.375.125.125 0 0 1-.25 0 .625.625 0 0 1 .625-.625h.525a.975.975 0 0 1 .6 1.725l-.355.298v.227a.125.125 0 0 1-.25 0v-.5a.25.25 0 0 1 .068-.182l.558-.472a.725.725 0 0 0-.446-1.096h-.525ZM6 7.875a.375.375 0 1 0 0-.75.375.375 0 0 0 0 .75Z" fill="currentColor"/></svg>
+                        <svg width="12" height="12" viewBox="0 0 10 10" fill="none" className="shrink-0"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.625 3.125C4.41789 3.125 4.25 3.29289 4.25 3.5C4.25 3.70711 4.07711 3.875 3.875 3.875C3.66789 3.875 3.5 3.70711 3.5 3.5C3.5 2.87868 4.00368 2.375 4.625 2.375H5.15C5.82132 2.375 6.375 2.92868 6.375 3.6C6.375 4.05195 6.12524 4.46458 5.73047 4.67695L5.375 4.86829V5.125C5.375 5.33211 5.20711 5.5 5 5.5C4.79289 5.5 4.625 5.33211 4.625 5.125V4.625C4.625 4.48886 4.69886 4.36263 4.81797 4.29805L5.37523 4.00017C5.54755 3.90714 5.625 3.76005 5.625 3.6C5.625 3.34315 5.40685 3.125 5.15 3.125H4.625ZM5 6.875C5.20711 6.875 5.375 6.70711 5.375 6.5C5.375 6.29289 5.20711 6.125 5 6.125C4.79289 6.125 4.625 6.29289 4.625 6.5C4.625 6.70711 4.79289 6.875 5 6.875Z" fill="currentColor" fillOpacity="0.4" /></svg>
                         <span className="text-xs font-medium text-page-text-subtle">Paste up to 50 URLs</span>
                       </div>
                     </div>

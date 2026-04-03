@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { CopyButton } from "@/components/copy-button";
 import { Modal } from "@/components/ui/modal";
 import { CreatorHeader } from "@/components/creator-header";
 import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
@@ -636,7 +637,7 @@ export default function CreatorForYouPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
-          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-4 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
+          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-4 rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
             {/* Back button */}
             <button
               onClick={goBack}
@@ -1034,8 +1035,8 @@ function CampaignDetail({
   const [chartTab, setChartTab] = useState<"views" | "submissions">("views");
   const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, engagement: false });
   const visibleMetricKeys = useMemo(() => Object.entries(metricState).filter(([, on]) => on).map(([k]) => k), [metricState]);
-  const [copied, setCopied] = useState(false);
   const [heroMode, setHeroMode] = useState<"thumb" | "preview">("thumb");
+  const campaignUrl = `https://outpace.studio/campaigns/${campaign.title.toLowerCase().replace(/\s+/g, "-")}`;
 
   // Transition to preview mode after 3 seconds when open
   useEffect(() => {
@@ -1043,11 +1044,6 @@ function CampaignDetail({
     const t = setTimeout(() => setHeroMode("preview"), 3000);
     return () => clearTimeout(t);
   }, [open]);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(`https://outpace.studio/campaigns/${campaign.title.toLowerCase().replace(/\s+/g, "-")}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const topEarners = [
     { rank: 2, name: "kaazty", views: "442,717 views", color: "#839FB9", bg: "bg-[rgba(131,159,185,0.04)]", hoverBg: "hover:bg-[rgba(131,159,185,0.08)]", height: "h-[160px] lg:h-[197px]", avatarSize: "size-8" },
@@ -1350,14 +1346,9 @@ function CampaignDetail({
 
         {/* Bottom action bar */}
         <div className="flex shrink-0 items-center justify-end gap-2 border-t border-foreground/[0.06] bg-white px-5 py-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-page-bg">
-          <button onClick={handleCopy} className={cn("flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors", copied ? "bg-[#00994D]/10 text-[#00994D]" : "bg-foreground/[0.06] text-page-text hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]")}>
-            {copied ? (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.333 8L6.667 11.333 12.667 5.333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            ) : (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M11.226 2H7.44c-.351 0-.654 0-.904.02a2.02 2.02 0 0 0-.778.198 2 2 0 0 0-.874.874 2.02 2.02 0 0 0-.198.778c-.018.224-.02.49-.02.797-.306 0-.573.002-.797.02a2.02 2.02 0 0 0-.778.199 2 2 0 0 0-.874.874 2.02 2.02 0 0 0-.198.778C2 6.786 2 7.09 2 7.44v3.786c0 .352 0 .655.02.905.024.264.072.526.2.778a2 2 0 0 0 .874.874c.252.129.514.176.778.2.25.02.553.02.905.02h3.785c.351 0 .654 0 .904-.02.264-.024.526-.071.778-.2a2 2 0 0 0 .874-.874c.129-.252.176-.514.2-.778.018-.224.02-.49.02-.797.306 0 .573-.002.797-.02.264-.024.526-.071.778-.2a2 2 0 0 0 .874-.874c.129-.252.176-.514.2-.778.02-.25.02-.553.02-.905V4.774c0-.352 0-.655-.02-.905a2.02 2.02 0 0 0-.2-.778 2 2 0 0 0-.874-.874 2.02 2.02 0 0 0-.778-.198C11.88 2 11.577 2 11.226 2ZM11.333 10c.31 0 .522-.002.688-.016.181-.015.248-.04.281-.057a.667.667 0 0 0 .291-.291c.018-.033.042-.1.057-.282.016-.189.016-.437.016-.821V4.8c0-.384 0-.632-.016-.821-.015-.181-.04-.249-.057-.282a.667.667 0 0 0-.291-.29c-.033-.018-.1-.043-.281-.058-.19-.016-.438-.016-.822-.016H7.467c-.384 0-.633 0-.822.016-.181.015-.248.04-.281.057a.667.667 0 0 0-.291.291c-.018.033-.042.1-.057.282-.014.167-.016.379-.016.689h2.559c.351 0 .654 0 .904.02.264.024.526.072.778.2a2 2 0 0 1 .874.874c.129.252.176.514.2.778.02.25.02.553.02.905V10Z" fill="currentColor"/></svg>
-            )}
-            {copied ? "Copied!" : "Copy link"}
-          </button>
+          <CopyButton variant="default" size="lg" text={campaignUrl}>
+            Copy link
+          </CopyButton>
           <button
             className="flex h-10 items-center rounded-full px-5 text-sm font-medium text-white"
             style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}

@@ -3,9 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DotMenuIcon } from "./icons";
+import { FlagSubmissionModal } from "./flag-submission-modal";
 
 export function DotMenuPopover({ aiSummaryHidden, onToggleAiSummary }: { aiSummaryHidden: boolean; onToggleAiSummary: () => void }) {
   const [open, setOpen] = useState(false);
+  const [flagOpen, setFlagOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,12 +43,13 @@ export function DotMenuPopover({ aiSummaryHidden, onToggleAiSummary }: { aiSumma
             <button className="flex w-full cursor-pointer items-center rounded-lg px-[10px] py-2 font-inter text-sm tracking-[-0.02em] text-page-text hover:bg-foreground/[0.04]" onClick={() => { onToggleAiSummary(); setOpen(false); }} type="button">
               {aiSummaryHidden ? "Show AI summary" : "Hide AI summary"}
             </button>
-            <button className="flex w-full cursor-pointer items-center rounded-lg px-[10px] py-2 font-inter text-sm tracking-[-0.02em] text-page-text hover:bg-foreground/[0.04]" onClick={() => setOpen(false)} type="button">
+            <button className="flex w-full cursor-pointer items-center rounded-lg px-[10px] py-2 font-inter text-sm tracking-[-0.02em] text-page-text hover:bg-foreground/[0.04]" onClick={() => { setFlagOpen(true); setOpen(false); }} type="button">
               Flag
             </button>
           </motion.div>
         )}
       </AnimatePresence>
+      <FlagSubmissionModal open={flagOpen} onClose={() => setFlagOpen(false)} />
     </div>
   );
 }

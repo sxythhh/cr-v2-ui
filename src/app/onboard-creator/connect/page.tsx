@@ -11,6 +11,7 @@ import {
 import TikTokIcon from "@/assets/icons/tiktok.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import CopyIcon from "@/assets/icons/copy.svg";
+import { CopyButton } from "@/components/copy-button";
 import CircleCheckFilled from "@/assets/icons/circle-check-filled.svg";
 import { ThemeDebugMenu } from "@/components/discover/shared/ThemeDebugMenu";
 
@@ -82,10 +83,7 @@ export default function ConnectAccountsPage() {
     }
   };
 
-  const handleCopyCode = () => {
-    const formatted = `${verificationCode.slice(0, 3)}-${verificationCode.slice(3)}`;
-    navigator.clipboard.writeText(formatted);
-  };
+  const formattedCode = `${verificationCode.slice(0, 3)}-${verificationCode.slice(3)}`;
 
   const handleDisconnect = (platformName: string) => {
     setConnectedAccounts((prev) => {
@@ -364,13 +362,13 @@ export default function ConnectAccountsPage() {
                 </button>
               ) : dialogStep === "code" ? (
                 <>
-                  <button
-                    onClick={handleCopyCode}
-                    className="glass-hover flex flex-1 items-center justify-center gap-2 rounded-full bg-black/5 py-2.5 text-sm font-medium tracking-[-0.02em] text-black active:scale-[0.98] dark:bg-white/10 dark:text-white"
+                  <CopyButton
+                    variant="secondary"
+                    text={formattedCode}
+                    className="flex-1 active:scale-[0.98]"
                   >
-                    <CopyIcon className="h-3 w-3 text-black dark:text-white" />
                     Copy code
-                  </button>
+                  </CopyButton>
                   <button
                     onClick={() => setDialogStep("success")}
                     className="flex flex-1 items-center justify-center rounded-full bg-black py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-all active:scale-[0.98] dark:bg-white dark:text-black"

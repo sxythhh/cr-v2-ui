@@ -95,9 +95,14 @@ export function BoostCampaignModal({
                       className={cn(
                         "flex flex-1 cursor-pointer items-start justify-between rounded-2xl border p-3 transition-colors",
                         isSelected
-                          ? "border-[rgba(139,92,246,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(139,92,246,0.12)_0%,rgba(139,92,246,0)_50%),#FFFFFF] dark:bg-[radial-gradient(50%_50%_at_50%_100%,rgba(139,92,246,0.12)_0%,rgba(139,92,246,0)_50%),#1a1a1a]"
-                          : "border-[rgba(37,37,37,0.06)] bg-white hover:border-[rgba(37,37,37,0.12)] dark:border-[rgba(255,255,255,0.06)] dark:bg-card-bg dark:hover:border-[rgba(255,255,255,0.12)]",
+                          ? "border-[rgba(139,92,246,0.3)] shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                          : "border-[rgba(37,37,37,0.06)] bg-white hover:border-[rgba(37,37,37,0.12)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:border-[rgba(224,224,224,0.08)]",
                       )}
+                      style={{
+                        background: isSelected
+                          ? "radial-gradient(50% 50% at 50% 100%, rgba(139,92,246,0.12) 0%, rgba(139,92,246,0) 50%), var(--card-bg, #FFFFFF)"
+                          : undefined,
+                      }}
                     >
                       {/* Left: label + price */}
                       <div className="flex flex-col gap-2">
@@ -115,8 +120,8 @@ export function BoostCampaignModal({
                           className={cn(
                             "flex size-4 shrink-0 items-center justify-center rounded-full",
                             isSelected
-                              ? "bg-[#8B5CF6] shadow-[0_-0.8px_2.4px_rgba(0,0,0,0.06),0_1.6px_1.6px_#fff,inset_0_0.4px_1.6px_rgba(0,0,0,0.12)]"
-                              : "border-[0.8px] border-[rgba(37,37,37,0.1)] bg-white shadow-[0_-0.8px_2.4px_rgba(0,0,0,0.06),0_1.6px_1.6px_#fff,inset_0_0.4px_1.6px_rgba(0,0,0,0.12)]",
+                              ? "bg-[#8B5CF6] shadow-[0_-0.8px_2.4px_rgba(0,0,0,0.06),inset_0_0.4px_1.6px_rgba(0,0,0,0.12)] dark:ring-[0.8px] dark:ring-[rgba(224,224,224,0.06)]"
+                              : "border border-[rgba(37,37,37,0.2)] bg-white shadow-[0_-1px_3px_rgba(0,0,0,0.06),inset_0_0.5px_2px_rgba(0,0,0,0.12)] dark:border-[rgba(224,224,224,0.2)] dark:bg-[rgba(224,224,224,0.03)]",
                           )}
                         >
                           {isSelected && (
@@ -228,7 +233,7 @@ export function BoostCampaignModal({
           </div>
 
           {/* ── Footer ──────────────────────────────────────────── */}
-          <div className="flex items-center gap-2 border-t border-foreground/[0.06] px-4 py-4 sm:justify-end sm:px-5">
+          <div className="flex items-center gap-2 px-4 py-4 sm:justify-end sm:px-5">
             <DialogPrimitive.Close
               className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] px-4 text-[14px] font-medium text-[#252525] transition-colors hover:bg-[rgba(37,37,37,0.10)] sm:flex-none dark:bg-[rgba(255,255,255,0.06)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.10)]"
             >

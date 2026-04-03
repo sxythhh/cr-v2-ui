@@ -17,6 +17,7 @@ import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import { FilterSelect, type Filter } from "@/components/ui/dub-filter";
 import { Modal } from "@/components/ui/modal";
+import { RulesModal } from "@/components/submissions/rules-modal";
 import {
   type Submission, type SubmissionStatus, type QualityResult, type CheckItem, type MobileSubTab,
   MOBILE_SUB_TABS,
@@ -62,7 +63,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "United Kingdom",
     countryCode: "gb",
     topAge: "18-24",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "01:15",
     videoCurrentTime: "00:21",
     overviewText: "Failed 12 of 13 checks. No brand mentions, stock audio, and below-minimum video quality — not eligible for payout.",
@@ -118,7 +119,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "United Kingdom",
     countryCode: "gb",
     topAge: "18-24",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "01:15",
     videoCurrentTime: "00:21",
     overviewText: "Passed all 13 checks. Content matches the brief, brand mentioned 4 times, and video meets all quality requirements. Eligible for payout.",
@@ -174,7 +175,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "United States",
     countryCode: "us",
     topAge: "25-34",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "00:58",
     videoCurrentTime: "00:34",
     overviewText: "Passed 10 of 13 checks. Good brand integration and authentic delivery. Minor issues with hashtag placement and end-screen CTA missing.",
@@ -229,7 +230,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "India",
     countryCode: "in",
     topAge: "18-24",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "01:32",
     videoCurrentTime: "00:45",
     overviewText: "Failed 8 of 13 checks. High view count but low engagement ratio suggests inorganic traffic. Brand messaging was off-brief and product shown incorrectly.",
@@ -284,7 +285,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "Germany",
     countryCode: "de",
     topAge: "25-34",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "01:05",
     videoCurrentTime: "00:52",
     overviewText: "Passed 12 of 13 checks. Exceptional engagement metrics and authentic storytelling. Only minor issue: one talking point slightly paraphrased.",
@@ -339,7 +340,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "Brazil",
     countryCode: "br",
     topAge: "18-24",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "01:48",
     videoCurrentTime: "01:12",
     overviewText: "Passed 8 of 13 checks. Good product demonstration and genuine enthusiasm. Audio quality needs improvement and some brand guidelines not followed.",
@@ -394,7 +395,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "Nigeria",
     countryCode: "ng",
     topAge: "13-17",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "00:32",
     videoCurrentTime: "00:08",
     overviewText: "Failed 11 of 13 checks. Content appears to be entirely unrelated to the campaign. Suspected re-upload of existing content with no modifications.",
@@ -449,7 +450,7 @@ const SUBMISSIONS: Submission[] = [
     topCountry: "Canada",
     countryCode: "ca",
     topAge: "25-34",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     videoDuration: "02:10",
     videoCurrentTime: "01:35",
     overviewText: "Perfect score — passed all 13 checks. Outstanding production quality, seamless brand integration, and exceptional audience engagement. Top performer this week.",
@@ -1246,6 +1247,7 @@ export default function SubmissionsPage() {
   const [scrollVariant, setScrollVariant] = useState<ScrollVariant>("spring-pop");
   const [actions, setActions] = useState<Record<string, "approve" | "reject">>({});
   const [scoresOpen, setScoresOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
 
   const handleAction = useCallback((id: string, action: "approve" | "reject") => {
     setActions((prev) => ({ ...prev, [id]: action }));
@@ -1269,21 +1271,28 @@ export default function SubmissionsPage() {
           <button
             type="button"
             onClick={() => setScoresOpen(true)}
-            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-2 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:bg-accent sm:px-4"
+            className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium tracking-[-0.02em] text-foreground/50 transition-colors hover:bg-foreground/[0.04] sm:pl-3 sm:pr-4"
           >
-            <span className="hidden sm:inline">Understanding scores &amp; matches</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" />
               <path d="M6.5 6.5C6.5 5.67 7.17 5 8 5C8.83 5 9.5 5.67 9.5 6.5C9.5 7.17 9.01 7.73 8.37 7.93C8.16 8 8 8.17 8 8.39V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               <circle cx="8" cy="11" r="0.75" fill="currentColor" />
             </svg>
+            <span className="hidden sm:inline">Understanding scores &amp; matches</span>
           </button>
 
-          <button className="flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-accent">
-            Export
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <button onClick={() => setRulesOpen(true)} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">
+            <svg width="13" height="15" viewBox="0 0 13 15" fill="none" className="shrink-0">
+              <path d="M7.37884 1.00184C7.37884 0.0124272 6.09561 -0.37609 5.54679 0.447142L0.169631 8.51288C-0.273405 9.17744 0.202986 10.0676 1.00168 10.0676H4.71217V13.8C4.71217 14.7894 5.9954 15.1779 6.54423 14.3547L11.9214 6.28895C12.3644 5.6244 11.888 4.73425 11.0893 4.73425H7.37884V1.00184Z" fill="currentColor" />
+            </svg>
+            Rules
+          </button>
+
+          <button className="flex h-9 items-center gap-1.5 rounded-full bg-foreground/[0.06] pl-3 pr-4 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
               <path d="M8 2.667V10M8 2.667L5.333 5.333M8 2.667L10.667 5.333M2.667 10.667V12C2.667 12.736 3.264 13.333 4 13.333H12C12.736 13.333 13.333 12.736 13.333 12V10.667" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
+            Export
           </button>
         </div>
       </div>
@@ -1407,6 +1416,7 @@ export default function SubmissionsPage() {
       </div>
 
       <ScoresModal open={scoresOpen} onClose={() => setScoresOpen(false)} />
+      <RulesModal open={rulesOpen} onClose={() => setRulesOpen(false)} />
     </div>
   );
 }

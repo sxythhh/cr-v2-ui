@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { CopyButton } from "@/components/copy-button";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
@@ -2600,8 +2601,6 @@ function getTabFromHash(): SettingsTab {
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>(getTabFromHash);
-  const [copied, setCopied] = useState(false);
-
   const handleTabChange = useCallback((tab: SettingsTab) => {
     setActiveTab(tab);
     window.location.hash = tab.toLowerCase().replace(/\s+/g, "-");
@@ -2627,29 +2626,11 @@ export default function SettingsPage() {
           )}
 
           {/* Copy Link button — Agency Profile only */}
-          {activeTab === "Agency Profile" && <button
-            onClick={() => {
-              navigator.clipboard.writeText("https://app.contentrewards.com/agency/virality");
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
-            }}
-            className={cn(
-              "hidden h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 font-inter text-[14px] font-medium tracking-[-0.02em] transition-colors sm:inline-flex",
-              copied
-                ? "bg-[#00994D] text-white"
-                : "bg-foreground/[0.06] text-page-text hover:bg-foreground/[0.10]",
-            )}
-          >
-            <span className="inline-grid">
-              <span className="invisible col-start-1 row-start-1">Copy Link</span>
-              <span className="col-start-1 row-start-1 text-center">{copied ? "Copied!" : "Copy Link"}</span>
-            </span>
-            {copied ? (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            ) : (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.333 1.75H11.083C11.404 1.75 11.667 2.013 11.667 2.333V11.667C11.667 11.987 11.404 12.25 11.083 12.25H2.917C2.596 12.25 2.333 11.987 2.333 11.667V2.333C2.333 2.013 2.596 1.75 2.917 1.75H4.667" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /><rect x="4.667" y="0.583" width="4.667" height="2.333" rx="0.583" stroke="currentColor" strokeWidth="1.2" /></svg>
-            )}
-          </button>}
+          {activeTab === "Agency Profile" && (
+            <CopyButton variant="default" text="https://app.contentrewards.com/agency/virality" className="hidden sm:inline-flex">
+              Copy Link
+            </CopyButton>
+          )}
 
           {/* User avatar pill */}
           <UserDropdown variant="header" />

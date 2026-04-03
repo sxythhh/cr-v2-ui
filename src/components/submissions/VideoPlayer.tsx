@@ -330,11 +330,13 @@ export function VideoPlayer({
   platform,
   duration,
   showChat,
+  hideSpeed,
 }: {
   src: string;
   platform: "tiktok" | "instagram";
   duration: string;
   showChat?: boolean;
+  hideSpeed?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const bgVideoRef = useRef<HTMLVideoElement>(null);
@@ -901,8 +903,8 @@ export function VideoPlayer({
     document.body,
     )}
 
-    <div className="flex h-full flex-col p-1 pl-1">
-      <div className="relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[20px]">
+    <div className="flex h-full flex-col">
+      <div className="relative flex h-full flex-col items-center justify-center overflow-hidden">
         {/* Blurred background for landscape videos */}
         {isLandscape && (
           <>
@@ -1029,10 +1031,9 @@ export function VideoPlayer({
                   onMouseEnter={openVolume}
                   onMouseLeave={closeVolumeDelayed}
                 >
-                  <motion.div
-                    className="flex h-8 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-white/20 backdrop-blur-[12px]"
-                    animate={{ width: volumeOpen ? 75 : 32, paddingLeft: 10, paddingRight: volumeOpen ? 8 : 10 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                  <div
+                    className="flex h-8 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-white/20 backdrop-blur-[12px] transition-all duration-150 ease-out"
+                    style={{ width: volumeOpen ? 75 : 32, paddingLeft: 10, paddingRight: volumeOpen ? 8 : 10 }}
                   >
                     <button
                       className="flex shrink-0 cursor-pointer items-center justify-center"
@@ -1074,7 +1075,7 @@ export function VideoPlayer({
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Chat button — only in card view */}
@@ -1086,8 +1087,8 @@ export function VideoPlayer({
 
               </div>
               <div className="flex items-center gap-1">
-                {/* Speed with popup menu — hidden on mobile */}
-                <div className="relative hidden sm:block" data-speed-menu>
+                {/* Speed with popup menu — hidden on mobile and when hideSpeed */}
+                {!hideSpeed && <div className="relative hidden sm:block" data-speed-menu>
                   <AnimatePresence>
                     {speedOpen && (
                       <motion.div
@@ -1147,7 +1148,7 @@ export function VideoPlayer({
                     <span className="font-inter text-xs font-medium tracking-[0.1px] text-white">{speed.toFixed(1)}</span>
                     <span className="font-inter text-xs tracking-[0.1px] text-white/50">x</span>
                   </button>
-                </div>
+                </div>}
 
                 {/* Expand */}
                 <button
