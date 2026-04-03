@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { GamepadIcon } from "@/components/sidebar/icons/gamepad";
+import { AiPopupAnimated } from "@/components/ai-popup-animations";
 
 
 const SUGGESTIONS = [
@@ -280,7 +281,7 @@ export function CreatorAiFab() {
 
   return (
     <>
-      {open && (
+      <AiPopupAnimated open={open}>
         <div className="fixed bottom-[132px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)] md:bottom-[72px]">
           {/* Pink gradient border rect */}
           <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF3FD5" }} />
@@ -459,7 +460,7 @@ export function CreatorAiFab() {
           </div>
         </div>
         </div>
-      )}
+      </AiPopupAnimated>
 
       {/* FAB */}
       <button

@@ -291,28 +291,29 @@ function StreakDay({
         className={cn(
           "flex size-[52px] flex-col items-center justify-center gap-1.5 rounded-full",
           current
-            ? "border border-[#E57100] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg"
+            ? "border border-[#E57100] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#FB923C] dark:bg-card-bg"
             : future
-              ? "border border-dashed border-foreground/[0.12] bg-white dark:bg-card-bg"
-              : "border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:bg-card-bg"
+              ? "border border-dashed border-foreground/[0.12] bg-white dark:border-white/[0.08] dark:bg-card-bg"
+              : "border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.03] dark:bg-card-bg"
         )}
       >
         <span
           className={cn(
             "text-base font-medium leading-none tracking-[-0.02em]",
-            active ? "text-[#E57100]" : future ? "text-page-text-muted" : "text-page-text-muted"
+            current
+              ? "text-[#252525] dark:text-[#E0E0E0]"
+              : active
+                ? "text-[#E57100] dark:text-[#FB923C]"
+                : "text-page-text-muted"
           )}
         >
           {date}
         </span>
+        <FlameIcon
+          className="size-4"
+          color={active || current ? "#E57100" : "rgba(37,37,37,0.2)"}
+        />
       </div>
-      {active && !future ? (
-        <div className="flex h-4 items-center justify-center">
-          <FlameIcon className="size-4" color={active ? "#E57100" : undefined} />
-        </div>
-      ) : (
-        <div className="h-4" />
-      )}
       {reward && (
         <div className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-white px-1.5 py-1 shadow-[0_0_0_2px_white,0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg dark:shadow-[0_0_0_2px_var(--card-bg),0_1px_2px_rgba(0,0,0,0.15)]">
           <StarIcon className="size-3" />

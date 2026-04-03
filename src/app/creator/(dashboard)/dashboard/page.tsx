@@ -518,7 +518,7 @@ export default function CreatorForYouPage() {
                 ].map((d) => (
                   <div key={d.day} onClick={() => setStreakOpen(true)} className="flex flex-1 cursor-pointer flex-col items-center gap-3">
                     <div
-                      className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full transition-transform hover:scale-110"
+                      className="flex size-9 items-center justify-center overflow-hidden rounded-full transition-transform hover:scale-110"
                       style={{
                         border: d.current
                           ? `1px solid ${isDark ? "#FB923C" : "#E57100"}`
@@ -526,15 +526,19 @@ export default function CreatorForYouPage() {
                             ? `1px dashed ${isDark ? "rgba(224,224,224,0.08)" : "rgba(37,37,37,0.12)"}`
                             : `1px solid ${isDark ? "rgba(224,224,224,0.03)" : "rgba(37,37,37,0.06)"}`,
                         boxShadow: !d.future ? "0 1px 2px 0 rgba(0,0,0,0.03)" : undefined,
-                        background: isDark ? "rgba(224,224,224,0.03)" : undefined,
+                        background: isDark ? "rgba(224,224,224,0.03)" : "#FFFFFF",
                       }}
                     >
-                      <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39l-.001.001C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27l.001.001C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? (isDark ? "#FB923C" : "#E57100") : (isDark ? "rgba(224,224,224,0.20)" : "rgba(37,37,37,0.20)")}/></svg>
+                      <svg width="16" height="16" viewBox="0 0 12 14" fill="none"><path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39l-.001.001C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27l.001.001C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? (isDark ? "#FB923C" : "#E57100") : (isDark ? "rgba(224,224,224,0.20)" : "rgba(37,37,37,0.20)")}/></svg>
                     </div>
                     <span
                       className="text-xs text-center tracking-[-0.02em]"
                       style={{
-                        color: d.active || d.current ? (isDark ? "#FB923C" : "#E57100") : (isDark ? "rgba(224,224,224,0.50)" : "rgba(37,37,37,0.50)"),
+                        color: d.current
+                          ? (isDark ? "#E0E0E0" : "#252525")
+                          : d.active
+                            ? (isDark ? "#FB923C" : "#E57100")
+                            : (isDark ? "rgba(224,224,224,0.50)" : "rgba(37,37,37,0.50)"),
                         fontWeight: d.active || d.current ? 500 : 400,
                       }}
                     >
@@ -1098,7 +1102,7 @@ function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               <div key={i} className="flex flex-1 flex-col items-center gap-2">
                 <div
                   className={cn(
-                    "flex size-[52px] items-center justify-center rounded-full",
+                    "flex size-[52px] flex-col items-center justify-center gap-1.5 rounded-full",
                     d.current
                       ? "border border-[#E57100] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[#FB923C] dark:bg-[rgba(224,224,224,0.03)]"
                       : d.future
@@ -1107,7 +1111,7 @@ function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                   )}
                 >
                   <span className={cn(
-                    "text-base font-medium",
+                    "text-base font-medium leading-none tracking-[-0.02em]",
                     d.current
                       ? "text-page-text dark:text-[#E0E0E0]"
                       : d.active
@@ -1116,10 +1120,7 @@ function StreakModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                   )}>
                     {d.date}
                   </span>
-                </div>
-                {/* Fire icon */}
-                <div className="flex items-center justify-center">
-                  <svg width="14" height="14" viewBox="-0.5 -0.5 12.5 15" fill="none">
+                  <svg width="16" height="16" viewBox="0 0 12 14" fill="none">
                     <path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? (isBroken ? "rgba(37,37,37,0.2)" : "#E57100") : "rgba(37,37,37,0.2)"} className="dark:hidden" />
                     <path d="M5.815.142C5.635.003 5.398-.037 5.182.035 4.967.107 4.801.281 4.74.5 4.373 1.817 3.62 2.543 2.652 3.475c-.13.126-.265.255-.402.39C1.82 4.288 1.375 4.767 1.01 5.31c-1.082 1.61-1.348 3.435-.508 5.27C1.824 13.63 4.848 14.508 7.374 13.735c2.536-.776 4.616-3.218 4.178-6.739C11.418 5.9 11.047 4.766 10.131 3.873c-.144-.14-.342-.21-.542-.191-.2.02-.382.126-.497.291-.096.138-.314.405-.575.713-.046-.548-.16-1.075-.354-1.585C7.74 1.985 6.957 1.022 5.815.142Z" fill={d.active || d.current ? "#FB923C" : "rgba(224,224,224,0.2)"} className="hidden dark:block" />
                   </svg>
