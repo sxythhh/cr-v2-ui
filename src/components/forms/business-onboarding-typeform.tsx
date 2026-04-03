@@ -190,6 +190,7 @@ export function BusinessOnboardingTypeform({
       loading={loading}
       finishLabel="Done"
       onFinish={handleFinish}
+      hideFooter={currentStep === 3}
     >
       {/* Step 1: Personal info */}
       {currentStep === 0 && (
@@ -278,7 +279,7 @@ export function BusinessOnboardingTypeform({
             <div className="flex w-full flex-col gap-3">
               <button
                 type="button"
-                onClick={() => updateField("planType", "self-serve")}
+                onClick={() => { updateField("planType", "self-serve"); setTimeout(() => setCurrentStep(4), 250); }}
                 className={cn(
                   "flex cursor-pointer flex-col justify-center gap-1 rounded-xl border px-4 py-5 text-left transition-all active:scale-[0.98]",
                   data.planType === "self-serve"
@@ -296,7 +297,7 @@ export function BusinessOnboardingTypeform({
 
               <button
                 type="button"
-                onClick={() => updateField("planType", "managed")}
+                onClick={() => { updateField("planType", "managed"); setTimeout(() => setCurrentStep(4), 250); }}
                 className={cn(
                   "flex cursor-pointer flex-col justify-center gap-1 rounded-xl border px-4 py-5 text-left transition-all active:scale-[0.98]",
                   data.planType === "managed"

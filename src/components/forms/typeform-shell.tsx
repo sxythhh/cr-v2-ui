@@ -22,6 +22,7 @@ interface TypeformShellProps {
   children: React.ReactNode;
   finishLabel?: string;
   onFinish?: () => void;
+  hideFooter?: boolean;
 }
 
 /* ── Shell ── */
@@ -36,6 +37,7 @@ export function TypeformShell({
   children,
   finishLabel = "Finish",
   onFinish,
+  hideFooter = false,
 }: TypeformShellProps) {
   const isLast = currentStep === steps.length - 1;
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -92,7 +94,7 @@ export function TypeformShell({
         </AnimatePresence>
       </div>
 
-      <div className="px-6 pb-5 pt-2 flex items-center gap-2">
+      {!hideFooter && <div className="px-6 pb-5 pt-2 flex items-center gap-2">
         {currentStep > 0 && (
           <button
             type="button"
@@ -134,7 +136,7 @@ export function TypeformShell({
           )}
         </button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

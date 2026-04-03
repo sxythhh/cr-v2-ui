@@ -52,18 +52,18 @@ function buildSvg(theme: typeof COLOR_THEMES[number], amount: string, date: stri
   const qrPath = generateQrSvgPath(`https://contentrewards.cc/${username}`, 54);
   const name = username.replace("@", "");
 
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFC745"/><stop offset="100%" stop-color="#FF9501"/></linearGradient>
       <linearGradient id="bo" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${theme.primary}"/><stop offset="100%" stop-color="${theme.secondary}"/></linearGradient>
-      <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0.4)"/></linearGradient>
+      <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="white" stop-opacity="0"/><stop offset="100%" stop-color="white" stop-opacity="0.4"/></linearGradient>
       <clipPath id="cc"><rect width="${width}" height="${height}" rx="24"/></clipPath>
     </defs>
     <style>text{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}</style>
     <g clip-path="url(#cc)">
       <rect width="${width}" height="${height}" fill="${theme.primary}"/>
       <rect width="${width}" height="${height}" fill="url(#bo)" opacity="0.6"/>
-      <g opacity="0.12" transform="scale(2)">
+      <g opacity="0.08" transform="scale(2)">
         <path d="M55.4 21.1L96.2 18.6 77.6 46 101.3 78.2 59.2 66.4 33 88.8 25.7 54 -14.2 35.7 23.3 26 24.8 -7.7z" fill="white"/>
         <path d="M178.3 80.9L202.1 105.7 171.2 100.9 159.2 123.5 145.7 94.5 114.6 83.7 137.2 70.6 129.9 41.2 157.4 62.2 184 54.8z" fill="white"/>
         <path d="M-29.4 91.1L-23.8 65 -4.7 92.5 26.3 97.4 8.6 115.7 22.1 144.7 -7.9 128.6 -30.5 141.7 -31.4 113.3 -58.9 92.4z" fill="white"/>
@@ -74,9 +74,9 @@ function buildSvg(theme: typeof COLOR_THEMES[number], amount: string, date: stri
       <rect x="300" y="420" width="1467" height="223" fill="url(#rg)" transform="rotate(-28.54 300 420)" opacity="0.4"/>
       <rect x="250" y="180" width="1954" height="223" fill="url(#rg)" transform="rotate(-28.54 250 180)" opacity="0.4"/>
       <!-- "Earned with" + Content Rewards vector logo (right-aligned) -->
-      <g transform="translate(${width - 460}, 8)">
+      <g transform="translate(${width - 260}, 10)">
         <text x="0" y="26" font-size="22" font-weight="600" fill="white" letter-spacing="-0.03em">Earned with</text>
-        <g transform="translate(150, 0) scale(1.4)" fill="white">
+        <g transform="translate(128, 0) scale(1.4)" fill="white">
           <path d="M11.55 0L13.07 3.45 16.8 3.85 14.01 6.37 14.79 10.07 11.55 8.18 8.3 10.07 9.08 6.37 6.3 3.85 10.03 3.45z"/>
           <path d="M11.55 27L12.33 25.23 14.25 25.02 12.82 23.73 13.22 21.83 11.55 22.8 9.88 21.83 10.28 23.73 8.85 25.02 10.77 25.23z"/>
           <path d="M4.45 6.77L5.03 9.54 7.71 10.42 5.27 11.83V14.67L3.18 12.77.51 13.65 1.65 11.06 0 8.76 2.8 9.06z"/>
@@ -99,11 +99,11 @@ function buildSvg(theme: typeof COLOR_THEMES[number], amount: string, date: stri
           <path d="M79.87 25.35c-.72 0-1.33-.11-1.82-.32-.48-.21-.86-.5-1.12-.88-.26-.38-.41-.8-.45-1.28l1.79-.08c.06.39.22.68.48.9.25.21.63.32 1.13.32.41 0 .73-.06.96-.19.24-.14.36-.35.36-.63 0-.17-.04-.3-.12-.41-.08-.11-.24-.2-.46-.29-.23-.08-.57-.17-1.01-.25-.75-.13-1.34-.28-1.77-.47-.43-.19-.73-.43-.92-.72-.17-.28-.26-.64-.26-1.06 0-.69.26-1.24.78-1.67.53-.43 1.3-.65 2.31-.65.66 0 1.21.11 1.65.33.45.21.79.51 1.04.88.25.37.41.79.48 1.27l-1.76.08c-.05-.25-.13-.46-.25-.65-.12-.18-.28-.32-.48-.41-.2-.1-.43-.15-.71-.15-.41 0-.72.08-.93.25-.21.17-.31.39-.31.66 0 .19.05.35.14.48.1.13.26.24.48.32.22.07.51.14.88.21.76.12 1.37.28 1.8.47.45.18.76.42.95.72.19.28.28.63.28 1.03 0 .47-.13.87-.4 1.2-.25.33-.62.59-1.09.76-.46.17-1.01.25-1.64.25z"/>
         </g>
       </g>
-      <text x="48" y="232" font-size="18" font-weight="600" fill="white"><tspan fill="rgba(255,255,255,0.5)">Brand: </tspan>Outpace</text>
-      <text x="48" y="258" font-size="18" font-weight="600" fill="white"><tspan fill="rgba(255,255,255,0.5)">Date: </tspan>${date}</text>
+      <text x="48" y="232" font-size="18" font-weight="600" fill="white"><tspan fill="white" opacity="0.5">Brand: </tspan>Outpace</text>
+      <text x="48" y="258" font-size="18" font-weight="600" fill="white"><tspan fill="white" opacity="0.5">Date: </tspan>${date}</text>
       <text x="${width - 30}" y="270" text-anchor="end" letter-spacing="-3"><tspan font-size="36" font-weight="700" fill="white">+</tspan><tspan font-size="56" font-weight="800" fill="white">${amount}</tspan></text>
-      <rect x="30" y="${height - 108}" width="${width - 60}" height="78" fill="rgba(0,0,0,0.3)" rx="16"/>
-      <circle cx="68" cy="${height - 69}" r="33" fill="rgba(255,255,255,0.15)"/>
+      <rect x="30" y="${height - 108}" width="${width - 60}" height="78" fill="black" fill-opacity="0.3" rx="16"/>
+      <circle cx="68" cy="${height - 69}" r="33" fill="white" fill-opacity="0.15"/>
       <text x="68" y="${height - 62}" font-size="22" font-weight="700" fill="white" text-anchor="middle">${name[0].toUpperCase()}</text>
       <text x="112" y="${height - 62}" font-size="28" font-weight="700" fill="white">${name}</text>
       <rect x="${width - 102}" y="${height - 104}" width="66" height="66" fill="white" rx="12"/>
@@ -188,25 +188,45 @@ export function TransactionShareModal({ open, onClose, amount = "$2,862.15", dat
         <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Share your stats</span>
       </div>
 
-      <div className="flex flex-col gap-5 p-5">
-        {/* Live preview — no bitmap generation, instant theme switching */}
+      <div className="flex flex-col gap-4 p-5 tracking-[-0.02em]">
+        {/* Live preview */}
         <div
           ref={svgRef}
           className="overflow-hidden rounded-xl border border-foreground/[0.06] [&>svg]:h-auto [&>svg]:w-full dark:border-[rgba(224,224,224,0.03)]"
           dangerouslySetInnerHTML={{ __html: previewSvg }}
         />
 
+        {/* Color theme — horizontal scroll strip */}
+        <div className="flex items-center gap-3">
+          <span className="shrink-0 text-xs font-medium text-page-text-muted">Theme</span>
+          <div className="flex items-center gap-1.5">
+            {COLOR_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => setSelectedTheme(theme)}
+                className={cn(
+                  "relative flex size-7 shrink-0 items-center justify-center rounded-lg transition-all",
+                  selectedTheme.id === theme.id
+                    ? "ring-2 ring-page-text ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-[#161616]"
+                    : "hover:scale-110"
+                )}
+                style={{ background: theme.gradient }}
+              />
+            ))}
+          </div>
+        </div>
+
         {/* Action buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button
             onClick={handleCopy}
             disabled={exporting}
             className="flex flex-1 items-center justify-center gap-2 rounded-full bg-foreground/[0.06] px-3 py-2.5 text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] disabled:opacity-40 dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-white/[0.06]"
           >
             {copied ? (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.33 8L6.67 11.33 12.67 5.33" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.33 8L6.67 11.33 12.67 5.33" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             ) : (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5.333" y="5.333" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.33"/><path d="M3.333 10.667h-.5A1.5 1.5 0 0 1 1.333 9.167v-6A1.5 1.5 0 0 1 2.833 1.667h6A1.5 1.5 0 0 1 10.333 3.167v.5" stroke="currentColor" strokeWidth="1.33"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5.333" y="5.333" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.33"/><path d="M3.333 10.667h-.5A1.5 1.5 0 0 1 1.333 9.167v-6A1.5 1.5 0 0 1 2.833 1.667h6A1.5 1.5 0 0 1 10.333 3.167v.5" stroke="currentColor" strokeWidth="1.33"/></svg>
             )}
             {copied ? "Copied!" : "Copy"}
           </button>
@@ -215,42 +235,19 @@ export function TransactionShareModal({ open, onClose, amount = "$2,862.15", dat
             disabled={exporting}
             className="flex flex-1 items-center justify-center gap-2 rounded-full bg-foreground/[0.06] px-3 py-2.5 text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10] disabled:opacity-40 dark:bg-[rgba(224,224,224,0.03)] dark:hover:bg-white/[0.06]"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2.667 12.667h10.666" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            Save image
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2.667 12.667h10.666" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Save
+          </button>
+          <button
+            onClick={handleShareOnX}
+            className="flex flex-1 items-center justify-center gap-2 rounded-full bg-page-text px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-page-text/90 dark:bg-white dark:text-[#252525] dark:hover:bg-white/90"
+          >
+            <svg className="size-3.5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            Share
           </button>
         </div>
-
-        {/* Color theme */}
-        <div className="flex flex-col gap-3">
-          <span className="text-sm font-medium text-page-text">Color theme</span>
-          <div className="flex flex-wrap gap-2">
-            {COLOR_THEMES.map((theme) => (
-              <button
-                key={theme.id}
-                onClick={() => setSelectedTheme(theme)}
-                className={cn(
-                  "flex size-10 items-center justify-center rounded-xl border transition-all",
-                  selectedTheme.id === theme.id
-                    ? "border-page-text dark:border-white"
-                    : "border-foreground/[0.06] hover:border-foreground/[0.15] dark:border-[rgba(224,224,224,0.06)] dark:hover:border-white/[0.15]"
-                )}
-              >
-                <div className="size-7 rounded-full" style={{ background: theme.gradient }} />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Share on X */}
-        <button
-          onClick={handleShareOnX}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-page-text px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-page-text/90 dark:bg-white dark:text-[#252525] dark:hover:bg-white/90"
-        >
-          <svg className="size-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
-          Share
-        </button>
       </div>
     </Modal>
   );

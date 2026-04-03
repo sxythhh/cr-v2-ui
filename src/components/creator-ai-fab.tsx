@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { GamepadIcon } from "@/components/sidebar/icons/gamepad";
 
+
 const SUGGESTIONS = [
   "Find campaigns that fit my style",
   "How can I earn more?",
@@ -281,8 +282,10 @@ export function CreatorAiFab() {
     <>
       {open && (
         <div className="fixed bottom-[132px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)] md:bottom-[72px]">
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-foreground/[0.06] opacity-30 blur-[0.5px] dark:border-white/[0.06]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)" }} />
-          <div className="pointer-events-none absolute inset-0 rounded-2xl border border-foreground/[0.06] opacity-30 blur-[0.5px] dark:border-white/[0.06]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)" }} />
+          {/* Pink gradient border rect */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF3FD5" }} />
+          {/* Orange gradient border rect */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF9025" }} />
         <div className="relative flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-[#FBFBFB] shadow-[0_2px_6px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.04)] dark:border-white/[0.06] dark:bg-[#161616] dark:shadow-[0_2px_6px_rgba(0,0,0,0.3),0_4px_12px_rgba(0,0,0,0.2)]">
           {/* Header */}
           <div className="relative flex items-center justify-center border-b border-foreground/[0.06] bg-white px-5 py-3 dark:border-white/[0.06] dark:bg-card-bg">

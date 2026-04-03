@@ -604,8 +604,12 @@ export default function CreatorForYouPage() {
         if (q.multi) {
           return { ...prev, [quizStep]: curr.includes(opt) ? curr.filter((o) => o !== opt) : [...curr, opt] };
         }
-        // Single select — replace
-        return { ...prev, [quizStep]: curr.includes(opt) ? [] : [opt] };
+        // Single select — replace and auto-advance
+        const newAnswers = { ...prev, [quizStep]: curr.includes(opt) ? [] : [opt] };
+        if (!curr.includes(opt)) {
+          setTimeout(goForward, 0);
+        }
+        return newAnswers;
       });
     };
 
@@ -753,22 +757,24 @@ export default function CreatorForYouPage() {
                 </div>
               </div>
 
-              {/* Continue button — pinned at bottom right */}
-              <div className="flex w-full shrink-0 justify-end">
-                <button
-                  onClick={goForward}
-                  disabled={selected.length === 0}
-                  className={cn(
-                    "shrink-0 rounded-full px-8 py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-opacity",
-                    selected.length === 0 ? "pointer-events-none opacity-30" : "opacity-100"
-                  )}
-                  style={{
-                    background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207",
-                  }}
-                >
-                  Continue
-                </button>
-              </div>
+              {/* Continue button — pinned at bottom right, hidden for single-select */}
+              {q.multi && (
+                <div className="flex w-full shrink-0 justify-end">
+                  <button
+                    onClick={goForward}
+                    disabled={selected.length === 0}
+                    className={cn(
+                      "shrink-0 rounded-full px-8 py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-opacity",
+                      selected.length === 0 ? "pointer-events-none opacity-30" : "opacity-100"
+                    )}
+                    style={{
+                      background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207",
+                    }}
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
