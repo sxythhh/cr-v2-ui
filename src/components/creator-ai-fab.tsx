@@ -280,9 +280,9 @@ export function CreatorAiFab() {
   if (!pathname?.startsWith("/creator")) return null;
 
   return (
-    <>
+    <div className="hidden md:block">
       <AiPopupAnimated open={open}>
-        <div className="fixed bottom-[132px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)] md:bottom-[72px]">
+        <div className="fixed bottom-[72px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)]">
           {/* Pink gradient border rect */}
           <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF3FD5" }} />
           {/* Orange gradient border rect */}
@@ -355,7 +355,7 @@ export function CreatorAiFab() {
                 {/* Streamed response text */}
                 <div className="flex items-start gap-1.5 px-5">
                   <RobotIconSmall />
-                  <span className="text-sm leading-[160%] tracking-[-0.02em] text-page-text">
+                  <span className="relative -top-[2px] text-sm leading-[160%] tracking-[-0.02em] text-page-text">
                     {streamedText}
                     {!textDone && <span className="ml-0.5 inline-block h-[14px] w-[2px] animate-pulse bg-[#E57100]" />}
                   </span>
@@ -462,10 +462,10 @@ export function CreatorAiFab() {
         </div>
       </AiPopupAnimated>
 
-      {/* FAB */}
+      {/* FAB — desktop only, mobile uses /creator/ai-assistant page */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-20 right-4 z-[9998] flex size-12 items-center justify-center rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.08),0_0_0_1px_rgba(229,113,0,0.06)] transition-transform hover:scale-105 active:scale-95 dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),0_0_0_1px_rgba(229,113,0,0.15)] md:bottom-4"
+        className="fixed bottom-4 right-4 z-[9998] flex size-12 items-center justify-center rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.08),0_0_0_1px_rgba(229,113,0,0.06)] transition-transform hover:scale-105 active:scale-95 dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),0_0_0_1px_rgba(229,113,0,0.15)]"
         style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.2) 0%, rgba(255,144,37,0) 90.69%), var(--card-bg, #FFFFFF)" }}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -474,6 +474,6 @@ export function CreatorAiFab() {
           <defs><radialGradient id="fab_grad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 1.263) rotate(180) scale(9 13.51)"><stop stopColor="#F59E0B"/><stop offset="1" stopColor="#F59E0B" stopOpacity="0"/></radialGradient></defs>
         </svg>
       </button>
-    </>
+    </div>
   );
 }
