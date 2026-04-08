@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/haptics";
 import { Sparkle as SidebarSparkle } from "@/components/sidebar/icons/sparkle";
+import { Compass as SidebarCompass } from "@/components/sidebar/icons/compass";
 import { Submissions as SidebarSubmissions } from "@/components/sidebar/icons/submissions";
 
 // ── Tab bar icons — exact copies from sidebar/icons/ ───────────────
@@ -191,7 +192,7 @@ const BRAND_MORE_ITEMS = [
 const CREATOR_PRIMARY_TABS = [
   { href: "/creator/dashboard", icon: HomeIcon, exact: true },
   { href: "/creator/for-you", icon: SidebarSparkle },
-  { href: "/creator/discover", icon: CompassIcon },
+  { href: "/creator/discover", icon: SidebarCompass },
   { href: "/creator/submissions", icon: SidebarSubmissions },
 ];
 
