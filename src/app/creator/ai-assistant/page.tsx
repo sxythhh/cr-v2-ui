@@ -275,10 +275,10 @@ export default function CreatorAiAssistantPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
+    <div className="flex h-[calc(100svh-60px)] flex-col overflow-hidden font-inter tracking-[-0.02em] md:min-h-screen md:h-auto md:overflow-visible">
       <CreatorHeader title="AI Assistant" />
 
-      <div className="flex flex-1 flex-col justify-between px-4 pb-5 sm:px-5">
+      <div className="flex min-h-0 flex-1 flex-col justify-between px-4 pb-5 sm:px-5">
         {view === "welcome" ? (
           /* ── Welcome state ── */
           <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-6">

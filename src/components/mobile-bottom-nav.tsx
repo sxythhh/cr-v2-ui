@@ -6,6 +6,8 @@ import { useState, useRef, useEffect, type SVGProps } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/haptics";
+import { Sparkle as SidebarSparkle } from "@/components/sidebar/icons/sparkle";
+import { Submissions as SidebarSubmissions } from "@/components/sidebar/icons/submissions";
 
 // ── Tab bar icons — exact copies from sidebar/icons/ ───────────────
 
@@ -188,9 +190,9 @@ const BRAND_MORE_ITEMS = [
 
 const CREATOR_PRIMARY_TABS = [
   { href: "/creator/dashboard", icon: HomeIcon, exact: true },
-  { href: "/creator/for-you", icon: SparkleIcon },
+  { href: "/creator/for-you", icon: SidebarSparkle },
   { href: "/creator/discover", icon: CompassIcon },
-  { href: "/creator/submissions", icon: SubmissionsIcon },
+  { href: "/creator/submissions", icon: SidebarSubmissions },
 ];
 
 const CREATOR_MORE_ITEMS = [
