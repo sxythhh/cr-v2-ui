@@ -260,7 +260,7 @@ function QuestItem({
         <span className="text-sm font-medium leading-none tracking-[-0.02em] text-page-text" style={titleColor ? { color: titleColor } : {}}>
           {title}
         </span>
-        <span className="truncate text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">{description}</span>
+        <span className="text-xs leading-[150%] tracking-[-0.02em] text-page-text-muted">{description}</span>
       </div>
       <div className="flex shrink-0 items-center gap-1 rounded-full border border-foreground/[0.06] bg-white py-1 pl-1.5 pr-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
         <StarIcon className="size-3" />
@@ -817,6 +817,13 @@ export default function CreatorRewardsPage() {
                 xp="100 XP"
               />
             </div>
+            <QuestItem
+              icon={<MedalIcon className="size-4" color="rgba(37,37,37,0.5)" />}
+              title="Sharpshooter"
+              titleColor="#ED1285"
+              description="50%+ approval rate (min 10 submissions)."
+              xp="100 XP"
+            />
           </div>
         </div>
 
@@ -864,24 +871,39 @@ export default function CreatorRewardsPage() {
 
             <div className="h-px w-full bg-foreground/[0.06]" />
 
-            {/* Day labels */}
-            <div className="flex items-center justify-between">
-              {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-                <div key={i} className="flex w-[69px] items-center justify-center">
-                  <span className="text-xs font-medium leading-none text-page-text-subtle">{d}</span>
-                </div>
-              ))}
+            {/* Row 1: M T W T */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                {["M", "T", "W", "T"].map((d, i) => (
+                  <div key={i} className="flex flex-1 items-center justify-center">
+                    <span className="text-xs font-medium leading-none text-page-text-subtle">{d}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-start justify-between gap-4">
+                <StreakDay date={23} active={false} />
+                <StreakDay date={24} active />
+                <StreakDay date={25} active reward="50 XP" />
+                <StreakDay date={26} active />
+              </div>
             </div>
 
-            {/* Day circles */}
-            <div className="flex items-start justify-between">
-              <StreakDay date={23} active={false} />
-              <StreakDay date={24} active />
-              <StreakDay date={25} active reward="50 XP" />
-              <StreakDay date={26} active />
-              <StreakDay date={27} current active />
-              <StreakDay date={28} future />
-              <StreakDay date={29} future reward="100 XP" />
+            {/* Row 2: F S S */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center">
+                {["F", "S", "S"].map((d, i) => (
+                  <div key={i} className="flex flex-1 items-center justify-center">
+                    <span className="text-xs font-medium leading-none text-page-text-subtle">{d}</span>
+                  </div>
+                ))}
+                <div className="flex-1" />
+              </div>
+              <div className="flex items-start gap-4">
+                <StreakDay date={27} current active />
+                <StreakDay date={28} future />
+                <StreakDay date={29} future reward="100 XP" />
+                <div className="flex-1" />
+              </div>
             </div>
           </div>
         </div>

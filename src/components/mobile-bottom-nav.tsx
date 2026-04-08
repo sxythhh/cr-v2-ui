@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect, type SVGProps } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import { haptic } from "@/lib/haptics";
 
 // ── Tab bar icons — exact copies from sidebar/icons/ ───────────────
 
@@ -106,6 +107,14 @@ function GearIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function RobotIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 12 14" fill="currentColor" {...props}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M6 0C6.36819 0 6.66667 0.298477 6.66667 0.666667V1.33333H9.33333C10.4379 1.33333 11.3333 2.22876 11.3333 3.33333V6.66667C11.3333 7.259 11.0758 7.79119 10.6667 8.1574V9.05719L11.8047 10.1953C12.0651 10.4556 12.0651 10.8777 11.8047 11.1381C11.5444 11.3984 11.1223 11.3984 10.8619 11.1381L10.454 10.7302C9.86034 12.6251 8.09073 14 6 14C3.90927 14 2.13966 12.6251 1.54598 10.7302L1.13807 11.1381C0.877722 11.3984 0.455612 11.3984 0.195262 11.1381C-0.0650874 10.8777 -0.0650874 10.4556 0.195262 10.1953L1.33333 9.05719V8.1574C0.924167 7.79119 0.666667 7.259 0.666667 6.66667V3.33333C0.666667 2.22876 1.5621 1.33333 2.66667 1.33333H5.33333V0.666667C5.33333 0.298477 5.63181 0 6 0ZM2.66667 2.66667C2.29848 2.66667 2 2.96514 2 3.33333V6.66667C2 7.03486 2.29848 7.33333 2.66667 7.33333H9.33333C9.70152 7.33333 10 7.03486 10 6.66667V3.33333C10 2.96514 9.70152 2.66667 9.33333 2.66667H2.66667ZM4 4C4.36819 4 4.66667 4.29848 4.66667 4.66667V5.33333C4.66667 5.70152 4.36819 6 4 6C3.63181 6 3.33333 5.70152 3.33333 5.33333V4.66667C3.33333 4.29848 3.63181 4 4 4ZM8 4C8.36819 4 8.66667 4.29848 8.66667 4.66667V5.33333C8.66667 5.70152 8.36819 6 8 6C7.63181 6 7.33333 5.70152 7.33333 5.33333V4.66667C7.33333 4.29848 7.63181 4 8 4Z" />
+    </svg>
+  );
+}
+
 function LogoutIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -186,13 +195,14 @@ const CREATOR_PRIMARY_TABS = [
 
 const CREATOR_MORE_ITEMS = [
   [
-    { href: "/creator/analytics", icon: PieChartIcon, label: "Insights" },
     { href: "/creator/rewards", icon: TrophyIcon, label: "Rewards" },
+    { href: "/creator/analytics", icon: PieChartIcon, label: "Insights" },
     { href: "/creator/community", icon: UsersIcon, label: "Community" },
+    { href: "/creator/help", icon: HelpCircleIcon, label: "Help" },
   ],
   [
-    { href: "/creator/help", icon: HelpCircleIcon, label: "Help" },
     { href: "/creator/settings", icon: GearIcon, label: "Settings" },
+    { href: "/creator/ai-assistant", icon: RobotIcon, label: "AI Assistant", isAi: true },
     { href: "#logout", icon: LogoutIcon, label: "Logout", isLogout: true },
   ],
 ] as const;
@@ -243,6 +253,7 @@ export function MobileBottomNav() {
             <Link
               key={href}
               href={href}
+              onClick={() => haptic("light")}
               className="flex flex-1 flex-col items-center justify-center gap-1 py-3"
             >
               <Icon
@@ -259,7 +270,7 @@ export function MobileBottomNav() {
         <button
           ref={btnRef}
           type="button"
-          onClick={() => setMoreOpen((v) => !v)}
+          onClick={() => { haptic("medium"); setMoreOpen((v) => !v); }}
           className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 py-3"
         >
           <MoreDotsIcon
@@ -286,13 +297,15 @@ export function MobileBottomNav() {
                   {row.map((item) => {
                     const Icon = item.icon;
                     const isLogout = "isLogout" in item && item.isLogout;
-                    const isActive = !isLogout && pathname.startsWith(item.href);
+                    const isAi = "isAi" in item && item.isAi;
+                    const isActive = !isLogout && !isAi && pathname.startsWith(item.href);
 
                     return (
                       <Link
                         key={item.label}
                         href={item.href}
                         onClick={(e) => {
+                          haptic("light");
                           if (isLogout) e.preventDefault();
                           setMoreOpen(false);
                         }}
@@ -303,9 +316,11 @@ export function MobileBottomNav() {
                             "flex h-14 w-16 items-center justify-center rounded-2xl transition-colors",
                             isLogout
                               ? "bg-[rgba(255,51,85,0.08)]"
-                              : isActive
-                                ? "bg-foreground/[0.08]"
-                                : "bg-foreground/[0.04]",
+                              : isAi
+                                ? "bg-[rgba(229,113,0,0.08)]"
+                                : isActive
+                                  ? "bg-foreground/[0.08]"
+                                  : "bg-foreground/[0.04]",
                           )}
                         >
                           <Icon
@@ -313,9 +328,11 @@ export function MobileBottomNav() {
                               "size-6",
                               isLogout
                                 ? "text-[#FF3355]"
-                                : isActive
-                                  ? "text-foreground"
-                                  : "text-foreground/50",
+                                : isAi
+                                  ? "text-[#FF6207]"
+                                  : isActive
+                                    ? "text-foreground"
+                                    : "text-foreground/50",
                             )}
                           />
                         </div>

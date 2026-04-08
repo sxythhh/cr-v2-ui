@@ -506,17 +506,17 @@ export default function CreatorForYouPage() {
   // ── Quiz intro stage ──────────────────────────────────────────
   if (stage === "quiz") {
     return (
-      <div className="relative flex min-h-screen flex-col bg-[#FBFBFB] font-inter tracking-[-0.02em] dark:bg-page-bg">
-        {/* Background gradients */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] h-[712px]" style={{
+      <div className="relative flex min-h-screen flex-col bg-page-bg font-inter tracking-[-0.02em] md:bg-[#FBFBFB] dark:bg-page-bg">
+        {/* Background gradients — hidden on mobile */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] hidden h-[712px] md:block" style={{
           background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255,63,213,0.16) 0%, rgba(255,63,213,0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255,144,37,0.5) 0%, rgba(255,144,37,0) 100%)",
         }} />
 
         {/* Header */}
-        <CreatorHeader title="For you" className="relative z-10 border-transparent bg-transparent" />
+        <CreatorHeader title="For you" className="relative z-10 md:border-transparent md:bg-transparent" />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-12 lg:px-[156px]">
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-5 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
           <div className="relative isolate flex w-full max-w-[400px] flex-col items-center gap-6 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
 
@@ -625,19 +625,19 @@ export default function CreatorForYouPage() {
     };
 
     return (
-      <div className="relative flex min-h-screen flex-col bg-[#FBFBFB] font-inter tracking-[-0.02em] dark:bg-page-bg">
-        {/* Background gradients */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] h-[712px]" style={{
+      <div className="relative flex min-h-screen flex-col bg-page-bg font-inter tracking-[-0.02em] md:bg-[#FBFBFB] dark:bg-page-bg">
+        {/* Background gradients — hidden on mobile */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] hidden h-[712px] md:block" style={{
           background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255,63,213,0.16) 0%, rgba(255,63,213,0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255,144,37,0.5) 0%, rgba(255,144,37,0) 100%)",
         }} />
 
         {/* Header */}
-        <CreatorHeader title="For you" className="relative z-10 border-transparent bg-transparent" />
+        <CreatorHeader title="For you" className="relative z-10 md:border-transparent md:bg-transparent" />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-12 lg:px-[156px]">
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-5 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
-          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-4 rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
+          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-6 rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
             {/* Back button */}
             <button
               onClick={goBack}
