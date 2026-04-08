@@ -873,18 +873,18 @@ export default function CreatorRewardsPage() {
 
             {/* Row 1: M T W T */}
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 {["M", "T", "W", "T"].map((d, i) => (
                   <div key={i} className="flex flex-1 items-center justify-center">
                     <span className="text-xs font-medium leading-none text-page-text-subtle">{d}</span>
                   </div>
                 ))}
               </div>
-              <div className="flex items-start justify-between gap-4">
-                <StreakDay date={23} active={false} />
-                <StreakDay date={24} active />
-                <StreakDay date={25} active reward="50 XP" />
-                <StreakDay date={26} active />
+              <div className="flex items-start">
+                <div className="flex flex-1 justify-center"><StreakDay date={23} active={false} /></div>
+                <div className="flex flex-1 justify-center"><StreakDay date={24} active /></div>
+                <div className="flex flex-1 justify-center"><StreakDay date={25} active reward="50 XP" /></div>
+                <div className="flex flex-1 justify-center"><StreakDay date={26} active /></div>
               </div>
             </div>
 
@@ -898,10 +898,10 @@ export default function CreatorRewardsPage() {
                 ))}
                 <div className="flex-1" />
               </div>
-              <div className="flex items-start gap-4">
-                <StreakDay date={27} current active />
-                <StreakDay date={28} future />
-                <StreakDay date={29} future reward="100 XP" />
+              <div className="flex items-start">
+                <div className="flex flex-1 justify-center"><StreakDay date={27} current active /></div>
+                <div className="flex flex-1 justify-center"><StreakDay date={28} future /></div>
+                <div className="flex flex-1 justify-center"><StreakDay date={29} future reward="100 XP" /></div>
                 <div className="flex-1" />
               </div>
             </div>
