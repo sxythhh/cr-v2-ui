@@ -258,7 +258,7 @@ export function MobileBottomNav() {
             >
               <Icon
                 className={cn(
-                  "transition-colors",
+                  "size-5 transition-colors",
                   isActive ? "text-foreground" : "text-foreground/50",
                 )}
               />
@@ -275,7 +275,7 @@ export function MobileBottomNav() {
         >
           <MoreDotsIcon
             className={cn(
-              "transition-colors",
+              "w-5 transition-colors",
               moreOpen || isMoreActive ? "text-foreground" : "text-foreground/50",
             )}
           />
