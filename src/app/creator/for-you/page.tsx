@@ -506,7 +506,7 @@ export default function CreatorForYouPage() {
   // ── Quiz intro stage ──────────────────────────────────────────
   if (stage === "quiz") {
     return (
-      <div className="relative flex min-h-screen flex-col bg-page-bg font-inter tracking-[-0.02em] md:bg-[#FBFBFB] dark:bg-page-bg">
+      <div className="relative flex h-[calc(100svh-60px)] flex-col overflow-hidden bg-page-bg font-inter tracking-[-0.02em] md:min-h-screen md:overflow-visible md:bg-[#FBFBFB] dark:bg-page-bg">
         {/* Background gradients — hidden on mobile */}
         <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] hidden h-[712px] md:block" style={{
           background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255,63,213,0.16) 0%, rgba(255,63,213,0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255,144,37,0.5) 0%, rgba(255,144,37,0) 100%)",
@@ -625,7 +625,7 @@ export default function CreatorForYouPage() {
     };
 
     return (
-      <div className="relative flex min-h-screen flex-col bg-page-bg font-inter tracking-[-0.02em] md:bg-[#FBFBFB] dark:bg-page-bg">
+      <div className="relative flex h-[calc(100svh-60px)] flex-col overflow-hidden bg-page-bg font-inter tracking-[-0.02em] md:min-h-screen md:overflow-visible md:bg-[#FBFBFB] dark:bg-page-bg">
         {/* Background gradients — hidden on mobile */}
         <div className="pointer-events-none absolute inset-x-0 bottom-[-12px] hidden h-[712px] md:block" style={{
           background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, rgba(255,63,213,0.16) 0%, rgba(255,63,213,0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, rgba(255,144,37,0.5) 0%, rgba(255,144,37,0) 100%)",
