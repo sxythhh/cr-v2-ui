@@ -124,7 +124,7 @@ export default function CreatorSettingsPage() {
         {activeTab === "profile" && (
           <div className="flex flex-col gap-2 md:flex-row">
             {/* Left: Profile info */}
-            <div className={cn(cardCls, "flex flex-1 flex-col gap-4 self-start p-4")}>
+            <div className={cn(cardCls, "flex w-full flex-col gap-4 self-start p-4 md:flex-1")}>
               {/* Avatar + name */}
               <div className="flex items-center gap-4">
                 <div className="size-14 shrink-0 overflow-hidden rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500 dark:border-[rgba(224,224,224,0.03)]" />
@@ -185,7 +185,7 @@ export default function CreatorSettingsPage() {
             </div>
 
             {/* Right column */}
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="flex w-full flex-col gap-2 md:flex-1">
               {/* Content niches */}
               <div className={cn(cardCls, "flex flex-col gap-3 p-4")}>
                 <div className="flex flex-col gap-1.5">
