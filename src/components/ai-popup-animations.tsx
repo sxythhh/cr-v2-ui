@@ -8,7 +8,7 @@ const ANIM = {
   visible: { opacity: 1, scale: 1, borderRadius: "0%" },
   exit: { opacity: 0, scale: 0.98, filter: "blur(4px)" },
   enterTransition: { type: "spring" as const, stiffness: 340, damping: 28, mass: 0.8 },
-  exitTransition: { duration: 0.15, ease: [0.5, 0, 1, 0.5] },
+  exitTransition: { duration: 0.15, ease: [0.5, 0, 1, 0.5] as [number, number, number, number] },
 };
 
 export function AiPopupAnimated({
