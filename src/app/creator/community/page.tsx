@@ -90,45 +90,56 @@ export default function CommunityPage() {
   const [activeThread, setActiveThread] = useState<typeof discussions[number] | null>(null);
 
   return (
-    <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
-      <CreatorHeader title="Community" />
+    <div className={cn("flex flex-col font-inter tracking-[-0.02em]", activeThread ? "h-[calc(100svh-60px)] overflow-hidden md:h-auto md:min-h-screen md:overflow-visible" : "min-h-screen")}>
+      {activeThread ? (
+        <div className="flex items-center justify-between border-b border-foreground/[0.06] px-4 py-4 sm:px-5 md:hidden">
+          <button onClick={() => setActiveThread(null)} className="flex items-center gap-2 text-sm font-medium text-page-text">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-foreground/50"><path d="M10 4L6 8l4 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Back
+          </button>
+        </div>
+      ) : null}
+      <CreatorHeader title="Community" className={activeThread ? "hidden md:flex" : ""} />
 
       {activeThread ? (
         /* ── Thread detail view ── */
-        <div className="mx-auto flex w-full max-w-[756px] flex-col gap-4 px-4 py-4 sm:px-5 md:px-4">
-          <button onClick={() => setActiveThread(null)} className="flex items-center gap-2 self-start text-sm font-medium text-page-text transition-colors hover:text-page-text-muted">
+        <div className="mx-auto flex w-full max-w-[756px] flex-1 flex-col gap-4 px-4 py-4 sm:px-5 md:px-4">
+          {/* Back button — desktop shows text, mobile in header */}
+          <button onClick={() => setActiveThread(null)} className="hidden items-center gap-2 self-start text-sm font-medium text-page-text transition-colors hover:text-page-text-muted md:flex">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-foreground/50"><path d="M10 4L6 8l4 4" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
             Back to Discussions
           </button>
 
-          <div className={cn(cardCls, "flex flex-col")}>
+          <div className={cn(cardCls, "relative flex flex-1 flex-col")}>
             {/* Thread header */}
-            <div className="flex items-center gap-3 border-b border-foreground/[0.06] p-4 dark:border-[rgba(224,224,224,0.03)]">
+            <div className="flex items-start gap-3 border-b border-foreground/[0.06] p-4 dark:border-[rgba(224,224,224,0.03)]">
               <div className="size-9 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
-              <div className="flex flex-1 flex-col gap-2">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-medium text-page-text">{activeThread.title}</span>
+              <div className="flex min-w-0 flex-1 flex-col gap-3">
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm font-medium leading-[120%] text-page-text">{activeThread.title}</span>
+                  <div className="flex items-center gap-1 text-xs text-page-text-subtle">
+                    <span>{activeThread.author}</span>
+                    <span>&middot;</span>
+                    <span>{activeThread.time}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-page-text-subtle">
-                  <span>{activeThread.author}</span>
-                  <span>&middot;</span>
-                  <span>{activeThread.time}</span>
+                <div className="flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] py-1 pl-1.5 pr-2 dark:border-[rgba(224,224,224,0.03)]">
+                    <ChatBubbleIcon className="size-3 text-foreground/50" />
+                    <span className="text-xs font-medium text-page-text">{activeThread.replies} replies</span>
+                  </span>
+                  {activeThread.hot && (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] py-1 pl-1.5 pr-2 dark:border-[rgba(224,224,224,0.03)]">
+                      <FireIcon className="size-3" />
+                      <span className="text-xs font-medium text-page-text">Hot</span>
+                    </span>
+                  )}
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] py-1 pl-1.5 pr-2 dark:border-[rgba(224,224,224,0.03)]">
-                <ChatBubbleIcon className="size-3 text-foreground/50" />
-                <span className="text-xs font-medium text-page-text">{activeThread.replies} replies</span>
-              </span>
-              {activeThread.hot && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-foreground/[0.06] py-1 pl-1.5 pr-2 dark:border-[rgba(224,224,224,0.03)]">
-                  <FireIcon className="size-3" />
-                  <span className="text-xs font-medium text-page-text">Hot</span>
-                </span>
-              )}
             </div>
 
-            {/* Comments */}
-            <div className="flex flex-col">
+            {/* Comments — scrollable */}
+            <div className="flex flex-1 flex-col overflow-y-auto pb-16">
               {threadComments.map((c, i) => (
                 <div key={i} className="flex gap-2 border-b border-foreground/[0.06] px-4 py-4 dark:border-[rgba(224,224,224,0.03)]">
                   <div className="size-6 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
@@ -156,13 +167,10 @@ export default function CommunityPage() {
               ))}
             </div>
 
-            {/* Comment input */}
-            <div className="flex items-center gap-2 p-4">
-              <div className="size-10 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
-              <div className="flex flex-1 items-center rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 dark:bg-white/[0.04]">
-                <span className="text-sm text-foreground/40">Write a message...</span>
-              </div>
-              <button className="flex h-10 items-center rounded-full px-4 text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+            {/* Comment input — pinned at bottom */}
+            <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 rounded-b-2xl bg-white px-4 py-4 dark:bg-[rgba(224,224,224,0.03)]">
+              <input className="flex-1 rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="Write a message..." />
+              <button className="flex h-10 shrink-0 items-center rounded-full px-4 text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
                 Post
               </button>
             </div>
