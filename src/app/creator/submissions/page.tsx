@@ -80,7 +80,7 @@ const filterTabs = [
   { label: "In review", count: 3 },
   { label: "Approved", count: 194 },
   { label: "Rejected", count: 0 },
-  { label: "Flagged", count: 0 },
+  { label: "Archived", count: 3 },
 ];
 
 const clips = [
@@ -157,6 +157,17 @@ export default function CreatorSubmissionsPage() {
   }, []);
 
   const [viewMode, setViewMode] = useState<"list" | "card">("card");
+  const statScrollRef = useRef<HTMLDivElement>(null);
+  const [statActiveIndex, setStatActiveIndex] = useState(0);
+
+  const handleStatScroll = useCallback(() => {
+    const el = statScrollRef.current;
+    if (!el || !el.children[0]) return;
+    const childWidth = (el.children[0] as HTMLElement).offsetWidth;
+    if (childWidth === 0) return;
+    const index = Math.round(el.scrollLeft / (childWidth + 8));
+    setStatActiveIndex(Math.min(index, stats.length - 1));
+  }, []);
   const [activeFilter, setActiveFilter] = useState(0);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [payoutOpen, setPayoutOpen] = useState(false);
@@ -183,17 +194,73 @@ export default function CreatorSubmissionsPage() {
       <CreatorHeader title="My clips" />
 
       <div className="mx-auto flex w-full max-w-[756px] flex-col gap-6 px-4 py-4 sm:px-5 md:px-4">
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+        {/* Stat cards — mobile carousel */}
+        <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+          <div
+            ref={statScrollRef}
+            onScroll={handleStatScroll}
+            className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide [scroll-padding-inline:16px] sm:pl-5 sm:[scroll-padding-inline:20px]"
+          >
+            {stats.map((s, i) => {
+              const isClickable = s.label === "Trust score";
+              return (
+                <div
+                  key={s.label}
+                  className={cn("w-[calc(50%-4px)] shrink-0 snap-start snap-always", i === stats.length - 1 && "mr-4 sm:mr-5")}
+                >
+                  <div
+                    className={cn(cardCls, "flex h-[61px] items-center gap-3 overflow-hidden pr-3", isClickable && "cursor-pointer")}
+                    onClick={isClickable ? () => setTrustScoreOpen(true) : undefined}
+                  >
+                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={isDark ? s.bgDark : s.bg} />
+                      </svg>
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        {s.icon(isDark ? s.iconColorDark : s.color)}
+                      </div>
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+                      <span className="text-sm font-medium text-page-text">{s.value}</span>
+                      <span className="flex items-center gap-1 text-xs text-page-text-muted">
+                        {s.label}
+                        {s.hasHelp && <HelpIcon className="shrink-0" />}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-1">
+            {stats.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => {
+                  const child = statScrollRef.current?.children[i] as HTMLElement | undefined;
+                  child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+                }}
+                className={cn(
+                  "size-1.5 cursor-pointer rounded-full transition-colors",
+                  i === statActiveIndex ? "bg-page-text" : "bg-foreground/10 dark:bg-white/10",
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Stat cards — desktop grid */}
+        <div className="hidden grid-cols-4 gap-2 md:grid">
           {stats.map((s) => {
             const isClickable = s.label === "Trust score";
             return (
               <div
                 key={s.label}
-                className={cn(cardCls, "flex h-[56px] items-center gap-2 overflow-hidden pr-3 sm:h-[61px] sm:gap-3", isClickable && "cursor-pointer transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}
+                className={cn(cardCls, "flex h-[61px] items-center gap-3 overflow-hidden pr-3", isClickable && "cursor-pointer transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}
                 onClick={isClickable ? () => setTrustScoreOpen(true) : undefined}
               >
-                <div className="relative h-[56px] w-[50px] shrink-0 overflow-hidden sm:h-[61px] sm:w-[60px]">
+                <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
                   <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
                     <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={isDark ? s.bgDark : s.bg} />
                   </svg>
@@ -201,7 +268,7 @@ export default function CreatorSubmissionsPage() {
                     {s.icon(isDark ? s.iconColorDark : s.color)}
                   </div>
                 </div>
-                <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
                   <span className="text-sm font-medium text-page-text">{s.value}</span>
                   <span className="flex items-center gap-1 text-xs text-page-text-muted">
                     {s.label}
@@ -213,14 +280,16 @@ export default function CreatorSubmissionsPage() {
           })}
         </div>
 
-        {/* Filter bar + actions */}
+        {/* Filter bar */}
         <div className="flex items-start justify-between gap-4">
-          <Tabs selectedIndex={activeFilter} onSelect={setActiveFilter} className="w-fit">
-            {filterTabs.map((t, i) => (
-              <TabItem key={t.label} label={t.label} count={t.count} index={i} />
-            ))}
-          </Tabs>
-          <div className="flex items-center gap-2">
+          <div className="-mx-4 overflow-x-auto px-4 scrollbar-hide sm:-mx-5 sm:px-5 md:mx-0 md:px-0">
+            <Tabs selectedIndex={activeFilter} onSelect={setActiveFilter} className="w-fit">
+              {filterTabs.map((t, i) => (
+                <TabItem key={t.label} label={t.label} count={t.count} index={i} />
+              ))}
+            </Tabs>
+          </div>
+          <div className="hidden items-center gap-2 md:flex">
             <button
               onClick={() => setViewMode((v) => (v === "list" ? "card" : "list"))}
               className="flex size-9 items-center justify-center rounded-xl bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
@@ -660,6 +729,13 @@ export default function CreatorSubmissionsPage() {
 
       {/* Trust Score Modal */}
       <TrustScoreModal open={trustScoreOpen} onClose={() => setTrustScoreOpen(false)} />
+
+      {/* Mobile fixed bottom submit bar */}
+      <div className="fixed inset-x-0 bottom-[calc(52px+max(8px,env(safe-area-inset-bottom)))] z-40 flex items-center justify-end border-t border-foreground/[0.06] bg-white px-4 py-4 sm:px-5 md:hidden dark:bg-page-bg">
+        <button onClick={() => setSubmitOpen(true)} className="flex h-9 items-center rounded-full px-4 text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+          Submit clip
+        </button>
+      </div>
     </div>
   );
 }
