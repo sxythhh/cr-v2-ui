@@ -72,6 +72,83 @@ const INSIGHTS_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
   yLabels: ["1M", "750k", "500k", "250k", "0"],
 };
 
+function StatCard({ s }: { s: typeof stats[number] }) {
+  return (
+    <div className={cn(cardCls, "flex h-[61px] items-center gap-3 overflow-hidden pr-3")}>
+      <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+        <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+          <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={s.bg} />
+        </svg>
+        <div className="relative flex h-full w-full items-center justify-center">
+          {s.icon}
+        </div>
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{s.value}</span>
+        <span className="text-xs tracking-[-0.02em] text-page-text-muted">{s.label}</span>
+      </div>
+    </div>
+  );
+}
+
+function StatCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || !el.children[0]) return;
+    const childWidth = (el.children[0] as HTMLElement).offsetWidth;
+    if (childWidth === 0) return;
+    const index = Math.round(el.scrollLeft / (childWidth + 8));
+    setActiveIndex(Math.min(index, stats.length - 1));
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  return (
+    <div className="-mx-4 flex flex-col items-center gap-2 sm:-mx-5 md:hidden">
+      <div
+        ref={scrollRef}
+        className="flex w-full snap-x snap-mandatory gap-2 overflow-x-auto pl-4 scrollbar-hide [scroll-padding-inline:16px] sm:pl-5 sm:[scroll-padding-inline:20px]"
+      >
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={cn(
+              "w-[calc(50%-4px)] shrink-0 snap-start snap-always",
+              i === stats.length - 1 && "mr-4 sm:mr-5",
+            )}
+          >
+            <StatCard s={s} />
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-1">
+        {stats.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => {
+              const child = scrollRef.current?.children[i] as HTMLElement | undefined;
+              child?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+            }}
+            className={cn(
+              "size-1.5 cursor-pointer rounded-full transition-colors",
+              i === activeIndex ? "bg-page-text" : "bg-foreground/10 dark:bg-white/10",
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CreatorAnalyticsPage() {
   const [chartTab, setChartTab] = useState<"views" | "payouts">("views");
   const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, engagement: false });
@@ -88,23 +165,13 @@ export default function CreatorAnalyticsPage() {
       <CreatorHeader title="Insights" />
 
       <div className="mx-auto flex w-full max-w-[756px] flex-col gap-4 px-4 py-4 sm:px-5 md:px-4">
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+        {/* Stat cards — mobile carousel */}
+        <StatCarousel />
+
+        {/* Stat cards — desktop grid */}
+        <div className="hidden grid-cols-4 gap-2 md:grid">
           {stats.map((s) => (
-            <div key={s.label} className={cn(cardCls, "flex h-[56px] items-center gap-2 overflow-hidden pr-3 sm:h-[61px] sm:gap-3")}>
-              <div className="relative h-[56px] w-[50px] shrink-0 overflow-hidden sm:h-[61px] sm:w-[60px]">
-                <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
-                  <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={s.bg} />
-                </svg>
-                <div className="relative flex h-full w-full items-center justify-center">
-                  {s.icon}
-                </div>
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{s.value}</span>
-                <span className="text-xs tracking-[-0.02em] text-page-text-muted">{s.label}</span>
-              </div>
-            </div>
+            <StatCard key={s.label} s={s} />
           ))}
         </div>
 
@@ -138,9 +205,9 @@ export default function CreatorAnalyticsPage() {
         </div>
 
         {/* Campaign table */}
-        <div className={cn(cardCls, "flex flex-col overflow-x-auto")}>
-          {/* Header */}
-          <div className="flex min-w-[600px] items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
+        <div className={cn(cardCls, "flex flex-col")}>
+          {/* Header — desktop full columns */}
+          <div className="hidden border-b border-foreground/[0.06] px-1 md:flex dark:border-[rgba(224,224,224,0.03)]">
             <div className="flex flex-1 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Campaign</span></div>
             <div className="flex w-28 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Type</span></div>
             <div className="flex w-16 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Views</span></div>
@@ -148,6 +215,11 @@ export default function CreatorAnalyticsPage() {
             <div className="flex w-20 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Approved</span></div>
             <div className="flex w-24 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Earned</span></div>
             <div className="flex w-20 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Rate</span></div>
+          </div>
+          {/* Header — mobile 2 columns */}
+          <div className="flex items-center border-b border-foreground/[0.06] px-1 md:hidden dark:border-[rgba(224,224,224,0.03)]">
+            <div className="flex flex-1 items-center p-3"><span className="text-xs font-medium text-page-text-subtle">Campaign</span></div>
+            <div className="flex w-20 items-center justify-end p-3"><span className="text-xs font-medium text-page-text-subtle">Rate &amp; earned</span></div>
           </div>
           {/* Rows */}
           <div
@@ -173,23 +245,30 @@ export default function CreatorAnalyticsPage() {
               <div
                 key={i}
                 ref={(el) => campaignHover.registerItem(i, el)}
-                className="relative z-[1] flex min-w-[600px] cursor-pointer items-center border-b border-foreground/[0.03] px-1 dark:border-[rgba(224,224,224,0.01)]"
+                className="relative z-[1] flex cursor-pointer items-center border-b border-foreground/[0.03] px-1 dark:border-[rgba(224,224,224,0.01)]"
               >
+                {/* Campaign info — always visible */}
                 <div className="flex flex-1 items-center gap-2 p-3">
-                  <div className="size-6 shrink-0 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500 dark:border-[rgba(224,224,224,0.03)]" />
-                  <span className="text-xs font-medium text-page-text">{r.name}</span>
+                  <div className="size-9 shrink-0 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500 dark:border-[rgba(224,224,224,0.03)]" />
+                  <div className="flex min-w-0 flex-col gap-1">
+                    <span className="text-xs font-medium text-page-text">{r.name}</span>
+                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium dark:border-[rgba(224,224,224,0.03)]" style={{ color: r.typeColor }}>
+                      {TYPE_ICONS[r.type]}
+                      {r.type}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex w-28 items-center p-3">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium dark:border-[rgba(224,224,224,0.03)]" style={{ color: r.typeColor }}>
-                    {TYPE_ICONS[r.type]}
-                    {r.type}
-                  </span>
+                {/* Desktop-only columns */}
+                <div className="hidden w-16 items-center p-3 md:flex"><span className="text-xs text-page-text">{r.views}</span></div>
+                <div className="hidden w-16 items-center p-3 md:flex"><span className="text-xs text-page-text">{r.clips}</span></div>
+                <div className="hidden w-20 items-center p-3 md:flex"><span className="text-xs text-page-text">{r.approved}</span></div>
+                <div className="hidden w-24 items-center p-3 md:flex"><span className="text-xs text-[#00994D] dark:text-[#34D399]">{r.earned}</span></div>
+                <div className="hidden w-20 items-center p-3 md:flex"><span className="text-xs text-page-text">{r.rate}</span></div>
+                {/* Mobile: rate + earned */}
+                <div className="flex w-20 flex-col items-end gap-2 p-3 md:hidden">
+                  <span className="text-xs text-page-text">{r.rate}</span>
+                  <span className="text-xs text-[#00994D]">{r.earned}</span>
                 </div>
-                <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.views}</span></div>
-                <div className="flex w-16 items-center p-3"><span className="text-xs text-page-text">{r.clips}</span></div>
-                <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.approved}</span></div>
-                <div className="flex w-24 items-center p-3"><span className="text-xs text-[#00994D] dark:text-[#34D399]">{r.earned}</span></div>
-                <div className="flex w-20 items-center p-3"><span className="text-xs text-page-text">{r.rate}</span></div>
               </div>
             ))}
           </div>
