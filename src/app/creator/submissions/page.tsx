@@ -582,7 +582,7 @@ export default function CreatorSubmissionsPage() {
               </div>
 
               {payoutClipIndex === 0 ? (
-                <>
+                <div className="flex w-full flex-col items-center gap-0">
                   {/* Pending payout card */}
                   <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
                     <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
@@ -602,11 +602,17 @@ export default function CreatorSubmissionsPage() {
                     </span>
                   </div>
 
+                  {/* Vertical connector */}
+                  <div className="h-2 w-px border-l border-foreground/[0.12]" />
+
                   {/* Next payment notice */}
-                  <div className="flex w-full items-center justify-center gap-1.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" fill="none"/><path d="M12 7v5l3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round"/></svg>
+                  <div className="flex w-full items-center justify-center gap-1.5 py-0.5">
+                    <PendingClockIcon color="rgba(37,37,37,0.5)" />
                     <span className="text-xs font-medium text-page-text-subtle">2 days until next payment</span>
                   </div>
+
+                  {/* Vertical connector */}
+                  <div className="h-2 w-px border-l border-foreground/[0.12]" />
 
                   {/* Completed payout card */}
                   <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
@@ -626,9 +632,9 @@ export default function CreatorSubmissionsPage() {
                       Approved
                     </span>
                   </div>
-                </>
+                </div>
               ) : (
-                <>
+                <div className="flex w-full flex-col items-center gap-0">
                   {/* Completed payout 1 */}
                   <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
                     <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
@@ -669,7 +675,7 @@ export default function CreatorSubmissionsPage() {
                       Approved
                     </span>
                   </div>
-                </>
+                </div>
               )}
             </div>
         </ModalBody>
