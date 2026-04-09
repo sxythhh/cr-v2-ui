@@ -212,13 +212,30 @@ export default function AiCampaignPage() {
                 </div>
               </div>
             )}
+            {/* Mobile: inline summary card on final step */}
+            {isLastStep && (
+              <div className="flex items-start gap-1.5 md:hidden">
+                <div className="flex flex-col items-start justify-end pb-1 pt-1"><RobotIcon16 /></div>
+                <div className="flex flex-1 flex-col gap-5 rounded-2xl border border-foreground/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+                  <SummaryRow label="Payment model" value={summary.Model || "CPM"} />
+                  <SummaryRow label="Rate" value="$2.50 CPM" />
+                  <SummaryRow label="Platforms" value={summary.Platforms || "TikTok, Instagram"} />
+                  <SummaryRow label="Access" value={summary.Access || "Open to public"} />
+                  <SummaryRow label="Contract" value="3 months" />
+                  <SummaryRow label="Posts" value="20/mo" />
+                  <SummaryRow label="Spots" value="13 remaining (47/60)" />
+                  <SummaryRow label="Bonuses" value="2 milestones" />
+                  <SummaryRow label="Invited" value="3 invited creators" />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Options / Input area */}
           <div className="flex flex-col gap-4 pt-2">
             {/* Option buttons (if current question has options and not completed) */}
             {q.options && !isLastStep && (
-              <div className="flex flex-wrap justify-center gap-2">
+              <div className="flex flex-wrap gap-2 md:justify-center">
                 {q.options.map((opt) => (
                   <button
                     key={opt}
@@ -249,10 +266,10 @@ export default function AiCampaignPage() {
             {/* Final buttons */}
             {isLastStep && (
               <div className="flex items-center justify-center gap-2">
-                <button onClick={() => router.push("/create-campaign?model=cpm")} className="rounded-full bg-foreground/[0.06] px-4 py-2.5 text-sm font-medium text-page-text">
+                <button onClick={() => router.push("/create-campaign?model=cpm")} className="flex-1 rounded-full bg-foreground/[0.06] px-4 py-2.5 text-sm font-medium text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:flex-none">
                   Edit in Manual wizard
                 </button>
-                <button className="rounded-full bg-[#252525] px-4 py-2.5 text-sm font-medium text-white dark:bg-white dark:text-[#151515]">
+                <button className="flex-1 rounded-full bg-[#252525] px-4 py-2.5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:flex-none dark:bg-white dark:text-[#151515]">
                   Launch campaign
                 </button>
               </div>
