@@ -12,7 +12,6 @@ import { springs } from "@/lib/springs";
 import { Rating } from "@/components/reui/rating";
 import { UserDropdown } from "@/components/sidebar/user-dropdown";
 import { HexColorPicker, HexColorInput } from "react-colorful";
-import { IconUpload, IconPhoto } from "@tabler/icons-react";
 
 // ── Settings Tabs ────────────────────────────────────────────────────────────
 
@@ -1802,7 +1801,7 @@ function AgencyProfileTab() {
                         <div className="flex items-center gap-1">
                           <div className="size-[15px] shrink-0 rounded-full bg-foreground/[0.12]" />
                           <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-page-text">{card.brand}</span>
-                          <img src="/icons/verified-check.svg" alt="Verified" width={12} height={12} />
+                          <img src="/icons/CRCheckmark.svg" alt="Verified" width={12} height={12} />
                           <span className="font-inter text-[11px] tracking-[-0.02em] text-page-text-muted">&middot;</span>
                           <span className="font-inter text-[11px] tracking-[-0.02em] text-page-text-muted">{card.applied}</span>
                         </div>
@@ -1961,7 +1960,7 @@ function AgencyProfileTab() {
                             className="flex items-center gap-3 rounded-[14px] border border-dashed border-foreground/[0.16] px-4 py-4 transition-colors hover:border-foreground/[0.24] hover:bg-foreground/[0.02]"
                           >
                             <div className="flex size-[60px] shrink-0 items-center justify-center rounded-full bg-foreground/[0.04]">
-                              <IconUpload size={20} className="text-page-text-muted" />
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text-muted"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 9l5-5l5 5"/><path d="M12 4v12"/></svg>
                             </div>
                             <div className="flex flex-col gap-1">
                               <span className="font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text">Upload logo</span>
@@ -1998,7 +1997,7 @@ function AgencyProfileTab() {
                             className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border border-dashed border-foreground/[0.16] bg-foreground/[0.02] transition-colors hover:border-foreground/[0.24] hover:bg-foreground/[0.04]"
                             style={{ height: 231 }}
                           >
-                            <IconPhoto size={28} className="text-page-text-muted" />
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text-muted"><path d="M15 8h.01"/><path d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z"/><path d="M3 16l5-5c.928-.893 2.072-.893 3 0l5 5"/><path d="M14 14l1-1c.928-.893 2.072-.893 3 0l3 3"/></svg>
                             <span className="font-inter text-[14px] font-medium tracking-[-0.02em] text-page-text">Upload banner image</span>
                             <span className="font-inter text-[12px] tracking-[-0.02em] text-page-text-muted">PNG or JPEG, recommended 1200x400px</span>
                           </button>

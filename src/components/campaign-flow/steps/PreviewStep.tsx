@@ -121,7 +121,7 @@ export function PreviewStep({ configuration, details }: { configuration: Configu
                     <div className="size-6 rounded-full bg-foreground/10" />
                     <div className="flex items-center gap-1.5">
                       <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{brandName}</span>
-                      <img src="/icons/verified-check.svg" alt="Verified" width={14} height={14} />
+                      <img src="/icons/CRCheckmark.svg" alt="Verified" width={14} height={14} />
                       <span className="font-inter text-sm tracking-[-0.02em] text-foreground/20">·</span>
                       <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">5d</span>
                     </div>
@@ -190,7 +190,7 @@ export function PreviewStep({ configuration, details }: { configuration: Configu
                 <div className="size-6 rounded-full bg-foreground/10" />
                 <div className="flex items-center gap-1.5">
                   <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{brandName}</span>
-                  <img src="/icons/verified-check.svg" alt="Verified" width={14} height={14} />
+                  <img src="/icons/CRCheckmark.svg" alt="Verified" width={14} height={14} />
                   <span className="font-inter text-sm tracking-[-0.02em] text-foreground/20">·</span>
                   <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">5d</span>
                 </div>
