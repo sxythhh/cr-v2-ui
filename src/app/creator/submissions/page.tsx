@@ -533,7 +533,7 @@ export default function CreatorSubmissionsPage() {
       <Modal open={payoutOpen} onClose={() => setPayoutOpen(false)} size="md">
         <ModalHeader>Payout details</ModalHeader>
         <ModalBody>
-            <div className="flex flex-col items-center gap-4 p-5">
+            <div className="flex flex-col items-center gap-4 p-4 sm:p-5">
               {/* Minimum payout notice */}
               <div className="flex items-center justify-center gap-1.5 pb-2">
                 <svg width="12" height="12" viewBox="0 0 10 10" fill="none" className="shrink-0"><path fillRule="evenodd" clipRule="evenodd" d="M0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5ZM5 1.75C5.27614 1.75 5.5 1.97386 5.5 2.25V2.56183C5.90202 2.66355 6.25675 2.88729 6.48794 3.20702C6.64975 3.4308 6.59952 3.74337 6.37575 3.90517C6.15198 4.06698 5.8394 4.01675 5.6776 3.79297C5.56897 3.64274 5.32671 3.5 5 3.5H4.86111C4.41372 3.5 4.25 3.77246 4.25 3.88889V3.92705C4.25 4.02568 4.32456 4.19131 4.57627 4.29199L5.79512 4.77953C6.32859 4.99292 6.75 5.4693 6.75 6.07295C6.75 6.80947 6.1615 7.3072 5.5 7.45453V7.75C5.5 8.02614 5.27614 8.25 5 8.25C4.72386 8.25 4.5 8.02614 4.5 7.75V7.43817C4.09798 7.33645 3.74325 7.11271 3.51205 6.79297C3.35025 6.5692 3.40048 6.25663 3.62425 6.09483C3.84802 5.93302 4.16059 5.98325 4.3224 6.20702C4.43103 6.35726 4.67329 6.5 5 6.5H5.09119C5.56492 6.5 5.75 6.21045 5.75 6.07295C5.75 5.97432 5.67543 5.80869 5.42373 5.70801L4.20488 5.22047C3.67141 5.00708 3.25 4.5307 3.25 3.92705V3.88889C3.25 3.15689 3.84468 2.66952 4.5 2.53666V2.25C4.5 1.97386 4.72386 1.75 5 1.75Z" fill="currentColor" fillOpacity="0.5"/></svg>
@@ -607,7 +607,7 @@ export default function CreatorSubmissionsPage() {
 
                   {/* Next payment notice */}
                   <div className="flex w-full items-center justify-center gap-1.5 py-0.5">
-                    <PendingClockIcon color="rgba(37,37,37,0.5)" />
+                    <svg width="12" height="12" viewBox="0 0 10 10" fill="none" className="shrink-0"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill="currentColor" fillOpacity="0.5" /></svg>
                     <span className="text-xs font-medium text-page-text-subtle">2 days until next payment</span>
                   </div>
 
