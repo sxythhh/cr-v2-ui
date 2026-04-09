@@ -348,78 +348,9 @@ nav [data-active="true"] svg path {
 .verified-card-image-fade {
   background: linear-gradient(180deg, transparent 60%, rgba(255,255,255,0.05) 100%);
 }
-/* ── Discover card animations (from clipper) ── */
-.discover-page {
-  --hover-duration: 380ms;
-  --hover-delay: 30ms;
-  --hover-easing: cubic-bezier(0.16, 1, 0.3, 1);
-}
-.verified-card-hover {
-  contain: layout style;
-  transition: box-shadow var(--hover-duration, 380ms) var(--hover-easing, cubic-bezier(0.16, 1, 0.3, 1));
-  box-shadow:
-    0 60px 80px -12px rgba(0,0,0,0.08),
-    0 30px 48px -8px rgba(0,0,0,0.12),
-    0 14px 24px 0 rgba(0,0,0,0.14),
-    0 6px 12px 0 rgba(0,0,0,0.16),
-    0 1px 4px 0 rgba(0,0,0,0.18);
-}
-html.dark .verified-card-hover {
-  box-shadow: none;
-}
-@media (min-width: 1024px) {
-  .group\/card:hover .verified-card-hover {
-    box-shadow:
-      0 2px 6px 0 rgba(0,0,0,0.2),
-      0 8px 20px 0 rgba(0,0,0,0.18),
-      0 24px 48px -8px rgba(0,0,0,0.2),
-      0 48px 80px -12px rgba(0,0,0,0.18);
-    transition: box-shadow var(--hover-duration) var(--hover-easing) var(--hover-delay);
-  }
-  html.dark .group\/card:hover .verified-card-hover {
-    box-shadow:
-      0 2px 6px 0 rgba(0,0,0,0.5),
-      0 8px 20px 0 rgba(0,0,0,0.45),
-      0 24px 48px -8px rgba(0,0,0,0.5),
-      0 48px 80px -12px rgba(0,0,0,0.4);
-  }
-}
-.verified-expand {
-  transition-delay: 0s;
-  transition-timing-function: var(--hover-easing, cubic-bezier(0.16, 1, 0.3, 1));
-  transition-duration: var(--hover-duration, 380ms);
-}
-.verified-expand-ease {
-  transition-delay: 0s;
-  transition-timing-function: ease;
-  transition-duration: 180ms;
-}
-@media (min-width: 1024px) {
-  .group\/card:hover .verified-expand,
-  .group\/card:hover .verified-expand-ease {
-    transition-delay: calc(var(--hover-delay, 30ms) + var(--expand-stagger, 0ms));
-  }
-}
-.card-hover-inner {
-  transition: scale 280ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.is-dragging .verified-card-hover {
-  transition: none;
-}
 @keyframes shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: -100% 0; }
-}
-@keyframes card-enter {
-  from { opacity: 0; transform: translateY(6px) scale(0.97); }
-}
-.card-enter-anim {
-  animation: card-enter 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--enter-d, 0) * 1ms);
-}
-@media (prefers-reduced-motion: reduce) {
-  @keyframes card-enter { from { opacity: 1; transform: none; } }
-  .card-enter-anim { animation-duration: 0ms; }
 }
 
 /* Analytics Card Background */
