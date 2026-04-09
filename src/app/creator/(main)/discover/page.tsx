@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { type Campaign, formatCreators, BANNER_CAMPAIGNS, FEATURED_CAMPAIGNS, GRID_CAMPAIGNS } from "./_shared";
@@ -159,20 +159,57 @@ function HeroBanner({ campaigns }: { campaigns: Campaign[] }) {
   );
 }
 
+/* ── Drag-to-scroll hook ── */
+function useDragScroll() {
+  const ref = useRef<HTMLDivElement>(null);
+  const state = useRef({ dragging: false, startX: 0, scrollLeft: 0 });
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    state.current = { dragging: true, startX: e.clientX, scrollLeft: el.scrollLeft };
+    el.setPointerCapture(e.pointerId);
+    el.style.cursor = "grabbing";
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!state.current.dragging) return;
+    const el = ref.current;
+    if (!el) return;
+    e.preventDefault();
+    el.scrollLeft = state.current.scrollLeft - (e.clientX - state.current.startX);
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    state.current.dragging = false;
+    if (ref.current) ref.current.style.cursor = "";
+  }, []);
+
+  return { ref, onPointerDown, onPointerMove, onPointerUp };
+}
+
 /* ── Scrollable campaign row ── */
 function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[] }) {
+  const drag = useDragScroll();
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="mx-auto flex w-full max-w-[756px] items-center justify-between px-4 sm:px-5 md:px-4">
         <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">{title}</h3>
         <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
       </div>
-      <div className="-mx-4 sm:-mx-5 md:-mx-4">
-        <div className="flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide sm:px-5 md:px-4">
-          {campaigns.map((c) => (
-            <CampaignCard key={c.id} campaign={c} />
-          ))}
-        </div>
+      <div
+        ref={drag.ref}
+        onPointerDown={drag.onPointerDown}
+        onPointerMove={drag.onPointerMove}
+        onPointerUp={drag.onPointerUp}
+        onPointerCancel={drag.onPointerUp}
+        className="flex cursor-grab gap-2 overflow-x-auto pb-2 scrollbar-hide"
+        style={{ paddingLeft: "max(16px, calc((100% - 756px) / 2 + 16px))" }}
+      >
+        {campaigns.map((c) => (
+          <CampaignCard key={c.id} campaign={c} />
+        ))}
+        <div className="w-px shrink-0" />
       </div>
     </div>
   );
@@ -182,8 +219,10 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
 export default function CreatorDiscoverPage() {
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
-      <div className="mx-auto flex w-full max-w-[756px] flex-col gap-6 px-4 py-4 sm:px-5 md:px-4">
-        <HeroBanner campaigns={BANNER_CAMPAIGNS} />
+      <div className="flex flex-col gap-6 py-4">
+        <div className="mx-auto w-full max-w-[756px] px-4 sm:px-5 md:px-4">
+          <HeroBanner campaigns={BANNER_CAMPAIGNS} />
+        </div>
         <CampaignRow title="Verified campaigns" campaigns={[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5)} />
         <CampaignRow title="Trending campaigns" campaigns={GRID_CAMPAIGNS.slice(0, 6)} />
       </div>
