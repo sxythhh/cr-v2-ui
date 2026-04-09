@@ -1,6 +1,5 @@
 "use client";
 
-import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/modal";
@@ -251,7 +250,7 @@ export function CampaignFlowLayout({ children }: { children: React.ReactNode }) 
           onClick={() => setShowLeaveModal(true)}
           type="button"
         >
-          <IconArrowLeft size={16} strokeWidth={1.5} className="text-page-text" />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-page-text"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6-6"/></svg>
           <span>{editMode ? "Back to campaign" : "Back to model selection"}</span>
         </button>
       </div>

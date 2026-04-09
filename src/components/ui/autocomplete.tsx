@@ -1,7 +1,6 @@
 "use client";
 
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete";
-import { IconSelector, IconX } from "@tabler/icons-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -62,7 +61,7 @@ function AutocompleteInput({
           {...triggerProps}
         >
           <AutocompletePrimitive.Icon data-slot="autocomplete-icon">
-            <IconSelector size={16} />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 9l4-4l4 4"/><path d="M16 15l-4 4l-4-4"/></svg>
           </AutocompletePrimitive.Icon>
         </AutocompleteTrigger>
       )}
@@ -74,7 +73,7 @@ function AutocompleteInput({
           )}
           {...clearProps}
         >
-          <IconX size={16} />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </AutocompleteClear>
       )}
     </div>
@@ -254,7 +253,7 @@ function AutocompleteClear({
       data-slot="autocomplete-clear"
       {...props}
     >
-      <IconX size={16} />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </AutocompletePrimitive.Clear>
   );
 }

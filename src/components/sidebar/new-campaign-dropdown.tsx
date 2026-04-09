@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
-import { IconChevronDown } from "@tabler/icons-react";
 import { Scratch } from "./icons/scratch";
 import { Template } from "./icons/template";
 import { RichButton } from "@/components/rich-button";

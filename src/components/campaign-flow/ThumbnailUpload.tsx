@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
-import { IconCrop, IconInfoCircle, IconUpload } from "@tabler/icons-react";
 import { ThumbnailCropModal } from "./thumbnail-modal/ThumbnailCropModal";
 
 interface ThumbnailUploadProps {
@@ -112,10 +111,10 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
             />
             <div className="absolute right-3 top-3 flex items-center gap-2">
               <button type="button" onClick={handleReplace} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
-                <IconUpload size={16} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 9l5-5l5 5"/><path d="M12 4v12"/></svg>
               </button>
               <button type="button" onClick={() => { setModalInitialFile(lastFile); setModalOpen(true); }} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
-                <IconCrop size={16} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4H4"/><path d="M4 8h12a2 2 0 0 1 2 2v12"/><path d="M16 22v-4h4"/><path d="M20 16H8a2 2 0 0 1-2-2V2"/></svg>
               </button>
               <button type="button" onClick={onDelete} className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-[8px] text-white transition-opacity hover:opacity-80">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -130,7 +129,7 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
           onClick={() => fileRef.current?.click()}
           className="group flex h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-[14px] border border-dashed border-foreground/[0.12] bg-foreground/[0.02] transition-colors hover:bg-foreground/[0.04]"
         >
-          <IconUpload size={24} className="text-foreground/30" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/30"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 9l5-5l5 5"/><path d="M12 4v12"/></svg>
           <div className="flex flex-col items-center gap-1">
             <span className="text-sm font-medium tracking-[-0.02em] text-page-text group-hover:underline">Upload or drag & drop</span>
             <span className="text-xs tracking-[-0.02em] text-foreground/40">PNG, JPEG or WebP. Max 5MB</span>
@@ -139,7 +138,7 @@ export function ThumbnailUpload({ fileName, thumbnailPreview, onCropComplete, on
       )}
 
       <div className="flex items-start gap-1">
-        <span title="Thumbnail guidelines"><IconInfoCircle size={12} className="mt-px shrink-0 text-foreground/40" /></span>
+        <span title="Thumbnail guidelines"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-px shrink-0 text-foreground/40"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg></span>
         <span className="text-[10px] tracking-[-0.02em] text-foreground/40">
           Ratio 2:3 — shown on the Discovery page. The subject/face should be positioned in the center.
         </span>

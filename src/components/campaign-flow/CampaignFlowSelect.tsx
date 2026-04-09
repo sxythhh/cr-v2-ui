@@ -1,7 +1,6 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { IconCheck, IconChevronDown } from "@tabler/icons-react";
 import { useCfPortalContainer } from "./CampaignFlowContext";
 
 interface CampaignFlowSelectProps {
@@ -19,7 +18,7 @@ export function CampaignFlowSelect({ value, onValueChange, placeholder = "Select
         className="flex h-10 w-full items-center rounded-[14px] px-3.5 bg-[rgba(37,37,37,0.04)] dark:bg-[rgba(255,255,255,0.06)] text-sm tracking-[-0.02em] text-page-text outline-none data-[placeholder]:text-[rgba(37,37,37,0.4)] dark:data-[placeholder]:text-[rgba(255,255,255,0.4)]"
       >
         <SelectPrimitive.Value placeholder={placeholder} />
-        <SelectPrimitive.Icon className="ml-auto"><IconChevronDown className="text-[rgba(37,37,37,0.4)] dark:text-[rgba(255,255,255,0.4)]" size={14} /></SelectPrimitive.Icon>
+        <SelectPrimitive.Icon className="ml-auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[rgba(37,37,37,0.4)] dark:text-[rgba(255,255,255,0.4)]"><path d="M6 9l6 6l6-6"/></svg></SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
       <SelectPrimitive.Portal container={portalContainer}>
         <SelectPrimitive.Content
@@ -36,7 +35,7 @@ export function CampaignFlowSelect({ value, onValueChange, placeholder = "Select
               >
                 {opt.icon && <span className="shrink-0">{opt.icon}</span>}
                 <SelectPrimitive.ItemText>{opt.label}</SelectPrimitive.ItemText>
-                <SelectPrimitive.ItemIndicator className="absolute right-2"><IconCheck size={14} /></SelectPrimitive.ItemIndicator>
+                <SelectPrimitive.ItemIndicator className="absolute right-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5l10-10"/></svg></SelectPrimitive.ItemIndicator>
               </SelectPrimitive.Item>
             ))}
           </SelectPrimitive.Viewport>

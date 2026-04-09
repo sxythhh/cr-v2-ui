@@ -1268,7 +1268,7 @@ function DashboardView() {
             <button type="button" className="flex size-4 cursor-pointer items-center justify-center">
               <ChevronLeftIcon className="size-4 text-page-text-muted" />
             </button>
-            <span className="font-inter text-sm tabular-nums tracking-[-0.02em] text-page-text">1/3</span>
+            <span className="font-inter text-sm tracking-[-0.02em] text-page-text">1/3</span>
             <button type="button" className="flex size-4 cursor-pointer items-center justify-center">
               <ChevronRightIcon className="size-4 text-page-text-muted" />
             </button>

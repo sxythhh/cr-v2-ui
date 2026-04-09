@@ -3,15 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  IconSearchFilled,
-  IconLifebuoyFilled,
-  IconBellFilled,
-  IconRefresh,
-  IconBookFilled,
-  IconDownloadFilled,
-  IconCreditCardFilled,
-} from "@tabler/icons-react";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 
@@ -68,13 +59,13 @@ function MessagesNavIcon({ active }: { active: boolean }) {
 const ICON_PROPS = { size: 18, className: "text-foreground/50" } as const;
 
 const MENU_ITEMS = [
-  { icon: <IconSearchFilled {...ICON_PROPS} />, label: "Search" },
-  { icon: <IconLifebuoyFilled {...ICON_PROPS} />, label: "Help Center" },
-  { icon: <IconBellFilled {...ICON_PROPS} />, label: "Notifications" },
-  { icon: <IconRefresh {...ICON_PROPS} stroke={1.5} />, label: "Updates" },
-  { icon: <IconBookFilled {...ICON_PROPS} />, label: "Knowledge Base" },
-  { icon: <IconDownloadFilled {...ICON_PROPS} />, label: "Downloads" },
-  { icon: <IconCreditCardFilled {...ICON_PROPS} />, label: "Billing & Plans" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M10 2a8 8 0 0 1 5.293 13.707l4.5 4.5a1 1 0 0 1-1.414 1.414l-4.5-4.5A8 8 0 1 1 10 2z"/></svg>, label: "Search" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M12 2a10 10 0 1 0 0 20a10 10 0 0 0 0-20zm-1 6a1 1 0 1 1 2 0v4a1 1 0 0 1-.553.894l-3 1.5a1 1 0 0 1-.894-1.788L11 11.382V8z"/></svg>, label: "Help Center" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6z"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>, label: "Notifications" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/50"><path d="M20 11A8.1 8.1 0 0 0 4.5 9M4 5v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/></svg>, label: "Updates" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm1 4v2h12V8H6zm0 4v2h8v-2H6z"/></svg>, label: "Knowledge Base" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M12 2a1 1 0 0 1 1 1v10.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L11 13.586V3a1 1 0 0 1 1-1zM5 17a1 1 0 1 0-2 0v2a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2a1 1 0 1 0-2 0v2a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-2z"/></svg>, label: "Downloads" },
+  { icon: <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/50"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5zm2 4v6h14V9H5z"/></svg>, label: "Billing & Plans" },
 ];
 
 // ── Quick Link Row ──────────────────────────────────────────────────

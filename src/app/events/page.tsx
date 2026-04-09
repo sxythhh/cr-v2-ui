@@ -1,6 +1,5 @@
 "use client";
 import { PageShell } from "@/components/page-shell";
-import { IconPointer } from "@tabler/icons-react";
 
 const EVENTS = [
   { id: 1, type: "click", link: "dub.sh/launch", location: "San Francisco, US", device: "Chrome / macOS", time: "2 min ago" },

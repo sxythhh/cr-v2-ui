@@ -6,7 +6,6 @@ import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/modal";
-import { IconCashBanknoteFilled } from "@tabler/icons-react";
 import { Gear } from "@/components/sidebar/icons/gear";
 
 // ── Types ───────────────────────────────────────────────────────────
@@ -122,7 +121,7 @@ const TYPE_STYLES: Record<
   payouts: {
     bg: "bg-[rgba(32,96,223,0.06)] dark:bg-[rgba(32,96,223,0.12)]",
     color: "text-[#2060DF]",
-    icon: <IconCashBanknoteFilled size={16} />,
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17 3H7a4 4 0 0 0-4 4v10a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7a4 4 0 0 0-4-4zm-5 14a4 4 0 1 1 0-8a4 4 0 0 1 0 8z"/></svg>,
   },
   clawbacks: {
     bg: "bg-[rgba(238,78,81,0.06)] dark:bg-[rgba(238,78,81,0.12)]",

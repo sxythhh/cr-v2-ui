@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -127,7 +126,7 @@ export function InviteCreatorModal({
               </div>
             </div>
             <DialogPrimitive.Close className="flex size-8 cursor-pointer items-center justify-center rounded-full text-page-text-muted transition-colors hover:bg-foreground/[0.06] hover:text-page-text">
-              <IconX size={16} />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </DialogPrimitive.Close>
           </div>
 
@@ -151,7 +150,7 @@ export function InviteCreatorModal({
                   onClick={() => { setSearch(""); inputRef.current?.focus(); }}
                   className="flex size-5 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] text-page-text-muted transition-colors hover:text-page-text"
                 >
-                  <IconX size={10} />
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               )}
             </div>

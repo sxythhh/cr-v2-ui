@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { IconPlus } from "@tabler/icons-react";
 import { LinkBuilderModal } from "@/components/link-builder/link-builder-modal";
 import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
 import { RichButton } from "@/components/rich-button";
@@ -26,7 +25,7 @@ export default function Page() {
       <div className="flex flex-col items-center justify-center px-4 py-16 sm:px-5 sm:py-24">
         <div className="flex flex-col items-center gap-4">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-page-border">
-            <IconPlus size={20} className="text-page-text-muted" />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text-muted"><path d="M12 5v14M5 12h14"/></svg>
           </div>
           <div className="text-center">
             <p className="font-[family-name:var(--font-inter)] text-sm font-medium tracking-[-0.02em] text-page-text">

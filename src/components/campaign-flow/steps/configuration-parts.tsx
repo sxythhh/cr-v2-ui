@@ -1,6 +1,5 @@
 "use client";
 
-import { IconChevronDown } from "@tabler/icons-react";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { Switch } from "@/components/ui/switch";
 import type { CampaignModel, ConfigurationData, Platform } from "@/types/campaign-flow.types";
@@ -40,7 +39,7 @@ export function RetainerConfiguration({ data, update, togglePlatform }: { data: 
               <select className={`${INPUT_CLASS} appearance-none pr-8 cursor-pointer`} onChange={(e) => update({ contractLength: e.target.value })} value={data.contractLength}>
                 {CONTRACT_LENGTHS.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
               </select>
-              <IconChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-page-text-muted" size={12} />
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-page-text-muted"><path d="M6 9l6 6l6-6"/></svg>
             </div>
           </Field>
         </div>

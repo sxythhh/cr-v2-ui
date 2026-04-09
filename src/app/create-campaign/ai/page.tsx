@@ -75,6 +75,7 @@ export default function AiCampaignPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const stepMsgCounts = useRef<number[]>([]); // messages added per step transition
 
   const q = QUESTIONS[step];
   const isLastStep = step === QUESTIONS.length - 1;
@@ -95,39 +96,44 @@ export default function AiCampaignPage() {
   }, [messages, typing]);
 
   const advanceStep = useCallback((answer: string) => {
-    // Add user message
     setMessages((prev) => [...prev, { from: "user", text: answer }]);
 
-    // Update summary
     if (q.summaryKey) {
       setSummary((prev) => ({ ...prev, [q.summaryKey]: answer }));
     }
 
-    // Advance to next question
     const nextStep = step + 1;
     if (nextStep < QUESTIONS.length) {
       setTyping(true);
       setTimeout(() => {
         const nextQ = QUESTIONS[nextStep];
-        // Add a transition message for certain steps
-        let aiMsg = nextQ.question;
         if (nextQ.id === "category" && answer) {
-          aiMsg = `Got it, ${answer} campaign. I'll suggest relevant settings for this category.`;
-          setMessages((prev) => [...prev, { from: "ai", text: aiMsg }]);
-          // Then ask the actual question after a delay
-          setTimeout(() => {
-            setMessages((prev) => [...prev, { from: "ai", text: nextQ.question }]);
-            setTyping(false);
-            setStep(nextStep);
-          }, 800);
+          const transitionMsg = `Got it, ${answer} campaign. I'll suggest relevant settings for this category.`;
+          setMessages((prev) => [...prev, { from: "ai", text: transitionMsg }, { from: "ai", text: nextQ.question }]);
+          stepMsgCounts.current.push(3); // user + transition + question
+          setTyping(false);
+          setStep(nextStep);
           return;
         }
-        setMessages((prev) => [...prev, { from: "ai", text: aiMsg }]);
+        setMessages((prev) => [...prev, { from: "ai", text: nextQ.question }]);
+        stepMsgCounts.current.push(2); // user + AI question
         setTyping(false);
         setStep(nextStep);
       }, 500);
     }
   }, [step, q]);
+
+  const goBack = useCallback(() => {
+    if (step <= 0) return;
+    const count = stepMsgCounts.current.pop() || 2;
+    setMessages((prev) => prev.slice(0, -count));
+    const prevQ = QUESTIONS[step - 1];
+    if (prevQ.summaryKey) {
+      setSummary((prev) => { const next = { ...prev }; delete next[prevQ.summaryKey]; return next; });
+    }
+    setStep(step - 1);
+    setSelectedOptions([]);
+  }, [step]);
 
   const handleOptionClick = (opt: string) => {
     if (q.multiSelect) {
@@ -169,7 +175,7 @@ export default function AiCampaignPage() {
         <div className="flex flex-1 flex-col">
           {/* Progress bar */}
           <div className="flex items-center gap-3 pb-6">
-            <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06]" onClick={() => step > 0 && setStep(step - 1)}>
+            <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06]" onClick={goBack}>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 9L4.5 6l3-3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <div className="flex flex-1 flex-col gap-2">
@@ -184,7 +190,10 @@ export default function AiCampaignPage() {
           </div>
 
           {/* Chat messages */}
-          <div ref={scrollRef} className="flex flex-1 flex-col gap-2 overflow-y-auto pb-4 scrollbar-hide">
+          <div className="relative flex-1 overflow-hidden">
+            {/* Top gradient fade */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12" style={{ background: "linear-gradient(180deg, var(--page-bg, #FBFBFB) 0%, transparent 100%)" }} />
+          <div ref={scrollRef} className="flex h-full flex-col gap-2 overflow-y-auto pb-4 pt-8 scrollbar-hide">
             {messages.map((msg, i) => (
               <div key={i} className={cn("flex items-start gap-1.5", msg.from === "user" ? "justify-end" : "")}>
                 {msg.from === "ai" && (
@@ -212,6 +221,52 @@ export default function AiCampaignPage() {
                 </div>
               </div>
             )}
+            {/* Campaign preview card on final step */}
+            {isLastStep && (
+              <div className="flex items-start gap-1.5">
+                <div className="flex flex-col items-start justify-end pb-1 pt-1"><RobotIcon16 /></div>
+                <div className="flex w-full max-w-[600px] flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+                  {/* Thumbnail */}
+                  <div className="relative p-1 pb-0">
+                    <div className="h-[200px] w-full rounded-2xl bg-cover bg-center" style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 29.62%), url(/creator-home/campaign-thumb-1.png)" }}>
+                      <div className="flex items-start justify-between p-3">
+                        <div className="flex items-center rounded-full bg-[#00B259] px-2.5 py-2 backdrop-blur-xl">
+                          <span className="text-sm font-medium tracking-[-0.02em] text-white">92% match</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <div className="flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-xl"><svg width="16" height="16" viewBox="0 0 15 17" fill="none"><path d="M14.528 6.845c-1.483 0-2.856-.472-3.977-1.272v5.821c0 2.912-2.362 5.273-5.276 5.273a5.26 5.26 0 0 1-2.937-.892A5.273 5.273 0 0 1 0 11.394c0-2.912 2.362-5.273 5.276-5.273.242 0 .484.017.724.05v2.916a2.425 2.425 0 0 0-.733-.113 2.413 2.413 0 0 0-2.413 2.413 2.42 2.42 0 0 0 1.327 2.154c.327.165.696.257 1.086.257 1.33 0 2.409-1.075 2.413-2.404V0h2.871v.367c.01.11.025.219.044.328a4.416 4.416 0 0 0 1.822 2.694c.633.395 1.365.604 2.112.603v2.853Z" fill="white"/></svg></div>
+                          <div className="flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-xl"><svg width="16" height="16" viewBox="0 0 13 13" fill="none"><path d="M6.333 1.141c1.691 0 1.891.007 2.56.037.4.005.8.079 1.175.218.275.102.524.264.728.474.21.204.372.453.474.728.14.377.213.774.218 1.176.03.675.037.876.037 2.566s-.006 1.891-.037 2.56a3.6 3.6 0 0 1-.218 1.175 2.16 2.16 0 0 1-.474.728 2.16 2.16 0 0 1-.728.474c-.377.14-.774.213-1.176.218-.675.03-.876.037-2.559.037s-1.891-.006-2.56-.037a3.6 3.6 0 0 1-1.175-.218 2.16 2.16 0 0 1-.728-.474 2.16 2.16 0 0 1-.474-.728 3.6 3.6 0 0 1-.218-1.176c-.03-.675-.037-.876-.037-2.559s.007-1.891.037-2.56c.005-.4.079-.8.218-1.175.102-.275.264-.524.474-.728a2.16 2.16 0 0 1 .728-.474c.377-.14.774-.213 1.176-.218.675-.03.876-.037 2.559-.037Z" fill="white"/></svg></div>
+                          <div className="flex h-8 items-center gap-1.5 rounded-full bg-white/20 px-2.5 backdrop-blur-xl"><span className="text-sm font-medium text-white">{summary.Category || "Gaming"}</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Body */}
+                  <div className="flex flex-col gap-4 px-5 pb-5 pt-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="size-6 rounded-full bg-foreground/10" />
+                        <span className="text-sm font-medium text-page-text">{summary.Brand || "Clipping Culture"}</span>
+                        <img src="/icons/CRCheckmark.svg" alt="Verified" width={14} height={14} />
+                        <span className="text-sm text-foreground/20">·</span>
+                        <span className="text-sm text-page-text-muted">5d</span>
+                      </div>
+                      <span className="text-sm text-page-text-muted">Application required</span>
+                    </div>
+                    <span className="text-base font-medium tracking-[-0.02em] text-page-text">{summary.Name || "Call of Duty BO7 Official Clipping Campaign"}</span>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2.5 py-2"><span className="text-sm font-medium text-page-text">121,4K</span></div>
+                        <div className="flex items-center gap-[1px] rounded-full bg-[rgba(59,130,246,0.1)] px-2.5 py-2"><span className="text-sm font-medium text-[#3B82F6]">$1.50</span><span className="text-sm text-[rgba(59,130,246,0.7)]">/1K</span></div>
+                      </div>
+                      <div className="flex items-center gap-[1px] text-sm"><span className="font-medium text-page-text">$8,677</span><span className="text-page-text-subtle">/</span><span className="text-page-text-subtle">$37,500</span></div>
+                    </div>
+                    <div className="h-1 w-full rounded-full bg-foreground/[0.06]"><div className="h-1 w-[58%] rounded-full" style={{ background: "radial-gradient(31.76% 50.52% at 64.86% 100.52%, #FF3FD5 0%, rgba(255,63,213,0) 100%), radial-gradient(31.58% 54.43% at 32.86% 102.32%, #FF9025 0%, rgba(255,144,37,0) 100%), var(--foreground)" }} /></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Mobile: inline summary card on final step */}
             {isLastStep && (
               <div className="flex items-start gap-1.5 md:hidden">
@@ -229,6 +284,7 @@ export default function AiCampaignPage() {
                 </div>
               </div>
             )}
+          </div>
           </div>
 
           {/* Options / Input area */}

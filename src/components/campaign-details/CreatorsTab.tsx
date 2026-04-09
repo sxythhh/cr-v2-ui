@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/campaign-flow/PlatformButton";
-import { IconExternalLink } from "@tabler/icons-react";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { InviteCreatorModal } from "./InviteCreatorModal";
@@ -441,7 +440,7 @@ function CreatorCardItem({
           className="flex h-7 items-center gap-1 rounded-full bg-[rgba(37,37,37,0.06)] px-2.5 text-[12px] font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.7)] transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:text-[rgba(255,255,255,0.6)] dark:hover:bg-[rgba(255,255,255,0.10)]"
         >
           <span>{actionLabel}</span>
-          <IconExternalLink size={14} stroke={1.5} />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M11 13l9-9"/><path d="M15 4h5v5"/></svg>
         </button>
       </div>
     </div>

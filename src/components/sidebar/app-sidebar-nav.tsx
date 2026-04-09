@@ -1,20 +1,5 @@
 "use client";
 
-import {
-  IconWorld,
-  IconFolder,
-  IconTag,
-  IconRouteAltRight,
-  IconReceipt,
-  IconUsers,
-  IconPlugConnected,
-  IconShieldCheck,
-  IconKey,
-  IconWebhook,
-  IconBell,
-  IconApps,
-  IconGift,
-} from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -79,28 +64,28 @@ const FilledFinance: AnimatedIcon = ({ "data-hovered": _, ...props }) => (
   </svg>
 );
 
-// Wrap Tabler icons to match AnimatedIcon type
-function wrapTabler(TablerIcon: typeof IconWorld): AnimatedIcon {
-  const Wrapped: AnimatedIcon = ({ "data-hovered": _, ...props }) => (
-    <TablerIcon {...(props as Record<string, unknown>)} />
+// Inline SVG icon wrappers matching AnimatedIcon type
+function makeSvgIcon(paths: string, displayName: string): AnimatedIcon {
+  const Icon: AnimatedIcon = ({ "data-hovered": _, className, ...props }) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...(props as Record<string, unknown>)} dangerouslySetInnerHTML={{ __html: paths }} />
   );
-  Wrapped.displayName = TablerIcon.displayName;
-  return Wrapped;
+  Icon.displayName = displayName;
+  return Icon;
 }
 
-const Globe = wrapTabler(IconWorld);
-const FolderIcon = wrapTabler(IconFolder);
-const TagIcon = wrapTabler(IconTag);
-const DiamondTurnRight = wrapTabler(IconRouteAltRight);
-const Receipt = wrapTabler(IconReceipt);
-const UsersIcon = wrapTabler(IconUsers);
-const ShieldCheck = wrapTabler(IconShieldCheck);
-const KeyIcon = wrapTabler(IconKey);
-const WebhookIcon = wrapTabler(IconWebhook);
-const BellIcon = wrapTabler(IconBell);
-const AppsIcon = wrapTabler(IconApps);
-const GiftIcon = wrapTabler(IconGift);
-const IntegrationsIcon = wrapTabler(IconPlugConnected);
+const Globe = makeSvgIcon('<circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8"/><path d="M3.6 15h16.8"/><path d="M11.5 3a17 17 0 0 0 0 18"/><path d="M12.5 3a17 17 0 0 1 0 18"/>', "Globe");
+const FolderIcon = makeSvgIcon('<path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2"/>', "FolderIcon");
+const TagIcon = makeSvgIcon('<path d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0"/><path d="M3 4.5a1.5 1.5 0 0 1 1.5-1.5h5.586a2 2 0 0 1 1.414.586l7.5 7.5a2 2 0 0 1 0 2.828l-5.172 5.172a2 2 0 0 1-2.828 0l-7.5-7.5A2 2 0 0 1 3 10.086V4.5z"/>', "TagIcon");
+const DiamondTurnRight = makeSvgIcon('<path d="M3 17h4v4"/><path d="M7 17l10-10"/><path d="M13 7h4v4"/>', "DiamondTurnRight");
+const Receipt = makeSvgIcon('<path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14 8H9.5"/><path d="M14 12H9.5"/>', "Receipt");
+const UsersIcon = makeSvgIcon('<path d="M9 7a4 4 0 1 0 0-8a4 4 0 0 0 0 8z" transform="translate(0 3)"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/>', "UsersIcon");
+const ShieldCheck = makeSvgIcon('<path d="M12 3l8 4v5c0 5.25-3.5 9.74-8 11c-4.5-1.26-8-5.75-8-11V7l8-4z"/><path d="M9 12l2 2l4-4"/>', "ShieldCheck");
+const KeyIcon = makeSvgIcon('<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1-4.069 0l-3.602-3.602a6.043 6.043 0 0 1-1.643.235a6 6 0 1 1 5.612-8.204"/><path d="M16 9l2 2"/>', "KeyIcon");
+const WebhookIcon = makeSvgIcon('<path d="M4.876 13.61A4 4 0 1 0 11 17h6"/><path d="M15.066 20.502A4 4 0 1 0 17 13H7"/><path d="M10.058 5.89A4 4 0 1 0 6 13h2"/>', "WebhookIcon");
+const BellIcon = makeSvgIcon('<path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/>', "BellIcon");
+const AppsIcon = makeSvgIcon('<path d="M4 4m0 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M14 4m0 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/><path d="M4 14m0 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M14 14m0 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/>', "AppsIcon");
+const GiftIcon = makeSvgIcon('<path d="M3 8m0 1a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5a2.5 2.5 0 0 1 0 5"/>', "GiftIcon");
+const IntegrationsIcon = makeSvgIcon('<path d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1-5-5L7 12z"/><path d="M17 12l-5-5l1.5-1.5a3.536 3.536 0 1 1 5 5L17 12z"/><path d="M3 21l2.5-2.5"/><path d="M18.5 5.5L21 3"/><path d="M10 11l-2 2"/><path d="M13 14l-2 2"/>', "IntegrationsIcon");
 
 const NAV_AREAS: SidebarNavAreas = {
   default: () => ({

@@ -2,12 +2,6 @@
 
 import { useState, useMemo } from "react";
 import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconCheck,
-  IconArrowRight,
-} from "@tabler/icons-react";
-import {
   startOfMonth,
   endOfMonth,
   startOfWeek,
@@ -187,7 +181,7 @@ export function AgencyBookingWidget() {
                   : "bg-white border border-[rgba(87,62,105,0.13)]",
               ].join(" ")}
             >
-              {agreed && <IconCheck size={11} className="text-white" strokeWidth={3} />}
+              {agreed && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M5 12l5 5l10-10"/></svg>}
             </button>
             <span className="text-[12px] leading-[17px] text-[#545454]/70">
               By proceeding, you agree to Content Reward&apos;s{" "}
@@ -220,7 +214,7 @@ export function AgencyBookingWidget() {
                 onClick={handleBack}
                 className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors active:scale-[0.98]"
               >
-                <IconChevronLeft size={18} className="text-black" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><path d="M15 6l-6 6l6 6"/></svg>
               </button>
               <h3 className="text-[17px] font-semibold tracking-[-0.36px] text-black">
                 {format(currentMonth, "MMMM yyyy")}
@@ -232,14 +226,14 @@ export function AgencyBookingWidget() {
                 onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
                 className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors active:scale-[0.98]"
               >
-                <IconChevronLeft size={16} className="text-black/40" />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black/40"><path d="M15 6l-6 6l6 6"/></svg>
               </button>
               <button
                 type="button"
                 onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
                 className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors active:scale-[0.98]"
               >
-                <IconChevronRight size={16} className="text-black/40" />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black/40"><path d="M9 6l6 6l-6 6"/></svg>
               </button>
             </div>
           </div>
@@ -316,7 +310,7 @@ export function AgencyBookingWidget() {
               onClick={handleBack}
               className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors active:scale-[0.98]"
             >
-              <IconChevronLeft size={18} className="text-black" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><path d="M15 6l-6 6l6 6"/></svg>
             </button>
             <h3 className="text-[17px] font-semibold tracking-[-0.36px] text-black">
               {selectedDate ? format(selectedDate, "EEEE, MMM d") : ""}
@@ -385,7 +379,7 @@ export function AgencyBookingWidget() {
         >
           <div className="flex flex-col items-center text-center gap-4 p-8">
             <div className="size-14 rounded-full bg-[#69527A]/10 flex items-center justify-center">
-              <IconCheck size={28} className="text-[#69527A]" />
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#69527A]"><path d="M5 12l5 5l10-10"/></svg>
             </div>
             <div>
               <h3 className="text-[20px] font-semibold tracking-[-0.4px] text-[#483953] mb-1">
@@ -423,9 +417,9 @@ export function AgencyBookingWidget() {
             </span>
             <div className="absolute right-[2px] top-[2px] bottom-[2px] w-[44px] flex items-center justify-center rounded-[9px]">
               {showTime ? (
-                <IconCheck size={18} className="text-white" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M5 12l5 5l10-10"/></svg>
               ) : (
-                <IconArrowRight size={18} className="text-white" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M5 12h14"/><path d="M13 18l6-6"/><path d="M13 6l6 6"/></svg>
               )}
             </div>
           </button>

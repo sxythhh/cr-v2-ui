@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { IconArrowLeft, IconPencil, IconCheck } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 function PlayIcon({ className, color }: { className?: string; color?: string }) {
@@ -192,7 +191,7 @@ function StoryEditor({
           onClick={onExit}
           className="flex cursor-pointer items-center gap-1.5 font-inter text-[13px] font-medium tracking-[-0.02em] text-white/60 transition-colors hover:text-white"
         >
-          <IconArrowLeft size={14} />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6-6"/></svg>
           Back
         </button>
         <span className="font-inter text-[13px] font-medium tracking-[-0.02em] text-white">
@@ -261,7 +260,7 @@ function StoryEditor({
             onClick={onExit}
             className="flex h-[30px] cursor-pointer items-center gap-2 rounded-lg bg-white px-2 font-inter text-[13px] font-semibold text-[#222] transition-colors hover:bg-white/90 active:scale-[0.98]"
           >
-            <IconCheck size={11} strokeWidth={2.5} />
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5l10-10"/></svg>
             Finish Editing
           </button>
         </div>

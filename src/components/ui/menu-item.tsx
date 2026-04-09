@@ -1,14 +1,13 @@
 "use client";
 
 import { useRef, useEffect, forwardRef, type HTMLAttributes } from "react";
-import type { TablerIcon } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useDropdown } from "@/components/ui/dropdown";
 import { cn } from "@/lib/utils";
 import { fontWeights } from "@/lib/font-weight";
 
 interface MenuItemProps extends HTMLAttributes<HTMLDivElement> {
-  icon: TablerIcon;
+  icon: React.ComponentType<{ size?: number; stroke?: number; className?: string }>;
   label: string;
   index: number;
   checked?: boolean;

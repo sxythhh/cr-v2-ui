@@ -3,7 +3,6 @@
 import { Children, useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { IconTrash, IconX } from "@tabler/icons-react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
@@ -256,7 +255,7 @@ function ApplicationFormSection() {
                 onClick={() => removeField(field.id)}
                 className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.06] text-page-text-muted transition-colors hover:bg-foreground/[0.10] hover:text-page-text"
               >
-                <IconTrash size={14} />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>
               </button>
             </div>
           ))}
@@ -393,7 +392,7 @@ export function CampaignSettingsModal({
               Campaign settings
             </span>
             <DialogPrimitive.Close className="absolute right-3 top-1/2 -translate-y-1/2 flex size-7 cursor-pointer items-center justify-center rounded-full text-[rgba(37,37,37,0.5)] transition-colors hover:bg-[rgba(37,37,37,0.06)] hover:text-[#252525] dark:text-[rgba(255,255,255,0.45)] dark:hover:bg-[rgba(255,255,255,0.06)] dark:hover:text-[#e5e5e5]">
-              <IconX size={14} stroke={2} />
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </DialogPrimitive.Close>
           </div>
 

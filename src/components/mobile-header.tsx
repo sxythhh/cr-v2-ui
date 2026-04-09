@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconSearch, IconBell } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
 import { useSideNav } from "@/components/sidebar/sidebar-context";
@@ -38,14 +37,14 @@ export function MobileHeader() {
           className="flex size-11 items-center justify-center rounded-full text-page-text active:bg-foreground/[0.06]"
           onClick={() => setSearchOpen(true)}
         >
-          <IconSearch size={20} stroke={2} />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6-6"/></svg>
         </button>
 
         <button
           type="button"
           className="relative flex size-11 items-center justify-center rounded-full text-page-text active:bg-foreground/[0.06]"
         >
-          <IconBell size={20} stroke={2} />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
           <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-red-500" />
         </button>
 

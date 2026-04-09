@@ -25,7 +25,6 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@svgr/webpack": "^8.1.0",
-    "@tabler/icons-react": "^3.26.0",
     "@tiptap/extension-link": "^3.20.4",
     "@tiptap/extension-placeholder": "^3.20.4",
     "@tiptap/extension-text-align": "^3.20.4",

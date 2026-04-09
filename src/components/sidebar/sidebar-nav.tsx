@@ -17,7 +17,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { IconChevronDown, IconChevronLeft, IconLayoutSidebar, IconPlus } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { UserDropdown } from "./user-dropdown";
 import { WorkspaceDropdown } from "./workspace-dropdown";
@@ -366,7 +365,7 @@ function SidebarAreasPanel({
                                   "transition-[transform,background-color,color] duration-150 group-hover:-translate-x-0.5 group-hover:bg-sidebar-hover group-hover:text-sidebar-text-subtle",
                                 )}
                               >
-                                <IconChevronLeft size={12} stroke={2.5} />
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
                               </div>
                             )}
                             <span className="text-lg font-semibold text-sidebar-text">
@@ -777,10 +776,7 @@ function NavItem({ item, index }: { item: NavItemType | NavSubItemType; index?: 
               </span>
           )}
           {items && (
-            <IconChevronDown
-              size={14}
-              className="text-sidebar-text-muted transition-transform duration-75 group-data-[active=true]:rotate-180"
-            />
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sidebar-text-muted transition-transform duration-75 group-data-[active=true]:rotate-180"><path d="M6 9l6 6l6-6"/></svg>
           )}
           {arrow && (
             <svg

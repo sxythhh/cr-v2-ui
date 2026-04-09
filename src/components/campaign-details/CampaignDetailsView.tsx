@@ -16,12 +16,6 @@ import SubmissionsTab from "./SubmissionsTab";
 import CreatorsTab from "./CreatorsTab";
 import EventsTab from "./EventsTab";
 import AnalyticsTab from "./AnalyticsTab";
-import {
-  IconArrowLeft,
-  IconLock,
-  IconScissors,
-  IconDots,
-} from "@tabler/icons-react";
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -154,7 +148,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           onClick={() => router.push("/campaigns")}
           className="flex cursor-pointer items-center gap-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:text-page-text-muted"
         >
-          <IconArrowLeft size={16} />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6-6"/></svg>
           <span>Back to campaigns</span>
         </button>
       </div>
@@ -166,7 +160,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           onClick={() => router.push("/campaigns")}
           className="mr-4 hidden items-center gap-1.5 text-sm tracking-[-0.02em] text-page-text-muted hover:text-[#252525] dark:hover:text-[#e5e5e5] transition-colors md:flex"
         >
-          <IconArrowLeft size={16} />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6-6"/></svg>
           <span>Back to campaigns</span>
         </button>
 
@@ -220,7 +214,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                   {/* Meta row */}
                   <div className="flex items-center gap-1.5 text-[12px] font-medium tracking-[-0.02em] text-page-text">
                     <span className="flex h-6 items-center gap-1.5">
-                      <IconScissors size={12} />
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88"/><path d="M14.47 14.48L20 20"/><path d="M8.12 8.12L12 12"/></svg>
                       {c.type}
                     </span>
                     <span className="text-[rgba(37,37,37,0.2)] dark:text-[rgba(255,255,255,0.2)]">·</span>
@@ -418,7 +412,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
               onClick={() => setDotsOpen((v) => !v)}
               className="flex size-9 cursor-pointer items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white text-page-text-muted transition-colors hover:bg-[rgba(37,37,37,0.04)] dark:border-transparent dark:bg-[rgba(255,255,255,0.08)] dark:text-[#E0E0E0] dark:hover:bg-[rgba(255,255,255,0.12)]"
             >
-              <IconDots size={16} />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
             </button>
             <AnimatePresence>
               {dotsOpen && (

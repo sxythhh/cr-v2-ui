@@ -14,12 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  IconCheck,
-  IconFileText,
-  IconSignature,
-  IconWorld,
-} from "@tabler/icons-react";
-import {
   TypeformShell,
   useFormPersistence,
   type TypeformStep,
@@ -158,7 +152,7 @@ export function TaxWizardTypeform({
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 text-primary">
-              <IconWorld size={20} />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8"/><path d="M3.6 15h16.8"/><path d="M11.5 3a17 17 0 0 0 0 18"/><path d="M12.5 3a17 17 0 0 1 0 18"/></svg>
               <span className="text-xs font-medium">Tax Information</span>
             </div>
             <h2 className="text-xl font-semibold tracking-tight">
@@ -224,7 +218,7 @@ export function TaxWizardTypeform({
                       )}
                     >
                       {data.isUSPerson === opt.value && (
-                        <IconCheck size={10} className="text-primary-foreground" />
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground"><path d="M5 12l5 5l10-10"/></svg>
                       )}
                     </div>
                     <div>
@@ -252,7 +246,7 @@ export function TaxWizardTypeform({
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 text-primary">
-              <IconFileText size={20} />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 9h1"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>
               <span className="text-xs font-medium">Form {formType}</span>
             </div>
             <h2 className="text-xl font-semibold tracking-tight">
@@ -337,7 +331,7 @@ export function TaxWizardTypeform({
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 text-primary">
-              <IconSignature size={20} />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17c3.333-3.333 5-6 5-8c0-3-2.5-2.5-2.5 0c0 4 3.357 8 8 8s4.5-2 2.5-4c-2-2-5-1-5 1c0 2 2 4 5 4s4-1 4-4"/></svg>
               <span className="text-xs font-medium">Certification</span>
             </div>
             <h2 className="text-xl font-semibold tracking-tight">
@@ -386,7 +380,7 @@ export function TaxWizardTypeform({
       {currentStep === 3 && (
         <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
           <div className="size-14 rounded-full bg-primary flex items-center justify-center">
-            <IconCheck size={28} className="text-primary-foreground" />
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground"><path d="M5 12l5 5l10-10"/></svg>
           </div>
           <div className="space-y-2">
             <h2 className="text-xl font-semibold tracking-tight">

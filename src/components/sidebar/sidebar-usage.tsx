@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { IconChevronRight } from "@tabler/icons-react";
 import NumberFlow from "@number-flow/react";
 import { Sparkle } from "./icons/sparkle";
 import { Hyperlink } from "./icons/hyperlink";
@@ -75,10 +74,7 @@ export function SidebarUsage() {
         href="/settings/billing"
       >
         AI usage
-        <IconChevronRight
-          size={12}
-          className="text-sidebar-text-muted transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-sidebar-text-muted"
-        />
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sidebar-text-muted transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-sidebar-text-muted"><path d="M9 6l6 6l-6 6"/></svg>
       </Link>
 
       <div className="mt-4 flex flex-col gap-4">

@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { IconTrash, IconX } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useThumbnailCrop } from "@/hooks/media/use-thumbnail-crop";
 import { cn } from "@/lib/utils";
@@ -92,7 +91,7 @@ export function ThumbnailCropModal({ open, onOpenChange, onSave, initialFile }: 
           <input accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleReplaceFile} ref={fileRef} type="file" />
 
           <DialogPrimitive.Close render={<button className="absolute left-[calc(100%+24px)] top-[5px] flex items-center justify-center size-8 rounded-full bg-[rgba(37,37,37,0.12)] dark:bg-[rgba(255,255,255,0.12)] transition-colors hover:bg-[rgba(37,37,37,0.2)] dark:hover:bg-[rgba(255,255,255,0.2)]" type="button" />}>
-            <IconX className="text-page-text-muted" size={14} strokeWidth={1.5} />
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-page-text-muted"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </DialogPrimitive.Close>
 
           <div className="relative flex flex-col rounded-3xl overflow-hidden w-[800px] max-w-[calc(100vw-80px)] h-[673px] max-h-[calc(100vh-80px)] bg-card-bg border border-border">
@@ -120,7 +119,7 @@ export function ThumbnailCropModal({ open, onOpenChange, onSave, initialFile }: 
             <div className={cn("flex items-center px-6 h-[68px] shrink-0", state === "preview" ? "justify-between" : "justify-end")}>
               {state === "preview" && (
                 <div className="flex items-center gap-2">
-                  <button className="flex items-center justify-center size-9 rounded-full transition-colors hover:opacity-80 active:scale-[0.98] bg-rose-500/[0.16] border border-rose-500/[0.15]" onClick={handleDelete} type="button"><IconTrash className="text-rose-500" size={16} /></button>
+                  <button className="flex items-center justify-center size-9 rounded-full transition-colors hover:opacity-80 active:scale-[0.98] bg-rose-500/[0.16] border border-rose-500/[0.15]" onClick={handleDelete} type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-rose-500"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></button>
                   <button className={secondaryBtn} onClick={handleReplace} type="button">Replace</button>
                 </div>
               )}

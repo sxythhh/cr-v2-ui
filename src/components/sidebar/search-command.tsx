@@ -2,7 +2,6 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { IconPlus, IconLink, IconUserPlus } from "@tabler/icons-react";
 import { Home } from "./icons/home";
 import { Creators } from "./icons/creators";
 import { PieChart } from "./icons/pie-chart";
@@ -85,15 +84,15 @@ export function SearchCommand({ onOpenChange }: { onOpenChange?: (open: boolean)
               <CommandGroup>
                 <CommandGroupLabel>Actions</CommandGroupLabel>
                 <CommandItem value="Create new campaign">
-                  <IconPlus size={16} />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
                   Create new campaign
                 </CommandItem>
                 <CommandItem value="Create short link">
-                  <IconLink size={16} />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 15l6-6"/><path d="M11 6l.463-.536a5 5 0 0 1 7.071 7.072L18 13"/><path d="M13 18l-.397.534a5.068 5.068 0 0 1-7.127 0a4.972 4.972 0 0 1 0-7.071L6 11"/></svg>
                   Create short link
                 </CommandItem>
                 <CommandItem value="Invite team member">
-                  <IconUserPlus size={16} />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0"/><path d="M6 21v-2a4 4 0 0 1 4-4h3"/><path d="M16 19h6"/><path d="M19 16v6"/></svg>
                   Invite team member
                 </CommandItem>
               </CommandGroup>
