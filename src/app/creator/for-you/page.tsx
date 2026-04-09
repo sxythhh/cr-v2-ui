@@ -797,10 +797,10 @@ export default function CreatorForYouPage() {
       <CreatorHeader title="For you" className="relative z-10 border-transparent bg-transparent" />
 
       {/* ── Content ────────────────────────────────────────────── */}
-      <div className="relative z-10 flex flex-1 flex-col items-center px-4 py-4 md:px-12 lg:px-[156px]">
-        <div className="flex w-full max-w-[400px] flex-1 flex-col gap-6">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-4 md:px-12 lg:px-[156px]">
+        <div className="flex w-full max-w-[400px] flex-col gap-6">
           {/* ── Campaign card stack ──────────────────────────── */}
-          <div className="flex flex-1 flex-col gap-2">
+          <div className="flex flex-col gap-2">
             {/* Top meta row */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -824,7 +824,7 @@ export default function CreatorForYouPage() {
             </div>
 
             {/* Main card */}
-            <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+            <div className="flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
               {/* Thumbnail area */}
               <div className="relative isolate flex items-center justify-center overflow-hidden" style={{ height: "294px" }}>
                 {/* Blurred bg behind image */}
