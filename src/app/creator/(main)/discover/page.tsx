@@ -50,7 +50,7 @@ function ImagePlatformPills({ platforms, category }: { platforms: string[]; cate
 function CampaignCard({ campaign }: { campaign: Campaign }) {
   const progress = Math.max(4, Math.min(100, campaign.progressPercentage));
   return (
-    <div className={cn(cardCls, "flex w-[320px] shrink-0 flex-col")}>
+    <div className={cn(cardCls, "flex w-[320px] shrink-0 cursor-pointer flex-col")}>
       {/* Image */}
       <div className="relative p-1 pb-0">
         <div className="relative h-[184px] w-full overflow-hidden rounded-xl bg-cover bg-center" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 29.62%), url(${campaign.thumbnail})` }}>
@@ -306,7 +306,7 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
       {expanded ? (
         <div className="mx-auto grid w-full max-w-[756px] grid-cols-1 gap-2 px-4 sm:grid-cols-2 sm:px-5 md:px-4 lg:grid-cols-3">
           {campaigns.map((c) => (
-            <div key={c.id} className="w-full [&>div]:w-full">
+            <div key={c.id} className="w-full *:!w-full *:!shrink">
               <CampaignCard campaign={c} />
             </div>
           ))}
