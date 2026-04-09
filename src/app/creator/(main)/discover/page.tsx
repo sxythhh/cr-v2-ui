@@ -282,26 +282,41 @@ function useDragScroll() {
 /* ── Scrollable campaign row ── */
 function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[] }) {
   const drag = useDragScroll();
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="mx-auto flex w-full max-w-[756px] items-center justify-between px-4 sm:px-5 md:px-4">
         <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">{title}</h3>
-        <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
+        <button onClick={() => setExpanded(!expanded)} className="text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+          {expanded ? "Show less" : "See all"}
+        </button>
       </div>
-      <div
-        ref={drag.ref}
-        onPointerDown={drag.onPointerDown}
-        onPointerMove={drag.onPointerMove}
-        onPointerUp={drag.onPointerUp}
-        onPointerCancel={drag.onPointerUp}
-        className="flex cursor-default gap-2 overflow-x-auto pb-2 scrollbar-hide"
-        style={{ paddingLeft: "max(16px, calc((100% - 756px) / 2 + 16px))" }}
-      >
-        {campaigns.map((c) => (
-          <CampaignCard key={c.id} campaign={c} />
-        ))}
-        <div className="w-px shrink-0" />
-      </div>
+
+      {expanded ? (
+        <div className="mx-auto grid w-full max-w-[756px] grid-cols-1 gap-2 px-4 sm:grid-cols-2 sm:px-5 md:px-4 lg:grid-cols-3">
+          {campaigns.map((c) => (
+            <div key={c.id} className="w-full [&>div]:w-full">
+              <CampaignCard campaign={c} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div
+          ref={drag.ref}
+          onPointerDown={drag.onPointerDown}
+          onPointerMove={drag.onPointerMove}
+          onPointerUp={drag.onPointerUp}
+          onPointerCancel={drag.onPointerUp}
+          className="flex cursor-default gap-2 overflow-x-auto pb-2 scrollbar-hide"
+          style={{ paddingLeft: "max(16px, calc((100% - 756px) / 2 + 16px))" }}
+        >
+          {campaigns.map((c) => (
+            <CampaignCard key={c.id} campaign={c} />
+          ))}
+          <div className="w-px shrink-0" />
+        </div>
+      )}
     </div>
   );
 }
