@@ -95,6 +95,67 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
   );
 }
 
+/* ── Campaign List Card (row mode) ── */
+function CampaignListCard({ campaign }: { campaign: Campaign }) {
+  const progress = Math.max(4, Math.min(100, campaign.progressPercentage));
+  return (
+    <div className={cn(cardCls, "flex h-[118px] w-full items-center")}>
+      {/* Thumbnail */}
+      <div className="relative h-full w-[195px] shrink-0 p-1 pl-1">
+        <div className="relative h-[110px] w-full overflow-hidden rounded-xl bg-cover bg-center" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 29.62%), url(${campaign.thumbnail})` }}>
+          <div className="absolute inset-x-0 top-0 flex justify-between p-3">
+            <ImagePlatformPills platforms={campaign.platforms} category={campaign.category} />
+          </div>
+        </div>
+      </div>
+      {/* Body */}
+      <div className="flex min-w-0 flex-1 items-center gap-4 px-4 py-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          {/* Brand + title */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5">
+              <img src={campaign.avatar} alt={campaign.brand} className="size-4 shrink-0 rounded-full border border-foreground/[0.06]" />
+              <span className="text-xs font-medium text-page-text">{campaign.brand}</span>
+              {campaign.isVerified && <VerifiedBadge size={12} />}
+              <span className="text-xs font-medium text-foreground/20">·</span>
+              <span className="text-xs text-page-text-subtle">{campaign.fundedAgo}</span>
+            </div>
+            <span className="line-clamp-1 text-sm font-medium tracking-[-0.02em] text-page-text">{campaign.title}</span>
+          </div>
+          {/* Stats + progress */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1">
+                <svg width="12" height="12" viewBox="0 0 15 12" fill="currentColor"><path d="M1.807 2.667C1.807 1.194 3 0 4.473 0c1.473 0 2.667 1.194 2.667 2.667 0 1.473-1.194 2.666-2.667 2.666S1.807 4.14 1.807 2.667Z"/><path d="M7.807 2.667C7.807 1.194 9 0 10.473 0c1.473 0 2.667 1.194 2.667 2.667 0 1.473-1.194 2.666-2.667 2.666S7.807 4.14 7.807 2.667Z"/><path d="M4.473 6c1.914 0 3.73 1.32 4.405 3.742.353 1.267-.727 2.258-1.836 2.258H1.904C.795 12-.285 11.009.068 9.742.744 7.32 2.56 6 4.473 6Z"/><path d="M10.163 9.384c-.325-1.166-.884-2.152-1.603-2.916A4.6 4.6 0 0 1 10.474 6c1.913 0 3.729 1.32 4.405 3.742.353 1.267-.727 2.258-1.836 2.258H9.694c.512-.697.746-1.624.469-2.616Z"/></svg>
+                <span className="text-xs font-medium text-page-text">{formatCreators(campaign.creators)}</span>
+              </div>
+              <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333C4.364 1.333 1.227 3.63 0 7.333c1.227 3.703 4.364 6 8 6s6.773-2.297 8-6c-1.227-3.703-4.364-6-8-6Zm0 9.667a3.667 3.667 0 1 0 0-7.333 3.667 3.667 0 0 0 0 7.333Zm0-1.833a1.833 1.833 0 1 0 0-3.667 1.833 1.833 0 0 0 0 3.667Z" fill="#1A67E5"/></svg>
+                <span className="text-xs font-medium text-[#1A67E5]">{campaign.pricePerView}/1k</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-[1px] text-xs">
+              <span className="font-medium text-page-text">{campaign.budgetSpent}</span>
+              <span className="text-foreground/70">/</span>
+              <span className="text-foreground/70">{campaign.budgetTotal}</span>
+            </div>
+          </div>
+          {/* Progress bar */}
+          <div className="h-1 w-full rounded-full bg-foreground/[0.06]">
+            <div className="h-full rounded-full bg-page-text" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+        {/* View details button */}
+        <div className="flex shrink-0 flex-col items-end justify-between self-stretch">
+          <button className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10]">
+            View details
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Hero Banner ── */
 function HeroBanner({ campaigns }: { campaigns: Campaign[] }) {
   const [active, setActive] = useState(0);
@@ -330,8 +391,18 @@ export default function CreatorDiscoverPage() {
           <FilterBar search={search} onSearch={setSearch} viewMode={viewMode} onViewMode={setViewMode} />
         </div>
 
-        <CampaignRow title="Verified campaigns" campaigns={[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5)} />
-        <CampaignRow title="Trending campaigns" campaigns={GRID_CAMPAIGNS.slice(0, 6)} />
+        {viewMode === "grid" ? (
+          <>
+            <CampaignRow title="Verified campaigns" campaigns={[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5)} />
+            <CampaignRow title="Trending campaigns" campaigns={GRID_CAMPAIGNS.slice(0, 6)} />
+          </>
+        ) : (
+          <div className="mx-auto flex w-full max-w-[756px] flex-col gap-2 px-4 sm:px-5 md:px-4">
+            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].map((c) => (
+              <CampaignListCard key={c.id} campaign={c} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
