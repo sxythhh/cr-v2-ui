@@ -304,7 +304,7 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
       </div>
 
       {expanded ? (
-        <div className="mx-auto flex w-full max-w-[1024px] flex-wrap justify-center gap-2 px-4 sm:px-5 md:px-4">
+        <div className="mx-auto flex w-full max-w-[1024px] flex-wrap gap-2 px-4 sm:px-5 md:px-4">
           {campaigns.map((c) => (
             <CampaignCard key={c.id} campaign={c} />
           ))}
