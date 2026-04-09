@@ -456,7 +456,7 @@ export default function CreatorHomePage() {
       </div>
 
       {/* ─── Feed Section ─── */}
-      <div className={`${cardStyle} mx-4 flex flex-col gap-4 p-4`}>
+      <div className={`${cardStyle} mx-4 flex flex-col gap-4 overflow-hidden p-4`}>
         {/* Header */}
         <div className={sectionHeader}>
           <span className={headerTitle}>Feed</span>
@@ -474,7 +474,7 @@ export default function CreatorHomePage() {
         {/* Swipable feed pages */}
         <div
           ref={feedScrollRef}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-none"
+          className="flex snap-x snap-mandatory gap-0 overflow-x-auto scrollbar-hide"
           onScroll={(e) => {
             const el = e.currentTarget;
             const idx = Math.round(el.scrollLeft / el.clientWidth);

@@ -164,11 +164,17 @@ export default function CreatorSubmissionsPage() {
   const handleStatScroll = useCallback(() => {
     const el = statScrollRef.current;
     if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) return;
-    const ratio = el.scrollLeft / maxScroll;
-    const pages = Math.ceil(stats.length / 2);
-    setStatActiveIndex(Math.round(ratio * (pages - 1)));
+    // Find which card is closest to the left edge
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    const scrollLeft = el.scrollLeft;
+    for (let i = 0; i < el.children.length; i++) {
+      const child = el.children[i] as HTMLElement;
+      const dist = Math.abs(child.offsetLeft - scrollLeft - 16); // 16px = scroll-padding
+      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+    }
+    // Convert card index to page index (2 cards per page)
+    setStatActiveIndex(Math.min(Math.floor(closestIdx / 2), Math.ceil(stats.length / 2) - 1));
   }, []);
   const [activeFilter, setActiveFilter] = useState(0);
   const [timelineOpen, setTimelineOpen] = useState(false);
@@ -823,7 +829,7 @@ export default function CreatorSubmissionsPage() {
       <TrustScoreModal open={trustScoreOpen} onClose={() => setTrustScoreOpen(false)} />
 
       {/* Mobile fixed bottom submit bar */}
-      <div className="fixed inset-x-0 bottom-[calc(60px+max(8px,env(safe-area-inset-bottom)))] z-40 flex items-center justify-end border-t border-foreground/[0.06] bg-white px-4 py-3 sm:px-5 md:hidden dark:bg-page-bg">
+      <div className="fixed inset-x-0 bottom-[calc(44px+max(8px,env(safe-area-inset-bottom)))] z-40 flex items-center justify-end border-t border-foreground/[0.06] bg-white px-4 py-3 sm:px-5 md:hidden dark:bg-page-bg">
         <button onClick={() => setSubmitOpen(true)} className="flex h-9 items-center rounded-full px-4 text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
           Submit clip
         </button>
