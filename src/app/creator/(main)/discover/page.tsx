@@ -61,7 +61,7 @@ function EyeIconSmall() {
 function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick?: () => void }) {
   const progress = Math.max(4, Math.min(100, campaign.progressPercentage));
   return (
-    <div className={cn(cardCls, "flex cursor-pointer flex-col transition-shadow hover:shadow-lg")} onClick={onClick}>
+    <div className={cn(cardCls, "group/card flex w-[320px] shrink-0 cursor-pointer flex-col transition-shadow hover:shadow-lg")} onClick={onClick}>
       {/* Image area with overlaid pills */}
       <div className="relative p-1 pb-0">
         <div className="relative h-[184px] w-full overflow-hidden rounded-xl bg-cover bg-center" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 29.62%), url(${campaign.thumbnail})` }}>
@@ -101,6 +101,16 @@ function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick?: () 
             <span className="font-medium text-page-text">{campaign.budgetSpent}</span>
             <span className="text-foreground/70">/</span>
             <span className="text-foreground/70">{campaign.budgetTotal}</span>
+          </div>
+        </div>
+
+        {/* Hover: description + join button */}
+        <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 lg:group-hover/card:grid-rows-[1fr]">
+          <div className="overflow-hidden">
+            <p className="line-clamp-2 pb-2 text-xs leading-[150%] text-foreground/60">{campaign.description}</p>
+            <button className="flex h-9 w-full items-center justify-center rounded-full text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+              Join Campaign
+            </button>
           </div>
         </div>
       </div>
@@ -218,25 +228,25 @@ export default function CreatorDiscoverPage() {
         <HeroBanner campaigns={BANNER_CAMPAIGNS} onJoin={() => {}} />
 
         {/* Verified campaigns */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+        <div className="-mx-4 flex flex-col gap-4 sm:-mx-5 md:mx-0">
+          <div className="flex items-center justify-between px-4 sm:px-5 md:px-0">
             <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">Verified campaigns</h3>
             <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
           </div>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 3).map((c) => (
+          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 scrollbar-hide sm:pl-5 md:pl-0">
+            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5).map((c) => (
               <CampaignCard key={c.id} campaign={c} />
             ))}
           </div>
         </div>
 
         {/* Trending campaigns */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+        <div className="-mx-4 flex flex-col gap-4 sm:-mx-5 md:mx-0">
+          <div className="flex items-center justify-between px-4 sm:px-5 md:px-0">
             <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">Trending campaigns</h3>
             <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
           </div>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 scrollbar-hide sm:pl-5 md:pl-0">
             {GRID_CAMPAIGNS.slice(0, 6).map((c) => (
               <CampaignCard key={c.id} campaign={c} />
             ))}
