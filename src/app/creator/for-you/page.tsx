@@ -887,8 +887,8 @@ export default function CreatorForYouPage() {
                   </span>
                   {/* CPM pill */}
                   <span className="flex h-6 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white px-2 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
-                    <svg width="12" height="12" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#60A5FA"/></svg>
-                    <span className="text-xs font-medium text-[#1A67E5] dark:text-[#60A5FA]">{campaign.cpmRate}</span>
+                    <svg width="12" height="12" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#1A67E5"/></svg>
+                    <span className="text-xs font-medium text-[#1A67E5]">{campaign.cpmRate}</span>
                   </span>
                 </div>
                 {/* Budget */}
@@ -1133,8 +1133,8 @@ function CampaignDetail({
                     <span className="text-sm font-medium text-page-text">{campaign.creators}</span>
                   </span>
                   <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
-                    <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#60A5FA"/></svg>
-                    <span className="text-sm font-medium text-[#1A67E5] dark:text-[#60A5FA]">{campaign.cpmRate}</span>
+                    <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="#1A67E5"/></svg>
+                    <span className="text-sm font-medium text-[#1A67E5]">{campaign.cpmRate}</span>
                   </span>
                   <span className="text-xs text-foreground/20">&middot;</span>
                   <span className="flex h-8 items-center gap-1.5 rounded-full border border-foreground/[0.06] bg-white py-2 pl-2 pr-2.5 dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">

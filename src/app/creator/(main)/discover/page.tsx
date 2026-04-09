@@ -254,15 +254,19 @@ function useDragScroll() {
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     const el = ref.current;
     if (!el) return;
-    state.current = { dragging: true, startX: e.clientX, scrollLeft: el.scrollLeft };
+    state.current = { dragging: false, startX: e.clientX, scrollLeft: el.scrollLeft };
     el.setPointerCapture(e.pointerId);
-    el.style.cursor = "grabbing";
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!state.current.dragging) return;
     const el = ref.current;
     if (!el) return;
+    const dx = Math.abs(e.clientX - state.current.startX);
+    if (!state.current.dragging && dx > 3) {
+      state.current.dragging = true;
+      el.style.cursor = "grabbing";
+    }
+    if (!state.current.dragging) return;
     e.preventDefault();
     el.scrollLeft = state.current.scrollLeft - (e.clientX - state.current.startX);
   }, []);
@@ -290,7 +294,7 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
         onPointerMove={drag.onPointerMove}
         onPointerUp={drag.onPointerUp}
         onPointerCancel={drag.onPointerUp}
-        className="flex cursor-grab gap-2 overflow-x-auto pb-2 scrollbar-hide"
+        className="flex cursor-default gap-2 overflow-x-auto pb-2 scrollbar-hide"
         style={{ paddingLeft: "max(16px, calc((100% - 756px) / 2 + 16px))" }}
       >
         {campaigns.map((c) => (
@@ -334,7 +338,7 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
   return (
     <div className="flex items-center justify-between gap-4 py-2">
       {/* Search */}
-      <div className="flex h-9 flex-1 items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 md:max-w-[300px] dark:bg-white/[0.04]">
+      <div className="flex h-9 w-full items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 md:w-[300px] md:flex-none dark:bg-white/[0.04]">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M14 14l-3.5-3.5M10.5 6a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
         <input value={search} onChange={(e) => onSearch(e.target.value)} placeholder="Search campaigns..." className="w-full bg-transparent text-sm text-page-text outline-none placeholder:text-foreground/70 dark:placeholder:text-white/40" />
       </div>
