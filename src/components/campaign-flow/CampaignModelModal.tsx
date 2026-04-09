@@ -300,7 +300,7 @@ export function CampaignModelModal({
                   <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Combined payout model</span>
                   <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Creators can earn from multiple payout types on this campaign. Each model has its own budget pool and rules.</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   {/* CPM mini card */}
                   <div className="flex flex-1 items-center gap-3 rounded-[20px] p-3" style={{ background: "radial-gradient(100% 100% at 50% 0%, rgba(26,103,229,0) 30%, rgba(26,103,229,0.12) 100%), var(--card-bg, #FFFFFF)", border: "1px solid rgba(26,103,229,0.3)" }}>
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(26,103,229,0.06)" }}>
