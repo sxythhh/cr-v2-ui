@@ -4,6 +4,7 @@ import { DubNav } from "@/components/lander/dub-nav";
 import { Caveat } from "next/font/google";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useTheme } from "@/components/theme-provider";
+import { VerifiedBadge } from "@/components/verified-badge";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -88,30 +89,6 @@ function OrangeIconBadge() {
         />
       </svg>
     </div>
-  );
-}
-
-function VerifiedBadge() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6.27 1.455a2 2 0 0 1 3.46 0l.445.77a2 2 0 0 0 1.35.961l.862.178a2 2 0 0 1 1.73 1.73l.178.862a2 2 0 0 0 .961 1.35l.77.445a2 2 0 0 1 0 3.46l-.77.445a2 2 0 0 0-.961 1.35l-.178.862a2 2 0 0 1-1.73 1.73l-.862.178a2 2 0 0 0-1.35.961l-.445.77a2 2 0 0 1-3.46 0l-.445-.77a2 2 0 0 0-1.35-.961l-.862-.178a2 2 0 0 1-1.73-1.73l-.178-.862a2 2 0 0 0-.961-1.35l-.77-.445a2 2 0 0 1 0-3.46l.77-.445a2 2 0 0 0 .961-1.35l.178-.862a2 2 0 0 1 1.73-1.73l.862-.178a2 2 0 0 0 1.35-.961l.445-.77Z"
-        fill="#FF7A00"
-      />
-      <path
-        d="M5.5 8L7 9.5L10.5 6"
-        stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 

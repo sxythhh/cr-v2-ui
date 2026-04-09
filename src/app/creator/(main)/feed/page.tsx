@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { VerifiedBadge } from "@/components/verified-badge";
 
 /* ─── Inline SVG Icons ─── */
 
@@ -140,15 +141,6 @@ function EyeIconSmall() {
   return (
     <svg width="11" height="8" viewBox="0 0 11 8" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M5.37317 0C7.34902 0 9.26845 1.13616 10.5515 3.29156C10.8113 3.72792 10.8113 4.27203 10.5515 4.70838C9.26846 6.86379 7.34903 8 5.37317 8C3.39732 8 1.47789 6.86384 0.194815 4.70844C-0.0649384 4.27208-0.0649381 3.72797 0.194815 3.29162C1.47788 1.13622 3.39731 0 5.37317 0ZM3.62317 4C3.62317 3.0335 4.40667 2.25 5.37317 2.25C6.33967 2.25 7.12317 3.0335 7.12317 4C7.12317 4.9665 6.33967 5.75 5.37317 5.75C4.40667 5.75 3.62317 4.9665 3.62317 4Z" fill="#1A67E5"/>
-    </svg>
-  );
-}
-
-function VerifiedBadge() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <circle cx="6" cy="6" r="6" fill="currentColor"/>
-      <path d="M3.5 6L5.25 7.75L8.5 4.25" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

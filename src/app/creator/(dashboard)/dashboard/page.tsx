@@ -8,6 +8,7 @@ import { CheckCircleIcon } from "@/components/submissions/icons";
 import { TrustScoreModal } from "@/components/trust-score-modal";
 import { TransactionShareModal } from "@/components/transaction-share-modal";
 import { PerksDrawer } from "@/components/perks-drawer";
+import { VerifiedBadge } from "@/components/verified-badge";
 
 // ── Inline Icons ────────────────────────────────────────────────────
 
@@ -129,21 +130,6 @@ function PaperclipIcon() {
   return (
     <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
       <path d="M6.3 0C4.367 0 2.8 1.567 2.8 3.5V9.09999C2.8 10.2598 3.7402 11.2 4.9 11.2C6.05979 11.2 6.99999 10.2598 6.99999 9.09999V3.5C6.99999 3.1134 6.68659 2.8 6.3 2.8C5.9134 2.8 5.6 3.1134 5.6 3.5V9.09999C5.6 9.48659 5.2866 9.79999 4.9 9.79999C4.5134 9.79999 4.2 9.48659 4.2 9.09999V3.5C4.2 2.3402 5.1402 1.4 6.3 1.4C7.45979 1.4 8.39999 2.3402 8.39999 3.5V9.09999C8.39999 11.033 6.83299 12.6 4.9 12.6C2.967 12.6 1.4 11.033 1.4 9.09999V6.3C1.4 5.9134 1.0866 5.6 0.699999 5.6C0.3134 5.6 0 5.9134 0 6.3V9.09999C0 11.8062 2.1938 14 4.9 14C7.60619 14 9.79999 11.8062 9.79999 9.09999V3.5C9.79999 1.567 8.23299 0 6.3 0Z" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function VerifiedBadge() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M5.8 0.8C6.5 0.1 7.5 0.1 8.2 0.8L8.9 1.5L9.9 1.3C10.8 1.1 11.7 1.7 11.9 2.6L12.1 3.6L13 4.1C13.8 4.5 14.1 5.5 13.7 6.3L13.2 7.2L13.7 8.1C14.1 8.9 13.8 9.9 13 10.3L12.1 10.8L11.9 11.8C11.7 12.7 10.8 13.3 9.9 13.1L8.9 12.9L8.2 13.6C7.5 14.3 6.5 14.3 5.8 13.6L5.1 12.9L4.1 13.1C3.2 13.3 2.3 12.7 2.1 11.8L1.9 10.8L1 10.3C0.2 9.9 -0.1 8.9 0.3 8.1L0.8 7.2L0.3 6.3C-0.1 5.5 0.2 4.5 1 4.1L1.9 3.6L2.1 2.6C2.3 1.7 3.2 1.1 4.1 1.3L5.1 1.5L5.8 0.8Z" fill="url(#gold_gradient)" />
-      <path d="M5 7L6.5 8.5L9.5 5.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      <defs>
-        <linearGradient id="gold_gradient" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFD700" />
-          <stop offset="1" stopColor="#F0A500" />
-        </linearGradient>
-      </defs>
     </svg>
   );
 }

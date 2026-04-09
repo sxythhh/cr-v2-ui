@@ -4,15 +4,7 @@ import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import type { Platform } from "./_shared";
 import { PILL_MASK } from "./_shared";
 
-export function VerifiedBadge({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" className="shrink-0">
-      <circle cx="7" cy="7" r="7" fill="url(#vbg)" />
-      <path d="M4.5 7.2L6 8.7L9.5 5.3" stroke="#000" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      <defs><linearGradient id="vbg" x1="7" y1="0" x2="7" y2="14"><stop stopColor="#FDDC87" /><stop offset="1" stopColor="#FCB02B" /></linearGradient></defs>
-    </svg>
-  );
-}
+export { VerifiedBadge } from "@/components/verified-badge";
 
 export function PlatformPills({ platforms }: { platforms: Platform[] }) {
   return (

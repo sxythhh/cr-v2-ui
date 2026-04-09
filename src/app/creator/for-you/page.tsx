@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/copy-button";
 import { Modal } from "@/components/ui/modal";
 import { CreatorHeader } from "@/components/creator-header";
+import { VerifiedBadge } from "@/components/verified-badge";
 import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
 import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
 import { UsersIcon } from "@/components/sidebar/icons/users";
@@ -86,21 +87,6 @@ function BellIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M8 1.33C8.47 1.33 8.93 1.4 9.37 1.53C9.06 1.87 8.84 2.28 8.73 2.74C8.5 2.69 8.25 2.67 8 2.67C6.11 2.67 4.56 4.14 4.47 6.03L4.35 8.28C4.34 8.65 4.24 9.01 4.08 9.34L3.41 10.67H12.59L11.92 9.34C11.76 9.01 11.66 8.65 11.65 8.28L11.53 6.03C11.53 6.01 11.53 6 11.53 5.99C12 5.96 12.45 5.8 12.83 5.54C12.84 5.68 12.86 5.82 12.87 5.96L12.98 8.21C12.99 8.4 13.03 8.58 13.12 8.74L13.87 10.25C13.96 10.42 14 10.6 14 10.79C14 11.46 13.46 12 12.79 12H11.27C10.96 13.52 9.61 14.67 8 14.67C6.39 14.67 5.04 13.52 4.73 12H3.21C2.58 12 2.07 11.53 2.01 10.92L2 10.79L2.01 10.65C2.02 10.52 2.06 10.38 2.13 10.25L2.88 8.74C2.96 8.58 3.01 8.4 3.02 8.21L3.14 5.96C3.26 3.37 5.4 1.33 8 1.33ZM6.12 12C6.39 12.78 7.13 13.33 8 13.33C8.87 13.33 9.61 12.78 9.88 12H6.12Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function VerifiedBadge() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-      <path d="M5.8 0.8C6.5 0.1 7.5 0.1 8.2 0.8L8.9 1.5L9.9 1.3C10.8 1.1 11.7 1.7 11.9 2.6L12.1 3.6L13 4.1C13.8 4.5 14.1 5.5 13.7 6.3L13.2 7.2L13.7 8.1C14.1 8.9 13.8 9.9 13 10.3L12.1 10.8L11.9 11.8C11.7 12.7 10.8 13.3 9.9 13.1L8.9 12.9L8.2 13.6C7.5 14.3 6.5 14.3 5.8 13.6L5.1 12.9L4.1 13.1C3.2 13.3 2.3 12.7 2.1 11.8L1.9 10.8L1 10.3C0.2 9.9 -0.1 8.9 0.3 8.1L0.8 7.2L0.3 6.3C-0.1 5.5 0.2 4.5 1 4.1L1.9 3.6L2.1 2.6C2.3 1.7 3.2 1.1 4.1 1.3L5.1 1.5L5.8 0.8Z" fill="url(#vb_grad)" />
-      <path d="M5 7L6.5 8.5L9.5 5.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      <defs>
-        <linearGradient id="vb_grad" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FDDC87" />
-          <stop offset="1" stopColor="#FCB02B" />
-        </linearGradient>
-      </defs>
     </svg>
   );
 }

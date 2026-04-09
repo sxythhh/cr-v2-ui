@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { VerifiedBadge } from "@/components/verified-badge";
 import {
   Check,
   XCircle,
@@ -198,30 +199,6 @@ const tabs = [
 /* ------------------------------------------------------------------ */
 /*  Small Components                                                   */
 /* ------------------------------------------------------------------ */
-
-function VerifiedBadge() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path
-        d="M7 0L8.5 1.2L10.3 0.8L11 2.5L12.8 3.2L12.5 5.1L14 6.5L12.8 8L13.2 9.8L11.5 10.5L10.8 12.3L8.9 12L7.5 13.5L6 12.3L4.2 12.7L3.5 11L1.7 10.3L2 8.4L0.5 7L1.7 5.5L1.3 3.7L3 3L3.7 1.2L5.6 1.5L7 0Z"
-        fill="url(#gold)"
-      />
-      <path
-        d="M5.5 7.2L6.5 8.2L8.8 5.5"
-        stroke="black"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <defs>
-        <linearGradient id="gold" x1="7" y1="0" x2="7" y2="14">
-          <stop offset="0%" stopColor="#FDDC87" />
-          <stop offset="100%" stopColor="#FCB02B" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
 
 function CategoryIcon({
   icon,

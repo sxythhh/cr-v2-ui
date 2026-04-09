@@ -7,6 +7,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { motion, AnimatePresence } from "motion/react";
 import { FloatingPortal } from "@floating-ui/react";
 import { springs } from "@/lib/springs";
+import { VerifiedBadge } from "@/components/verified-badge";
 
 import {
   ChevronDown,
@@ -75,13 +76,6 @@ function AgencyLogo({
         {initials}
       </span>
     </div>
-  );
-}
-
-// ── Verified badge SVG ───────────────────────────────────────────────────────
-function VerifiedBadge({ size = 16 }: { size?: number }) {
-  return (
-    <img src="/icons/verified-check.svg" alt="Verified" width={size} height={size} />
   );
 }
 
