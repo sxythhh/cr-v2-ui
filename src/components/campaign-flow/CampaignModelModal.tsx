@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { IconCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { CampaignModel } from "@/types/campaign-flow.types";
@@ -102,21 +101,100 @@ export function CampaignModelModal({
   onSelect,
 }: CampaignModelModalProps) {
   const [selected, setSelected] = useState<CampaignModel | null>(null);
+  const [screen, setScreen] = useState<"choose" | "model">("choose");
 
   const handleContinue = () => {
     if (selected) {
       onSelect(selected);
       setSelected(null);
+      setScreen("choose");
     }
   };
 
   const handleOpenChange = (next: boolean) => {
-    if (!next) setSelected(null);
+    if (!next) { setSelected(null); setScreen("choose"); }
     onOpenChange(next);
+  };
+
+  const handleAiSelect = () => {
+    onOpenChange(false);
+    setScreen("choose");
+    // Navigate to AI campaign creation
+    window.location.href = "/create-campaign/ai";
   };
 
   const selectedModel = MODELS.find((m) => m.id === selected);
 
+  // ── "Choose how to get started" screen ──
+  if (screen === "choose") {
+    return (
+      <DialogPrimitive.Root onOpenChange={handleOpenChange} open={open}>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-neutral-100/50 backdrop-blur-md dark:bg-black/60 data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0" />
+          <DialogPrimitive.Popup className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-32px)] sm:w-[520px] max-w-[520px] focus:outline-none data-[open]:animate-in data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[open]:fade-in-0 data-[ending-style]:zoom-out-95 data-[open]:zoom-in-95">
+            <DialogPrimitive.Title className="sr-only">New campaign</DialogPrimitive.Title>
+            <div className="flex flex-col rounded-[20px] bg-white dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
+              {/* Header */}
+              <div className="relative flex items-center justify-center border-b border-foreground/[0.06] px-5 py-3">
+                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">New campaign</span>
+                <DialogPrimitive.Close render={<button className="absolute right-4 top-3 flex items-center justify-center text-foreground/50" type="button" />}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.52" strokeLinecap="round" /></svg>
+                </DialogPrimitive.Close>
+              </div>
+
+              {/* Subtitle */}
+              <div className="flex items-center justify-center px-5 pt-4">
+                <span className="text-sm font-medium tracking-[-0.02em] text-foreground/70">Choose how you&apos;d like to get started</span>
+              </div>
+
+              {/* Options */}
+              <div className="flex flex-col gap-2 px-5 pb-5 pt-4">
+                {/* AI Assistant */}
+                <button
+                  onClick={handleAiSelect}
+                  className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-4 text-left shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                  type="button"
+                >
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.03)]" style={{ background: "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.2) 0%, rgba(255,144,37,0) 90.69%), #FFFFFF", border: "1px solid rgba(229,113,0,0.08)" }}>
+                    <svg width="20" height="20" viewBox="0 0 12 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 0C6.36819 0 6.66667 0.298477 6.66667 0.666667V1.33333H9.33333C10.4379 1.33333 11.3333 2.22876 11.3333 3.33333V6.66667C11.3333 7.259 11.0758 7.79119 10.6667 8.1574V9.05719L11.8047 10.1953C12.0651 10.4556 12.0651 10.8777 11.8047 11.1381C11.5444 11.3984 11.1223 11.3984 10.8619 11.1381L10.454 10.7302C9.86034 12.6251 8.09073 14 6 14C3.90927 14 2.13966 12.6251 1.54598 10.7302L1.13807 11.1381C0.877722 11.3984 0.455612 11.3984 0.195262 11.1381C-0.0650874 10.8777 -0.0650874 10.4556 0.195262 10.1953L1.33333 9.05719V8.1574C0.924167 7.79119 0.666667 7.259 0.666667 6.66667V3.33333C0.666667 2.22876 1.5621 1.33333 2.66667 1.33333H5.33333V0.666667C5.33333 0.298477 5.63181 0 6 0ZM2.66667 2.66667C2.29848 2.66667 2 2.96514 2 3.33333V6.66667C2 7.03486 2.29848 7.33333 2.66667 7.33333H9.33333C9.70152 7.33333 10 7.03486 10 6.66667V3.33333C10 2.96514 9.70152 2.66667 9.33333 2.66667H2.66667ZM4 4C4.36819 4 4.66667 4.29848 4.66667 4.66667V5.33333C4.66667 5.70152 4.36819 6 4 6C3.63181 6 3.33333 5.70152 3.33333 5.33333V4.66667C3.33333 4.29848 3.63181 4 4 4ZM8 4C8.36819 4 8.66667 4.29848 8.66667 4.66667V5.33333C8.66667 5.70152 8.36819 6 8 6C7.63181 6 7.33333 5.70152 7.33333 5.33333V4.66667C7.33333 4.29848 7.63181 4 8 4Z" fill="#E57100" /></svg>
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-medium tracking-[-0.02em] text-page-text">AI Assistant</span>
+                      <span className="rounded-full bg-[rgba(229,113,0,0.08)] px-2 py-1 text-xs font-medium tracking-[-0.02em] text-[#E57100]">Recommended</span>
+                    </div>
+                    <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Answer a few questions and we&apos;ll build your campaign for you. Takes less than 2 minutes.</span>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+
+                {/* Manual setup */}
+                <button
+                  onClick={() => setScreen("model")}
+                  className="flex items-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-4 text-left shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]"
+                  type="button"
+                >
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 2.5L5.83 4.17M12.5 2.5L14.17 4.17M10 1.67V3.33M3.33 10H1.67M18.33 10H16.67M15.83 15.83L14.17 14.17M4.17 15.83L5.83 14.17M10 16.67V18.33M13.33 10C13.33 11.84 11.84 13.33 10 13.33C8.16 13.33 6.67 11.84 6.67 10C6.67 8.16 8.16 6.67 10 6.67C11.84 6.67 13.33 8.16 13.33 10Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Manual setup</span>
+                      <span className="rounded-full bg-foreground/[0.06] px-2 py-1 text-xs font-medium tracking-[-0.02em] text-page-text">Advanced</span>
+                    </div>
+                    <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Full control over every setting. Step-by-step wizard with all configuration options.</span>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+              </div>
+            </div>
+          </DialogPrimitive.Popup>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+    );
+  }
+
+  // ── Model selection screen (existing) ──
   return (
     <DialogPrimitive.Root onOpenChange={handleOpenChange} open={open}>
       <DialogPrimitive.Portal>
