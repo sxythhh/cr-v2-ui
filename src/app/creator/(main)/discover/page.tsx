@@ -58,10 +58,11 @@ function EyeIconSmall() {
 }
 
 /* ── Campaign Card ── */
-function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick?: () => void }) {
+function CampaignCard({ campaign, onClick, style }: { campaign: Campaign; onClick?: () => void; style?: React.CSSProperties }) {
   const progress = Math.max(4, Math.min(100, campaign.progressPercentage));
   return (
-    <div className={cn(cardCls, "group/card flex w-[320px] shrink-0 cursor-pointer flex-col transition-shadow hover:shadow-lg")} onClick={onClick}>
+    <div className="group/card w-[320px] shrink-0 cursor-pointer" onClick={onClick} style={style}>
+    <div className={cn(cardCls, "verified-card-hover flex flex-col")}>
       {/* Image area with overlaid pills */}
       <div className="relative p-1 pb-0">
         <div className="relative h-[184px] w-full overflow-hidden rounded-xl bg-cover bg-center" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 29.62%), url(${campaign.thumbnail})` }}>
@@ -104,11 +105,16 @@ function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick?: () 
           </div>
         </div>
 
-        {/* Hover: description + join button */}
-        <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 lg:group-hover/card:grid-rows-[1fr]">
+        {/* Hover: description */}
+        <div className="grid grid-rows-[0fr] lg:group-hover/card:grid-rows-[1fr] verified-expand" style={{ "--expand-stagger": "20ms" } as React.CSSProperties}>
           <div className="overflow-hidden">
-            <p className="line-clamp-2 pb-2 text-xs leading-[150%] text-foreground/60">{campaign.description}</p>
-            <button className="flex h-9 w-full items-center justify-center rounded-full text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+            <p className="line-clamp-2 pb-1 text-xs leading-[150%] text-foreground/60">{campaign.description}</p>
+          </div>
+        </div>
+        {/* Hover: join button */}
+        <div className="grid grid-rows-[0fr] lg:group-hover/card:grid-rows-[1fr] verified-expand" style={{ "--expand-stagger": "40ms" } as React.CSSProperties}>
+          <div className="overflow-hidden">
+            <button className="mb-1 flex h-9 w-full items-center justify-center rounded-full text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
               Join Campaign
             </button>
           </div>
@@ -119,6 +125,7 @@ function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick?: () 
       <div className="h-1 w-full bg-foreground/[0.06]">
         <div className="h-full rounded-full bg-page-text" style={{ width: `${progress}%` }} />
       </div>
+    </div>
     </div>
   );
 }
@@ -222,33 +229,33 @@ function HeroBanner({ campaigns, onJoin }: { campaigns: Campaign[]; onJoin: (c: 
 /* ── Page ── */
 export default function CreatorDiscoverPage() {
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
+    <div className="discover-page flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
       <div className="mx-auto flex w-full max-w-[756px] flex-col gap-6 px-4 py-4 sm:px-5 md:px-4">
         {/* Hero */}
         <HeroBanner campaigns={BANNER_CAMPAIGNS} onJoin={() => {}} />
 
         {/* Verified campaigns */}
-        <div className="-mx-4 flex flex-col gap-4 sm:-mx-5 md:mx-0">
+        <div className="-mr-4 -ml-4 flex flex-col gap-4 sm:-mr-5 sm:-ml-5 md:-mr-4 md:ml-0">
           <div className="flex items-center justify-between px-4 sm:px-5 md:px-0">
             <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">Verified campaigns</h3>
             <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 scrollbar-hide sm:pl-5 md:pl-0">
-            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5).map((c) => (
-              <CampaignCard key={c.id} campaign={c} />
+          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 pr-4 scrollbar-hide sm:pl-5 sm:pr-5 md:pl-0 md:pr-4">
+            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5).map((c, i) => (
+              <CampaignCard key={c.id} campaign={c} style={{ "--enter-d": `${Math.min(i * 25, 200)}` } as React.CSSProperties} />
             ))}
           </div>
         </div>
 
         {/* Trending campaigns */}
-        <div className="-mx-4 flex flex-col gap-4 sm:-mx-5 md:mx-0">
+        <div className="-mr-4 -ml-4 flex flex-col gap-4 sm:-mr-5 sm:-ml-5 md:-mr-4 md:ml-0">
           <div className="flex items-center justify-between px-4 sm:px-5 md:px-0">
             <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">Trending campaigns</h3>
             <button className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">See all</button>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 scrollbar-hide sm:pl-5 md:pl-0">
-            {GRID_CAMPAIGNS.slice(0, 6).map((c) => (
-              <CampaignCard key={c.id} campaign={c} />
+          <div className="flex gap-2 overflow-x-auto pb-2 pl-4 pr-4 scrollbar-hide sm:pl-5 sm:pr-5 md:pl-0 md:pr-4">
+            {GRID_CAMPAIGNS.slice(0, 6).map((c, i) => (
+              <CampaignCard key={c.id} campaign={c} style={{ "--enter-d": `${Math.min(i * 25, 200)}` } as React.CSSProperties} />
             ))}
           </div>
         </div>
