@@ -153,7 +153,7 @@ export default function AiCampaignPage() {
   return (
     <div className="flex h-screen flex-col bg-[#FBFBFB] font-inter tracking-[-0.02em] dark:bg-page-bg">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-4">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-foreground/[0.06] px-5">
         <button onClick={() => router.push("/campaigns")} className="flex items-center gap-2 text-sm font-medium text-page-text transition-opacity hover:opacity-70">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6-6"/></svg>
           Back to campaigns
@@ -194,7 +194,7 @@ export default function AiCampaignPage() {
                   className={cn(
                     "max-w-[320px] rounded-xl px-2.5 py-1.5 text-sm leading-[140%]",
                     msg.from === "ai"
-                      ? "border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] text-page-text dark:border-white/[0.06] dark:bg-card-bg"
+                      ? "border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] text-page-text dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
                       : "bg-[#E57100] text-white"
                   )}
                 >
@@ -205,7 +205,7 @@ export default function AiCampaignPage() {
             {typing && (
               <div className="flex items-start gap-1.5">
                 <div className="flex flex-col items-start justify-end pb-1 pt-1"><RobotIcon16 /></div>
-                <div className="flex items-center gap-1 rounded-xl border border-foreground/[0.06] bg-white px-2.5 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-white/[0.06] dark:bg-card-bg">
+                <div className="flex items-center gap-1 rounded-xl border border-foreground/[0.06] bg-white px-2.5 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
                   <span className="size-1.5 animate-bounce rounded-full bg-foreground/30 [animation-delay:0ms]" />
                   <span className="size-1.5 animate-bounce rounded-full bg-foreground/30 [animation-delay:150ms]" />
                   <span className="size-1.5 animate-bounce rounded-full bg-foreground/30 [animation-delay:300ms]" />
@@ -241,11 +241,12 @@ export default function AiCampaignPage() {
                     key={opt}
                     onClick={() => handleOptionClick(opt)}
                     className={cn(
-                      "rounded-full border px-3 py-2 text-sm font-medium transition-colors",
+                      "rounded-full border px-3 py-2.5 text-sm font-medium transition-colors",
                       selectedOptions.includes(opt)
-                        ? "border-[rgba(255,144,37,0.3)] bg-[radial-gradient(50%_50%_at_50%_100%,rgba(255,144,37,0.12)_0%,rgba(255,144,37,0)_50%),#FFFFFF] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-                        : "border-foreground/[0.06] bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.02] dark:border-white/[0.06] dark:bg-card-bg"
+                        ? "border-[rgba(255,144,37,0.3)] text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                        : "border-foreground/[0.06] bg-white text-page-text shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg"
                     )}
+                    style={selectedOptions.includes(opt) ? { background: "radial-gradient(50% 50% at 50% 100%, rgba(255,144,37,0.12) 0%, rgba(255,144,37,0) 50%), var(--card-bg, #FFFFFF)" } : undefined}
                   >
                     {opt}
                   </button>
@@ -280,7 +281,7 @@ export default function AiCampaignPage() {
               <div className="flex items-center gap-2">
                 <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSend()} placeholder="Type your answer..." className="flex-1 rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" />
                 <button onClick={handleSend} className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#252525] dark:bg-white">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L7 4M7 4L11.5 8.5M7 4V13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="dark:stroke-[#151515]" transform="rotate(-45 8 8)" /></svg>
+                  <svg width="15" height="13" viewBox="0 0 15 13" fill="none"><path d="M0.50446 2.37563C-0.481509 1.58905 0.0746884 0 1.33597 0H13.3823C14.4061 0 15.048 1.10618 14.5398 1.99506L8.64431 12.3079C8.0281 13.3858 6.40259 13.1104 6.17585 11.8897L5.2135 6.70834L9.02748 4.54003C9.34756 4.35806 9.45952 3.95107 9.27755 3.63099C9.09558 3.31091 8.68859 3.19895 8.36851 3.38092L4.51251 5.57312L0.50446 2.37563Z" fill="white" className="dark:fill-[#151515]" /></svg>
                 </button>
               </div>
             )}
@@ -290,7 +291,7 @@ export default function AiCampaignPage() {
         {/* Campaign summary sidebar — desktop only */}
         <div className="hidden w-[320px] shrink-0 flex-col gap-2 md:flex">
           <div className="flex items-center justify-center gap-1 py-1">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h3M2 8h5M2 12h3M8 4h6M8 8h4M8 12h6" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" strokeLinecap="round" /></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M2.66667 3.33203C3.03486 3.33203 3.33333 3.63051 3.33333 3.9987V9.9987C3.33333 10.3669 3.63181 10.6654 4 10.6654H11.3333V9.9987C11.3333 9.74243 11.4802 9.50884 11.7112 9.39783C11.9422 9.28682 12.2163 9.31803 12.4165 9.47812L14.0831 10.8115C14.2413 10.938 14.3333 11.1295 14.3333 11.332C14.3333 11.5346 14.2413 11.7261 14.0831 11.8526L12.4165 13.1859C12.2163 13.346 11.9422 13.3772 11.7112 13.2662C11.4802 13.1552 11.3333 12.9216 11.3333 12.6654V11.9987H4C2.89543 11.9987 2 11.1033 2 9.9987V3.9987C2 3.63051 2.29848 3.33203 2.66667 3.33203ZM5.33333 4.66536C5.33333 4.29717 5.63181 3.9987 6 3.9987H11.3333C11.7015 3.9987 12 4.29717 12 4.66536C12 5.03355 11.7015 5.33203 11.3333 5.33203H6C5.63181 5.33203 5.33333 5.03355 5.33333 4.66536ZM5.33333 7.9987C5.33333 7.63051 5.63181 7.33203 6 7.33203H8.66667C9.03486 7.33203 9.33333 7.63051 9.33333 7.9987C9.33333 8.36689 9.03486 8.66536 8.66667 8.66536H6C5.63181 8.66536 5.33333 8.36689 5.33333 7.9987Z" fill="currentColor" fillOpacity="0.5" /></svg>
             <span className="text-sm font-medium text-page-text-subtle">Campaign summary</span>
           </div>
           <div className="flex flex-1 flex-col gap-2 overflow-y-auto rounded-2xl border border-foreground/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] scrollbar-hide dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
