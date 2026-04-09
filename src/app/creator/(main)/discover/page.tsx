@@ -75,9 +75,9 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
               <svg width="12" height="12" viewBox="0 0 15 12" fill="currentColor"><path d="M1.807 2.667C1.807 1.194 3 0 4.473 0c1.473 0 2.667 1.194 2.667 2.667 0 1.473-1.194 2.666-2.667 2.666S1.807 4.14 1.807 2.667Z"/><path d="M7.807 2.667C7.807 1.194 9 0 10.473 0c1.473 0 2.667 1.194 2.667 2.667 0 1.473-1.194 2.666-2.667 2.666S7.807 4.14 7.807 2.667Z"/><path d="M4.473 6c1.914 0 3.73 1.32 4.405 3.742.353 1.267-.727 2.258-1.836 2.258H1.904C.795 12-.285 11.009.068 9.742.744 7.32 2.56 6 4.473 6Z"/><path d="M10.163 9.384c-.325-1.166-.884-2.152-1.603-2.916A4.6 4.6 0 0 1 10.474 6c1.913 0 3.729 1.32 4.405 3.742.353 1.267-.727 2.258-1.836 2.258H9.694c.512-.697.746-1.624.469-2.616Z"/></svg>
               <span className="text-xs font-medium text-page-text">{formatCreators(campaign.creators)}</span>
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333C4.364 1.333 1.227 3.63 0 7.333c1.227 3.703 4.364 6 8 6s6.773-2.297 8-6c-1.227-3.703-4.364-6-8-6Zm0 9.667a3.667 3.667 0 1 0 0-7.333 3.667 3.667 0 0 0 0 7.333Zm0-1.833a1.833 1.833 0 1 0 0-3.667 1.833 1.833 0 0 0 0 3.667Z" fill="#1A67E5"/></svg>
-              <span className="text-xs font-medium text-[#1A67E5]">{campaign.pricePerView}/1k</span>
+            <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-1 text-[#1A67E5] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:text-[#60A5FA]">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M8 1.333C4.364 1.333 1.227 3.63 0 7.333c1.227 3.703 4.364 6 8 6s6.773-2.297 8-6c-1.227-3.703-4.364-6-8-6Zm0 9.667a3.667 3.667 0 1 0 0-7.333 3.667 3.667 0 0 0 0 7.333Zm0-1.833a1.833 1.833 0 1 0 0-3.667 1.833 1.833 0 0 0 0 3.667Z" fill="currentColor"/></svg>
+              <span className="text-xs font-medium">{campaign.pricePerView}/1k</span>
             </div>
           </div>
           <div className="flex items-center gap-[1px] text-xs">
@@ -169,6 +169,7 @@ function HeroBanner({ campaigns }: { campaigns: Campaign[] }) {
   const go = (dir: -1 | 1) => {
     setActive((i) => (i + dir + campaigns.length) % campaigns.length);
     clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => setActive((i) => (i + 1) % campaigns.length), 5000);
   };
 
   const c = campaigns[active];
@@ -417,7 +418,7 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </button>
                       {/* Desktop: hover submenu */}
-                      <div className="pointer-events-none absolute right-full top-0 z-50 mr-1 hidden opacity-0 transition-opacity group-hover/filter:pointer-events-auto group-hover/filter:opacity-100 lg:block">
+                      <div className="pointer-events-none absolute bottom-0 right-full z-50 mr-2 hidden opacity-0 transition-opacity group-hover/filter:pointer-events-auto group-hover/filter:opacity-100 lg:block">
                         <div className="flex w-64 flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
                           <span className="px-2.5 pb-1 pt-2 text-sm text-page-text-subtle">{key}</span>
                           {FILTER_SECTIONS[key]?.map((opt) => {
