@@ -532,26 +532,33 @@ export default function CreatorSubmissionsPage() {
       <Modal open={payoutOpen} onClose={() => setPayoutOpen(false)} size="md">
         <ModalHeader>Payout details</ModalHeader>
         <ModalBody>
-            <div className="flex flex-col gap-6 p-5">
+            <div className="flex flex-col items-center gap-6 p-5">
+              {/* Minimum payout notice */}
+              <div className="flex items-center justify-center gap-1.5 pb-2">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0 text-foreground/50"><circle cx="6" cy="6" r="5" fill="currentColor"/><path d="M6 4v3M6 8.5h0" stroke="var(--card-bg, white)" strokeWidth="1" strokeLinecap="round"/></svg>
+                <span className="text-xs font-medium text-page-text-subtle">Minimum payout threshold $1.00</span>
+              </div>
+
               {/* Clip card mini */}
-              <div className={cn(cardCls, "flex overflow-hidden")}>
+              <div className={cn(cardCls, "flex w-full overflow-hidden")}>
                 <div className="w-[72px] shrink-0 p-1 pl-1">
                   <div className="h-[112px] w-[68px] rounded-xl bg-cover bg-center" style={{ backgroundImage: "linear-gradient(180deg, transparent 68%, rgba(0,0,0,0.4) 100%), url(/creator-home/campaign-thumb-1.png)" }} />
                 </div>
-                <div className="flex flex-col gap-3 p-3 pl-4 pt-3">
-                  <div className="flex flex-col gap-2">
+                <div className="flex flex-1 flex-col gap-3 p-3 pl-4 pt-3">
+                  <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-1.5 text-xs">
                       <div className="size-4 rounded-full border border-foreground/[0.06] bg-gradient-to-br from-blue-400 to-purple-500" />
                       <span className="font-medium text-page-text">Sound Network</span>
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M5.8.8C6.5.1 7.5.1 8.2.8L8.9 1.5l1-.2c.9-.2 1.8.4 2 1.3l.2 1 .9.5c.8.4 1.1 1.4.7 2.2l-.5.9.5.9c.4.8.1 1.8-.7 2.2l-.9.5-.2 1c-.2.9-1.1 1.5-2 1.3l-1-.2-.7.7c-.7.7-1.7.7-2.4 0l-.7-.7-1 .2c-.9.2-1.8-.4-2-1.3l-.2-1-.9-.5c-.8-.4-1.1-1.4-.7-2.2l.5-.9-.5-.9c-.4-.8-.1-1.8.7-2.2l.9-.5.2-1C2.3 1.7 3.2 1.1 4.1 1.3l1 .2.7-.7Z" fill="url(#pvb)"/><path d="M5 7l1.5 1.5 3-3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/><defs><linearGradient id="pvb" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse"><stop stopColor="#FDDC87"/><stop offset="1" stopColor="#FCB02B"/></linearGradient></defs></svg>
                       <span className="text-page-text-subtle">Feb 10, 2026</span>
                     </div>
-                    <span className="text-sm font-medium text-page-text">Caffeine vs Competitors - Honest Take</span>
+                    <span className="text-sm font-medium leading-[120%] text-page-text">Caffeine vs Competitors - Honest Take</span>
                   </div>
                 </div>
               </div>
 
               {/* Earning row */}
-              <div className={cn(cardCls, "flex items-center justify-center gap-0 p-3")}>
+              <div className={cn(cardCls, "flex w-full items-center justify-center gap-0 p-3")}>
                 <div className="flex flex-1 flex-col gap-2 border-r border-foreground/[0.06] pr-3 dark:border-[rgba(224,224,224,0.03)]">
                   <span className="text-sm font-medium text-page-text">$0.09</span>
                   <span className="text-xs text-page-text-muted">Total earned</span>
@@ -566,26 +573,55 @@ export default function CreatorSubmissionsPage() {
                 </div>
               </div>
 
-              {/* Status card */}
-              <div className={cn(cardCls, "flex items-center gap-3 pr-3")}>
+              {/* Timeline divider */}
+              <div className="flex w-full items-center gap-3 py-2">
+                <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
+                <span className="text-xs font-medium text-page-text-subtle">Timeline</span>
+                <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
+              </div>
+
+              {/* Pending payout card */}
+              <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
                 <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
                   <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
                     <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={isDark ? "rgba(251,146,60,0.08)" : "rgba(229,113,0,0.08)"} />
                   </svg>
                   <div className="relative flex h-full w-full items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke={isDark ? "#FB923C" : "#E57100"} strokeWidth="2" fill="none"/><path d="M12 7v5l3 3" stroke={isDark ? "#FB923C" : "#E57100"} strokeWidth="2" strokeLinecap="round"/></svg>
+                    <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
                   </div>
                 </div>
-                <div className="flex flex-1 flex-col gap-1">
+                <div className="flex min-w-0 flex-1">
                   <span className="text-sm font-medium text-page-text">$1.00</span>
                 </div>
-                <span className={cn("flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium", isDark ? "bg-[rgba(251,146,60,0.08)] text-[#FB923C]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]")}>Under review</span>
+                <span className={cn("flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-medium", isDark ? "bg-[rgba(251,146,60,0.08)] text-[#FB923C]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]")}>
+                  <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
+                  Under review
+                </span>
               </div>
 
-              {/* Minimum payout notice */}
-              <div className="flex items-center gap-1.5 pt-2">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-foreground/50"><circle cx="6" cy="6" r="5" fill="currentColor"/><path d="M6 4v3M6 8.5h0" stroke="var(--card-bg, white)" strokeWidth="1" strokeLinecap="round"/></svg>
-                <span className="text-xs font-medium text-page-text-subtle">Minimum payout threshold $1.00</span>
+              {/* Next payment notice */}
+              <div className="flex w-full items-center justify-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" fill="none"/><path d="M12 7v5l3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round"/></svg>
+                <span className="text-xs font-medium text-page-text-subtle">2 days until next payment</span>
+              </div>
+
+              {/* Completed payout card */}
+              <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
+                <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                  <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                    <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                  </svg>
+                  <div className="relative flex h-full w-full items-center justify-center">
+                    <CheckCircleIcon color="#00994D" />
+                  </div>
+                </div>
+                <div className="flex min-w-0 flex-1">
+                  <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
+                </div>
+                <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 text-xs font-medium text-[#00994D]">
+                  <CheckCircleIcon color="#00994D" />
+                  Approved
+                </span>
               </div>
             </div>
         </ModalBody>
