@@ -204,7 +204,7 @@ export function CampaignModelModal({
             Select campaign model
           </DialogPrimitive.Title>
 
-          <div className="flex flex-col h-[min(750px,calc(100vh-64px))] sm:h-[568px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
+          <div className="flex flex-col h-[min(850px,calc(100vh-64px))] sm:h-[769px] rounded-[20px] sm:rounded-3xl bg-card-bg dark:bg-page-bg overflow-hidden border border-border dark:border-[rgba(224,224,224,0.03)]">
             {/* Top bar */}
             <div className="relative flex items-center justify-center px-5 sm:px-6 h-10 sm:h-[41px] shrink-0 bg-foreground/[0.03] dark:bg-foreground/[0.03] border-b border-foreground/[0.03]">
               <span className="text-sm font-medium tracking-[-0.02em] text-page-text">
@@ -227,14 +227,9 @@ export function CampaignModelModal({
 
             {/* Content */}
             <div className="flex flex-col px-5 gap-2 flex-1 min-h-0">
-              {/* Title section */}
-              <div className="flex flex-col items-center gap-1 shrink-0 pt-3 sm:pt-3">
-                <h2 className="hidden sm:block text-xl font-semibold text-page-text tracking-[-0.02em]">
-                  Campaign Model
-                </h2>
-                <p className="text-sm sm:text-base font-medium sm:font-normal text-page-text-muted text-center tracking-[-0.02em]">
-                  Select a payment model for your campaign.
-                </p>
+              {/* Subtitle */}
+              <div className="flex items-center justify-center shrink-0 pt-4">
+                <span className="text-sm font-medium tracking-[-0.02em] text-foreground/70">Select a payment model for your campaign.</span>
               </div>
 
               {/* Cards — vertical on mobile, horizontal on desktop */}
@@ -298,33 +293,45 @@ export function CampaignModelModal({
               </div>
             </div>
 
-            {/* Bottom bar */}
-            <div className="flex items-center justify-end sm:justify-between p-5 shrink-0">
-              {/* Left placeholder for centering — hidden on mobile */}
-              <div className="hidden sm:block w-[150px] opacity-0 pointer-events-none">
-                <div className="rounded-full px-4 h-9 text-sm">Cancel</div>
-              </div>
-
-              {/* Center indicator — hidden on mobile */}
-              <div className="hidden sm:flex items-center gap-1.5 h-[17px]">
-                {selectedModel ? (
-                  <>
-                    <div className={selectedModel.iconColor}>
-                      <selectedModel.icon size={16} />
+            {/* Combined payout model */}
+            <div className="shrink-0 px-5">
+              <div className="flex flex-col gap-4 rounded-2xl border border-foreground/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Combined payout model</span>
+                  <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Creators can earn from multiple payout types on this campaign. Each model has its own budget pool and rules.</span>
+                </div>
+                <div className="flex gap-2">
+                  {/* CPM mini card */}
+                  <div className="flex flex-1 items-center gap-3 rounded-[20px] p-3" style={{ background: "radial-gradient(100% 100% at 50% 0%, rgba(26,103,229,0) 30%, rgba(26,103,229,0.12) 100%), var(--card-bg, #FFFFFF)", border: "1px solid rgba(26,103,229,0.3)" }}>
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(26,103,229,0.06)" }}>
+                      <CpmEyeIcon size={16} />
                     </div>
-                    <span className="text-sm font-medium text-page-text tracking-[-0.02em]">
-                      {selectedModel.label}
-                    </span>
-                  </>
-                ) : null}
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-medium tracking-[-0.02em] text-page-text">CPM</span>
+                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Pay per 1K views</span>
+                    </div>
+                  </div>
+                  {/* Retainer mini card */}
+                  <div className="flex flex-1 items-center gap-3 rounded-[20px] p-3" style={{ background: "radial-gradient(100% 100% at 50% 0%, rgba(229,113,0,0) 30%, rgba(229,113,0,0.12) 100%), var(--card-bg, #FFFFFF)", border: "1px solid rgba(229,113,0,0.3)" }}>
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(229,113,0,0.06)" }}>
+                      <RetainerIcon size={16} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Retainer</span>
+                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-muted">Monthly fixed + bonus</span>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              {/* Right buttons */}
-              <div className="flex items-center gap-2 sm:w-[150px] justify-end">
+            {/* Bottom bar */}
+            <div className="flex items-center justify-end p-5 shrink-0 bg-white dark:bg-page-bg">
+              <div className="flex items-center gap-2">
                 <DialogPrimitive.Close
                   render={
                     <button
-                      className="flex items-center justify-center rounded-full h-10 sm:h-9 px-4 text-sm font-medium tracking-[-0.02em] text-page-text bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] active:scale-[0.98]"
+                      className="flex items-center justify-center rounded-full h-10 px-4 text-sm font-medium tracking-[-0.02em] text-page-text bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] active:scale-[0.98]"
                       type="button"
                     />
                   }
@@ -333,7 +340,7 @@ export function CampaignModelModal({
                 </DialogPrimitive.Close>
                 <button
                   className={cn(
-                    "flex items-center justify-center rounded-full h-10 sm:h-9 px-4 text-sm font-medium tracking-[-0.02em] bg-[#252525] dark:bg-white text-white dark:text-[#151515] transition-all active:scale-[0.98]",
+                    "flex items-center justify-center rounded-full h-10 px-4 text-sm font-medium tracking-[-0.02em] bg-[#252525] dark:bg-white text-white dark:text-[#151515] transition-all active:scale-[0.98]",
                     !selected && "opacity-30 cursor-not-allowed",
                   )}
                   disabled={!selected}
