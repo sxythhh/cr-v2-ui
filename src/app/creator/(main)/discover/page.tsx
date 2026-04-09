@@ -458,7 +458,7 @@ export default function CreatorDiscoverPage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
-      <div className="flex flex-col gap-6 md:py-4">
+      <div className="flex flex-col gap-6 pb-5 md:py-4">
         {/* Hero — full-bleed on mobile, contained on desktop */}
         <div className="md:mx-auto md:w-full md:max-w-[756px] md:px-4">
           <HeroBanner campaigns={BANNER_CAMPAIGNS} />

@@ -53,12 +53,11 @@ export function AnalyticsPocMobileCarousel({
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const scrollLeft = el.scrollLeft;
-    const childWidth = el.children[0]?.clientWidth ?? 0;
-    if (childWidth === 0) return;
-    const index = Math.round(scrollLeft / (childWidth + gap));
-    setActiveIndex(Math.min(index, items.length - 1));
-  }, [gap, items.length]);
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) return;
+    const ratio = el.scrollLeft / maxScroll;
+    setActiveIndex(Math.round(ratio * (items.length - 1)));
+  }, [items.length]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -71,13 +70,12 @@ export function AnalyticsPocMobileCarousel({
     <div className={cn("flex flex-col items-center gap-2", className)}>
       <div
         ref={scrollRef}
-        className="flex w-full snap-x snap-mandatory overflow-x-auto scrollbar-hide [scroll-padding-inline:16px]"
+        className="flex w-full snap-x snap-mandatory overflow-x-auto pl-4 scrollbar-hide [scroll-padding-inline:16px] sm:pl-5 sm:[scroll-padding-inline:20px]"
         style={{ gap }}
       >
         {items.map((child, i) => (
           <div key={i} className={cn(
-            "w-[calc(100vw-56px)] max-w-80 shrink-0",
-            i === 0 ? "snap-start snap-always ml-4 sm:ml-5" : "snap-start snap-always",
+            "w-[calc(100vw-48px)] shrink-0 snap-start snap-always",
             i === items.length - 1 && "mr-4 sm:mr-5",
           )}>
             {child}

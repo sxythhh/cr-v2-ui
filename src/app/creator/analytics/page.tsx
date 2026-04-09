@@ -233,7 +233,7 @@ export default function CreatorAnalyticsPage() {
               {campaignActiveRect && (
                 <motion.div
                   key={campaignHover.sessionRef.current}
-                  className="pointer-events-none absolute z-0 bg-foreground/[0.04]"
+                  className="pointer-events-none absolute z-0 rounded-xl bg-foreground/[0.04]"
                   initial={{ opacity: 0, ...campaignActiveRect }}
                   animate={{ opacity: 1, ...campaignActiveRect }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
@@ -245,7 +245,7 @@ export default function CreatorAnalyticsPage() {
               <div
                 key={i}
                 ref={(el) => campaignHover.registerItem(i, el)}
-                className="relative z-[1] flex cursor-pointer items-center border-b border-foreground/[0.03] px-1 dark:border-[rgba(224,224,224,0.01)]"
+                className={cn("relative z-[1] flex cursor-pointer items-center px-1", i < campaignRows.length - 1 && "border-b border-foreground/[0.03] dark:border-[rgba(224,224,224,0.01)]")}
               >
                 {/* Campaign info — always visible */}
                 <div className="flex flex-1 items-center gap-2 p-3">

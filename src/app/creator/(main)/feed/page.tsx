@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { VerifiedBadge } from "@/components/verified-badge";
 
 /* ─── Inline SVG Icons ─── */
@@ -338,10 +338,22 @@ function BellIcon() {
 
 /* ─── MAIN PAGE ─── */
 export default function CreatorHomePage() {
-  const [feedIndex] = useState(0);
+  const [feedIndex, setFeedIndex] = useState(0);
+  const feedScrollRef = useRef<HTMLDivElement>(null);
+  const feedTotal = 3;
+
+  const scrollToFeed = useCallback((idx: number) => {
+    const clamped = Math.max(0, Math.min(feedTotal - 1, idx));
+    setFeedIndex(clamped);
+    const container = feedScrollRef.current;
+    if (container) {
+      const page = container.children[clamped] as HTMLElement;
+      if (page) page.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    }
+  }, []);
 
   return (
-    <div className="flex flex-1 flex-col gap-4 bg-[#F7F7F6] font-inter">
+    <div className="flex flex-1 flex-col gap-4 bg-[#F7F7F6] pb-5 font-inter">
       {/* ─── Top Header ─── */}
       <div className="flex items-center justify-between px-4 pt-4">
         {/* Left: Bell notification */}
@@ -449,46 +461,88 @@ export default function CreatorHomePage() {
         <div className={sectionHeader}>
           <span className={headerTitle}>Feed</span>
           <div className="flex items-center gap-3">
-            <button className="flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] opacity-30">
+            <button className={`flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] ${feedIndex === 0 ? "opacity-30" : ""}`} onClick={() => scrollToFeed(feedIndex - 1)}>
               <ChevronLeft />
             </button>
-            <span className={mutedText}>1/3</span>
-            <button className="flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)]">
+            <span className={mutedText}>{feedIndex + 1}/{feedTotal}</span>
+            <button className={`flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] ${feedIndex === feedTotal - 1 ? "opacity-30" : ""}`} onClick={() => scrollToFeed(feedIndex + 1)}>
               <ChevronRight />
             </button>
           </div>
         </div>
 
-        {/* Action cards grid */}
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-2">
-            <ActionCard
-              icon={<MoneybagIcon />}
-              badge={<span className="text-sm font-medium tracking-[-0.02em] text-[#00994D]">$2,862</span>}
-              title="Withdraw your earnings"
-              description="You have $2,862 available. Withdraw it to your account anytime."
-              actions={
-                <>
-                  <NavItem variant="dark">Withdraw</NavItem>
-                  <NavItem>Share</NavItem>
-                </>
-              }
-            />
-            <ActionCard
-              icon={<VideoIcon />}
-              badge={<XpBadge text="50 XP" />}
-              title="Submit a new clip"
-              description="Keep the momentum going. Your campaigns are waiting for content."
-              actions={<NavItem>Submit clip</NavItem>}
-            />
+        {/* Swipable feed pages */}
+        <div
+          ref={feedScrollRef}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-none"
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const idx = Math.round(el.scrollLeft / el.clientWidth);
+            if (idx !== feedIndex) setFeedIndex(idx);
+          }}
+        >
+          {/* Page 1 */}
+          <div className="flex w-full shrink-0 snap-start flex-col gap-2">
+            <div className="flex gap-2">
+              <ActionCard
+                icon={<MoneybagIcon />}
+                badge={<span className="text-sm font-medium tracking-[-0.02em] text-[#00994D]">$2,862</span>}
+                title="Withdraw your earnings"
+                description="You have $2,862 available. Withdraw it to your account anytime."
+                actions={
+                  <>
+                    <NavItem variant="dark">Withdraw</NavItem>
+                    <NavItem>Share</NavItem>
+                  </>
+                }
+              />
+              <ActionCard
+                icon={<VideoIcon />}
+                badge={<XpBadge text="50 XP" />}
+                title="Submit a new clip"
+                description="Keep the momentum going. Your campaigns are waiting for content."
+                actions={<NavItem>Submit clip</NavItem>}
+              />
+            </div>
           </div>
-          <div className="flex gap-2">
-            <ActionCard
-              icon={<PaperclipIcon />}
-              title="Application expiring soon"
-              description="Your CoD BO7 application closes in 2 days. Don't miss it."
-              actions={<NavItem>View application</NavItem>}
-            />
+
+          {/* Page 2 */}
+          <div className="flex w-full shrink-0 snap-start flex-col gap-2">
+            <div className="flex gap-2">
+              <ActionCard
+                icon={<FireIcon size={14} />}
+                badge={<XpBadge text="100 XP" />}
+                title="Keep your streak alive"
+                description="You're on a 4-day streak. Submit a clip today to keep it going."
+                actions={<NavItem>Submit clip</NavItem>}
+              />
+              <ActionCard
+                icon={<WreathIcon />}
+                badge={<span className="text-sm font-medium tracking-[-0.02em] text-[#00994D]">92</span>}
+                title="Trust score is high"
+                description="Your trust score unlocks priority placement. Keep it above 90."
+                actions={<NavItem>View details</NavItem>}
+              />
+            </div>
+          </div>
+
+          {/* Page 3 */}
+          <div className="flex w-full shrink-0 snap-start flex-col gap-2">
+            <div className="flex gap-2">
+              <ActionCard
+                icon={<PaperclipIcon />}
+                title="Application expiring soon"
+                description="Your CoD BO7 application closes in 2 days. Don't miss it."
+                actions={<NavItem>View application</NavItem>}
+              />
+              <ActionCard
+                icon={<EyeIcon />}
+                badge={<span className="text-sm font-medium tracking-[-0.02em] text-[#1A67E5]">24.5k</span>}
+                title="Views are trending up"
+                description="Your clips gained 24.5k views this week. That's 12% more than last week."
+                actions={<NavItem>View insights</NavItem>}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -600,7 +654,7 @@ export default function CreatorHomePage() {
       </div>
 
       {/* ─── Active Campaigns ─── */}
-      <div className={`${cardStyle} mx-4 flex flex-col gap-4 p-4 mb-4`}>
+      <div className={`${cardStyle} mx-4 flex flex-col gap-4 p-4`}>
         <div className={sectionHeader}>
           <span className={headerTitle}>Active campaigns</span>
           <span className={headerLink}>Browse more</span>

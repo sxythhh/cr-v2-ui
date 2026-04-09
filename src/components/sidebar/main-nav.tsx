@@ -50,7 +50,7 @@ export function MainNav({ children }: { children: ReactNode }) {
 
         {/* Main content — on mobile the outer div is the scroll container so sticky works */}
         <div className="scrollbar-hide relative flex min-h-0 flex-1 flex-col overflow-y-auto bg-page-bg pb-[calc(60px+max(8px,env(safe-area-inset-bottom)))] md:overflow-hidden md:pb-0 md:[contain:layout_style_paint]">
-          <MobileHeader />
+          {/* <MobileHeader /> */}
           <div className="scrollbar-hide flex min-h-0 flex-col md:flex-1 md:overflow-y-auto md:will-change-transform">
             {children}
           </div>

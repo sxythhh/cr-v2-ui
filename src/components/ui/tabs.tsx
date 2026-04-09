@@ -292,7 +292,7 @@ export const TabItem = forwardRef<
       tabIndex={isSelected ? 0 : -1}
       onClick={() => onSelect(index)}
       className={cn(
-        "relative z-10 flex cursor-pointer items-center border-none bg-transparent font-[family-name:var(--font-inter)] tracking-[-0.02em] outline-none",
+        "relative z-10 flex cursor-pointer items-center whitespace-nowrap border-none bg-transparent font-[family-name:var(--font-inter)] tracking-[-0.02em] outline-none",
         isContained && "h-8 gap-1.5 rounded-[10px] px-4",
         isUnderline && "h-10 gap-1.5 px-3",
         className,

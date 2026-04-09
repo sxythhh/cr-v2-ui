@@ -81,7 +81,7 @@ export default function CommunityPage() {
   const [activeThread, setActiveThread] = useState<typeof discussions[number] | null>(null);
 
   return (
-    <div className={cn("flex flex-col font-inter tracking-[-0.02em]", activeThread ? "h-[calc(100svh-60px)] overflow-hidden md:h-auto md:min-h-screen md:overflow-visible" : "min-h-screen")}>
+    <div className={cn("flex flex-col font-inter tracking-[-0.02em]", activeThread ? "h-[calc(100svh-60px)] overflow-y-auto md:h-auto md:min-h-screen md:overflow-visible" : "min-h-screen")}>
       {activeThread ? (
         <div className="flex items-center justify-between border-b border-foreground/[0.06] px-4 py-4 sm:px-5 md:hidden">
           <button onClick={() => setActiveThread(null)} className="flex items-center gap-2 text-sm font-medium text-page-text">

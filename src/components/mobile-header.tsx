@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
 import { useSideNav } from "@/components/sidebar/sidebar-context";

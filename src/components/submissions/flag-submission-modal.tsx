@@ -82,8 +82,10 @@ export function FlagSubmissionModal({
       <div className="flex flex-col items-center gap-4 p-5">
         {/* Icon + title */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#fff] dark:bg-card-bg dark:shadow-[0_0_0_2px_var(--card-bg)]">
+          <div className="relative flex size-14 items-center justify-center rounded-full bg-foreground/[0.03] shadow-[0_0_0_2px_#fff] dark:bg-card-bg dark:shadow-none">
             <FlagIcon />
+            <div className="pointer-events-none absolute inset-0 rounded-full dark:hidden" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(37,37,37,0) 0%, rgba(37,37,37,0.12) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+            <div className="pointer-events-none absolute inset-0 rounded-full hidden dark:block" style={{ padding: "1px", background: "linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,0.2) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
           </div>
           <div className="flex flex-col items-center gap-2">
             <span className="text-lg font-medium tracking-[-0.02em] text-page-text">Flag submission</span>

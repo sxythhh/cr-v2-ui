@@ -623,7 +623,7 @@ export default function CreatorForYouPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-5 md:px-12 lg:px-[156px]">
           {/* Quiz card */}
-          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-6 rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
+          <div className="relative isolate flex max-h-[calc(100svh-160px)] w-full max-w-[720px] flex-col items-center gap-6 overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white px-4 pb-6 pt-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg sm:max-h-[560px] sm:px-6 md:px-8">
             {/* Back button */}
             <button
               onClick={goBack}

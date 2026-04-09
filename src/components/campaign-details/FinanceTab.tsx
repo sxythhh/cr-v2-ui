@@ -232,11 +232,34 @@ export default function FinanceTab() {
         { label: "Daily burn rate", value: "$312", secondary: "+8% vs last week", secondaryColor: "text-[#FF3355] dark:text-[#FB7185]" },
       ]} columns={3} />
 
-      {/* Recent transactions table */}
-      <div className="flex flex-col overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
+      {/* Recent transactions — desktop: table, mobile: cards */}
+      {/* Mobile card list */}
+      <div className="flex flex-col gap-2 md:hidden">
+        {TRANSACTIONS.map((tx, i) => (
+          <div key={i} className="flex flex-col gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-[9px] font-semibold text-white", tx.color)}>{tx.initials}</div>
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{tx.handle}</span>
+              </div>
+              <StatusPill status={tx.status} />
+            </div>
+            <span className="truncate text-xs tracking-[-0.02em] text-page-text-muted">{tx.video}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs tracking-[-0.02em] text-page-text-subtle">{tx.date}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs tracking-[-0.02em] text-page-text-subtle">{tx.views} views</span>
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{tx.amount}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden overflow-hidden rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.03)] md:flex md:flex-col dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg dark:shadow-none">
         {/* Header row */}
-        <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex h-9 min-w-[700px] items-center border-b border-[rgba(37,37,37,0.06)] px-1 dark:border-[rgba(224,224,224,0.03)]">
+        <div className="flex h-9 items-center border-b border-[rgba(37,37,37,0.06)] px-1 dark:border-[rgba(224,224,224,0.03)]">
           <span className="flex w-20 items-center px-3 font-inter text-xs font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Date</span>
           <span className="flex w-60 items-center pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Creator</span>
           <span className="flex flex-1 items-center pr-3 font-inter text-xs font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Video</span>
@@ -268,7 +291,7 @@ export default function FinanceTab() {
             <div
               key={i}
               ref={(el) => registerItem(i, el)}
-              className="relative z-10 flex min-w-[700px] items-center px-1"
+              className="relative z-10 flex items-center px-1"
             >
               <div className={cn("flex h-14 flex-1 items-center", i < TRANSACTIONS.length - 1 && "border-b border-[rgba(37,37,37,0.03)] dark:border-[rgba(224,224,224,0.03)]")}>
                 <span className="flex w-20 items-center px-3 font-inter text-xs font-medium tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted whitespace-nowrap">{tx.date}</span>
@@ -285,7 +308,6 @@ export default function FinanceTab() {
               </div>
             </div>
           ))}
-        </div>
         </div>
       </div>
     </div>

@@ -278,234 +278,216 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   );
 }
 
-// ── Notification Row ─────────────────────────────────────────────────────────
+// ── Notification Preferences Grid ────────────────────────────────────────────
 
-function NotificationRow({
-  title,
-  description,
-  on,
-  onToggle,
-}: {
-  title: string;
-  description: string;
-  on: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div className={cn(cardClass, "cursor-pointer gap-2 p-4 transition-colors hover:bg-foreground/[0.02]")} onClick={onToggle}>
-      <div className="flex items-center gap-3">
-        <div className="flex flex-1 flex-col gap-1.5">
-          <span className="font-inter text-[14px] font-medium leading-[1] tracking-[-0.02em] text-page-text">
-            {title}
-          </span>
-          <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
-            {description}
-          </span>
-        </div>
-        <Toggle on={on} onToggle={onToggle} />
-      </div>
-    </div>
-  );
-}
+const NOTIF_CHANNELS = ["In-App", "Whatsapp", "Email", "Slack"] as const;
+type NotifChannel = (typeof NOTIF_CHANNELS)[number];
 
-// ── Notification Section ─────────────────────────────────────────────────────
-
-function NotificationSection({
-  label,
-  items,
-  toggles,
-  onToggle,
-}: {
-  label: string;
-  items: { key: string; title: string; description: string }[];
-  toggles: Record<string, boolean>;
-  onToggle: (key: string) => void;
-}) {
-  return (
-    <div className={cardClass}>
-      <span className={labelClass}>{label}</span>
-      <div className="flex flex-col gap-2">
-        {items.map((item) => (
-          <NotificationRow
-            key={item.key}
-            title={item.title}
-            description={item.description}
-            on={toggles[item.key] ?? true}
-            onToggle={() => onToggle(item.key)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Notifications Tab ────────────────────────────────────────────────────────
-
-const NOTIFICATION_SECTIONS = [
-  {
-    label: "Campaigns & submissions",
-    items: [
-      { key: "new_submissions", title: "New submissions", description: "Content submitted for review, including auto-approve countdowns" },
-      { key: "budget_alerts", title: "Budget alerts", description: "Budget running low, exhausted, or topped up by a brand" },
-      { key: "campaign_updates", title: "Campaign updates", description: "Milestones reached, campaigns ending soon, or completed" },
-      { key: "content_viral", title: "Content going viral", description: "A submission surpassed 500K views or spiked 50%+ in 4 hours" },
-    ],
-  },
-  {
-    label: "Creators",
-    items: [
-      { key: "new_applications", title: "New applications", description: "Creators applied to join your campaigns" },
-      { key: "fraud_alerts", title: "Fraud and bot alerts", description: "Suspicious view spikes, high bot scores, or creator bans" },
-      { key: "messages", title: "Messages", description: "Direct messages from creators or brand clients" },
-    ],
-  },
-  {
-    label: "Payouts",
-    items: [
-      { key: "payouts_processed", title: "Payouts processed", description: "Weekly creator payouts sent, including validation window reminders" },
-      { key: "clawbacks", title: "Clawbacks", description: "Funds returned to campaign budget after a clawback" },
-    ],
-  },
-  {
-    label: "Reports & System",
-    items: [
-      { key: "weekly_digest", title: "Weekly performance digest", description: "Views, spend, CPM, and top creators across all campaigns" },
-      { key: "security_alerts", title: "Security alerts", description: "New logins, integration failures, or permission changes" },
-      { key: "product_updates", title: "Product updates", description: "New features, improvements, and platform announcements" },
-    ],
-  },
+const NOTIF_EVENTS = [
+  { key: "new_submission", title: "New submission", desc: "Video submitted by creator", defaults: { "In-App": true, "Whatsapp": true, "Email": true, "Slack": true } },
+  { key: "auto_approve", title: "Auto-approve countdown", desc: "Submissions about to auto-approve", defaults: { "In-App": true, "Whatsapp": true, "Email": true, "Slack": false } },
+  { key: "payout_processed", title: "Payout processed", desc: "Weekly payout batch completed", defaults: { "In-App": true, "Whatsapp": true, "Email": false, "Slack": false } },
+  { key: "validation_closing", title: "Validation window closing", desc: "Payouts about to finalize", defaults: { "In-App": true, "Whatsapp": true, "Email": true, "Slack": true } },
+  { key: "budget_low", title: "Budget low / depleted", desc: "Campaign budget reaching threshold", defaults: { "In-App": true, "Whatsapp": true, "Email": true, "Slack": true } },
+  { key: "clawback", title: "Clawback completed", desc: "Payout clawed back from creator", defaults: { "In-App": true, "Whatsapp": true, "Email": false, "Slack": true } },
+  { key: "clawback_2", title: "Clawback completed", desc: "Payout clawed back from creator", defaults: { "In-App": true, "Whatsapp": true, "Email": false, "Slack": true } },
 ] as const;
 
-const EMAIL_FREQUENCIES = ["Instant", "Daily", "Weekly", "Off"] as const;
-type EmailFrequency = (typeof EMAIL_FREQUENCIES)[number];
+const DELIVERY_CHANNELS = [
+  { key: "whatsapp", name: "Whatsapp", status: "Connected", statusColor: "#00994D", on: true },
+  { key: "imessage", name: "iMessage", status: "Connected", statusColor: "#00994D", on: true },
+  { key: "slack", name: "Slack", status: "Connect account", statusColor: "rgba(37,37,37,0.5)", on: true },
+  { key: "email", name: "Email", status: "Pending...", statusColor: "rgba(37,37,37,0.5)", on: false },
+] as const;
+
+function NotifCheckCircle({ checked }: { checked: boolean }) {
+  if (checked) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" fill="url(#notifCheckGrad)" />
+        <path d="M5 8.5l2 2 4-4" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        <defs><linearGradient id="notifCheckGrad" x1="8" y1="1" x2="8" y2="44.37" gradientUnits="userSpaceOnUse"><stop stopColor="#F59E0B" /><stop offset="1" stopColor="#F97316" /></linearGradient></defs>
+      </svg>
+    );
+  }
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1" fill="none" />
+    </svg>
+  );
+}
 
 function NotificationsTab() {
-  const [toggles, setToggles] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    for (const section of NOTIFICATION_SECTIONS) {
-      for (const item of section.items) {
-        initial[item.key] = true;
-      }
-    }
-    return initial;
+  const [prefsOpen, setPrefsOpen] = useState(false);
+  const [exitConfirmOpen, setExitConfirmOpen] = useState(false);
+  const [channelToggles, setChannelToggles] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {};
+    NOTIF_EVENTS.forEach((ev) => {
+      NOTIF_CHANNELS.forEach((ch) => {
+        init[`${ev.key}_${ch}`] = ev.defaults[ch];
+      });
+    });
+    return init;
   });
-  const [emailFrequency, setEmailFrequency] = useState<EmailFrequency>("Instant");
-  const freqContainerRef = useRef<HTMLDivElement>(null);
-  const freqIsMouseInside = useRef(false);
-  const {
-    activeIndex: freqHoveredIndex,
-    itemRects: freqRects,
-    handlers: freqHandlers,
-    registerItem: freqRegister,
-    measureItems: freqMeasure,
-  } = useProximityHover(freqContainerRef, { axis: "x" });
-  useEffect(() => { freqMeasure(); }, [freqMeasure]);
+  const [deliveryToggles, setDeliveryToggles] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {};
+    DELIVERY_CHANNELS.forEach((ch) => { init[ch.key] = ch.on; });
+    return init;
+  });
 
-  const handleToggle = (key: string) => {
-    setToggles((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleChannel = (key: string) => setChannelToggles((p) => ({ ...p, [key]: !p[key] }));
+  const toggleDelivery = (key: string) => setDeliveryToggles((p) => ({ ...p, [key]: !p[key] }));
+
+  const handleClose = () => {
+    setExitConfirmOpen(true);
   };
 
   return (
     <div className="flex justify-center px-5 py-5">
       <div className="flex w-full max-w-[520px] flex-col gap-4">
-        {/* Title */}
-        <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-[#1E1E1E] dark:text-white">
-          Notification Preferences
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] text-[#1E1E1E] dark:text-white">
+            Notification Preferences
+          </span>
+          <button onClick={() => setPrefsOpen(true)} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06]">
+            Edit preferences
+          </button>
+        </div>
 
-        {/* Sections */}
-        <div className="flex flex-col gap-2">
-          {NOTIFICATION_SECTIONS.map((section) => (
-            <NotificationSection
-              key={section.label}
-              label={section.label}
-              items={section.items as unknown as { key: string; title: string; description: string }[]}
-              toggles={toggles}
-              onToggle={handleToggle}
-            />
+        {/* Events grid table */}
+        <div className={cn(cardClass, "overflow-hidden p-0")}>
+          {/* Header row */}
+          <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
+            <div className="flex flex-1 items-center px-3 py-4">
+              <span className="text-xs font-medium tracking-[-0.02em] text-page-text-subtle">Event</span>
+            </div>
+            {NOTIF_CHANNELS.map((ch) => (
+              <div key={ch} className="flex w-[55px] shrink-0 items-center justify-center px-3 py-4 md:w-[62px]" style={ch === "Whatsapp" ? { width: 81 } : ch === "Email" ? { width: 54 } : ch === "Slack" ? { width: 55 } : undefined}>
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-subtle">{ch}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Event rows */}
+          {NOTIF_EVENTS.map((ev) => (
+            <div key={ev.key} className="flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0 dark:border-[rgba(224,224,224,0.015)]">
+              <div className="flex flex-1 flex-col gap-1 px-3 py-2">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{ev.title}</span>
+                <span className="text-xs leading-[120%] tracking-[-0.02em] text-page-text-subtle">{ev.desc}</span>
+              </div>
+              {NOTIF_CHANNELS.map((ch) => {
+                const k = `${ev.key}_${ch}`;
+                return (
+                  <div key={ch} className="flex w-[55px] shrink-0 items-center justify-center px-3 py-2 md:w-[62px]" style={ch === "Whatsapp" ? { width: 81 } : ch === "Email" ? { width: 54 } : ch === "Slack" ? { width: 55 } : undefined}>
+                    <button onClick={() => toggleChannel(k)} className="cursor-pointer">
+                      <NotifCheckCircle checked={channelToggles[k] ?? false} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           ))}
+        </div>
+      </div>
 
-          {/* Email digest section */}
-          <div className={cardClass}>
-            <span className={labelClass}>Email digest</span>
-            <div className="flex flex-col gap-2">
-              <div className={cn(cardClass, "gap-4 p-4")}>
-                <div className="flex flex-col gap-1.5">
-                  <span className="font-inter text-[14px] font-medium leading-[1] tracking-[-0.02em] text-page-text">
-                    Email summary frequency
-                  </span>
-                  <span className="font-inter text-[12px] leading-[1] tracking-[-0.02em] text-page-text-muted">
-                    How often should we bundle your notifications into a digest?
-                  </span>
+      {/* ── Preferences modal (full-screen on mobile, panel on desktop) ── */}
+      {prefsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center md:items-start md:justify-end md:p-4">
+          <div className="absolute inset-0 bg-black/20" onClick={handleClose} />
+          <div className="relative flex h-full w-full flex-col bg-white font-inter tracking-[-0.02em] shadow-xl md:h-auto md:max-h-[90vh] md:w-[520px] md:rounded-2xl dark:bg-card-bg">
+            {/* Header */}
+            <div className="flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5">
+              <span className="text-sm font-medium text-page-text">Preferences</span>
+              <button onClick={handleClose} className="absolute right-4 top-3">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.52" strokeLinecap="round" /></svg>
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4 scrollbar-hide">
+              {/* Delivery channels */}
+              <div className={cn(cardClass, "overflow-hidden p-0")}>
+                <div className="px-4 pb-2 pt-4">
+                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Delivery channels</span>
                 </div>
 
-                {/* Segmented control with proximity hover */}
-                <div
-                  ref={freqContainerRef}
-                  onMouseMove={(e) => { freqIsMouseInside.current = true; freqHandlers.onMouseMove(e); }}
-                  onMouseLeave={() => { freqIsMouseInside.current = false; freqHandlers.onMouseLeave(); }}
-                  className="relative flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5"
-                >
-                  {/* Selected pill */}
-                  {(() => {
-                    const selectedIdx = EMAIL_FREQUENCIES.indexOf(emailFrequency);
-                    const selectedRect = freqRects[selectedIdx];
-                    if (!selectedRect) return null;
-                    return (
-                      <motion.div
-                        className="pointer-events-none absolute z-0 rounded-[10px] bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-[#222222] dark:shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
-                        initial={false}
-                        animate={{ left: selectedRect.left, width: selectedRect.width, top: selectedRect.top, height: selectedRect.height }}
-                        transition={springs.moderate}
-                      />
-                    );
-                  })()}
+                {DELIVERY_CHANNELS.map((ch, i) => (
+                  <div key={ch.key} className={cn("flex items-center gap-2 border-b border-foreground/[0.06] px-4 py-3 dark:border-[rgba(224,224,224,0.03)]", i === DELIVERY_CHANNELS.length - 1 && "border-b-0")}>
+                    <div className="flex size-6 items-center justify-center rounded-full border border-foreground/[0.06]">
+                      {ch.key === "whatsapp" && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10.1 1.84A5.44 5.44 0 0 0 6.02.17C2.87.17.31 2.73.31 5.88a5.67 5.67 0 0 0 .84 2.97L.24 11.83l3.06-.8a5.73 5.73 0 0 0 2.72.69c3.15 0 5.71-2.56 5.71-5.71a5.68 5.68 0 0 0-1.63-4.17Z" fill="currentColor" /></svg>}
+                      {ch.key === "imessage" && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1C3.24 1 1 2.91 1 5.25c0 1.12.54 2.14 1.42 2.9-.08.56-.38 1.3-.89 1.82a.19.19 0 0 0 .14.32c.96-.04 1.82-.41 2.4-.82.6.18 1.24.28 1.93.28 2.76 0 5-1.91 5-4.25S8.76 1 6 1Z" fill="currentColor" /></svg>}
+                      {ch.key === "slack" && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.52 7.56a1.26 1.26 0 1 1-1.26-1.26h1.26v1.26Zm.63 0a1.26 1.26 0 1 1 2.52 0v3.15a1.26 1.26 0 0 1-2.52 0V7.56ZM4.41 2.52A1.26 1.26 0 1 1 5.67 1.26V2.52H4.41Zm0 .63a1.26 1.26 0 0 1 0 2.52H1.26a1.26 1.26 0 1 1 0-2.52h3.15ZM9.45 4.41a1.26 1.26 0 1 1 1.26 1.26H9.45V4.41Zm-.63 0a1.26 1.26 0 1 1-2.52 0V1.26a1.26 1.26 0 0 1 2.52 0v3.15ZM7.56 9.45a1.26 1.26 0 1 1-1.26-1.26v1.26h1.26Zm0-.63a1.26 1.26 0 0 1 0-2.52h3.15a1.26 1.26 0 0 1 0 2.52H7.56Z" fill="currentColor" /></svg>}
+                      {ch.key === "email" && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h7A1.5 1.5 0 0 1 11 3.5v5A1.5 1.5 0 0 1 9.5 10h-7A1.5 1.5 0 0 1 1 8.5v-5Zm1.22-.19L6 5.94l3.78-2.63A.5.5 0 0 0 9.5 3h-7a.5.5 0 0 0-.28.31Z" fill="currentColor" /></svg>}
+                    </div>
+                    <div className="flex flex-1 flex-col gap-0.5">
+                      <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{ch.name}</span>
+                      <span className="text-xs leading-[120%] tracking-[-0.02em]" style={{ color: ch.statusColor }}>{ch.status}</span>
+                    </div>
+                    <Toggle on={deliveryToggles[ch.key] ?? false} onToggle={() => toggleDelivery(ch.key)} />
+                  </div>
+                ))}
 
-                  {/* Hover highlight */}
-                  <AnimatePresence>
-                    {(() => {
-                      const selectedIdx = EMAIL_FREQUENCIES.indexOf(emailFrequency);
-                      const hoverRect = freqHoveredIndex !== null ? freqRects[freqHoveredIndex] : null;
-                      if (!hoverRect || freqHoveredIndex === selectedIdx) return null;
+                {/* Slack connect input */}
+                <div className="flex items-center gap-3 px-4 py-2.5">
+                  <input className="flex-1 rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/70 dark:bg-white/[0.04]" placeholder="Your email" />
+                  <button className="shrink-0 rounded-full bg-page-text px-4 py-2.5 text-sm font-medium text-white dark:bg-white dark:text-[#151515]">Send</button>
+                </div>
+              </div>
+
+              {/* Events grid */}
+              <div className={cn(cardClass, "overflow-hidden p-0")}>
+                <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.03)]">
+                  <div className="flex flex-1 items-center px-3 py-4">
+                    <span className="text-xs font-medium tracking-[-0.02em] text-page-text-subtle">Event</span>
+                  </div>
+                  {NOTIF_CHANNELS.map((ch) => (
+                    <div key={ch} className="flex w-[55px] shrink-0 items-center justify-center px-3 py-4 md:w-[62px]" style={ch === "Whatsapp" ? { width: 81 } : ch === "Email" ? { width: 54 } : ch === "Slack" ? { width: 55 } : undefined}>
+                      <span className="text-xs font-medium tracking-[-0.02em] text-page-text-subtle">{ch}</span>
+                    </div>
+                  ))}
+                </div>
+                {NOTIF_EVENTS.map((ev) => (
+                  <div key={ev.key} className="flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0 dark:border-[rgba(224,224,224,0.015)]">
+                    <div className="flex flex-1 flex-col gap-1 px-3 py-2">
+                      <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{ev.title}</span>
+                      <span className="text-xs leading-[120%] tracking-[-0.02em] text-page-text-subtle">{ev.desc}</span>
+                    </div>
+                    {NOTIF_CHANNELS.map((ch) => {
+                      const k = `${ev.key}_${ch}`;
                       return (
-                        <motion.div
-                          className="pointer-events-none absolute z-0 rounded-[10px] bg-foreground/[0.04]"
-                          initial={{ ...hoverRect, opacity: 0 }}
-                          animate={{ left: hoverRect.left, width: hoverRect.width, top: hoverRect.top, height: hoverRect.height, opacity: 1 }}
-                          exit={{ opacity: 0, transition: { duration: 0.12 } }}
-                          transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
-                        />
+                        <div key={ch} className="flex w-[55px] shrink-0 items-center justify-center px-3 py-2 md:w-[62px]" style={ch === "Whatsapp" ? { width: 81 } : ch === "Email" ? { width: 54 } : ch === "Slack" ? { width: 55 } : undefined}>
+                          <button onClick={() => toggleChannel(k)} className="cursor-pointer"><NotifCheckCircle checked={channelToggles[k] ?? false} /></button>
+                        </div>
                       );
-                    })()}
-                  </AnimatePresence>
-
-                  {EMAIL_FREQUENCIES.map((freq, i) => {
-                    const selectedIdx = EMAIL_FREQUENCIES.indexOf(emailFrequency);
-                    return (
-                      <button
-                        key={freq}
-                        data-proximity-index={i}
-                        ref={(el) => freqRegister(i, el)}
-                        onClick={() => setEmailFrequency(freq)}
-                        className={cn(
-                          "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-[10px] font-inter text-[14px] font-medium leading-[1.2] tracking-[-0.02em] transition-colors",
-                          i === selectedIdx
-                            ? "text-page-text dark:text-white"
-                            : freqHoveredIndex === i
-                              ? "text-page-text"
-                              : "text-page-text-subtle",
-                        )}
-                      >
-                        {freq}
-                      </button>
-                    );
-                  })}
-                </div>
+                    })}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* ── Exit confirmation dialog ── */}
+      {exitConfirmOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setExitConfirmOpen(false)} />
+          <div className="relative flex w-[320px] flex-col gap-4 rounded-2xl bg-white p-5 shadow-xl dark:bg-card-bg">
+            <div className="flex flex-col gap-2">
+              <span className="text-base font-medium tracking-[-0.02em] text-page-text">Exit without saving?</span>
+              <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">You have unsaved changes. Are you sure you want to exit?</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setExitConfirmOpen(false)} className="flex-1 rounded-full bg-foreground/[0.06] py-2.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06]">
+                Keep editing
+              </button>
+              <button onClick={() => { setExitConfirmOpen(false); setPrefsOpen(false); }} className="flex-1 rounded-full bg-[#FF3355] py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#FF3355]/90">
+                Discard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -2606,7 +2588,7 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col dark:bg-page-bg">
+    <div className="flex flex-1 flex-col pb-5 dark:bg-page-bg">
       {/* Tab header */}
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-page-bg pr-4 sm:pr-5">
         <ProximityTabs
