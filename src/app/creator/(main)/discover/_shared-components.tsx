@@ -24,8 +24,8 @@ export function CpmPill({ cpm }: { cpm: string }) {
     <div className="relative flex h-6 items-center justify-center rounded-full px-2 py-[3px] verified-pill-blue">
       <span className="pointer-events-none absolute inset-0 rounded-full verified-pill-border" style={PILL_MASK} />
       <span className="text-xs font-semibold leading-[1.2]">
-        <span className="text-blue-500 dark:text-[#89B6FF]">{cpm}</span>
-        <span className="text-blue-500/70 dark:text-[rgba(137,182,255,0.7)]">/1K</span>
+        <span className="text-[#1A67E5]">{cpm}</span>
+        <span className="text-[#1A67E5]/70">/1K</span>
       </span>
     </div>
   );
