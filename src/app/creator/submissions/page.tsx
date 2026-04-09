@@ -171,6 +171,7 @@ export default function CreatorSubmissionsPage() {
   const [activeFilter, setActiveFilter] = useState(0);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [payoutOpen, setPayoutOpen] = useState(false);
+  const [payoutClipIndex, setPayoutClipIndex] = useState(0);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [trustScoreOpen, setTrustScoreOpen] = useState(false);
   const [submitStep, setSubmitStep] = useState<"select" | "pick">("select");
@@ -337,7 +338,7 @@ export default function CreatorSubmissionsPage() {
                   </div>
                   <div className="flex items-center gap-2 border-l border-foreground/[0.06] px-3 py-3 dark:border-[rgba(224,224,224,0.03)]">
                     {clip.hasViewPayout && (
-                      <button onClick={() => setPayoutOpen(true)} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
+                      <button onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
                     )}
                     <button onClick={() => setTimelineOpen(true)} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View timeline</button>
                   </div>
@@ -454,7 +455,7 @@ export default function CreatorSubmissionsPage() {
 
                 {/* Action buttons */}
                 <div className="flex gap-2 px-3 pb-3">
-                  <button onClick={() => setPayoutOpen(true)} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
+                  <button onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
                   <button onClick={() => setTimelineOpen(true)} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View timeline</button>
                 </div>
               </div>
@@ -560,15 +561,15 @@ export default function CreatorSubmissionsPage() {
               {/* Earning row */}
               <div className={cn(cardCls, "flex w-full items-center justify-center gap-0 p-3")}>
                 <div className="flex flex-1 flex-col gap-2 border-r border-foreground/[0.06] pr-3 dark:border-[rgba(224,224,224,0.03)]">
-                  <span className="text-sm font-medium text-page-text">$0.09</span>
+                  <span className="text-sm font-medium text-page-text">{payoutClipIndex === 0 ? "$0.09" : "$425.00"}</span>
                   <span className="text-xs text-page-text-muted">Total earned</span>
                 </div>
                 <div className="flex flex-1 flex-col gap-2 border-r border-foreground/[0.06] px-3 dark:border-[rgba(224,224,224,0.03)]">
-                  <span className="text-sm font-medium text-page-text">$0.00</span>
+                  <span className={cn("text-sm font-medium", payoutClipIndex === 0 ? "text-page-text" : "text-[#00994D]")}>{payoutClipIndex === 0 ? "$0.00" : "$425.00"}</span>
                   <span className="text-xs text-page-text-muted">Received</span>
                 </div>
                 <div className="flex flex-1 flex-col gap-2 pl-3">
-                  <span className={cn("text-sm font-medium", isDark ? "text-[#FB923C]" : "text-[#E57100]")}>$1.00</span>
+                  <span className={cn("text-sm font-medium", payoutClipIndex === 0 ? (isDark ? "text-[#FB923C]" : "text-[#E57100]") : "text-page-text")}>{payoutClipIndex === 0 ? "$1.00" : "$0.00"}</span>
                   <span className="text-xs text-page-text-muted">Pending</span>
                 </div>
               </div>
@@ -580,49 +581,96 @@ export default function CreatorSubmissionsPage() {
                 <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
               </div>
 
-              {/* Pending payout card */}
-              <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
-                <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
-                  <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
-                    <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={isDark ? "rgba(251,146,60,0.08)" : "rgba(229,113,0,0.08)"} />
-                  </svg>
-                  <div className="relative flex h-full w-full items-center justify-center">
-                    <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
+              {payoutClipIndex === 0 ? (
+                <>
+                  {/* Pending payout card */}
+                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
+                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill={isDark ? "rgba(251,146,60,0.08)" : "rgba(229,113,0,0.08)"} />
+                      </svg>
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
+                      </div>
+                    </div>
+                    <div className="flex min-w-0 flex-1">
+                      <span className="text-sm font-medium text-page-text">$1.00</span>
+                    </div>
+                    <span className={cn("flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-medium", isDark ? "bg-[rgba(251,146,60,0.08)] text-[#FB923C]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]")}>
+                      <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
+                      Under review
+                    </span>
                   </div>
-                </div>
-                <div className="flex min-w-0 flex-1">
-                  <span className="text-sm font-medium text-page-text">$1.00</span>
-                </div>
-                <span className={cn("flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-medium", isDark ? "bg-[rgba(251,146,60,0.08)] text-[#FB923C]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]")}>
-                  <PendingClockIcon color={isDark ? "#FB923C" : "#E57100"} />
-                  Under review
-                </span>
-              </div>
 
-              {/* Next payment notice */}
-              <div className="flex w-full items-center justify-center gap-1.5">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" fill="none"/><path d="M12 7v5l3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round"/></svg>
-                <span className="text-xs font-medium text-page-text-subtle">2 days until next payment</span>
-              </div>
-
-              {/* Completed payout card */}
-              <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
-                <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
-                  <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
-                    <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
-                  </svg>
-                  <div className="relative flex h-full w-full items-center justify-center">
-                    <CheckCircleIcon color="#00994D" />
+                  {/* Next payment notice */}
+                  <div className="flex w-full items-center justify-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" fill="none"/><path d="M12 7v5l3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round"/></svg>
+                    <span className="text-xs font-medium text-page-text-subtle">2 days until next payment</span>
                   </div>
-                </div>
-                <div className="flex min-w-0 flex-1">
-                  <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
-                </div>
-                <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 text-xs font-medium text-[#00994D]">
-                  <CheckCircleIcon color="#00994D" />
-                  Approved
-                </span>
-              </div>
+
+                  {/* Completed payout card */}
+                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
+                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                      </svg>
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <CheckCircleIcon color="#00994D" />
+                      </div>
+                    </div>
+                    <div className="flex min-w-0 flex-1">
+                      <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
+                    </div>
+                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 text-xs font-medium text-[#00994D]">
+                      <CheckCircleIcon color="#00994D" />
+                      Approved
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Completed payout 1 */}
+                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
+                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                      </svg>
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <CheckCircleIcon color="#00994D" />
+                      </div>
+                    </div>
+                    <div className="flex min-w-0 flex-1">
+                      <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
+                    </div>
+                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 text-xs font-medium text-[#00994D]">
+                      <CheckCircleIcon color="#00994D" />
+                      Approved
+                    </span>
+                  </div>
+
+                  {/* Vertical connector */}
+                  <div className="h-4 w-px border-l border-foreground/[0.12]" />
+
+                  {/* Completed payout 2 */}
+                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
+                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
+                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                      </svg>
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <CheckCircleIcon color="#00994D" />
+                      </div>
+                    </div>
+                    <div className="flex min-w-0 flex-1">
+                      <span className="text-sm font-medium text-page-text">$425.00 paid out Jan 27, 2026</span>
+                    </div>
+                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] px-2 py-1 text-xs font-medium text-[#00994D]">
+                      <CheckCircleIcon color="#00994D" />
+                      Approved
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
         </ModalBody>
       </Modal>
