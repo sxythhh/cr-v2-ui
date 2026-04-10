@@ -446,6 +446,17 @@ select:focus-visible,
 }
 
 :root {
+  /* Admin shorthand aliases (map to theme tokens) */
+  --bg: #ffffff;
+  --fg: #171717;
+  --border-color: #e5e5e5;
+  --card: #ffffff;
+  --muted-fg: #737373;
+  --dropdown-checkbox-bg: transparent;
+  --dropdown-checkbox-border: #d4d4d4;
+  --dropdown-checkbox-checked: #f6850f;
+  --ghost-bg: #f5f5f5;
+
   --background: #ffffff;
   --foreground: #171717;
   --popover: #ffffff;
@@ -506,6 +517,9 @@ select:focus-visible,
   --dropdown-hover: rgba(0, 0, 0, 0.03);
   --dropdown-text: #404040;
   --dropdown-text-muted: #8a8a8a;
+  --dropdown-shadow: 0px 12px 60px rgba(0, 0, 0, 0.12), 0px 12px 32px -16px rgba(0, 0, 0, 0.08);
+  --dropdown-item-hover: rgba(0, 0, 0, 0.04);
+  --dropdown-item-active: rgba(0, 0, 0, 0.06);
 
   /* Tooltip */
   --tooltip-bg: #212121;
@@ -558,6 +572,17 @@ select:focus-visible,
 }
 
 .dark {
+  /* Admin shorthand aliases (dark mode) */
+  --bg: #161616;
+  --fg: #E0E0E0;
+  --border-color: #212121;
+  --card: #1C1C1C;
+  --muted-fg: rgba(224, 224, 224, 0.5);
+  --dropdown-checkbox-bg: transparent;
+  --dropdown-checkbox-border: rgba(224, 224, 224, 0.15);
+  --dropdown-checkbox-checked: #f6850f;
+  --ghost-bg: #181818;
+
   /* Support page – dark mode */
   --support-page-bg: #161616;
   --support-surface-bg: rgba(224, 224, 224, 0.03);
@@ -624,6 +649,9 @@ select:focus-visible,
   --dropdown-hover: rgba(224, 224, 224, 0.03);
   --dropdown-text: #E0E0E0;
   --dropdown-text-muted: rgba(224, 224, 224, 0.5);
+  --dropdown-shadow: 0px 12px 60px rgba(0, 0, 0, 0.3), 0px 12px 32px -16px rgba(0, 0, 0, 0.5);
+  --dropdown-item-hover: rgba(255, 255, 255, 0.04);
+  --dropdown-item-active: rgba(255, 255, 255, 0.06);
 
   /* Tooltip */
   --tooltip-bg: #1A1A1A;
@@ -719,4 +747,25 @@ select:focus-visible,
   --color-tooltip-bg: var(--tooltip-bg);
   --color-tooltip-text: var(--tooltip-text);
   --color-tooltip-text-muted: var(--tooltip-text-muted);
+}
+
+/* ── Admin dashboard: widget drag ── */
+@keyframes wiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-0.15deg); }
+  50% { transform: rotate(0.15deg); }
+  75% { transform: rotate(-0.1deg); }
+  100% { transform: rotate(0deg); }
+}
+
+body.is-dragging, body.is-dragging * {
+  cursor: grabbing !important;
+}
+
+/* ── Recharts: remove click focus border ── */
+.recharts-surface:focus,
+.recharts-wrapper:focus,
+.recharts-surface:focus-visible,
+.recharts-wrapper:focus-visible {
+  outline: none !important;
 }

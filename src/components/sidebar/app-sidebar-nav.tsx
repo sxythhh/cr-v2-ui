@@ -41,6 +41,31 @@ import { Trophy } from "./icons/trophy";
 
 import { WorkspaceCard } from "./workspace-card";
 import { SidebarWalletCard } from "./sidebar-wallet-card";
+import { CentralIcon } from "@central-icons-react/all";
+
+// Central Icon wrappers for admin sidebar (filled style)
+const ciAdminProps = { join: "round" as const, fill: "filled" as const, stroke: "2" as const, radius: "2" as const };
+
+function makeCentralIcon(name: string, displayName: string): AnimatedIcon {
+  const Icon: AnimatedIcon = ({ "data-hovered": _, className, ...props }) => (
+    <span className={className} {...(props as Record<string, unknown>)}>
+      <CentralIcon name={name as any} size={16} color="currentColor" {...ciAdminProps} />
+    </span>
+  );
+  Icon.displayName = displayName;
+  return Icon;
+}
+
+const AdminShield = makeCentralIcon("IconHome", "AdminShield");
+const AdminAudit = makeCentralIcon("IconReceiptBill", "AdminAudit");
+const AdminPins = makeCentralIcon("IconApps", "AdminPins");
+
+const AdminUsers: AnimatedIcon = ({ "data-hovered": _, className, ...props }) => (
+  <svg width="13" height="11" viewBox="0 0 13 11" fill="currentColor" className={className} {...(props as Record<string, unknown>)}>
+    <path d="M4.28571 0C5.706 0 6.85714 1.15114 6.85714 2.57143C6.85714 3.99171 5.706 5.14286 4.28571 5.14286C2.86543 5.14286 1.71429 3.99171 1.71429 2.57143C1.71429 1.15114 2.86543 0 4.28571 0ZM3.06086 6H5.51057C7.20086 6 8.57143 7.37057 8.57143 9.06086C8.57057 9.73714 8.02286 10.2849 7.34657 10.2857H1.22486C0.548571 10.2849 0.000857143 9.73714 0 9.06086C0 7.37057 1.37057 6 3.06086 6Z" />
+    <path d="M7.82232 0C8.85946 0.000857143 9.79375 0.624857 10.1932 1.58229C10.5917 2.53886 10.3775 3.642 9.64803 4.37914C8.91946 5.11629 7.81889 5.34429 6.85718 4.956C7.47689 4.31743 7.82318 3.462 7.82232 2.57143C7.82318 1.68086 7.47689 0.825429 6.85718 0.186857C7.16403 0.0634286 7.49146 0 7.82232 0ZM9.04718 6C10.7375 6 12.108 7.37057 12.108 9.06086C12.1072 9.73714 11.5595 10.2849 10.8832 10.2857H9.30689C9.45346 10.0337 9.53661 9.74057 9.53661 9.42857C9.53832 8.07943 8.90232 6.80829 7.82232 6H9.04718Z" />
+  </svg>
+);
 
 
 
@@ -132,6 +157,22 @@ const NAV_AREAS: SidebarNavAreas = {
     ],
   }),
 
+  admin: () => ({
+    content: [
+      {
+        items: [
+          { name: "Dashboard", icon: AdminShield, href: "/admin", exact: true, description: "Overview with draggable widget cards." },
+          { name: "Board", icon: makeCentralIcon("IconLayoutColumn", "Board"), href: "/admin/board", description: "Project management board." },
+          { name: "Planner", icon: makeCentralIcon("IconReceiptBill", "Planner"), href: "/admin/planner", description: "Task planner and scheduling." },
+          { name: "Users", icon: AdminUsers, href: "/admin/users", description: "User management." },
+          { name: "Super Admin", icon: makeCentralIcon("IconCircleCheck", "SuperAdmin"), href: "/admin/super-admin", description: "Submissions, payouts, and platform management." },
+          { name: "Audit History", icon: makeCentralIcon("IconClock", "AuditHistory"), href: "/admin/audit-history", description: "Platform audit log." },
+          { name: "Settings", icon: Gear, href: "/admin/settings", description: "Admin settings and integrations." },
+        ],
+      },
+    ],
+  }),
+
 };
 
 export function AppSidebarNav() {
@@ -152,6 +193,7 @@ function AppSidebarNavInner() {
   const currentArea = useMemo(() => {
     if (pathname.startsWith("/program")) return "program";
     if (pathname === "/creator" || pathname.startsWith("/creator/")) return "creator";
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) return "admin";
     return "default";
   }, [pathname]);
 
