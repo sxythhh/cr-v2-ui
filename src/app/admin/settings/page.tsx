@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import { useToast } from "@/components/admin/toast";
 import { useConfirm } from "@/components/admin/confirm-dialog";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/modal";
 
 // ── Toggle ───────────────────────────────────────────────────────────
 
@@ -58,6 +59,22 @@ const TABS = [
   { name: "Notifications" },
   { name: "Security" },
   { name: "Integrations" },
+  { name: "PIN Management" },
+];
+
+// ── PIN types ────────────────────────────────────────────────────────
+
+interface PinEntry {
+  id: string;
+  code: string;
+  description: string;
+  status: "Active" | "Inactive";
+  usageCount: number;
+  lastUsed: string;
+}
+
+const INITIAL_PINS: PinEntry[] = [
+  { id: "p1", code: "1356", description: "Default admin PIN — Change this immediately", status: "Active", usageCount: 7, lastUsed: "13/03/2026, 18:24:54" },
 ];
 
 // ── Page ─────────────────────────────────────────────────────────────
@@ -66,6 +83,10 @@ export default function AdminSettingsPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { toast } = useToast();
   const { confirm } = useConfirm();
+  const [pins, setPins] = useState<PinEntry[]>(INITIAL_PINS);
+  const [newPinOpen, setNewPinOpen] = useState(false);
+  const [newPinCode, setNewPinCode] = useState("");
+  const [newPinDesc, setNewPinDesc] = useState("");
 
   // General
   const [platformName, setPlatformName] = useState("Content Rewards");
@@ -252,6 +273,120 @@ export default function AdminSettingsPage() {
               </SettingRow>
             ))}
           </SettingSection>
+        )}
+
+        {/* PIN Management */}
+        {selectedIndex === 4 && (
+          <>
+            <div className="flex items-center justify-between">
+              <h2 className="font-inter text-base font-semibold tracking-[-0.02em] text-page-text">PIN Management</h2>
+              <button
+                onClick={() => setNewPinOpen(true)}
+                className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#3B82F6] px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90"
+              >
+                Create New PIN
+              </button>
+            </div>
+
+            {/* PIN Table */}
+            <div className="overflow-hidden rounded-xl border border-border bg-card-bg">
+              {/* Header */}
+              <div className="flex items-center border-b border-border px-4" style={{ height: 40 }}>
+                <div className="w-[90px] shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted">PIN Code</div>
+                <div className="min-w-0 flex-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted">Description</div>
+                <div className="w-[80px] shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted">Status</div>
+                <div className="hidden w-[100px] shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted sm:block">Usage Count</div>
+                <div className="hidden w-[160px] shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted md:block">Last Used</div>
+                <div className="w-[90px] shrink-0 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-page-text-muted">Actions</div>
+              </div>
+              {/* Rows */}
+              {pins.map((pin) => (
+                <div key={pin.id} className="flex items-center border-b border-border px-4 last:border-b-0 transition-colors hover:bg-foreground/[0.02]" style={{ height: 52 }}>
+                  <div className="w-[90px] shrink-0 font-inter text-sm font-medium tracking-[-0.02em] text-page-text">{pin.code}</div>
+                  <div className="min-w-0 flex-1 truncate font-inter text-sm tracking-[-0.02em] text-page-text-muted">{pin.description}</div>
+                  <div className="w-[80px] shrink-0">
+                    <span className={`inline-flex items-center whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${pin.status === "Active" ? "bg-[rgba(0,178,89,0.15)] text-[#00B259]" : "bg-foreground/[0.06] text-page-text-muted"}`}>
+                      {pin.status}
+                    </span>
+                  </div>
+                  <div className="hidden w-[100px] shrink-0 font-inter text-sm tracking-[-0.02em] text-page-text-muted sm:block">{pin.usageCount}</div>
+                  <div className="hidden w-[160px] shrink-0 font-inter text-xs tracking-[-0.02em] text-page-text-muted md:block">{pin.lastUsed}</div>
+                  <div className="w-[90px] shrink-0 text-right">
+                    {pin.status === "Active" ? (
+                      <button
+                        onClick={async () => {
+                          const ok = await confirm({ title: "Deactivate PIN?", message: `Deactivate PIN ${pin.code}? It will no longer be usable.`, destructive: true, confirmLabel: "Deactivate" });
+                          if (ok) { setPins((prev) => prev.map((p) => p.id === pin.id ? { ...p, status: "Inactive" } : p)); toast("PIN deactivated"); }
+                        }}
+                        className="cursor-pointer font-inter text-xs font-medium tracking-[-0.02em] text-[#FF2525] transition-opacity hover:opacity-70"
+                        style={{ background: "none", border: "none" }}
+                      >
+                        Deactivate
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => { setPins((prev) => prev.map((p) => p.id === pin.id ? { ...p, status: "Active" } : p)); toast("PIN activated"); }}
+                        className="cursor-pointer font-inter text-xs font-medium tracking-[-0.02em] text-[#00B259] transition-opacity hover:opacity-70"
+                        style={{ background: "none", border: "none" }}
+                      >
+                        Activate
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {pins.length === 0 && (
+                <div className="flex items-center justify-center py-12 text-sm text-page-text-muted">No PINs created</div>
+              )}
+            </div>
+
+            {/* Create New PIN Modal */}
+            {newPinOpen && (
+              <Modal open={newPinOpen} onClose={() => setNewPinOpen(false)} size="sm">
+                <ModalHeader>
+                  <span className="font-inter text-base font-semibold tracking-[-0.02em] text-page-text">Create New PIN</span>
+                </ModalHeader>
+                <ModalBody className="space-y-4">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-page-text-muted">PIN Code</label>
+                    <input
+                      value={newPinCode}
+                      onChange={(e) => setNewPinCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      placeholder="Enter 4-6 digit PIN"
+                      className="h-10 w-full rounded-xl border border-border bg-foreground/[0.03] px-3.5 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/30 focus:border-[#3B82F6]/40 focus:ring-1 focus:ring-[#3B82F6]/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-page-text-muted">Description</label>
+                    <input
+                      value={newPinDesc}
+                      onChange={(e) => setNewPinDesc(e.target.value)}
+                      placeholder="What is this PIN for?"
+                      className="h-10 w-full rounded-xl border border-border bg-foreground/[0.03] px-3.5 font-inter text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/30 focus:border-[#3B82F6]/40 focus:ring-1 focus:ring-[#3B82F6]/20"
+                    />
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <button onClick={() => setNewPinOpen(false)} className="cursor-pointer rounded-full bg-foreground/[0.06] px-4 py-2 font-inter text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (newPinCode.length >= 4) {
+                        setPins((prev) => [...prev, { id: `p${Date.now()}`, code: newPinCode, description: newPinDesc || "New PIN", status: "Active", usageCount: 0, lastUsed: "Never" }]);
+                        setNewPinCode(""); setNewPinDesc(""); setNewPinOpen(false);
+                        toast("PIN created");
+                      }
+                    }}
+                    disabled={newPinCode.length < 4}
+                    className="cursor-pointer rounded-full bg-[#3B82F6] px-4 py-2 font-inter text-sm font-semibold tracking-[-0.02em] text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                  >
+                    Create PIN
+                  </button>
+                </ModalFooter>
+              </Modal>
+            )}
+          </>
         )}
       </div>
     </div>

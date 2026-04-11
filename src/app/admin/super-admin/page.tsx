@@ -8,6 +8,15 @@ import { ProximityTabs } from "@/components/ui/proximity-tabs";
 import { FilterSelect, type Filter } from "@/components/ui/dub-filter";
 import { CentralIcon } from "@central-icons-react/all";
 import { AdminTable, type AdminColumn } from "@/components/admin/admin-table";
+import { AuditLogSheet } from "@/components/admin/audit-log-sheet";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { ClockCircleIcon } from "@/components/admin/status-icons";
 import {
   type Submission,
   FilterIcon, CheckCircleIcon, XCircleIcon, SparkleIcon,
@@ -114,7 +123,7 @@ const SA_FILTERS: Filter[] = [
 
 // ── Submission Card (replicates brand submissions card) ──────────────
 
-function SASubmissionCard({ submission, onAction }: { submission: Submission; onAction?: (action: "approve" | "reject") => void }) {
+function SASubmissionCard({ submission, onAction, onAuditLog }: { submission: Submission; onAction?: (action: "approve" | "reject") => void; onAuditLog?: () => void }) {
   const isPass = submission.aiResult === "pass";
   const scoreColor = isPass ? "#00B259" : "#FF2525";
   const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, likes: true, comments: true, shares: false });
@@ -215,6 +224,11 @@ function SASubmissionCard({ submission, onAction }: { submission: Submission; on
               <button onClick={() => onAction?.("approve")} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-[#00B259] px-3 text-sm font-medium text-white transition-colors hover:bg-[#00A050]">
                 <CheckCircleIcon size={14} color="#fff" /> Approve
               </button>
+              {onAuditLog && (
+                <button onClick={onAuditLog} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 text-xs font-medium text-page-text-muted transition-colors hover:bg-foreground/[0.10]">
+                  <CentralIcon name="IconClock" size={12} color="currentColor" {...ciProps} /> Audit
+                </button>
+              )}
               <DotMenuPopover onViewContent={() => {}} onViewCreator={() => {}} onFlag={() => {}} />
             </div>
           </div>
@@ -288,10 +302,17 @@ function StatusBadge({ status }: { status: string }) {
     Failed: { bg: "rgba(255,37,37,0.15)", text: "#FF2525" },
     Refunded: { bg: "rgba(96,165,250,0.15)", text: "#60A5FA" },
   };
+  const icons: Record<string, React.ReactNode> = {
+    Pending: <ClockCircleIcon size={12} color="#E9A23B" />,
+    Completed: <CheckCircleIcon size={12} color="#00B259" />,
+    Processed: <CheckCircleIcon size={12} color="#00B259" />,
+    Failed: <XCircleIcon size={12} color="#FF2525" />,
+    Refunded: <ClockCircleIcon size={12} color="#60A5FA" />,
+  };
   const c = colors[status] ?? colors.Pending;
   return (
-    <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: c.bg, color: c.text }}>
-      {status}
+    <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: c.bg, color: c.text }}>
+      {icons[status]}{status}
     </span>
   );
 }
@@ -525,10 +546,21 @@ function ReportCell({ row, colKey }: { row: UserReport; colKey: string }) {
       return <span className="text-xs tabular-nums text-page-text-muted">{row.date}</span>;
     case "actions":
       return (
-        <div className="flex items-center justify-center">
-          <button className="flex items-center justify-center rounded-md transition-colors hover:bg-foreground/[0.04] cursor-pointer" style={{ width: 24, height: 24, background: "none", border: "none" }}>
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" className="text-page-text-subtle"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
-          </button>
+        <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center justify-center rounded-md transition-colors hover:bg-foreground/[0.04] cursor-pointer" style={{ width: 24, height: 24, background: "none", border: "none" }}>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" className="text-page-text-subtle"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[160px] rounded-xl border-foreground/[0.06] bg-card-bg p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] backdrop-blur-[10px]">
+              <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium">View submission</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium">View reporter</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium">Dismiss report</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium text-[#FF2525]">Ban user</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       );
     default:
@@ -564,6 +596,123 @@ function PayoutCell({ row, colKey }: { row: typeof MOCK_PAYOUTS[number]; colKey:
     default: return null;
   }
 }
+
+// ── Flagged Submissions Table ─────────────────────────────────────────
+
+type FlaggedSubmission = { id: string; creator: string; avatar: string; campaign: string; reason: string; reasonColor: string; flaggedBy: string; flaggedAvatar: string; date: string; status: string };
+
+const FLAGGED_SUBMISSIONS: FlaggedSubmission[] = [
+  { id: "f1", creator: "xKaizen", avatar: "https://i.pravatar.cc/32?u=xkaizen", campaign: "Caffeine AI", reason: "Bot traffic", reasonColor: "rgba(255,37,37,0.15)", flaggedBy: "Ivelin Ivanov", flaggedAvatar: "https://i.pravatar.cc/24?u=ivelin", date: "Apr 10, 2026", status: "Pending Review" },
+  { id: "f2", creator: "messy", avatar: "https://i.pravatar.cc/32?u=messy", campaign: "GYMSHARK", reason: "Bot traffic", reasonColor: "rgba(255,37,37,0.15)", flaggedBy: "System", flaggedAvatar: "https://i.pravatar.cc/24?u=system", date: "Apr 9, 2026", status: "Pending Review" },
+  { id: "f3", creator: "TechTalksDaily", avatar: "https://i.pravatar.cc/32?u=techtalksdaily", campaign: "NovaPay Wallet", reason: "Content violation", reasonColor: "rgba(246,133,15,0.15)", flaggedBy: "David Chen", flaggedAvatar: "https://i.pravatar.cc/24?u=david", date: "Apr 8, 2026", status: "Clawed Back" },
+  { id: "f4", creator: "abir", avatar: "https://i.pravatar.cc/32?u=abir", campaign: "Clipping Culture", reason: "Copyright", reasonColor: "rgba(96,165,250,0.15)", flaggedBy: "Ivelin Ivanov", flaggedAvatar: "https://i.pravatar.cc/24?u=ivelin", date: "Apr 7, 2026", status: "Resolved" },
+  { id: "f5", creator: "Roger", avatar: "https://i.pravatar.cc/32?u=roger", campaign: "Kyro Clips", reason: "Bot traffic", reasonColor: "rgba(255,37,37,0.15)", flaggedBy: "System", flaggedAvatar: "https://i.pravatar.cc/24?u=system", date: "Apr 6, 2026", status: "Pending Review" },
+  { id: "f6", creator: "Billy elis", avatar: "https://i.pravatar.cc/32?u=billy", campaign: "PLAX.Inc", reason: "Content violation", reasonColor: "rgba(246,133,15,0.15)", flaggedBy: "Ivelin Ivanov", flaggedAvatar: "https://i.pravatar.cc/24?u=ivelin", date: "Apr 5, 2026", status: "Pending Review" },
+];
+
+const FLAGGED_COLUMNS: AdminColumn[] = [
+  { key: "creator", label: "Submission", width: "minmax(140px, 2fr)" },
+  { key: "reason", label: "Reason", width: "120px" },
+  { key: "flaggedBy", label: "Flagged By", width: "130px", hideMobile: true },
+  { key: "date", label: "Date", sortable: true, width: "100px" },
+  { key: "status", label: "Status", width: "120px" },
+];
+
+function FlaggedCell({ row, colKey }: { row: FlaggedSubmission; colKey: string }) {
+  const statusColors: Record<string, { bg: string; text: string }> = {
+    "Pending Review": { bg: "rgba(233,162,59,0.15)", text: "#E9A23B" },
+    "Resolved": { bg: "rgba(0,178,89,0.15)", text: "#00B259" },
+    "Clawed Back": { bg: "rgba(255,37,37,0.15)", text: "#FF2525" },
+  };
+  switch (colKey) {
+    case "creator":
+      return (
+        <div className="flex items-center gap-2.5 min-w-0">
+          <img src={row.avatar} alt="" className="size-7 rounded-full shrink-0" />
+          <div className="min-w-0">
+            <div className="truncate text-sm font-medium text-page-text">{row.creator}</div>
+            <div className="truncate text-xs text-page-text-subtle">{row.campaign}</div>
+          </div>
+        </div>
+      );
+    case "reason": {
+      const reasonText = row.reason === "Bot traffic" ? "#FF2525" : row.reason === "Copyright" ? "#60A5FA" : "#f6850f";
+      return <span className="whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-medium" style={{ background: row.reasonColor, color: reasonText }}>{row.reason}</span>;
+    }
+    case "flaggedBy":
+      return (
+        <div className="flex items-center gap-1.5">
+          <img src={row.flaggedAvatar} alt="" className="size-4 rounded-full" />
+          <span className="text-xs text-page-text-muted">{row.flaggedBy}</span>
+        </div>
+      );
+    case "date": return <span className="text-xs text-page-text-muted">{row.date}</span>;
+    case "status": {
+      const c = statusColors[row.status] ?? statusColors["Pending Review"];
+      const icon = row.status === "Pending Review" ? <ClockCircleIcon size={12} color={c.text} /> : row.status === "Resolved" ? <CheckCircleIcon size={12} color={c.text} /> : <XCircleIcon size={12} color={c.text} />;
+      return <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: c.bg, color: c.text }}>{icon}{row.status}</span>;
+    }
+    default: return null;
+  }
+}
+
+function FlaggedSubmissionsTable() {
+  return <AdminTable columns={FLAGGED_COLUMNS} data={FLAGGED_SUBMISSIONS} rowKey={(r) => r.id} renderCell={(row, colKey) => <FlaggedCell row={row} colKey={colKey} />} />;
+}
+
+// ── Clawback History Table ────────────────────────────────────────────
+
+type ClawbackEntry = { id: string; creator: string; avatar: string; amount: string; reason: string; campaign: string; date: string; status: string };
+
+const CLAWBACK_ENTRIES: ClawbackEntry[] = [
+  { id: "cb1", creator: "TechTalksDaily", avatar: "https://i.pravatar.cc/32?u=techtalksdaily", amount: "-$1,200.00", reason: "Bot/fake views", campaign: "NovaPay Wallet", date: "Apr 8, 2026", status: "Processed" },
+  { id: "cb2", creator: "messy", avatar: "https://i.pravatar.cc/32?u=messy", amount: "-$690.00", reason: "Content violation", campaign: "GYMSHARK", date: "Apr 7, 2026", status: "Pending" },
+  { id: "cb3", creator: "abir", avatar: "https://i.pravatar.cc/32?u=abir", amount: "-$425.00", reason: "Deleted video", campaign: "Clipping Culture", date: "Apr 5, 2026", status: "Processed" },
+  { id: "cb4", creator: "Billy elis", avatar: "https://i.pravatar.cc/32?u=billy", amount: "-$830.00", reason: "Bot/fake views", campaign: "PLAX.Inc", date: "Apr 4, 2026", status: "Disputed" },
+  { id: "cb5", creator: "Roger", avatar: "https://i.pravatar.cc/32?u=roger", amount: "-$275.00", reason: "Below threshold", campaign: "Kyro Clips", date: "Apr 3, 2026", status: "Processed" },
+];
+
+const CLAWBACK_COLUMNS: AdminColumn[] = [
+  { key: "creator", label: "Creator", width: "minmax(120px, 1.5fr)" },
+  { key: "amount", label: "Amount", sortable: true, width: "100px" },
+  { key: "reason", label: "Reason", width: "130px", hideMobile: true },
+  { key: "campaign", label: "Campaign", width: "minmax(100px, 1fr)", hideMobile: true },
+  { key: "date", label: "Date", sortable: true, width: "100px" },
+  { key: "status", label: "Status", width: "90px" },
+];
+
+function ClawbackCell({ row, colKey }: { row: ClawbackEntry; colKey: string }) {
+  const statusColors: Record<string, { bg: string; text: string }> = {
+    Processed: { bg: "rgba(0,178,89,0.15)", text: "#00B259" },
+    Pending: { bg: "rgba(233,162,59,0.15)", text: "#E9A23B" },
+    Disputed: { bg: "rgba(96,165,250,0.15)", text: "#60A5FA" },
+  };
+  switch (colKey) {
+    case "creator":
+      return (
+        <div className="flex items-center gap-2.5 min-w-0">
+          <img src={row.avatar} alt="" className="size-7 rounded-full shrink-0" />
+          <span className="truncate text-sm font-medium text-page-text">{row.creator}</span>
+        </div>
+      );
+    case "amount": return <span className="text-sm font-semibold text-[#FF2525]">{row.amount}</span>;
+    case "reason": return <span className="text-xs text-page-text-muted">{row.reason}</span>;
+    case "campaign": return <span className="truncate text-xs text-page-text-muted">{row.campaign}</span>;
+    case "date": return <span className="text-xs text-page-text-muted">{row.date}</span>;
+    case "status": {
+      const c = statusColors[row.status] ?? statusColors.Pending;
+      const icon = row.status === "Processed" ? <CheckCircleIcon size={12} color={c.text} /> : row.status === "Pending" ? <ClockCircleIcon size={12} color={c.text} /> : <XCircleIcon size={12} color={c.text} />;
+      return <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: c.bg, color: c.text }}>{icon}{row.status}</span>;
+    }
+    default: return null;
+  }
+}
+
+function ClawbackHistoryTable() {
+  return <AdminTable columns={CLAWBACK_COLUMNS} data={CLAWBACK_ENTRIES} rowKey={(r) => r.id} renderCell={(row, colKey) => <ClawbackCell row={row} colKey={colKey} />} />;
+}
+
+// ── Payouts Table ────────────────────────────────────────────────────
 
 function PayoutsTab() {
   return <AdminTable columns={PAYOUT_COLUMNS} data={MOCK_PAYOUTS} rowKey={(r) => r.id} renderCell={(row, colKey) => <PayoutCell row={row} colKey={colKey} />} />;
@@ -635,6 +784,7 @@ function SpringPopItem({ children }: { children: React.ReactNode }) {
 export default function SuperAdminPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [actions, setActions] = useState<Record<string, "approve" | "reject">>({});
+  const [auditTarget, setAuditTarget] = useState<{ type: "submission"; id: string; title: string } | null>(null);
   const handleAction = useCallback((id: string, action: "approve" | "reject") => {
     setActions((prev) => ({ ...prev, [id]: action }));
   }, []);
@@ -643,7 +793,7 @@ export default function SuperAdminPage() {
   return (
     <div>
       {/* Header with ProximityTabs */}
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] pr-4 sm:pr-5 dark:border-foreground/[0.08]">
+      <div className="flex items-center justify-between border-b border-border pr-4 sm:pr-5">
         <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
           <ProximityTabs
             tabs={SA_TABS.map((t) => ({ label: t.name, count: t.count }))}
@@ -674,7 +824,7 @@ export default function SuperAdminPage() {
             <AnimatePresence mode="popLayout">
               {visibleSubmissions.map((sub) => (
                 <SpringPopItem key={sub.id}>
-                  <SASubmissionCard submission={sub} onAction={(a) => handleAction(sub.id, a)} />
+                  <SASubmissionCard submission={sub} onAction={(a) => handleAction(sub.id, a)} onAuditLog={() => setAuditTarget({ type: "submission", id: sub.id, title: `${sub.creator} — ${sub.campaign}` })} />
                 </SpringPopItem>
               ))}
             </AnimatePresence>
@@ -702,7 +852,7 @@ export default function SuperAdminPage() {
                 <div className="mt-1 text-xl font-semibold text-page-text">$548.00</div>
               </div>
             </div>
-            <PayoutsTab />
+            <div className="-mx-4 sm:-mx-6"><PayoutsTab /></div>
           </div>
         )}
 
@@ -730,10 +880,21 @@ export default function SuperAdminPage() {
                 <div className="mt-1 text-xl font-semibold text-[#60A5FA]">-$275.00</div>
               </div>
             </div>
-            <PaymentMgmtTab />
+            <div className="-mx-4 sm:-mx-6"><PaymentMgmtTab /></div>
           </div>
         )}
       </div>
+
+      {/* Audit Log Sheet */}
+      {auditTarget && (
+        <AuditLogSheet
+          open={!!auditTarget}
+          onClose={() => setAuditTarget(null)}
+          entityType={auditTarget.type}
+          entityId={auditTarget.id}
+          entityTitle={auditTarget.title}
+        />
+      )}
     </div>
   );
 }

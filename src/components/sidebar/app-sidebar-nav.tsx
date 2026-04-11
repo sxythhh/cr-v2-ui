@@ -165,6 +165,8 @@ const NAV_AREAS: SidebarNavAreas = {
           { name: "Board", icon: makeCentralIcon("IconLayoutColumn", "Board"), href: "/admin/board", description: "Project management board." },
           { name: "Planner", icon: makeCentralIcon("IconReceiptBill", "Planner"), href: "/admin/planner", description: "Task planner and scheduling." },
           { name: "Users", icon: AdminUsers, href: "/admin/users", description: "User management." },
+          { name: "Campaigns", icon: Megaphone, href: "/admin/campaigns", description: "Campaign management and status controls." },
+          { name: "Refunds", icon: makeCentralIcon("IconArrowRotateLeftRight", "Refunds"), href: "/admin/refunds", description: "Review and process pending refunds." },
           { name: "Super Admin", icon: makeCentralIcon("IconCircleCheck", "SuperAdmin"), href: "/admin/super-admin", description: "Submissions, payouts, and platform management." },
           { name: "Audit History", icon: makeCentralIcon("IconClock", "AuditHistory"), href: "/admin/audit-history", description: "Platform audit log." },
           { name: "Settings", icon: Gear, href: "/admin/settings", description: "Admin settings and integrations." },

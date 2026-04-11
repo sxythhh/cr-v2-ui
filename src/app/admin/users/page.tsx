@@ -10,6 +10,8 @@ import { Filters, createFilter, type Filter, type FilterFieldConfig } from "@/co
 import { useToast } from "@/components/admin/toast";
 import { EmptyState } from "@/components/admin/empty-state";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
+import { AuditLogSheet } from "@/components/admin/audit-log-sheet";
+import { AdminTable, type AdminColumn } from "@/components/admin/admin-table";
 import { springs } from "@/lib/springs";
 import {
   DropdownMenu,
@@ -81,14 +83,9 @@ function Avatar({ name, index }: { name: string; index: number }) {
 /*  Columns definition                                                 */
 /* ------------------------------------------------------------------ */
 
-type Column = {
-  key: string;
-  label: string;
-  sortable?: boolean;
-  width?: string;
-};
+type Column = AdminColumn;
 
-const DEFAULT_COLUMNS: Column[] = [
+const DEFAULT_COLUMNS: AdminColumn[] = [
   { key: "user", label: "User", sortable: true, width: "minmax(160px, 2fr)" },
   { key: "status", label: "Status", width: "100px" },
   { key: "submissions", label: "Submissions", sortable: true, width: "120px" },
@@ -457,9 +454,9 @@ function CellContent({ colKey, user, index, onEmail, onMessage }: { colKey: stri
   }
 }
 
-function UserRow({ user, index, gridTemplate, visibleColumns, page, pageSize, registerHover, onRowClick }: {
+function UserRow({ user, index, gridTemplate, visibleColumns, page, pageSize, registerHover, onRowClick, onAuditLog }: {
   user: typeof USERS[number]; index: number; gridTemplate: string; visibleColumns: Column[]; page: number; pageSize: number;
-  registerHover: (index: number, element: HTMLElement | null) => void; onRowClick: () => void;
+  registerHover: (index: number, element: HTMLElement | null) => void; onRowClick: () => void; onAuditLog: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -472,12 +469,17 @@ function UserRow({ user, index, gridTemplate, visibleColumns, page, pageSize, re
       ref={ref}
       data-proximity-index={index}
       onClick={onRowClick}
-      className="relative z-[1] grid items-center px-4 cursor-pointer"
-      style={{ gridTemplateColumns: gridTemplate, height: 56, boxShadow: "inset 0px -1px 0px var(--border-color)" }}
+      className="relative z-[1] flex items-center px-4 cursor-pointer"
+      style={{ height: 56, boxShadow: "inset 0px -1px 0px var(--border-color)" }}
     >
-      {visibleColumns.map((col) => (
-        <CellContent key={col.key} colKey={col.key} user={user} index={page * pageSize + index} />
+      <div className="grid min-w-0 flex-1 items-center" style={{ gridTemplateColumns: gridTemplate }}>
+        {visibleColumns.map((col) => (
+          <CellContent key={col.key} colKey={col.key} user={user} index={page * pageSize + index} />
       ))}
+      </div>
+      <button onClick={(e) => { e.stopPropagation(); onAuditLog(); }} className="hidden shrink-0 cursor-pointer items-center gap-1 rounded-full bg-foreground/[0.06] px-2.5 py-1 text-[11px] font-medium text-page-text-muted transition-colors hover:bg-foreground/[0.10] md:flex" title="View audit log">
+        <CentralIcon name="IconClock" size={10} color="currentColor" {...ciProps} /> Audit
+      </button>
     </div>
   );
 }
@@ -487,6 +489,7 @@ export default function UsersPage() {
   const { toast } = useToast();
   const [filters, setFilters] = useState<Filter[]>([]);
   const [columns, setColumns] = useState<Column[]>(DEFAULT_COLUMNS);
+  const [auditTarget, setAuditTarget] = useState<{ id: string; name: string } | null>(null);
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set(DEFAULT_COLUMNS.map((c) => c.key)));
 
   // On mobile, default to fewer columns
@@ -499,11 +502,6 @@ export default function UsersPage() {
     }
   }, []);
 
-  const [sortKey, setSortKey] = useState<string | null>(null);
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
-  const [page, setPage] = useState(0);
-  const pageSize = 15;
-
   const toggleVisibility = (key: string) => {
     setVisibleKeys((prev) => {
       const next = new Set(prev);
@@ -513,24 +511,7 @@ export default function UsersPage() {
     });
   };
 
-  const toggleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortDir((d) => d === "asc" ? "desc" : "asc");
-    } else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
-  };
-
-  const sortedUsers = [...USERS].sort((a, b) => {
-    if (!sortKey) return 0;
-    const av = (a as any)[sortKey] ?? "";
-    const bv = (b as any)[sortKey] ?? "";
-    const cmp = typeof av === "string" ? av.localeCompare(bv) : av - bv;
-    return sortDir === "asc" ? cmp : -cmp;
-  });
-
-  const filteredUsers = sortedUsers.filter(user => {
+  const filteredUsers = USERS.filter(user => {
     return filters.every(filter => {
       const field = FILTER_FIELDS.find(f => f.key === filter.field);
       if (!field) return true;
@@ -562,15 +543,7 @@ export default function UsersPage() {
     });
   });
 
-  const totalPages = Math.ceil(filteredUsers.length / pageSize);
-  const pagedUsers = filteredUsers.slice(page * pageSize, (page + 1) * pageSize);
-
   const visibleColumns = columns.filter((c) => visibleKeys.has(c.key));
-  const gridTemplate = visibleColumns.map((c) => c.width || "1fr").join(" ");
-
-  const tableRef = useRef<HTMLDivElement>(null);
-  const { activeIndex: hoverIdx, itemRects: hoverRects, sessionRef: hoverSession, handlers: hoverHandlers, registerItem: registerHoverItem } = useProximityHover(tableRef);
-  const hoverRect = hoverIdx !== null ? hoverRects[hoverIdx] : null;
 
   const handleExport = () => {
     const headers = visibleColumns.map(c => c.label).join(",");
@@ -592,6 +565,41 @@ export default function UsersPage() {
     URL.revokeObjectURL(url);
     toast("Exported to CSV");
   };
+
+  const renderUserCell = useCallback((user: typeof USERS[number], colKey: string, index: number) => {
+    switch (colKey) {
+      case "user":
+        return (
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img src={user.avatar} alt="" className="size-8 rounded-full object-cover shrink-0" />
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium" style={{ color: "var(--fg)" }}>{user.name}</div>
+              <div className="truncate text-xs" style={{ color: "var(--muted-fg)" }}>{user.handle}</div>
+            </div>
+          </div>
+        );
+      case "status":
+        return (
+          <span
+            className="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium"
+            style={{
+              background: user.status === "Active" ? "rgba(0,178,89,0.15)" : "rgba(255,37,37,0.15)",
+              color: user.status === "Active" ? "#00B259" : "#FF2525",
+            }}
+          >
+            {user.status}
+          </span>
+        );
+      case "submissions":
+        return <span style={{ fontSize: 14, fontWeight: 400, color: "var(--fg)" }}>{user.submissions.toLocaleString()}</span>;
+      case "earned":
+        return <span style={{ fontSize: 14, fontWeight: 400, color: "var(--fg)" }}>${user.earned.toLocaleString()}</span>;
+      case "trustScore":
+        return <span style={{ fontSize: 14, fontWeight: 400, color: "var(--fg)" }}>{user.trustScore}%</span>;
+      default:
+        return null;
+    }
+  }, []);
 
   return (
     <div
@@ -635,138 +643,26 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {/* ---- Data Table ---- */}
-      <div className="flex-1 overflow-auto" style={{ scrollbarWidth: "none" }}>
-        <div>
-        {/* Header */}
-        <div
-          className="grid items-center sticky top-0 z-10 px-4"
-          style={{
-            gridTemplateColumns: gridTemplate,
-            height: 40,
-            background: "var(--bg)",
-            boxShadow: "inset 0px -1px 0px var(--border-color)",
-            borderTop: "1px solid var(--border-color)",
-          }}
-        >
-          {visibleColumns.map((col) => {
-            const isSorted = sortKey === col.key;
-            return (
-              <div
-                key={col.key}
-                className={`flex items-center gap-1 select-none ${col.sortable ? "cursor-pointer" : ""}`}
-                style={{ fontSize: 13, fontWeight: 500, color: "var(--muted-fg)" }}
-                onClick={() => col.sortable && toggleSort(col.key)}
-              >
-                {col.label}
-                {col.sortable && (
-                  <span className="flex flex-col items-center" style={{ width: 12, height: 16 }}>
-                    <CentralIcon
-                      name="IconChevronTop"
-                      size={10}
-                      color={isSorted && sortDir === "asc" ? "var(--fg)" : "var(--muted-fg)"}
-                      {...ciProps}
-                      style={{ opacity: isSorted && sortDir === "asc" ? 1 : 0.4 }}
-                    />
-                    <CentralIcon
-                      name="IconChevronBottom"
-                      size={10}
-                      color={isSorted && sortDir === "desc" ? "var(--fg)" : "var(--muted-fg)"}
-                      {...ciProps}
-                      style={{ opacity: isSorted && sortDir === "desc" ? 1 : 0.4, marginTop: -3 }}
-                    />
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Rows */}
-        {filteredUsers.length === 0 ? (
-          <div className="flex items-center justify-center py-20">
-            <EmptyState
-              title="No users match your filters"
-              actionLabel="Clear filters"
-              onAction={() => setFilters([])}
-            />
-          </div>
-        ) : (
-          <div
-            ref={tableRef}
-            className="relative"
-            onMouseEnter={hoverHandlers.onMouseEnter}
-            onMouseMove={hoverHandlers.onMouseMove}
-            onMouseLeave={hoverHandlers.onMouseLeave}
-          >
-            <AnimatePresence>
-              {hoverRect && (
-                <motion.div
-                  key={hoverSession.current}
-                  className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.03]"
-                  initial={{ opacity: 0, ...hoverRect }}
-                  animate={{ opacity: 1, ...hoverRect }}
-                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
-                  transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
-                />
-              )}
-            </AnimatePresence>
-            {pagedUsers.map((user, i) => (
-              <UserRow key={user.handle} user={user} index={i} gridTemplate={gridTemplate} visibleColumns={visibleColumns} page={page} pageSize={pageSize} registerHover={registerHoverItem} onRowClick={() => router.push(`/admin/users/${user.name.toLowerCase().replace(/\s+/g, "")}`)} />
-            ))}
-          </div>
-        )}
-        </div>
-      </div>
-
-      {/* ---- Pagination Footer ---- */}
-      <div
-        className="flex flex-col sm:flex-row items-center justify-between shrink-0 px-4 gap-2 sm:gap-0 py-2 sm:py-0"
-        style={{
-          minHeight: 57,
-          background: "var(--bg)",
-          borderTop: "1px solid var(--border-color)",
-        }}
-      >
-        <span
-          style={{
-            fontSize: 14,
-            fontWeight: 400,
-            color: "var(--muted-fg)",
-            letterSpacing: "-0.18px",
-          }}
-        >
-          {filteredUsers.length === 0
-            ? "No results"
-            : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, filteredUsers.length)} of ${filteredUsers.length}`}
-        </span>
-
-        <div className="flex items-center gap-1">
-          {[
-            { name: "IconChevronDoubleLeft" as const, disabled: page === 0, onClick: () => setPage(0) },
-            { name: "IconChevronLeft" as const, disabled: page === 0, onClick: () => setPage(p => Math.max(0, p - 1)) },
-            { name: "IconChevronRight" as const, disabled: page >= totalPages - 1, onClick: () => setPage(p => Math.min(totalPages - 1, p + 1)) },
-            { name: "IconChevronDoubleRight" as const, disabled: page >= totalPages - 1, onClick: () => setPage(totalPages - 1) },
-          ].map((btn, idx) => (
-            <button
-              key={idx}
-              disabled={btn.disabled}
-              onClick={btn.onClick}
-              className="flex items-center justify-center rounded-md cursor-pointer disabled:cursor-default"
-              style={{
-                width: 32,
-                height: 32,
-                border: "none",
-                color: btn.disabled ? "var(--muted-fg)" : "var(--fg)",
-                background: "transparent",
-                opacity: btn.disabled ? 0.35 : 1,
-              }}
-            >
-              <CentralIcon name={btn.name} size={12} color={btn.disabled ? "var(--muted-fg)" : "var(--fg)"} {...ciProps} />
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* ---- Data Table (AdminTable) ---- */}
+      <AdminTable
+        columns={visibleColumns}
+        data={filteredUsers}
+        rowKey={(user) => user.handle}
+        renderCell={renderUserCell}
+        onRowClick={(user) => router.push(`/admin/users/${user.name.toLowerCase().replace(/\s+/g, "")}`)}
+        emptyTitle="No users match your filters"
+        emptyAction={{ label: "Clear filters", onClick: () => setFilters([]) }}
+      />
+      {/* Audit Log Sheet */}
+      {auditTarget && (
+        <AuditLogSheet
+          open={!!auditTarget}
+          onClose={() => setAuditTarget(null)}
+          entityType="user"
+          entityId={auditTarget.id}
+          entityTitle={auditTarget.name}
+        />
+      )}
     </div>
   );
 }
