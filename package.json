@@ -20,6 +20,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@floating-ui/react": "^0.27.19",
+    "@notionhq/client": "^5.17.0",
     "@number-flow/react": "^0.6.0",
     "@radix-ui/react-context-menu": "^2.2.16",
     "@radix-ui/react-navigation-menu": "^1.2.14",

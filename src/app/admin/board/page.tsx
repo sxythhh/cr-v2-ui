@@ -10,6 +10,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { CentralIcon } from "@central-icons-react/all";
+import { useNotionTasks, type NotionTask } from "@/hooks/use-notion-tasks";
 import {
   Sheet,
   SheetContent,
@@ -154,51 +155,48 @@ interface Column {
   tasks: Task[];
 }
 
-const INITIAL_COLUMNS: Column[] = [
-  {
-    id: "open",
-    label: "Open",
-    color: "#8D8D8D",
-    bgOverlay: "rgba(141,141,141,0.1)",
-    tasks: [
-      { id: "1", title: "Google Docs + Notion Integration for Blueprints" },
-      { id: "2", title: "Blueprint Templates" },
-      { id: "3", title: "Onboarding Webhooks sent to Discord/n8n" },
-      { id: "4", title: "Admin Dashboard" },
-      { id: "5", title: "Light Mode" },
-      { id: "6", title: "Whitelabel" },
-    ],
-  },
-  {
-    id: "in-progress",
-    label: "In Progress",
-    color: "#5A43D6",
-    bgOverlay: "rgba(90,67,214,0.05)",
-    tasks: [
-      { id: "7", title: "Invoices with Web App Database + Framer", hasAssignee: true, assigneeImg: "https://i.pravatar.cc/20?img=3" },
-      { id: "8", title: "Self Service Campaign Setup" },
-      { id: "9", title: "Improve Demographics Review Process" },
-      { id: "10", title: "virality.gg Landing Page", hasLink: true },
-      { id: "11", title: "Affiliate Program with Dub (for Virality)" },
-    ],
-  },
-  {
-    id: "needs-review",
-    label: "Needs Review",
-    color: "#ED5F00",
-    bgOverlay: "rgba(237,95,0,0.05)",
-    tasks: [
-      { id: "12", title: "Client Dashboard with Shortimize API", hasAssignee: true, assigneeImg: "https://i.pravatar.cc/20?img=5", date: "11/14/25", dateColor: "#C62A2F", hasPriority: true },
-    ],
-  },
-  {
-    id: "completed",
-    label: "Completed",
-    color: "#299764",
-    bgOverlay: "rgba(41,151,100,0.05)",
-    tasks: [],
-  },
+/* Column definitions — tasks are populated from Notion at runtime */
+const COLUMN_DEFS: Omit<Column, "tasks">[] = [
+  { id: "open", label: "To Do", color: "#8D8D8D", bgOverlay: "rgba(141,141,141,0.1)" },
+  { id: "in-progress", label: "In Progress", color: "#5A43D6", bgOverlay: "rgba(90,67,214,0.05)" },
+  { id: "needs-review", label: "Blocked", color: "#ED5F00", bgOverlay: "rgba(237,95,0,0.05)" },
+  { id: "completed", label: "Done", color: "#299764", bgOverlay: "rgba(41,151,100,0.05)" },
 ];
+
+const STATUS_TO_COL: Record<string, string> = {
+  "To Do": "open",
+  "In Progress": "in-progress",
+  "Blocked": "needs-review",
+  "Done": "completed",
+};
+
+const COL_TO_STATUS: Record<string, string> = {
+  "open": "To Do",
+  "in-progress": "In Progress",
+  "needs-review": "Blocked",
+  "completed": "Done",
+};
+
+function notionTaskToCard(nt: NotionTask): Task {
+  return {
+    id: nt.id,
+    title: nt.title,
+    hasAssignee: !!nt.owner,
+    hasDescription: !!nt.notes,
+    date: nt.dueDate ? new Date(nt.dueDate).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }) : undefined,
+  };
+}
+
+function buildColumns(notionTasks: NotionTask[]): Column[] {
+  return COLUMN_DEFS.map((col) => ({
+    ...col,
+    tasks: notionTasks
+      .filter((t) => (STATUS_TO_COL[t.status] ?? "open") === col.id)
+      .map(notionTaskToCard),
+  }));
+}
+
+const INITIAL_COLUMNS: Column[] = COLUMN_DEFS.map((c) => ({ ...c, tasks: [] }));
 
 // ─── Board Task Card Component ──────────────────────────────────────────────
 
@@ -380,8 +378,18 @@ export default function BoardPage() {
   const didDrag = useRef(false);
   const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
 
+  // ── Notion live data ──
+  const { tasks: notionTasks, loading: notionLoading, updateTask: notionUpdate, createTask: notionCreate, deleteTask: notionDelete } = useNotionTasks();
+
   // ── Drag-and-drop state ──
   const [columns, setColumns] = useState<Column[]>(INITIAL_COLUMNS);
+
+  // Sync Notion tasks into columns when they load
+  useEffect(() => {
+    if (notionTasks.length > 0) {
+      setColumns(buildColumns(notionTasks));
+    }
+  }, [notionTasks]);
 
   // ── Filtered columns (search) ──
   const filteredColumns = useMemo(() => {
@@ -531,6 +539,16 @@ export default function BoardPage() {
     };
 
     const handleMouseUp = () => {
+      // Sync status change to Notion if card moved to a different column
+      if (dragTask) {
+        const currentCol = columns.find((c) => c.tasks.some((t) => t.id === dragTask.id));
+        if (currentCol && currentCol.id !== dragTask.colId) {
+          const newStatus = COL_TO_STATUS[currentCol.id];
+          if (newStatus) {
+            notionUpdate(dragTask.id, { status: newStatus }).catch(() => {});
+          }
+        }
+      }
       setDragTask(null);
       setDragPos(null);
       setDropTarget(null);
@@ -551,6 +569,13 @@ export default function BoardPage() {
   return (
     <div className="flex flex-col h-full" style={{ color: "var(--fg)" }}>
 
+      {/* Notion loading indicator */}
+      {notionLoading && (
+        <div className="flex h-8 shrink-0 items-center justify-center gap-2 border-b text-[12px]" style={{ borderColor: "var(--border-color)", background: "rgba(246,133,15,0.04)", color: "#f6850f" }}>
+          <div className="size-3 animate-spin rounded-full border border-transparent border-t-[#f6850f]" />
+          Syncing from Notion...
+        </div>
+      )}
 
       {/* Settings Bar */}
       <div
@@ -1011,6 +1036,9 @@ export default function BoardPage() {
           setColumns((prev) => prev.map((col) =>
             col.id === createColId ? { ...col, tasks: [...col.tasks, newTask] } : col
           ));
+          // Sync to Notion
+          const notionStatus = COL_TO_STATUS[createColId] ?? "To Do";
+          notionCreate({ title, status: notionStatus, area: "Other", owner: "", dueDate: null, notes: (form.elements.namedItem("desc") as HTMLTextAreaElement).value.trim() }).catch(() => {});
           setCreateOpen(false);
         }}>
           <ModalHeader>

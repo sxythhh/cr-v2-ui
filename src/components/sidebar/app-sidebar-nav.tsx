@@ -169,6 +169,7 @@ const NAV_AREAS: SidebarNavAreas = {
           { name: "Refunds", icon: makeCentralIcon("IconArrowRotateLeftRight", "Refunds"), href: "/admin/refunds", description: "Review and process pending refunds." },
           { name: "Super Admin", icon: makeCentralIcon("IconCircleCheck", "SuperAdmin"), href: "/admin/super-admin", description: "Submissions, payouts, and platform management." },
           { name: "Audit History", icon: makeCentralIcon("IconClock", "AuditHistory"), href: "/admin/audit-history", description: "Platform audit log." },
+          { name: "Notion", icon: makeCentralIcon("IconReceiptBill", "Notion"), href: "/admin/notion", description: "Browse and edit Notion workspace." },
           { name: "Settings", icon: Gear, href: "/admin/settings", description: "Admin settings and integrations." },
         ],
       },

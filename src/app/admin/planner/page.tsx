@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { CentralIcon } from "@central-icons-react/all";
+import { useNotionTasks, type NotionTask } from "@/hooks/use-notion-tasks";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import {
   DropdownMenu,
@@ -37,19 +38,22 @@ const ganttStatuses = {
   planned: { id: "planned", name: "Planned", color: "#ED5F00" },
 };
 
+/* Gantt data sourced from Notion — Growth Tasks + V2.0 Tasks */
 const initialGanttFeatures: GanttFeature[] = (() => {
   const now = new Date();
   const y = now.getFullYear();
   const m = now.getMonth();
   return [
-    { id: "g1", name: "Research & Discovery", startAt: new Date(y, m - 1, 5), endAt: new Date(y, m - 1, 20), status: ganttStatuses.done },
-    { id: "g2", name: "Wireframe Design", startAt: new Date(y, m - 1, 15), endAt: new Date(y, m, 2), status: ganttStatuses.done },
-    { id: "g3", name: "API Architecture", startAt: new Date(y, m, 1), endAt: new Date(y, m, 15), status: ganttStatuses.inProgress },
-    { id: "g4", name: "Frontend Build", startAt: new Date(y, m, 5), endAt: new Date(y, m, 25), status: ganttStatuses.inProgress },
-    { id: "g5", name: "Backend Services", startAt: new Date(y, m, 8), endAt: new Date(y, m + 1, 5), status: ganttStatuses.inProgress },
-    { id: "g6", name: "Integration Testing", startAt: new Date(y, m + 1, 1), endAt: new Date(y, m + 1, 15), status: ganttStatuses.planned },
-    { id: "g7", name: "Performance Audit", startAt: new Date(y, m + 1, 10), endAt: new Date(y, m + 1, 22), status: ganttStatuses.planned },
-    { id: "g8", name: "Launch & Deploy", startAt: new Date(y, m + 1, 20), endAt: new Date(y, m + 1, 28), status: ganttStatuses.planned },
+    { id: "g1", name: "Update hiring page copy", startAt: new Date(y, m - 1, 25), endAt: new Date(y, m, 10), status: ganttStatuses.done },
+    { id: "g2", name: "Transition CPM pages to brand pages", startAt: new Date(y, m, 1), endAt: new Date(y, m, 15), status: ganttStatuses.inProgress },
+    { id: "g3", name: "Twitter outreach (100 messages)", startAt: new Date(y, m, 5), endAt: new Date(y, m, 14), status: ganttStatuses.inProgress },
+    { id: "g4", name: "API docs v2", startAt: new Date(y, m, 8), endAt: new Date(y, m, 16), status: ganttStatuses.inProgress },
+    { id: "g5", name: "Creator onboarding video", startAt: new Date(y, m, 10), endAt: new Date(y, m, 13), status: ganttStatuses.inProgress },
+    { id: "g6", name: "Campaign automations", startAt: new Date(y, m, 14), endAt: new Date(y, m, 20), status: ganttStatuses.planned },
+    { id: "g7", name: "Set up PostHog funnels", startAt: new Date(y, m, 15), endAt: new Date(y, m, 19), status: ganttStatuses.planned },
+    { id: "g8", name: "Brand outreach - warm intros", startAt: new Date(y, m, 16), endAt: new Date(y, m, 22), status: ganttStatuses.planned },
+    { id: "g9", name: "Design system token audit", startAt: new Date(y, m, 18), endAt: new Date(y, m, 22), status: ganttStatuses.planned },
+    { id: "g10", name: "Yapping course", startAt: new Date(y, m + 1, 1), endAt: new Date(y, m + 1, 10), status: ganttStatuses.planned },
   ];
 })();
 
@@ -108,31 +112,20 @@ const HOUR_COUNT = 15;
 
 /* ── Initial Tasks ── */
 
+/* Data sourced from Notion — Growth Tasks database
+   Schema: Task, Status (To Do / In Progress / Done / Blocked), Area, Owner, Due Date, Notes */
+/* No hardcoded tasks — all populated from Notion at runtime.
+   Only calendar events are pre-scheduled below. */
 const INITIAL_TASKS: PlannerTask[] = [
-  { id: "1", title: "Invoices with Web App Database + Framer", status: "in-progress", statusColor: "#5A43D6", section: "priorities", duration: 1.5, description: "Integrate invoice generation using the web app database and Framer components" },
-  { id: "2", title: "Virality TOS and Privacy Policy", status: "in-progress", statusColor: "#5A43D6", section: "priorities", duration: 1, description: "Draft and review terms of service and privacy policy documents" },
-  { id: "3", title: "Self Service Campaign Setup", status: "in-progress", statusColor: "#ED5F00", section: "priorities", duration: 2, description: "Build the self-service campaign creation flow for brands" },
-  { id: "4", title: "Call Emberly", status: "open", section: "meetWith", duration: 0.5 },
-  { id: "5", title: "Sync with David", status: "open", section: "meetWith", duration: 0.5 },
-  { id: "6", title: "Client Dashboard Review", status: "in-progress", statusColor: "#5A43D6", section: "assignedToMe", duration: 1, description: "Review the latest client dashboard designs and provide feedback" },
-  { id: "7", title: "Landing Page Copy Review", status: "open", section: "assignedToMe", duration: 1 },
-  { id: "8", title: "Order Twister", status: "open", section: "todayOverdue", duration: 0.5, automationLabel: "1h" },
-  { id: "9", title: "Fix payment webhook", status: "open", section: "todayOverdue", duration: 1, description: "Debug and fix the Stripe webhook handler for failed payments" },
-  { id: "10", title: "Design system audit", status: "open", section: "backlog", duration: 2, description: "Audit all components against the design system for consistency" },
-  { id: "11", title: "Implement dark mode for emails", status: "open", section: "backlog", duration: 1.5 },
-  { id: "12", title: "Write API documentation", status: "open", section: "backlog", duration: 2 },
-  { id: "13", title: "Refactor auth middleware", status: "open", section: "backlog", duration: 1 },
-  { id: "14", title: "Add analytics tracking", status: "open", section: "backlog", duration: 1 },
-  { id: "15", title: "Update onboarding flow", status: "open", section: "backlog", duration: 1.5 },
   // Pre-scheduled events (relative to current week)
   ...(() => {
     const mon = getMonday(new Date());
     return [
-      { id: "s1", title: "Team standup", status: "in-progress" as const, statusColor: "#5A43D6", section: "priorities" as const, duration: 0.5, scheduledDate: addDays(mon, 0), scheduledHour: 9 },
-      { id: "s2", title: "Sprint planning", status: "in-progress" as const, statusColor: "#ED5F00", section: "priorities" as const, duration: 1.5, scheduledDate: addDays(mon, 0), scheduledHour: 14 },
-      { id: "s3", title: "Design review", status: "open" as const, section: "assignedToMe" as const, duration: 1, scheduledDate: addDays(mon, 2), scheduledHour: 11 },
-      { id: "s4", title: "Q2 Roadmap Discussion", status: "in-progress" as const, statusColor: "#5A43D6", section: "priorities" as const, duration: 2, scheduledDate: addDays(mon, 3), scheduledHour: 10, spanDays: 1 },
-      { id: "s5", title: "1:1 with Manager", status: "open" as const, section: "meetWith" as const, duration: 0.5, scheduledDate: addDays(mon, 4), scheduledHour: 15 },
+      { id: "s1", title: "Growth sync — outreach review", status: "in-progress" as const, statusColor: "#5A43D6", section: "priorities" as const, duration: 0.5, scheduledDate: addDays(mon, 0), scheduledHour: 9 },
+      { id: "s2", title: "Sprint planning — V2.0 tasks", status: "in-progress" as const, statusColor: "#ED5F00", section: "priorities" as const, duration: 1.5, scheduledDate: addDays(mon, 0), scheduledHour: 14 },
+      { id: "s3", title: "CPM migration review with Ivelin", status: "open" as const, section: "assignedToMe" as const, duration: 1, scheduledDate: addDays(mon, 2), scheduledHour: 11 },
+      { id: "s4", title: "Brand partnership calls", status: "in-progress" as const, statusColor: "#5A43D6", section: "priorities" as const, duration: 2, scheduledDate: addDays(mon, 3), scheduledHour: 10, spanDays: 1 },
+      { id: "s5", title: "Sync with Matt on Twitter outreach", status: "open" as const, section: "meetWith" as const, duration: 0.5, scheduledDate: addDays(mon, 4), scheduledHour: 15 },
     ];
   })(),
 ];
@@ -231,13 +224,68 @@ function CalendarEvent({ task, dayWidth, onDragStart, onResizeStart, onSpanResiz
 /*  Page Component                                               */
 /* ══════════════════════════════════════════════════════════════ */
 
+function notionToPlannerTasks(notionTasks: NotionTask[]): PlannerTask[] {
+  const mon = getMonday(new Date());
+  return notionTasks.map((nt, i) => {
+    const status: PlannerTask["status"] =
+      nt.status === "Done" ? "completed" :
+      nt.status === "In Progress" ? "in-progress" : "open";
+    const statusColor = nt.status === "In Progress" ? "#5A43D6" : nt.status === "Blocked" ? "#ED5F00" : undefined;
+    const isOverdue = nt.dueDate && new Date(nt.dueDate) < new Date() && nt.status !== "Done";
+    const section: PlannerTask["section"] =
+      nt.status === "Blocked" || isOverdue ? "todayOverdue" :
+      nt.status === "In Progress" ? "priorities" :
+      nt.status === "Done" ? "backlog" : "assignedToMe";
+    return {
+      id: nt.id,
+      title: nt.title,
+      status,
+      statusColor,
+      section,
+      duration: 1,
+      description: [nt.notes, nt.owner ? `Owner: ${nt.owner}` : ""].filter(Boolean).join(" — ") || undefined,
+    };
+  });
+}
+
+function notionToGantt(notionTasks: NotionTask[]): GanttFeature[] {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  return notionTasks
+    .filter((t) => t.status !== "Done")
+    .map((nt, i) => {
+      const start = nt.dueDate ? new Date(new Date(nt.dueDate).getTime() - 5 * 86400000) : new Date(y, m, 1 + i * 3);
+      const end = nt.dueDate ? new Date(nt.dueDate) : new Date(start.getTime() + 7 * 86400000);
+      const status =
+        nt.status === "In Progress" ? ganttStatuses.inProgress :
+        nt.status === "Done" ? ganttStatuses.done : ganttStatuses.planned;
+      return { id: nt.id, name: nt.title, startAt: start, endAt: end, status };
+    });
+}
+
 export default function PlannerPage() {
   const [tasks, setTasks] = useState<PlannerTask[]>(INITIAL_TASKS);
+  const { tasks: notionTasks, loading: notionLoading } = useNotionTasks();
   const [weekStart, setWeekStart] = useState(() => getMonday(new Date()));
   // Ensure we're on the correct week after hydration
   useEffect(() => { setWeekStart(getMonday(new Date())); }, []);
   const [viewMode, setViewMode] = useState<ViewMode>("week");
   const [ganttFeatures, setGanttFeatures] = useState<GanttFeature[]>(initialGanttFeatures);
+
+  // Sync Notion tasks into planner + gantt when they load
+  useEffect(() => {
+    if (notionTasks.length > 0) {
+      const mon = getMonday(new Date());
+      const plannerTasks = notionToPlannerTasks(notionTasks);
+      // Keep scheduled calendar events, replace sidebar tasks
+      setTasks((prev) => {
+        const scheduled = prev.filter((t) => t.scheduledDate);
+        return [...plannerTasks, ...scheduled];
+      });
+      setGanttFeatures(notionToGantt(notionTasks));
+    }
+  }, [notionTasks]);
   const handleGanttMove = (id: string, startAt: Date, endAt: Date | null) => {
     setGanttFeatures((prev) => prev.map((f) => f.id === id ? { ...f, startAt, endAt: endAt ?? f.endAt } : f));
   };
