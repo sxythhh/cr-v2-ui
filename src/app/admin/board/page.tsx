@@ -10,7 +10,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { CentralIcon } from "@central-icons-react/all";
-import { useNotionTasks, type NotionTask } from "@/hooks/use-notion-tasks";
+import { useBoardTasks } from "@/hooks/use-board-tasks";
+import type { BoardTask, DataSource } from "@/types/board-task";
 import {
   Sheet,
   SheetContent,
@@ -177,22 +178,22 @@ const COL_TO_STATUS: Record<string, string> = {
   "completed": "Done",
 };
 
-function notionTaskToCard(nt: NotionTask): Task {
+function taskToCard(t: BoardTask): Task {
   return {
-    id: nt.id,
-    title: nt.title,
-    hasAssignee: !!nt.owner,
-    hasDescription: !!nt.notes,
-    date: nt.dueDate ? new Date(nt.dueDate).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }) : undefined,
+    id: t.id,
+    title: t.title,
+    hasAssignee: !!t.owner,
+    hasDescription: !!t.notes,
+    date: t.dueDate ? new Date(t.dueDate).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }) : undefined,
   };
 }
 
-function buildColumns(notionTasks: NotionTask[]): Column[] {
+function buildColumns(boardTasks: BoardTask[]): Column[] {
   return COLUMN_DEFS.map((col) => ({
     ...col,
-    tasks: notionTasks
+    tasks: boardTasks
       .filter((t) => (STATUS_TO_COL[t.status] ?? "open") === col.id)
-      .map(notionTaskToCard),
+      .map(taskToCard),
   }));
 }
 
@@ -378,18 +379,29 @@ export default function BoardPage() {
   const didDrag = useRef(false);
   const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
 
-  // ── Notion live data ──
-  const { tasks: notionTasks, loading: notionLoading, updateTask: notionUpdate, createTask: notionCreate, deleteTask: notionDelete } = useNotionTasks();
+  // ── Data source ──
+  const [dataSource, setDataSource] = useState<DataSource>("notion");
+  const { tasks: boardTasks, loading: boardLoading, error: boardError, updateTask: boardUpdate, createTask: boardCreate, deleteTask: boardDelete, refetch: boardRefetch } = useBoardTasks(dataSource);
 
   // ── Drag-and-drop state ──
   const [columns, setColumns] = useState<Column[]>(INITIAL_COLUMNS);
 
-  // Sync Notion tasks into columns when they load
+  // Sync tasks into columns when they load, or reset when empty/switching
   useEffect(() => {
-    if (notionTasks.length > 0) {
-      setColumns(buildColumns(notionTasks));
+    if (boardTasks.length > 0) {
+      setColumns(buildColumns(boardTasks));
+    } else if (!boardLoading) {
+      setColumns(INITIAL_COLUMNS);
     }
-  }, [notionTasks]);
+  }, [boardTasks, boardLoading]);
+
+  // Toast + reset on data source switch
+  const handleSourceSwitch = useCallback((source: DataSource) => {
+    if (source === dataSource) return;
+    setColumns(INITIAL_COLUMNS);
+    setDataSource(source);
+    toast(`Switched to ${source === "notion" ? "Notion" : "Trello"}`);
+  }, [dataSource, toast]);
 
   // ── Filtered columns (search) ──
   const filteredColumns = useMemo(() => {
@@ -545,7 +557,7 @@ export default function BoardPage() {
         if (currentCol && currentCol.id !== dragTask.colId) {
           const newStatus = COL_TO_STATUS[currentCol.id];
           if (newStatus) {
-            notionUpdate(dragTask.id, { status: newStatus }).catch(() => {});
+            boardUpdate(dragTask.id, { status: newStatus }).catch(() => {});
           }
         }
       }
@@ -569,11 +581,27 @@ export default function BoardPage() {
   return (
     <div className="flex flex-col h-full" style={{ color: "var(--fg)" }}>
 
-      {/* Notion loading indicator */}
-      {notionLoading && (
+      {/* Loading indicator */}
+      {boardLoading && (
         <div className="flex h-8 shrink-0 items-center justify-center gap-2 border-b text-[12px]" style={{ borderColor: "var(--border-color)", background: "rgba(246,133,15,0.04)", color: "#f6850f" }}>
           <div className="size-3 animate-spin rounded-full border border-transparent border-t-[#f6850f]" />
-          Syncing from Notion...
+          Syncing from {dataSource === "notion" ? "Notion" : "Trello"}...
+        </div>
+      )}
+
+      {/* Error banner */}
+      {boardError && !boardLoading && (
+        <div className="flex h-9 shrink-0 items-center justify-center gap-2 border-b text-[12px]" style={{ borderColor: "var(--border-color)", background: "rgba(255,37,37,0.06)", color: "#FF2525" }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#FF2525" strokeWidth="1.5"/><path d="M7 4v3.5M7 9.5v.5" stroke="#FF2525" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          {dataSource === "trello" && boardError.includes("400")
+            ? "Trello not configured. Add credentials in Settings \u2192 Integrations."
+            : `Failed to sync from ${dataSource === "notion" ? "Notion" : "Trello"}: ${boardError}`}
+          <button
+            onClick={() => boardRefetch()}
+            className="ml-2 cursor-pointer rounded-full bg-[#FF2525]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#FF2525] transition-colors hover:bg-[#FF2525]/20"
+          >
+            Retry
+          </button>
         </div>
       )}
 
@@ -592,6 +620,16 @@ export default function BoardPage() {
           <DropdownItem icon={<CentralIcon name="IconUser" size={15} color="var(--fg)" {...CI} />} label="Assignee" />
           <DropdownItem icon={<CentralIcon name="IconCalendar1" size={15} color="var(--fg)" {...CI} />} label="Due date" />
           <DropdownItem icon={<CentralIcon name="IconMinusSmall" size={15} color="var(--fg)" {...CI} />} label="None" />
+        </BoardDropdown>
+
+        <BoardDropdown trigger={
+          <div className="h-[24px] flex items-center gap-1 px-2.5 rounded-[12px] cursor-pointer" style={{ fontSize: "12px", fontWeight: 500, color: dataSource === "trello" ? "#0079BF" : "#f6850f", backgroundColor: dataSource === "trello" ? "rgba(0,121,191,0.12)" : "rgba(246,133,15,0.12)" }}>
+            <CentralIcon name="IconChainLink1" size={12} color={dataSource === "trello" ? "#0079BF" : "#f6850f"} {...CI} />
+            Source: {dataSource === "notion" ? "Notion" : "Trello"}
+          </div>
+        }>
+          <DropdownItem icon={<span style={{ fontSize: 14 }}>📝</span>} label="Notion" active={dataSource === "notion"} onClick={() => handleSourceSwitch("notion")} />
+          <DropdownItem icon={<span style={{ fontSize: 14 }}>📋</span>} label="Trello" active={dataSource === "trello"} onClick={() => handleSourceSwitch("trello")} />
         </BoardDropdown>
 
         <BoardDropdown trigger={
@@ -1036,9 +1074,9 @@ export default function BoardPage() {
           setColumns((prev) => prev.map((col) =>
             col.id === createColId ? { ...col, tasks: [...col.tasks, newTask] } : col
           ));
-          // Sync to Notion
-          const notionStatus = COL_TO_STATUS[createColId] ?? "To Do";
-          notionCreate({ title, status: notionStatus, area: "Other", owner: "", dueDate: null, notes: (form.elements.namedItem("desc") as HTMLTextAreaElement).value.trim() }).catch(() => {});
+          // Sync to backend
+          const taskStatus = COL_TO_STATUS[createColId] ?? "To Do";
+          boardCreate({ title, status: taskStatus, area: "Other", owner: "", dueDate: null, notes: (form.elements.namedItem("desc") as HTMLTextAreaElement).value.trim() }).catch(() => {});
           setCreateOpen(false);
         }}>
           <ModalHeader>

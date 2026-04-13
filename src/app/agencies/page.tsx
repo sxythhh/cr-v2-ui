@@ -10,6 +10,8 @@ import { Megaphone } from "@/components/sidebar/icons/megaphone";
 import { GlassFilterPill } from "@/components/ui/glass-filter-pill";
 import { ChevronDown } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { StarRating } from "@/components/agency/StarRating";
+import { AgencyBookingWidget } from "@/components/agency/AgencyBookingWidget";
 
 /* ─── Gold verified icon with tooltip ─── */
 function GoldVerified({ size = 14 }: { size?: number }) {
@@ -59,6 +61,8 @@ const AGENCY_DETAIL = {
   totalSubmissions: "750",
   startingAt: "$1,500/mo",
   minBudget: "$10,000",
+  website: "https://billbord.com",
+  services: ["Logo Placement", "Clipping", "Reposting", "UGC"],
   campaigns: [
     { name: "Harry Styles Podcast x Shania Twain Clipping [7434]", brand: "Sound Network", brandLogo: "/creator-home/brand-logo-1.png", thumb: "/creator-home/campaign-thumb-1.png", time: "2h", platforms: ["tiktok", "instagram"], category: "Personal brand", members: "121.4K", cpm: "$1.50/1k", earned: "$8,677", total: "$37,500", progress: 27 },
     { name: "Call of Duty BO7 Official Clipping Campaign", brand: "Clipping Culture", brandLogo: "/creator-home/brand-logo-2.png", thumb: "/creator-home/campaign-thumb-2.png", time: "2d", platforms: ["tiktok", "instagram"], category: "Gaming", members: "121.4K", cpm: "$1.50/1k", earned: "$8,677", total: "$37,500", progress: 27 },
@@ -391,6 +395,7 @@ export default function AgenciesPage() {
   const [specialty, setSpecialty] = useState("");
   const [status, setStatus] = useState("");
   const [sort, setSort] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const detail = selectedAgency ? AGENCY_DETAIL : null;
 
@@ -400,19 +405,21 @@ export default function AgenciesPage() {
       <div className="min-h-screen bg-page-bg font-inter">
         <AnnouncementBanner />
         <DubNav />
-        <div className="mx-auto max-w-[1024px] px-4 py-8 sm:px-6">
+
+        {/* Sticky back header — full width */}
+        <div className="sticky top-14 z-10 border-b border-foreground/[0.06] bg-page-bg">
+          <div className="mx-auto flex h-12 max-w-[1024px] items-center px-4 sm:px-6">
+            <button onClick={() => setSelectedAgency(null)} className="flex cursor-pointer items-center gap-2 text-sm font-medium tracking-[-0.02em] text-page-text transition-opacity hover:opacity-70">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" /><path d="M5 12l6 6" /><path d="M5 12l6-6" />
+              </svg>
+              Back to agencies
+            </button>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-[1024px] px-4 py-6 sm:px-6">
           <div className="flex flex-col gap-6 tracking-[-0.02em]">
-            {/* Sticky back header */}
-            <div className="sticky top-14 z-10 -mx-4 border-b border-foreground/[0.06] bg-page-bg px-4 sm:-mx-6 sm:px-6">
-              <div className="flex h-12 items-center">
-                <button onClick={() => setSelectedAgency(null)} className="flex cursor-pointer items-center gap-2 text-sm font-medium tracking-[-0.02em] text-page-text transition-opacity hover:opacity-70">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" /><path d="M5 12l6 6" /><path d="M5 12l6-6" />
-                  </svg>
-                  Back to agencies
-                </button>
-              </div>
-            </div>
 
             {/* Content */}
             <div className="flex flex-1 flex-col gap-6 overflow-hidden md:flex-row md:gap-6">
@@ -470,96 +477,61 @@ export default function AgenciesPage() {
                 </div>
               </div>
 
-              {/* Right column — profile + contact */}
-              <div className="relative w-full md:w-[340px] md:shrink-0">
-                <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
-                  {/* Cover */}
-                  <div className="-mx-4 -mt-4">
-                    <div className="p-0">
-                      <div
-                        className="h-[168px] w-full rounded-t-2xl bg-cover bg-center"
-                        style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%), url(${detail.cover})` }}
-                      >
-                      </div>
+              {/* Right column — identity + rating + booking */}
+              <div className="relative flex w-full flex-col gap-6 md:w-[400px] md:shrink-0">
+                {/* Agency identity */}
+                <div className="flex items-center gap-4">
+                  <img src={detail.logo} alt="" className="size-14 rounded-xl border-2 border-foreground/[0.06] object-cover" />
+                  <h1 className="text-3xl font-semibold tracking-[-0.04em] text-page-text sm:text-4xl">
+                    {detail.name}
+                  </h1>
+                  <GoldVerified size={18} />
+                </div>
+
+                {/* Star rating */}
+                <div className="flex flex-col gap-1.5">
+                  <StarRating count={detail.rating} />
+                  <span className="text-sm font-medium tracking-[-0.02em] text-page-text-muted">
+                    Reviewed by {detail.reviewCount} users worldwide
+                  </span>
+                </div>
+
+                {/* Pricing + website row */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-5">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-page-text-muted">Starting at</span>
+                      <span className="text-sm font-semibold tracking-[-0.02em] text-page-text">{detail.startingAt}</span>
+                    </div>
+                    <div className="h-7 w-px bg-foreground/[0.06]" />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-page-text-muted">Min. budget</span>
+                      <span className="text-sm font-semibold tracking-[-0.02em] text-page-text">{detail.minBudget}</span>
                     </div>
                   </div>
+                  <a
+                    href={detail.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-xl border border-foreground/[0.06] px-3.5 py-2 text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.04]"
+                  >
+                    {new URL(detail.website).hostname.replace(/^www\./, "")}
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 6.5v3a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1H5.5M7.5 1.5h3v3M5 7l5.5-5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </a>
+                </div>
 
-                  {/* Logo + name */}
-                  <div className="flex items-center gap-3 px-4 -mt-2">
-                    <div className="relative -mt-4">
-                      <img src={detail.logo} alt="" className="size-12 rounded-[10px] border-2 border-white object-cover dark:border-card-bg" />
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-base font-medium tracking-[-0.02em] text-page-text">{detail.name}</span>
-                      <GoldVerified size={14} />
-                    </div>
-                  </div>
+                {/* Services */}
+                <div className="flex flex-wrap gap-1">
+                  {detail.services.map((s) => (
+                    <span key={s} className="rounded-full border border-foreground/[0.06] px-2.5 py-1 text-xs font-semibold tracking-[-0.02em] text-page-text">
+                      {s}
+                    </span>
+                  ))}
+                </div>
 
-                  {/* Review + website */}
-                  <div className={cn("flex items-center gap-3 rounded-[10px] border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)]")}>
-                    <div className="flex flex-1 flex-col gap-1">
-                      <div className="flex items-center">
-                        {Array.from({ length: 5 }, (_, i) => (
-                          <svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M8 1.333l1.947 3.947 4.386.64-3.173 3.093.747 4.36L8 11.373l-3.907 2-0.747-4.36L.173 5.92l4.387-.64L8 1.333Z" fill="#FACC15" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">Reviewed by {detail.reviewCount} users worldwide</span>
-                    </div>
-                    <button className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.02em] text-page-text dark:bg-white/[0.06]">
-                      View website
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M9 6.5v3a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1H5.5M7.5 1.5h3v3M5 7l5.5-5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]" />
-
-                  {/* Contact form */}
-                  <div className="flex flex-col gap-4">
-                    <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Get in touch</span>
-
-                    <div className="flex flex-col gap-2">
-                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Name</span>
-                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="Jane" />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Email</span>
-                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="jane@company.com" />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Phone</span>
-                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="+1 (555) 123-4567" />
-                    </div>
-
-                    {/* Terms checkbox */}
-                    <button type="button" onClick={() => setTermsAccepted(!termsAccepted)} className="flex cursor-pointer items-start gap-2 text-left">
-                      <div className={cn(
-                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors",
-                        termsAccepted
-                          ? "border-[#FF8003] bg-[#FF8003]"
-                          : "border-foreground/15 bg-white shadow-[0px_-1px_3px_rgba(0,0,0,0.06),inset_0px_0.5px_2px_rgba(0,0,0,0.08)] dark:bg-card-bg",
-                      )}>
-                        {termsAccepted && (
-                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                      </div>
-                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">
-                        By proceeding, you agree to our Terms and Brand Policy.
-                      </span>
-                    </button>
-
-                    <button className="rounded-full bg-page-text py-2.5 text-sm font-medium tracking-[-0.02em] text-white opacity-50 dark:bg-white dark:text-[#151515]">
-                      Continue
-                    </button>
-                  </div>
+                {/* Booking widget (from clipper) */}
+                <div className={cn(cardCls, "p-5")}>
+                  <AgencyBookingWidget />
                 </div>
               </div>
             </div>

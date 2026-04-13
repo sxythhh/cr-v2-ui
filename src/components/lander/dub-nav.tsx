@@ -967,10 +967,10 @@ export function DubNav({
           {/* Scrolled background */}
           <div
             className={cn(
-              "absolute inset-0 block border-b border-transparent transition-all duration-500 ease-out",
+              "absolute inset-0 block border-b border-foreground/[0.06] transition-all duration-500 ease-out",
               !transparent && !scrolled && "bg-white dark:bg-[#111111]",
               scrolled &&
-                "border-foreground/[0.06] bg-white/75 backdrop-blur-lg dark:bg-[rgba(17,17,17,0.85)]"
+                "bg-white/75 backdrop-blur-lg dark:bg-[rgba(17,17,17,0.85)]"
             )}
           />
           <div className={cn("relative mx-auto w-full max-w-screen-xl px-3 lg:px-10")}>
@@ -998,7 +998,7 @@ export function DubNav({
                 <Link
                   href="https://app.dub.co/login"
                   className={cn(
-                    "flex h-8 items-center rounded-lg border px-4 text-sm transition-all",
+                    "flex h-9 items-center rounded-lg border px-4 text-sm transition-all",
                     buttonVariantStyles.secondary,
                     "dark:border-white/[0.06] dark:bg-[#111111] dark:text-white dark:hover:bg-neutral-900"
                   )}
@@ -1007,7 +1007,7 @@ export function DubNav({
                 </Link>
                 <Link
                   href="https://app.dub.co/register"
-                  className="flex h-8 items-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90"
+                  className="flex h-9 items-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90"
                   style={{
                     fontFamily: "var(--font-abc-oracle), sans-serif",
                     background: "#FF8003",

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BannerSlideIndicator } from "./BannerSlideIndicator";
+// Inline slide indicator (replaces BannerSlideIndicator)
 
 import type { AgencyCampaign, CampaignStats } from "./types";
 
@@ -57,11 +57,10 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
           onClick={(e) => e.stopPropagation()}
           className="absolute z-20 top-4 right-4 flex items-center justify-center size-10 rounded-full border border-white/15 hover:bg-white/10 hover:border-white/30 active:scale-[0.96] transition-[transform,background,border-color] duration-150 ease-[cubic-bezier(0.165,0.84,0.44,1)]"
           aria-label="View campaign details"
-          title="View campaign details"
         >
           <Image
             src="/icons/svg/circle-info.svg"
-            alt="Info"
+            alt=""
             width={20}
             height={20}
             className="opacity-[0.72]"
@@ -77,16 +76,10 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
           </span>
 
           {campaigns.length > 1 && (
-            <div
-              className="relative z-10 [&_button]:!bg-white"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <BannerSlideIndicator
-                count={campaigns.length}
-                activeIndex={activeIndex}
-                onSelect={setActiveIndex}
-                className="p-0"
-              />
+            <div className="relative z-10 flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+              {campaigns.map((_, i) => (
+                <button key={i} type="button" onClick={() => setActiveIndex(i)} className={`h-1.5 rounded-full transition-all ${i === activeIndex ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} />
+              ))}
             </div>
           )}
         </div>

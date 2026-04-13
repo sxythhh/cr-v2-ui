@@ -107,6 +107,13 @@ export default function AdminSettingsPage() {
   const [ipWhitelist, setIpWhitelist] = useState(false);
   const [auditRetention, setAuditRetention] = useState("90");
 
+  // Trello config
+  const [trelloConfigOpen, setTrelloConfigOpen] = useState(false);
+  const [trelloApiKey, setTrelloApiKey] = useState("");
+  const [trelloToken, setTrelloToken] = useState("");
+  const [trelloBoardId, setTrelloBoardId] = useState("");
+  const [trelloTesting, setTrelloTesting] = useState(false);
+
   return (
     <div>
       {/* Top nav */}
@@ -246,33 +253,145 @@ export default function AdminSettingsPage() {
 
         {/* Integrations */}
         {selectedIndex === 3 && (
-          <SettingSection title="Connected Services">
-            {[
-              { name: "Stripe", description: "Payment processing", connected: true, icon: "💳" },
-              { name: "PayPal", description: "Alternative payouts", connected: true, icon: "🅿️" },
-              { name: "Slack", description: "Team notifications", connected: false, icon: "💬" },
-              { name: "Notion", description: "Task management sync", connected: true, icon: "📝" },
-              { name: "Google Analytics", description: "Traffic and conversion tracking", connected: false, icon: "📊" },
-            ].map((svc) => (
-              <SettingRow key={svc.name} label={`${svc.icon}  ${svc.name}`} description={svc.description}>
-                {svc.connected ? (
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1 text-xs font-medium text-[#00B259]">
-                      <span className="size-1.5 rounded-full bg-[#00B259]" />
-                      Connected
-                    </span>
-                    <button className="h-8 cursor-pointer rounded-lg border border-border bg-transparent px-3 text-xs font-medium text-page-text-muted transition-colors hover:bg-foreground/[0.04]">
-                      Disconnect
+          <>
+            <SettingSection title="Connected Services">
+              {[
+                { name: "Stripe", description: "Payment processing", connected: true, icon: "💳" },
+                { name: "PayPal", description: "Alternative payouts", connected: true, icon: "🅿️" },
+                { name: "Slack", description: "Team notifications", connected: false, icon: "💬" },
+                { name: "Notion", description: "Task management sync", connected: true, icon: "📝" },
+                { name: "Trello", description: "Kanban board sync", connected: false, icon: "📋", configurable: true },
+                { name: "Google Analytics", description: "Traffic and conversion tracking", connected: false, icon: "📊" },
+              ].map((svc) => (
+                <SettingRow key={svc.name} label={`${svc.icon}  ${svc.name}`} description={svc.description}>
+                  {svc.connected ? (
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1 text-xs font-medium text-[#00B259]">
+                        <span className="size-1.5 rounded-full bg-[#00B259]" />
+                        Connected
+                      </span>
+                      <button className="h-8 cursor-pointer rounded-lg border border-border bg-transparent px-3 text-xs font-medium text-page-text-muted transition-colors hover:bg-foreground/[0.04]">
+                        Disconnect
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => { if (svc.configurable) setTrelloConfigOpen(true); }}
+                      className="h-8 cursor-pointer rounded-lg bg-foreground/[0.06] px-3 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10]"
+                    >
+                      Connect
                     </button>
-                  </div>
-                ) : (
-                  <button className="h-8 cursor-pointer rounded-lg bg-foreground/[0.06] px-3 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10]">
-                    Connect
-                  </button>
-                )}
-              </SettingRow>
-            ))}
-          </SettingSection>
+                  )}
+                </SettingRow>
+              ))}
+            </SettingSection>
+
+            {/* Trello Configuration Modal */}
+            <Modal open={trelloConfigOpen} onClose={() => setTrelloConfigOpen(false)}>
+              <ModalHeader>
+                <span className="font-[family-name:var(--font-inter)] text-base font-semibold text-page-text">Connect Trello</span>
+              </ModalHeader>
+              <ModalBody className="space-y-5">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-page-text-muted">API Key</label>
+                  <input
+                    value={trelloApiKey}
+                    onChange={(e) => setTrelloApiKey(e.target.value)}
+                    placeholder="Your Trello API key"
+                    className="h-10 w-full rounded-xl border border-border bg-foreground/[0.03] px-3.5 font-[family-name:var(--font-inter)] text-sm text-page-text outline-none transition-colors placeholder:text-foreground/30 focus:border-[#0079BF]/40 focus:ring-1 focus:ring-[#0079BF]/20"
+                  />
+                  <p className="mt-1 text-[11px] text-page-text-subtle">
+                    Get your API key from{" "}
+                    <a href="https://trello.com/power-ups/admin" target="_blank" rel="noopener noreferrer" className="text-[#0079BF] hover:underline">
+                      trello.com/power-ups/admin
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-page-text-muted">Token</label>
+                  <input
+                    value={trelloToken}
+                    onChange={(e) => setTrelloToken(e.target.value)}
+                    placeholder="Your Trello token"
+                    className="h-10 w-full rounded-xl border border-border bg-foreground/[0.03] px-3.5 font-[family-name:var(--font-inter)] text-sm text-page-text outline-none transition-colors placeholder:text-foreground/30 focus:border-[#0079BF]/40 focus:ring-1 focus:ring-[#0079BF]/20"
+                  />
+                  {trelloApiKey && (
+                    <p className="mt-1 text-[11px] text-page-text-subtle">
+                      <a
+                        href={`https://trello.com/1/authorize?expiration=never&scope=read,write&response_type=token&key=${trelloApiKey}&name=AdminBoard`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#0079BF] hover:underline"
+                      >
+                        Generate a token here
+                      </a>
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-page-text-muted">Board ID</label>
+                  <input
+                    value={trelloBoardId}
+                    onChange={(e) => setTrelloBoardId(e.target.value)}
+                    placeholder="e.g. 60a1b2c3d4e5f6g7h8i9j0k1"
+                    className="h-10 w-full rounded-xl border border-border bg-foreground/[0.03] px-3.5 font-[family-name:var(--font-inter)] text-sm text-page-text outline-none transition-colors placeholder:text-foreground/30 focus:border-[#0079BF]/40 focus:ring-1 focus:ring-[#0079BF]/20"
+                  />
+                  <p className="mt-1 text-[11px] text-page-text-subtle">
+                    Find in the board URL: trello.com/b/<strong>BOARD_ID</strong>/board-name
+                  </p>
+                </div>
+
+                <button
+                  onClick={async () => {
+                    setTrelloTesting(true);
+                    try {
+                      const res = await fetch(`/api/trello?test=true`);
+                      const data = await res.json();
+                      if (data.success) {
+                        toast(`Connected to board "${data.boardName}"`);
+                      } else {
+                        toast(data.error || "Connection failed", "error");
+                      }
+                    } catch {
+                      toast("Connection failed", "error");
+                    } finally {
+                      setTrelloTesting(false);
+                    }
+                  }}
+                  disabled={!trelloApiKey || !trelloToken || !trelloBoardId || trelloTesting}
+                  className="flex h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#0079BF]/30 bg-[#0079BF]/10 text-sm font-medium text-[#0079BF] transition-colors hover:bg-[#0079BF]/20 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {trelloTesting ? (
+                    <>
+                      <div className="size-3 animate-spin rounded-full border border-transparent border-t-[#0079BF]" />
+                      Testing...
+                    </>
+                  ) : (
+                    "Test Connection"
+                  )}
+                </button>
+              </ModalBody>
+              <ModalFooter>
+                <button
+                  type="button"
+                  onClick={() => setTrelloConfigOpen(false)}
+                  className="cursor-pointer rounded-full bg-foreground/[0.06] px-4 py-2 font-[family-name:var(--font-inter)] text-sm font-medium text-page-text transition-colors hover:bg-foreground/[0.10]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    toast("Trello credentials saved. Add TRELLO_API_KEY, TRELLO_TOKEN, and TRELLO_BOARD_ID to your .env.local file to activate.");
+                    setTrelloConfigOpen(false);
+                  }}
+                  disabled={!trelloApiKey || !trelloToken || !trelloBoardId}
+                  className="cursor-pointer rounded-full bg-[#0079BF] px-4 py-2 font-[family-name:var(--font-inter)] text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Save
+                </button>
+              </ModalFooter>
+            </Modal>
+          </>
         )}
 
         {/* PIN Management */}

@@ -7,6 +7,7 @@ import { DubNav } from "@/components/lander/dub-nav";
 import { AnnouncementBanner } from "@/components/lander/announcement-banner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { haptic } from "@/lib/haptics";
 
 /* ── Blog post data ────────────────────────────────────────────── */
 
@@ -87,6 +88,7 @@ interface HeroSlide {
   image: string; // poster/fallback image (always required)
   video?: string; // optional MP4 URL — muted autoplay loop
   wistiaId?: string; // optional Wistia media ID — muted autoplay, no controls
+  youtubeId?: string; // optional YouTube video ID — muted autoplay loop, no controls
   tag: string;
 }
 
@@ -213,13 +215,14 @@ function WistiaEmbed({ mediaId }: { mediaId: string }) {
   return (
     <div ref={containerRef} className="relative h-full w-full overflow-hidden">
       {/* Wistia player — scaled up to fill and crop */}
-      <div className="absolute inset-[-20%] flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "scale(1.5)", transformOrigin: "center" }}>
         {/* @ts-expect-error — Wistia custom element */}
         <wistia-player
           media-id={mediaId}
           player-color="#FF8003"
           muted="true"
           autoplay="true"
+          time="1"
           end-video-behavior="loop"
           playbar-control="false"
           play-pause-control="false"
@@ -233,6 +236,24 @@ function WistiaEmbed({ mediaId }: { mediaId: string }) {
         />
       </div>
 
+    </div>
+  );
+}
+
+/* ── YouTube embed (muted, autoplay, no controls, skip 1s) ──── */
+
+function YouTubeEmbed({ videoId }: { videoId: string }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "scale(1.5)", transformOrigin: "center" }}>
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&start=1&disablekb=1&fs=0&iv_load_policy=3`}
+          allow="autoplay; encrypted-media"
+          allowFullScreen={false}
+          className="h-full w-full border-0"
+          style={{ pointerEvents: "none" }}
+        />
+      </div>
     </div>
   );
 }
@@ -305,7 +326,7 @@ function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<H
   }, []);
 
   return (
-    <div className="absolute right-4 top-4 z-[3]" onMouseEnter={openVolume} onMouseLeave={closeVolumeDelayed}>
+    <div className="absolute right-4 top-4 z-[5]" onMouseEnter={openVolume} onMouseLeave={closeVolumeDelayed}>
       <motion.div
         className="flex h-9 cursor-pointer items-center gap-2 overflow-hidden rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10"
         animate={{ width: volumeOpen ? 130 : volume === 0 ? 135 : 40, paddingLeft: 12, paddingRight: volumeOpen ? 10 : volume === 0 ? 10 : 12 }}
@@ -367,10 +388,12 @@ function HeroCarousel() {
   }, []);
 
   const goNext = useCallback(() => {
+    haptic("light");
     goTo((activeIndex + 1) % HERO_SLIDES.length);
   }, [activeIndex, goTo]);
 
   const goPrev = useCallback(() => {
+    haptic("light");
     goTo((activeIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   }, [activeIndex, goTo]);
 
@@ -406,7 +429,7 @@ function HeroCarousel() {
     <div
       ref={heroRef}
       className="relative w-full overflow-hidden"
-      style={{ height: "clamp(400px, 50vw, 600px)" }}
+      style={{ height: "clamp(450px, 55vw, 680px)" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -421,6 +444,8 @@ function HeroCarousel() {
         >
           {slide.wistiaId ? (
             <WistiaEmbed mediaId={slide.wistiaId} />
+          ) : slide.youtubeId ? (
+            <YouTubeEmbed videoId={slide.youtubeId} />
           ) : slide.video ? (
             <motion.video
               key={slide.video}
@@ -452,8 +477,8 @@ function HeroCarousel() {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-      {/* Volume control — top right, only for Wistia slides */}
-      {slide.wistiaId && (
+      {/* Volume control — top right, for video slides */}
+      {(slide.wistiaId || slide.youtubeId) && (
         <WistiaVolumeControl heroRef={heroRef} onUnmute={() => setIsPlaying(false)} />
       )}
 
@@ -509,9 +534,9 @@ function HeroCarousel() {
         <button
           type="button"
           onClick={goPrev}
-          className="relative flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full text-white sm:hidden"
+          className="relative flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl px-2.5 py-2 text-white sm:hidden"
         >
-          <div className="absolute inset-0 rounded-full bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
+          <div className="absolute inset-0 rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
           <span className="relative z-[1]"><ChevronIcon direction="left" size={16} /></span>
         </button>
         <div className="relative flex items-center gap-3 rounded-xl px-3 py-2">
@@ -524,7 +549,7 @@ function HeroCarousel() {
               <button
                 key={s.id}
                 type="button"
-                onClick={() => goTo(i)}
+                onClick={() => { haptic("light"); goTo(i); }}
                 className="cursor-pointer"
                 aria-label={`Go to slide ${i + 1}`}
               >
@@ -578,9 +603,9 @@ function HeroCarousel() {
         <button
           type="button"
           onClick={goNext}
-          className="relative flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full text-white sm:hidden"
+          className="relative flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl px-2.5 py-2 text-white sm:hidden"
         >
-          <div className="absolute inset-0 rounded-full bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
+          <div className="absolute inset-0 rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
           <span className="relative z-[1]"><ChevronIcon direction="right" size={16} /></span>
         </button>
       </div>
@@ -748,8 +773,8 @@ function NewsCarousel() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Right fade mask — behind arrows */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24" style={{ background: "linear-gradient(to right, transparent, var(--page-bg))" }} />
+      {/* Right fade mask */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-16 sm:w-24" style={{ background: "linear-gradient(to right, transparent, var(--page-bg))" }} />
 
       <div
         ref={(el) => {

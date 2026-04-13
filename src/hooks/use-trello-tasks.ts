@@ -1,29 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import type { BoardTask } from "@/types/board-task";
 
-export interface NotionTask {
-  id: string;
-  title: string;
-  status: string;
-  area: string;
-  owner: string;
-  dueDate: string | null;
-  notes: string;
-}
-
-export function useNotionTasks(enabled = true) {
+export function useTrelloTasks(enabled = true) {
   const [tasks, setTasks] = useState<BoardTask[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTasks = useCallback(async () => {
     try {
-      const res = await fetch("/api/notion");
-      if (!res.ok) throw new Error(`Failed: ${res.status}`);
+      const res = await fetch("/api/trello");
       const data = await res.json();
-      setTasks(
-        (data.tasks ?? []).map((t: NotionTask) => ({ ...t, source: "notion" as const }))
-      );
+      if (!res.ok) throw new Error(data.error || `Failed: ${res.status}`);
+      setTasks(data.tasks ?? []);
       setError(null);
     } catch (err: any) {
       setError(err.message);
@@ -43,7 +31,7 @@ export function useNotionTasks(enabled = true) {
   }, [enabled, fetchTasks]);
 
   const createTask = useCallback(async (task: Omit<BoardTask, "id" | "source">) => {
-    const res = await fetch("/api/notion", {
+    const res = await fetch("/api/trello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task),
@@ -55,7 +43,7 @@ export function useNotionTasks(enabled = true) {
   const updateTask = useCallback(async (id: string, updates: Partial<BoardTask>) => {
     // Optimistic update
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...updates } : t)));
-    const res = await fetch("/api/notion", {
+    const res = await fetch("/api/trello", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, ...updates }),
@@ -68,7 +56,7 @@ export function useNotionTasks(enabled = true) {
 
   const deleteTask = useCallback(async (id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
-    const res = await fetch("/api/notion", {
+    const res = await fetch("/api/trello", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),

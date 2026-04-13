@@ -2,15 +2,14 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
+import { VerifiedAgencyPage } from "./VerifiedAgencyPage";
 
 export function VerifiedAgencyDrawer({
   open,
   onOpenChange,
-  children,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  children?: React.ReactNode;
 }) {
   const [snap, setSnap] = useState<number | string | null>(0.5);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -42,7 +41,7 @@ export function VerifiedAgencyDrawer({
       <DrawerPrimitive.Portal>
         <DrawerPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <DrawerPrimitive.Content
-          className="agency-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-page-bg shadow-2xl outline-none"
+          className="agency-drawer fixed inset-x-0 bottom-0 z-50 mt-6 flex max-h-[calc(100vh-24px)] flex-col overflow-hidden rounded-t-[28px] bg-white shadow-2xl outline-none"
           onPointerDownOutside={() => handleOpenChange(false)}
         >
           <style>{`
@@ -55,10 +54,10 @@ export function VerifiedAgencyDrawer({
           `}</style>
           {/* Floating handle - overlaps content */}
           <div className="absolute inset-x-0 top-0 z-10 flex cursor-grab justify-center pt-2.5 active:cursor-grabbing">
-            <div className="h-1 w-9 rounded-full bg-black/20 dark:bg-white/30" />
+            <div className="h-1 w-9 rounded-full bg-black/20" />
           </div>
           <DrawerPrimitive.Title className="sr-only">
-            Apply for Verified Agency
+            Verified Agency
           </DrawerPrimitive.Title>
           <div
             ref={scrollRef}
@@ -99,7 +98,7 @@ export function VerifiedAgencyDrawer({
               }
             }}
           >
-            {children}
+            <VerifiedAgencyPage />
           </div>
         </DrawerPrimitive.Content>
       </DrawerPrimitive.Portal>
