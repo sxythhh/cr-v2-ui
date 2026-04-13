@@ -120,9 +120,9 @@ export const NavContext = createContext<{ theme: NavTheme }>({
 
 function DubWordmark({ className }: { className?: string }) {
   return (
-    <div className={cn("flex flex-col", className)} style={{ gap: "0.93px" }}>
-      <span className="font-inter text-[17.6px] font-semibold leading-[16px] tracking-[-0.02em]">Content</span>
-      <span className="font-inter text-[17.6px] font-semibold leading-[16px] tracking-[-0.02em]">Rewards</span>
+    <div className={cn("flex flex-col", className)} style={{ gap: "0.5px" }}>
+      <span className="font-inter text-[14px] font-semibold leading-[14px] tracking-[-0.02em]">Content</span>
+      <span className="font-inter text-[14px] font-semibold leading-[14px] tracking-[-0.02em]">Rewards</span>
     </div>
   );
 }
@@ -168,21 +168,21 @@ function ProductContent({ domain }: { domain: string }) {
       description: "Short links with superpowers for modern marketing teams.",
       href: "/links",
       color: "#f4950c",
-      icon: <Hyperlink className="size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <Hyperlink className="size-5 text-page-text-muted" />,
     },
     {
       title: "Dub Analytics",
       description: "Powerful analytics delivered instantly.",
       href: "/analytics",
       color: "#36D78F",
-      icon: <PieChart className="size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <PieChart className="size-5 text-page-text-muted" />,
     },
     {
       title: "Dub Partners",
       description: "Grow your revenue on auto-pilot with partnerships.",
       href: "/partners",
       color: "#818cf8",
-      icon: <Creators className="size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <Creators className="size-5 text-page-text-muted" />,
     },
   ];
 
@@ -206,21 +206,16 @@ function ProductContent({ domain }: { domain: string }) {
           <NavigationMenuPrimitive.Link asChild key={title}>
             <Link
               href={`https://dub.co${href}`}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-neutral-100 bg-neutral-50 transition-colors duration-150 hover:bg-neutral-100 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:bg-white/[0.08]"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
             >
-              <div className="relative p-5 pb-0">
+              <div className="relative p-5">
                 {icon}
-                <span className="mt-3 block text-sm font-medium text-neutral-900 dark:text-white">
+                <span className="mt-3 block text-sm font-medium tracking-[-0.02em] text-page-text">
                   {title}
                 </span>
-                <p className="mt-2 max-w-56 text-sm text-neutral-500 dark:text-white/60">
+                <p className="mt-2 max-w-56 text-sm tracking-[-0.02em] text-page-text-muted">
                   {description}
                 </p>
-              </div>
-              <div className="relative mt-10 h-40 grow">
-                <div className="absolute left-0 top-0 size-full grow overflow-hidden [mask-image:linear-gradient(black_50%,transparent)]">
-                  <div className="relative size-full bg-gradient-to-b from-transparent to-neutral-100 dark:to-white/5" />
-                </div>
               </div>
             </Link>
           </NavigationMenuPrimitive.Link>
@@ -231,14 +226,14 @@ function ProductContent({ domain }: { domain: string }) {
           <NavigationMenuPrimitive.Link asChild key={title}>
             <Link
               href={`https://dub.co${href}`}
-              className="group relative flex flex-col justify-center rounded-xl border border-neutral-100 bg-neutral-50 transition-colors duration-150 hover:bg-neutral-100 active:bg-neutral-200 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:bg-white/[0.08] dark:active:bg-white/[0.06]"
+              className="group relative flex flex-col justify-center rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
             >
               <div className="relative flex items-center justify-between px-5 py-4">
                 <div>
-                  <span className="text-sm font-medium leading-none text-neutral-900 dark:text-white">
+                  <span className="text-sm font-medium leading-none tracking-[-0.02em] text-page-text">
                     {title}
                   </span>
-                  <p className="mt-1 text-sm text-neutral-500 dark:text-white/60">
+                  <p className="mt-1 text-sm tracking-[-0.02em] text-page-text-muted">
                     {description}
                   </p>
                 </div>
@@ -257,19 +252,19 @@ function SolutionsContent({ domain }: { domain: string }) {
       title: "Marketing Attribution",
       description: "Easily track and measure marketing impact",
       href: "/analytics",
-      icon: <Compass className="relative size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <Compass className="relative size-5 text-page-text-muted" />,
     },
     {
       title: "Content Creators",
       description: "Intelligent audience insights and link tracking",
       href: "/solutions/creators",
-      icon: <Megaphone className="relative size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <Megaphone className="relative size-5 text-page-text-muted" />,
     },
     {
       title: "Affiliate Management",
       description: "Manage affiliates and automate payouts",
       href: "/partners",
-      icon: <Creators className="relative size-5 text-neutral-700 dark:text-white/60" />,
+      icon: <Creators className="relative size-5 text-page-text-muted" />,
     },
   ];
 
@@ -282,9 +277,9 @@ function SolutionsContent({ domain }: { domain: string }) {
   ];
 
   return (
-    <div className="grid w-[1020px] grid-cols-[minmax(0,1fr),0.4fr] divide-x divide-neutral-200 dark:divide-white/20">
+    <div className="grid w-[1020px] grid-cols-[minmax(0,1fr),0.4fr] divide-x divide-foreground/[0.06]">
       <div className="flex h-full flex-col p-4">
-        <p className="mb-4 ml-2 text-xs uppercase text-neutral-500 dark:text-white/60">
+        <p className="mb-4 ml-2 text-xs uppercase text-page-text-muted">
           Use case
         </p>
         <div className="grid grow grid-cols-3 gap-4">
@@ -293,16 +288,15 @@ function SolutionsContent({ domain }: { domain: string }) {
               <Link
                 href={`https://dub.co${href}`}
                 className={cn(
-                  "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-100 bg-neutral-50 px-5 py-4 transition-colors duration-150 hover:bg-neutral-100",
-                  "dark:border-white/[0.06] dark:bg-[#0e0e0e] dark:hover:bg-white/[0.08]"
+                  "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] px-5 py-4 transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 )}
               >
                 {icon}
                 <div className="relative mt-auto">
-                  <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                  <span className="text-sm font-medium text-page-text">
                     {title}
                   </span>
-                  <p className="mt-2 text-xs text-neutral-500 dark:text-white/60">
+                  <p className="mt-2 text-xs text-page-text-muted">
                     {description}
                   </p>
                 </div>
@@ -312,7 +306,7 @@ function SolutionsContent({ domain }: { domain: string }) {
         </div>
       </div>
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-neutral-500 dark:text-white/60">
+        <p className="mb-2 text-xs uppercase text-page-text-muted">
           SDKs
         </p>
         <DropdownLinkList
@@ -320,8 +314,8 @@ function SolutionsContent({ domain }: { domain: string }) {
             title: s.title,
             href: s.href,
             icon: (
-              <div className="shrink-0 rounded-[10px] border border-neutral-200 bg-white/50 p-1 dark:border-white/[0.06] dark:bg-white/[0.03]">
-                <div className="flex size-5 items-center justify-center text-xs font-bold text-neutral-500 dark:text-white/60">
+              <div className="shrink-0 rounded-[10px] border border-foreground/[0.06] bg-foreground/[0.06] p-1">
+                <div className="flex size-5 items-center justify-center text-xs font-bold text-page-text-muted">
                   {s.title.slice(0, 2)}
                 </div>
               </div>
@@ -357,7 +351,7 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Browse opportunities posted by brands",
       href: "/creator/discover",
       icon: (
-        <svg className="relative size-10 text-neutral-700 dark:text-white/60" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="relative size-10 text-page-text-muted" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clipPath="url(#clip0_dc)">
             <mask id="mask0_dc" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="56" height="56">
               <path d="M0 0H56V56H0V0Z" fill="white"/>
@@ -388,8 +382,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Company, values, and team",
       href: "/about",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <User className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <User className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -398,8 +392,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Join our global, remote team",
       href: "/careers",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <Brands className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <Brands className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -408,8 +402,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Logos, wordmark, etc.",
       href: "/brand",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <Sparkle className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <Sparkle className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -418,8 +412,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Reach out to support or sales",
       href: "/contact",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <ChatBubble className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <ChatBubble className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -431,8 +425,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Insights and stories",
       href: "/blog",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <Megaphone className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <Megaphone className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -441,8 +435,8 @@ function ResourcesContent({ domain }: { domain: string }) {
       description: "Releases and updates",
       href: "/changelog",
       icon: (
-        <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
-          <Submissions className="size-4 text-neutral-600 dark:text-white/60" />
+        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
+          <Submissions className="size-4 text-page-text-muted" />
         </div>
       ),
     },
@@ -450,10 +444,10 @@ function ResourcesContent({ domain }: { domain: string }) {
 
   return (
     <div className="w-[1020px]">
-    <div className="grid grid-cols-[0.9fr,0.55fr,0.55fr] divide-x divide-neutral-200 dark:divide-white/20">
+    <div className="grid grid-cols-[0.9fr,0.55fr,0.55fr] divide-x divide-foreground/[0.06]">
       {/* Explore column */}
       <div className="flex h-full flex-col p-4">
-        <p className="mb-4 ml-2 text-xs uppercase text-neutral-500 dark:text-white/60">
+        <p className="mb-4 ml-2 text-xs uppercase text-page-text-muted">
           Explore
         </p>
         <div className="grid grid-cols-2 gap-4">
@@ -462,16 +456,15 @@ function ResourcesContent({ domain }: { domain: string }) {
               <Link
                 href={title === "Discover Campaigns" || title === "Help Center" ? href : `https://dub.co${href}`}
                 className={cn(
-                  "group relative flex items-center gap-4 overflow-hidden rounded-xl border border-neutral-100 bg-neutral-50 px-5 py-5 transition-colors duration-150 hover:bg-neutral-100",
-                  "dark:border-white/[0.06] dark:bg-[#0e0e0e] dark:hover:bg-white/[0.08]"
+                  "group relative flex items-center gap-4 overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] px-5 py-5 transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 )}
               >
                 <div className="shrink-0">{icon}</div>
                 <div>
-                  <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                  <span className="text-sm font-medium text-page-text">
                     {title}
                   </span>
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-white/60">
+                  <p className="mt-1 text-xs text-page-text-muted">
                     {description}
                   </p>
                 </div>
@@ -483,7 +476,7 @@ function ResourcesContent({ domain }: { domain: string }) {
 
       {/* Company column */}
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-neutral-500 dark:text-white/60">
+        <p className="mb-2 text-xs uppercase text-page-text-muted">
           Company
         </p>
         <DropdownLinkList items={company} />
@@ -491,7 +484,7 @@ function ResourcesContent({ domain }: { domain: string }) {
 
       {/* Updates column */}
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-neutral-500 dark:text-white/60">
+        <p className="mb-2 text-xs uppercase text-page-text-muted">
           Updates
         </p>
         <DropdownLinkList items={updates} />
@@ -567,18 +560,18 @@ function ResourcesBottomBar() {
   ];
 
   return (
-    <div className="flex items-center justify-between border-t border-neutral-200 bg-neutral-50 px-5 py-2.5 dark:border-white/[0.06] dark:bg-[#0e0e0e]" style={{ borderRadius: "0 0 20px 20px" }} onPointerDown={(e) => e.stopPropagation()}>
+    <div className="flex items-center justify-between border-t border-foreground/[0.06] bg-neutral-50 px-5 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]" style={{ borderRadius: "0 0 20px 20px" }} onPointerDown={(e) => e.stopPropagation()}>
       <div className="relative flex items-center gap-2">
-        <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400">I&apos;m a</span>
+        <span className="text-[13px] font-medium text-page-text-muted">I&apos;m a</span>
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setRoleOpen(!roleOpen); }}
-          className="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-[13px] font-medium text-neutral-900 transition-colors hover:bg-neutral-100 dark:border-white/[0.06] dark:bg-[#131313] dark:text-white dark:hover:bg-white/[0.08]"
+          className="flex items-center gap-1.5 rounded-lg border border-foreground/[0.06] bg-white px-3 py-1.5 text-[13px] font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.04] dark:border-white/[0.06] dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
         >
           {role}
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className={cn("transition-transform", roleOpen && "rotate-180")}><path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
         {roleOpen && (
-          <div className="absolute bottom-full left-8 mb-1.5 overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-lg dark:border-white/[0.06] dark:bg-[#131313]">
+          <div className="absolute bottom-full left-8 mb-1.5 overflow-hidden rounded-lg border border-foreground/[0.06] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
             {ROLES.map((r) => (
               <button
                 key={r}
@@ -586,8 +579,8 @@ function ResourcesBottomBar() {
                 className={cn(
                   "flex w-full items-center gap-2 px-3 py-2 text-[13px] font-medium transition-colors",
                   r === role
-                    ? "bg-neutral-100 text-neutral-900 dark:bg-white/[0.08] dark:text-white"
-                    : "text-neutral-600 hover:bg-neutral-50 dark:text-neutral-400 dark:hover:bg-white/[0.04]",
+                    ? "bg-foreground/[0.06] text-page-text"
+                    : "text-page-text-muted hover:bg-foreground/[0.04]",
                 )}
               >
                 {r === role && (
@@ -601,8 +594,8 @@ function ResourcesBottomBar() {
         )}
       </div>
       <div className="flex items-center gap-2.5">
-        <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400">Appearance</span>
-        <div className="flex items-center gap-0.5 rounded-lg border border-neutral-200 bg-white p-0.5 dark:border-white/[0.06] dark:bg-[#131313]">
+        <span className="text-[13px] font-medium text-page-text-muted">Appearance</span>
+        <div className="flex items-center gap-0.5 rounded-lg border border-foreground/[0.06] bg-white p-0.5 dark:border-white/[0.06] dark:bg-white/[0.04]">
           {modes.map((m) => (
             <button
               key={m.key}
@@ -612,7 +605,7 @@ function ResourcesBottomBar() {
                 "flex h-7 w-7 items-center justify-center rounded-md transition-all",
                 mode === m.key
                   ? "bg-neutral-900 text-white shadow-sm dark:bg-white dark:text-neutral-900"
-                  : "text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300",
+                  : "text-page-text-muted hover:text-page-text",
               )}
             >
               {m.icon}
@@ -642,21 +635,6 @@ const navItems: NavItem[] = [
     content: ResourcesContent,
     segments: ["/help", "/docs", "/about", "/careers", "/brand", "/blog", "/changelog", "/contact"],
   },
-  {
-    name: "Enterprise",
-    href: "/case-studies",
-    segments: ["/case-studies"],
-  },
-  {
-    name: "Customers",
-    href: "https://dub.co/customers",
-    segments: ["/customers"],
-  },
-  {
-    name: "Pricing",
-    href: "https://dub.co/pricing",
-    segments: ["/pricing"],
-  },
 ];
 
 // ── Button variants (from @dub/ui) ──────────────────────────────────────────
@@ -671,9 +649,298 @@ const buttonVariantStyles = {
 // ── Nav item class ──────────────────────────────────────────────────────────
 
 const navItemClassName = cn(
-  "relative z-[1] group/item flex items-center rounded-md px-4 py-2 text-sm rounded-lg font-medium font-inter text-neutral-700 hover:text-neutral-900 transition-colors",
+  "relative z-[1] group/item flex items-center rounded-md px-4 py-2 text-sm rounded-lg font-medium font-inter tracking-[-0.02em] text-neutral-700 hover:text-neutral-900 transition-colors",
   "dark:text-white/90 dark:hover:text-white",
 );
+
+// ── Nav search data ──────────────────────────────────────────────────────────
+
+const SEARCH_NAV_ITEMS = [
+  { icon: "🔌", label: "Integrations" }, { icon: "📊", label: "Reports" },
+  { icon: "⚙️", label: "Settings" }, { icon: "👥", label: "People" },
+  { icon: "🏢", label: "Companies" }, { icon: "💼", label: "Deals" },
+  { icon: "📋", label: "Lists" }, { icon: "🔄", label: "Workflows" },
+  { icon: "📧", label: "Email & Calendar" }, { icon: "📱", label: "Apps" },
+  { icon: "🎓", label: "Academy" }, { icon: "📖", label: "Documentation" },
+  { icon: "🔑", label: "API Reference" }, { icon: "💬", label: "Community" },
+  { icon: "🎧", label: "Support" }, { icon: "📝", label: "Changelog" },
+  { icon: "🏠", label: "Home" }, { icon: "🔔", label: "Notifications" },
+];
+
+const SEARCH_HELP_ARTICLES = [
+  { title: "Getting started with Content Rewards", desc: "A step-by-step guide to setting up your workspace and inviting your team." },
+  { title: "Understanding objects and records", desc: "Learn what objects and records are and how they organize your data." },
+  { title: "Creating and managing campaigns", desc: "How to create, configure, and manage campaigns from start to finish." },
+  { title: "Setting up creator payouts", desc: "Configure payout methods, schedules, and automate creator payments." },
+  { title: "Workflow automations guide", desc: "Build powerful automations to streamline your team's processes." },
+  { title: "Email sync and calendar integration", desc: "Connect your email and calendar to automatically log communications." },
+  { title: "Building reports and dashboards", desc: "Create visual reports to track metrics and share insights." },
+  { title: "Using AI features", desc: "Leverage AI-powered attributes, enrichment, and smart suggestions." },
+  { title: "Privacy, permissions, and roles", desc: "Manage access controls, user roles, and data visibility settings." },
+  { title: "Keyboard shortcuts reference", desc: "Speed up your workflow with the full list of keyboard shortcuts." },
+];
+
+function BookIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M2 1.5h3a1 1 0 0 1 1 1v8a.75.75 0 0 0-.75-.75H2A.5.5 0 0 1 1.5 9.25V2A.5.5 0 0 1 2 1.5Z" stroke="currentColor" strokeWidth="1" />
+      <path d="M10 1.5H7a1 1 0 0 0-1 1v8a.75.75 0 0 1 .75-.75H10a.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5Z" stroke="currentColor" strokeWidth="1" />
+    </svg>
+  );
+}
+
+// ── Search results with proximity hover ──────────────────────────────────────
+
+function SearchResults({ navToShow, helpToShow, totalItems, activeTab, filteredNavCount, filteredHelpCount, onSetTab, onClose }: {
+  navToShow: typeof SEARCH_NAV_ITEMS;
+  helpToShow: typeof SEARCH_HELP_ARTICLES;
+  totalItems: number;
+  activeTab: "all" | "navigation" | "help";
+  filteredNavCount: number;
+  filteredHelpCount: number;
+  onSetTab: (t: "all" | "navigation" | "help") => void;
+  onClose: () => void;
+}) {
+  const listRef = useRef<HTMLDivElement>(null);
+  const { activeIndex, itemRects, sessionRef, handlers, registerItem } =
+    useProximityHover(listRef);
+
+  let itemIdx = 0;
+
+  return (
+    <div ref={listRef} className="relative max-h-[360px] overflow-y-auto" style={{ scrollbarWidth: "none" }} {...handlers}>
+      {/* Proximity hover highlight */}
+      <AnimatePresence>
+        {activeIndex !== null && itemRects[activeIndex] && (
+          <motion.div
+            key={sessionRef.current}
+            layoutId={`search-hover-${sessionRef.current}`}
+            className="pointer-events-none absolute rounded-xl bg-foreground/[0.06]"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              x: itemRects[activeIndex].left,
+              y: itemRects[activeIndex].top,
+              width: itemRects[activeIndex].width,
+              height: itemRects[activeIndex].height,
+            }}
+            exit={{ opacity: 0 }}
+            transition={springs.fast}
+          />
+        )}
+      </AnimatePresence>
+
+      {totalItems === 0 && (
+        <div className="flex flex-col items-center gap-2 py-10 text-page-text-muted">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span className="text-sm font-medium">No results found</span>
+        </div>
+      )}
+
+      {/* Navigation */}
+      {navToShow.length > 0 && (
+        <div className="px-2 pt-2">
+          <div className="flex items-center justify-between px-2 py-1.5">
+            <span className="text-[12px] font-semibold tracking-[-0.02em] text-page-text-muted">Navigation</span>
+            {activeTab === "all" && filteredNavCount > 5 && (
+              <button type="button" onClick={() => onSetTab("navigation")} className="cursor-pointer text-[12px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+                See more ({filteredNavCount}) →
+              </button>
+            )}
+          </div>
+          {navToShow.map((item) => {
+            const thisIdx = itemIdx++;
+            return (
+              <div
+                key={item.label}
+                ref={(el) => registerItem(thisIdx, el)}
+                className="relative z-[1] flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2"
+                onClick={onClose}
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-foreground/[0.06] text-[13px]">{item.icon}</span>
+                <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{item.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Help center */}
+      {helpToShow.length > 0 && (
+        <div className="px-2 pb-2 pt-1">
+          {navToShow.length > 0 && <div className="mx-2 my-1 border-t border-border" />}
+          <div className="flex items-center justify-between px-2 py-1.5">
+            <span className="text-[12px] font-semibold tracking-[-0.02em] text-page-text-muted">Browse help center</span>
+            {activeTab === "all" && filteredHelpCount > 4 && (
+              <button type="button" onClick={() => onSetTab("help")} className="cursor-pointer text-[12px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+                See more ({filteredHelpCount}) →
+              </button>
+            )}
+          </div>
+          {helpToShow.map((article) => {
+            const thisIdx = itemIdx++;
+            return (
+              <div
+                key={article.title}
+                ref={(el) => registerItem(thisIdx, el)}
+                className="relative z-[1] flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2.5"
+                onClick={onClose}
+              >
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-foreground/[0.06] text-page-text-muted">
+                  <BookIcon />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{article.title}</span>
+                  <p className="mt-0.5 truncate text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">{article.desc}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── NavSearch — morphing command palette ─────────────────────────────────────
+
+function NavSearch() {
+  const [focused, setFocused] = useState(false);
+  const [query, setQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"all" | "navigation" | "help">("all");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const q = query.toLowerCase();
+  const filteredNav = SEARCH_NAV_ITEMS.filter((n) => n.label.toLowerCase().includes(q));
+  const filteredHelp = SEARCH_HELP_ARTICLES.filter((a) => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q));
+
+  const navToShow = activeTab === "help" ? [] : activeTab === "navigation" ? filteredNav : filteredNav.slice(0, 5);
+  const helpToShow = activeTab === "navigation" ? [] : activeTab === "help" ? filteredHelp : filteredHelp.slice(0, 4);
+  const totalItems = navToShow.length + helpToShow.length;
+
+  const showDropdown = focused && query.trim().length > 0;
+
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // ⌘K + Escape + arrow keys
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (focused) { setFocused(false); inputRef.current?.blur(); }
+        else inputRef.current?.focus();
+      }
+      if (e.key === "Escape" && focused) {
+        setFocused(false);
+        inputRef.current?.blur();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [focused]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") { setFocused(false); inputRef.current?.blur(); }
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Input */}
+      <div
+        className={cn(
+          "flex h-9 w-[380px] items-center gap-2 border bg-card-bg/60 px-2 rounded-[10px] backdrop-blur-sm",
+          focused
+            ? "border-[#FF8003]"
+            : "border-border",
+        )}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-page-text-muted">
+          <path d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onKeyDown={handleKeyDown}
+          placeholder="Search help"
+          className="flex-1 bg-transparent text-sm font-medium tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
+        />
+        <div className="flex shrink-0 items-center gap-1">
+          <kbd className="flex h-[22px] min-w-[22px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-xs font-semibold text-page-text-muted shadow-[0_1px_0_1px] shadow-border" style={{ borderWidth: "1px 1px 2px 1px", borderStyle: "solid" }}>⌘</kbd>
+          <kbd className="flex h-[22px] min-w-[22px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-xs font-medium text-page-text-muted shadow-[0_1px_0_1px] shadow-border" style={{ borderWidth: "1px 1px 2px 1px", borderStyle: "solid" }}>K</kbd>
+        </div>
+      </div>
+
+      {/* Dropdown command palette */}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-0 top-full z-50 mt-2 w-[380px] overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_16px_70px_rgba(0,0,0,0.15)] dark:border-white/[0.06] dark:bg-[#111111]"
+          >
+            {/* Tabs */}
+            <div className="flex items-center gap-1 border-b border-border px-4 py-2">
+              {(["all", "navigation", "help"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "cursor-pointer rounded-full px-3 py-1 text-[13px] font-medium tracking-[-0.02em] transition-colors",
+                    activeTab === tab
+                      ? "bg-foreground text-background"
+                      : "text-page-text-muted hover:bg-foreground/[0.06] hover:text-page-text",
+                  )}
+                >
+                  {tab === "all" ? "All" : tab === "navigation" ? "Navigation" : "Help Center"}
+                </button>
+              ))}
+            </div>
+
+            {/* Results with proximity hover */}
+            <SearchResults
+              navToShow={navToShow}
+              helpToShow={helpToShow}
+              totalItems={totalItems}
+              activeTab={activeTab}
+              filteredNavCount={filteredNav.length}
+              filteredHelpCount={filteredHelp.length}
+              onSetTab={setActiveTab}
+              onClose={() => setFocused(false)}
+            />
+
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-3 border-t border-border px-4 py-2">
+              <span className="text-[11px] font-medium text-page-text-muted">↑↓ Navigate</span>
+              <span className="text-[11px] font-medium text-page-text-muted">↵ Open</span>
+              <span className="text-[11px] font-medium text-page-text-muted">esc Close</span>
+              <div className="ml-1 flex items-center gap-1">
+                <kbd className="flex h-[20px] min-w-[20px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-[10px] font-semibold text-page-text-muted" style={{ borderWidth: "1px 1px 2px 1px" }}>⌘</kbd>
+                <kbd className="flex h-[20px] min-w-[20px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-[10px] font-medium text-page-text-muted" style={{ borderWidth: "1px 1px 2px 1px" }}>K</kbd>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 // ── Main Nav Component ──────────────────────────────────────────────────────
 
@@ -701,19 +968,19 @@ export function DubNav({
           <div
             className={cn(
               "absolute inset-0 block border-b border-transparent transition-all duration-500 ease-out",
-              !transparent && !scrolled && "bg-white dark:bg-[#0e0e0e]",
+              !transparent && !scrolled && "bg-white dark:bg-[#111111]",
               scrolled &&
-                "border-neutral-100 bg-white/75 backdrop-blur-lg dark:border-white/[0.06] dark:bg-[rgba(14,14,14,0.85)] dark:backdrop-blur-lg"
+                "border-foreground/[0.06] bg-white/75 backdrop-blur-lg dark:bg-[rgba(17,17,17,0.85)]"
             )}
           />
           <div className={cn("relative mx-auto w-full max-w-screen-xl px-3 lg:px-10")}>
-            <div className="flex h-14 items-center justify-between">
+            <div className="flex h-14 items-center gap-6">
               {/* Logo */}
-              <div className="grow basis-0">
+              <div className="shrink-0">
                 <Link className="block w-fit py-2 pr-2" href="https://dub.co/home">
                   <div className="flex items-center gap-2">
-                    <DubLogo className="text-neutral-900 dark:text-white" />
-                    <DubWordmark className="text-neutral-900 dark:text-white" />
+                    <DubLogo className="text-page-text" />
+                    <DubWordmark className="text-page-text" />
                   </div>
                 </Link>
               </div>
@@ -721,25 +988,32 @@ export function DubNav({
               {/* Desktop navigation */}
               <NavItemsList pathname={pathname} />
 
+              {/* Spacer */}
+              <div className="hidden flex-1 lg:block" />
+
               {/* Auth buttons */}
-              <div className="hidden grow basis-0 justify-end gap-2 lg:flex">
+              <div className="hidden items-center gap-2 lg:flex">
+                {/* Search help — morphing input */}
+                <NavSearch />
                 <Link
                   href="https://app.dub.co/login"
                   className={cn(
                     "flex h-8 items-center rounded-lg border px-4 text-sm transition-all",
                     buttonVariantStyles.secondary,
-                    "dark:border-white/[0.06] dark:bg-[#0e0e0e] dark:text-white dark:hover:bg-neutral-900"
+                    "dark:border-white/[0.06] dark:bg-[#111111] dark:text-white dark:hover:bg-neutral-900"
                   )}
                 >
                   Log in
                 </Link>
                 <Link
                   href="https://app.dub.co/register"
-                  className={cn(
-                    "flex h-8 items-center rounded-lg border px-4 text-sm transition-all",
-                    buttonVariantStyles.primary,
-                    "dark:border-white dark:bg-white dark:text-black dark:hover:bg-neutral-50 dark:hover:ring-white/10"
-                  )}
+                  className="flex h-8 items-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90"
+                  style={{
+                    fontFamily: "var(--font-abc-oracle), sans-serif",
+                    background: "#FF8003",
+                    borderTop: "1px solid rgba(255,160,50,0.5)",
+                    boxShadow: "inset 0px 1.3px 2px 1px rgba(255,255,255,0.25), inset 0px -1px 1px 0px rgba(0,0,0,0.1)",
+                  }}
                 >
                   Sign up
                 </Link>
@@ -781,7 +1055,7 @@ function DropdownLinkList({ items }: { items: DropdownLinkItem[] }) {
           <motion.div
             key={sessionRef.current}
             layoutId={`dropdown-hover-${sessionRef.current}`}
-            className="pointer-events-none absolute rounded-[8px] bg-neutral-100 dark:bg-white/[0.08]"
+            className="pointer-events-none absolute rounded-[8px] bg-foreground/[0.06]"
             initial={{ opacity: 0 }}
             animate={{
               opacity: 1,
@@ -806,23 +1080,23 @@ function DropdownLinkList({ items }: { items: DropdownLinkItem[] }) {
               {icon ? (
                 icon
               ) : (
-                <div className="shrink-0 rounded-md border border-neutral-200 bg-white/50 p-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
+                <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
                   <div className="size-4" />
                 </div>
               )}
               <div className="flex-1">
-                <p className="text-sm font-medium text-neutral-700 dark:text-white">
+                <p className="text-sm font-medium tracking-[-0.02em] text-page-text">
                   {title}
                 </p>
                 {description && (
-                  <p className="text-xs text-neutral-500 line-clamp-1 dark:text-white/60">
+                  <p className="text-xs tracking-[-0.02em] text-page-text-muted line-clamp-1">
                     {description}
                   </p>
                 )}
               </div>
               {showArrow && (
                 <svg
-                  className="invisible -ml-6 h-4 w-4 text-neutral-700 group-hover:visible dark:text-white/80"
+                  className="invisible -ml-6 h-4 w-4 text-page-text-muted group-hover:visible"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -862,7 +1136,7 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
             <motion.div
               key={sessionRef.current}
               layoutId={`nav-hover-${sessionRef.current}`}
-              className="pointer-events-none absolute rounded-lg bg-neutral-900/5 dark:bg-white/[0.08]"
+              className="pointer-events-none absolute rounded-lg bg-foreground/[0.04]"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
@@ -902,7 +1176,7 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
                     data-active={isActive}
                   >
                     {name}
-                    <AnimatedChevron className="ml-1.5 size-2.5 text-neutral-700" />
+                    <AnimatedChevron className="ml-1.5 size-2.5 text-neutral-700 dark:text-white/90" />
                   </button>
                 )}
               </WithTrigger>
@@ -917,10 +1191,10 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
         })}
       </NavigationMenuPrimitive.List>
 
-      <div className="absolute left-1/2 top-full mt-3 -translate-x-1/2">
+      <div className="absolute left-0 top-full mt-3">
         <NavigationMenuPrimitive.Viewport
           className={cn(
-            "relative flex origin-[top_center] justify-start overflow-hidden rounded-[20px] border border-neutral-200 bg-white shadow-md font-inter dark:border-white/[0.06] dark:bg-[#0e0e0e]",
+            "relative flex origin-[top_center] justify-start overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] font-inter dark:border-white/[0.06] dark:bg-[#111111] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]",
             "data-[state=closed]:animate-scale-out-content data-[state=open]:animate-scale-in-content",
             "h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] transition-[width,height]"
           )}
@@ -932,95 +1206,105 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
 
 // ── Mobile Nav ──────────────────────────────────────────────────────────────
 
+const MOBILE_MENU_LINKS = [
+  { label: "Product", href: "#", expandable: true },
+  { label: "Solutions", href: "#", expandable: true },
+  { label: "Resources", href: "#", expandable: true },
+  { label: "Blog", href: "/blog" },
+  { label: "Academy", href: "/academy" },
+  { label: "Help", href: "/help" },
+  { label: "About", href: "/about" },
+  { label: "Changelog", href: "/changelog" },
+];
+
 function MobileNav({ theme }: { theme: NavTheme }) {
   const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    document.body.style.overflow = open ? "hidden" : "auto";
+    return () => { document.body.style.overflow = "auto"; };
   }, [open]);
 
   return (
-    <div className={cn("flex items-center gap-4 lg:hidden", theme === "dark" && "dark")}>
-      <div className="flex gap-2 max-[280px]:hidden">
-        <Link
-          href="https://app.dub.co/login"
-          className={cn(
-            "flex h-8 w-fit items-center whitespace-nowrap rounded-lg border px-3 text-[0.8125rem] transition-all",
-            buttonVariantStyles.secondary,
-          )}
-        >
-          Log in
-        </Link>
-        <Link
-          href="https://app.dub.co/register"
-          className={cn(
-            "flex h-8 w-fit items-center whitespace-nowrap rounded-lg border px-3 text-[0.8125rem] transition-all",
-            buttonVariantStyles.primary,
-          )}
-        >
-          Sign Up
-        </Link>
-      </div>
+    <div className={cn("flex items-center lg:hidden", theme === "dark" && "dark")}>
       <button
         onClick={() => setOpen(!open)}
-        className={cn(
-          "z-30 rounded-full p-2 transition-colors duration-200 hover:bg-neutral-200 focus:outline-none active:bg-neutral-300 dark:hover:bg-white/20 dark:active:bg-white/30",
-          open && "hover:bg-neutral-100 active:bg-neutral-200"
-        )}
+        className="z-30 rounded-full p-2 transition-colors duration-200 hover:bg-foreground/[0.06] active:bg-foreground/[0.1]"
       >
         {open ? (
-          <X className="h-5 w-5 text-neutral-600 dark:text-white/70" />
+          <X className="h-5 w-5 text-page-text" />
         ) : (
-          <Menu className="h-5 w-5 text-neutral-600 dark:text-white/70" />
+          <Menu className="h-5 w-5 text-page-text" />
         )}
       </button>
-      <nav
-        className={cn(
-          "fixed inset-0 z-20 hidden max-h-screen w-full overflow-y-auto bg-white px-5 py-16 lg:hidden dark:bg-[#0e0e0e] dark:text-white/70",
-          open && "block"
-        )}
-      >
-        <ul className="grid divide-y divide-neutral-200 dark:divide-white/[0.15]">
-          {navItems.map(({ name, href, content }) => (
-            <li key={name} className="py-3">
-              {href ? (
-                <Link
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className="flex w-full font-semibold capitalize"
-                >
-                  {name}
-                </Link>
-              ) : (
-                <div>
-                  <button
-                    className="flex w-full justify-between"
-                    onClick={() =>
-                      setExpanded(expanded === name ? null : name)
-                    }
+
+      {/* Fullscreen dark menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-20 flex flex-col bg-[#101014] lg:hidden"
+          >
+            {/* Top bar */}
+            <div className="flex items-center justify-end gap-2 px-4 py-2">
+              {/* Search */}
+              <button className="flex h-8 w-8 items-center justify-center rounded-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="11" cy="11" r="7" stroke="white" strokeWidth="2" />
+                  <path d="M16 16L20 20" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+
+              {/* Sign in */}
+              <Link
+                href="https://app.dub.co/login"
+                onClick={() => setOpen(false)}
+                className="flex h-8 items-center rounded-md bg-white/15 px-3 text-sm tracking-[0.28px] text-white"
+              >
+                Sign in
+              </Link>
+
+              {/* Close */}
+              <button
+                onClick={() => setOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-md"
+              >
+                <X className="h-5 w-5 text-white" />
+              </button>
+            </div>
+
+            {/* Scrollable menu */}
+            <div className="flex-1 overflow-y-auto px-4 py-4" style={{ scrollbarWidth: "none" }}>
+              {/* Heading */}
+              <h2 className="pb-8 pl-2 text-[32px] font-normal leading-8 tracking-[-1.12px] text-white">
+                Menu
+              </h2>
+
+              {/* Links */}
+              <nav className="flex flex-col">
+                {MOBILE_MENU_LINKS.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-between rounded-xl px-2 py-3 text-base tracking-[0.32px] text-white transition-colors active:bg-white/[0.06]"
                   >
-                    <p className="font-semibold">{name}</p>
-                    <ChevronDown
-                      className={cn(
-                        "h-5 w-5 text-neutral-500 transition-all dark:text-white/50",
-                        expanded === name && "rotate-180"
-                      )}
-                    />
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+                    <span>{item.label}</span>
+                    {item.expandable && (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="-rotate-90">
+                        <path d="M7 8L10 11L13 8" stroke="rgba(255,255,255,0.65)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

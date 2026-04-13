@@ -2,87 +2,34 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { VerifiedBadge } from "@/components/verified-badge";
-import { PageShell } from "@/components/page-shell";
+import { DubNav } from "@/components/lander/dub-nav";
+import { AnnouncementBanner } from "@/components/lander/announcement-banner";
+import { PlatformIcon } from "@/components/icons/PlatformIcon";
+import { Creators } from "@/components/sidebar/icons/creators";
+import { Megaphone } from "@/components/sidebar/icons/megaphone";
+import { GlassFilterPill } from "@/components/ui/glass-filter-pill";
+import { ChevronDown } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
-/* ─── Icons ─── */
-function SearchIcon() {
+/* ─── Gold verified icon with tooltip ─── */
+function GoldVerified({ size = 14 }: { size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M11.5 11.5L14 14M7.333 13a5.667 5.667 0 1 0 0-11.333 5.667 5.667 0 0 0 0 11.333Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M4 6l4 4 4-4" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function PersonIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M6 0C4.343 0 3 1.343 3 3s1.343 3 3 3 3-1.343 3-3S7.657 0 6 0ZM6 7c-2.761 0-5 1.79-5 4v1h10v-1c0-2.21-2.239-4-5-4Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function MegaphoneIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M10.5 1.5v7M10.5 5H4.5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h1l.5 2.5h1L7.5 9M10.5 5c1.105 0 2-.672 2-1.5S11.605 2 10.5 2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </svg>
-  );
-}
-
-function XCircleIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M6 12A6 6 0 1 0 6 0a6 6 0 0 0 0 12ZM4.172 4.172a.5.5 0 0 1 .707 0L6 5.293l1.121-1.121a.5.5 0 0 1 .707.707L6.707 6l1.121 1.121a.5.5 0 0 1-.707.707L6 6.707 4.879 7.828a.5.5 0 0 1-.707-.707L5.293 6 4.172 4.879a.5.5 0 0 1 0-.707Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M8 1.333l1.947 3.947 4.386.64-3.173 3.093.747 4.36L8 11.373l-3.907 2-0.747-4.36L.173 5.92l4.387-.64L8 1.333Z" fill="#FACC15" />
-    </svg>
-  );
-}
-
-function ExternalLinkIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M9 6.5v3a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1H5.5M7.5 1.5h3v3M5 7l5.5-5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ArrowLeftIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" /><path d="M5 12l6 6" /><path d="M5 12l6-6" />
-    </svg>
-  );
-}
-
-function ChevronLeftSmall() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M7.5 9L4.5 6l3-3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronRightSmall() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <svg width={size} height={size} viewBox="0 0 14 14" fill="none" className="shrink-0 cursor-default">
+            <path d="M12.578 5.20364C12.3511 4.96692 12.1177 4.72363 12.0298 4.50993C11.9476 4.31349 11.9435 3.98883 11.9385 3.67485C11.9303 3.08964 11.9205 2.42634 11.4585 1.96524C10.9982 1.50495 10.3358 1.49509 9.75056 1.48605C9.43576 1.48194 9.1111 1.47701 8.91548 1.39482C8.70177 1.30769 8.45684 1.07262 8.22177 0.84741C7.80834 0.450418 7.33819 0 6.7127 0C6.08804 0 5.61625 0.449596 5.20364 0.84741C4.96692 1.07262 4.72363 1.30769 4.50993 1.39482C4.31431 1.47701 3.98883 1.48194 3.67485 1.48605C3.08964 1.49509 2.42634 1.50495 1.96524 1.96606C1.50495 2.42634 1.49838 3.08964 1.48605 3.67485C1.48194 3.98883 1.47701 4.31349 1.39482 4.50993C1.30769 4.72363 1.07262 4.96692 0.84741 5.20364C0.450418 5.61625 0 6.08639 0 6.7127C0 7.33737 0.449596 7.80834 0.84741 8.22177C1.07262 8.45684 1.30769 8.70177 1.39482 8.91548C1.47701 9.1111 1.48194 9.43576 1.48605 9.75056C1.49509 10.3358 1.50495 10.9982 1.96606 11.4602C2.42634 11.9205 3.08964 11.9287 3.67485 11.9385C3.98883 11.9435 4.31349 11.9476 4.50993 12.0298C4.72363 12.1177 4.96692 12.3511 5.20364 12.578C5.61625 12.9742 6.08639 13.4246 6.7127 13.4246C7.33737 13.4246 7.80834 12.9758 8.22177 12.578C8.45684 12.3511 8.70177 12.1177 8.91548 12.0298C9.1111 11.9476 9.43576 11.9435 9.75056 11.9385C10.3358 11.9303 10.9982 11.9205 11.4602 11.4585C11.9205 10.9982 11.9287 10.3358 11.9385 9.75056C11.9435 9.43576 11.9476 9.1111 12.0298 8.91548C12.1177 8.70177 12.3511 8.45684 12.578 8.22177C12.9742 7.80834 13.4246 7.33819 13.4246 6.7127C13.4246 6.08804 12.9758 5.61625 12.578 5.20364ZM9.44891 5.61296L6.09297 8.96972C6.0485 9.01451 5.99562 9.05005 5.93736 9.0743C5.8791 9.09855 5.81662 9.11104 5.75351 9.11104C5.6904 9.11104 5.62792 9.09855 5.56966 9.0743C5.5114 9.05005 5.45852 9.01451 5.41405 8.96972L3.97568 7.53135C3.92688 7.48776 3.88749 7.43468 3.85992 7.37535C3.83235 7.31602 3.81718 7.25168 3.81533 7.18628C3.81349 7.12088 3.82501 7.05579 3.84919 6.995C3.87338 6.93421 3.90971 6.87899 3.95597 6.83273C4.00224 6.78647 4.05745 6.75013 4.11825 6.72595C4.17904 6.70177 4.24413 6.69024 4.30953 6.69209C4.37493 6.69393 4.43926 6.70911 4.49859 6.73668C4.55793 6.76425 4.61101 6.80364 4.65459 6.85243L5.75351 7.95217L8.77082 4.93487C8.81398 4.88471 8.86703 4.844 8.92665 4.81529C8.98627 4.78658 9.05117 4.77048 9.11729 4.76801C9.18342 4.76553 9.24935 4.77673 9.31094 4.80091C9.37254 4.82508 9.42849 4.86171 9.47528 4.9085C9.52207 4.95529 9.5587 5.01124 9.58287 5.07283C9.60705 5.13443 9.61825 5.20036 9.61577 5.26648C9.6133 5.33261 9.5972 5.39751 9.56849 5.45713C9.53978 5.51675 9.49907 5.5698 9.44891 5.61296Z" fill="url(#paint0_linear_gold_verified)"/>
+            <defs>
+              <linearGradient id="paint0_linear_gold_verified" x1="6.68544" y1="0" x2="6.73914" y2="13.4246" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#FEF1D6"/>
+                <stop offset="1" stopColor="#FCB02B"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={4}>Verified Partner</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -119,16 +66,6 @@ const AGENCY_DETAIL = {
   ],
 };
 
-/* ─── Filter button ─── */
-function FilterButton({ label }: { label: string }) {
-  return (
-    <button className="flex items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 py-3 text-sm tracking-[-0.02em] text-page-text dark:bg-white/[0.06]">
-      {label}
-      <ChevronDownIcon />
-    </button>
-  );
-}
-
 /* ─── Stat mini card ─── */
 function StatMini({ value, label, valueSuffix, valueColor }: { value: string; label: string; valueSuffix?: string; valueColor?: string }) {
   return (
@@ -145,7 +82,7 @@ function StatMini({ value, label, valueSuffix, valueColor }: { value: string; la
 /* ─── Agency card ─── */
 function AgencyCard({ agency, onClick, onBookCall }: { agency: typeof AGENCIES[number]; onClick: () => void; onBookCall: () => void }) {
   return (
-    <div className={cn(cardCls, "flex cursor-pointer flex-col transition-shadow hover:shadow-md")} onClick={onClick}>
+    <div className={cn(cardCls, "group flex cursor-pointer flex-col transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] dark:hover:border-white/[0.06]")} onClick={onClick}>
       {/* Cover */}
       <div className="p-1 pb-0">
         <div
@@ -159,18 +96,12 @@ function AgencyCard({ agency, onClick, onBookCall }: { agency: typeof AGENCIES[n
           {/* Pills */}
           <div className="absolute left-4 top-4 flex items-center gap-1">
             <div className={pillCls}>
-              <PersonIcon />
+              <Creators width={12} height={12} className="text-white" />
               <span>{agency.creators}</span>
             </div>
             <div className={pillCls}>
-              <MegaphoneIcon />
+              <Megaphone width={12} height={12} className="text-white" />
               <span>{agency.campaigns}</span>
-            </div>
-          </div>
-          <div className="absolute right-4 top-4">
-            <div className={cn(pillCls, "gap-1 px-2")}>
-              <VerifiedBadge size={12} />
-              <span>{agency.badge}</span>
             </div>
           </div>
         </div>
@@ -184,7 +115,7 @@ function AgencyCard({ agency, onClick, onBookCall }: { agency: typeof AGENCIES[n
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-1">
             <span className="text-base font-medium tracking-[-0.02em] text-page-text">{agency.name}</span>
-            <VerifiedBadge size={12} />
+            <GoldVerified size={14} />
           </div>
           <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">{agency.totalPaid}</span>
         </div>
@@ -212,7 +143,9 @@ function AgencyCard({ agency, onClick, onBookCall }: { agency: typeof AGENCIES[n
         {/* Status + CTA */}
         <div className="flex items-center justify-between pt-3">
           <div className="flex items-center gap-1 rounded-full bg-[rgba(255,51,85,0.08)] px-2 py-2">
-            <XCircleIcon />
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd" d="M6 12A6 6 0 1 0 6 0a6 6 0 0 0 0 12ZM4.172 4.172a.5.5 0 0 1 .707 0L6 5.293l1.121-1.121a.5.5 0 0 1 .707.707L6.707 6l1.121 1.121a.5.5 0 0 1-.707.707L6 6.707 4.879 7.828a.5.5 0 0 1-.707-.707L5.293 6 4.172 4.879a.5.5 0 0 1 0-.707Z" fill="#FF3355" />
+            </svg>
             <span className="text-xs font-medium tracking-[-0.02em] text-[#FF3355]">Not accepting</span>
           </div>
           <button onClick={(e) => { e.stopPropagation(); onBookCall(); }} className="rounded-full bg-page-text px-3 py-2 text-xs font-medium tracking-[-0.02em] text-white dark:bg-white dark:text-[#151515]">
@@ -237,9 +170,7 @@ function CampaignCard({ campaign }: { campaign: typeof AGENCY_DETAIL.campaigns[n
           <div className="flex items-start justify-end gap-1 p-3">
             {campaign.platforms.map((p) => (
               <div key={p} className="flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-xl">
-                {p === "tiktok" && <svg width="12" height="12" viewBox="0 0 15 17" fill="none"><path d="M14.528 6.845c-1.483 0-2.856-.472-3.977-1.272v5.821c0 2.912-2.362 5.273-5.276 5.273a5.26 5.26 0 0 1-2.937-.892A5.273 5.273 0 0 1 0 11.394c0-2.912 2.362-5.273 5.276-5.273.242 0 .484.017.724.05v2.916a2.425 2.425 0 0 0-.733-.113 2.413 2.413 0 0 0-2.413 2.413 2.42 2.42 0 0 0 1.327 2.154c.327.165.696.257 1.086.257 1.33 0 2.409-1.075 2.413-2.404V0h2.871v.367c.01.11.025.219.044.328a4.416 4.416 0 0 0 1.822 2.694c.633.395 1.365.604 2.112.603v2.853Z" fill="white" /></svg>}
-                {p === "instagram" && <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M6.333 1.141c1.691 0 1.891.007 2.56.037.4.005.8.079 1.175.218.275.102.524.264.728.474.21.204.372.453.474.728.14.377.213.774.218 1.176.03.675.037.876.037 2.566s-.006 1.891-.037 2.56a3.6 3.6 0 0 1-.218 1.175 2.16 2.16 0 0 1-.474.728 2.16 2.16 0 0 1-.728.474c-.377.14-.774.213-1.176.218-.675.03-.876.037-2.559.037s-1.891-.006-2.56-.037a3.6 3.6 0 0 1-1.175-.218 2.16 2.16 0 0 1-.728-.474 2.16 2.16 0 0 1-.474-.728 3.6 3.6 0 0 1-.218-1.176c-.03-.675-.037-.876-.037-2.559s.007-1.891.037-2.56c.005-.4.079-.8.218-1.175.102-.275.264-.524.474-.728a2.16 2.16 0 0 1 .728-.474c.377-.14.774-.213 1.176-.218.675-.03.876-.037 2.559-.037Z" fill="white" /></svg>}
-                {p === "youtube" && <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M15.32 4.06a2.013 2.013 0 0 0-1.415-1.425C12.728 2.28 8 2.28 8 2.28s-4.728 0-5.905.355A2.013 2.013 0 0 0 .68 4.06 21.002 21.002 0 0 0 .325 8c-.019 1.33.1 2.658.355 3.94a2.013 2.013 0 0 0 1.415 1.425c1.177.355 5.905.355 5.905.355s4.728 0 5.905-.355a2.013 2.013 0 0 0 1.415-1.425c.255-1.282.374-2.61.355-3.94a21 21 0 0 0-.355-3.94ZM6.5 10.5v-5l4 2.5-4 2.5Z" fill="white" /></svg>}
+                <PlatformIcon platform={p} size={12} className="invert dark:invert-0" />
               </div>
             ))}
             <div className={cn(pillCls, "h-6 gap-1 px-2")}>
@@ -255,7 +186,7 @@ function CampaignCard({ campaign }: { campaign: typeof AGENCY_DETAIL.campaigns[n
         <div className="flex items-center gap-1.5">
           <img src={campaign.brandLogo} alt="" className="size-4 rounded-full border border-foreground/[0.06]" />
           <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{campaign.brand}</span>
-          <VerifiedBadge size={12} />
+          <GoldVerified size={14} />
           <span className="text-xs font-medium tracking-[-0.02em] text-foreground/20">·</span>
           <span className="text-xs tracking-[-0.02em] text-page-text-subtle">{campaign.time}</span>
         </div>
@@ -267,7 +198,7 @@ function CampaignCard({ campaign }: { campaign: typeof AGENCY_DETAIL.campaigns[n
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             <div className="flex items-center gap-1.5 rounded-full border border-foreground/[0.06] px-2 py-2">
-              <PersonIcon />
+              <Creators width={12} height={12} className="text-page-text-muted" />
               <span className="text-xs font-medium tracking-[-0.02em] text-page-text">{campaign.members}</span>
             </div>
             <div className="flex items-center gap-[1px] rounded-full border border-foreground/[0.06] px-2 py-2">
@@ -341,8 +272,9 @@ const TIMES = [
 
 /* ─── Book a call panel ─── */
 function BookCallPanel({ agencyName, agencyLogo, onClose }: { agencyName: string; agencyLogo: string; onClose: () => void }) {
-  const [selectedDate, setSelectedDate] = useState(1); // Thu Apr 9
-  const [selectedTime, setSelectedTime] = useState(2); // 11:00 AM
+  const [selectedDate, setSelectedDate] = useState(1);
+  const [selectedTime, setSelectedTime] = useState(2);
+  const [termsAccepted, setTermsAccepted] = useState(false); // 11:00 AM
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -356,7 +288,7 @@ function BookCallPanel({ agencyName, agencyLogo, onClose }: { agencyName: string
           <span className="text-sm font-medium text-page-text">Book a call</span>
           <button onClick={onClose} className="absolute right-4 top-3">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.52" strokeLinecap="round" />
+              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.52" strokeLinecap="round" />
             </svg>
           </button>
         </div>
@@ -454,154 +386,181 @@ function BookCallPanel({ agencyName, agencyLogo, onClose }: { agencyName: string
    PAGE
    ═══════════════════════════════════════════════════════════ */
 export default function AgenciesPage() {
-  const [search, setSearch] = useState("");
   const [selectedAgency, setSelectedAgency] = useState<string | null>(null);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [specialty, setSpecialty] = useState("");
+  const [status, setStatus] = useState("");
+  const [sort, setSort] = useState("");
 
   const detail = selectedAgency ? AGENCY_DETAIL : null;
 
   /* ─── Detail view ─── */
   if (detail && selectedAgency) {
     return (
-      <div className="flex flex-1 flex-col font-inter tracking-[-0.02em] dark:bg-page-bg">
-        {/* Header */}
-        <div className="flex h-14 items-center border-b border-foreground/[0.06] px-5">
-          <button onClick={() => setSelectedAgency(null)} className="flex items-center gap-2 text-sm font-medium text-page-text transition-opacity hover:opacity-70">
-            <ArrowLeftIcon />
-            Back to agencies
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-1 flex-col gap-6 px-5 pb-5 md:flex-row md:gap-10">
-          {/* Left column */}
-          <div className="flex flex-1 flex-col gap-4">
-            {/* Stat cards — desktop: 3+2 rows, mobile: 2+1 with carousel dots */}
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <StatMini value={detail.budget} label="Budget" valueSuffix={detail.budgetUsed} valueColor="#00994D" />
-                <StatMini value={detail.creators} label="Creators" valueSuffix={detail.creatorsStatus} valueColor="var(--page-text)" />
-                <div className="hidden md:flex md:flex-1"><StatMini value={detail.totalSubmissions} label="Total submissions" /></div>
-              </div>
-              {/* Mobile: total submissions as separate row */}
-              <div className="md:hidden">
-                <StatMini value={detail.totalSubmissions} label="Total submissions" />
-              </div>
-              {/* Dot pagination for mobile carousel */}
-              <div className="flex items-center justify-center gap-1 md:hidden">
-                <div className="size-1.5 rounded-full bg-page-text" />
-                <div className="size-1.5 rounded-full bg-foreground/10" />
-                <div className="size-1.5 rounded-full bg-foreground/10" />
+      <div className="min-h-screen bg-page-bg font-inter">
+        <AnnouncementBanner />
+        <DubNav />
+        <div className="mx-auto max-w-[1024px] px-4 py-8 sm:px-6">
+          <div className="flex flex-col gap-6 tracking-[-0.02em]">
+            {/* Sticky back header */}
+            <div className="sticky top-14 z-10 -mx-4 border-b border-foreground/[0.06] bg-page-bg px-4 sm:-mx-6 sm:px-6">
+              <div className="flex h-12 items-center">
+                <button onClick={() => setSelectedAgency(null)} className="flex cursor-pointer items-center gap-2 text-sm font-medium tracking-[-0.02em] text-page-text transition-opacity hover:opacity-70">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" /><path d="M5 12l6 6" /><path d="M5 12l6-6" />
+                  </svg>
+                  Back to agencies
+                </button>
               </div>
             </div>
 
-            {/* Stat cards row 2 */}
-            <div className="flex gap-2">
-              <StatMini value={detail.startingAt} label="Starting at" />
-              <StatMini value={detail.minBudget} label="Min. budget" />
-            </div>
+            {/* Content */}
+            <div className="flex flex-1 flex-col gap-6 overflow-hidden md:flex-row md:gap-6">
+              {/* Left column */}
+              <div className="flex min-w-0 flex-1 flex-col gap-4">
+                {/* Stat cards — desktop: 3+2 rows, mobile: 2+1 with carousel dots */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <StatMini value={detail.budget} label="Budget" valueSuffix={detail.budgetUsed} valueColor="#00994D" />
+                    <StatMini value={detail.creators} label="Creators" valueSuffix={detail.creatorsStatus} valueColor="var(--page-text)" />
+                    <div className="hidden md:flex md:flex-1"><StatMini value={detail.totalSubmissions} label="Total submissions" /></div>
+                  </div>
+                  {/* Mobile: total submissions as separate row */}
+                  <div className="md:hidden">
+                    <StatMini value={detail.totalSubmissions} label="Total submissions" />
+                  </div>
+                  {/* Dot pagination for mobile carousel */}
+                  <div className="flex items-center justify-center gap-1 md:hidden">
+                    <div className="size-1.5 rounded-full bg-page-text" />
+                    <div className="size-1.5 rounded-full bg-foreground/10" />
+                    <div className="size-1.5 rounded-full bg-foreground/10" />
+                  </div>
+                </div>
 
-            {/* About */}
-            <div className={cn(cardCls, "flex flex-col gap-2 p-4")}>
-              <span className="text-sm font-medium tracking-[-0.02em] text-page-text">About {detail.name}</span>
-              <p className="text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">{detail.about}</p>
-            </div>
+                {/* Stat cards row 2 */}
+                <div className="flex gap-2">
+                  <StatMini value={detail.startingAt} label="Starting at" />
+                  <StatMini value={detail.minBudget} label="Min. budget" />
+                </div>
 
-            {/* Active campaigns */}
-            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Active campaigns</span>
-                <div className="flex items-center gap-2">
-                  <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] opacity-30"><ChevronLeftSmall /></button>
-                  <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06]"><ChevronRightSmall /></button>
+                {/* About */}
+                <div className={cn(cardCls, "flex flex-col gap-2 p-4")}>
+                  <span className="text-sm font-medium tracking-[-0.02em] text-page-text">About {detail.name}</span>
+                  <p className="text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">{detail.about}</p>
+                </div>
+
+                {/* Active campaigns */}
+                <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Active campaigns</span>
+                    <div className="flex items-center gap-2">
+                      <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] opacity-30">
+                        <ChevronDown className="size-3 rotate-90 text-page-text-muted" />
+                      </button>
+                      <button className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06]">
+                        <ChevronDown className="size-3 -rotate-90 text-page-text-muted" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {detail.campaigns.map((c) => (
+                      <CampaignCard key={c.name} campaign={c} />
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                {detail.campaigns.map((c) => (
-                  <CampaignCard key={c.name} campaign={c} />
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* Right column — profile + contact */}
-          <div className="relative w-full md:w-[400px] md:shrink-0">
-            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
-              {/* Cover */}
-              <div className="-mx-4 -mt-4">
-                <div className="p-0">
-                  <div
-                    className="h-[168px] w-full rounded-t-2xl bg-cover bg-center"
-                    style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%), url(${detail.cover})` }}
-                  >
-                    <div className="flex justify-end p-4">
-                      <div className={cn(pillCls, "gap-1 px-2")}>
-                        <VerifiedBadge size={12} />
-                        <span>{AGENCIES[0].badge}</span>
+              {/* Right column — profile + contact */}
+              <div className="relative w-full md:w-[340px] md:shrink-0">
+                <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+                  {/* Cover */}
+                  <div className="-mx-4 -mt-4">
+                    <div className="p-0">
+                      <div
+                        className="h-[168px] w-full rounded-t-2xl bg-cover bg-center"
+                        style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%), url(${detail.cover})` }}
+                      >
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Logo + name */}
-              <div className="flex items-center gap-3 px-4 -mt-2">
-                <div className="relative -mt-4">
-                  <img src={detail.logo} alt="" className="size-12 rounded-[10px] border-2 border-white object-cover dark:border-card-bg" />
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium tracking-[-0.02em] text-page-text">{detail.name}</span>
-                  <VerifiedBadge size={12} />
-                </div>
-              </div>
-
-              {/* Review + website */}
-              <div className={cn("flex items-center gap-3 rounded-[10px] border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)]")}>
-                <div className="flex flex-1 flex-col gap-1">
-                  <div className="flex items-center">
-                    {Array.from({ length: 5 }, (_, i) => <StarIcon key={i} />)}
+                  {/* Logo + name */}
+                  <div className="flex items-center gap-3 px-4 -mt-2">
+                    <div className="relative -mt-4">
+                      <img src={detail.logo} alt="" className="size-12 rounded-[10px] border-2 border-white object-cover dark:border-card-bg" />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-base font-medium tracking-[-0.02em] text-page-text">{detail.name}</span>
+                      <GoldVerified size={14} />
+                    </div>
                   </div>
-                  <span className="text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">Reviewed by {detail.reviewCount} users worldwide</span>
+
+                  {/* Review + website */}
+                  <div className={cn("flex items-center gap-3 rounded-[10px] border border-foreground/[0.06] p-3 dark:border-[rgba(224,224,224,0.03)]")}>
+                    <div className="flex flex-1 flex-col gap-1">
+                      <div className="flex items-center">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1.333l1.947 3.947 4.386.64-3.173 3.093.747 4.36L8 11.373l-3.907 2-0.747-4.36L.173 5.92l4.387-.64L8 1.333Z" fill="#FACC15" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-foreground/70">Reviewed by {detail.reviewCount} users worldwide</span>
+                    </div>
+                    <button className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.02em] text-page-text dark:bg-white/[0.06]">
+                      View website
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M9 6.5v3a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1H5.5M7.5 1.5h3v3M5 7l5.5-5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]" />
+
+                  {/* Contact form */}
+                  <div className="flex flex-col gap-4">
+                    <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Get in touch</span>
+
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Name</span>
+                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="Jane" />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Email</span>
+                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="jane@company.com" />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Phone</span>
+                      <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="+1 (555) 123-4567" />
+                    </div>
+
+                    {/* Terms checkbox */}
+                    <button type="button" onClick={() => setTermsAccepted(!termsAccepted)} className="flex cursor-pointer items-start gap-2 text-left">
+                      <div className={cn(
+                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                        termsAccepted
+                          ? "border-[#FF8003] bg-[#FF8003]"
+                          : "border-foreground/15 bg-white shadow-[0px_-1px_3px_rgba(0,0,0,0.06),inset_0px_0.5px_2px_rgba(0,0,0,0.08)] dark:bg-card-bg",
+                      )}>
+                        {termsAccepted && (
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">
+                        By proceeding, you agree to our Terms and Brand Policy.
+                      </span>
+                    </button>
+
+                    <button className="rounded-full bg-page-text py-2.5 text-sm font-medium tracking-[-0.02em] text-white opacity-50 dark:bg-white dark:text-[#151515]">
+                      Continue
+                    </button>
+                  </div>
                 </div>
-                <button className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium tracking-[-0.02em] text-page-text dark:bg-white/[0.06]">
-                  View website
-                  <ExternalLinkIcon />
-                </button>
-              </div>
-
-              {/* Divider */}
-              <div className="border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]" />
-
-              {/* Contact form */}
-              <div className="flex flex-col gap-4">
-                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">Get in touch</span>
-
-                <div className="flex flex-col gap-2">
-                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Name</span>
-                  <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="Jane" />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Email</span>
-                  <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="jane@company.com" />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Phone</span>
-                  <input className="rounded-[14px] bg-foreground/[0.04] px-3.5 py-3 text-sm text-page-text outline-none placeholder:text-foreground/40 dark:bg-white/[0.04]" placeholder="+1 (555) 123-4567" />
-                </div>
-
-                {/* Terms checkbox */}
-                <div className="flex items-start gap-1.5">
-                  <div className="mt-[1px] size-5 shrink-0 rounded-full border border-foreground/10 bg-white shadow-[0px_-1px_3px_rgba(0,0,0,0.06),0px_2px_2px_#FFFFFF,inset_0px_0.5px_2px_rgba(0,0,0,0.12)] dark:bg-card-bg" />
-                  <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">
-                    By proceeding, you agree to our Terms and Brand Policy.
-                  </span>
-                </div>
-
-                <button className="rounded-full bg-page-text py-2.5 text-sm font-medium tracking-[-0.02em] text-white opacity-50 dark:bg-white dark:text-[#151515]">
-                  Continue
-                </button>
               </div>
             </div>
           </div>
@@ -614,48 +573,29 @@ export default function AgenciesPage() {
 
   /* ─── Listing view ─── */
   return (
-    <div className="flex flex-1 flex-col font-inter tracking-[-0.02em] dark:bg-page-bg">
-      {/* Header — mobile: "Discover an agency" with back arrow, desktop: PageShell */}
-      <div className="md:hidden">
-        <div className="flex h-14 items-center border-b border-foreground/[0.06] px-5">
-          <div className="flex items-center gap-2 text-sm font-medium text-page-text">
-            <ArrowLeftIcon />
-            Discover an agency
+    <div className="min-h-screen bg-page-bg font-inter">
+      <AnnouncementBanner />
+      <DubNav />
+      <div className="mx-auto max-w-[1024px] px-4 py-8 sm:px-6">
+        <div className="flex flex-col gap-4 tracking-[-0.02em] md:gap-5">
+          {/* Filters */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-hide" style={{ scrollbarWidth: "none" }}>
+              <GlassFilterPill label="Specialty" options={["All", "Logo placement", "Clipping", "Talking head", "Reposting"]} value={specialty} onChange={setSpecialty} variant="outline" />
+              <GlassFilterPill label="Status" options={["All", "Accepting", "Not accepting"]} value={status} onChange={setStatus} variant="outline" />
+              <GlassFilterPill label="Sort by" options={["Featured", "Most campaigns", "Highest views", "Lowest CPM"]} value={sort} onChange={setSort} variant="outline" />
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="hidden md:block">
-        <PageShell title="Agencies" />
-      </div>
 
-      <div className="flex flex-col gap-4 px-5 py-4 md:gap-5 md:p-5">
-        {/* Search + filters */}
-        <div className="flex flex-col gap-2">
-          <div className="flex w-full items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 py-2.5 md:w-[320px] dark:bg-white/[0.04]">
-            <SearchIcon />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search agencies..."
-              className="flex-1 bg-transparent text-sm tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/70"
-            />
-          </div>
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <FilterButton label="Content style" />
-            <FilterButton label="Niche" />
-            <FilterButton label="Payment type" />
-            <FilterButton label="Budget" />
-          </div>
+          {/* Agency grid */}
+          {[0, 1, 2].map((row) => (
+            <div key={row} className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {AGENCIES.map((agency) => (
+                <AgencyCard key={`${row}-${agency.id}`} agency={agency} onClick={() => setSelectedAgency(agency.id)} onBookCall={() => setBookingOpen(true)} />
+              ))}
+            </div>
+          ))}
         </div>
-
-        {/* Agency grid */}
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {AGENCIES.map((agency) => (
-              <AgencyCard key={`${row}-${agency.id}`} agency={agency} onClick={() => setSelectedAgency(agency.id)} onBookCall={() => setBookingOpen(true)} />
-            ))}
-          </div>
-        ))}
       </div>
 
       {bookingOpen && <BookCallPanel agencyName="billbord" agencyLogo="/icons/agency1.avif" onClose={() => setBookingOpen(false)} />}

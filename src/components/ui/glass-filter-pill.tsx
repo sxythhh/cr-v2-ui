@@ -215,7 +215,7 @@ function GlassFilterPill({
                   type="button"
                 >
                   <span>{opt}</span>
-                  {isSelected && <CheckCircleIcon className="shrink-0" />}
+                  {isSelected && <CheckCircleIcon className="shrink-0 text-[#FF8003]" />}
                 </button>
               );
             })}

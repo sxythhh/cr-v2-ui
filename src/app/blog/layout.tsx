@@ -1,0 +1,20 @@
+import localFont from "next/font/local";
+
+const abcOracle = localFont({
+  src: "../../../public/fonts/ABCOracleVariable-Trial.ttf",
+  variable: "--font-abc-oracle",
+  display: "swap",
+});
+
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`${abcOracle.variable} blog-root`}>
+      <style>{`html:has(.blog-root) { scrollbar-width: none; -ms-overflow-style: none; } html:has(.blog-root)::-webkit-scrollbar { display: none; }`}</style>
+      {children}
+    </div>
+  );
+}
