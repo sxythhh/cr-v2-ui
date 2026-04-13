@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
@@ -432,19 +432,21 @@ function LeftSidebar({
   expandedGroups,
   onItemClick,
   onToggleGroup,
+  onSearchOpen,
 }: {
   activeItem: string;
   expandedGroups: Set<string>;
   onItemClick: (item: string) => void;
   onToggleGroup: (group: string) => void;
+  onSearchOpen?: () => void;
 }) {
   return (
     <aside className="hidden w-[290px] shrink-0 md:block">
       <div className="sticky top-[68px]">
-        {/* Search */}
-        <div className="flex h-9 items-center gap-2 rounded-[10px] border border-border bg-card-bg px-2">
+        {/* Search — opens command palette */}
+        <button onClick={() => onSearchOpen?.()} className="flex h-9 w-full items-center gap-2 rounded-[10px] border border-border bg-card-bg px-2 transition-colors hover:border-foreground/20">
           <SearchIcon className="shrink-0 text-page-text-muted" />
-          <span className="flex-1 text-sm font-medium text-page-text-muted">
+          <span className="flex-1 text-left text-sm font-medium text-page-text-muted">
             Search help
           </span>
           <div className="flex items-center gap-1">
@@ -455,7 +457,7 @@ function LeftSidebar({
               K
             </kbd>
           </div>
-        </div>
+        </button>
 
         {/* Navigation */}
         <nav className="mt-6 max-h-[calc(100vh-160px)] space-y-6 overflow-y-auto pb-8">
@@ -573,10 +575,15 @@ function RightSidebar({ activeLesson, completedLessons, onToggleComplete, onNavi
               {progress}%
             </span>
           </div>
-          <div className="mt-2 h-1.5 w-full rounded-full bg-foreground/[0.06]">
+          <div className="relative mt-2 h-2 w-full overflow-hidden rounded-full border border-border bg-foreground/[0.05]">
             <div
-              className="h-1 rounded-full bg-foreground transition-all"
-              style={{ width: `${progress}%` }}
+              className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+              style={{
+                width: `${progress}%`,
+                minWidth: progress > 0 ? 8 : 0,
+                background: "linear-gradient(180deg, #FFBB00 0%, #FF5300 100%)",
+                boxShadow: "inset 0px 1px 0px rgba(255,255,255,0.35), inset 0px -1px 0px rgba(255,255,255,0.15)",
+              }}
             />
           </div>
         </div>
@@ -647,6 +654,262 @@ function RightSidebar({ activeLesson, completedLessons, onToggleComplete, onNavi
   );
 }
 
+// ─── Search Command Palette Data ──────────────────────────────────────────────
+
+const NAV_ITEMS = [
+  { icon: "🔌", label: "Integrations" },
+  { icon: "📄", label: "Policies" },
+  { icon: "🔧", label: "Tests" },
+  { icon: "🔍", label: "Access Reviews" },
+  { icon: "✅", label: "Trust Report" },
+  { icon: "📊", label: "Reports" },
+  { icon: "⚙️", label: "Settings" },
+  { icon: "👥", label: "People" },
+  { icon: "🏢", label: "Companies" },
+  { icon: "💼", label: "Deals" },
+  { icon: "📋", label: "Lists" },
+  { icon: "🔄", label: "Workflows" },
+  { icon: "📧", label: "Email & Calendar" },
+  { icon: "📱", label: "Apps" },
+  { icon: "🎓", label: "Academy" },
+  { icon: "📖", label: "Documentation" },
+  { icon: "🔑", label: "API Reference" },
+  { icon: "💬", label: "Community" },
+  { icon: "🎧", label: "Support" },
+  { icon: "📝", label: "Changelog" },
+  { icon: "🏠", label: "Home" },
+  { icon: "🔔", label: "Notifications" },
+  { icon: "👤", label: "Profile" },
+  { icon: "🔒", label: "Security" },
+  { icon: "💳", label: "Billing" },
+  { icon: "🌐", label: "Domains" },
+  { icon: "📤", label: "Imports & Exports" },
+  { icon: "🏷️", label: "Tags" },
+  { icon: "📂", label: "Templates" },
+];
+
+const HELP_ARTICLES = [
+  { title: "Getting started with Content Rewards", desc: "A step-by-step guide to setting up your workspace, inviting your team, and connecting your first data source." },
+  { title: "Understanding objects and records", desc: "Learn what objects and records are and how they organize your data in the platform." },
+  { title: "Creating and managing campaigns", desc: "How to create, configure, and manage campaigns from start to finish." },
+  { title: "Setting up creator payouts", desc: "Configure payout methods, schedules, and automate creator payments with Stripe." },
+  { title: "Workflow automations guide", desc: "Build powerful automations to streamline your team's processes and save time." },
+  { title: "Email sync and calendar integration", desc: "Connect your email and calendar to automatically log communications." },
+  { title: "Custom attributes and relationships", desc: "Define custom fields and connect records across different objects." },
+  { title: "Building reports and dashboards", desc: "Create visual reports to track metrics and share insights with your team." },
+  { title: "Using AI features", desc: "Leverage AI-powered attributes, enrichment, and smart suggestions." },
+  { title: "Privacy, permissions, and roles", desc: "Manage access controls, user roles, and data visibility settings." },
+  { title: "Importing data from CSV", desc: "Bulk import contacts, companies, and deals from spreadsheet files." },
+  { title: "API authentication and setup", desc: "Get started with the REST API using OAuth2 or API key authentication." },
+  { title: "Keyboard shortcuts reference", desc: "Speed up your workflow with the full list of available keyboard shortcuts." },
+  { title: "Managing your subscription", desc: "Upgrade, downgrade, or cancel your plan. View invoices and billing history." },
+];
+
+// ─── Search Command Palette ──────────────────────────────────────────────────
+
+function SearchCommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [query, setQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"all" | "navigation" | "help">("all");
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const q = query.toLowerCase().trim();
+
+  const filteredNav = NAV_ITEMS.filter((n) => n.label.toLowerCase().includes(q));
+  const filteredHelp = HELP_ARTICLES.filter(
+    (a) => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q),
+  );
+
+  const showNav = activeTab === "all" || activeTab === "navigation";
+  const showHelp = activeTab === "all" || activeTab === "help";
+  const navToShow = showNav ? (activeTab === "all" ? filteredNav.slice(0, 5) : filteredNav) : [];
+  const helpToShow = showHelp ? (activeTab === "all" ? filteredHelp.slice(0, 4) : filteredHelp) : [];
+  const totalItems = navToShow.length + helpToShow.length;
+
+  useEffect(() => {
+    if (open) {
+      setQuery("");
+      setActiveTab("all");
+      setSelectedIndex(0);
+      setTimeout(() => inputRef.current?.focus(), 50);
+      document.body.style.overflow = "hidden";
+      // Also lock the sidebar scroll container
+      const scrollEls = document.querySelectorAll<HTMLElement>('[class*="overflow-y-auto"], [class*="overflow-auto"]');
+      scrollEls.forEach((el) => { el.dataset.prevOverflow = el.style.overflow; el.style.overflow = "hidden"; });
+      return () => {
+        document.body.style.overflow = "";
+        scrollEls.forEach((el) => { el.style.overflow = el.dataset.prevOverflow || ""; delete el.dataset.prevOverflow; });
+      };
+    }
+  }, [open]);
+
+  useEffect(() => { setSelectedIndex(0); }, [query, activeTab]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((i) => Math.min(i + 1, totalItems - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Escape") {
+      onClose();
+    }
+  };
+
+  // Scroll selected item into view
+  useEffect(() => {
+    const el = listRef.current?.querySelector(`[data-idx="${selectedIndex}"]`);
+    if (el) el.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex]);
+
+  if (!open) return null;
+
+  let idx = 0;
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div className="fixed inset-0 z-[9999] bg-black/40" onClick={onClose} />
+
+      {/* Modal */}
+      <div className="fixed left-1/2 top-[15%] z-[10000] w-[calc(100%-32px)] max-w-[640px] -translate-x-1/2 overflow-hidden rounded-2xl border border-border bg-card-bg shadow-[0_16px_70px_rgba(0,0,0,0.15)]">
+        {/* Search input */}
+        <div className="flex items-center gap-3 border-b border-border px-4 py-3">
+          <SearchIcon className="shrink-0 text-page-text-muted" />
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Try searching for a topic to find help articles"
+            className="flex-1 bg-transparent text-[15px] font-medium tracking-[-0.02em] text-page-text outline-none placeholder:text-page-text-muted"
+          />
+          {query && (
+            <button onClick={() => setQuery("")} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-foreground/[0.08] text-page-text-muted hover:bg-foreground/[0.12]">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            </button>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="flex items-center gap-1 border-b border-border px-4 py-2">
+          {(["all", "navigation", "help"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                "rounded-full px-3 py-1 text-[13px] font-medium tracking-[-0.02em] transition-colors",
+                activeTab === tab
+                  ? "bg-foreground text-background"
+                  : "text-page-text-muted hover:bg-foreground/[0.06] hover:text-page-text",
+              )}
+            >
+              {tab === "all" ? "All" : tab === "navigation" ? "Navigation" : "Help Center"}
+            </button>
+          ))}
+        </div>
+
+        {/* Results */}
+        <div ref={listRef} className="max-h-[400px] overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+          {totalItems === 0 && (
+            <div className="flex flex-col items-center gap-2 py-10 text-page-text-muted">
+              <SearchIcon className="h-6 w-6" />
+              <span className="text-sm font-medium">No results found</span>
+            </div>
+          )}
+
+          {/* Navigation section */}
+          {navToShow.length > 0 && (
+            <div className="px-2 pt-2">
+              <div className="flex items-center justify-between px-2 py-1.5">
+                <span className="text-[12px] font-semibold tracking-[-0.02em] text-page-text-muted">Navigation</span>
+                {activeTab === "all" && filteredNav.length > 5 && (
+                  <button onClick={() => setActiveTab("navigation")} className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+                    See more ({filteredNav.length}) →
+                  </button>
+                )}
+              </div>
+              {navToShow.map((item) => {
+                const thisIdx = idx++;
+                return (
+                  <div
+                    key={item.label}
+                    data-idx={thisIdx}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 transition-colors",
+                      selectedIndex === thisIdx ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]",
+                    )}
+                    onMouseEnter={() => setSelectedIndex(thisIdx)}
+                    onClick={onClose}
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-foreground/[0.06] text-[13px]">
+                      {item.icon}
+                    </span>
+                    <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{item.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Help center section */}
+          {helpToShow.length > 0 && (
+            <div className="px-2 pb-2 pt-1">
+              {navToShow.length > 0 && <div className="mx-2 my-1 border-t border-border" />}
+              <div className="flex items-center justify-between px-2 py-1.5">
+                <span className="text-[12px] font-semibold tracking-[-0.02em] text-page-text-muted">Browse help center</span>
+                {activeTab === "all" && filteredHelp.length > 4 && (
+                  <button onClick={() => setActiveTab("help")} className="text-[12px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+                    See more ({filteredHelp.length}) →
+                  </button>
+                )}
+              </div>
+              {helpToShow.map((article) => {
+                const thisIdx = idx++;
+                return (
+                  <div
+                    key={article.title}
+                    data-idx={thisIdx}
+                    className={cn(
+                      "flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2.5 transition-colors",
+                      selectedIndex === thisIdx ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]",
+                    )}
+                    onMouseEnter={() => setSelectedIndex(thisIdx)}
+                    onClick={onClose}
+                  >
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-foreground/[0.06]">
+                      <BookIcon className="text-page-text-muted" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[14px] font-medium tracking-[-0.02em] text-page-text">{article.title}</span>
+                      <p className="mt-0.5 truncate text-[12px] font-medium tracking-[-0.02em] text-page-text-muted">
+                        {article.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 border-t border-border px-4 py-2">
+          <span className="text-[11px] font-medium text-page-text-muted">↑↓ Navigate</span>
+          <span className="text-[11px] font-medium text-page-text-muted">↵ Open</span>
+          <span className="text-[11px] font-medium text-page-text-muted">esc Close</span>
+          <div className="ml-1 flex items-center gap-1">
+            <kbd className="flex h-[20px] min-w-[20px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-[10px] font-semibold text-page-text-muted" style={{ borderWidth: "1px 1px 2px 1px" }}>⌘</kbd>
+            <kbd className="flex h-[20px] min-w-[20px] items-center justify-center rounded-md border border-border bg-card-bg px-1 text-[10px] font-medium text-page-text-muted" style={{ borderWidth: "1px 1px 2px 1px" }}>K</kbd>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function HelpCenterClient() {
@@ -655,6 +918,19 @@ export default function HelpCenterClient() {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     () => new Set(["Introductions", "Attio 101"]),
   );
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // ⌘K keyboard shortcut
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const handleNavigate = useCallback((direction: "prev" | "next") => {
     const idx = LESSONS.findIndex((l) => l.name === activeItem);
@@ -696,6 +972,7 @@ export default function HelpCenterClient() {
 
   return (
     <div className="help-root min-h-screen bg-page-bg text-page-text">
+      <SearchCommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
       <style>{`
         html:has(.help-root), html:has(.help-root) body, .help-root, .help-root * {
           scrollbar-width: none !important;
@@ -716,6 +993,7 @@ export default function HelpCenterClient() {
           expandedGroups={expandedGroups}
           onItemClick={handleItemClick}
           onToggleGroup={handleToggleGroup}
+          onSearchOpen={() => setSearchOpen(true)}
         />
 
         {/* Main content */}

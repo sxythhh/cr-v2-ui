@@ -1,202 +1,154 @@
 "use client";
 
 import Link from "next/link";
-import { DubNav } from "@/components/lander/dub-nav";
-import { useState } from "react";
-import { useTheme } from "@/components/theme-provider";
+import { cn } from "@/lib/utils";
+import { PageShell } from "@/components/page-shell";
 
-const CATEGORIES = [
-  {
-    title: "Getting Started",
-    description: "Learn the basics and set up your account.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    ),
-    articles: ["Creating your account", "Setting up your workspace", "Inviting team members", "Platform overview"],
-    href: "/academy",
-  },
-  {
-    title: "Campaigns",
-    description: "Create, manage, and track campaigns.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    ),
-    articles: ["Creating a campaign", "Setting budgets", "Tracking performance", "Campaign templates"],
-    href: "/academy",
-  },
-  {
-    title: "Creators & Affiliates",
-    description: "Manage creator relationships and payouts.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    ),
-    articles: ["Finding creators", "Managing submissions", "Approval workflows", "Payout setup"],
-    href: "/academy",
-  },
-  {
-    title: "Analytics & Reports",
-    description: "Understand your data and measure ROI.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    ),
-    articles: ["Dashboard overview", "Custom reports", "Export data", "Attribution models"],
-    href: "/academy",
-  },
-  {
-    title: "Billing & Plans",
-    description: "Manage subscriptions, invoices, and payments.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M1 10h22" stroke="currentColor" strokeWidth="1.5"/></svg>
-    ),
-    articles: ["Upgrading your plan", "Managing payment methods", "Invoices & receipts", "Cancellation policy"],
-    href: "/academy",
-  },
-  {
-    title: "Integrations",
-    description: "Connect with your favorite tools.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    ),
-    articles: ["Zapier integration", "API overview", "Webhooks", "Shopify connection"],
-    href: "/academy",
-  },
+const cardCls = "rounded-2xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none";
+
+const ACADEMY_VIDEOS = [
+  { title: "Welcome to Content Rewards", duration: "1:32", thumb: "/creator-home/campaign-thumb-1.png" },
+  { title: "Getting Started as a Brand Manager", duration: "6:32", thumb: "/creator-home/campaign-thumb-2.png" },
 ];
 
-const POPULAR_ARTICLES = [
-  "How does CPM work?",
-  "How do I request a payout?",
-  "Why was my submission rejected?",
-  "How to set up auto-payouts",
-  "Understanding campaign metrics",
-  "Creator verification process",
+const HELP_ARTICLES = [
+  { title: "How do campaigns work?", desc: "Learn about CPM, retainer, and per-video campaign types." },
+  { title: "Managing creator payouts", desc: "Set up Stripe, process payouts, and handle disputes." },
+  { title: "Submission review workflow", desc: "Approve, reject, and manage content submissions." },
+  { title: "Understanding analytics", desc: "Track views, engagement, and ROI across campaigns." },
+  { title: "Trust score & quality", desc: "How creator trust scores work and affect approvals." },
 ];
 
-export function HelpCenterLanding() {
-  const [search, setSearch] = useState("");
-  const { darkMode } = useTheme();
+const DISCOVER_LINKS = [
+  { title: "Register for one of the daily webinars!", desc: "Learn tips to optimize your workflow", icon: "calendar" },
+];
 
+const DISCOVER_ARTICLES = [
+  { title: "What's new in Content Rewards?", thumb: "/creator-home/campaign-thumb-3.png" },
+  { title: "View all help topics", thumb: "/creator-home/campaign-thumb-1.png" },
+];
+
+const STILL_NEED_HELP = [
+  { label: "Knowledge base", href: "/support", icon: <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 2.5A1 1 0 0 1 2.5 1.5h7a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7z" stroke="currentColor" strokeWidth="1.1"/><path d="M3.5 4h5M3.5 6h3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg> },
+  { label: "Get started guide", href: "/academy", icon: <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg> },
+  { label: "Submit a ticket", href: "#", icon: <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5l4.5 3 4.5-3M1.5 3.5v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1z" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+];
+
+export default function HelpPageClient() {
   return (
-    <div className="help-root min-h-screen bg-page-bg font-inter text-foreground">
-      <style>{`
-        html:has(.help-root), html:has(.help-root) body, .help-root, .help-root * {
-          scrollbar-width: none !important; -ms-overflow-style: none !important;
-        }
-        html:has(.help-root)::-webkit-scrollbar, html:has(.help-root) body::-webkit-scrollbar,
-        .help-root::-webkit-scrollbar, .help-root *::-webkit-scrollbar { display: none !important; }
-      `}</style>
-      <DubNav theme={darkMode ? "dark" : "light"} />
+    <PageShell title="Help">
+      <div className="mx-auto flex w-full max-w-[520px] flex-col gap-6 px-4 py-5 font-inter tracking-[-0.02em] sm:px-5">
 
-      {/* Hero */}
-      <div className="bg-card-bg pb-16 pt-20">
-        <div className="mx-auto max-w-[720px] px-4 text-center">
-          <h1 className="text-[40px] font-semibold leading-[48px] tracking-[-0.84px] text-page-text sm:text-[52px] sm:leading-[60px]">
-            How can we help?
-          </h1>
-          <p className="mt-4 text-[18px] font-medium leading-[26px] tracking-[-0.18px] text-page-text-muted">
-            Search our knowledge base or browse categories below.
-          </p>
+        {/* Promo banner — AI onboarding */}
+        <div className="relative overflow-hidden rounded-xl p-5" style={{ background: "#655A4E" }}>
+          <div className="relative z-10 flex flex-col gap-1">
+            <span className="text-[12px] font-normal uppercase tracking-[0.02em] text-white/70">Limited time offer</span>
+            <span className="text-[16px] font-bold leading-[20px] text-white/90">CR AI onboarding agent</span>
+            <span className="text-[12px] font-medium leading-[16px] text-white/70">Jump in instantly with the CR AI onboarding agent.</span>
+          </div>
+        </div>
 
-          {/* Search bar */}
-          <div className="mx-auto mt-8 flex max-w-[560px] items-center gap-3 rounded-xl border border-border bg-card-bg px-4 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0 text-muted-foreground">
-              <path d="M9.167 15.833a6.667 6.667 0 1 0 0-13.333 6.667 6.667 0 0 0 0 13.333ZM17.5 17.5l-3.625-3.625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search for articles, guides, and more..."
-              className="flex-1 bg-transparent text-[16px] font-medium text-page-text outline-none placeholder:text-muted-foreground"
-            />
-            <div className="flex items-center gap-1">
-              <kbd className="flex h-[22px] min-w-[22px] items-center justify-center rounded-md border border-border px-1 text-xs font-semibold text-muted-foreground" style={{ borderBottomWidth: 2 }}>
-                ⌘
-              </kbd>
-              <kbd className="flex h-[22px] min-w-[22px] items-center justify-center rounded-md border border-border px-1 text-xs font-medium text-muted-foreground" style={{ borderBottomWidth: 2 }}>
-                K
-              </kbd>
+        {/* Recommended resources */}
+        <div className="flex flex-col gap-4">
+          <span className="text-[14px] font-medium text-page-text">Recommended resources</span>
+
+          <div className={cn(cardCls, "flex flex-col overflow-hidden")}>
+            {/* Academy videos tab */}
+            <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+              <span className="text-[14px] font-medium text-page-text">CR Academy videos</span>
+              <div className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-[12px] text-page-text-muted dark:bg-white/[0.06]">
+                {ACADEMY_VIDEOS.length}
+              </div>
+              <div className="flex-1" />
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+
+            {/* Videos */}
+            <div className="flex flex-col gap-3 p-4">
+              <p className="text-[12px] font-normal leading-[18px] text-page-text-muted">
+                These videos are related to getting started. To see more, go to <Link href="/academy" className="text-[#E57100] underline">CR Academy</Link>.
+              </p>
+              <div className="flex gap-3">
+                {ACADEMY_VIDEOS.map((video) => (
+                  <div key={video.title} className="flex flex-1 flex-col gap-1 rounded-lg">
+                    {/* Thumbnail */}
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-foreground/[0.04] dark:bg-white/[0.04]">
+                      <img src={video.thumb} alt="" className="h-full w-full object-cover" />
+                      {/* Play button */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="flex size-[26px] items-center justify-center rounded-full bg-[#E57100]">
+                          <svg width="7" height="8" viewBox="0 0 7 8" fill="none"><path d="M6.5 4L0.5 7.5V0.5L6.5 4Z" fill="white"/></svg>
+                        </div>
+                      </div>
+                      {/* Duration */}
+                      <div className="absolute bottom-1 right-1 rounded-full bg-page-text/80 px-1.5 py-0.5 text-[11px] font-medium text-white dark:bg-white/80 dark:text-page-text">
+                        {video.duration}
+                      </div>
+                    </div>
+                    <span className="text-[12px] font-medium leading-[18px] text-page-text">{video.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Help center articles tab */}
+            <div className="flex items-center gap-2 border-t border-border px-4 py-3">
+              <span className="text-[14px] font-medium text-page-text">Help center articles</span>
+              <div className="flex size-5 items-center justify-center rounded-full bg-foreground/[0.06] text-[12px] text-page-text-muted dark:bg-white/[0.06]">
+                {HELP_ARTICLES.length}
+              </div>
+              <div className="flex-1" />
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-page-text-muted"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Categories Grid */}
-      <div className="mx-auto max-w-[1100px] px-4 py-16">
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.title}
-              href={cat.href}
-              className="group flex flex-col rounded-2xl border border-border bg-card-bg p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF7A00]/10 text-[#FF7A00]">
-                {cat.icon}
-              </div>
-              <h3 className="mt-4 text-[16px] font-semibold leading-[22px] tracking-[-0.16px] text-page-text">
-                {cat.title}
-              </h3>
-              <p className="mt-1.5 text-[14px] font-medium leading-[20px] text-page-text-muted">
-                {cat.description}
-              </p>
-              <ul className="mt-4 space-y-1.5">
-                {cat.articles.map((article) => (
-                  <li key={article} className="flex items-center gap-2 text-[13px] font-medium text-muted-foreground transition-colors group-hover:text-page-text-muted">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
-                      <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {article}
-                  </li>
-                ))}
-              </ul>
-            </Link>
-          ))}
+        {/* Discover more */}
+        <div className="flex flex-col gap-4">
+          <span className="text-[14px] font-medium text-page-text">Discover more</span>
+
+          <div className="flex flex-col gap-3">
+            {/* Webinar link card */}
+            {DISCOVER_LINKS.map((link) => (
+              <a key={link.title} href="#" className={cn(cardCls, "flex items-center gap-4 p-3 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0 text-page-text-muted"><rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" strokeWidth="1.3"/><path d="M2 7h16M6 3v3M14 3v3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="text-[12px] font-medium text-page-text">{link.title}</span>
+                  <span className="text-[12px] text-page-text-muted">{link.desc}</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-page-text-muted"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </a>
+            ))}
+
+            {/* Article cards */}
+            <div className="flex gap-3">
+              {DISCOVER_ARTICLES.map((article) => (
+                <a key={article.title} href="#" className="flex flex-1 flex-col overflow-hidden rounded-lg border border-border transition-colors hover:border-foreground/[0.12]">
+                  <div className="h-[90px] w-full overflow-hidden bg-foreground/[0.04] dark:bg-white/[0.04]">
+                    <img src={article.thumb} alt="" className="h-full w-full object-cover" />
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <span className="text-[12px] font-medium leading-[18px] text-page-text">{article.title}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Popular Articles */}
-      <div className="border-t border-border bg-card-bg py-16">
-        <div className="mx-auto max-w-[1100px] px-4">
-          <h2 className="text-center text-[28px] font-semibold leading-[36px] tracking-[-0.32px] text-page-text">
-            Popular articles
-          </h2>
-          <div className="mx-auto mt-8 grid max-w-[720px] grid-cols-1 gap-3 sm:grid-cols-2">
-            {POPULAR_ARTICLES.map((article) => (
-              <Link
-                key={article}
-                href="/academy"
-                className="flex items-center gap-3 rounded-xl border border-border bg-page-bg px-4 py-3.5 text-[14px] font-medium text-page-text-muted transition-all hover:text-page-text hover:shadow-sm"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-[#FF7A00]">
-                  <path d="M2 4C2 2.9 2.9 2 4 2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4Z" stroke="currentColor" strokeWidth="1.2"/>
-                  <path d="M5.5 5.5h5M5.5 8h3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                </svg>
-                {article}
+        {/* Still need help? */}
+        <div className="flex flex-col gap-4">
+          <span className="text-[14px] font-medium text-page-text">Still need help?</span>
+          <div className="flex flex-col gap-2.5">
+            {STILL_NEED_HELP.map((item) => (
+              <Link key={item.label} href={item.href} className="flex items-center gap-1.5 text-[12px] text-[#7BA4D4] transition-colors hover:text-[#9BBDE6] dark:text-[#7BA4D4] dark:hover:text-[#9BBDE6]">
+                <span className="flex size-3 items-center justify-center">{item.icon}</span>
+                {item.label}
               </Link>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Academy CTA */}
-      <div className="py-16">
-        <div className="mx-auto max-w-[640px] px-4 text-center">
-          <h2 className="text-[24px] font-semibold leading-[32px] tracking-[-0.32px] text-page-text">
-            Want to go deeper?
-          </h2>
-          <p className="mt-2 text-[16px] font-medium text-page-text-muted">
-            Our Academy has step-by-step video courses to master every feature.
-          </p>
-          <Link
-            href="/academy"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-[14px] font-semibold text-background transition-opacity hover:opacity-90"
-          >
-            Browse Academy
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2.917 7h8.166M7.583 3.5L11.083 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </Link>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   );
 }

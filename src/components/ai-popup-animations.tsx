@@ -14,16 +14,18 @@ const ANIM = {
 export function AiPopupAnimated({
   open,
   children,
+  skipEntry,
 }: {
   open: boolean;
   children: ReactNode;
+  skipEntry?: boolean;
 }) {
   return (
     <AnimatePresence mode="wait">
       {open && (
         <motion.div
-          initial={ANIM.enter}
-          animate={{ ...ANIM.visible, transition: ANIM.enterTransition }}
+          initial={skipEntry ? ANIM.visible : ANIM.enter}
+          animate={{ ...ANIM.visible, transition: skipEntry ? { duration: 0.15 } : ANIM.enterTransition }}
           exit={{ ...ANIM.exit, transition: ANIM.exitTransition }}
           style={{
             transformOrigin: "bottom right",

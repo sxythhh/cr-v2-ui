@@ -495,32 +495,49 @@ function ArticleView({
   }, [page]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("data-section-id");
-            if (id) setActiveSectionId(id);
-          }
-        });
-      },
-      { rootMargin: "-100px 0px -70% 0px", threshold: [0, 0.1] }
-    );
+    const boundEls: EventTarget[] = [];
+    const sectionIds = page.sections.map((s) => s.id);
 
-    const timeout = setTimeout(() => {
-      sectionRefs.current.forEach((el) => observer.observe(el));
+    const handleScroll = () => {
+      // Pick the last section whose top has scrolled past the threshold
+      let active = sectionIds[0] ?? null;
+      for (const id of sectionIds) {
+        const el = sectionRefs.current.get(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 150) active = id;
+        }
+      }
+      if (active) setActiveSectionId(active);
+    };
+
+    // Wait for refs to populate, then find all scrollable ancestors
+    const timer = setTimeout(() => {
+      boundEls.push(window);
+      let el: HTMLElement | null = sectionRefs.current.values().next().value ?? null;
+      while (el) {
+        const style = getComputedStyle(el);
+        if (el.scrollHeight > el.clientHeight && (style.overflowY === "auto" || style.overflowY === "scroll")) {
+          boundEls.push(el);
+        }
+        el = el.parentElement;
+      }
+      boundEls.forEach((e) => e.addEventListener("scroll", handleScroll, { passive: true }));
+      handleScroll();
     }, 100);
 
     return () => {
-      clearTimeout(timeout);
-      observer.disconnect();
+      clearTimeout(timer);
+      boundEls.forEach((e) => e.removeEventListener("scroll", handleScroll));
     };
   }, [page]);
 
   const scrollToSection = (sectionId: string) => {
     setActiveSectionId(sectionId);
     const el = sectionRefs.current.get(sectionId);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const categoryName =
@@ -586,6 +603,7 @@ function ArticleView({
         {page.sections.map((section) => (
           <div
             key={section.id}
+            id={section.id}
             ref={(el) => {
               if (el) sectionRefs.current.set(section.id, el);
               else sectionRefs.current.delete(section.id);
@@ -726,10 +744,11 @@ function ArticleView({
                 padding: "6px 0 6px 16px",
                 letterSpacing: "-0.42px",
                 color: isActive ? C.textPrimary : C.textSecondary,
-                borderLeft: `2px solid ${isActive ? C.accent : C.border}`,
                 background: "none",
                 backgroundImage: "none",
-                border: "none",
+                borderTop: "none",
+                borderRight: "none",
+                borderBottom: "none",
                 borderLeftWidth: 2,
                 borderLeftStyle: "solid",
                 borderLeftColor: isActive ? C.accent : C.border,

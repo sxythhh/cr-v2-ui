@@ -351,7 +351,7 @@ function ProfileDropdown({
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -4, transition: { duration: 0.1 } }}
                 transition={{ duration: 0.15 }}
-                className="absolute bottom-0 left-full ml-1"
+                className="absolute bottom-0 left-full pl-2"
                 onMouseMove={(e) => e.stopPropagation()}
                 onMouseEnter={(e) => {
                   e.stopPropagation();

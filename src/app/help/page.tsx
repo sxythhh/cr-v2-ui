@@ -1,4 +1,4 @@
-import { SupportPageClient } from "@/components/support/SupportPage";
+import HelpPageClient from "./page-client";
 
 export const metadata = {
   title: "Help — Content Rewards",
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function HelpPage() {
-  return <SupportPageClient />;
+  return <HelpPageClient />;
 }

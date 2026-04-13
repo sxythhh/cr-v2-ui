@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/copy-button";
 import { Modal } from "@/components/ui/modal";
@@ -474,12 +475,29 @@ const quizQuestions = [
 ];
 
 export default function CreatorForYouPage() {
+  return (
+    <Suspense>
+      <CreatorForYouPageInner />
+    </Suspense>
+  );
+}
+
+function CreatorForYouPageInner() {
   const [stage, setStage] = useState<"quiz" | "quiz-questions" | "feed">("quiz");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizStep, setQuizStep] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string[]>>({});
+  const searchParams = useSearchParams();
   const [detailOpen, setDetailOpen] = useState(false);
+  const [fullScreenOpen, setFullScreenOpen] = useState(false);
   const campaign = campaigns[currentIndex];
+
+  // Open detail modal if ?detail=open is in the URL (e.g. after applying)
+  useEffect(() => {
+    if (searchParams.get("detail") === "open") {
+      setDetailOpen(true);
+    }
+  }, [searchParams]);
 
   const goNext = () => setCurrentIndex((i) => Math.min(campaigns.length - 1, i + 1));
   const goPrev = () => setCurrentIndex((i) => Math.max(0, i - 1));
@@ -972,7 +990,12 @@ export default function CreatorForYouPage() {
       </div>
 
       {/* ── Campaign detail panel ──────────────────────────── */}
-      <CampaignDetail campaign={campaign} open={detailOpen} onClose={() => setDetailOpen(false)} />
+      <CampaignDetail campaign={campaign} open={detailOpen} onClose={() => setDetailOpen(false)} onExpand={() => { setDetailOpen(false); setFullScreenOpen(true); }} />
+
+      {/* ── Campaign full-screen view ────────────────────── */}
+      {fullScreenOpen && (
+        <CampaignFullScreen campaign={campaign} onClose={() => setFullScreenOpen(false)} />
+      )}
     </div>
   );
 }
@@ -1013,10 +1036,12 @@ function CampaignDetail({
   campaign,
   open,
   onClose,
+  onExpand,
 }: {
   campaign: (typeof campaigns)[number];
   open: boolean;
   onClose: () => void;
+  onExpand?: () => void;
 }) {
   const [chartTab, setChartTab] = useState<"views" | "submissions">("views");
   const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, engagement: false });
@@ -1055,7 +1080,7 @@ function CampaignDetail({
       <div className="flex max-h-[85vh] flex-col overflow-hidden md:max-h-[704px]">
         {/* Expand/close button — sticky over scroll */}
         <button
-          onClick={onClose}
+          onClick={onExpand ?? onClose}
           className="absolute right-4 top-4 z-20 flex size-10 items-center justify-center rounded-full bg-black/20 backdrop-blur-xl transition-colors hover:bg-black/30"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 5a.833.833 0 0 1 .833-.833h2.5A2.5 2.5 0 0 1 15.833 6.667v2.5a.833.833 0 1 1-1.666 0v-2.5a.833.833 0 0 0-.834-.834h-2.5A.833.833 0 0 1 10 5ZM5 10a.833.833 0 0 1 .833.833v2.5c0 .46.373.834.834.834h2.5a.833.833 0 1 1 0 1.666h-2.5a2.5 2.5 0 0 1-2.5-2.5v-2.5A.833.833 0 0 1 5 10Z" fill="white"/></svg>
@@ -1335,15 +1360,315 @@ function CampaignDetail({
           <CopyButton variant="default" size="lg" text={campaignUrl}>
             Copy link
           </CopyButton>
-          <button
+          <a
+            href="/creator/campaign/apply"
             className="flex h-10 items-center rounded-full px-5 text-sm font-medium text-white"
             style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}
           >
-            Join campaign
-          </button>
+            Apply
+          </a>
         </div>
       </div>
     </Modal>
+  );
+}
+
+// ── Campaign Full-Screen View ──────────────────────────────────────
+
+function CampaignFullScreen({
+  campaign,
+  onClose,
+}: {
+  campaign: (typeof campaigns)[number];
+  onClose: () => void;
+}) {
+  const [chartTab, setChartTab] = useState<"views" | "submissions">("views");
+  const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, engagement: false });
+  const visibleMetricKeys = useMemo(() => Object.entries(metricState).filter(([, on]) => on).map(([k]) => k), [metricState]);
+  const campaignUrl = `https://outpace.studio/campaigns/${campaign.title.toLowerCase().replace(/\s+/g, "-")}`;
+
+  const topEarners = [
+    { rank: 2, name: "kaazty", views: "442,717 views", color: "#839FB9", bg: "bg-[rgba(131,159,185,0.04)]", hoverBg: "hover:bg-[rgba(131,159,185,0.08)]", height: "h-[160px] lg:h-[197px]", avatarSize: "size-8" },
+    { rank: 1, name: "abelix", views: "455,032 views", color: "#FB923C", bg: "bg-[rgba(251,146,60,0.04)]", hoverBg: "hover:bg-[rgba(251,146,60,0.08)]", height: "h-[200px] lg:h-[255px]", avatarSize: "size-10", crown: true },
+    { rank: 3, name: "Brent", views: "338,662 views", color: "#9E5200", bg: "bg-[rgba(158,82,0,0.04)]", hoverBg: "hover:bg-[rgba(158,82,0,0.08)]", height: "h-[130px] lg:h-[160px]", avatarSize: "size-8" },
+  ];
+
+  const platforms = [
+    { name: "YouTube", rate: "$0.50 per 1k views", min: "$0.50 min", max: "$250 max" },
+    { name: "TikTok", rate: "$1.50 per 1k views", min: "$1.50 min", max: "$250 max" },
+    { name: "Instagram", rate: "$1.50 per 1k views", min: "$1.50 min", max: "$350 max" },
+  ];
+
+  const resources = [
+    { name: "Google Drive", desc: "Content Bank Folder" },
+    { name: "Dropbox", desc: "Content Bank Folder" },
+    { name: "YouTube", desc: "Call of Duty S2 Launch" },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#FBFBFB] font-inter tracking-[-0.02em] dark:bg-page-bg">
+      {/* Top nav bar — reuses CreatorHeader with custom back title */}
+      <CreatorHeader
+        title=""
+        className="relative z-10 border-transparent bg-transparent"
+        leftSlot={
+          <button onClick={onClose} className="flex items-center gap-2">
+            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+              <path d="M4.667.667L.667 4.667l4 4M1.334 4.667h10" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.333" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-sm font-medium text-page-text">Back to For you</span>
+          </button>
+        }
+      />
+
+      {/* Scrollable content */}
+      <div className="relative z-10 flex-1 overflow-y-auto scrollbar-hide">
+        <div className="mx-auto flex w-full max-w-[756px] flex-col items-center gap-4 px-4 pb-6 sm:px-5 md:px-0">
+          {/* Hero card */}
+          <div
+            className="relative flex w-full flex-col justify-between overflow-hidden rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
+            style={{ minHeight: 320 }}
+          >
+            {/* Background image + overlays */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${campaign.thumbnail})` }}
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(37,37,37,0.2), rgba(37,37,37,0.2)), linear-gradient(180deg, rgba(37,37,37,0.9) 0%, rgba(37,37,37,0) 29.62%), linear-gradient(0deg, rgba(37,37,37,0.9) 17.19%, rgba(37,37,37,0) 68.75%)" }} />
+
+            {/* Top row: platform icons + category */}
+            <div className="relative z-10 flex items-center justify-end gap-1 p-5 text-white">
+              {["TikTok", "Instagram", "YouTube"].map((p) => (
+                <span key={p} className="flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-xl">
+                  {p === "TikTok" ? <TikTokIcon /> : p === "Instagram" ? <InstagramIcon /> : <YouTubeIcon />}
+                </span>
+              ))}
+              <span className="flex h-6 items-center gap-1 rounded-full bg-white/20 px-2 backdrop-blur-xl">
+                <GamepadIcon className="size-3 text-white" />
+                <span className="text-xs font-medium text-white">{campaign.category}</span>
+              </span>
+            </div>
+
+            {/* Bottom content */}
+            <div className="relative z-10 flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between sm:gap-20">
+              {/* Left: campaign info */}
+              <div className="flex flex-1 flex-col gap-3">
+                <div className="flex flex-col gap-2">
+                  {/* Brand row */}
+                  <div className="flex items-center gap-1.5">
+                    <img src={campaign.brandLogo} alt={campaign.brand} className="size-4 rounded-full" />
+                    <span className="text-xs font-medium text-white">{campaign.brand}</span>
+                    {campaign.verified && <VerifiedBadge />}
+                    <span className="text-xs text-white/20">&middot;</span>
+                    <span className="text-xs text-white/50">{campaign.postedAgo}</span>
+                    <span className="text-xs text-white/20">&middot;</span>
+                    <span className="text-xs text-white/50">Application required</span>
+                  </div>
+                  {/* Title */}
+                  <h1 className="text-xl font-medium leading-[135%] text-white">{campaign.title}</h1>
+                </div>
+
+                {/* Stats pills */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    <span className="flex h-6 items-center gap-1 rounded-full bg-white/20 px-2 backdrop-blur-xl">
+                      <svg width="12" height="12" viewBox="0 0 15 11" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7.164 0C9.8.0 12.358 1.515 14.069 4.389c.346.582.346 1.307 0 1.889C12.358 9.152 9.799 10.667 7.164 10.667 4.53 10.667 1.971 9.152.26 6.278c-.346-.582-.346-1.307 0-1.89C1.971 1.515 4.53 0 7.164 0ZM4.831 5.333a2.333 2.333 0 1 1 4.667 0 2.333 2.333 0 0 1-4.667 0Z" fill="white"/></svg>
+                      <span className="text-xs font-medium text-white">{campaign.cpmRate}</span>
+                    </span>
+                    <span className="flex h-6 items-center gap-1 rounded-full bg-white/20 px-2 backdrop-blur-xl">
+                      <svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1.355 2C1.355.895 2.25 0 3.355 0 4.46 0 5.355.895 5.355 2s-.895 2-2 2-2-.895-2-2Z" fill="white"/><path d="M5.855 2C5.855.895 6.75 0 7.855 0 8.96 0 9.855.895 9.855 2s-.895 2-2 2-2-.895-2-2Z" fill="white"/><path d="M3.355 4.5c1.435 0 2.797.99 3.304 2.807.265.95-.545 1.693-1.377 1.693H1.428c-.832 0-1.642-.744-1.377-1.693C.558 5.49 1.92 4.5 3.355 4.5Z" fill="white"/><path d="M7.622 7.038c-.244-.874-.663-1.614-1.202-2.187a3.5 3.5 0 0 1 1.435-.351c1.436 0 2.797.99 3.304 2.807.265.95-.545 1.693-1.377 1.693H7.27c.384-.522.562-1.218.354-1.962Z" fill="white"/></svg>
+                      <span className="text-xs font-medium text-white">{campaign.creators}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-0.5 text-xs">
+                    <span className="font-medium text-white">{campaign.budgetSpent}</span>
+                    <span className="text-white/50">/</span>
+                    <span className="text-white/50">{campaign.budgetTotal}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: action buttons */}
+              <div className="flex shrink-0 items-center gap-2">
+                <CopyButton variant="default" size="lg" text={campaignUrl} className="bg-white/20 text-white backdrop-blur-xl hover:bg-white/30 [&>svg]:text-white">
+                  Copy link
+                </CopyButton>
+                <a
+                  href="/creator/campaign/apply"
+                  className="flex h-10 items-center rounded-full px-5 text-sm font-medium text-white"
+                  style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}
+                >
+                  Join campaign
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="w-full text-sm leading-[150%] text-foreground/70">
+            {campaign.description} Creators should read through this description carefully to fully understand what is required, including the tone, style, audience targeting, and posting schedule.
+          </p>
+
+          {/* Cards section */}
+          <div className="flex w-full flex-col gap-2">
+            {/* Creator requirements */}
+            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+              <span className="text-sm font-medium text-page-text">Creator requirements</span>
+              <div className="flex gap-1">
+                <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12] dark:bg-white/[0.12]" />
+                <div className="flex flex-col gap-1 pl-2">
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
+                    <span className="text-sm leading-[150%] text-page-text">requirement one</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
+                    <span className="text-sm leading-[150%] text-page-text">requirement two (with a link)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content requirements */}
+            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+              <span className="text-sm font-medium text-page-text">Content requirements</span>
+              <div className="flex flex-col gap-3">
+                <span className="text-sm font-semibold text-page-text">Some title:</span>
+                <div className="flex gap-1">
+                  <div className="w-0.5 shrink-0 rounded-full bg-foreground/[0.12] dark:bg-white/[0.12]" />
+                  <div className="flex flex-col gap-1 pl-2">
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
+                      <span className="text-sm leading-[150%] text-page-text">requirement one</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex size-4 items-center justify-center"><div className="size-1 rounded-full bg-page-text" /></div>
+                      <span className="text-sm leading-[150%] text-page-text">requirement two (with a link)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Platform rate cards */}
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+              {platforms.map((p) => (
+                <div key={p.name} className={cn(cardCls, "flex flex-col justify-center gap-4 p-4")}>
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">
+                      {p.name === "YouTube" ? <YouTubeIcon /> : p.name === "TikTok" ? <TikTokIcon /> : <InstagramIcon />}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-medium text-page-text">{p.name}</span>
+                      <span className="text-sm text-page-text-subtle">{p.rate}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="rounded-full border border-foreground/[0.06] bg-white px-2.5 py-2 text-sm font-medium text-page-text dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">{p.min}</span>
+                    <span className="rounded-full border border-foreground/[0.06] bg-white px-2.5 py-2 text-sm font-medium text-page-text dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.04)]">{p.max}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Resources */}
+            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+              <span className="text-sm font-medium text-page-text">Resources</span>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {resources.map((r) => (
+                  <div key={r.name + r.desc} className={cn(cardCls, "flex cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}>
+                    <div className="flex size-10 items-center justify-center rounded-full border border-foreground/[0.06] shadow-[0_1.25px_2.5px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)]">
+                      {r.name === "Google Drive" ? (
+                        <svg width="20" height="18" viewBox="0 0 20 18" fill="none"><path d="M1.512 15.314l.882 1.524c.183.32.447.573.756.756L6.3 12.141H0c0 .355.092.71.275 1.031l1.237 2.142Z" fill="#0066DA"/><path d="M10 5.727L6.85.275a1.87 1.87 0 0 0-.756.756L.275 11.111A1.85 1.85 0 0 0 0 12.142h6.3L10 5.727Z" fill="#00AC47"/><path d="M16.85 17.594c.31-.184.573-.448.756-.756l.366-.63 1.753-3.035c.183-.32.275-.676.275-1.031h-6.3l1.34 2.634 1.81 2.818Z" fill="#EA4335"/><path d="M10 5.727l3.15-5.452A1.84 1.84 0 0 0 12.12 0H7.882c-.366 0-.721.103-1.031.275L10 5.727Z" fill="#00832D"/><path d="M13.699 12.141H6.3L3.149 17.594c.31.183.665.275 1.031.275h11.638c.366 0 .722-.103 1.031-.275l-3.15-5.453Z" fill="#2684FC"/><path d="M16.816 6.071l-2.91-5.04a1.871 1.871 0 0 0-.756-.756L10 5.727l3.7 6.415h6.289c0-.355-.091-.71-.275-1.031l-2.898-5.04Z" fill="#FFBA00"/></svg>
+                      ) : r.name === "Dropbox" ? (
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g clipPath="url(#dbclip2)"><path d="M0 0h20v20H0Z" fill="#0061FE"/><path d="M6.828 5l-3.171 1.992 3.172 1.992L10 6.992l3.172 1.992 3.171-1.992L13.172 5 10 6.992 6.828 5Zm0 7.969L3.657 10.977l3.171-1.993L10 10.977l-3.172 1.992Zm3.172-1.993l3.172-1.992 3.171 1.992-3.171 1.993L10 10.977Zm0 4.648l-3.172-1.992L10 11.641l3.172 1.992L10 15.625Z" fill="#F7F5F2"/></g><defs><clipPath id="dbclip2"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>
+                      ) : (
+                        <svg width="20" height="15" viewBox="0 0 20 15" fill="none"><g clipPath="url(#ytclip2)"><path d="M19.558 2.193A2.506 2.506 0 0 0 17.788.423C16.236 0 9.99 0 9.99 0S3.743.013 2.191.436A2.506 2.506 0 0 0 .421 2.206c-.469 2.758-.65 6.96.014 9.607.115.424.339.81.65 1.12.31.311.696.535 1.12.65 1.552.423 7.798.423 7.798.423s6.249 0 7.801-.423a2.47 2.47 0 0 0 1.755-1.77c.495-2.761.652-6.96-.001-9.62Z" fill="#FF0000"/><path d="M8.001 10.005l5.182-3.001L8.001 4.002v6.003Z" fill="white"/></g><defs><clipPath id="ytclip2"><rect width="20" height="14.063" fill="white"/></clipPath></defs></svg>
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col gap-2">
+                      <span className="text-sm font-medium text-page-text">{r.name}</span>
+                      <span className="text-xs text-page-text-subtle">{r.desc}</span>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M9.333 3.333a.667.667 0 0 1 0-1.333h4a.667.667 0 0 1 .667.667v4a.667.667 0 1 1-1.333 0V4.276l-4.862 4.862a.667.667 0 0 1-.943-.943l4.862-4.862H9.333ZM4.774 3.333H6a.667.667 0 0 1 0 1.334H4.8c-.384 0-.633 0-.822.016-.181.015-.248.04-.281.057a.667.667 0 0 0-.291.291c-.017.033-.042.1-.057.281-.016.19-.016.438-.016.822v5.067c0 .384 0 .632.016.821.015.181.04.249.057.282a.667.667 0 0 0 .291.29c.033.018.1.043.281.058.19.016.438.016.822.016h5.067c.384 0 .632 0 .821-.016.181-.015.249-.04.282-.057a.667.667 0 0 0 .29-.291c.018-.033.043-.1.058-.282.016-.189.016-.437.016-.821V10a.667.667 0 1 1 1.334 0v1.226c0 .352 0 .655-.02.905-.024.264-.071.526-.2.778a2 2 0 0 1-.874.874c-.252.129-.514.176-.778.2-.25.02-.553.02-.905.02H4.774c-.351 0-.654 0-.904-.02a2.019 2.019 0 0 1-.778-.2 2 2 0 0 1-.874-.874 2.019 2.019 0 0 1-.2-.778c-.02-.25-.02-.553-.02-.905V6.108c0-.352 0-.655.02-.905.024-.264.072-.526.2-.778a2 2 0 0 1 .874-.874c.252-.129.514-.176.778-.2.25-.02.553-.02.905-.02Z" fill="currentColor" fillOpacity="0.5"/>
+                    </svg>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Top earners */}
+            <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
+              <span className="text-sm font-medium text-page-text">Top earners</span>
+              <div className="flex items-end justify-center gap-2">
+                {topEarners.map((e) => (
+                  <div
+                    key={e.rank}
+                    className={cn(
+                      "flex w-full flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors dark:border-[rgba(224,224,224,0.03)]",
+                      e.bg, e.hoverBg, e.height
+                    )}
+                  >
+                    {e.crown ? (
+                      <div className="flex h-6 items-center gap-2 rounded-full px-2" style={{ background: e.color }}>
+                        <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M5.916.223A.5.5 0 0 0 5.5 0a.5.5 0 0 0-.416.223L3.329 2.855.724 1.553a.5.5 0 0 0-.713.549l1.084 5.204A1.5 1.5 0 0 0 2.563 8.5h5.874a1.5 1.5 0 0 0 1.468-1.194l1.084-5.204a.5.5 0 0 0-.713-.549L7.671 2.855 5.916.223Z" fill="white"/></svg>
+                        <span className="text-base font-medium text-white">{e.rank}</span>
+                      </div>
+                    ) : (
+                      <div className="flex size-[26px] items-center justify-center rounded-full text-base font-medium text-white" style={{ background: e.color }}>
+                        {e.rank}
+                      </div>
+                    )}
+                    <div className="flex flex-col items-center gap-2">
+                      <div className={cn("rounded-full bg-foreground/[0.08]", e.avatarSize)} />
+                      <div className="flex flex-col items-center gap-1.5">
+                        <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{e.name}</span>
+                        <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">{e.views}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Analytics */}
+            <div className={cn(cardCls, "flex flex-col justify-center gap-4 p-4")}>
+              <div className="flex flex-col gap-4">
+                {/* Tab switcher */}
+                <div className="flex rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-[rgba(224,224,224,0.03)]" style={{ width: "fit-content" }}>
+                  <button
+                    onClick={() => { setChartTab("views"); setMetricState({ views: true, engagement: false }); }}
+                    className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "views" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
+                  >
+                    Views
+                  </button>
+                  <button
+                    onClick={() => { setChartTab("submissions"); setMetricState({ views: false, engagement: true }); }}
+                    className={cn("rounded-[10px] px-4 py-2 text-sm font-medium transition-colors", chartTab === "submissions" ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]" : "text-page-text-muted")}
+                  >
+                    Submissions
+                  </button>
+                </div>
+                {/* Big number */}
+                <div className="flex flex-col gap-2">
+                  <span className="text-5xl font-medium tracking-[-0.02em] text-page-text">1.7m</span>
+                  <span className="text-sm leading-[120%] tracking-[-0.02em] text-foreground/50">Total views</span>
+                </div>
+              </div>
+              <AnalyticsPocChartPlaceholder
+                variant="line"
+                chartStylePreset="performance-main"
+                lineChart={DETAIL_CHART_DATA}
+                activeLineDataset="daily"
+                visibleMetricKeys={visibleMetricKeys}
+                heightClassName="h-[220px]"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

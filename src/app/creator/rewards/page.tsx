@@ -46,6 +46,55 @@ function LockIcon({ className }: { className?: string }) {
   );
 }
 
+function LockedBadgeSVG({ size = 80, progress = 67 }: { size?: number; progress?: number }) {
+  const pad = Math.round(size * 0.028);
+  const inner = size - pad * 2;
+  const r = Math.round(size * 0.21);
+  return (
+    <div
+      className="relative flex shrink-0 items-center justify-center"
+      style={{
+        width: size,
+        height: size,
+        padding: pad,
+        background: "radial-gradient(ellipse at 10% -69%, #E9E6E3 0%, #EDEDED 60%, #F4F4F4 100%)",
+        boxShadow: "inset 0px 4px 5px -6px rgba(37,37,37,0.08), inset -3px 3px 5px -5px rgba(37,37,37,0.12), inset 3px 3px 5px -5px rgba(37,37,37,0.16), inset 0px -1px 2px -1px rgba(255,255,255,0.8)",
+        borderRadius: r,
+      }}
+    >
+      <div
+        className="flex items-center justify-center"
+        style={{
+          width: inner,
+          height: inner,
+          background: "linear-gradient(180deg, #FFFFFF -10%, rgba(255,255,255,0.01) 69%), #EAE8E6",
+          boxShadow: "0px 7px 3px rgba(0,0,0,0.01), 0px 4px 2px rgba(0,0,0,0.04), 0px 2px 2px rgba(0,0,0,0.07), 0px 0.5px 1px rgba(0,0,0,0.08), inset 0px 1px 0px #FFFFFF, inset 0px -1px 0px rgba(255,255,255,0.7)",
+          borderRadius: r,
+        }}
+      >
+        <svg width={size * 0.53} height={size * 0.67} viewBox="0 0 86 109" fill="none">
+          <g filter="url(#rlf0)"><path d="M54.668 73.122c3.298-.134 6.567-.033 9.863-.034.779 2.599 1.738 5.148 2.63 7.71l3.026 8.848c-3.494-.786-7.097-1.146-10.572-1.996-1.153 1.913-2.384 3.764-3.603 5.635-.954 1.464-1.882 2.937-2.872 4.378-.906-2.743-2.034-5.422-3.047-8.128-.994-2.655-1.088-.27-2.196-2.88 1.271-1.328 2.478-2.748 3.651-4.163 1.19-1.435 2.362-3.22 3.911-4.27z" fill="#D1D1D2"/></g>
+          <g filter="url(#rlf1)"><path d="M20.632 72.832c3.065.262 6.21.094 9.282.004 1.933 2.107 3.784 4.279 5.688 6.41.726.813 1.616 1.56 2.276 2.417l-4.004 10.981c-.59 1.641-1.348 3.329-1.784 5.015-2.166-3.461-4.674-6.702-6.847-10.157-2.01.476-4.028.922-6.052 1.339-1.521.317-3.047.655-4.588.863.641-2.254 1.587-4.442 2.4-6.638 1.244-3.399 2.453-6.81 3.629-10.232z" fill="#D1D1D2"/></g>
+          <g filter="url(#rlf2)"><path d="M30.257 10.006c1.753-1.71 3.48-3.443 5.185-5.201C36.696 3.509 37.938 1.874 39.44.876c.89-.591 1.922-.88 2.987-.876 1.94.006 3.2.823 4.528 2.185 2.543 2.654 5.128 5.267 7.755 7.838l7.296-.001c1.782-.017 3.694-.261 5.443.116 1.14.246 2.228.782 3.056 1.613.667.67 1.095 1.498 1.313 2.415.461 1.937.253 4.21.238 6.192-.02 2.293-.014 4.586.016 6.878 1.388 1.307 2.697 2.721 4.041 4.075 1.271 1.281 3.579 3.324 4.443 4.797.395.673.57 1.51.595 2.287.052 1.652-.591 3.053-1.713 4.24-1.498 1.582-3.03 3.157-4.565 4.705-.61.614-1.313 1.165-1.877 1.819-.258.3-.483.63-.641.993-.439 1.009-.294 2.34-.286 3.417l.017 5.547c.008 1.399.107 2.869-.132 4.251-.58 3.348-3.073 5.02-6.333 5.111-.877.024-1.76-.036-2.634.031.498 1.523 1.103 3.044 1.544 4.58-3.296.002-6.565-.099-9.862.035-1.55 1.05-2.721 2.835-3.911 4.27-1.174 1.414-2.38 2.835-3.651 4.163-.511-1.121-.87-2.3-1.239-3.473-1.832.9-3.753 1.251-5.724.535-.352-.125-.696-.271-1.03-.438-.405 1.11-.966 2.31-1.235 3.452-.66-.857-1.55-1.604-2.276-2.417-1.904-2.131-3.755-4.303-5.688-6.41-3.071.09-6.217.258-9.282-.004.5-1.476 1.035-2.946 1.467-4.444-2.576.055-5.398.19-7.398-1.732-1.668-1.603-1.906-3.773-1.932-5.972-.04-3.408-.007-6.841.031-10.249-.719-.827-1.511-1.586-2.272-2.373-.718-.742-1.403-1.518-2.128-2.251C2.237 43.627-.224 41.701.017 38.302c.076-1.084.429-2.082 1.013-2.995.983-1.535 2.714-2.976 4.029-4.283l4.188-4.205c-.096-2.252-.049-4.527-.049-6.78.001-1.764-.196-3.778.197-5.5.223-.973.667-1.88 1.348-2.614 1.337-1.438 3.007-1.884 4.917-1.94 1.149-.033 2.304.035 3.454.043 2.38.02 4.761.013 7.142-.022z" fill="#DEDEDE"/></g>
+          <path d="M42.604 14.063c14.635 0 26.5 11.864 26.5 26.5 0 14.635-11.865 26.5-26.5 26.5s-26.5-11.865-26.5-26.5c0-14.636 11.865-26.5 26.5-26.5zm0 4.969c-11.891 0-21.531 9.64-21.531 21.531 0 11.891 9.64 21.531 21.531 21.531 11.891 0 21.531-9.64 21.531-21.531 0-11.891-9.64-21.531-21.531-21.531z" fill="#BAB9B9"/>
+          <path d="M69.104 40.562c0 5.597-1.772 11.049-5.062 15.577-3.289 4.527-7.927 7.897-13.25 9.627l-1.533-4.722c8.466-2.749 14.633-10.6 14.869-19.926l.007-.556h4.969z" fill="#EAEAEA"/>
+          <circle cx="42.6" cy="40.56" r="21.5" fill="white"/>
+          <path d="M35.733 39.602c0-1.013.783-1.834 1.75-1.834h9.187c.967 0 1.75.822 1.75 1.834v6.875c0 1.013-.783 1.833-1.75 1.833h-9.188c-.966 0-1.75-.82-1.75-1.833V39.602z" fill="#BAB9B9"/>
+          <path d="M45.795 37.769v-2.292c0-2.151-1.665-3.896-3.719-3.896s-3.718 1.745-3.718 3.896v2.292m3.718 3.896v2.75m-4.594 3.896h9.188c.966 0 1.75-.82 1.75-1.834v-6.875c0-1.012-.784-1.833-1.75-1.833h-9.188c-.966 0-1.75.82-1.75 1.833v6.875c0 1.013.784 1.834 1.75 1.834z" stroke="#BAB9B9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          <rect x="32.826" y="60.081" width="20.5" height="9.5" rx="4.75" fill="#BAB9B9" stroke="url(#rlpg)" strokeWidth="0.5"/>
+          <text x="43.08" y="66.5" fill="white" fontSize="6" fontWeight="700" fontFamily="Inter" textAnchor="middle" letterSpacing="-0.05em">{progress}%</text>
+          <defs>
+            <filter id="rlf0" x="40" y="70" width="38" height="39" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="a"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="b"/><feOffset dy="4"/><feGaussianBlur stdDeviation="3.5"/><feComposite in2="b" operator="out"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.21 0"/><feBlend in2="a" result="c"/><feBlend in="SourceGraphic" in2="c"/></filter>
+            <filter id="rlf1" x="7.6" y="69.8" width="38" height="39" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="a"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="b"/><feOffset dy="4"/><feGaussianBlur stdDeviation="3.5"/><feComposite in2="b" operator="out"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.21 0"/><feBlend in2="a" result="c"/><feBlend in="SourceGraphic" in2="c"/></filter>
+            <filter id="rlf2" x="0" y="0" width="86" height="90" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB"><feFlood floodOpacity="0" result="a"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="b"/><feOffset dy="4"/><feGaussianBlur stdDeviation="2"/><feComposite in2="b" operator="out"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/><feBlend in2="a" result="c"/><feBlend in="SourceGraphic" in2="c"/></filter>
+            <linearGradient id="rlpg" x1="32.576" y1="64.831" x2="53.576" y2="64.831" gradientUnits="userSpaceOnUse"><stop stopColor="#BAB9B9"/><stop offset="1" stopColor="#EAEAEA"/></linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 function ChevronRightIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 16 16" fill="none">
@@ -977,9 +1026,7 @@ function BadgeTierSection({ tier, onBadgeClick }: { tier: typeof BADGE_TIERS[num
             {badge.earned ? (
               <div className="size-20 rounded-full border border-foreground/[0.06] bg-gray-200 shadow-[0_0_0_1.8px_#fff] dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(224,224,224,0.06)] dark:shadow-[0_0_0_1.8px_var(--card-bg)]" />
             ) : (
-              <div className="flex size-20 items-center justify-center rounded-full border border-dashed border-foreground/[0.12] bg-white dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)]">
-                <LockIcon className="size-9" />
-              </div>
+              <LockedBadgeSVG size={80} progress={67} />
             )}
             {/* Label */}
             <div className="flex flex-col items-center gap-2">

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CreatorHeader } from "@/components/creator-header";
+import { PlatformIcon } from "@/components/icons/PlatformIcon";
+import { ProximityTabs } from "@/components/ui/proximity-tabs";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -78,6 +80,108 @@ const contracts = [
 
 // ── Page ───────────────────────────────────────────────────────────
 
+const ACCOUNT_PLATFORMS = [
+  { key: "all", label: "All", count: 50, platform: null },
+  { key: "tiktok", label: null, count: 25, platform: "tiktok" as const },
+  { key: "instagram", label: null, count: 10, platform: "instagram" as const },
+  { key: "youtube", label: null, count: 10, platform: "youtube" as const },
+  { key: "x", label: null, count: 5, platform: "x" as const },
+];
+
+const MOCK_ACCOUNTS = [
+  { id: "1", username: "@vladclips", platform: "tiktok" as const, followers: "124.5K", views: "2.1M", status: "active" as const, joined: "Jan 2026" },
+  { id: "2", username: "@vladcreates", platform: "tiktok" as const, followers: "45.2K", views: "890K", status: "active" as const, joined: "Feb 2026" },
+  { id: "3", username: "@vlad.studio", platform: "instagram" as const, followers: "89.1K", views: "1.5M", status: "active" as const, joined: "Jan 2026" },
+  { id: "4", username: "VladClips", platform: "youtube" as const, followers: "12.3K", views: "450K", status: "active" as const, joined: "Mar 2026" },
+  { id: "5", username: "@vladx", platform: "x" as const, followers: "8.7K", views: "120K", status: "pending" as const, joined: "Mar 2026" },
+];
+
+function AccountsSection() {
+  const [activePlatform, setActivePlatform] = useState("all");
+  const [search, setSearch] = useState("");
+
+  const filtered = MOCK_ACCOUNTS.filter((a) => {
+    if (activePlatform !== "all" && a.platform !== activePlatform) return false;
+    if (search && !a.username.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Filter bar */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* Platform tabs */}
+        <div className="flex items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 dark:bg-white/[0.04]">
+          {ACCOUNT_PLATFORMS.map((p) => {
+            const isActive = activePlatform === p.key;
+            return (
+              <button
+                key={p.key}
+                onClick={() => setActivePlatform(p.key)}
+                className={cn(
+                  "flex h-8 items-center gap-1.5 rounded-[10px] px-4 text-[14px] tracking-[-0.02em] transition-all",
+                  isActive
+                    ? "bg-white font-medium text-page-text shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg"
+                    : "text-foreground/50 hover:text-foreground/70"
+                )}
+              >
+                {p.platform && <PlatformIcon platform={p.platform} size={16} className="opacity-70" />}
+                {p.label && <span>{p.label}</span>}
+                <span className={isActive ? "text-foreground/50" : ""}>{p.count}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search + Add */}
+        <div className="flex items-center gap-2">
+          <div className="flex h-9 w-[200px] items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 dark:bg-white/[0.04]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search account..." className="flex-1 bg-transparent text-[14px] tracking-[-0.02em] text-page-text outline-none placeholder:text-foreground/70" />
+          </div>
+          <button className="flex h-9 items-center rounded-full px-4 text-[14px] font-medium tracking-[-0.02em] text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+            Add account
+          </button>
+        </div>
+      </div>
+
+      {/* Account cards */}
+      <div className="flex flex-col gap-2">
+        {filtered.map((account) => (
+          <div key={account.id} className={cn(cardCls, "flex items-center gap-4 p-4")}>
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-foreground/[0.04] dark:bg-white/[0.04]">
+              <PlatformIcon platform={account.platform} size={20} />
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="truncate text-sm font-medium tracking-[-0.02em] text-page-text">{account.username}</span>
+              <span className="text-xs tracking-[-0.02em] text-page-text-muted">{account.platform === "x" ? "X (Twitter)" : account.platform.charAt(0).toUpperCase() + account.platform.slice(1)} · Joined {account.joined}</span>
+            </div>
+            <div className="hidden items-center gap-6 sm:flex">
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{account.followers}</span>
+                <span className="text-xs tracking-[-0.02em] text-page-text-muted">Followers</span>
+              </div>
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-sm font-medium tracking-[-0.02em] text-page-text">{account.views}</span>
+                <span className="text-xs tracking-[-0.02em] text-page-text-muted">Views</span>
+              </div>
+            </div>
+            <span className={cn("flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium", account.status === "active" ? "bg-[rgba(0,153,77,0.08)] text-[#00994D]" : "bg-[rgba(229,113,0,0.08)] text-[#E57100]")}>
+              <div className={cn("size-1.5 rounded-full", account.status === "active" ? "bg-[#00994D]" : "bg-[#E57100]")} />
+              {account.status === "active" ? "Connected" : "Pending"}
+            </span>
+          </div>
+        ))}
+        {filtered.length === 0 && (
+          <div className="flex flex-col items-center gap-2 py-12 text-page-text-muted">
+            <span className="text-sm font-medium">No accounts found</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CreatorSettingsPage() {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [discoverable, setDiscoverable] = useState(true);
@@ -102,23 +206,12 @@ export default function CreatorSettingsPage() {
       <CreatorHeader title="Settings" />
 
       <div className="mx-auto flex w-full max-w-[756px] flex-col gap-4 px-4 py-4 sm:px-5 md:px-4">
-        {/* Tab bar */}
-        <div className="flex overflow-x-auto border-b border-foreground/[0.06] scrollbar-hide dark:border-[rgba(224,224,224,0.03)]">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "whitespace-nowrap px-4 py-3 text-sm font-medium tracking-[-0.02em] transition-colors sm:px-5",
-                activeTab === tab.id
-                  ? "border-b border-page-text text-page-text"
-                  : "text-page-text-muted hover:text-page-text"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {/* Tab bar — proximity hover */}
+        <ProximityTabs
+          tabs={tabs.map((t) => ({ label: t.label }))}
+          selectedIndex={tabs.findIndex((t) => t.id === activeTab)}
+          onSelect={(i) => setActiveTab(tabs[i].id)}
+        />
 
         {/* Tab content */}
         {activeTab === "profile" && (
@@ -252,32 +345,7 @@ export default function CreatorSettingsPage() {
           </div>
         )}
 
-        {activeTab === "accounts" && (
-          <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>
-            <span className="text-sm font-medium text-page-text">Connected accounts</span>
-            <div className="flex flex-col gap-2">
-              {connectedAccounts.map((a) => (
-                <div key={a.platform} className={cn(cardCls, "flex cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02]")}>
-                  <div className="flex size-9 items-center justify-center rounded-full border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
-                    {platformIcons[a.platform]}
-                  </div>
-                  <div className="flex flex-1 flex-col gap-2">
-                    <span className="text-sm font-medium text-page-text">{a.platform}</span>
-                    <span className="text-xs text-page-text-subtle">{a.handle}</span>
-                  </div>
-                  <span className="text-xs font-medium text-[#00994D] dark:text-[#34D399]">Connected</span>
-                </div>
-              ))}
-              {/* Add new */}
-              <div className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-foreground/[0.12] p-4 transition-colors hover:border-foreground/[0.25] hover:bg-foreground/[0.02] dark:border-[rgba(224,224,224,0.08)] dark:bg-[rgba(224,224,224,0.03)] dark:hover:border-[rgba(224,224,224,0.15)] dark:hover:bg-white/[0.04]">
-                <div className="flex size-9 items-center justify-center rounded-full bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="text-foreground/70"><path d="M9 3v12M3 9h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                </div>
-                <span className="text-sm font-medium text-page-text">Connect another account</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === "accounts" && <AccountsSection />}
 
         {activeTab === "contracts" && (
           <div className={cn(cardCls, "flex flex-col gap-4 p-4")}>

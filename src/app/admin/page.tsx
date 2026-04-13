@@ -1242,7 +1242,7 @@ function TopCampaignsCard() {
           <div key={c.rank} className="flex items-center gap-2.5 rounded-lg px-1 py-1.5 transition-colors" onMouseEnter={(e) => { e.currentTarget.style.background = C.hoverBg; }} onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
             <span className="flex size-5 items-center justify-center rounded-full text-[10px] font-semibold" style={{ background: c.rank <= 3 ? (c.rank === 1 ? "#f6850f" : c.rank === 2 ? "#9CA3AF" : "#B45309") : "transparent", color: c.rank <= 3 ? "#fff" : C.textMuted }}>{c.rank}</span>
             <span className="flex-1 min-w-0 truncate text-[13px] font-medium" style={{ color: C.text }}>{c.name}</span>
-            <span className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold tabular-nums" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>{c.count.toLocaleString()}</span>
+            <span className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>{c.count.toLocaleString()}</span>
           </div>
         ))}
       </div>
@@ -1260,7 +1260,7 @@ function TopCreatorsCard() {
           <div key={c.rank} className="flex items-center gap-2.5 rounded-lg px-1 py-1.5 transition-colors" onMouseEnter={(e) => { e.currentTarget.style.background = C.hoverBg; }} onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
             <span className="flex size-5 items-center justify-center rounded-full text-[10px] font-semibold" style={{ background: c.rank <= 3 ? (c.rank === 1 ? "#f6850f" : c.rank === 2 ? "#9CA3AF" : "#B45309") : "transparent", color: c.rank <= 3 ? "#fff" : C.textMuted }}>{c.rank}</span>
             <span className="flex-1 min-w-0 truncate text-[13px] font-medium" style={{ color: C.text }}>{c.name}</span>
-            <span className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold tabular-nums" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>{c.count.toLocaleString()}</span>
+            <span className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>{c.count.toLocaleString()}</span>
           </div>
         ))}
       </div>

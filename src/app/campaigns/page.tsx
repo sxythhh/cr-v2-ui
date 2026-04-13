@@ -51,6 +51,8 @@ interface Campaign {
   cpmUnit: string;
   joinedDate: string;
   progress?: number;
+  budgetTotal?: number;
+  budgetSpent?: number;
   earned?: string;
   pending?: string;
   videosSubmitted?: string;
@@ -78,6 +80,8 @@ const CAMPAIGNS: Campaign[] = [
     cpmUnit: "1K",
     joinedDate: "Tue 3 Mar, 2026",
     progress: 45,
+    budgetTotal: 10000,
+    budgetSpent: 4500,
   },
   {
     id: 2,
@@ -96,6 +100,8 @@ const CAMPAIGNS: Campaign[] = [
     cpmUnit: "1K",
     joinedDate: "Tue 3 Mar, 2026",
     progress: 45,
+    budgetTotal: 37500,
+    budgetSpent: 16875,
   },
   {
     id: 3,
@@ -213,7 +219,7 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-[160px] md:h-full w-full md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
+            className="h-[160px] md:h-full w-full md:w-[200px] lg:w-[260px] rounded-[18px] object-cover"
           />
           {/* CPM badge */}
           <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
@@ -226,14 +232,14 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
         {/* Campaign info */}
         <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 self-stretch px-4 py-3 md:px-0 md:py-4">
           {/* Status + discover badges */}
-          <div className="flex items-start gap-1">
+          <div className="flex flex-wrap items-start gap-1">
             <div className="flex items-center gap-1.5 rounded-full bg-[rgba(52,211,153,0.08)] px-2 py-1.5">
               <div className="size-1.5 rounded-full bg-[#34D399]" />
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#34D399]">
                 Active
               </span>
             </div>
-            <button className="group/btn flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5 dark:bg-foreground/[0.03] md:hidden lg:flex">
+            <button className="group/btn hidden cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5 dark:bg-foreground/[0.03] lg:flex">
               <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
                 View on Discover
               </span>
@@ -273,23 +279,24 @@ function ActiveCampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp
             </div>
           </div>
 
-          {/* Progress bar */}
-          <div className="flex flex-col gap-2">
-            <span className="font-inter text-xs font-medium tracking-[-0.02em] text-[#34D399]">
-              {campaign.progress}%
-            </span>
-            <div className="relative h-1 w-full rounded-full bg-foreground/[0.06]">
+          {/* Progress bar with hover tooltip */}
+          <div className="group/prog relative flex cursor-help items-center">
+            <div className="relative h-2 w-full overflow-hidden rounded-full border border-border bg-foreground/[0.05]">
               <div
-                className="absolute inset-y-0 left-0 rounded-full bg-[#34D399]"
-                style={{ width: `${campaign.progress}%` }}
+                className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+                style={{ width: `${campaign.progress}%`, minWidth: campaign.progress ? 8 : 0, background: "linear-gradient(180deg, #FFBB00 0%, #FF5300 100%)", boxShadow: "inset 0px 1px 0px rgba(255,255,255,0.35), inset 0px -1px 0px rgba(255,255,255,0.15)" }}
               />
+            </div>
+            {/* Budget tooltip */}
+            <div className="pointer-events-none absolute bottom-full left-0 z-50 mb-2 whitespace-nowrap rounded-lg bg-tooltip-bg px-2.5 py-1 text-xs font-medium tracking-[-0.02em] text-tooltip-text opacity-0 shadow-lg transition-opacity group-hover/prog:opacity-100">
+              ${(campaign.budgetSpent ?? 0).toLocaleString()} from ${(campaign.budgetTotal ?? 0).toLocaleString()} <span className="text-tooltip-text/50">({campaign.progress}%)</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right section: stats + actions */}
-      <div className="flex min-w-0 flex-col items-start gap-3 self-stretch px-4 pb-4 md:items-end md:p-4 md:pl-0">
+      <div className="flex min-w-0 shrink-0 flex-col items-start gap-3 self-stretch px-4 pb-4 md:w-auto md:items-end md:p-4 md:pl-0">
         {/* Stats */}
         <div className="flex flex-1 flex-col items-start gap-3 md:items-end">
           {/* Stat pills */}
@@ -368,7 +375,7 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
           <img
             src={campaign.thumbnail}
             alt=""
-            className="h-[160px] md:h-full w-full md:w-[240px] lg:w-[307px] rounded-[18px] object-cover"
+            className="h-[160px] md:h-full w-full md:w-[200px] lg:w-[260px] rounded-[18px] object-cover"
           />
           <div className="absolute left-4 top-4 z-[1] flex items-center justify-center gap-[1px] rounded-full bg-blue-500/40 px-2.5 py-2 backdrop-blur-[8px]">
             <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#DBEAFE]">
@@ -382,7 +389,7 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
           {/* Top section: badges + title */}
           <div className="flex flex-col gap-2">
             {/* Status badges */}
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-1">
               {isPaused && (
                 <div className="flex items-center gap-1.5 rounded-full bg-foreground/[0.06] px-2 py-1.5">
                   <div className="size-1.5 rounded-full bg-page-text/70" />
@@ -400,7 +407,7 @@ function DetailCampaignCard({ campaign }: { campaign: Campaign }) {
                 </div>
               )}
               {isCompleted && (
-                <button className="group/btn ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5 md:hidden lg:flex">
+                <button className="group/btn ml-2 hidden cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] py-1.5 pl-2 pr-2 transition-[padding,margin] duration-200 ease-out hover:mr-[-6px] hover:pr-3.5 lg:flex">
                   <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text/70">
                     View on Discover
                   </span>
@@ -536,6 +543,48 @@ function CampaignCard({ campaign, onTopUp }: { campaign: Campaign; onTopUp?: () 
 }
 
 // ── Header Tabs with proximity hover ────────────────────────────────
+
+function ScrollFadeTabs({ children, bgLight = "#FBFBFB", bgDark = "#161616" }: { children: React.ReactNode; bgLight?: string; bgDark?: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    const ro = new ResizeObserver(checkScroll);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", checkScroll); ro.disconnect(); };
+  }, [checkScroll]);
+
+  const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+  const bg = isDark ? bgDark : bgLight;
+
+  return (
+    <div className="relative min-w-0 flex-1">
+      <div ref={scrollRef} className="overflow-x-auto scrollbar-hide">
+        {children}
+      </div>
+      <div
+        className={cn("pointer-events-none absolute inset-y-0 left-0 z-10 w-8 transition-opacity duration-200", canScrollLeft ? "opacity-100" : "opacity-0")}
+        style={{ background: `linear-gradient(to right, ${bg}, transparent)` }}
+      />
+      <div
+        className={cn("pointer-events-none absolute inset-y-0 right-0 z-10 w-8 transition-opacity duration-200", canScrollRight ? "opacity-100" : "opacity-0")}
+        style={{ background: `linear-gradient(to left, ${bg}, transparent)` }}
+      />
+    </div>
+  );
+}
 
 function HeaderTabs({ selectedIndex, onSelect }: { selectedIndex: number; onSelect: (i: number) => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -801,9 +850,9 @@ export default function CampaignsPage() {
     <div className="min-h-full bg-page-bg">
       {/* Header with underline tabs */}
       <div className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[rgba(37,37,37,0.06)] bg-[#FBFBFB] pr-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-page-bg sm:pr-5">
-        <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide">
+        <ScrollFadeTabs from="[#FBFBFB]" fromDark="page-bg">
           <HeaderTabs selectedIndex={selectedHeaderTab} onSelect={setSelectedHeaderTab} />
-        </div>
+        </ScrollFadeTabs>
         {/* Action buttons — desktop only in header */}
         <div className="hidden shrink-0 items-center gap-2 md:flex">
           <button

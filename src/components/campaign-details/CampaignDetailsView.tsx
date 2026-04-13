@@ -141,7 +141,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
   const pct = Math.round((c.budget.spent / c.budget.total) * 100);
 
   return (
-    <div className="flex flex-col bg-white dark:bg-[#161616] md:h-full">
+    <div className="flex min-w-0 flex-col bg-white dark:bg-[#161616] md:h-full">
       {/* ── Mobile back header ───────────────────────────────── */}
       <div className="flex h-14 items-center border-b border-[rgba(37,37,37,0.06)] px-5 dark:border-[rgba(224,224,224,0.03)] md:hidden">
         <button
@@ -154,7 +154,7 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* ── Top bar ─────────────────────────────────────────────── */}
-      <header className="flex items-center border-b border-[rgba(37,37,37,0.06)] px-4 dark:border-[rgba(224,224,224,0.03)] sm:px-5">
+      <header className="sticky top-0 z-30 flex items-center border-b border-[rgba(37,37,37,0.06)] bg-white px-4 dark:border-[rgba(224,224,224,0.03)] dark:bg-[#161616] sm:px-5">
         {/* Back – hidden on mobile, shown inline on desktop */}
         <button
           onClick={() => router.push("/campaigns")}
@@ -164,11 +164,13 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           <span>Back to campaigns</span>
         </button>
 
-        {/* Tabs – scrollable on mobile, right-aligned on desktop */}
-        <HeaderTabs
-          selectedIndex={TABS.findIndex((t) => t.key === activeTab)}
-          onSelect={(i) => setActiveTab(TABS[i].key)}
-        />
+        {/* Tabs – scrollable, with directional fade gradients */}
+        <ScrollFadeTabs bgLight="#ffffff" bgDark="#161616">
+          <HeaderTabs
+            selectedIndex={TABS.findIndex((t) => t.key === activeTab)}
+            onSelect={(i) => setActiveTab(TABS[i].key)}
+          />
+        </ScrollFadeTabs>
       </header>
 
       {/* ── Content ─────────────────────────────────────────────── */}
@@ -308,10 +310,10 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                       </span>
                     </div>
                     {/* Progress bar */}
-                    <div className="h-1 w-full overflow-hidden rounded-full bg-[rgba(37,37,37,0.06)] dark:bg-[rgba(255,255,255,0.06)]">
+                    <div className="h-2 w-full overflow-hidden rounded-full border border-border bg-foreground/[0.05]">
                       <div
-                        className="h-full rounded-full bg-[#E57100] transition-all"
-                        style={{ width: `${pct}%` }}
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${pct}%`, minWidth: pct > 0 ? 8 : 0, background: "linear-gradient(180deg, #FFBB00 0%, #FF5300 100%)", boxShadow: "inset 0px 1px 0px rgba(255,255,255,0.35), inset 0px -1px 0px rgba(255,255,255,0.15)" }}
                       />
                     </div>
                     <div className="flex items-center justify-between">
@@ -467,6 +469,36 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 /* ------------------------------------------------------------------ */
 /*  HeaderTabs – proximity hover                                       */
 /* ------------------------------------------------------------------ */
+
+function ScrollFadeTabs({ children, bgLight = "#FBFBFB", bgDark = "#161616" }: { children: React.ReactNode; bgLight?: string; bgDark?: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+  }, []);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    const ro = new ResizeObserver(checkScroll);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", checkScroll); ro.disconnect(); };
+  }, [checkScroll]);
+  const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+  const bg = isDark ? bgDark : bgLight;
+  return (
+    <div className="relative min-w-0 flex-1">
+      <div ref={scrollRef} className="overflow-x-auto scrollbar-hide">{children}</div>
+      <div className={cn("pointer-events-none absolute inset-y-0 left-0 z-10 w-8 transition-opacity duration-200", canScrollLeft ? "opacity-100" : "opacity-0")} style={{ background: `linear-gradient(to right, ${bg}, transparent)` }} />
+      <div className={cn("pointer-events-none absolute inset-y-0 right-0 z-10 w-8 transition-opacity duration-200", canScrollRight ? "opacity-100" : "opacity-0")} style={{ background: `linear-gradient(to left, ${bg}, transparent)` }} />
+    </div>
+  );
+}
 
 function HeaderTabs({
   selectedIndex,

@@ -58,6 +58,8 @@ type SideNavContextType = {
   setSearchOpen: Dispatch<SetStateAction<boolean>>;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
+  aiSidebarOpen: boolean;
+  setAiSidebarOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const SideNavContext = createContext<SideNavContextType>({
@@ -71,6 +73,8 @@ export const SideNavContext = createContext<SideNavContextType>({
   setSearchOpen: () => {},
   editMode: false,
   setEditMode: () => {},
+  aiSidebarOpen: false,
+  setAiSidebarOpen: () => {},
 });
 
 export function SideNavProvider({ children }: { children: ReactNode }) {
@@ -80,6 +84,12 @@ export function SideNavProvider({ children }: { children: ReactNode }) {
   const [workspace, setWorkspace] = useState<Workspace>(WORKSPACES[2]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [aiSidebarOpen, setAiSidebarOpen] = useState(false);
+
+  // When AI sidebar opens, bump breakpoints so content stays responsive
+  useEffect(() => {
+    document.documentElement.classList.toggle("ai-sidebar-open", aiSidebarOpen);
+  }, [aiSidebarOpen]);
 
   // Close side nav when pathname changes
   useEffect(() => {
@@ -95,7 +105,7 @@ export function SideNavProvider({ children }: { children: ReactNode }) {
   }, [isOpen]);
 
   return (
-    <SideNavContext.Provider value={{ isOpen, setIsOpen, collapsed, setCollapsed, workspace, setWorkspace, searchOpen, setSearchOpen, editMode, setEditMode }}>
+    <SideNavContext.Provider value={{ isOpen, setIsOpen, collapsed, setCollapsed, workspace, setWorkspace, searchOpen, setSearchOpen, editMode, setEditMode, aiSidebarOpen, setAiSidebarOpen }}>
       {children}
     </SideNavContext.Provider>
   );

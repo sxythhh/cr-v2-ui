@@ -338,8 +338,8 @@ function ApplicationDetailsModal({
                 </div>
 
                 {/* Applied to */}
-                <div className="flex flex-1 flex-col justify-center gap-2 rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
-                  <span className="truncate font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
+                <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 overflow-hidden rounded-2xl border border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)] bg-card-bg p-3">
+                  <span className="block truncate font-inter text-sm font-medium leading-[1.2] tracking-[-0.02em] text-page-text">
                     {app.campaign}
                   </span>
                   <span className="font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
@@ -1037,13 +1037,13 @@ function ApplicationCard({ app, onClick }: { app: Application; onClick: () => vo
           <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 text-border">
             <path d="M0.75 0.75V8.75C0.75 10.9591 2.54086 12.75 4.75 12.75H16.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <div className="inline-flex items-center gap-1 rounded-full bg-accent py-px pl-0.5 pr-1.5">
+          <div className="inline-flex max-w-full items-center gap-1 rounded-full bg-accent py-px pl-0.5 pr-1.5">
             <img
               src={app.campaignAvatar}
               alt=""
-              className="size-3 rounded-full object-cover"
+              className="size-3 shrink-0 rounded-full object-cover"
             />
-            <span className="font-[family-name:var(--font-inter)] text-xs leading-[120%] text-page-text-subtle">
+            <span className="truncate font-[family-name:var(--font-inter)] text-xs leading-[120%] text-page-text-subtle">
               {app.campaign}
             </span>
           </div>
@@ -1230,7 +1230,7 @@ export function ApplicationsContent({ onQuickReviewRef, onScoresRef }: { onQuick
             <ApplicationCard
               key={app.id}
               app={app}
-              onClick={() => setSelectedAppId(app.id)}
+              onClick={() => window.location.href = `/applications/${app.id}`}
             />
           ))}
         </div>

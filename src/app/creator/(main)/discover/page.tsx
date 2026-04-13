@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { type Campaign, formatCreators, BANNER_CAMPAIGNS, FEATURED_CAMPAIGNS, GRID_CAMPAIGNS } from "./_shared";
@@ -293,14 +295,40 @@ function useDragScroll() {
 function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[] }) {
   const drag = useDragScroll();
   const [expanded, setExpanded] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollBy = useCallback((dir: "left" | "right") => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === "right" ? 300 : -300, behavior: "smooth" });
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="mx-auto flex w-full max-w-[756px] items-center justify-between px-4 sm:px-5 md:px-4">
         <h3 className="text-base font-medium tracking-[-0.02em] text-page-text">{title}</h3>
-        <button onClick={() => setExpanded(!expanded)} className="text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
-          {expanded ? "Show less" : "See all"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setExpanded(!expanded)} className="text-sm font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text">
+            {expanded ? "Show less" : "See all"}
+          </button>
+          {!expanded && (
+            <div className="hidden items-center sm:flex">
+              <button
+                onClick={() => scrollBy("left")}
+                className="flex h-[34px] w-[42px] items-center justify-center rounded-l-full border border-r-0 border-foreground/[0.12] text-page-text-muted transition-colors hover:bg-foreground/[0.04] hover:text-page-text dark:border-white/[0.12] dark:hover:bg-white/[0.04]"
+                style={{ opacity: 0.6 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+              <button
+                onClick={() => scrollBy("right")}
+                className="flex h-[34px] w-[42px] items-center justify-center rounded-r-full border border-foreground/[0.12] text-page-text-muted transition-colors hover:bg-foreground/[0.04] hover:text-page-text dark:border-white/[0.12] dark:hover:bg-white/[0.04]"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {expanded ? (
@@ -311,7 +339,7 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
         </div>
       ) : (
         <div
-          ref={drag.ref}
+          ref={(el) => { (drag.ref as React.MutableRefObject<HTMLDivElement | null>).current = el; scrollContainerRef.current = el; }}
           onPointerDown={drag.onPointerDown}
           onPointerMove={drag.onPointerMove}
           onPointerUp={drag.onPointerUp}
@@ -333,15 +361,16 @@ function CampaignRow({ title, campaigns }: { title: string; campaigns: Campaign[
 const SORT_OPTIONS = ["Featured", "Newest", "Budget (highest to lowest)", "CPM (highest to lowest)", "Paid out (highest to lowest)", "Creators (highest to lowest)"];
 const FILTER_SECTIONS: Record<string, string[]> = {
   Content: ["All", "Slideshows", "Reposting", "Talking head", "Watermark"],
-  Category: ["All", "Gaming", "Music", "Entertainment", "Sports", "Lifestyle", "Technology"],
   Type: ["All", "CPM", "Per video", "Retainer"],
   Budget: ["All", "Under $5K", "$5K–$20K", "$20K–$50K", "$50K+"],
 };
 const FILTER_KEYS = Object.keys(FILTER_SECTIONS);
 
-function FilterBar({ search, onSearch, viewMode, onViewMode }: {
+function FilterBar({ search, onSearch, viewMode, onViewMode, verifiedOnly, onVerifiedToggle, showHelpMePick }: {
   search: string; onSearch: (v: string) => void;
   viewMode: "list" | "grid"; onViewMode: (v: "list" | "grid") => void;
+  verifiedOnly?: boolean; onVerifiedToggle?: () => void;
+  showHelpMePick?: boolean;
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [sort, setSort] = useState("Featured");
@@ -359,33 +388,81 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
   }, [dropdownOpen]);
 
   return (
-    <div className="flex items-center justify-between gap-4 py-2">
-      {/* Search */}
-      <div className="flex h-9 w-full items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 md:w-[300px] md:flex-none dark:bg-white/[0.04]">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-foreground/50"><path d="M14 14l-3.5-3.5M10.5 6a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-        <input value={search} onChange={(e) => onSearch(e.target.value)} placeholder="Search campaigns..." className="w-full bg-transparent text-sm text-page-text outline-none placeholder:text-foreground/70 dark:placeholder:text-white/40" />
+    <div className="flex items-center justify-between gap-2 py-1">
+      {/* Search + Help me pick */}
+      <div className="flex items-center gap-2">
+        <div className="flex h-9 w-full items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 md:w-[300px] md:flex-none dark:bg-white/[0.04]">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" className="shrink-0"><path d="M11.4167 11.4167L8.78333 8.78333M10.0833 5.41667C10.0833 7.994 7.994 10.0833 5.41667 10.0833C2.83934 10.0833 0.75 7.994 0.75 5.41667C0.75 2.83934 2.83934 0.75 5.41667 0.75C7.994 0.75 10.0833 2.83934 10.0833 5.41667Z" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          <input value={search} onChange={(e) => onSearch(e.target.value)} placeholder="Search campaigns..." className="w-full bg-transparent text-sm text-page-text outline-none placeholder:text-foreground/70 dark:placeholder:text-white/40" />
+        </div>
+        {showHelpMePick && (
+          <Link
+            href="/creator/feed"
+            className="hidden shrink-0 items-center gap-1.5 text-xs font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text sm:flex"
+          >
+            <svg width="12" height="12" viewBox="0 0 10 10" fill="none" className="shrink-0"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.625 3.125C4.41789 3.125 4.25 3.29289 4.25 3.5C4.25 3.70711 4.07711 3.875 3.875 3.875C3.66789 3.875 3.5 3.70711 3.5 3.5C3.5 2.87868 4.00368 2.375 4.625 2.375H5.15C5.82132 2.375 6.375 2.92868 6.375 3.6C6.375 4.05195 6.12524 4.46458 5.73047 4.67695L5.375 4.86829V5.125C5.375 5.33211 5.20711 5.5 5 5.5C4.79289 5.5 4.625 5.33211 4.625 5.125V4.625C4.625 4.48886 4.69886 4.36263 4.81797 4.29805L5.37523 4.00017C5.54755 3.90714 5.625 3.76005 5.625 3.6C5.625 3.34315 5.40685 3.125 5.15 3.125H4.625ZM5 6.875C5.20711 6.875 5.375 6.70711 5.375 6.5C5.375 6.29289 5.20711 6.125 5 6.125C4.79289 6.125 4.625 6.29289 4.625 6.5C4.625 6.70711 4.79289 6.875 5 6.875Z" fill="currentColor"/></svg>
+            Help me pick
+          </Link>
+        )}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* View toggle — desktop only */}
+      <div className="flex items-center gap-1.5">
+        {/* View toggle + verified — desktop only */}
         <div className="hidden items-center gap-0.5 rounded-xl bg-foreground/[0.06] p-0.5 md:flex dark:bg-white/[0.06]">
+          {/* Verified toggle */}
+          {onVerifiedToggle && (
+            <button
+              onClick={onVerifiedToggle}
+              className={cn(
+                "flex h-8 items-center gap-1.5 rounded-[10px] px-2.5 text-xs font-medium tracking-[-0.02em] transition-all",
+                verifiedOnly
+                  ? "bg-white text-[#E57100] shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg"
+                  : "text-page-text-muted"
+              )}
+            >
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M5.8.8C6.5.1 7.5.1 8.2.8L8.9 1.5l1-.2c.9-.2 1.8.4 2 1.3l.2 1 .9.5c.8.4 1.1 1.4.7 2.2l-.5.9.5.9c.4.8.1 1.8-.7 2.2l-.9.5-.2 1c-.2.9-1.1 1.5-2 1.3l-1-.2-.7.7c-.7.7-1.7.7-2.4 0l-.7-.7-1 .2c-.9.2-1.8-.4-2-1.3l-.2-1-.9-.5c-.8-.4-1.1-1.4-.7-2.2l.5-.9-.5-.9c-.4-.8-.1-1.8.7-2.2l.9-.5.2-1C2.3 1.7 3.2 1.1 4.1 1.3l1 .2.7-.7Z" fill={verifiedOnly ? "#E57100" : "currentColor"} fillOpacity={verifiedOnly ? 1 : 0.4}/><path d="M5 7l1.5 1.5 3-3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Verified
+            </button>
+          )}
           <button onClick={() => onViewMode("list")} className={cn("flex size-8 items-center justify-center rounded-[10px] transition-all", viewMode === "list" ? "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg" : "")}>
-            <svg width="12" height="11" viewBox="0 0 12 11" fill="none"><path d="M2 0C.895 0 0 .895 0 2s.895 2 2 2 2-.895 2-2-.895-2-2-2Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M6.667 1.333C6.298 1.333 6 1.632 6 2s.298.667.667.667h4.666C11.702 2.667 12 2.368 12 2s-.298-.667-.667-.667H6.667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M2 6.667C.895 6.667 0 7.562 0 8.667S.895 10.667 2 10.667s2-.895 2-2-.895-2-2-2Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/><path d="M6.667 8C6.298 8 6 8.298 6 8.667s.298.666.667.666h4.666c.368 0 .667-.298.667-.666S11.702 8 11.333 8H6.667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/></svg>
+            <svg width="12" height="11" viewBox="0 0 12 11" fill="none">
+              <rect x="0.25" y="0.25" width="3.5" height="3.5" rx="0.75" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/>
+              <path d="M6.667 1.333C6.298 1.333 6 1.632 6 2s.298.667.667.667h4.666C11.702 2.667 12 2.368 12 2s-.298-.667-.667-.667H6.667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/>
+              <rect x="0.25" y="6.917" width="3.5" height="3.5" rx="0.75" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/>
+              <path d="M6.667 8C6.298 8 6 8.298 6 8.667s.298.666.667.666h4.666c.368 0 .667-.298.667-.666S11.702 8 11.333 8H6.667Z" fill="currentColor" fillOpacity={viewMode === "list" ? 1 : 0.4}/>
+            </svg>
           </button>
           <button onClick={() => onViewMode("grid")} className={cn("flex size-8 items-center justify-center rounded-[10px] transition-all", viewMode === "grid" ? "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg" : "")}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect width="5" height="5" rx="1" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><rect x="7" width="5" height="5" rx="1" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><rect y="7" width="5" height="5" rx="1" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/><rect x="7" y="7" width="5" height="5" rx="1" fill="currentColor" fillOpacity={viewMode === "grid" ? 1 : 0.4}/></svg>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style={{ opacity: viewMode === "grid" ? 1 : 0.4 }}>
+              <rect x="3" y="3" width="6" height="6" rx="1.5" fill="currentColor"/>
+              <rect x="11" y="3" width="6" height="6" rx="1.5" fill="currentColor"/>
+              <rect x="3" y="11" width="6" height="6" rx="1.5" fill="currentColor"/>
+              <circle cx="14" cy="14" r="2.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              <path d="M16 16l1.5 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
 
         {/* Filter/sort button */}
         <div className="relative" ref={dropdownRef}>
-          <button onClick={() => { setDropdownOpen(!dropdownOpen); setSubMenu(null); }} className="flex size-9 items-center justify-center rounded-xl bg-foreground/[0.06] dark:bg-white/[0.06]">
+          <button onClick={() => { setDropdownOpen(!dropdownOpen); setSubMenu(null); }} className="relative flex size-9 items-center justify-center rounded-xl bg-foreground/[0.06] dark:bg-white/[0.06]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            {Object.values(filterSelections).filter((v) => v && v !== "All").length > 0 && (
+              <div className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[#FF3B30] text-[9px] text-white" style={{ fontWeight: 800 }}>
+                {Object.values(filterSelections).filter((v) => v && v !== "All").length}
+              </div>
+            )}
           </button>
 
           {/* Dropdown */}
+          <AnimatePresence>
           {dropdownOpen && (
-            <div className="absolute right-0 top-full z-50 mt-2 flex w-64 flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.1 } }}
+              transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute right-0 top-full z-50 mt-2 flex w-64 flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
               {subMenu ? (
                 <>
                   {/* Sub-menu header (mobile: click back) */}
@@ -425,7 +502,7 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </button>
                       {/* Desktop: hover submenu */}
-                      <div className="pointer-events-none absolute bottom-0 right-full z-50 mr-2 hidden opacity-0 transition-opacity group-hover/filter:pointer-events-auto group-hover/filter:opacity-100 lg:block">
+                      <div className="pointer-events-none absolute bottom-0 right-full z-50 hidden pr-2 opacity-0 transition-opacity group-hover/filter:pointer-events-auto group-hover/filter:opacity-100 lg:block">
                         <div className="flex w-64 flex-col rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1C1C1C]">
                           <span className="px-2.5 pb-1 pt-2 text-sm text-page-text-subtle">{key}</span>
                           {FILTER_SECTIONS[key]?.map((opt) => {
@@ -443,9 +520,94 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
                   ))}
                 </>
               )}
-            </div>
+            </motion.div>
           )}
+          </AnimatePresence>
         </div>
+      </div>
+    </div>
+  );
+}
+
+const CATEGORIES = ["All Categories", "Entertainment", "Gaming", "Technology", "Lifestyle", "Sports", "Music"];
+
+function FloatingCategoryBar({ onShuffle }: { onShuffle: () => void }) {
+  const [catOpen, setCatOpen] = useState(false);
+  const [selectedCat, setSelectedCat] = useState("All Categories");
+  const catRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!catOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (catRef.current && !catRef.current.contains(e.target as Node)) setCatOpen(false);
+    };
+    document.addEventListener("pointerdown", handler);
+    return () => document.removeEventListener("pointerdown", handler);
+  }, [catOpen]);
+
+  return (
+    <div ref={catRef} className="sticky bottom-5 z-40 ml-4 self-start sm:ml-5 md:ml-4">
+      {/* Dropdown — opens upward, same width + style as bar */}
+      <AnimatePresence>
+        {catOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.97, transition: { duration: 0.1 } }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute bottom-full left-0 mb-1 flex w-full flex-col rounded-[10px] p-1"
+            style={{ background: "var(--tooltip-bg, rgba(6,7,16,0.92))", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+          >
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => { setSelectedCat(cat); setCatOpen(false); }}
+                className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors hover:bg-white/[0.08]"
+                style={{ color: "var(--tooltip-text, white)", opacity: selectedCat === cat ? 1 : 0.6 }}
+              >
+                {cat !== "All Categories" && CATEGORY_ICONS[cat] && <span className="flex size-4 items-center justify-center text-white/70">{CATEGORY_ICONS[cat]}</span>}
+                <span className="flex-1 text-left">{cat}</span>
+                {selectedCat === cat && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6l2.5 2.5 4.5-4.5" stroke="currentColor" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bar */}
+      <div
+        className="flex items-center rounded-[10px] p-1"
+        style={{ background: "var(--tooltip-bg, rgba(6,7,16,0.92))", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+      >
+        {/* Category button — shows selected category's icon */}
+        <button onClick={() => setCatOpen((v) => !v)} className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.08]">
+          <span className="flex size-4 shrink-0 items-center justify-center opacity-80" style={{ color: "var(--tooltip-text, white)" }}>
+            {selectedCat !== "All Categories" && CATEGORY_ICONS[selectedCat] ? CATEGORY_ICONS[selectedCat] : (
+              <svg width="14" height="18" viewBox="0 0 16 24" fill="none">
+                <path fillRule="evenodd" clipRule="evenodd" d="M13.617 6.188c-.532-.22-1.234-.408-2.104-.64l-.707-.188c-.87-.232-1.571-.419-2.143-.492-.594-.076-1.121-.041-1.608.238-.487.28-.782.717-1.013 1.268-.222.53-.41 1.228-.643 2.092l-.701 2.602c-.233.865-.421 1.563-.495 2.132-.076.592-.042 1.118.24 1.604.282.485.722.778 1.274 1.008.532.22 1.234.408 2.104.64l.707.188c.87.232 1.572.419 2.143.492.594.076 1.122.041 1.609-.238.487-.28.782-.717 1.013-1.268.222-.53.41-1.228.643-2.093l.701-2.601c.233-.865.421-1.563.495-2.132.077-.592.041-1.118-.24-1.604-.282-.485-.722-.779-1.274-1.008z" fill="currentColor"/>
+                <path fillRule="evenodd" clipRule="evenodd" d="M4.283 7.978a.5.5 0 0 0-.45.828c-.647.186-.914.318-1.075.595a1.14 1.14 0 0 0-.096.872c.061.481.225 1.102.469 2.016l.675 2.533c.244.914.41 1.534.597 1.981.179.43.339.605.514.706.176.1.41.151.875.09.483-.063 1.107-.23 2.025-.477l.315-.085a.5.5 0 0 1 .259.966l-.36.097c-.86.232-1.571.424-2.153.5-.611.08-1.181.049-1.712-.256-.531-.305-.844-.78-1.08-1.349-.226-.54-.414-1.248-.643-2.105l-.699-2.624c-.228-.857-.417-1.565-.49-2.146-.077-.611-.042-1.18.266-1.71.457-.788 1.303-1.112 2.321-1.413a.5.5 0 0 1 .378.45z" fill="currentColor"/>
+              </svg>
+            )}
+          </span>
+          <span className="font-inter text-[14px] font-medium opacity-80" style={{ color: "var(--tooltip-text, white)" }}>{selectedCat}</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className={cn("opacity-80 transition-transform", catOpen && "rotate-180")}>
+            <path d="M5.5 7L8 9.5L10.5 7" stroke="var(--tooltip-text, white)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        {/* Divider */}
+        <div className="mx-0.5 h-[18px] w-px rounded-full" style={{ background: "var(--tooltip-text, white)", opacity: 0.15 }} />
+
+        {/* Shuffle button — orange gradient on hover */}
+        <button onClick={onShuffle} className="group/shuffle relative flex items-center gap-1 overflow-hidden rounded-lg px-2.5 py-2 transition-all">
+          {/* Orange gradient bg — hidden by default, shown on hover */}
+          <div className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-200 group-hover/shuffle:opacity-100" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }} />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="relative z-10 opacity-30 transition-opacity group-hover/shuffle:opacity-100">
+            <path fillRule="evenodd" clipRule="evenodd" d="M2.861 6.817c.515.2.771.779.572 1.294-.577 1.492-.577 2.786 0 4.278.2.515-.056 1.095-.571 1.294-.516.2-1.095-.056-1.294-.572C.81 11.154.81 9.346 1.567 7.39c.2-.515.779-.771 1.294-.572z" fill="var(--tooltip-text, white)"/>
+            <path d="M11.387 8.217l4.88-2.921c1.617-.968 3.685-.393 4.618 1.283l1.031 1.852c2.231 4.008.907 9.133-2.958 11.447-2.599 1.556-5.814 1.49-8.352-.17l-5.571-3.644a.75.75 0 0 1-.265-.982l.111-.756c.187-1.276 1.337-2.153 2.567-1.959l1.339.212-3.381-6.072a1.75 1.75 0 0 1 .825-2.38 1.75 1.75 0 0 1 2.254.856l2.254 4.048z" fill="var(--tooltip-text, white)"/>
+          </svg>
+          <span className="relative z-10 font-inter text-[14px] font-medium opacity-30 transition-opacity group-hover/shuffle:opacity-100" style={{ color: "var(--tooltip-text, white)" }}>Shuffle</span>
+        </button>
       </div>
     </div>
   );
@@ -455,32 +617,97 @@ function FilterBar({ search, onSearch, viewMode, onViewMode }: {
 export default function CreatorDiscoverPage() {
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [shuffleKey, setShuffleKey] = useState(0);
+  const [isShuffling, setIsShuffling] = useState(false);
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  const [filterFloating, setFilterFloating] = useState(false);
+
+  const shuffledVerified = useMemo(() => {
+    const arr = [...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5);
+    if (shuffleKey === 0) return arr;
+    return [...arr].sort(() => Math.random() - 0.5);
+  }, [shuffleKey]);
+
+  const shuffledTrending = useMemo(() => {
+    const arr = GRID_CAMPAIGNS.slice(0, 6);
+    if (shuffleKey === 0) return arr;
+    return [...arr].sort(() => Math.random() - 0.5);
+  }, [shuffleKey]);
+
+  const handleShuffle = useCallback(() => {
+    setIsShuffling(true);
+    setTimeout(() => {
+      setShuffleKey((k) => k + 1);
+      setTimeout(() => setIsShuffling(false), 300);
+    }, 150);
+  }, []);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      if (!filterBarRef.current) return;
+      const rect = filterBarRef.current.getBoundingClientRect();
+      setFilterFloating(rect.bottom < 0);
+    };
+    // Listen on all scroll containers
+    const scrollEls: EventTarget[] = [window];
+    let el: HTMLElement | null = filterBarRef.current;
+    while (el) {
+      if (el.scrollHeight > el.clientHeight) scrollEls.push(el);
+      el = el.parentElement;
+    }
+    scrollEls.forEach((e) => e.addEventListener("scroll", checkScroll, { passive: true }));
+    return () => scrollEls.forEach((e) => e.removeEventListener("scroll", checkScroll));
+  }, []);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
-      <div className="flex flex-col gap-6 pb-5 md:py-4">
+    <div className="relative flex min-h-0 flex-1 flex-col bg-page-bg font-inter tracking-[-0.02em]">
+      <div className="flex flex-col gap-4 pb-5 md:py-4">
         {/* Hero — full-bleed on mobile, contained on desktop */}
         <div className="md:mx-auto md:w-full md:max-w-[756px] md:px-4">
           <HeroBanner campaigns={BANNER_CAMPAIGNS} />
         </div>
 
         {/* Filter bar */}
-        <div className="mx-auto w-full max-w-[756px] px-4 sm:px-5 md:px-4">
+        <div ref={filterBarRef} className="mx-auto w-full max-w-[756px] px-4 sm:px-5 md:px-4">
           <FilterBar search={search} onSearch={setSearch} viewMode={viewMode} onViewMode={setViewMode} />
         </div>
 
-        {viewMode === "grid" ? (
-          <>
-            <CampaignRow title="Verified campaigns" campaigns={[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].slice(0, 5)} />
-            <CampaignRow title="Trending campaigns" campaigns={GRID_CAMPAIGNS.slice(0, 6)} />
-          </>
-        ) : (
-          <div className="mx-auto flex w-full max-w-[756px] flex-col gap-2 px-4 sm:px-5 md:px-4">
-            {[...FEATURED_CAMPAIGNS, ...GRID_CAMPAIGNS].map((c) => (
-              <CampaignListCard key={c.id} campaign={c} />
-            ))}
+        {/* Floating filter bar — sticky, no layout jump */}
+        <div className="sticky top-0 z-30 h-0">
+          <div
+            className={cn(
+              "mx-auto w-full max-w-[900px] px-4 pt-2 transition-all duration-200 ease-out sm:px-5 md:px-4",
+              filterFloating ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0"
+            )}
+          >
+            <div
+              className="rounded-[10px] border border-border px-2 dark:border-white/[0.06]"
+              style={{ background: "var(--page-bg, rgba(255,255,255,0.92))", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", boxShadow: "0px 8px 24px rgba(0,0,0,0.06), 0px 2px 6px rgba(0,0,0,0.04)" }}
+            >
+              <FilterBar search={search} onSearch={setSearch} viewMode={viewMode} onViewMode={setViewMode} verifiedOnly={verifiedOnly} onVerifiedToggle={() => setVerifiedOnly((v) => !v)} showHelpMePick />
+            </div>
           </div>
-        )}
+        </div>
+
+        <div className={cn("transition-all duration-300", isShuffling ? "scale-[0.98] opacity-40 blur-[2px]" : "scale-100 opacity-100 blur-0")}>
+          {viewMode === "grid" ? (
+            <>
+              <CampaignRow title="Verified campaigns" campaigns={shuffledVerified} />
+              <div className="h-4" />
+              <CampaignRow title="Trending campaigns" campaigns={shuffledTrending} />
+            </>
+          ) : (
+            <div className="mx-auto flex w-full max-w-[756px] flex-col gap-2 px-4 sm:px-5 md:px-4">
+              {[...shuffledVerified, ...shuffledTrending].map((c) => (
+                <CampaignListCard key={`${c.id}-${shuffleKey}`} campaign={c} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Floating category + shuffle bar — sticks to bottom of scroll viewport */}
+        <FloatingCategoryBar onShuffle={handleShuffle} />
       </div>
     </div>
   );

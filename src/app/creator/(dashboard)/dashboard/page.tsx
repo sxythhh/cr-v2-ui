@@ -9,6 +9,7 @@ import { TrustScoreModal } from "@/components/trust-score-modal";
 import { TransactionShareModal } from "@/components/transaction-share-modal";
 import { PerksDrawer } from "@/components/perks-drawer";
 import { VerifiedBadge } from "@/components/verified-badge";
+import { PlatformIcon } from "@/components/icons/PlatformIcon";
 
 // ── Inline Icons ────────────────────────────────────────────────────
 
@@ -395,7 +396,7 @@ export default function CreatorForYouPage() {
           </div>
 
           {/* Feed cards: row on desktop, single card on mobile */}
-          <div className="hidden gap-2 sm:flex">
+          <div className="hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3">
             {feedCards.map((card) => (
               <div
                 key={card.title}
@@ -1223,6 +1224,127 @@ function RecentActivityModal({ open, onClose, isDark }: { open: boolean; onClose
   );
 }
 
+// ── Submit Links Card ────────────────────────────────────────────
+
+const MOCK_LINKS = [
+  { url: "https://www.tiktok.com/@vladclips/video192d912e92129e39202101002", platform: "tiktok", username: "@vladclips", status: "valid" as const },
+  { url: "https://www.tiktok.com/@vladclips/video192d912e92129e39202101002", platform: "tiktok", username: "@vladclips", status: "invalid" as const, error: "This video belongs to @kevenclips on TikTok, which doesn't match your verified account. If it is your account, please re-link it in your settings." },
+  { url: "https://www.tiktok.com/@vladclips/video192d912e92129e39202101002", platform: "tiktok", username: "@vladclips", status: "valid" as const },
+  { url: "https://www.youtube.com/@vladclips/video192d912e92129e39202101002", platform: "youtube", username: "@vladclips", status: "valid" as const },
+  { url: "https://www.tiktok.com/@vladclips/video192d912e92129e39202101002", platform: "tiktok", username: "@vladclips", status: "invalid" as const, error: "This video belongs to @kevenclips on TikTok, which doesn't match your verified account. If it is your account, please re-link it in your settings." },
+  { url: "https://www.tiktok.com/@vladclips/video192d912e92129e39202101002", platform: "tiktok", username: "@vladclips", status: "valid" as const },
+];
+
+function InfoCircleIcon({ className }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M7.33333 7.33333H8V10.6667M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7.99902 4.83301C8.27506 4.83301 8.49885 5.05702 8.49902 5.33301C8.49902 5.60915 8.27517 5.83301 7.99902 5.83301C7.72303 5.83283 7.49902 5.60904 7.49902 5.33301C7.4992 5.05712 7.72314 4.83318 7.99902 4.83301Z" fill="currentColor" stroke="currentColor" strokeWidth="0.333333"/>
+    </svg>
+  );
+}
+
+function CircleXIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 6.66667C0 2.98477 2.98477 0 6.66667 0C10.3486 0 13.3333 2.98477 13.3333 6.66667C13.3333 10.3486 10.3486 13.3333 6.66667 13.3333C2.98477 13.3333 0 10.3486 0 6.66667ZM5.13807 4.19526C4.87772 3.93491 4.45561 3.93491 4.19526 4.19526C3.93491 4.45561 3.93491 4.87772 4.19526 5.13807L5.72386 6.66667L4.19526 8.19526C3.93491 8.45561 3.93491 8.87772 4.19526 9.13807C4.45561 9.39842 4.87772 9.39842 5.13807 9.13807L6.66667 7.60948L8.19526 9.13807C8.45561 9.39842 8.87772 9.39842 9.13807 9.13807C9.39842 8.87772 9.39842 8.45561 9.13807 8.19526L7.60948 6.66667L9.13807 5.13807C9.39842 4.87772 9.39842 4.45561 9.13807 4.19526C8.87772 3.93491 8.45561 3.93491 8.19526 4.19526L6.66667 5.72386L5.13807 4.19526Z" fill="#FF3355"/>
+    </svg>
+  );
+}
+
+function SubmitLinksCard() {
+  const [showErrors, setShowErrors] = useState(false);
+  const invalidCount = MOCK_LINKS.filter((l) => l.status === "invalid").length;
+  const validCount = MOCK_LINKS.filter((l) => l.status === "valid").length;
+  const tiktokCount = MOCK_LINKS.filter((l) => l.platform === "tiktok").length;
+  const youtubeCount = MOCK_LINKS.filter((l) => l.platform === "youtube").length;
+
+  return (
+    <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
+      <div className="flex flex-col gap-2">
+        <span className="text-xs text-page-text-subtle">Video URLs (separated by commas)</span>
+
+        {/* URL input area */}
+        <div className="flex flex-1 flex-col gap-4 rounded-[14px] bg-foreground/[0.04] p-3 dark:bg-white/[0.04]">
+          {MOCK_LINKS.map((link, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <span className="w-[9px] text-[14px] font-normal leading-[120%] text-page-text-subtle">{i + 1}</span>
+              </div>
+              <div className="flex min-w-0 flex-1 items-center gap-1">
+                <span className="min-w-0 flex-1 truncate text-[14px] font-normal leading-[120%] text-page-text">{link.url}</span>
+              </div>
+              {link.status === "invalid" ? (
+                <CircleXIcon />
+              ) : (
+                <InfoCircleIcon className={cn("shrink-0", i === 0 ? "text-page-text" : "text-page-text-subtle")} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Error banner */}
+      {invalidCount > 0 && (
+        <div className="flex flex-col gap-3 rounded-xl bg-[#FF3355]/[0.08] px-4 py-3">
+          <div className="flex items-center">
+            <span className="flex-1 text-[12px] font-medium text-[#FF3355]">{invalidCount} invalid URLs</span>
+            <button onClick={() => setShowErrors((v) => !v)} className="flex items-center gap-1.5 text-[12px] font-medium text-page-text-subtle">
+              See why
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className={cn("transition-transform", showErrors && "rotate-180")}>
+                <path d="M3 4.5l3 3 3-3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          {showErrors && (
+            <div className="flex flex-col gap-1.5">
+              {MOCK_LINKS.filter((l) => l.status === "invalid").map((link, i) => (
+                <div key={i} className="flex flex-col gap-1.5 border-t border-foreground/[0.06] pt-3 first:border-t-0 first:pt-0">
+                  <span className="text-[14px] font-normal leading-[120%] text-page-text">{link.url}</span>
+                  <span className="text-[14px] font-normal leading-[140%] text-page-text-subtle">{link.error}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Platform count pills */}
+      <div className="flex items-center gap-2">
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 3l6 5-6 5V3z" fill="currentColor" className="text-page-text"/></svg>
+          <span className="text-[12px] font-medium text-page-text">{MOCK_LINKS.length}</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M7 14a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm3.024-8.524a.75.75 0 0 0-1.048-1.076L5.95 7.426 5.024 6.5a.75.75 0 0 0-1.048 1.076l1.45 1.45a.75.75 0 0 0 1.048 0l3.55-3.55Z" fill="#00994D"/></svg>
+          <span className="text-[12px] font-medium text-page-text">{validCount}</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <CircleXIcon />
+          <span className="text-[12px] font-medium text-page-text">{invalidCount}</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <PlatformIcon platform="tiktok" size={16} className="text-page-text" />
+          <span className="text-[12px] font-medium text-page-text">{tiktokCount}</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <PlatformIcon platform="youtube" size={16} className="text-page-text" />
+          <span className="text-[12px] font-medium text-page-text">{youtubeCount}</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <PlatformIcon platform="instagram" size={16} className="text-page-text-subtle" />
+          <span className="text-[12px] font-medium text-page-text">0</span>
+        </span>
+        <span className="flex items-center gap-1 rounded-full border border-foreground/[0.06] bg-card-bg px-2 py-1">
+          <PlatformIcon platform="x" size={16} className="text-page-text-subtle" />
+          <span className="text-[12px] font-medium text-page-text">0</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // ── Submit Clip Modal ────────────────────────────────────────────
 
 const submitCampaigns = [
@@ -1304,26 +1426,7 @@ function SubmitClipModal({ open, onClose }: { open: boolean; onClose: () => void
                   </div>
                 </div>
               ) : (
-                <div className={cn(cardClass, "flex flex-col gap-4 p-4")}>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-xs text-page-text-subtle">Video URLs (one per line)</span>
-                    <div className="relative rounded-[14px] bg-foreground/[0.04]">
-                      <textarea className="w-full resize-none bg-transparent px-3.5 py-3 text-sm text-page-text-muted outline-none" rows={5} placeholder="https://www.tiktok.com/@username/video..." />
-                      <span className="absolute bottom-3.5 right-3.5 text-xs text-page-text-subtle">0/300</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Links 0", "Valid 0", "Invalid 0", "TikTok 0", "YouTube 0", "Instagram 0", "X 0"].map((s) => (
-                      <span key={s} className="flex items-center gap-1 rounded-full border border-foreground/[0.06] px-2 py-1 text-xs font-medium text-page-text">
-                        {s.split(" ")[0]} <span className="text-page-text">{s.split(" ")[1]}</span>
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1.5 pt-2">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6 11a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-.375-6.875a.375.375 0 0 0-.375.375.125.125 0 0 1-.25 0 .625.625 0 0 1 .625-.625h.525a.975.975 0 0 1 .6 1.725l-.355.298v.227a.125.125 0 0 1-.25 0v-.5a.25.25 0 0 1 .068-.182l.558-.472a.725.725 0 0 0-.446-1.096h-.525ZM6 7.875a.375.375 0 1 0 0-.75.375.375 0 0 0 0 .75Z" fill="rgba(37,37,37,0.5)"/></svg>
-                    <span className="text-xs font-medium text-page-text-subtle">Paste up to 50 URLs</span>
-                  </div>
-                </div>
+                <SubmitLinksCard />
               )}
             </div>
             <div className="flex items-center justify-end gap-2 bg-white px-5 pb-5 dark:bg-card-bg">

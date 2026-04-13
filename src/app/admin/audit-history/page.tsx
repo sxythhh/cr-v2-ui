@@ -219,7 +219,7 @@ export default function AuditHistoryPage() {
                     </div>
                     {entry.ip && <span className="rounded-full bg-foreground/[0.04] px-2 py-0.5 text-[10px] font-mono text-page-text-subtle">{entry.ip}</span>}
                   </div>
-                  <span className="shrink-0 text-xs tabular-nums text-page-text-subtle">{entry.relativeTime}</span>
+                  <span className="shrink-0 text-xs text-page-text-subtle">{entry.relativeTime}</span>
                   <svg
                     width="12" height="12" viewBox="0 0 12 12" fill="none"
                     className={cn("shrink-0 text-page-text-subtle transition-transform", isExpanded && "rotate-180")}

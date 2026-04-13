@@ -14,9 +14,63 @@
   -webkit-mask-image: linear-gradient(to top, transparent 0%, black 50%);
 }
 
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px) translateX(-50%); }
+  to { opacity: 1; transform: translateY(0) translateX(-50%); }
+}
+
 html, body {
   cursor: default;
 }
+
+/*
+ * When AI sidebar is open, the content area loses ~400px.
+ * Force responsive layouts to stack earlier so nothing gets crushed.
+ */
+
+/* At ≤1280px viewport with AI sidebar, md: layouts should stack */
+@media (max-width: 1280px) {
+  .ai-content-narrow .md\:flex-row { flex-direction: column !important; }
+  .ai-content-narrow .md\:h-\[189px\],
+  .ai-content-narrow .md\:h-\[185px\] { height: auto !important; }
+  .ai-content-narrow .md\:items-center { align-items: stretch !important; }
+  .ai-content-narrow .md\:gap-4 { gap: 0 !important; }
+  .ai-content-narrow .md\:self-stretch { align-self: auto !important; }
+  .ai-content-narrow .md\:w-\[200px\],
+  .ai-content-narrow .md\:w-\[240px\] { width: 100% !important; }
+  .ai-content-narrow .md\:h-full { height: 160px !important; }
+  .ai-content-narrow .md\:items-end { align-items: flex-start !important; }
+  .ai-content-narrow .md\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .ai-content-narrow .sm\:flex-row { flex-direction: column !important; }
+  .ai-content-narrow .sm\:h-\[102px\] { height: auto !important; }
+  .ai-content-narrow .sm\:w-\[167px\] { width: 100% !important; }
+  .ai-content-narrow .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ai-content-narrow .md\:grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ai-content-narrow .md\:grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ai-content-narrow .md\:pr-4 { padding-right: 0 !important; }
+  .ai-content-narrow .md\:pl-0 { padding-left: 0 !important; }
+  .ai-content-narrow .md\:px-0 { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .ai-content-narrow .md\:p-4 { padding: 0 1rem 1rem !important; }
+  .ai-content-narrow .md\:py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+  .ai-content-narrow .md\:py-3 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+}
+
+/* lg: layouts should always stack when AI sidebar is open */
+.ai-content-narrow .lg\:flex-row { flex-direction: column !important; }
+.ai-content-narrow .lg\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+.ai-content-narrow .lg\:grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.ai-content-narrow .lg\:items-start { align-items: stretch !important; }
+.ai-content-narrow .lg\:items-center { align-items: stretch !important; }
+.ai-content-narrow .lg\:justify-between { justify-content: flex-start !important; }
+.ai-content-narrow .lg\:gap-10 { gap: 1rem !important; }
+.ai-content-narrow .lg\:w-\[400px\] { width: 100% !important; }
+.ai-content-narrow .lg\:w-\[260px\] { width: 100% !important; }
+
+/* xl: layouts should also stack */
+.ai-content-narrow .xl\:flex-row { flex-direction: column !important; }
+.ai-content-narrow .xl\:items-start { align-items: stretch !important; }
+.ai-content-narrow .xl\:gap-10 { gap: 1rem !important; }
+.ai-content-narrow .xl\:w-\[400px\] { width: 100% !important; }
 button, [role="button"], a, label[for], select, summary, [tabindex]:not([tabindex="-1"]) {
   cursor: pointer;
 }

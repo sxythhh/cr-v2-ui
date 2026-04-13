@@ -10,6 +10,7 @@ import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/Analyti
 import { Modal, ModalHeader, ModalBody } from "@/components/ui/modal";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { TrustScoreModal } from "@/components/trust-score-modal";
+import { AdminTable, type AdminColumn } from "@/components/admin/admin-table";
 
 const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
@@ -156,7 +157,7 @@ export default function CreatorSubmissionsPage() {
     return () => obs.disconnect();
   }, []);
 
-  const [viewMode, setViewMode] = useState<"list" | "card">("card");
+  const [viewMode, setViewMode] = useState<"list" | "card" | "table">("card");
   const statScrollRef = useRef<HTMLDivElement>(null);
   const [statActiveIndex, setStatActiveIndex] = useState(0);
 
@@ -180,6 +181,7 @@ export default function CreatorSubmissionsPage() {
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [payoutOpen, setPayoutOpen] = useState(false);
   const [payoutClipIndex, setPayoutClipIndex] = useState(0);
+  const [timelineExpanded, setTimelineExpanded] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [trustScoreOpen, setTrustScoreOpen] = useState(false);
   const [submitStep, setSubmitStep] = useState<"select" | "pick">("select");
@@ -197,6 +199,56 @@ export default function CreatorSubmissionsPage() {
     () => Object.entries(metricState).filter(([, on]) => on).map(([k]) => k),
     [metricState],
   );
+
+  const tableColumns: AdminColumn[] = [
+    { key: "title", label: "Clip", width: "minmax(180px, 1fr)" },
+    { key: "status", label: "Status", width: "100px" },
+    { key: "earned", label: "Earned", width: "80px", sortable: true },
+    { key: "received", label: "Received", width: "80px", sortable: true, hideMobile: true },
+    { key: "pending", label: "Pending", width: "80px", sortable: true, hideMobile: true },
+    { key: "views", label: "Views", width: "70px", sortable: true, hideMobile: true },
+    { key: "platform", label: "Platform", width: "70px", hideMobile: true },
+    { key: "date", label: "Date", width: "100px", sortable: true, hideMobile: true },
+  ];
+
+  const renderClipCell = useCallback((clip: typeof clips[0], colKey: string) => {
+    switch (colKey) {
+      case "title":
+        return (
+          <div className="flex items-center gap-2.5">
+            <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <span className="truncate text-sm font-medium text-page-text">{clip.title}</span>
+              <span className="truncate text-xs text-page-text-muted">{clip.brand}</span>
+            </div>
+          </div>
+        );
+      case "status":
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium" style={{ color: isDark ? clip.statusColorDark : clip.statusColor, backgroundColor: isDark ? clip.statusBgDark : clip.statusBg }}>
+            {clip.status}
+          </span>
+        );
+      case "earned":
+        return <span className="text-sm font-medium text-page-text">{clip.earned}</span>;
+      case "received":
+        return <span className="text-sm font-medium text-page-text">{clip.received}</span>;
+      case "pending":
+        return <span className="text-sm font-medium" style={{ color: isDark ? clip.pendingColorDark : clip.pendingColor }}>{clip.pending}</span>;
+      case "views":
+        return <span className="text-sm font-medium text-page-text">{clip.metrics.views}</span>;
+      case "platform":
+        return (
+          <div className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] dark:bg-white/[0.04]">
+            <PlatformIcon platform={clip.platform} size={12} />
+          </div>
+        );
+      case "date":
+        return <span className="text-xs text-page-text-muted">{clip.date}</span>;
+      default:
+        return null;
+    }
+  }, [isDark]);
 
   return (
     <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
@@ -229,7 +281,7 @@ export default function CreatorSubmissionsPage() {
                         {s.icon(isDark ? s.iconColorDark : s.color)}
                       </div>
                     </div>
-                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
                       <span className="text-sm font-medium text-page-text">{s.value}</span>
                       <span className="flex items-center gap-1 text-xs text-page-text-muted">
                         {s.label}
@@ -277,7 +329,7 @@ export default function CreatorSubmissionsPage() {
                     {s.icon(isDark ? s.iconColorDark : s.color)}
                   </div>
                 </div>
-                <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+                <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
                   <span className="text-sm font-medium text-page-text">{s.value}</span>
                   <span className="flex items-center gap-1 text-xs text-page-text-muted">
                     {s.label}
@@ -290,23 +342,36 @@ export default function CreatorSubmissionsPage() {
         </div>
 
         {/* Filter bar */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: "pan-x" }}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0 flex-1 overflow-x-auto scrollbar-hide" style={{ touchAction: "pan-x" }}>
             <Tabs selectedIndex={activeFilter} onSelect={setActiveFilter} className="w-fit">
               {filterTabs.map((t, i) => (
                 <TabItem key={t.label} label={t.label} count={t.count} index={i} />
               ))}
             </Tabs>
           </div>
-          <div className="hidden items-center gap-2 md:flex">
-            <button
-              onClick={() => setViewMode((v) => (v === "list" ? "card" : "list"))}
-              className="flex size-9 items-center justify-center rounded-xl bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
-              title={`Switch to ${viewMode === "list" ? "card" : "list"} view`}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeOpacity={0.8} strokeWidth="1.5" strokeLinecap="round"/></svg>
-            </button>
-            <button onClick={() => setSubmitOpen(true)} className="flex h-9 items-center rounded-full px-4 text-sm font-medium text-white" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
+          <div className="flex shrink-0 items-center gap-2">
+            {/* View mode toggle — 3 options */}
+            <div className="hidden items-center rounded-xl bg-foreground/[0.04] p-0.5 md:flex dark:bg-white/[0.04]">
+              {([
+                { mode: "card" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="8" y="1" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="1" y="8" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="8" y="8" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/></svg>, label: "Grid" },
+                { mode: "list" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 3h11M1.5 7h11M1.5 11h11" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>, label: "List" },
+                { mode: "table" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M1 5h12M1 9h12M5.5 5v8" stroke="currentColor" strokeWidth="1.2"/></svg>, label: "Table" },
+              ]).map((v) => (
+                <button
+                  key={v.mode}
+                  onClick={() => setViewMode(v.mode)}
+                  className={cn(
+                    "flex size-8 items-center justify-center rounded-[10px] text-page-text-muted transition-colors",
+                    viewMode === v.mode ? "bg-foreground/[0.08] text-page-text dark:bg-white/[0.08]" : "hover:text-page-text"
+                  )}
+                  title={v.label}
+                >
+                  {v.icon}
+                </button>
+              ))}
+            </div>
+            <button onClick={() => setSubmitOpen(true)} className="flex h-9 items-center rounded-full px-3 text-xs font-medium text-white sm:px-4 sm:text-sm" style={{ background: "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), #FF6207" }}>
               Submit clip
             </button>
           </div>
@@ -318,12 +383,12 @@ export default function CreatorSubmissionsPage() {
             {clips.map((clip, idx) => (
               <div key={idx} className={cn("overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]")}>
                 {/* Header row */}
-                <div className="flex items-center border-b border-foreground/[0.06] dark:border-[rgba(224,224,224,0.03)]">
+                <div className="flex flex-col border-b border-foreground/[0.06] sm:flex-row sm:items-center dark:border-[rgba(224,224,224,0.03)]">
                   <div className="flex flex-1 items-center gap-3 p-3">
                     <div className="size-9 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
-                    <div className="flex flex-col gap-2">
+                    <div className="flex min-w-0 flex-1 flex-col gap-2">
                       <div className="flex items-center gap-1.5 text-xs">
-                        <span className="font-medium text-page-text">{clip.title}</span>
+                        <span className="truncate font-medium text-page-text">{clip.title}</span>
                       </div>
                       <div className="flex items-center gap-1 text-xs">
                         <span className="text-page-text-subtle">{clip.brand}</span>
@@ -344,7 +409,7 @@ export default function CreatorSubmissionsPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 border-l border-foreground/[0.06] px-3 py-3 dark:border-[rgba(224,224,224,0.03)]">
+                  <div className="flex items-center gap-2 px-3 py-2 sm:border-l sm:border-foreground/[0.06] sm:py-3 dark:sm:border-[rgba(224,224,224,0.03)]">
                     {clip.hasViewPayout && (
                       <button onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }} className="rounded-full bg-foreground/[0.06] px-3 py-2 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
                     )}
@@ -365,7 +430,7 @@ export default function CreatorSubmissionsPage() {
 
                   {/* Col 2: Stats, Chart, Info */}
                   <div className="flex flex-1 flex-col gap-2 overflow-hidden p-3">
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       <StatMiniCard value={clip.earned} label="Total earned" variant="filled" />
                       <StatMiniCard value={clip.received} label="Received" variant="outlined" />
                       <StatMiniCard value={clip.pending} label="Pending" valueColor={isDark ? clip.pendingColorDark : clip.pendingColor} variant="outlined" />
@@ -398,7 +463,7 @@ export default function CreatorSubmissionsPage() {
 
         {/* Clip cards — card grid view */}
         {viewMode === "card" && (
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {clips.map((clip, idx) => (
               <div key={idx} className="flex flex-col overflow-hidden rounded-[20px] border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
                 {/* Header — 60px */}
@@ -469,6 +534,18 @@ export default function CreatorSubmissionsPage() {
               </div>
             ))}
           </div>
+        )}
+
+        {/* Clip table view */}
+        {viewMode === "table" && (
+          <AdminTable
+            columns={tableColumns}
+            data={clips}
+            renderCell={renderClipCell}
+            rowKey={(clip) => `${clip.title}-${clip.status}`}
+            onRowClick={(clip) => { setPayoutClipIndex(clips.indexOf(clip)); setPayoutOpen(true); }}
+            pageSize={20}
+          />
         )}
       </div>
 
@@ -582,12 +659,18 @@ export default function CreatorSubmissionsPage() {
                 </div>
               </div>
 
-              {/* Timeline divider */}
-              <div className="flex w-full items-center gap-3 py-2">
-                <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
-                <span className="text-xs font-medium text-page-text-subtle">Timeline</span>
-                <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
-              </div>
+              {/* Timeline — collapsible section */}
+              <div className="relative w-full">
+                {/* Collapsible content */}
+                <div
+                  className="overflow-hidden transition-all duration-300"
+                  style={{ maxHeight: timelineExpanded ? 600 : 0, opacity: timelineExpanded ? 1 : 0 }}
+                >
+                  <div className="flex w-full items-center gap-3 pb-3 pt-1">
+                    <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
+                    <span className="text-xs font-medium text-page-text-subtle">Timeline</span>
+                    <div className="flex-1 border-t border-dashed border-foreground/[0.12]" />
+                  </div>
 
               {payoutClipIndex === 0 ? (
                 <div className="flex w-full flex-col items-center gap-0">
@@ -623,20 +706,46 @@ export default function CreatorSubmissionsPage() {
                   <div className="h-2 w-px border-l border-foreground/[0.12]" />
 
                   {/* Completed payout card */}
-                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
-                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
-                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
-                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                  <div
+                    className="flex h-16 w-full items-center gap-2 overflow-hidden rounded-xl"
+                    style={{
+                      background: isDark
+                        ? "linear-gradient(90deg, rgba(252,176,43,0.10) -12.24%, rgba(252,176,43,0.02) 40%)"
+                        : "linear-gradient(90deg, #D1FFBB -12.24%, #F5FFF0 21.21%)",
+                      boxShadow: isDark
+                        ? "0px 0px 0px 0.5px rgba(252,176,43,0.25), inset 0px 1px 0px rgba(255,255,255,0.04)"
+                        : "0px 0px 0px 0.5px #84E159, inset 0px 1px 0px #FFFFFF",
+                    }}
+                  >
+                    {/* Half-circle icon area */}
+                    <div className="relative h-full w-[60px] shrink-0">
+                      <svg className="absolute inset-0" width="60" height="64" viewBox="0 0 60 64" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 32C60 50.3447 46.3447 64 29.5 64H-4V0Z" fill={isDark ? "rgba(252,176,43,0.08)" : "rgba(252,176,43,0.10)"} />
                       </svg>
                       <div className="relative flex h-full w-full items-center justify-center">
-                        <CheckCircleIcon color="#00994D" />
+                        <CheckCircleIcon color="#FCB02B" />
                       </div>
                     </div>
-                    <div className="flex min-w-0 flex-1">
-                      <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
+                    {/* Price */}
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm font-medium tracking-[-0.01em] text-page-text-muted">$</span>
+                      <span className="text-sm font-semibold tracking-[-0.01em] text-page-text">425.00</span>
                     </div>
-                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1 pl-1.5 pr-2 text-xs font-medium text-[#00994D]">
-                      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 0a5 5 0 1 0 0 10A5 5 0 0 0 5 0Zm1.89 3.96a.5.5 0 0 0-.77-.7L4.37 5.75l-.61-.61a.5.5 0 0 0-.71.71l1 1a.5.5 0 0 0 .74-.04l2.25-2.75Z" fill="#00994D"/></svg>
+                    {/* Date */}
+                    <div className="flex min-w-0 flex-1 items-center justify-center">
+                      <span className="text-[11px] font-medium tracking-[-0.006em] text-page-text-muted">Paid on <span className="text-page-text">Friday, Feb 27, 20:30 GMT+1</span></span>
+                    </div>
+                    {/* Approved pill */}
+                    <span
+                      className="mr-[18px] flex shrink-0 items-center gap-1 rounded-full py-1 pl-1.5 pr-2.5 text-xs font-medium tracking-[-0.01em]"
+                      style={{
+                        color: isDark ? "#FCB02B" : "#407228",
+                        background: isDark ? "rgba(252,176,43,0.12)" : "#D1FFBB",
+                        boxShadow: isDark ? "0px 0px 0px 1px rgba(252,176,43,0.2)" : "0px 0px 0px 1px rgba(0,0,0,0.08)",
+                        textShadow: isDark ? "none" : "0px 1px 0px #FFFFFF",
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 0a5 5 0 1 0 0 10A5 5 0 0 0 5 0Zm1.89 3.96a.5.5 0 0 0-.77-.7L4.37 5.75l-.61-.61a.5.5 0 0 0-.71.71l1 1a.5.5 0 0 0 .74-.04l2.25-2.75Z" fill="#FCB02B"/></svg>
                       Approved
                     </span>
                   </div>
@@ -644,20 +753,46 @@ export default function CreatorSubmissionsPage() {
               ) : (
                 <div className="flex w-full flex-col items-center gap-0">
                   {/* Completed payout 1 */}
-                  <div className={cn(cardCls, "flex h-[61px] w-full items-center gap-3 overflow-hidden pr-3")}>
-                    <div className="relative h-[61px] w-[60px] shrink-0 overflow-hidden">
-                      <svg className="absolute inset-0" width="60" height="61" viewBox="0 0 60 61" fill="none">
-                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 30.5C60 47.3447 46.3447 61 29.5 61H-4V0Z" fill="rgba(0,153,77,0.08)" />
+                  <div
+                    className="flex h-16 w-full items-center gap-2 overflow-hidden rounded-xl"
+                    style={{
+                      background: isDark
+                        ? "linear-gradient(90deg, rgba(252,176,43,0.10) -12.24%, rgba(252,176,43,0.02) 40%)"
+                        : "linear-gradient(90deg, #D1FFBB -12.24%, #F5FFF0 21.21%)",
+                      boxShadow: isDark
+                        ? "0px 0px 0px 0.5px rgba(252,176,43,0.25), inset 0px 1px 0px rgba(255,255,255,0.04)"
+                        : "0px 0px 0px 0.5px #84E159, inset 0px 1px 0px #FFFFFF",
+                    }}
+                  >
+                    {/* Half-circle icon area */}
+                    <div className="relative h-full w-[60px] shrink-0">
+                      <svg className="absolute inset-0" width="60" height="64" viewBox="0 0 60 64" fill="none">
+                        <path d="M-4 0H29.5C46.3447 0 60 13.6553 60 32C60 50.3447 46.3447 64 29.5 64H-4V0Z" fill={isDark ? "rgba(252,176,43,0.08)" : "rgba(252,176,43,0.10)"} />
                       </svg>
                       <div className="relative flex h-full w-full items-center justify-center">
-                        <CheckCircleIcon color="#00994D" />
+                        <CheckCircleIcon color="#FCB02B" />
                       </div>
                     </div>
-                    <div className="flex min-w-0 flex-1">
-                      <span className="text-sm font-medium text-page-text">$425.00 paid out Feb 27, 2026</span>
+                    {/* Price */}
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm font-medium tracking-[-0.01em] text-page-text-muted">$</span>
+                      <span className="text-sm font-semibold tracking-[-0.01em] text-page-text">425.00</span>
                     </div>
-                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[rgba(0,153,77,0.08)] py-1 pl-1.5 pr-2 text-xs font-medium text-[#00994D]">
-                      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 0a5 5 0 1 0 0 10A5 5 0 0 0 5 0Zm1.89 3.96a.5.5 0 0 0-.77-.7L4.37 5.75l-.61-.61a.5.5 0 0 0-.71.71l1 1a.5.5 0 0 0 .74-.04l2.25-2.75Z" fill="#00994D"/></svg>
+                    {/* Date */}
+                    <div className="flex min-w-0 flex-1 items-center justify-center">
+                      <span className="text-[11px] font-medium tracking-[-0.006em] text-page-text-muted">Paid on <span className="text-page-text">Friday, Feb 27, 20:30 GMT+1</span></span>
+                    </div>
+                    {/* Approved pill */}
+                    <span
+                      className="mr-[18px] flex shrink-0 items-center gap-1 rounded-full py-1 pl-1.5 pr-2.5 text-xs font-medium tracking-[-0.01em]"
+                      style={{
+                        color: isDark ? "#FCB02B" : "#407228",
+                        background: isDark ? "rgba(252,176,43,0.12)" : "#D1FFBB",
+                        boxShadow: isDark ? "0px 0px 0px 1px rgba(252,176,43,0.2)" : "0px 0px 0px 1px rgba(0,0,0,0.08)",
+                        textShadow: isDark ? "none" : "0px 1px 0px #FFFFFF",
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 0a5 5 0 1 0 0 10A5 5 0 0 0 5 0Zm1.89 3.96a.5.5 0 0 0-.77-.7L4.37 5.75l-.61-.61a.5.5 0 0 0-.71.71l1 1a.5.5 0 0 0 .74-.04l2.25-2.75Z" fill="#FCB02B"/></svg>
                       Approved
                     </span>
                   </div>
@@ -685,6 +820,26 @@ export default function CreatorSubmissionsPage() {
                   </div>
                 </div>
               )}
+                </div>
+
+                {/* Toggle button — centered below */}
+                <div className="flex w-full justify-center pt-1">
+                  <button
+                    onClick={() => setTimelineExpanded((e) => !e)}
+                    className="flex size-6 items-center justify-center rounded-full border border-border bg-card-bg shadow-sm transition-colors hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]"
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      className={cn("text-page-text-muted transition-transform duration-200", timelineExpanded && "rotate-180")}
+                    >
+                      <path d="M3 4.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
         </ModalBody>
       </Modal>

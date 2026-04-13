@@ -123,10 +123,11 @@ const SA_FILTERS: Filter[] = [
 
 // ── Submission Card (replicates brand submissions card) ──────────────
 
-function SASubmissionCard({ submission, onAction, onAuditLog }: { submission: Submission; onAction?: (action: "approve" | "reject") => void; onAuditLog?: () => void }) {
+function SASubmissionCard({ submission, onAction }: { submission: Submission; onAction?: (action: "approve" | "reject") => void }) {
   const isPass = submission.aiResult === "pass";
   const scoreColor = isPass ? "#00B259" : "#FF2525";
   const [metricState, setMetricState] = useState<Record<string, boolean>>({ views: true, likes: true, comments: true, shares: false });
+  const [cardTab, setCardTab] = useState<"overview" | "audit">("overview");
   const toggleMetric = useCallback((key: string) => { setMetricState((prev) => ({ ...prev, [key]: !prev[key] })); }, []);
   const visibleMetricKeys = useMemo(() => Object.entries(metricState).filter(([, v]) => v).map(([k]) => k), [metricState]);
 
@@ -151,7 +152,7 @@ function SASubmissionCard({ submission, onAction, onAuditLog }: { submission: Su
           <div className="flex items-center gap-2">
             <div className="flex h-7 items-center gap-1 rounded-full px-2" style={{ background: `${scoreColor}18` }}>
               <SparkleIcon size={12} color={scoreColor} />
-              <span className="text-xs font-semibold tabular-nums" style={{ color: scoreColor }}>{submission.aiScore}</span>
+              <span className="text-xs font-semibold" style={{ color: scoreColor }}>{submission.aiScore}</span>
             </div>
             <DotMenuPopover
               onViewContent={() => {}}
@@ -213,7 +214,7 @@ function SASubmissionCard({ submission, onAction, onAuditLog }: { submission: Su
             <div className="flex items-center gap-2">
               <div className="flex h-7 items-center gap-1 rounded-full px-2.5" style={{ background: `${scoreColor}18` }}>
                 <SparkleIcon size={12} color={scoreColor} />
-                <span className="text-xs font-semibold tabular-nums" style={{ color: scoreColor }}>{submission.aiScore}%</span>
+                <span className="text-xs font-semibold" style={{ color: scoreColor }}>{submission.aiScore}%</span>
               </div>
               <span className="text-xs text-page-text-muted">{submission.checksPassed}/{submission.checksTotal} checks</span>
             </div>
@@ -224,52 +225,84 @@ function SASubmissionCard({ submission, onAction, onAuditLog }: { submission: Su
               <button onClick={() => onAction?.("approve")} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-[#00B259] px-3 text-sm font-medium text-white transition-colors hover:bg-[#00A050]">
                 <CheckCircleIcon size={14} color="#fff" /> Approve
               </button>
-              {onAuditLog && (
-                <button onClick={onAuditLog} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-3 text-xs font-medium text-page-text-muted transition-colors hover:bg-foreground/[0.10]">
-                  <CentralIcon name="IconClock" size={12} color="currentColor" {...ciProps} /> Audit
-                </button>
-              )}
               <DotMenuPopover onViewContent={() => {}} onViewCreator={() => {}} onFlag={() => {}} />
             </div>
           </div>
         </div>
 
-        {/* Body: 3-column */}
-        <div className="flex h-[380px]">
-          {/* Col 1: Video */}
-          <div className="w-[200px] shrink-0 overflow-hidden border-r border-border lg:w-[260px]">
-            <VideoPlayer src={submission.videoUrl} platform={submission.platform as "tiktok" | "instagram"} duration={submission.videoDuration} />
+        {/* Tab bar */}
+        <div className="flex items-center border-b border-border px-5">
+          {(["overview", "audit"] as const).map((tab) => {
+            const labels = { overview: "Overview", audit: "Audit Log" };
+            const active = cardTab === tab;
+            return (
+              <button key={tab} onClick={() => setCardTab(tab)} className="relative h-10 cursor-pointer px-3 font-inter text-sm tracking-[-0.02em] transition-colors" style={{ background: "none", border: "none", fontWeight: active ? 600 : 400, color: active ? "var(--page-text)" : "var(--page-text-muted)" }}>
+                {labels[tab]}
+                {active && <div className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-page-text" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Body — fixed height container */}
+        <div style={{ height: 380, overflow: "hidden" }}>
+        {cardTab === "overview" ? (
+          <div className="flex h-full">
+            {/* Col 1: Video */}
+            <div className="w-[200px] shrink-0 overflow-hidden border-r border-border lg:w-[260px]">
+              <VideoPlayer src={submission.videoUrl} platform={submission.platform as "tiktok" | "instagram"} duration={submission.videoDuration} />
+            </div>
+
+            {/* Col 2: Stats + Chart */}
+            <div className="flex min-w-0 flex-1 flex-col gap-3 overflow-y-auto p-4" style={{ scrollbarWidth: "none" }}>
+              <div className="grid grid-cols-3 gap-2">
+                <StatMiniCard label="Payout" value={submission.payout} variant="filled" />
+                <StatMiniCard label="Eng. Rate" value={submission.engRate} variant="outlined" />
+                <StatMiniCard label="Bot Score" value={`${submission.botScore}%`} variant="outlined" valueColor={submission.botScoreColor} />
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <MetricPill label="Views" value={submission.viewsNum} active={metricState.views} onClick={() => toggleMetric("views")} />
+                <MetricPill label="Likes" value={submission.likesNum} active={metricState.likes} onClick={() => toggleMetric("likes")} />
+                <MetricPill label="Comments" value={submission.commentsNum} active={metricState.comments} onClick={() => toggleMetric("comments")} />
+                <MetricPill label="Shares" value={submission.sharesNum} active={metricState.shares} onClick={() => toggleMetric("shares")} />
+              </div>
+              <div className="flex-1" style={{ minHeight: 120 }}>
+                <AnalyticsPocChartPlaceholder variant="line" chartStylePreset="performance-main" lineChart={SUBMISSIONS_CHART_DATA} activeLineDataset="daily" visibleMetricKeys={visibleMetricKeys} heightClassName="h-full" />
+              </div>
+              <div className="flex items-center gap-4 text-xs text-page-text-muted">
+                <span>Top country: <span className="font-medium text-page-text">{submission.topCountry}</span></span>
+                <span>Top age: <span className="font-medium text-page-text">{submission.topAge}</span></span>
+              </div>
+            </div>
           </div>
-
-          {/* Col 2: Stats + Chart */}
-          <div className="flex min-w-0 flex-1 flex-col gap-3 overflow-y-auto border-r border-border p-4" style={{ scrollbarWidth: "none" }}>
-            {/* Stat cards */}
-            <div className="grid grid-cols-3 gap-2">
-              <StatMiniCard label="Payout" value={submission.payout} variant="filled" />
-              <StatMiniCard label="Eng. Rate" value={submission.engRate} variant="outlined" />
-              <StatMiniCard label="Bot Score" value={`${submission.botScore}%`} variant="outlined" valueColor={submission.botScoreColor} />
-            </div>
-
-            {/* Metric pills */}
-            <div className="flex flex-wrap gap-1.5">
-              <MetricPill label="Views" value={submission.viewsNum} active={metricState.views} onClick={() => toggleMetric("views")} />
-              <MetricPill label="Likes" value={submission.likesNum} active={metricState.likes} onClick={() => toggleMetric("likes")} />
-              <MetricPill label="Comments" value={submission.commentsNum} active={metricState.comments} onClick={() => toggleMetric("comments")} />
-              <MetricPill label="Shares" value={submission.sharesNum} active={metricState.shares} onClick={() => toggleMetric("shares")} />
-            </div>
-
-            {/* Chart */}
-            <div className="flex-1" style={{ minHeight: 120 }}>
-              <AnalyticsPocChartPlaceholder variant="line" chartStylePreset="performance-main" lineChart={SUBMISSIONS_CHART_DATA} activeLineDataset="daily" visibleMetricKeys={visibleMetricKeys} heightClassName="h-full" />
-            </div>
-
-            {/* Country + Age */}
-            <div className="flex items-center gap-4 text-xs text-page-text-muted">
-              <span>Top country: <span className="font-medium text-page-text">{submission.topCountry}</span></span>
-              <span>Top age: <span className="font-medium text-page-text">{submission.topAge}</span></span>
+        ) : (
+          <div className="h-full overflow-y-auto p-5" style={{ scrollbarWidth: "none" }}>
+            <div className="relative">
+              <div className="absolute left-[2px] top-4 bottom-4 w-px bg-border" />
+              {[
+                { action: "Submission approved", time: "2 hours ago", timestamp: "Apr 11, 2026 11:42 AM", user: "Ivelin Ivanov", avatar: "https://i.pravatar.cc/24?u=ivelin", severity: "info" },
+                { action: "AI review completed — score " + submission.aiScore, time: "2 hours ago", timestamp: "Apr 11, 2026 11:40 AM", user: "System", avatar: "https://i.pravatar.cc/24?u=system", severity: "info" },
+                { action: "Submission received from " + submission.creator, time: "2 hours ago", timestamp: "Apr 11, 2026 11:38 AM", user: "System", avatar: "https://i.pravatar.cc/24?u=system2", severity: "info" },
+              ].map((entry, i) => (
+                <div key={i} className="relative flex gap-3 pb-5 last:pb-0">
+                  <div className="relative z-10 mt-[7px] shrink-0">
+                    <div className="size-[5px] rounded-full bg-page-text-muted" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium tracking-[-0.02em] text-page-text">{entry.action}</div>
+                    <div className="mt-1 flex items-center gap-2">
+                      <img src={entry.avatar} alt="" className="size-4 rounded-full" />
+                      <span className="text-xs text-page-text-muted">{entry.user}</span>
+                      <span className="text-xs text-page-text-subtle">·</span>
+                      <span className="text-xs text-page-text-subtle">{entry.time}</span>
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-page-text-subtle">{entry.timestamp}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-
+        )}
         </div>
       </div>
     </div>
@@ -373,7 +406,7 @@ function RankBadge({ rank }: { rank: number }) {
 
 function CountPill({ value }: { value: number }) {
   return (
-    <span className="rounded-md px-2 py-0.5 text-xs font-semibold tabular-nums" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>
+    <span className="rounded-md px-2 py-0.5 text-xs font-semibold" style={{ background: "rgba(246,133,15,0.15)", color: "#f6850f" }}>
       {value.toLocaleString()}
     </span>
   );
@@ -407,7 +440,7 @@ function AnalyticsTab() {
           {row.map((s) => (
             <div key={s.label} className="rounded-xl border border-border bg-card-bg px-4 py-3">
               <div className="text-[11px] font-medium text-page-text-muted">{s.label}</div>
-              <div className="mt-1 text-xl font-semibold text-page-text tabular-nums">{s.value}</div>
+              <div className="mt-1 text-xl font-semibold text-page-text">{s.value}</div>
             </div>
           ))}
         </div>
@@ -543,7 +576,7 @@ function ReportCell({ row, colKey }: { row: UserReport; colKey: string }) {
     case "status":
       return <span className="text-sm text-page-text-muted">{row.status}</span>;
     case "date":
-      return <span className="text-xs tabular-nums text-page-text-muted">{row.date}</span>;
+      return <span className="text-xs text-page-text-muted">{row.date}</span>;
     case "actions":
       return (
         <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
@@ -784,7 +817,6 @@ function SpringPopItem({ children }: { children: React.ReactNode }) {
 export default function SuperAdminPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [actions, setActions] = useState<Record<string, "approve" | "reject">>({});
-  const [auditTarget, setAuditTarget] = useState<{ type: "submission"; id: string; title: string } | null>(null);
   const handleAction = useCallback((id: string, action: "approve" | "reject") => {
     setActions((prev) => ({ ...prev, [id]: action }));
   }, []);
@@ -824,7 +856,7 @@ export default function SuperAdminPage() {
             <AnimatePresence mode="popLayout">
               {visibleSubmissions.map((sub) => (
                 <SpringPopItem key={sub.id}>
-                  <SASubmissionCard submission={sub} onAction={(a) => handleAction(sub.id, a)} onAuditLog={() => setAuditTarget({ type: "submission", id: sub.id, title: `${sub.creator} — ${sub.campaign}` })} />
+                  <SASubmissionCard submission={sub} onAction={(a) => handleAction(sub.id, a)} />
                 </SpringPopItem>
               ))}
             </AnimatePresence>
@@ -885,16 +917,6 @@ export default function SuperAdminPage() {
         )}
       </div>
 
-      {/* Audit Log Sheet */}
-      {auditTarget && (
-        <AuditLogSheet
-          open={!!auditTarget}
-          onClose={() => setAuditTarget(null)}
-          entityType={auditTarget.type}
-          entityId={auditTarget.id}
-          entityTitle={auditTarget.title}
-        />
-      )}
     </div>
   );
 }

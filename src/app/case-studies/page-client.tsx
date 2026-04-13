@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { DubNav } from "@/components/lander/dub-nav";
 import { Caveat } from "next/font/google";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -940,25 +941,28 @@ const CASE_STUDIES: CaseStudy[] = [
     logo: "/logos/brand1.png",
     logoWidth: 124,
     logoHeight: 27,
-    category: "SaaS / $63 Million [Series B]",
-    headline: "83% faster lead triage. How Granola turns product signals into revenue at scale.",
+    category: "Prediction Markets / Clipping",
+    headline: "77M+ organic views in 30 days. How Polymarket flooded every feed at $0.20 CPM.",
     image: "/logos/brand2.png",
+    href: "/case-studies/polymarket",
   },
   {
     logo: "/logos/brand3.png",
     logoWidth: 126,
     logoHeight: 32,
-    category: "Artificial Intelligence / $23m [Series A]",
-    headline: "Workflow automation at scale. How Modal uses Attio to accelerate product-led growth.",
+    category: "Fitness / Clipping",
+    headline: "124M views across 4,560 creator videos. How GYMSHARK scaled content without scaling their team.",
     image: "/logos/brand4.png",
+    href: "/case-studies/gymshark",
   },
   {
     logo: "/logos/brand5.png",
     logoWidth: 111,
     logoHeight: 32,
-    category: "Data Migration / $94.8m [Series B]",
-    headline: "A single source of truth for GTM. How Flatfile uses Attio as their business engine.",
+    category: "Fintech / UGC + Clipping",
+    headline: "45.8M views driving fintech adoption. How NovaPay reached Gen Z at $0.15 CPM.",
     image: "/logos/brand6.png",
+    href: "/case-studies/novapay",
   },
   {
     logo: "/logos/brand7.jpeg",
@@ -1085,8 +1089,8 @@ function CaseStudyCard({
     </div>
   );
 
-  return (
-    <div className="relative flex min-h-[460px] flex-col bg-white dark:bg-[#161616] lg:flex-row">
+  const card = (
+    <div className={`relative flex min-h-[460px] flex-col bg-white dark:bg-[#161616] lg:flex-row ${study.href ? "cursor-pointer transition-shadow hover:shadow-lg" : ""}`}>
       {/* Center dashed divider */}
       <div className="pointer-events-none hidden lg:block">
         <DashedDividerV />
@@ -1104,6 +1108,8 @@ function CaseStudyCard({
       )}
     </div>
   );
+
+  return study.href ? <Link href={study.href}>{card}</Link> : card;
 }
 
 function CaseStudyPairRow({ left, right }: { left: CaseStudy; right: CaseStudy }) {
