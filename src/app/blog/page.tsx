@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect, createContext, useContext } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { DubNav } from "@/components/lander/dub-nav";
@@ -11,147 +11,9 @@ import { haptic } from "@/lib/haptics";
 
 /* ── Heading Font Context ──────────────────────────────────────── */
 
-const HEADING_FONTS = [
-  // Top picks (distinctive identity)
-  { key: "bricolage", label: "Bricolage Grotesque", css: "var(--font-bricolage)", tag: "pick" },
-  { key: "tektur", label: "Tektur", css: "var(--font-tektur)", tag: "pick" },
-  { key: "mona-sans", label: "Mona Sans", css: "var(--font-mona-sans)", tag: "pick" },
-  // Brand identity (Futura DNA)
-  { key: "jost", label: "Jost", css: "var(--font-jost)", tag: "brand" },
-  { key: "urbanist", label: "Urbanist", css: "var(--font-urbanist)", tag: "brand" },
-  { key: "saira", label: "Saira", css: "var(--font-saira)", tag: "brand" },
-  { key: "red-hat", label: "Red Hat Display", css: "var(--font-red-hat-display)", tag: "brand" },
-  { key: "manrope", label: "Manrope", css: "var(--font-manrope)", tag: "brand" },
-  // Condensed
-  { key: "bebas-neue", label: "Bebas Neue", css: "var(--font-bebas-neue)", tag: "condensed" },
-  { key: "fjalla-one", label: "Fjalla One", css: "var(--font-fjalla-one)", tag: "condensed" },
-  { key: "antonio", label: "Antonio", css: "var(--font-antonio)", tag: "condensed" },
-  // Display
-  { key: "clash-display", label: "Clash Display", css: "var(--font-clash-display)", tag: "display" },
-  { key: "panchang", label: "Panchang", css: "var(--font-panchang)", tag: "display" },
-  { key: "cabinet-grotesk", label: "Cabinet Grotesk", css: "var(--font-cabinet-grotesk)", tag: "geometric" },
-  // Geometric
-  { key: "hubot-sans", label: "Hubot Sans", css: "var(--font-hubot-sans)", tag: "geometric" },
-  { key: "outfit", label: "Outfit", css: "var(--font-outfit)", tag: "geometric" },
-  { key: "space-grotesk", label: "Space Grotesk", css: "var(--font-space-grotesk)", tag: "geometric" },
-  // System
-  { key: "geist", label: "Geist Sans", css: "var(--font-geist-sans)", tag: "system" },
-  { key: "inter", label: "Inter", css: "var(--font-inter)", tag: "system" },
-] as const;
+/* ── Heading style ──────────────────────────────────────────────── */
 
-const TAG_COLORS: Record<string, string> = {
-  pick: "#10B981",
-  brand: "#FF8003",
-  condensed: "#EF4444",
-  display: "#F59E0B",
-  geometric: "#3B82F6",
-  system: "#6B7280",
-};
-
-const HeadingFontCtx = createContext<{ fontFamily: string; letterSpacing: string; fontWeight: number }>({ fontFamily: "var(--font-geist-sans)", letterSpacing: "-0.05em", fontWeight: 800 });
-
-function useHeadingFont() {
-  return useContext(HeadingFontCtx);
-}
-
-function FontSwitcher({ font, onFontChange, spacing, onSpacingChange, weight, onWeightChange }: {
-  font: string; onFontChange: (v: string) => void;
-  spacing: string; onSpacingChange: (v: string) => void;
-  weight: number; onWeightChange: (v: number) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const active = HEADING_FONTS.find((f) => f.css === font);
-
-  return (
-    <div className="fixed bottom-6 left-6 z-50 hidden lg:block">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-lg bg-foreground px-3 py-2 text-xs font-semibold text-white shadow-lg dark:bg-white dark:text-black"
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M1 7h8M1 11h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-        {active?.label ?? "Font"} · {weight} · {spacing}
-      </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-0 mb-2 max-h-[min(520px,calc(100dvh-100px))] w-[260px] overflow-y-auto rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1C1C1C]"
-            style={{ scrollbarWidth: "none" }}
-          >
-            {/* Letter spacing slider */}
-            <div className="border-b border-foreground/[0.06] px-3 pb-3 pt-2 dark:border-white/[0.06]">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wide text-page-text-muted">Letter spacing</span>
-                <span className="rounded bg-foreground/[0.06] px-1.5 py-0.5 text-[10px] font-mono font-semibold text-page-text dark:bg-white/[0.06] dark:text-white">{spacing}</span>
-              </div>
-              <input
-                type="range"
-                min={-8}
-                max={0}
-                step={1}
-                value={parseFloat(spacing) * 100}
-                onChange={(e) => onSpacingChange(`${Number(e.target.value) / 100}em`)}
-                className="mt-2 w-full accent-[#FF8003]"
-              />
-              <div className="flex justify-between text-[9px] text-page-text-muted">
-                <span>-0.08em</span>
-                <span>0</span>
-              </div>
-
-              {/* Weight slider */}
-              <div className="mt-3 flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wide text-page-text-muted">Weight</span>
-                <span className="rounded bg-foreground/[0.06] px-1.5 py-0.5 text-[10px] font-mono font-semibold text-page-text dark:bg-white/[0.06] dark:text-white">{weight}</span>
-              </div>
-              <input
-                type="range"
-                min={100}
-                max={900}
-                step={100}
-                value={weight}
-                onChange={(e) => onWeightChange(Number(e.target.value))}
-                className="mt-2 w-full accent-[#FF8003]"
-              />
-              <div className="flex justify-between text-[9px] text-page-text-muted">
-                <span>Thin</span>
-                <span>Black</span>
-              </div>
-            </div>
-
-            {/* Font list */}
-            <div className="py-1">
-              {HEADING_FONTS.map((f, i) => {
-                const prevTag = i > 0 ? HEADING_FONTS[i - 1].tag : null;
-                const showDivider = prevTag && prevTag !== f.tag;
-                return (
-                  <div key={f.key}>
-                    {showDivider && <div className="mx-2 my-1 h-px bg-foreground/[0.06] dark:bg-white/[0.06]" />}
-                    <button
-                      onClick={() => { onFontChange(f.css); }}
-                      className={cn(
-                        "flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[13px] transition-colors",
-                        font === f.css
-                          ? "bg-foreground/[0.06] font-semibold text-page-text dark:bg-white/[0.06] dark:text-white"
-                          : "text-page-text-muted hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]",
-                      )}
-                    >
-                      <span className="w-[32px] text-[16px]" style={{ fontFamily: `${f.css}, sans-serif`, letterSpacing: spacing, fontWeight: weight }}>{f.key === "bebas-neue" ? "AB" : "Aa"}</span>
-                      <span className="flex-1 truncate">{f.label}</span>
-                      <span className="rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase text-white" style={{ background: TAG_COLORS[f.tag] }}>{f.tag}</span>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+const HEADING_STYLE = { fontFamily: "var(--font-geist-sans), sans-serif", letterSpacing: "-0.05em", fontWeight: 800 } as const;
 
 /* ── Blog post data ────────────────────────────────────────────── */
 
@@ -655,7 +517,7 @@ function HeroCarousel() {
       {/* Content overlay — static, no animation */}
       <div className="absolute bottom-20 left-4 right-4 z-[1] sm:bottom-28 sm:left-16 sm:right-16">
         <TagPill label={slide.tag} onDark />
-        <h1 className="mt-2 max-w-2xl cursor-pointer text-xl font-extrabold leading-tight text-white underline-offset-[8px] decoration-white decoration-[3px] hover:underline sm:mt-3 sm:text-4xl" style={{ fontFamily: `${useHeadingFont().fontFamily}, sans-serif`, letterSpacing: useHeadingFont().letterSpacing, fontWeight: useHeadingFont().fontWeight }}>
+        <h1 className="mt-2 max-w-2xl cursor-pointer text-xl font-extrabold leading-tight text-white underline-offset-[8px] decoration-white decoration-[3px] hover:underline sm:mt-3 sm:text-4xl" style={HEADING_STYLE}>
           {slide.title}
         </h1>
         <p className="mt-1 max-w-lg text-sm tracking-[-0.02em] text-white/75 sm:mt-2 sm:text-lg">
@@ -1013,16 +875,10 @@ function NewsCarousel() {
 /* ── Page ───────────────────────────────────────────────────────── */
 
 export default function BlogPage() {
-  const [headingFont, setHeadingFont] = useState("var(--font-geist-sans)");
-  const [letterSpacing, setLetterSpacing] = useState("-0.05em");
-  const [fontWeight, setFontWeight] = useState(800);
-
   return (
-    <HeadingFontCtx.Provider value={{ fontFamily: headingFont, letterSpacing, fontWeight }}>
     <div className="min-h-screen bg-page-bg font-inter">
       <AnnouncementBanner />
       <DubNav />
-      <FontSwitcher font={headingFont} onFontChange={setHeadingFont} spacing={letterSpacing} onSpacingChange={setLetterSpacing} weight={fontWeight} onWeightChange={setFontWeight} />
 
       {/* Hero carousel */}
       <HeroCarousel />
@@ -1030,7 +886,7 @@ export default function BlogPage() {
       <div className="py-10">
         {/* Section header — constrained */}
         <div className="mx-auto mb-6 flex max-w-[1213px] items-center gap-1.5 px-6">
-          <h2 className="text-xl font-bold capitalize leading-6 text-page-text" style={{ fontFamily: `${useHeadingFont().fontFamily}, sans-serif`, letterSpacing: useHeadingFont().letterSpacing, fontWeight: useHeadingFont().fontWeight }}>
+          <h2 className="text-xl font-bold capitalize leading-6 text-page-text" style={HEADING_STYLE}>
             News
           </h2>
           <span className="text-page-text">
@@ -1042,6 +898,5 @@ export default function BlogPage() {
         <NewsCarousel />
       </div>
     </div>
-    </HeadingFontCtx.Provider>
   );
 }
