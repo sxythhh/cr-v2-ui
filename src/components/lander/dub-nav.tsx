@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
+import flags from "react-phone-number-input/flags";
+import type { Country } from "react-phone-number-input";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import Link from "next/link";
@@ -277,7 +279,7 @@ function SolutionsContent({ domain }: { domain: string }) {
   return (
     <div className="grid w-[1020px] grid-cols-[minmax(0,1fr),0.4fr] divide-x divide-foreground/[0.06]">
       <div className="flex h-full flex-col p-4">
-        <p className="mb-4 ml-2 text-xs uppercase text-page-text-muted">
+        <p className="mb-4 ml-2 text-xs tracking-[-0.02em] text-page-text-muted">
           Use case
         </p>
         <div className="grid grow grid-cols-3 gap-4">
@@ -304,7 +306,7 @@ function SolutionsContent({ domain }: { domain: string }) {
         </div>
       </div>
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-page-text-muted">
+        <p className="mb-2 text-xs tracking-[-0.02em] text-page-text-muted">
           Learn more
         </p>
         <DropdownLinkList
@@ -445,7 +447,7 @@ function ResourcesContent({ domain }: { domain: string }) {
     <div className="grid grid-cols-[0.9fr,0.55fr,0.55fr] divide-x divide-foreground/[0.06]">
       {/* Explore column */}
       <div className="flex h-full flex-col p-4">
-        <p className="mb-4 ml-2 text-xs uppercase text-page-text-muted">
+        <p className="mb-4 ml-2 text-xs tracking-[-0.02em] text-page-text-muted">
           Explore
         </p>
         <div className="grid grid-cols-2 gap-4">
@@ -474,7 +476,7 @@ function ResourcesContent({ domain }: { domain: string }) {
 
       {/* Company column */}
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-page-text-muted">
+        <p className="mb-2 text-xs tracking-[-0.02em] text-page-text-muted">
           Company
         </p>
         <DropdownLinkList items={company} />
@@ -482,7 +484,7 @@ function ResourcesContent({ domain }: { domain: string }) {
 
       {/* Updates column */}
       <div className="px-6 py-4">
-        <p className="mb-2 text-xs uppercase text-page-text-muted">
+        <p className="mb-2 text-xs tracking-[-0.02em] text-page-text-muted">
           Updates
         </p>
         <DropdownLinkList items={updates} />
@@ -942,28 +944,29 @@ function NavSearch() {
 
 // ── Language Dropdown ───────────────────────────────────────────────────────
 
-const LANGUAGES = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "pt", name: "Português", flag: "🇧🇷" },
-  { code: "ja", name: "日本語", flag: "🇯🇵" },
-  { code: "ko", name: "한국어", flag: "🇰🇷" },
-  { code: "zh", name: "中文", flag: "🇨🇳" },
-  { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
-  { code: "it", name: "Italiano", flag: "🇮🇹" },
-  { code: "nl", name: "Nederlands", flag: "🇳🇱" },
-  { code: "pl", name: "Polski", flag: "🇵🇱" },
-  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
-  { code: "ru", name: "Русский", flag: "🇷🇺" },
-  { code: "sv", name: "Svenska", flag: "🇸🇪" },
+const LANGUAGES: { code: string; name: string; country: Country }[] = [
+  { code: "en", name: "English", country: "US" },
+  { code: "es", name: "Español", country: "ES" },
+  { code: "fr", name: "Français", country: "FR" },
+  { code: "de", name: "Deutsch", country: "DE" },
+  { code: "pt", name: "Português", country: "BR" },
+  { code: "ja", name: "日本語", country: "JP" },
+  { code: "ko", name: "한국어", country: "KR" },
+  { code: "zh", name: "中文", country: "CN" },
+  { code: "ar", name: "العربية", country: "SA" },
+  { code: "hi", name: "हिन्दी", country: "IN" },
+  { code: "it", name: "Italiano", country: "IT" },
+  { code: "nl", name: "Nederlands", country: "NL" },
+  { code: "pl", name: "Polski", country: "PL" },
+  { code: "tr", name: "Türkçe", country: "TR" },
+  { code: "ru", name: "Русский", country: "RU" },
+  { code: "sv", name: "Svenska", country: "SE" },
 ];
 
 function LanguageDropdown() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("en");
+  const selectedLang = LANGUAGES.find((l) => l.code === selected) ?? LANGUAGES[0];
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -982,11 +985,15 @@ function LanguageDropdown() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+        className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-page-text">
           <path d="M9.75 0C15.135 0 19.5 4.365 19.5 9.75C19.5 15.135 15.135 19.5 9.75 19.5C4.365 19.5 0 15.135 0 9.75C0 4.365 4.365 0 9.75 0ZM7.263 10.5C7.328 12.616 7.663 14.491 8.157 15.86C8.434 16.626 8.747 17.194 9.056 17.556C9.367 17.92 9.604 18 9.75 18C9.896 18 10.133 17.92 10.444 17.556C10.754 17.194 11.066 16.626 11.343 15.859C11.837 14.491 12.173 12.616 12.237 10.5H7.263ZM1.536 10.5C1.68403 12.1266 2.31157 13.6727 3.33911 14.9424C4.36666 16.212 5.74796 17.1481 7.308 17.632C7.08856 17.226 6.90068 16.8038 6.746 16.369C6.183 14.811 5.827 12.756 5.762 10.5H1.536ZM13.738 10.5C13.673 12.756 13.317 14.81 12.754 16.37C12.599 16.8045 12.4107 17.2264 12.191 17.632C13.7512 17.1483 15.1327 16.2123 16.1605 14.9426C17.1882 13.6729 17.8159 12.1268 17.964 10.5H13.738ZM7.308 1.867C5.74815 2.35154 4.3671 3.28792 3.33964 4.55766C2.31217 5.82739 1.68448 7.37339 1.536 9H5.762C5.827 6.744 6.183 4.69 6.746 3.13C6.911 2.674 7.099 2.248 7.308 1.867ZM9.75 1.5C9.604 1.5 9.367 1.58 9.056 1.944C8.746 2.306 8.434 2.874 8.157 3.641C7.663 5.009 7.327 6.884 7.263 9H12.237C12.172 6.884 11.837 5.009 11.343 3.64C11.066 2.874 10.753 2.306 10.444 1.944C10.133 1.58 9.896 1.5 9.75 1.5ZM12.191 1.867C12.401 2.248 12.589 2.674 12.754 3.131C13.317 4.69 13.673 6.744 13.738 9H17.964C17.8154 7.37327 17.1876 5.82718 16.16 4.55743C15.1323 3.28769 13.751 2.35137 12.191 1.867Z" fill="currentColor"/>
         </svg>
+        {/* Selected flag badge */}
+        <span className="pointer-events-none absolute bottom-[5px] right-[5px] overflow-hidden rounded-[2px] [&>svg]:block [&>svg]:h-[11px] [&>svg]:w-[11px]">
+          {flags[selectedLang.country]?.({ title: selectedLang.name })}
+        </span>
       </button>
 
       <AnimatePresence>
@@ -996,22 +1003,27 @@ function LanguageDropdown() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-full z-50 mt-2 max-h-[320px] w-[200px] overflow-y-auto rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-            style={{ scrollbarWidth: "thin" }}
+            className="absolute right-0 top-full z-50 mt-2 max-h-[min(480px,calc(100dvh-80px))] w-[200px] overflow-y-auto rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            style={{ scrollbarWidth: "none" }}
           >
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => { setSelected(lang.code); setOpen(false); }}
                 className={cn(
-                  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] font-medium transition-colors",
+                  "group/lang flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] transition-colors",
                   selected === lang.code
                     ? "bg-foreground/[0.06] text-page-text dark:bg-white/[0.06]"
                     : "text-page-text-muted hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]",
                 )}
               >
-                <span className="text-base leading-none">{lang.flag}</span>
-                <span className="flex-1">{lang.name}</span>
+                <span className="shrink-0 overflow-hidden rounded-[3px] [&>svg]:h-[18px] [&>svg]:w-[18px]">{flags[lang.country]?.({ title: lang.name })}</span>
+                <span className={cn(
+                  "flex-1 transition-all",
+                  selected === lang.code
+                    ? "font-semibold text-page-text"
+                    : "font-medium group-hover/lang:font-semibold group-hover/lang:text-page-text",
+                )}>{lang.name}</span>
                 {selected === lang.code && (
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 )}
@@ -1087,10 +1099,11 @@ export function DubNav({
                   type="button"
                   onClick={() => setAuthView("login")}
                   className={cn(
-                    "hidden h-9 cursor-pointer items-center rounded-lg border px-4 text-sm transition-all md:flex",
+                    "hidden h-9 cursor-pointer items-center rounded-lg border px-4 text-sm tracking-[-0.02em] transition-all md:flex",
                     buttonVariantStyles.secondary,
                     "dark:border-white/[0.06] dark:bg-[#111111] dark:text-white dark:hover:bg-neutral-900"
                   )}
+                  style={{ fontFamily: "var(--font-geist-sans), sans-serif" }}
                 >
                   Log in
                 </button>
@@ -1099,7 +1112,7 @@ export function DubNav({
                   onClick={() => setAuthView("signup")}
                   className="flex h-9 shrink-0 cursor-pointer items-center rounded-lg px-3 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90 sm:px-4"
                   style={{
-                    fontFamily: "var(--font-abc-oracle), sans-serif",
+                    fontFamily: "var(--font-geist-sans), sans-serif",
                     background: "#FF8003",
                     borderTop: "1px solid rgba(255,160,50,0.5)",
                     boxShadow: "inset 0px 1.3px 2px 1px rgba(255,255,255,0.25), inset 0px -1px 1px 0px rgba(0,0,0,0.1)",

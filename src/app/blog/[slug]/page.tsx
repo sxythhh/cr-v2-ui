@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { DubNav } from "@/components/lander/dub-nav";
 import { AnnouncementBanner } from "@/components/lander/announcement-banner";
+import { PreviewCard } from "@base-ui/react/preview-card";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -41,7 +42,7 @@ const BLOG_POSTS: BlogPostDetail[] = [
       { type: "heading", level: 2, content: "New Battle Royale Map - Golden Coast" },
       {
         type: "text",
-        content: "On the Island, explore a sun-soaked paradise on foot, by car, or through the air in new hot air balloons. These locations are your next backdrop:",
+        content: "On the Island, explore a sun-soaked paradise on foot, by car, or through the air in new <a href=\"https://example.com\">hot air balloons</a>. These locations are your next backdrop. Check out the <a href=\"https://example.com\">full patch notes</a> for more details:",
       },
       {
         type: "bullets",
@@ -67,7 +68,7 @@ const BLOG_POSTS: BlogPostDetail[] = [
       { type: "heading", level: 2, content: "New Battle Pass" },
       {
         type: "text",
-        content: "Purchase the Battle Pass and seek revenge as The Bride, rep the future as <strong>Marty McFly</strong>, and unlock Fortnite originals like Miles Cross and Cat Holloway...plus a new version of Dark Voyager!",
+        content: "Purchase the <a href=\"https://example.com\">Battle Pass</a> and seek revenge as The Bride, rep the future as <strong>Marty McFly</strong>, and unlock Fortnite originals like <a href=\"https://example.com\">Miles Cross</a> and Cat Holloway...plus a new version of Dark Voyager!",
       },
       {
         type: "text",
@@ -84,7 +85,7 @@ const BLOG_POSTS: BlogPostDetail[] = [
       { type: "heading", level: 3, content: "Weapons & Mobility" },
       {
         type: "text",
-        content: "New weapons are more responsive with layered recoil and smoother ADS transitions. Reload progress is now saved when your magazine is empty. Start a reload, and if you swap weapons or get interrupted, pick up right where you left off!",
+        content: "New weapons are more responsive with layered recoil and smoother ADS transitions. Read the <a href=\"https://example.com\">weapon balance overview</a> for detailed stats. Reload progress is now saved when your magazine is empty. Start a reload, and if you swap weapons or get interrupted, pick up right where you left off!",
       },
       {
         type: "bullets",
@@ -136,7 +137,7 @@ const BLOG_POSTS: BlogPostDetail[] = [
         type: "text",
         content: "\u2060Keep the party going with new developer made islands and updates, inspired by Pacific Break and brought to you for Chapter Seven in partnership with Epic. Find them in the Inspired by Chapter Seven row in Discover.",
       },
-      { type: "text", content: "Catch you on the Golden Coast!" },
+      { type: "text", content: "Catch you on the Golden Coast! Follow us on <a href=\"https://example.com\">Twitter</a> and <a href=\"https://example.com\">Discord</a> for the latest updates." },
     ],
   },
   {
@@ -165,13 +166,13 @@ const BLOG_POSTS: BlogPostDetail[] = [
     intro: "After years of absence, Fortnite is officially back on Google Play. Android users worldwide can download Fortnite directly from the Google Play Store.",
     sections: [
       { type: "heading", level: 2, content: "Why This Matters" },
-      { type: "text", content: "The return to Google Play removes a significant barrier for mobile players. With <strong>one-tap installation</strong>, millions of new players can access Fortnite instantly." },
+      { type: "text", content: "The return to <a href=\"https://example.com\">Google Play</a> removes a significant barrier for mobile players. With <strong>one-tap installation</strong>, millions of new players can access Fortnite instantly. See our <a href=\"https://example.com\">mobile optimization guide</a> for the best experience." },
       { type: "heading", level: 3, content: "Mobile Performance Improvements" },
       { type: "bullets", items: ["60 FPS support on flagship Android devices", "Reduced app size from 8GB to 4.2GB", "Improved touch controls with customizable HUD", "Cross-progression and cross-play with all platforms", "Battery optimization mode"] },
       { type: "gallery", images: [{ src: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=1261&h=709&fit=crop", alt: "Mobile gaming" }] },
       { type: "separator" },
       { type: "heading", level: 2, content: "Download Now" },
-      { type: "text", content: "Head to the Google Play Store and search for Fortnite. New players who download before April 15 receive the exclusive Neon Byte outfit and 1,000 V-Bucks." },
+      { type: "text", content: "Head to the <a href=\"https://example.com\">Google Play Store</a> and search for Fortnite. New players who download before April 15 receive the exclusive <a href=\"https://example.com\">Neon Byte outfit</a> and 1,000 V-Bucks." },
     ],
   },
 ];
@@ -301,11 +302,13 @@ function ImageGallery({ images }: { images: { src: string; alt: string }[] }) {
             type="button"
             onClick={() => setActive(i)}
             className={cn(
-              "relative h-[54px] w-24 cursor-pointer overflow-hidden rounded",
-              i === active && "ring-2 ring-white/80 ring-offset-2 ring-offset-page-bg",
+              "relative h-[54px] w-24 cursor-pointer overflow-hidden rounded-lg transition-all duration-200",
+              i === active
+                ? "border-[3px] border-[#FF8003] opacity-100"
+                : "border-[3px] border-transparent opacity-65 hover:opacity-100",
             )}
           >
-            <img src={img.src} alt={img.alt} loading="lazy" className="h-full w-full object-cover" />
+            <img src={img.src} alt={img.alt} loading="lazy" className="h-full w-full rounded-[5px] object-cover" />
           </button>
         ))}
       </div>
@@ -389,7 +392,7 @@ function MoreLikeThisCard({ post, onClick }: { post: BlogPostDetail; onClick: ()
       className="group relative block w-[368px] shrink-0 cursor-pointer select-none p-[6px]"
     >
       <div className="pointer-events-none absolute inset-0 rounded-[18px] border-3 border-transparent transition-all duration-300 group-hover:border-[#FF8003]" />
-      <article className="relative flex w-full flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none">
+      <article className="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)] dark:shadow-none">
         <div className="relative aspect-video w-full shrink-0 overflow-hidden">
           <img
             src={post.heroImage}
@@ -399,16 +402,18 @@ function MoreLikeThisCard({ post, onClick }: { post: BlogPostDetail; onClick: ()
             className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <div className="flex flex-1 flex-col justify-center gap-3 p-5">
-          <span className="font-inter text-[10px] font-bold uppercase leading-[14px] tracking-[-0.02em] text-page-text-muted">
-            {post.date}
-          </span>
-          <h3
-            className="text-base font-bold leading-5 tracking-[-0.02em] text-page-text"
-            style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}
-          >
-            {post.title}
-          </h3>
+        <div className="flex flex-1 flex-col justify-between gap-3 p-5">
+          <div className="flex flex-col gap-3">
+            <span className="font-inter text-[10px] font-bold uppercase leading-[14px] tracking-[-0.02em] text-page-text-muted">
+              {post.date}
+            </span>
+            <h3
+              className="line-clamp-2 text-base font-bold leading-5 text-page-text"
+              style={{ fontFamily: "var(--font-fm-universe), sans-serif" }}
+            >
+              {post.title}
+            </h3>
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             {post.tags.map((tag) => (
               <TagPill key={tag} label={tag} />
@@ -504,58 +509,34 @@ function AskAiWidget() {
         ref={btnRef}
         type="button"
         onMouseMove={handleMouseMove}
-        className="group relative flex cursor-pointer items-center overflow-hidden rounded-[20px] p-[3px]"
+        className="group relative flex cursor-pointer items-center overflow-hidden rounded-[20px]"
+        style={{ padding: "1.5px" }}
       >
-        {/* Animated gradient border that follows cursor */}
-        <div className="absolute inset-0 rounded-[20px] bg-[#141414]" />
+        {/* Outer border — default subtle */}
+        <div className="absolute inset-0 rounded-[20px] bg-white/[0.08]" />
+        {/* Outer border — hover orange glow */}
         <div
           className="pointer-events-none absolute inset-0 rounded-[20px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(120px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,144,37,0.5), rgba(255,63,213,0.3), transparent 70%)`,
+            background: `radial-gradient(100px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,128,3,0.7), rgba(255,128,3,0.25) 50%, transparent 70%)`,
           }}
         />
-        {/* Dark border default */}
-        <div className="pointer-events-none absolute inset-0 rounded-[20px] border-2 border-white/5 group-hover:border-transparent" />
 
         {/* Inner pill */}
-        <div className="relative flex items-center rounded-[17px] bg-[#0A0A0B] px-4 py-3">
-          {/* GlowFollowBorderCard inner border */}
-          <div className="pointer-events-none absolute inset-0 rounded-[17px] border-2 border-white/5" />
+        <div className="relative flex items-center rounded-[18.5px] bg-[#1C1C1C] px-4 py-3">
+          {/* Inner border */}
+          <div className="pointer-events-none absolute inset-0 rounded-[18.5px] border-[1.5px] border-white/[0.06]" />
 
           {/* Platform icons */}
-          <div className="flex items-center">
-            {/* Icon 1 — base64 */}
-            <div className="flex h-[25px] w-[25px] items-center justify-center rounded-[6px]">
-              <img
-                src="/images/ask-ai/icon-1.png"
-                alt=""
-                width={22}
-                height={22}
-                className="rounded-[5px]"
-                draggable={false}
-              />
+          <div className="flex items-center gap-[1.5px]">
+            <div className="flex h-[19px] w-[19px] items-center justify-center overflow-hidden rounded-[4px]">
+              <img src="/images/ask-ai/icon-1.png" alt="" className="h-[19px] w-[19px] object-cover" draggable={false} />
             </div>
-            {/* Icon 2 — base64 */}
-            <div className="-ml-0.5 flex h-[25px] w-[25px] items-center justify-center rounded-[6px]">
-              <img
-                src="/images/ask-ai/icon-2.png"
-                alt=""
-                width={22}
-                height={22}
-                className="rounded-[5px]"
-                draggable={false}
-              />
+            <div className="flex h-[16px] w-[16px] items-center justify-center overflow-hidden rounded-[4px]">
+              <img src="/images/ask-ai/icon-2.png" alt="" className="h-[16px] w-[16px] object-cover" draggable={false} />
             </div>
-            {/* Icon 3 — base64 */}
-            <div className="-ml-0.5 flex h-[25px] w-[25px] items-center justify-center rounded-[6px]">
-              <img
-                src="/images/ask-ai/icon-3.png"
-                alt=""
-                width={15}
-                height={22}
-                className="rounded-[5px]"
-                draggable={false}
-              />
+            <div className="flex h-[19px] w-[19px] items-center justify-center overflow-hidden rounded-[4px]">
+              <img src="/images/ask-ai/icon-3.png" alt="" className="h-[19px] w-[19px] object-cover" draggable={false} />
             </div>
           </div>
 
@@ -569,18 +550,165 @@ function AskAiWidget() {
   );
 }
 
-/* ── Rich text ────────────────────────────────────────────────── */
+/* ── Preview Card Link ───────────────────────────────────────── */
 
-function RichText({ html }: { html: string }) {
+function PreviewLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const domain = (() => { try { return new URL(href).hostname; } catch { return href; } })();
+
   return (
-    <p
-      className="font-inter text-base font-normal leading-7 tracking-[-0.02em] text-page-text-muted [&_a]:text-[#FF8003] [&_a]:underline [&_a]:underline-offset-2 [&_strong]:font-semibold [&_strong]:text-page-text-subtle"
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <PreviewCard.Root>
+      <PreviewCard.Trigger
+        href={href}
+        className="inline text-[#FF8003] underline decoration-[#FF8003]/30 underline-offset-2 transition-colors hover:decoration-[#FF8003]"
+      >
+        {children}
+      </PreviewCard.Trigger>
+      <PreviewCard.Portal>
+        <PreviewCard.Positioner sideOffset={10}>
+          <PreviewCard.Popup className="z-50 w-[300px] origin-[var(--transform-origin)] overflow-hidden rounded-xl border border-foreground/[0.06] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.1)] transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0 dark:border-white/[0.06] dark:bg-[#1C1C1C] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+            <PreviewCard.Arrow className="data-[side=bottom]:top-[-10px] data-[side=top]:bottom-[-10px]">
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+                <path d="M9.66437 2.60207L4.80758 6.97318C4.07308 7.63423 3.11989 8 2.13172 8H0V10H20V8H18.5349C17.5468 8 16.5936 7.63423 15.8591 6.97318L11.0023 2.60207C10.622 2.2598 10.0447 2.25979 9.66437 2.60207Z" className="fill-white dark:fill-[#1C1C1C]" />
+                <path d="M10.3333 3.34539L5.47654 7.71648C4.55842 8.54279 3.36693 9 2.13172 9H0V8H2.13172C3.11989 8 4.07308 7.63423 4.80758 6.97318L9.66437 2.60207C10.0447 2.25979 10.622 2.2598 11.0023 2.60207L15.8591 6.97318C16.5936 7.63423 17.5468 8 18.5349 8H20V9H18.5349C17.2998 9 16.1083 8.54278 15.1901 7.71648L10.3333 3.34539Z" className="fill-foreground/[0.06] dark:fill-white/[0.06]" />
+                <path d="M8.99542 1.85876C9.75604 1.17425 10.9106 1.17422 11.6713 1.85878L16.5281 6.22989C17.0789 6.72568 17.7938 7.00001 18.5349 7.00001L15.89 7L11.0023 2.60207C10.622 2.2598 10.0447 2.2598 9.66436 2.60207L4.77734 7L2.13171 7.00001C2.87284 7.00001 3.58774 6.72568 4.13861 6.22989L8.99542 1.85876Z" className="fill-white dark:fill-[#1C1C1C]" />
+              </svg>
+            </PreviewCard.Arrow>
+            <div className="p-4">
+              {/* URL bar */}
+              <div className="flex items-center gap-2 rounded-lg bg-foreground/[0.04] px-3 py-2 dark:bg-white/[0.04]">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 text-page-text-muted dark:text-white/40">
+                  <path d="M5.83 8.17a3.001 3.001 0 010-4.24l1.41-1.41a3 3 0 114.24 4.24l-.7.7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  <path d="M8.17 5.83a3.001 3.001 0 010 4.24l-1.41 1.41a3 3 0 11-4.24-4.24l.7-.7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                </svg>
+                <span className="truncate text-xs text-page-text-muted dark:text-white/40">{domain}</span>
+              </div>
+              {/* Title */}
+              <p className="mt-3 text-sm font-semibold leading-5 tracking-[-0.02em] text-page-text dark:text-white">{children}</p>
+              {/* Hint */}
+              <p className="mt-1.5 text-[11px] text-page-text-muted dark:text-white/40">Click to open link</p>
+            </div>
+          </PreviewCard.Popup>
+        </PreviewCard.Positioner>
+      </PreviewCard.Portal>
+    </PreviewCard.Root>
   );
 }
 
+/* ── Rich text (with PreviewCard links) ─────────────────────── */
+
+function RichText({ html }: { html: string }) {
+  // Parse HTML to extract links and render them as PreviewCard
+  const parts = useMemo(() => {
+    const result: { type: "text" | "link"; content: string; href?: string }[] = [];
+    const regex = /<a\s+href="([^"]*)"[^>]*>(.*?)<\/a>/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(html)) !== null) {
+      if (match.index > lastIndex) {
+        result.push({ type: "text", content: html.slice(lastIndex, match.index) });
+      }
+      result.push({ type: "link", content: match[2], href: match[1] });
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < html.length) {
+      result.push({ type: "text", content: html.slice(lastIndex) });
+    }
+    return result;
+  }, [html]);
+
+  return (
+    <p className="font-inter text-base font-normal leading-7 tracking-[-0.02em] text-page-text-muted [&_strong]:font-semibold [&_strong]:text-page-text-subtle">
+      {parts.map((part, i) =>
+        part.type === "link" ? (
+          <PreviewLink key={i} href={part.href!}>
+            <span dangerouslySetInnerHTML={{ __html: part.content }} />
+          </PreviewLink>
+        ) : (
+          <span key={i} dangerouslySetInnerHTML={{ __html: part.content }} />
+        )
+      )}
+    </p>
+  );
+}
+
+/* ── Floating Table of Contents ─────────────────────────────── */
+
+function FloatingTOC({ sections, activeSection, onNavigate }: {
+  sections: { id: string; label: string }[];
+  activeSection: string;
+  onNavigate: (id: string) => void;
+}) {
+  return (
+    <div className="fixed right-6 top-24 z-50 hidden w-[180px] rounded-lg bg-white/70 p-[10px] backdrop-blur-[4.5px] dark:bg-[#1C1C1C]/80 lg:block">
+      <div className="flex items-center gap-2">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2.5 3H11.5M2.5 7H7.5M2.5 11H11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-page-text dark:text-white/70" />
+        </svg>
+        <span className="font-inter text-sm font-medium tracking-[-0.42px] text-page-text dark:text-white">On this page</span>
+      </div>
+      <div className="mt-4 flex flex-col gap-2 pl-2.5">
+        {sections.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => onNavigate(s.id)}
+            className={cn(
+              "cursor-pointer text-left font-inter text-xs tracking-[-0.6px] transition-colors",
+              activeSection === s.id
+                ? "font-bold text-[#FFA600]"
+                : "font-medium text-page-text/70 hover:text-page-text dark:text-white/50 dark:hover:text-white/80",
+            )}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── useScrollSpy hook ──────────────────────────────────────── */
+
+function useScrollSpy(sectionIds: string[]) {
+  const [active, setActive] = useState(sectionIds[0] ?? "");
+  const refs = useRef<Map<string, HTMLElement>>(new Map());
+
+  useEffect(() => {
+    function handleScroll() {
+      let current = sectionIds[0] ?? "";
+      for (const id of sectionIds) {
+        const el = refs.current.get(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 150) current = id;
+        }
+      }
+      setActive(current);
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [sectionIds]);
+
+  const registerRef = useCallback((id: string, el: HTMLElement | null) => {
+    if (el) refs.current.set(id, el);
+    else refs.current.delete(id);
+  }, []);
+
+  const scrollTo = useCallback((id: string) => {
+    setActive(id);
+    const el = refs.current.get(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  return { active, registerRef, scrollTo };
+}
+
 /* ── Page ─────────────────────────────────────────────────────── */
+
+function slugify(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
 
 export default function BlogPostPage() {
   const params = useParams<{ slug: string }>();
@@ -588,6 +716,16 @@ export default function BlogPostPage() {
   const activePost = BLOG_POSTS.find((p) => p.slug === params.slug) ?? BLOG_POSTS[0];
   const morePosts = BLOG_POSTS.filter((p) => p.slug !== activePost.slug);
   const readTime = estimateReadTime(activePost);
+
+  // Extract TOC entries from h2 headings
+  const tocSections = useMemo(() => {
+    return activePost.sections
+      .filter((s): s is { type: "heading"; level: 2 | 3; content: string } => s.type === "heading" && (s as any).level === 2)
+      .map((s) => ({ id: slugify(s.content), label: s.content }));
+  }, [activePost]);
+
+  const tocIds = useMemo(() => tocSections.map((s) => s.id), [tocSections]);
+  const { active: activeSection, registerRef, scrollTo } = useScrollSpy(tocIds);
 
   const drag = useDragScroll();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -609,88 +747,93 @@ export default function BlogPostPage() {
       <AnnouncementBanner />
       <DubNav />
 
-      {/* ── Hero ──────────────────────────────────────────────── */}
-      <div className="relative w-full" style={{ height: "clamp(400px, 50vw, 708px)" }}>
-        <img src={activePost.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #000000 0%, #000000 50%, rgba(0,0,0,0) 100%)" }} />
-        {/* Hero gradient fade into page-bg */}
+      {/* Floating TOC */}
+      {tocSections.length > 0 && (
+        <FloatingTOC sections={tocSections} activeSection={activeSection} onNavigate={scrollTo} />
+      )}
+
+      {/* ── Hero (Epic Games masked image + overlaid content) ──── */}
+      <div className="relative w-full bg-page-bg" style={{ height: "clamp(520px, 52vw, 720px)" }}>
+        {/* Desktop: image pushed right with dual gradient mask */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[128px]"
-          style={{ background: "linear-gradient(180deg, transparent 0%, var(--page-bg) 100%)" }}
-        />
-      </div>
+          className="absolute inset-y-0 left-[10%] right-0 hidden sm:block"
+          style={{
+            maskImage: "linear-gradient(270deg, #000 0%, #000 50%, transparent 85%), linear-gradient(180deg, #000 0%, #000 40%, transparent 80%)",
+            maskComposite: "intersect",
+            WebkitMaskImage: "linear-gradient(270deg, #000 0%, #000 50%, transparent 85%), linear-gradient(180deg, #000 0%, #000 40%, transparent 80%)",
+            WebkitMaskComposite: "destination-in",
+          }}
+        >
+          <img src={activePost.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        </div>
+        {/* Mobile: full-width with vertical fade */}
+        <div
+          className="absolute inset-0 sm:hidden"
+          style={{
+            maskImage: "linear-gradient(180deg, #000 0%, #000 40%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(180deg, #000 0%, #000 40%, transparent 100%)",
+          }}
+        >
+          <img src={activePost.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        </div>
 
-      {/* ── Article (narrow text column) ──────────────────────── */}
-      <div className="relative z-[1]" style={{ marginTop: "-200px" }}>
-        <div className="mx-auto flex max-w-[1261px] flex-col items-center gap-12 px-4 py-12 sm:px-6">
-          {/* Back to blog breadcrumb */}
-          <div className="w-full max-w-[912px]">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1 font-inter text-sm tracking-[-0.02em] text-white/75 transition-colors hover:text-white"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Blog
-            </Link>
-          </div>
+        {/* ── Content overlaid in the hero ── */}
+        <div className="relative z-[1] mx-auto flex h-full max-w-[1261px] flex-col justify-end px-4 pb-10 sm:px-6 sm:pb-14">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            {/* Left: title + meta */}
+            <div className="flex max-w-[600px] flex-col gap-4">
+              {/* Back */}
+              <Link
+                href="/blog"
+                className="inline-flex w-fit items-center gap-1 font-inter text-sm tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                  <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Blog
+              </Link>
 
-          {/* Header — 912px with staggered entrance */}
-          <header className="flex w-full max-w-[912px] flex-col gap-6">
-            <motion.span
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0, ease: "easeOut" }}
-              className="font-inter text-[10px] font-bold uppercase leading-[14px] tracking-[-0.02em] text-white/75"
-            >
-              {activePost.date}
-            </motion.span>
+              {/* Date */}
+              <motion.span
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="font-inter text-[10px] font-bold uppercase leading-[14px] tracking-[-0.02em] text-page-text-muted"
+              >
+                {activePost.date}
+              </motion.span>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-              className="text-2xl font-bold leading-8 tracking-[-0.02em] text-white"
-              style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}
-            >
-              {activePost.title}
-            </motion.h1>
+              {/* Title */}
+              <motion.h1
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+                className="text-2xl font-bold leading-8 text-page-text sm:text-[32px] sm:leading-[1.15]"
+                style={{ fontFamily: "var(--font-fm-universe), sans-serif" }}
+              >
+                {activePost.title}
+              </motion.h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              className="flex flex-col gap-4"
-            >
               {/* Tags */}
-              <div className="flex flex-wrap items-center gap-2">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+                className="flex flex-wrap items-center gap-2"
+              >
                 {activePost.tags.map((tag) => (
                   <TagPill key={tag} label={tag} />
                 ))}
-              </div>
+              </motion.div>
 
-              {/* Author display */}
-              <div className="flex items-center gap-3">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face"
-                  alt="Epic Games"
-                  className="h-8 w-8 rounded-full object-cover"
-                />
-                <div className="flex items-center gap-2 font-inter text-sm tracking-[-0.02em]">
-                  <span className="font-semibold text-white">Epic Games</span>
-                  <span className="text-white/40">-</span>
-                  <span className="text-white/60">{activePost.date}</span>
-                  <span className="text-white/40">-</span>
-                  <span className="text-white/60">{readTime} min read</span>
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              {/* Share buttons */}
-              <ShareButtons />
-            </motion.div>
-          </header>
-
+      {/* ── Article (narrow text column) ──────────────────────── */}
+      <div className="relative z-[1]">
+        <div className="mx-auto flex max-w-[1261px] flex-col items-center gap-12 px-4 py-12 sm:px-6">
           {/* Intro */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -698,7 +841,7 @@ export default function BlogPostPage() {
             transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
             className="w-full max-w-[912px]"
           >
-            <p className="font-inter text-base font-normal leading-7 tracking-[-0.02em] text-white/75">
+            <p className="font-inter text-base font-normal leading-7 tracking-[-0.02em] text-page-text-muted">
               {activePost.intro}
             </p>
           </motion.div>
@@ -708,8 +851,9 @@ export default function BlogPostPage() {
             switch (section.type) {
               case "heading":
                 if (section.level === 2) {
+                  const hId = slugify(section.content);
                   return (
-                    <h2 key={i} className="w-full max-w-[912px] text-2xl font-bold leading-8 tracking-[-0.02em] text-page-text" style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}>
+                    <h2 key={i} id={hId} ref={(el) => registerRef(hId, el)} className="w-full max-w-[912px] scroll-mt-24 text-2xl font-bold leading-8 text-page-text" style={{ fontFamily: "var(--font-fm-universe), sans-serif" }}>
                       {section.content}
                     </h2>
                   );
@@ -755,8 +899,8 @@ export default function BlogPostPage() {
       {/* ── More Like This (horizontal draggable row) ─────────── */}
       <section className="mx-auto mt-12 max-w-[1261px] px-4 pb-24 sm:px-6">
         <h2
-          className="mb-6 text-xl font-bold leading-6 tracking-[-0.02em] text-page-text"
-          style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}
+          className="mb-6 text-xl font-bold leading-6 text-page-text"
+          style={{ fontFamily: "var(--font-fm-universe), sans-serif" }}
         >
           More Like This
         </h2>

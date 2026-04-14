@@ -204,10 +204,14 @@ nav [data-active="true"] svg path {
 }
 
 /* Hide scrollbar but keep scroll functionality */
+html,
+body,
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
