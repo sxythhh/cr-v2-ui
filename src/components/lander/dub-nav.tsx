@@ -21,6 +21,7 @@ import {
   useState,
 } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
+import { AuthModal } from "@/components/auth-modal";
 // useTheme removed — bottom bar toggles directly via DOM
 import { Hyperlink } from "@/components/sidebar/icons/hyperlink";
 import { PieChart } from "@/components/sidebar/icons/pie-chart";
@@ -953,6 +954,7 @@ export function DubNav({
 }) {
   const layoutGroupId = useId();
   const scrolled = useScroll(40);
+  const [authView, setAuthView] = useState<"login" | "signup" | null>(null);
   const pathname = usePathname();
 
   return (
@@ -974,7 +976,7 @@ export function DubNav({
             )}
           />
           <div className={cn("relative mx-auto w-full max-w-screen-xl px-3 lg:px-10")}>
-            <div className="flex h-14 items-center gap-6">
+            <div className="flex h-14 items-center gap-4 lg:gap-6">
               {/* Logo */}
               <div className="shrink-0">
                 <Link className="block w-fit py-2 pr-2" href="https://dub.co/home">
@@ -985,29 +987,34 @@ export function DubNav({
                 </Link>
               </div>
 
-              {/* Desktop navigation */}
+              {/* Desktop navigation — hidden below lg */}
               <NavItemsList pathname={pathname} />
 
               {/* Spacer */}
-              <div className="hidden flex-1 lg:block" />
+              <div className="flex-1" />
+
+              {/* Search — always visible, narrower on mobile */}
+              <div className="hidden sm:block">
+                <NavSearch />
+              </div>
 
               {/* Auth buttons */}
-              <div className="hidden items-center gap-2 lg:flex">
-                {/* Search help — morphing input */}
-                <NavSearch />
-                <Link
-                  href="https://app.dub.co/login"
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAuthView("login")}
                   className={cn(
-                    "flex h-9 items-center rounded-lg border px-4 text-sm transition-all",
+                    "hidden h-9 cursor-pointer items-center rounded-lg border px-4 text-sm transition-all md:flex",
                     buttonVariantStyles.secondary,
                     "dark:border-white/[0.06] dark:bg-[#111111] dark:text-white dark:hover:bg-neutral-900"
                   )}
                 >
                   Log in
-                </Link>
-                <Link
-                  href="https://app.dub.co/register"
-                  className="flex h-9 items-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAuthView("signup")}
+                  className="flex h-9 shrink-0 cursor-pointer items-center rounded-lg px-3 text-sm font-semibold tracking-[-0.02em] text-[#FCFCFB] transition-opacity hover:opacity-90 sm:px-4"
                   style={{
                     fontFamily: "var(--font-abc-oracle), sans-serif",
                     background: "#FF8003",
@@ -1016,8 +1023,15 @@ export function DubNav({
                   }}
                 >
                   Sign up
-                </Link>
+                </button>
               </div>
+
+              {/* Auth modal */}
+              <AuthModal
+                open={authView !== null}
+                onClose={() => setAuthView(null)}
+                initialView={authView ?? "login"}
+              />
 
               {/* Mobile nav */}
               <MobileNav theme={theme} />

@@ -192,50 +192,54 @@ function ExternalArrowIcon({ size = 20 }: { size?: number }) {
 /* ── Wistia embed (muted, autoplay, no controls) ─────────────── */
 
 function WistiaEmbed({ mediaId }: { mediaId: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [mp4Url, setMp4Url] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!document.querySelector('script[src="https://fast.wistia.com/player.js"]')) {
-      const s = document.createElement("script");
-      s.src = "https://fast.wistia.com/player.js";
-      s.async = true;
-      document.head.appendChild(s);
-    }
-    const moduleId = `wistia-${mediaId}`;
-    if (!document.getElementById(moduleId)) {
-      const s = document.createElement("script");
-      s.id = moduleId;
-      s.src = `https://fast.wistia.com/embed/${mediaId}.js`;
-      s.async = true;
-      s.type = "module";
-      document.head.appendChild(s);
-    }
+    let cancelled = false;
+
+    // Fetch direct MP4 URL from Wistia JSON API — bypasses HLS entirely
+    fetch(`https://fast.wistia.com/embed/medias/${mediaId}.json`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        const assets = data?.media?.assets ?? [];
+        // Prefer 1080p, fall back to 720p, then md (540p), then any mp4
+        const pick =
+          assets.find((a: any) => a.type === "hd_mp4_video" && a.width >= 1920) ??
+          assets.find((a: any) => a.type === "hd_mp4_video") ??
+          assets.find((a: any) => a.type === "md_mp4_video") ??
+          assets.find((a: any) => a.ext === "mp4");
+        if (pick?.url) {
+          // Wistia returns .bin URLs — replace with .mp4 so browser sets correct MIME type
+          setMp4Url(pick.url.replace(/\.bin$/, ".mp4"));
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+      const v = videoRef.current;
+      if (v) { v.pause(); v.src = ""; v.load(); }
+    };
   }, [mediaId]);
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-hidden">
-      {/* Wistia player — scaled up to fill and crop */}
-      <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "scale(1.5)", transformOrigin: "center" }}>
-        {/* @ts-expect-error — Wistia custom element */}
-        <wistia-player
-          media-id={mediaId}
-          player-color="#FF8003"
-          muted="true"
-          autoplay="true"
-          time="1"
-          end-video-behavior="loop"
-          playbar-control="false"
-          play-pause-control="false"
-          volume-control="false"
-          fullscreen-control="false"
-          settings-control="false"
-          small-play-button="false"
-          big-play-button="false"
-          focus-visible="false"
-          style={{ width: "100%", height: "100%", display: "block" }}
-        />
+    <div className="relative h-full w-full overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center scale-[1.8] sm:scale-[1.5]" style={{ transformOrigin: "center" }}>
+        {mp4Url && (
+          <video
+            ref={videoRef}
+            src={`${mp4Url}#t=1`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover transition-opacity duration-500"
+            style={{ opacity: mp4Url ? 1 : 0 }}
+          />
+        )}
       </div>
-
     </div>
   );
 }
@@ -245,7 +249,7 @@ function WistiaEmbed({ mediaId }: { mediaId: string }) {
 function YouTubeEmbed({ videoId }: { videoId: string }) {
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "scale(1.5)", transformOrigin: "center" }}>
+      <div className="absolute inset-0 flex items-center justify-center scale-[1.8] sm:scale-[1.5]" style={{ transformOrigin: "center" }}>
         <iframe
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&start=1&disablekb=1&fs=0&iv_load_policy=3`}
           allow="autoplay; encrypted-media"
@@ -260,7 +264,7 @@ function YouTubeEmbed({ videoId }: { videoId: string }) {
 
 /* ── Wistia volume control (expandable slider) ───────────────── */
 
-function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<HTMLDivElement | null>; onUnmute: () => void }) {
+function WistiaVolumeControl({ heroRef, onUnmute, onMute }: { heroRef: React.RefObject<HTMLDivElement | null>; onUnmute: () => void; onMute?: () => void }) {
   const [volume, setVolume] = useState(0);
   const [volumeOpen, setVolumeOpen] = useState(false);
   const volumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -272,12 +276,6 @@ function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<H
     if (!container) return [];
     const vids: HTMLVideoElement[] = [];
     container.querySelectorAll("video").forEach((v) => vids.push(v));
-    container.querySelectorAll("wistia-player").forEach((wp) => {
-      if (wp.shadowRoot) wp.shadowRoot.querySelectorAll("video").forEach((v) => vids.push(v));
-    });
-    container.querySelectorAll("iframe").forEach((iframe) => {
-      try { iframe.contentDocument?.querySelectorAll("video").forEach((v) => vids.push(v)); } catch {}
-    });
     return vids;
   }, [heroRef]);
 
@@ -313,8 +311,9 @@ function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<H
     } else {
       for (const v of vids) { v.muted = true; }
       setVolume(0);
+      onMute?.();
     }
-  }, [volume, getVideos, onUnmute]);
+  }, [volume, getVideos, onUnmute, onMute]);
 
   const openVolume = useCallback(() => {
     if (volumeTimerRef.current) clearTimeout(volumeTimerRef.current);
@@ -331,6 +330,7 @@ function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<H
         className="flex h-9 cursor-pointer items-center gap-2 overflow-hidden rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10"
         animate={{ width: volumeOpen ? 130 : volume === 0 ? 135 : 40, paddingLeft: 12, paddingRight: volumeOpen ? 10 : volume === 0 ? 10 : 12 }}
         transition={{ type: "spring", stiffness: 500, damping: 35 }}
+        onClick={volume === 0 && !volumeOpen ? toggleMute : undefined}
       >
         <button
           type="button"
@@ -344,7 +344,7 @@ function WistiaVolumeControl({ heroRef, onUnmute }: { heroRef: React.RefObject<H
           )}
         </button>
         {volume === 0 && !volumeOpen && (
-          <span className="whitespace-nowrap text-xs font-medium tracking-[-0.02em] text-white">Click for sound</span>
+          <span className="whitespace-nowrap text-xs font-medium tracking-[-0.02em] text-white" onClick={toggleMute}>Click for sound</span>
         )}
         <AnimatePresence>
           {volumeOpen && (
@@ -436,50 +436,54 @@ function HeroCarousel() {
       {/* Bottom gradient fade into page bg — dark mode only */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] hidden h-32 dark:block" style={{ background: "linear-gradient(to bottom, transparent, var(--page-bg))" }} />
 
-      {/* Image — breathes in on change */}
-      <AnimatePresence initial={false}>
+      {/* Static poster to prevent flash during transitions */}
+      <img src={slide.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+
+      {/* Slide media — only active slide gets video embed */}
+      <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={slide.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
           className="absolute inset-0"
         >
-          {slide.wistiaId ? (
-            <WistiaEmbed mediaId={slide.wistiaId} />
-          ) : slide.youtubeId ? (
-            <YouTubeEmbed videoId={slide.youtubeId} />
-          ) : slide.video ? (
-            <motion.video
-              key={slide.video}
-              src={slide.video}
-              poster={slide.image}
-              autoPlay
-              muted
-              loop
-              playsInline
-              initial={{ scale: 1.03 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <motion.img
-              key={slide.image}
-              src={slide.image}
-              alt={slide.title}
-              initial={{ scale: 1.03 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="h-full w-full object-cover"
-            />
-          )}
+          {/* Poster — always visible, video layers on top */}
+          <img src={slide.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
         </motion.div>
       </AnimatePresence>
+
+      {/* Video layer — only one at a time, outside AnimatePresence */}
+      <div className="absolute inset-0" key={slide.id}>
+        {slide.wistiaId ? (
+          <WistiaEmbed mediaId={slide.wistiaId} />
+        ) : slide.youtubeId ? (
+          <YouTubeEmbed videoId={slide.youtubeId} />
+        ) : slide.video ? (
+          <video
+            key={slide.video}
+            src={`${slide.video}#t=1`}
+            poster={slide.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+          />
+          ) : null}
+      </div>
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
       {/* Volume control — top right, for video slides */}
       {(slide.wistiaId || slide.youtubeId) && (
-        <WistiaVolumeControl heroRef={heroRef} onUnmute={() => setIsPlaying(false)} />
+        <WistiaVolumeControl
+          heroRef={heroRef}
+          onUnmute={() => setIsPlaying(false)}
+          onMute={() => setIsPlaying(true)}
+        />
       )}
 
       {/* Content overlay — static, no animation */}
@@ -534,10 +538,10 @@ function HeroCarousel() {
         <button
           type="button"
           onClick={goPrev}
-          className="relative flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl px-2.5 py-2 text-white sm:hidden"
+          className="relative hidden shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg px-2 py-1.5 text-white"
         >
-          <div className="absolute inset-0 rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
-          <span className="relative z-[1]"><ChevronIcon direction="left" size={16} /></span>
+          <div className="absolute inset-0 rounded-lg bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
+          <span className="relative z-[1]"><ChevronIcon direction="left" size={12} /></span>
         </button>
         <div className="relative flex items-center gap-3 rounded-xl px-3 py-2">
           {/* Background */}
@@ -603,10 +607,10 @@ function HeroCarousel() {
         <button
           type="button"
           onClick={goNext}
-          className="relative flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl px-2.5 py-2 text-white sm:hidden"
+          className="relative hidden shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg px-2 py-1.5 text-white"
         >
-          <div className="absolute inset-0 rounded-xl bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
-          <span className="relative z-[1]"><ChevronIcon direction="right" size={16} /></span>
+          <div className="absolute inset-0 rounded-lg bg-black/50 backdrop-blur-[12px] dark:bg-white/10" />
+          <span className="relative z-[1]"><ChevronIcon direction="right" size={12} /></span>
         </button>
       </div>
     </div>
@@ -850,9 +854,9 @@ export default function BlogPage() {
       {/* Hero carousel */}
       <HeroCarousel />
 
-      <div className="py-16">
+      <div className="py-10">
         {/* Section header — constrained */}
-        <div className="mx-auto mb-10 flex max-w-[1213px] items-center gap-1.5 px-6">
+        <div className="mx-auto mb-6 flex max-w-[1213px] items-center gap-1.5 px-6">
           <h2 className="text-xl font-bold capitalize leading-6 tracking-[-0.02em] text-page-text" style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}>
             News
           </h2>

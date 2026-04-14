@@ -248,6 +248,190 @@ function DetailCampaignCard({ campaign, onClick }: { campaign: Campaign; onClick
   );
 }
 
+// ── Mock Organizations ──────────────────────────────────────────────
+
+const ORGANIZATIONS = [
+  { id: "org-1", name: "Sound Network", logo: "https://i.pravatar.cc/32?u=soundnet", balance: "$142,500" },
+  { id: "org-2", name: "Clipping Culture", logo: "https://i.pravatar.cc/32?u=clipcult", balance: "$89,200" },
+  { id: "org-3", name: "Scene Society", logo: "https://i.pravatar.cc/32?u=scenesoc", balance: "$210,000" },
+  { id: "org-4", name: "Nova Media Group", logo: "https://i.pravatar.cc/32?u=novamedia", balance: "$67,800" },
+  { id: "org-5", name: "Viral Labs", logo: "https://i.pravatar.cc/32?u=virallabs", balance: "$315,000" },
+];
+
+// ── Move Campaign Modal ─────────────────────────────────────────────
+
+function MoveCampaignModal({ campaign, open, onClose }: {
+  campaign: Campaign; open: boolean; onClose: () => void;
+}) {
+  const { toast } = useToast();
+  const { confirm } = useConfirm();
+  const [sourceOrg, setSourceOrg] = useState(ORGANIZATIONS[0].id);
+  const [targetOrg, setTargetOrg] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
+  const [transferAll, setTransferAll] = useState(false);
+  const [note, setNote] = useState("");
+
+  const source = ORGANIZATIONS.find((o) => o.id === sourceOrg);
+  const target = ORGANIZATIONS.find((o) => o.id === targetOrg);
+  const canSubmit = targetOrg && targetOrg !== sourceOrg;
+
+  const handleSubmit = async () => {
+    const ok = await confirm({
+      title: "Confirm campaign transfer",
+      message: `Move "${campaign.title}" from ${source?.name} to ${target?.name}${transferAmount ? ` with $${transferAmount} fund transfer` : transferAll ? " with all remaining funds" : ""}?`,
+      confirmLabel: "Transfer",
+      destructive: false,
+    });
+    if (ok) {
+      toast(`Campaign moved to ${target?.name}`);
+      onClose();
+    }
+  };
+
+  return (
+    <Modal open={open} onClose={onClose} size="md">
+      <ModalHeader>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF8003]/10">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8003" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8L22 12L18 16" />
+              <path d="M2 12H22" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="font-inter text-base font-semibold tracking-[-0.02em] text-page-text">Move Campaign</h2>
+            <p className="mt-0.5 text-xs tracking-[-0.02em] text-page-text-muted">{campaign.title}</p>
+          </div>
+        </div>
+      </ModalHeader>
+
+      <ModalBody className="space-y-5">
+        {/* Source org */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">From organization</label>
+          <select
+            value={sourceOrg}
+            onChange={(e) => setSourceOrg(e.target.value)}
+            className="h-10 w-full cursor-pointer rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] px-3 text-sm tracking-[-0.02em] text-page-text outline-none transition-colors focus:border-[#FF8003] dark:border-white/[0.06] dark:bg-white/[0.02]"
+          >
+            {ORGANIZATIONS.map((org) => (
+              <option key={org.id} value={org.id}>{org.name} ({org.balance})</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Arrow */}
+        <div className="flex justify-center">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground/[0.04] dark:bg-white/[0.06]">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-page-text-muted">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Target org */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">To organization</label>
+          <select
+            value={targetOrg}
+            onChange={(e) => setTargetOrg(e.target.value)}
+            className="h-10 w-full cursor-pointer rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] px-3 text-sm tracking-[-0.02em] text-page-text outline-none transition-colors focus:border-[#FF8003] dark:border-white/[0.06] dark:bg-white/[0.02]"
+          >
+            <option value="">Select organization...</option>
+            {ORGANIZATIONS.filter((o) => o.id !== sourceOrg).map((org) => (
+              <option key={org.id} value={org.id}>{org.name} ({org.balance})</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-foreground/[0.06] dark:border-white/[0.06]" />
+
+        {/* Fund transfer */}
+        <div className="space-y-3">
+          <label className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Fund transfer</label>
+
+          {/* Transfer all toggle */}
+          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-foreground/[0.06] px-3 py-2.5 transition-colors hover:bg-foreground/[0.02] dark:border-white/[0.06]">
+            <span className="text-sm tracking-[-0.02em] text-page-text">Transfer all remaining funds</span>
+            <button
+              type="button"
+              onClick={() => { setTransferAll(!transferAll); if (!transferAll) setTransferAmount(""); }}
+              className={cn(
+                "relative h-5 w-9 rounded-full transition-colors",
+                transferAll ? "bg-[#FF8003]" : "bg-foreground/[0.12] dark:bg-white/[0.12]",
+              )}
+            >
+              <div className={cn(
+                "absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform",
+                transferAll ? "translate-x-[18px]" : "translate-x-0.5",
+              )} />
+            </button>
+          </label>
+
+          {/* Custom amount */}
+          {!transferAll && (
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-page-text-muted">$</span>
+              <input
+                type="text"
+                value={transferAmount}
+                onChange={(e) => setTransferAmount(e.target.value.replace(/[^0-9.,]/g, ""))}
+                placeholder="0.00"
+                className="h-10 w-full rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] pl-7 pr-3 text-sm tracking-[-0.02em] text-page-text outline-none transition-colors placeholder:text-page-text-muted/50 focus:border-[#FF8003] dark:border-white/[0.06] dark:bg-white/[0.02]"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Note */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Note (optional)</label>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Reason for transfer..."
+            rows={2}
+            className="w-full resize-none rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] px-3 py-2.5 text-sm tracking-[-0.02em] text-page-text outline-none transition-colors placeholder:text-page-text-muted/50 focus:border-[#FF8003] dark:border-white/[0.06] dark:bg-white/[0.02]"
+          />
+        </div>
+
+        {/* Summary */}
+        {canSubmit && (
+          <div className="rounded-xl bg-foreground/[0.03] p-3 dark:bg-white/[0.03]">
+            <div className="flex items-center gap-2 text-xs tracking-[-0.02em] text-page-text-muted">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.333A6.667 6.667 0 1 0 8 14.667 6.667 6.667 0 0 0 8 1.333Zm0 3.334v4M8 11.333h.007" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span>
+                Campaign will be transferred from <strong className="text-page-text">{source?.name}</strong> to <strong className="text-page-text">{target?.name}</strong>
+                {(transferAmount || transferAll) && (
+                  <> with <strong className="text-page-text">{transferAll ? "all remaining" : `$${transferAmount}`}</strong> funds</>
+                )}
+              </span>
+            </div>
+          </div>
+        )}
+      </ModalBody>
+
+      <ModalFooter>
+        <button onClick={onClose} className="flex h-9 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-4 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          disabled={!canSubmit}
+          className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#FF8003] px-4 text-sm font-medium tracking-[-0.02em] text-white transition-opacity hover:opacity-90 disabled:opacity-40 disabled:pointer-events-none"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 8L22 12L18 16" />
+            <path d="M2 12H22" />
+          </svg>
+          Transfer Campaign
+        </button>
+      </ModalFooter>
+    </Modal>
+  );
+}
+
 // ── Campaign Detail Modal ────────────────────────────────────────────
 
 function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
@@ -257,6 +441,7 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
   const { toast } = useToast();
   const { confirm } = useConfirm();
   const [auditOpen, setAuditOpen] = useState(false);
+  const [moveOpen, setMoveOpen] = useState(false);
 
   return (
     <>
@@ -332,6 +517,10 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
         </ModalBody>
 
         <ModalFooter>
+          <button onClick={() => setMoveOpen(true)} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#FF8003]/10 px-4 text-sm font-medium tracking-[-0.02em] text-[#FF8003] transition-colors hover:bg-[#FF8003]/20">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8L22 12L18 16" /><path d="M2 12H22" /></svg>
+            Move
+          </button>
           <button onClick={() => setAuditOpen(true)} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="8" r="6.25" /><path d="M8 5v3.5l2.5 1.5" /></svg>
             Audit Log
@@ -352,6 +541,7 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
       </Modal>
 
       <AuditLogSheet open={auditOpen} onClose={() => setAuditOpen(false)} entityType="campaign" entityId={String(campaign.id)} entityTitle={campaign.title} />
+      <MoveCampaignModal campaign={campaign} open={moveOpen} onClose={() => setMoveOpen(false)} />
     </>
   );
 }

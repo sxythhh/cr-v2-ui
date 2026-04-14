@@ -3,10 +3,11 @@ import type { BoardTask } from "@/types/board-task";
 
 export function useTrelloTasks(enabled = true) {
   const [tasks, setTasks] = useState<BoardTask[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTasks = useCallback(async () => {
+    setLoading(true);
     try {
       const res = await fetch("/api/trello");
       const data = await res.json();
