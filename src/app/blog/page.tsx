@@ -425,13 +425,35 @@ function HeroCarousel() {
 
   const slide = HERO_SLIDES[activeIndex];
 
+  // ── Touch swipe ──
+  const touchStart = useRef<{ x: number; y: number; t: number } | null>(null);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() };
+  }, []);
+
+  const onTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const dx = e.changedTouches[0].clientX - touchStart.current.x;
+    const dy = e.changedTouches[0].clientY - touchStart.current.y;
+    const dt = Date.now() - touchStart.current.t;
+    touchStart.current = null;
+    // Only trigger if horizontal swipe > 50px, not too vertical, within 500ms
+    if (Math.abs(dx) > 50 && Math.abs(dy) < Math.abs(dx) && dt < 500) {
+      if (dx < 0) goNext();
+      else goPrev();
+    }
+  }, [goNext, goPrev]);
+
   return (
     <div
       ref={heroRef}
-      className="relative w-full overflow-hidden"
+      className="relative w-full overflow-hidden touch-pan-y"
       style={{ height: "clamp(450px, 55vw, 680px)" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       {/* Bottom gradient fade into page bg — dark mode only */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] hidden h-32 dark:block" style={{ background: "linear-gradient(to bottom, transparent, var(--page-bg))" }} />
@@ -489,7 +511,7 @@ function HeroCarousel() {
       {/* Content overlay — static, no animation */}
       <div className="absolute bottom-20 left-4 right-4 z-[1] sm:bottom-28 sm:left-16 sm:right-16">
         <TagPill label={slide.tag} onDark />
-        <h1 className="mt-2 max-w-2xl cursor-pointer text-2xl font-bold leading-tight tracking-[-0.02em] text-white underline-offset-[8px] decoration-white decoration-[4px] hover:underline sm:mt-3 sm:text-5xl" style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}>
+        <h1 className="mt-2 max-w-2xl cursor-pointer text-xl font-extrabold leading-tight tracking-[-0.02em] text-white underline-offset-[8px] decoration-white decoration-[3px] hover:underline sm:mt-3 sm:text-4xl" style={{ fontFamily: "var(--font-abc-oracle), sans-serif" }}>
           {slide.title}
         </h1>
         <p className="mt-1 max-w-lg text-sm tracking-[-0.02em] text-white/75 sm:mt-2 sm:text-lg">

@@ -165,38 +165,35 @@ type NavItemChild = {
 function ProductContent({ domain }: { domain: string }) {
   const products = [
     {
-      title: "Dub Links",
-      description: "Short links with superpowers for modern marketing teams.",
-      href: "/links",
-      color: "#f4950c",
-      icon: <Hyperlink className="size-5 text-page-text-muted" />,
+      title: "Campaigns",
+      description: "Launch and manage creator campaigns at scale.",
+      href: "/campaigns",
+      icon: <Megaphone className="size-5 text-page-text-muted" />,
     },
     {
-      title: "Dub Analytics",
-      description: "Powerful analytics delivered instantly.",
+      title: "Analytics",
+      description: "Real-time performance tracking and ROI insights.",
       href: "/analytics",
-      color: "#36D78F",
       icon: <PieChart className="size-5 text-page-text-muted" />,
     },
     {
-      title: "Dub Partners",
-      description: "Grow your revenue on auto-pilot with partnerships.",
-      href: "/partners",
-      color: "#818cf8",
+      title: "Affiliate Program",
+      description: "Grow your revenue with creator partnerships.",
+      href: "/affiliate",
       icon: <Creators className="size-5 text-page-text-muted" />,
     },
   ];
 
   const largeLinks = [
     {
-      title: "Dub Integrations",
-      description: "Enhance your short links",
-      href: "/integrations",
+      title: "Link Management",
+      description: "Short links with tracking and attribution",
+      href: "/links",
     },
     {
-      title: "Dub API",
-      description: "Unlock further capabilities",
-      href: "/docs/api-reference/introduction",
+      title: "API Docs",
+      description: "Integrate Content Rewards into your stack",
+      href: "/docs",
     },
   ];
 
@@ -206,7 +203,7 @@ function ProductContent({ domain }: { domain: string }) {
         {products.map(({ title, description, href, icon }) => (
           <NavigationMenuPrimitive.Link asChild key={title}>
             <Link
-              href={`https://dub.co${href}`}
+              href={href}
               className="group relative flex flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
             >
               <div className="relative p-5">
@@ -226,7 +223,7 @@ function ProductContent({ domain }: { domain: string }) {
         {largeLinks.map(({ title, description, href }) => (
           <NavigationMenuPrimitive.Link asChild key={title}>
             <Link
-              href={`https://dub.co${href}`}
+              href={href}
               className="group relative flex flex-col justify-center rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
             >
               <div className="relative flex items-center justify-between px-5 py-4">
@@ -250,31 +247,31 @@ function ProductContent({ domain }: { domain: string }) {
 function SolutionsContent({ domain }: { domain: string }) {
   const mainLinks = [
     {
-      title: "Marketing Attribution",
-      description: "Easily track and measure marketing impact",
-      href: "/analytics",
-      icon: <Compass className="relative size-5 text-page-text-muted" />,
-    },
-    {
-      title: "Content Creators",
-      description: "Intelligent audience insights and link tracking",
-      href: "/solutions/creators",
+      title: "For Creators",
+      description: "Earn from your content with brand campaigns",
+      href: "/academy",
       icon: <Megaphone className="relative size-5 text-page-text-muted" />,
     },
     {
-      title: "Affiliate Management",
-      description: "Manage affiliates and automate payouts",
-      href: "/partners",
+      title: "For Brands",
+      description: "Launch UGC campaigns and track ROI",
+      href: "/case-studies",
+      icon: <Compass className="relative size-5 text-page-text-muted" />,
+    },
+    {
+      title: "For Agencies",
+      description: "Manage creators and campaigns at scale",
+      href: "/agencies",
       icon: <Creators className="relative size-5 text-page-text-muted" />,
     },
   ];
 
-  const sdks = [
-    { title: "TypeScript", href: "/sdks/typescript" },
-    { title: "Python", href: "/sdks/python" },
-    { title: "Go", href: "/sdks/go" },
-    { title: "Ruby", href: "/sdks/ruby" },
-    { title: "PHP", href: "/sdks/php" },
+  const caseStudies = [
+    { title: "Case Studies", href: "/case-studies" },
+    { title: "Creator Academy", href: "/academy" },
+    { title: "Agency Program", href: "/agency-program" },
+    { title: "Verified Agencies", href: "/verified-agency" },
+    { title: "Events", href: "/events" },
   ];
 
   return (
@@ -287,7 +284,7 @@ function SolutionsContent({ domain }: { domain: string }) {
           {mainLinks.map(({ title, description, href, icon }) => (
             <NavigationMenuPrimitive.Link asChild key={title}>
               <Link
-                href={`https://dub.co${href}`}
+                href={href}
                 className={cn(
                   "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] px-5 py-4 transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 )}
@@ -308,10 +305,10 @@ function SolutionsContent({ domain }: { domain: string }) {
       </div>
       <div className="px-6 py-4">
         <p className="mb-2 text-xs uppercase text-page-text-muted">
-          SDKs
+          Learn more
         </p>
         <DropdownLinkList
-          items={sdks.map((s) => ({
+          items={caseStudies.map((s) => ({
             title: s.title,
             href: s.href,
             icon: (
@@ -350,7 +347,7 @@ function ResourcesContent({ domain }: { domain: string }) {
     {
       title: "Discover Campaigns",
       description: "Browse opportunities posted by brands",
-      href: "/creator/discover",
+      href: "/campaigns",
       icon: (
         <svg className="relative size-10 text-page-text-muted" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clipPath="url(#clip0_dc)">
@@ -455,7 +452,7 @@ function ResourcesContent({ domain }: { domain: string }) {
           {mainLinks.map(({ title, description, href, icon }) => (
             <NavigationMenuPrimitive.Link asChild key={title}>
               <Link
-                href={title === "Discover Campaigns" || title === "Help Center" ? href : `https://dub.co${href}`}
+                href={href}
                 className={cn(
                   "group relative flex items-center gap-4 overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] px-5 py-5 transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 )}
@@ -516,9 +513,9 @@ function ResourcesBottomBar() {
     localStorage.setItem("user-role", r);
     // Navigate to role-specific page
     const routes: Record<Role, string> = {
-      Creator: "/creator/discover",
-      Brand: "/",
-      Agency: "/",
+      Creator: "/academy",
+      Brand: "/case-studies",
+      Agency: "/agencies",
     };
     window.location.href = routes[r];
   };
@@ -624,17 +621,17 @@ const navItems: NavItem[] = [
   {
     name: "Product",
     content: ProductContent,
-    segments: ["/links", "/analytics", "/partners", "/integrations", "/compare", "/features"],
+    segments: ["/campaigns", "/analytics", "/affiliate", "/links", "/docs"],
   },
   {
     name: "Solutions",
     content: SolutionsContent,
-    segments: ["/solutions", "/sdks"],
+    segments: ["/academy", "/case-studies", "/agencies", "/agency-program", "/verified-agency", "/events"],
   },
   {
     name: "Resources",
     content: ResourcesContent,
-    segments: ["/help", "/docs", "/about", "/careers", "/brand", "/blog", "/changelog", "/contact"],
+    segments: ["/help", "/about", "/careers", "/blog", "/changelog", "/contact", "/support"],
   },
 ];
 
@@ -943,6 +940,90 @@ function NavSearch() {
   );
 }
 
+// ── Language Dropdown ───────────────────────────────────────────────────────
+
+const LANGUAGES = [
+  { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "fr", name: "Français", flag: "🇫🇷" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  { code: "pt", name: "Português", flag: "🇧🇷" },
+  { code: "ja", name: "日本語", flag: "🇯🇵" },
+  { code: "ko", name: "한국어", flag: "🇰🇷" },
+  { code: "zh", name: "中文", flag: "🇨🇳" },
+  { code: "ar", name: "العربية", flag: "🇸🇦" },
+  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+  { code: "it", name: "Italiano", flag: "🇮🇹" },
+  { code: "nl", name: "Nederlands", flag: "🇳🇱" },
+  { code: "pl", name: "Polski", flag: "🇵🇱" },
+  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+  { code: "ru", name: "Русский", flag: "🇷🇺" },
+  { code: "sv", name: "Svenska", flag: "🇸🇪" },
+];
+
+function LanguageDropdown() {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("en");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div ref={dropdownRef} className="relative hidden sm:block">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-page-text">
+          <path d="M9.75 0C15.135 0 19.5 4.365 19.5 9.75C19.5 15.135 15.135 19.5 9.75 19.5C4.365 19.5 0 15.135 0 9.75C0 4.365 4.365 0 9.75 0ZM7.263 10.5C7.328 12.616 7.663 14.491 8.157 15.86C8.434 16.626 8.747 17.194 9.056 17.556C9.367 17.92 9.604 18 9.75 18C9.896 18 10.133 17.92 10.444 17.556C10.754 17.194 11.066 16.626 11.343 15.859C11.837 14.491 12.173 12.616 12.237 10.5H7.263ZM1.536 10.5C1.68403 12.1266 2.31157 13.6727 3.33911 14.9424C4.36666 16.212 5.74796 17.1481 7.308 17.632C7.08856 17.226 6.90068 16.8038 6.746 16.369C6.183 14.811 5.827 12.756 5.762 10.5H1.536ZM13.738 10.5C13.673 12.756 13.317 14.81 12.754 16.37C12.599 16.8045 12.4107 17.2264 12.191 17.632C13.7512 17.1483 15.1327 16.2123 16.1605 14.9426C17.1882 13.6729 17.8159 12.1268 17.964 10.5H13.738ZM7.308 1.867C5.74815 2.35154 4.3671 3.28792 3.33964 4.55766C2.31217 5.82739 1.68448 7.37339 1.536 9H5.762C5.827 6.744 6.183 4.69 6.746 3.13C6.911 2.674 7.099 2.248 7.308 1.867ZM9.75 1.5C9.604 1.5 9.367 1.58 9.056 1.944C8.746 2.306 8.434 2.874 8.157 3.641C7.663 5.009 7.327 6.884 7.263 9H12.237C12.172 6.884 11.837 5.009 11.343 3.64C11.066 2.874 10.753 2.306 10.444 1.944C10.133 1.58 9.896 1.5 9.75 1.5ZM12.191 1.867C12.401 2.248 12.589 2.674 12.754 3.131C13.317 4.69 13.673 6.744 13.738 9H17.964C17.8154 7.37327 17.1876 5.82718 16.16 4.55743C15.1323 3.28769 13.751 2.35137 12.191 1.867Z" fill="currentColor"/>
+        </svg>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 top-full z-50 mt-2 max-h-[320px] w-[200px] overflow-y-auto rounded-xl border border-foreground/[0.06] bg-white p-1 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            style={{ scrollbarWidth: "thin" }}
+          >
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => { setSelected(lang.code); setOpen(false); }}
+                className={cn(
+                  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] font-medium transition-colors",
+                  selected === lang.code
+                    ? "bg-foreground/[0.06] text-page-text dark:bg-white/[0.06]"
+                    : "text-page-text-muted hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]",
+                )}
+              >
+                <span className="text-base leading-none">{lang.flag}</span>
+                <span className="flex-1">{lang.name}</span>
+                {selected === lang.code && (
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                )}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ── Main Nav Component ──────────────────────────────────────────────────────
 
 export function DubNav({
@@ -993,13 +1074,15 @@ export function DubNav({
               {/* Spacer */}
               <div className="flex-1" />
 
-              {/* Search — always visible, narrower on mobile */}
+              {/* Search + Language + Auth */}
+              <div className="flex items-center gap-1.5">
               <div className="hidden sm:block">
                 <NavSearch />
               </div>
 
-              {/* Auth buttons */}
-              <div className="flex items-center gap-2">
+              <LanguageDropdown />
+
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setAuthView("login")}
@@ -1024,6 +1107,7 @@ export function DubNav({
                 >
                   Sign up
                 </button>
+              </div>
               </div>
 
               {/* Auth modal */}
@@ -1087,7 +1171,7 @@ function DropdownLinkList({ items }: { items: DropdownLinkItem[] }) {
         <NavigationMenuPrimitive.Link asChild key={href}>
           <Link
             ref={(el) => registerItem(index, el)}
-            href={`https://dub.co${href}`}
+            href={href}
             className="group relative z-[1] -mx-2 rounded-[8px] p-2"
           >
             <div className="flex items-center gap-3">
@@ -1220,16 +1304,135 @@ function NavItemsList({ pathname }: { pathname: string | null }) {
 
 // ── Mobile Nav ──────────────────────────────────────────────────────────────
 
-const MOBILE_MENU_LINKS = [
-  { label: "Product", href: "#", expandable: true },
-  { label: "Solutions", href: "#", expandable: true },
-  { label: "Resources", href: "#", expandable: true },
+type MobileMenuItem = {
+  label: string;
+  href?: string;
+  children?: { label: string; href: string }[];
+};
+
+const MOBILE_MENU_LINKS: MobileMenuItem[] = [
+  {
+    label: "Product",
+    children: [
+      { label: "Campaigns", href: "/campaigns" },
+      { label: "Analytics", href: "/analytics" },
+      { label: "Affiliate Program", href: "/affiliate" },
+      { label: "Link Management", href: "/links" },
+      { label: "API Docs", href: "/docs" },
+    ],
+  },
+  {
+    label: "Solutions",
+    children: [
+      { label: "For Creators", href: "/academy" },
+      { label: "For Brands", href: "/case-studies" },
+      { label: "For Agencies", href: "/agencies" },
+      { label: "Agency Program", href: "/agency-program" },
+      { label: "Events", href: "/events" },
+    ],
+  },
+  {
+    label: "Resources",
+    children: [
+      { label: "Help Center", href: "/help" },
+      { label: "Blog", href: "/blog" },
+      { label: "Changelog", href: "/changelog" },
+      { label: "About", href: "/about" },
+      { label: "Careers", href: "/careers" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
   { label: "Blog", href: "/blog" },
   { label: "Academy", href: "/academy" },
-  { label: "Help", href: "/help" },
-  { label: "About", href: "/about" },
-  { label: "Changelog", href: "/changelog" },
 ];
+
+function AnimatedBurger({ open, className }: { open: boolean; className?: string }) {
+  return (
+    <div className={cn("relative flex h-5 w-5 flex-col items-center justify-center", className)}>
+      <span
+        className="absolute h-[1.5px] w-4 rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.77,0,0.18,1)]"
+        style={{
+          transform: open ? "rotate(45deg)" : "translateY(-4px)",
+        }}
+      />
+      <span
+        className="absolute h-[1.5px] w-4 rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.77,0,0.18,1)]"
+        style={{
+          opacity: open ? 0 : 1,
+          transform: open ? "scaleX(0)" : "scaleX(1)",
+        }}
+      />
+      <span
+        className="absolute h-[1.5px] w-4 rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.77,0,0.18,1)]"
+        style={{
+          transform: open ? "rotate(-45deg)" : "translateY(4px)",
+        }}
+      />
+    </div>
+  );
+}
+
+function MobileNavItem({ item, onNavigate }: { item: MobileMenuItem; onNavigate: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const hasChildren = !!item.children?.length;
+
+  if (!hasChildren) {
+    return (
+      <Link
+        href={item.href!}
+        onClick={onNavigate}
+        className="flex items-center rounded-lg px-2 py-3 text-[15px] font-medium tracking-[-0.01em] text-page-text transition-colors active:bg-foreground/[0.06]"
+      >
+        {item.label}
+      </Link>
+    );
+  }
+
+  return (
+    <div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex w-full cursor-pointer items-center justify-between rounded-lg px-2 py-3 text-[15px] font-medium tracking-[-0.01em] text-page-text transition-colors active:bg-foreground/[0.06]"
+      >
+        <span>{item.label}</span>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          className="text-page-text-muted transition-transform duration-200"
+          style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+        >
+          <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="ml-3 border-l-2 border-foreground/[0.08] pl-3 dark:border-white/[0.08]">
+              {item.children!.map((child) => (
+                <Link
+                  key={child.href}
+                  href={child.href}
+                  onClick={onNavigate}
+                  className="flex items-center rounded-lg px-2 py-2.5 text-[14px] tracking-[-0.01em] text-page-text-muted transition-colors active:bg-foreground/[0.06]"
+                >
+                  {child.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 function MobileNav({ theme }: { theme: NavTheme }) {
   const [open, setOpen] = useState(false);
@@ -1243,16 +1446,11 @@ function MobileNav({ theme }: { theme: NavTheme }) {
     <div className={cn("flex items-center lg:hidden", theme === "dark" && "dark")}>
       <button
         onClick={() => setOpen(!open)}
-        className="z-30 rounded-full p-2 transition-colors duration-200 hover:bg-foreground/[0.06] active:bg-foreground/[0.1]"
+        className="z-[52] rounded-full p-2 transition-colors duration-200 hover:bg-foreground/[0.06] active:bg-foreground/[0.1]"
       >
-        {open ? (
-          <X className="h-5 w-5 text-page-text" />
-        ) : (
-          <Menu className="h-5 w-5 text-page-text" />
-        )}
+        <AnimatedBurger open={open} className="text-foreground" />
       </button>
 
-      {/* Fullscreen dark menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -1260,59 +1458,13 @@ function MobileNav({ theme }: { theme: NavTheme }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-20 flex flex-col bg-[#101014] lg:hidden"
+            className="fixed inset-x-0 top-14 bottom-0 z-[50] flex flex-col bg-page-bg lg:hidden"
           >
-            {/* Top bar */}
-            <div className="flex items-center justify-end gap-2 px-4 py-2">
-              {/* Search */}
-              <button className="flex h-8 w-8 items-center justify-center rounded-md">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <circle cx="11" cy="11" r="7" stroke="white" strokeWidth="2" />
-                  <path d="M16 16L20 20" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-
-              {/* Sign in */}
-              <Link
-                href="https://app.dub.co/login"
-                onClick={() => setOpen(false)}
-                className="flex h-8 items-center rounded-md bg-white/15 px-3 text-sm tracking-[0.28px] text-white"
-              >
-                Sign in
-              </Link>
-
-              {/* Close */}
-              <button
-                onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-md"
-              >
-                <X className="h-5 w-5 text-white" />
-              </button>
-            </div>
-
-            {/* Scrollable menu */}
-            <div className="flex-1 overflow-y-auto px-4 py-4" style={{ scrollbarWidth: "none" }}>
-              {/* Heading */}
-              <h2 className="pb-8 pl-2 text-[32px] font-normal leading-8 tracking-[-1.12px] text-white">
-                Menu
-              </h2>
-
-              {/* Links */}
+            {/* Scrollable menu — starts below the nav bar */}
+            <div className="flex-1 overflow-y-auto px-4 pb-8 pt-4" style={{ scrollbarWidth: "none" }}>
               <nav className="flex flex-col">
                 {MOBILE_MENU_LINKS.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className="flex items-center justify-between rounded-xl px-2 py-3 text-base tracking-[0.32px] text-white transition-colors active:bg-white/[0.06]"
-                  >
-                    <span>{item.label}</span>
-                    {item.expandable && (
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="-rotate-90">
-                        <path d="M7 8L10 11L13 8" stroke="rgba(255,255,255,0.65)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    )}
-                  </Link>
+                  <MobileNavItem key={item.label} item={item} onNavigate={() => setOpen(false)} />
                 ))}
               </nav>
             </div>
