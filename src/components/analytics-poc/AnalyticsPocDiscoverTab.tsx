@@ -12,16 +12,14 @@ import {
 } from "./AnalyticsPocCardPrimitives";
 import { AnalyticsPocPanel } from "./AnalyticsPocPanel";
 import { AnalyticsPocToggleGroup, AnalyticsPocToggleGroupItem } from "./AnalyticsPocToggleGroup";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 // ── Icons ────────────────────────────────────────────────────────────
 
-function SparkleIcon({ className }: { className?: string }) {
+function AiIcon({ className }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-      <path
-        d="M8 1L9.79 6.21L15 8L9.79 9.79L8 15L6.21 9.79L1 8L6.21 6.21L8 1Z"
-        fill="currentColor"
-      />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className={className}>
+      <path fillRule="evenodd" clipRule="evenodd" d="M12 1c.552 0 1 .448 1 1v1h4c1.657 0 3 1.343 3 3v5c0 .889-.386 1.687-1 2.236v1.35l1.707 1.707a1 1 0 0 1-1.414 1.414l-.319-.319C17.79 19.938 15.136 22 12 22s-5.791-2.062-6.974-4.612l-.319.319a1 1 0 0 1-1.414-1.414L5 14.586v-1.35A2.99 2.99 0 0 1 4 11V6c0-1.657 1.343-3 3-3h4V2c0-.552.448-1 1-1ZM7 5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H7Zm2 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm6 0a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Z" fill="currentColor" />
     </svg>
   );
 }
@@ -324,45 +322,18 @@ export function AnalyticsPocDiscoverTab() {
       {/* AI Insights Bar */}
       <div className="flex items-center gap-2">
         {/* Main insights card — hidden on mobile */}
+        <BorderBeam colorVariant="sunset" theme="auto" borderRadius={16} strength={0.35} duration={4} className="hidden flex-1 md:block">
         <div
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,
             ANALYTICS_POC_INTERACTIVE_CARD_CLASS,
-            "relative hidden h-16 flex-1 items-center justify-between gap-4 p-4 md:flex",
+            "relative flex h-16 flex-1 items-center justify-between gap-4 p-4",
           )}
           style={ANALYTICS_POC_CARD_SURFACE_STYLE}
         >
-          {/* Pink/magenta gradient border */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-2xl"
-            style={{
-              opacity: 0.3,
-              filter: "blur(6px)",
-              transform: "matrix(-1, 0, 0, 1, 0, 0)",
-              background: "linear-gradient(95.54deg, rgba(255,63,213,0) 0%, #FF3FD5 25%, rgba(255,63,213,0) 50%, #FF3FD5 75%, rgba(255,63,213,0) 100%)",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-              WebkitMaskComposite: "xor",
-              padding: 1.5,
-            }}
-          />
-          {/* Orange gradient border */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-2xl"
-            style={{
-              opacity: 0.3,
-              filter: "blur(6px)",
-              background: "linear-gradient(95.54deg, rgba(255,144,37,0) 0%, #FF9025 25%, rgba(255,144,37,0) 50%, #FF9025 75%, rgba(255,144,37,0) 100%)",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-              WebkitMaskComposite: "xor",
-              padding: 1.5,
-            }}
-          />
-
           {/* Label */}
           <div className="relative z-10 flex shrink-0 items-center gap-1.5">
-            <SparkleIcon className="size-4 text-page-text-muted" />
+            <AiIcon className="size-4 text-page-text-muted" />
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">AI Insights</span>
           </div>
 
@@ -393,6 +364,7 @@ export function AnalyticsPocDiscoverTab() {
             </button>
           </div>
         </div>
+        </BorderBeam>
 
         {/* Campaign card button */}
         <div

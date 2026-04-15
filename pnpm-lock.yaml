@@ -92,6 +92,9 @@ importers:
       ai:
         specifier: ^6.0.116
         version: 6.0.116(zod@4.3.6)
+      border-beam:
+        specifier: ^1.0.1
+        version: 1.0.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2911,6 +2914,12 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+
+  border-beam@1.0.1:
+    resolution: {integrity: sha512-kswSYT8zRmt5en+wZMtJAbM8RjJglqSKwyRuQZWXnMHQsBwJisaznTfhD8SWvWJZKAtGbSkE2q/wY7seiNDmcw==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   brace-expansion@5.0.4:
     resolution: {integrity: sha512-h+DEnpVvxmfVefa4jFbCf5HdH5YMDXRsmKflpf1pILZWRFlTbJpxeU55nJl4Smt5HQaGzg1o6RHFPJaOqnmBDg==}
@@ -7366,6 +7375,11 @@ snapshots:
       require-from-string: 2.0.2
 
   boolbase@1.0.0: {}
+
+  border-beam@1.0.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
 
   brace-expansion@5.0.4:
     dependencies:
