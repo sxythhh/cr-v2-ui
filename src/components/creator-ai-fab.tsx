@@ -13,6 +13,7 @@ import { GamepadIcon } from "@/components/sidebar/icons/gamepad";
 import { AiPopupAnimated } from "@/components/ai-popup-animations";
 import { useMentionPopover } from "@/hooks/use-mention-popover";
 import { MentionPopover } from "@/components/mention-popover";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 
 const SUGGESTIONS = [
@@ -533,10 +534,7 @@ export function CreatorAiFab() {
         <div className="hidden md:block">
           <AiPopupAnimated open={open && mode === "floating"} skipEntry={fromMinimize}>
             <div className="fixed bottom-[72px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)]">
-          {/* Pink gradient border rect */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF3FD5" }} />
-          {/* Orange gradient border rect */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-30 blur-[0.5px]" style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)", border: "1px solid #FF9025" }} />
+          <BorderBeam colorVariant="sunset" theme="auto" borderRadius={16} strength={0.35} duration={4}>
         <div className="relative flex flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-[#FBFBFB] shadow-[0_2px_6px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.04)] dark:border-white/[0.06] dark:bg-[#161616] dark:shadow-[0_2px_6px_rgba(0,0,0,0.3),0_4px_12px_rgba(0,0,0,0.2)]">
           {/* Header */}
           <div className="relative flex items-center justify-center border-b border-foreground/[0.06] bg-white px-5 py-3 dark:border-white/[0.06] dark:bg-card-bg">
@@ -788,6 +786,7 @@ export function CreatorAiFab() {
             </div>
           </div>
         </div>
+          </BorderBeam>
         </div>
           </AiPopupAnimated>
         </div>,
