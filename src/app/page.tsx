@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { StarsLogo } from "@/components/sidebar/icons/stars-logo";
+import { useInteractiveDemo, PLATFORM_DEMO } from "@/components/interactive-demo";
 import { WorkspaceAvatar } from "@/components/sidebar/workspace-avatar";
 import { cn } from "@/lib/utils";
 import { NewCampaignButton } from "@/components/sidebar/new-campaign-dropdown";
@@ -724,12 +725,40 @@ function OnboardingView({
                 </motion.div>
               );
             })}
+
+            {/* Explore product tour */}
+            <ExploreProductButton />
           </motion.div>
 
         </div>
       </div>
       </div>
     </div>
+  );
+}
+
+function ExploreProductButton() {
+  const { start: startDemo } = useInteractiveDemo();
+
+  return (
+    <motion.button
+      onClick={() => startDemo(PLATFORM_DEMO)}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+      className="mt-4 flex h-[38px] w-full cursor-pointer items-center justify-center gap-[6px] rounded-xl font-inter text-[14px] font-medium leading-[22px] tracking-[-0.16px] text-white transition-transform active:scale-[0.98]"
+      style={{
+        background: "#FF7A00",
+        border: "1px solid #CC6200",
+        boxShadow: "0px 1px 1px rgba(0,0,0,0.1), 0px 2px 3px rgba(0,0,0,0.08), 1px 4px 8px rgba(0,0,0,0.12), inset 0px -2px 1px rgba(0,0,0,0.2), inset 0px 1px 0px rgba(255,255,255,0.25)",
+      }}
+    >
+      Explore product
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+        <path d="M8 3.33V12.67" stroke="white" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12.67 8L8 12.67L3.33 8" stroke="white" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </motion.button>
   );
 }
 

@@ -164,165 +164,156 @@ type NavItemChild = {
 
 // ── Dropdown content components ─────────────────────────────────────────────
 
+function ProductIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shrink-0 rounded-[10px] border border-foreground/[0.06] bg-foreground/[0.06] p-2 transition-colors duration-150 group-hover:border-[#FF8003] group-hover:bg-[#FF8003] dark:border-white/[0.06] dark:bg-white/[0.06] dark:group-hover:border-[#FF8003] dark:group-hover:bg-[#FF8003]">
+      <div className="text-page-text-muted transition-colors duration-150 group-hover:text-white">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function ProductContent({ domain }: { domain: string }) {
-  const products = [
+  const productItems: DropdownLinkItem[] = [
     {
       title: "Campaigns",
-      description: "Launch and manage creator campaigns at scale.",
+      description: "Launch and manage creator campaigns.",
       href: "/campaigns",
-      icon: <Megaphone className="size-5 text-page-text-muted" />,
+      icon: <ProductIcon><Megaphone className="size-4" /></ProductIcon>,
+      showArrow: true,
     },
     {
       title: "Analytics",
-      description: "Real-time performance tracking and ROI insights.",
+      description: "Real-time performance and ROI.",
       href: "/analytics",
-      icon: <PieChart className="size-5 text-page-text-muted" />,
+      icon: <ProductIcon><PieChart className="size-4" /></ProductIcon>,
     },
     {
       title: "Affiliate Program",
-      description: "Grow your revenue with creator partnerships.",
+      description: "Grow revenue with partnerships.",
       href: "/affiliate",
-      icon: <Creators className="size-5 text-page-text-muted" />,
+      icon: <ProductIcon><Creators className="size-4" /></ProductIcon>,
+    },
+    {
+      title: "Link Management",
+      description: "Short links with attribution.",
+      href: "/links",
+      icon: <ProductIcon><Hyperlink className="size-4" /></ProductIcon>,
     },
   ];
 
-  const largeLinks = [
+  const platformItems: DropdownLinkItem[] = [
     {
-      title: "Link Management",
-      description: "Short links with tracking and attribution",
-      href: "/links",
+      title: "API & Docs",
+      description: "Integrate into your stack.",
+      href: "/docs",
+      icon: <ProductIcon><Gear className="size-4" /></ProductIcon>,
     },
     {
-      title: "API Docs",
-      description: "Integrate Content Rewards into your stack",
-      href: "/docs",
+      title: "AI Automation",
+      description: "Automate workflows with AI.",
+      href: "/academy",
+      icon: <ProductIcon><Sparkle className="size-4" /></ProductIcon>,
+    },
+    {
+      title: "Submissions",
+      description: "Review creator content.",
+      href: "/submissions",
+      icon: <ProductIcon><Submissions className="size-4" /></ProductIcon>,
+    },
+    {
+      title: "Payouts",
+      description: "Process creator earnings.",
+      href: "/payouts",
+      icon: <ProductIcon><Paperclip className="size-4" /></ProductIcon>,
     },
   ];
 
   return (
-    <div className="grid w-[1020px] grid-cols-1 gap-4 p-4">
-      <div className="grid grid-cols-3 gap-4">
-        {products.map(({ title, description, href, icon }) => (
-          <NavigationMenuPrimitive.Link asChild key={title}>
-            <Link
-              href={href}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
-            >
-              <div className="relative p-5">
-                {icon}
-                <span className="mt-3 block text-sm font-medium tracking-[-0.02em] text-page-text">
-                  {title}
-                </span>
-                <p className="mt-2 max-w-56 text-sm tracking-[-0.02em] text-page-text-muted">
-                  {description}
-                </p>
-              </div>
-            </Link>
-          </NavigationMenuPrimitive.Link>
-        ))}
+    <div className="flex w-[1020px] items-start">
+      {/* Products column */}
+      <div className="flex-1 px-5 py-4">
+        <p className="mb-3 text-xs tracking-[-0.02em] text-page-text-muted">Products</p>
+        <DropdownLinkList items={productItems} />
       </div>
-      <div className="grid grow grid-cols-2 gap-4">
-        {largeLinks.map(({ title, description, href }) => (
-          <NavigationMenuPrimitive.Link asChild key={title}>
-            <Link
-              href={href}
-              className="group relative flex flex-col justify-center rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
-            >
-              <div className="relative flex items-center justify-between px-5 py-4">
-                <div>
-                  <span className="text-sm font-medium leading-none tracking-[-0.02em] text-page-text">
-                    {title}
-                  </span>
-                  <p className="mt-1 text-sm tracking-[-0.02em] text-page-text-muted">
-                    {description}
-                  </p>
-                </div>
-              </div>
+
+      {/* Platform column */}
+      <div className="flex-1 px-5 py-4">
+        <p className="mb-3 text-xs tracking-[-0.02em] text-page-text-muted">Platform</p>
+        <DropdownLinkList items={platformItems} />
+      </div>
+
+      {/* Featured column */}
+      <div className="flex w-[280px] shrink-0 flex-col px-5 py-4">
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs tracking-[-0.02em] text-page-text-muted">Featured</p>
+          <NavigationMenuPrimitive.Link asChild>
+            <Link href="/changelog" className="group/more flex items-center gap-1 text-[11px] font-medium tracking-[-0.02em] text-page-text-muted transition-colors hover:text-page-text dark:hover:text-white">
+              Read more
+              <svg width="9" height="7" viewBox="0 0 9 7" fill="none" className="shrink-0 transition-transform duration-200 ease-out group-hover/more:translate-x-0.5"><path d="M5.5 0.5L8.5 3.49999L5.5 6.5M8 3.49999H0.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </NavigationMenuPrimitive.Link>
-        ))}
+        </div>
+        <NavigationMenuPrimitive.Link asChild>
+          <Link href="/changelog" className="group flex flex-col overflow-hidden rounded-xl border border-foreground/[0.06] bg-card-bg shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:shadow-none">
+            <div className="h-[120px] overflow-hidden">
+              <img
+                src="/creator-home/campaign-thumb-1.png"
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5 p-3.5">
+              <span className="text-[13px] font-semibold leading-tight tracking-[-0.02em] text-page-text underline-offset-2 group-hover:underline dark:text-white">Content Rewards v2</span>
+              <p className="text-[11px] leading-[1.4] tracking-[-0.02em] text-page-text-muted">
+                New dashboard, AI automation, and creator tools — now live.
+              </p>
+            </div>
+          </Link>
+        </NavigationMenuPrimitive.Link>
       </div>
     </div>
   );
 }
 
 function SolutionsContent({ domain }: { domain: string }) {
-  const mainLinks = [
-    {
-      title: "For Creators",
-      description: "Earn from your content with brand campaigns",
-      href: "/academy",
-      icon: <Megaphone className="relative size-5 text-page-text-muted" />,
-    },
-    {
-      title: "For Brands",
-      description: "Launch UGC campaigns and track ROI",
-      href: "/case-studies",
-      icon: <Compass className="relative size-5 text-page-text-muted" />,
-    },
-    {
-      title: "For Agencies",
-      description: "Manage creators and campaigns at scale",
-      href: "/agencies",
-      icon: <Creators className="relative size-5 text-page-text-muted" />,
-    },
+  const cards = [
+    { href: "/academy", image: "/images/for-creators.png", bg: undefined },
+    { href: "/case-studies", image: "/images/for-brands.png", bg: "#FF8003" },
+    { href: "/agencies", image: "/images/for-agencies.png", bg: undefined },
   ];
 
-  const caseStudies = [
-    { title: "Case Studies", href: "/case-studies" },
-    { title: "Creator Academy", href: "/academy" },
-    { title: "Agency Program", href: "/agency-program" },
-    { title: "Verified Agencies", href: "/verified-agency" },
-    { title: "Events", href: "/events" },
+  const learnMore: DropdownLinkItem[] = [
+    { title: "Case Studies", href: "/case-studies", icon: <ProductIcon><PieChart className="size-4" /></ProductIcon> },
+    { title: "Creator Academy", href: "/academy", icon: <ProductIcon><Compass className="size-4" /></ProductIcon> },
+    { title: "Agency Program", href: "/agency-program", icon: <ProductIcon><Brands className="size-4" /></ProductIcon> },
+    { title: "Verified Agencies", href: "/verified-agency", icon: <ProductIcon><Creators className="size-4" /></ProductIcon> },
+    { title: "Events", href: "/events", icon: <ProductIcon><Megaphone className="size-4" /></ProductIcon> },
   ];
 
   return (
-    <div className="grid w-[1020px] grid-cols-[minmax(0,1fr),0.4fr] divide-x divide-foreground/[0.06]">
-      <div className="flex h-full flex-col p-4">
-        <p className="mb-4 ml-2 text-xs tracking-[-0.02em] text-page-text-muted">
-          Use case
-        </p>
-        <div className="grid grow grid-cols-3 gap-4">
-          {mainLinks.map(({ title, description, href, icon }) => (
-            <NavigationMenuPrimitive.Link asChild key={title}>
-              <Link
-                href={href}
-                className={cn(
-                  "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-foreground/[0.06] bg-foreground/[0.03] px-5 py-4 transition-colors duration-150 hover:bg-foreground/[0.06] dark:border-white/[0.04] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
-                )}
-              >
-                {icon}
-                <div className="relative mt-auto">
-                  <span className="text-sm font-medium text-page-text">
-                    {title}
-                  </span>
-                  <p className="mt-2 text-xs text-page-text-muted">
-                    {description}
-                  </p>
-                </div>
-              </Link>
-            </NavigationMenuPrimitive.Link>
-          ))}
-        </div>
+    <div className="flex w-[1020px] flex-col p-4">
+      <p className="mb-3 ml-1 text-xs tracking-[-0.02em] text-page-text-muted">
+        Use case
+      </p>
+      <div className="flex gap-3">
+        {cards.map(({ href, image, bg }) => (
+          <NavigationMenuPrimitive.Link asChild key={href}>
+            <Link href={href} className="group relative block flex-1 p-[6px]">
+              <div className="pointer-events-none absolute inset-0 rounded-[18px] border-3 border-transparent transition-all duration-300 group-hover:border-[#FF8003]" />
+              <div className="overflow-hidden rounded-xl" style={bg ? { backgroundColor: bg } : undefined}>
+                <img src={image} alt="" className="pointer-events-none h-auto w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              </div>
+            </Link>
+          </NavigationMenuPrimitive.Link>
+        ))}
       </div>
-      <div className="px-6 py-4">
-        <p className="mb-2 text-xs tracking-[-0.02em] text-page-text-muted">
+      <div className="mt-4">
+        <p className="mb-2 ml-1 text-xs tracking-[-0.02em] text-page-text-muted">
           Learn more
         </p>
-        <DropdownLinkList
-          items={caseStudies.map((s) => ({
-            title: s.title,
-            href: s.href,
-            icon: (
-              <div className="shrink-0 rounded-[10px] border border-foreground/[0.06] bg-foreground/[0.06] p-1">
-                <div className="flex size-5 items-center justify-center text-xs font-bold text-page-text-muted">
-                  {s.title.slice(0, 2)}
-                </div>
-              </div>
-            ),
-            showArrow: true,
-          }))}
-        />
+        <DropdownLinkList items={learnMore} />
       </div>
     </div>
   );
@@ -381,41 +372,25 @@ function ResourcesContent({ domain }: { domain: string }) {
       title: "About",
       description: "Company, values, and team",
       href: "/about",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <User className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><Brands className="size-4" /></ProductIcon>,
     },
     {
       title: "Careers",
       description: "Join our global, remote team",
       href: "/careers",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <Brands className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><User className="size-4" /></ProductIcon>,
     },
     {
       title: "Brand Guidelines",
       description: "Logos, wordmark, etc.",
       href: "/brand",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <Sparkle className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><Sparkle className="size-4" /></ProductIcon>,
     },
     {
       title: "Contact",
       description: "Reach out to support or sales",
       href: "/contact",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <ChatBubble className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><ChatBubble className="size-4" /></ProductIcon>,
     },
   ];
 
@@ -424,21 +399,13 @@ function ResourcesContent({ domain }: { domain: string }) {
       title: "Blog",
       description: "Insights and stories",
       href: "/blog",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <Megaphone className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><Megaphone className="size-4" /></ProductIcon>,
     },
     {
       title: "Changelog",
       description: "Releases and updates",
       href: "/changelog",
-      icon: (
-        <div className="shrink-0 rounded-xl border border-foreground/[0.06] bg-foreground/[0.06] p-2.5">
-          <Submissions className="size-4 text-page-text-muted" />
-        </div>
-      ),
+      icon: <ProductIcon><Submissions className="size-4" /></ProductIcon>,
     },
   ];
 

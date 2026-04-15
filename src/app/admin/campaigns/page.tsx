@@ -10,6 +10,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/moda
 import { useToast } from "@/components/admin/toast";
 import { useConfirm } from "@/components/admin/confirm-dialog";
 import { AuditLogSheet } from "@/components/admin/audit-log-sheet";
+import { StatusIcon } from "@/components/admin/status-icons";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { ScissorsIcon } from "@/components/sidebar/icons/scissors";
 import { MusicNoteIcon } from "@/components/sidebar/icons/music-note";
@@ -434,6 +435,14 @@ function MoveCampaignModal({ campaign, open, onClose }: {
 
 // ── Campaign Detail Modal ────────────────────────────────────────────
 
+const STATUS_ICON_MAP: Record<CampaignStatus, { type: "check" | "clock" | "x"; color: string }> = {
+  active: { type: "check", color: "#34D399" },
+  paused: { type: "clock", color: "#9CA3AF" },
+  completed: { type: "check", color: "#60A5FA" },
+  archived: { type: "clock", color: "#6B7280" },
+  suspended: { type: "x", color: "#FF2525" },
+};
+
 function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
   campaign: Campaign; open: boolean; onClose: () => void;
   onStatusChange: (id: number, status: CampaignStatus) => void;
@@ -442,6 +451,7 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
   const { confirm } = useConfirm();
   const [auditOpen, setAuditOpen] = useState(false);
   const [moveOpen, setMoveOpen] = useState(false);
+  const [footerExpanded, setFooterExpanded] = useState<"move" | "audit" | null>(null);
 
   return (
     <>
@@ -466,18 +476,18 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
             <span className="text-xs font-medium text-page-text-muted">Status</span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex cursor-pointer items-center gap-1.5" style={{ background: "none", border: "none" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium capitalize" style={{ background: STATUS_COLORS[campaign.status].bg, color: STATUS_COLORS[campaign.status].text }}>
-                    <span className="size-1.5 rounded-full" style={{ background: STATUS_COLORS[campaign.status].dot }} />
+                <button className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-foreground/[0.06] px-3 py-1.5 transition-colors hover:bg-foreground/[0.04] dark:border-white/[0.06] dark:hover:bg-white/[0.04]" style={{ background: "none" }}>
+                  <StatusIcon type={STATUS_ICON_MAP[campaign.status].type} size={14} color={STATUS_ICON_MAP[campaign.status].color} />
+                  <span className="text-sm font-medium capitalize" style={{ color: STATUS_COLORS[campaign.status].text }}>
                     {campaign.status}
                   </span>
-                  <CentralIcon name="IconChevronBottom" size={10} color="var(--page-text-muted)" {...ci} />
+                  <CentralIcon name="IconChevronBottom" size={12} color="var(--page-text-muted)" {...ci} />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[140px] rounded-xl border-foreground/[0.06] bg-card-bg p-1 shadow-[0_4px_12px_rgba(0,0,0,0.12)] backdrop-blur-[10px]">
                 {(["active", "paused", "completed", "archived"] as CampaignStatus[]).map((s) => (
                   <DropdownMenuItem key={s} onClick={() => { onStatusChange(campaign.id, s); toast(`Status → ${s}`); }} className="cursor-pointer gap-2 rounded-lg px-3 py-1.5 text-sm font-medium capitalize">
-                    <span className="size-2 rounded-full" style={{ background: STATUS_COLORS[s].dot }} />
+                    <StatusIcon type={STATUS_ICON_MAP[s].type} size={14} color={STATUS_ICON_MAP[s].color} />
                     {s}
                   </DropdownMenuItem>
                 ))}
@@ -502,8 +512,15 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
 
           {/* Rules */}
           <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-page-text-muted">Platforms</span>
+              <div className="flex items-center gap-1.5">
+                {campaign.platforms.map((p: string) => (
+                  <PlatformIcon key={p} platform={p} size={16} className="text-page-text dark:invert" />
+                ))}
+              </div>
+            </div>
             {[
-              { label: "Platforms", value: campaign.platforms.join(", ") },
               { label: "Joined", value: campaign.joinedDate },
               { label: "Type", value: campaign.type },
               { label: "Category", value: campaign.category },
@@ -514,19 +531,63 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
               </div>
             ))}
           </div>
+          {/* Expanded panels */}
+          {footerExpanded === "move" && (
+            <div className="rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] p-4 dark:border-white/[0.06] dark:bg-white/[0.02]">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-sm font-medium text-page-text">Move campaign</span>
+                <button onClick={() => setFooterExpanded(null)} className="cursor-pointer text-page-text-muted hover:text-page-text">
+                  <CentralIcon name="IconX" size={14} color="currentColor" {...ci} />
+                </button>
+              </div>
+              <p className="mb-3 text-xs text-page-text-muted">Transfer this campaign to a different organization.</p>
+              <button onClick={() => { setFooterExpanded(null); setMoveOpen(true); }} className="flex h-8 cursor-pointer items-center gap-1.5 rounded-lg bg-[#FF8003] px-3 text-xs font-medium text-white transition-colors hover:bg-[#FF8003]/90">
+                <CentralIcon name="IconArrowRight" size={12} color="currentColor" {...ci} />
+                Select destination
+              </button>
+            </div>
+          )}
+          {footerExpanded === "audit" && (
+            <div className="rounded-xl border border-foreground/[0.06] bg-foreground/[0.02] p-4 dark:border-white/[0.06] dark:bg-white/[0.02]">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-sm font-medium text-page-text">Audit log</span>
+                <button onClick={() => setFooterExpanded(null)} className="cursor-pointer text-page-text-muted hover:text-page-text">
+                  <CentralIcon name="IconX" size={14} color="currentColor" {...ci} />
+                </button>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { action: "Campaign created", time: "Mar 3, 2026 · 10:24 AM", by: "System" },
+                  { action: "Status changed to active", time: "Mar 3, 2026 · 10:25 AM", by: "Admin" },
+                  { action: "Budget updated", time: "Mar 5, 2026 · 2:15 PM", by: "Admin" },
+                ].map((entry, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-medium text-page-text">{entry.action}</span>
+                      <span className="text-page-text-muted">{entry.time}</span>
+                    </div>
+                    <span className="text-page-text-muted">{entry.by}</span>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => { setFooterExpanded(null); setAuditOpen(true); }} className="mt-3 flex h-8 cursor-pointer items-center gap-1.5 rounded-lg bg-foreground/[0.06] px-3 text-xs font-medium text-page-text transition-colors hover:bg-foreground/[0.10]">
+                View full log
+              </button>
+            </div>
+          )}
         </ModalBody>
 
         <ModalFooter>
-          <button onClick={() => setMoveOpen(true)} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#FF8003]/10 px-4 text-sm font-medium tracking-[-0.02em] text-[#FF8003] transition-colors hover:bg-[#FF8003]/20">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8L22 12L18 16" /><path d="M2 12H22" /></svg>
+          <button onClick={() => setFooterExpanded(footerExpanded === "move" ? null : "move")} className={cn("flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-sm font-medium tracking-[-0.02em] transition-colors", footerExpanded === "move" ? "bg-[#FF8003] text-white" : "bg-[#FF8003]/10 text-[#FF8003] hover:bg-[#FF8003]/20")}>
+            <CentralIcon name="IconArrowRight" size={14} color="currentColor" {...ci} />
             Move
           </button>
-          <button onClick={() => setAuditOpen(true)} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10]">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="8" r="6.25" /><path d="M8 5v3.5l2.5 1.5" /></svg>
+          <button onClick={() => setFooterExpanded(footerExpanded === "audit" ? null : "audit")} className={cn("flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-sm font-medium tracking-[-0.02em] transition-colors", footerExpanded === "audit" ? "bg-foreground text-white dark:bg-white dark:text-black" : "bg-foreground/[0.06] text-page-text hover:bg-foreground/[0.10]")}>
+            <CentralIcon name="IconClock" size={14} color="currentColor" {...ci} />
             Audit Log
           </button>
           <button onClick={() => toast("Campaign flagged")} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#E9A23B]/10 px-4 text-sm font-medium tracking-[-0.02em] text-[#E9A23B] transition-colors hover:bg-[#E9A23B]/20">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 10V3.5c0-.3.2-.5.4-.6C5.5 1.8 7.5 3.8 10.5 3.2c.5-.1 1 .3 1 .8v6c0 .3-.2.5-.4.6C8.5 11.8 6.2 9.5 2.5 10zM2.5 10v4" /></svg>
+            <CentralIcon name="IconFlag1" size={14} color="currentColor" {...ci} />
             Flag
           </button>
           {campaign.status !== "suspended" && (
@@ -534,9 +595,11 @@ function CampaignDetailModal({ campaign, open, onClose, onStatusChange }: {
               const ok = await confirm({ title: "Suspend campaign?", message: "Creators will no longer be able to submit.", destructive: true, confirmLabel: "Suspend" });
               if (ok) { onStatusChange(campaign.id, "suspended"); toast("Campaign suspended"); onClose(); }
             }} className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-[#FF2525]/10 px-4 text-sm font-medium tracking-[-0.02em] text-[#FF2525] transition-colors hover:bg-[#FF2525]/20">
+              <CentralIcon name="IconBlock" size={14} color="currentColor" {...ci} />
               Suspend
             </button>
           )}
+
         </ModalFooter>
       </Modal>
 

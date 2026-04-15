@@ -221,9 +221,7 @@ function Welcome({ name, total, onStart, onClose }: { name: string; total: numbe
         <div className="relative flex h-[120px] items-center justify-center overflow-hidden bg-[#151515]">
           <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
           <div className="relative flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#FF7A00]">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="10 8 16 12 10 16 10 8" fill="white" /></svg>
-            </div>
+            <img src="/images/cr-favicon.png" alt="Content Rewards" className="size-10 rounded-xl" />
             <div>
               <p className="font-inter text-base font-semibold tracking-[-0.02em] text-white">Interactive Demo</p>
               <p className="font-inter text-xs tracking-[-0.02em] text-white/50">{total} steps</p>
