@@ -39,6 +39,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "@upstash/vector": "^1.2.2",
     "ai": "^6.0.116",
+    "border-beam": "^1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
