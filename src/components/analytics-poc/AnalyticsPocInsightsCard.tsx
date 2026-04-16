@@ -9,6 +9,7 @@ import {
 } from "./AnalyticsPocCardPrimitives";
 import { AnalyticsPocMediumCardBase } from "./AnalyticsPocMediumCardBase";
 import { ANALYTICS_POC_SHARE_BUTTON_INTERACTION_CLASS } from "./interaction";
+import { BorderBeam } from "border-beam";
 import type {
   AnalyticsPocInsightSlide,
   AnalyticsPocInsightsCardProps,
@@ -143,39 +144,10 @@ export function AnalyticsPocInsightsCard({
   };
 
   return (
+    <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2}>
     <AnalyticsPocMediumCardBase
       className={cn("overflow-visible", className)}
-      effectsLayer={
-        <>
-          {/* Pink/magenta gradient border */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-2xl"
-            style={{
-              opacity: 0.3,
-              filter: "blur(6px)",
-              transform: "matrix(-1, 0, 0, 1, 0, 0)",
-              background: "linear-gradient(95.54deg, rgba(255,63,213,0) 0%, #FF3FD5 25%, rgba(255,63,213,0) 50%, #FF3FD5 75%, rgba(255,63,213,0) 100%)",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-              WebkitMaskComposite: "xor",
-              padding: 1.5,
-            }}
-          />
-          {/* Orange gradient border */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-2xl"
-            style={{
-              opacity: 0.3,
-              filter: "blur(6px)",
-              background: "linear-gradient(95.54deg, rgba(255,144,37,0) 0%, #FF9025 25%, rgba(255,144,37,0) 50%, #FF9025 75%, rgba(255,144,37,0) 100%)",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-              WebkitMaskComposite: "xor",
-              padding: 1.5,
-            }}
-          />
-        </>
-      }
+      style={{ border: "none" }}
     >
       <AnalyticsPocCardHeader
         icon={<SparkleIcon />}
@@ -251,5 +223,6 @@ export function AnalyticsPocInsightsCard({
         </button>
       </div>
     </AnalyticsPocMediumCardBase>
+    </BorderBeam>
   );
 }

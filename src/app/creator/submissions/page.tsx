@@ -112,7 +112,7 @@ const clips = [
     title: "Catina - All Platforms",
     brand: "Sound Network",
     date: "Feb 10, 2026",
-    status: "Rejected" as const,
+    status: "Flagged" as const,
     statusColor: "#FF3355",
     statusColorDark: "#FF6680",
     statusBg: "rgba(255,51,85,0.08)",
@@ -130,6 +130,7 @@ const clips = [
     videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
     platform: "tiktok" as const,
     videoDuration: "01:15",
+    flagReason: "Something that harms the brand — Video contains information that's not meant to be shared to the public.",
   },
 ];
 
@@ -184,6 +185,8 @@ export default function CreatorSubmissionsPage() {
   const [timelineExpanded, setTimelineExpanded] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [trustScoreOpen, setTrustScoreOpen] = useState(false);
+  const [appealOpen, setAppealOpen] = useState(false);
+  const [appealStep, setAppealStep] = useState<"form" | "sent">("form");
   const [submitStep, setSubmitStep] = useState<"select" | "pick">("select");
   const [submitTab, setSubmitTab] = useState<"feed" | "link">("feed");
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
@@ -481,7 +484,11 @@ export default function CreatorSubmissionsPage() {
                     </div>
                   </div>
                   <span className="flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-medium" style={{ color: isDark ? clip.statusColorDark : clip.statusColor, backgroundColor: isDark ? clip.statusBgDark : clip.statusBg }}>
-                    <svg className="size-3 shrink-0" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill={isDark ? clip.statusColorDark : clip.statusColor} /></svg>
+                    {clip.status === "Flagged" ? (
+                      <svg className="size-3 shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 1v10M2 1.5h7l-2 3 2 3H2" stroke={isDark ? clip.statusColorDark : clip.statusColor} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    ) : (
+                      <svg className="size-3 shrink-0" viewBox="0 0 10 10" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill={isDark ? clip.statusColorDark : clip.statusColor} /></svg>
+                    )}
                     {clip.status}
                   </span>
                 </div>
@@ -506,31 +513,48 @@ export default function CreatorSubmissionsPage() {
                   />
                 </div>
 
-                {/* Stats bar */}
-                <div className="p-3">
-                  <div className="flex items-center justify-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
-                    <div className="flex min-w-0 flex-1 flex-col gap-2">
-                      <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]">{clip.earned}</span>
-                      <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Total earned</span>
+                {/* Stats bar OR flag reason */}
+                {clip.status === "Flagged" && "flagReason" in clip ? (
+                  <>
+                    <div className="p-3">
+                      <div className="flex flex-col gap-1 rounded-xl bg-[rgba(255,51,85,0.08)] p-3 dark:bg-[rgba(255,102,128,0.08)]">
+                        <span className="text-sm font-medium leading-none tracking-[-0.02em] text-page-text">Reason for flagging</span>
+                        <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">{(clip as any).flagReason}</span>
+                      </div>
                     </div>
-                    <div className="h-[37px] w-px bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]" />
-                    <div className="flex min-w-0 flex-1 flex-col gap-2">
-                      <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]">{clip.received}</span>
-                      <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Received</span>
+                    {/* Action buttons — flagged variant */}
+                    <div className="flex gap-2 px-3 pb-3">
+                      <button onClick={() => { setAppealStep("form"); setAppealOpen(true); }} className="flex flex-1 items-center justify-center rounded-full bg-[rgba(255,51,85,0.08)] py-2 text-xs font-medium tracking-[-0.02em] text-[#FF3355] transition-colors hover:bg-[rgba(255,51,85,0.14)] dark:bg-[rgba(255,102,128,0.08)] dark:text-[#FF6680] dark:hover:bg-[rgba(255,102,128,0.14)]">Appeal flag</button>
+                      <button onClick={() => setTimelineOpen(true)} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View timeline</button>
                     </div>
-                    <div className="h-[37px] w-px bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]" />
-                    <div className="flex min-w-0 flex-1 flex-col gap-2">
-                      <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]" style={{ color: isDark ? clip.pendingColorDark : clip.pendingColor }}>{clip.pending}</span>
-                      <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Pending</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="p-3">
+                      <div className="flex items-center justify-center gap-3 rounded-2xl border border-foreground/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]">{clip.earned}</span>
+                          <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Total earned</span>
+                        </div>
+                        <div className="h-[37px] w-px bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]" />
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]">{clip.received}</span>
+                          <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Received</span>
+                        </div>
+                        <div className="h-[37px] w-px bg-foreground/[0.06] dark:bg-[rgba(224,224,224,0.03)]" />
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <span className="text-sm font-medium leading-[120%] tracking-[-0.02em]" style={{ color: isDark ? clip.pendingColorDark : clip.pendingColor }}>{clip.pending}</span>
+                          <span className="text-xs leading-none tracking-[-0.02em] text-foreground/70">Pending</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                {/* Action buttons */}
-                <div className="flex gap-2 px-3 pb-3">
-                  <button onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
-                  <button onClick={() => setTimelineOpen(true)} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View timeline</button>
-                </div>
+                    {/* Action buttons */}
+                    <div className="flex gap-2 px-3 pb-3">
+                      <button onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View payout</button>
+                      <button onClick={() => setTimelineOpen(true)} className="flex flex-1 items-center justify-center rounded-full bg-foreground/[0.06] py-2 text-xs font-medium tracking-[-0.02em] transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">View timeline</button>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -982,6 +1006,92 @@ export default function CreatorSubmissionsPage() {
 
       {/* Trust Score Modal */}
       <TrustScoreModal open={trustScoreOpen} onClose={() => setTrustScoreOpen(false)} />
+
+      {/* Appeal Flag Modal */}
+      <Modal open={appealOpen} onClose={() => setAppealOpen(false)} size="md" showClose={appealStep === "form"}>
+        {appealStep === "form" ? (
+          <>
+            <div className="flex flex-col items-center gap-4 p-5">
+              {/* Icon */}
+              <div className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_0_0_2px_#FFFFFF] dark:bg-page-bg dark:shadow-[0_0_0_2px_rgba(30,30,30,1)]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L4 7v5.5c0 5 3.5 9.74 8 10.5 4.5-.76 8-5.5 8-10.5V7l-8-5Z" fill="none" />
+                  <path d="M8 12h8M8 8h8" />
+                  <circle cx="12" cy="16" r="0.5" fill="currentColor" stroke="none" />
+                </svg>
+              </div>
+
+              {/* Title + description */}
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-lg font-medium leading-[120%] tracking-[-0.02em] text-page-text">Appeal rejection</span>
+                <p className="max-w-[300px] text-center text-sm font-medium leading-[150%] tracking-[-0.02em] text-foreground/70">Explain why you disagree with this decision. Your appeal will be forwarded to the campaign manager.</p>
+              </div>
+
+              {/* Rejection reason box */}
+              <div className="flex w-full flex-col gap-1 rounded-xl bg-[rgba(255,51,85,0.08)] p-3 dark:bg-[rgba(255,102,128,0.08)]">
+                <span className="text-sm font-medium leading-none tracking-[-0.02em] text-page-text">Reason for rejection</span>
+                <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">Wrong competitor is being mentioned</span>
+              </div>
+
+              {/* Textarea */}
+              <div className="flex w-full flex-col gap-2">
+                <span className="text-xs tracking-[-0.02em] text-page-text-subtle">Appeal explanation</span>
+                <textarea
+                  className="h-24 w-full resize-none rounded-xl bg-foreground/[0.04] p-4 text-sm tracking-[-0.02em] text-page-text placeholder:text-foreground/40 focus:outline-none dark:bg-white/[0.04]"
+                  placeholder="E.g., my video clearly follows the brief and meets all requirements.."
+                  style={{ boxShadow: "0px 1px 2px rgba(0,0,0,0.03)" }}
+                />
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-center gap-2 px-5 pb-5">
+              <button onClick={() => setAppealOpen(false)} className="rounded-full bg-foreground/[0.06] px-4 py-2.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]">Cancel</button>
+              <button onClick={() => setAppealStep("sent")} className="rounded-full bg-foreground px-4 py-2.5 text-sm font-medium tracking-[-0.02em] text-white dark:bg-[#E0E0E0] dark:text-[#252525]">Submit appeal</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col items-center gap-4 px-5 pt-16 pb-5" style={{ background: "radial-gradient(50% 53.47% at 50% 0%, rgba(26,103,229,0.12) 0%, rgba(26,103,229,0) 100%)" }}>
+              {/* Sent icon */}
+              <div className="flex flex-col items-center gap-4">
+                <div
+                  className="flex size-14 items-center justify-center rounded-full"
+                  style={{
+                    background: "#1A67E5",
+                    border: "1px solid rgba(37,37,37,0.1)",
+                    boxShadow: "0px 0px 0px 2px #FFFFFF, inset 0px 0.5px 2px rgba(0,0,0,0.12), inset 0px 1px 0px rgba(255,255,255,0.36)",
+                  }}
+                >
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <span className="text-xl font-medium leading-[120%] tracking-[-0.02em] text-[#1A67E5]">Appeal sent</span>
+              </div>
+
+              {/* Confirmation text */}
+              <p className="text-center text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">Your appeal has been forwarded to the campaign manager.</p>
+
+              {/* What happens next card */}
+              <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]">
+                <div className="px-3 py-3">
+                  <span className="text-sm font-medium leading-[120%] tracking-[-0.02em] text-page-text">What happens next</span>
+                </div>
+                <div className="px-3 pb-3">
+                  <p className="text-sm leading-[150%] tracking-[-0.02em] text-page-text">You&apos;ll be notified once a decision has been made. You can track the status on your dashboard.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-center px-5 pb-5">
+              <button onClick={() => setAppealOpen(false)} className="w-full rounded-full bg-foreground px-4 py-2.5 text-sm font-medium tracking-[-0.02em] text-white dark:bg-[#E0E0E0] dark:text-[#252525]">Got it</button>
+            </div>
+          </>
+        )}
+      </Modal>
 
       {/* Mobile fixed bottom submit bar */}
       <div className="fixed inset-x-0 bottom-[calc(44px+max(8px,env(safe-area-inset-bottom)))] z-40 flex items-center justify-end border-t border-foreground/[0.06] bg-white px-4 py-3 sm:px-5 md:hidden dark:bg-page-bg">

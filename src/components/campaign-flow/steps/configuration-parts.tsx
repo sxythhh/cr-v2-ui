@@ -2,6 +2,7 @@
 
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { Switch } from "@/components/ui/switch";
+import { BorderBeam } from "border-beam";
 import type { CampaignModel, ConfigurationData, Platform } from "@/types/campaign-flow.types";
 import { CpmSummary } from "../CpmSummary";
 import { PlatformButton, PlatformIcon } from "../PlatformButton";
@@ -135,31 +136,13 @@ export function ProjectedViewsBar({ rate, budget }: { rate: string; budget: stri
   const display = projectedViews > 0 ? formatCompactViews(projectedViews) : "--";
 
   return (
-    <div className="relative mt-4 h-10">
-      {/* Pink/magenta blurred rectangle */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-[14px]"
-        style={{
-          opacity: 0.3,
-          filter: "blur(2px)",
-          background: "linear-gradient(95.54deg, rgba(255,63,213,0) 0%, #FF3FD5 25%, rgba(255,63,213,0) 50%, #FF3FD5 75%, rgba(255,63,213,0) 100%)",
-        }}
-      />
-      {/* Orange blurred rectangle */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-[14px]"
-        style={{
-          opacity: 0.3,
-          filter: "blur(0.5px)",
-          transform: "matrix(-1, 0, 0, 1, 0, 0)",
-          background: "linear-gradient(95.54deg, rgba(255,144,37,0) 0%, #FF9025 25%, rgba(255,144,37,0) 50%, #FF9025 75%, rgba(255,144,37,0) 100%)",
-        }}
-      />
-      {/* Content */}
-      <div className="absolute inset-0 flex items-center justify-between gap-1.5 rounded-[14px] border border-[rgba(37,37,37,0.06)] bg-white px-3 dark:border-[rgba(224,224,224,0.03)] dark:bg-card-bg">
-        <span className="font-inter text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Projected views</span>
-        <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-page-text">{display}</span>
-      </div>
+    <div className="mt-4">
+      <BorderBeam colorVariant="sunset" theme="auto" size="sm" borderRadius={14} strength={1} duration={2}>
+        <div className="flex h-10 items-center justify-between gap-1.5 rounded-[14px] bg-white px-3 dark:bg-card-bg">
+          <span className="font-inter text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Projected views</span>
+          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-page-text">{display}</span>
+        </div>
+      </BorderBeam>
     </div>
   );
 }
