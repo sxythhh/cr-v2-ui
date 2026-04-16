@@ -144,9 +144,9 @@ export function AnalyticsPocInsightsCard({
   };
 
   return (
-    <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2}>
+    <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2} className="h-full">
     <AnalyticsPocMediumCardBase
-      className={cn("overflow-visible", className)}
+      className={cn("overflow-visible h-full", className)}
       style={{ border: "none" }}
     >
       <AnalyticsPocCardHeader
