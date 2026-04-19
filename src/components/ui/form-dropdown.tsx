@@ -95,7 +95,7 @@ function DropdownOption({
       ref={ref}
       data-proximity-index={index}
       onClick={onSelect}
-      className="relative z-10 flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 font-inter text-sm tracking-[-0.05em]"
+      className="relative z-10 flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 font-inter text-[15px] tracking-[-0.05em]"
     >
       <span className={cn("text-[#252525] dark:text-page-text", checked && "font-semibold")}>
         {label}
@@ -163,11 +163,11 @@ export function FormDropdown({
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          "flex h-9 w-full cursor-pointer items-center justify-between rounded-2xl border border-border bg-transparent px-4 font-inter text-sm font-medium leading-[140%] tracking-[-0.05em] shadow-[0_1px_0_#FFFFFF] outline-none transition-colors dark:shadow-none",
+          "flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-transparent px-4 font-inter text-[15px] font-medium leading-[140%] tracking-[-0.05em] shadow-[0_1px_0_#FFFFFF] outline-none transition-all dark:shadow-none",
           selectedOption
             ? "text-[#252525] dark:text-page-text"
             : "text-[#878787]/60",
-          open && "border-[rgba(37,37,37,0.3)] dark:border-[#333]",
+          open && "border-[#f97316] shadow-[0_0_0_1px_#f97316] dark:shadow-[0_0_0_1px_#f97316]",
         )}
       >
         <span className="truncate">{selectedOption?.label ?? placeholder}</span>

@@ -11,6 +11,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Allow the embeddable form route (used in Framer iframes)
+  if (pathname.startsWith("/forms-demo/embed")) {
+    return NextResponse.next();
+  }
+
   // Allow static assets and Next.js internals
   if (
     pathname.startsWith("/_next") ||

@@ -151,6 +151,29 @@ export function BusinessOnboardingTypeform({
 
   const [loading, setLoading] = React.useState(false);
 
+  // IP-based country detection for the phone input.
+  const [defaultCountry, setDefaultCountry] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    let cancelled = false;
+    const fallback = setTimeout(() => {
+      if (!cancelled) setDefaultCountry((prev) => prev ?? "US");
+    }, 800);
+    fetch("https://ipinfo.io/json?token=3b11ddb842c4bc")
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        clearTimeout(fallback);
+        const code = String(d?.country || "US").toUpperCase();
+        setDefaultCountry(/^[A-Z]{2}$/.test(code) ? code : "US");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        clearTimeout(fallback);
+        setDefaultCountry("US");
+      });
+    return () => { cancelled = true; clearTimeout(fallback); };
+  }, []);
+
   const canProceed = () => {
     switch (currentStep) {
       case 0: return (data.fullName || "").trim() !== "";
@@ -213,15 +236,15 @@ export function BusinessOnboardingTypeform({
             />
           </FormField>
           <FormField label="Phone">
-            <div className="flex h-9 items-center rounded-2xl border border-[rgba(37,37,37,0.14)] shadow-[0_1px_0_#FFFFFF] dark:border-white/[0.08] dark:shadow-none [&_.PhoneInputCountry]:pr-3 [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-r-[rgba(37,37,37,0.14)] [&_.PhoneInputCountry]:self-stretch dark:[&_.PhoneInputCountry]:border-r-white/[0.08]">
-              <PhoneInput
+            <div className="flex h-10 items-center rounded-lg border border-[rgba(37,37,37,0.14)] shadow-[0_1px_0_#FFFFFF] transition-all focus-within:border-[#f97316] focus-within:shadow-[0_0_0_1px_#f97316] dark:border-white/[0.08] dark:shadow-none dark:focus-within:border-[#f97316] dark:focus-within:shadow-[0_0_0_1px_#f97316] [&_.PhoneInputCountry]:pr-3 [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-r-[rgba(37,37,37,0.14)] [&_.PhoneInputCountry]:self-stretch dark:[&_.PhoneInputCountry]:border-r-white/[0.08]">
+              {defaultCountry && <PhoneInput
                 value={data.phone as any}
                 onChange={(v) => updateField("phone", v?.toString() ?? "")}
-                defaultCountry="US"
+                defaultCountry={defaultCountry}
                 international
                 style={{ fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}
-                className="font-inter text-sm font-medium tracking-[-0.05em] text-[#252525] [&_input]:border-0 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:outline-none [&_input]:ring-0 [&_input]:focus-visible:ring-0 [&_input]:focus-visible:border-0 [&_input]:font-[inherit] [&_input]:text-[inherit] [&_input]:tracking-[inherit] [&_input]:placeholder:text-[#878787]/60 [&_input]:autofill:shadow-[inset_0_0_0_100px_white] [&_input]:autofill:[-webkit-text-fill-color:#252525] [&_button]:border-0 [&_button]:bg-transparent [&_button]:shadow-none [&_button]:rounded-none"
-              />
+                className="font-inter text-[15px] font-medium tracking-[-0.05em] text-[#252525] dark:text-page-text [&_input]:border-0 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:outline-none [&_input]:ring-0 [&_input]:focus-visible:ring-0 [&_input]:focus-visible:border-0 [&_input]:font-[inherit] [&_input]:text-[inherit] [&_input]:tracking-[inherit] [&_input]:placeholder:text-[#878787]/60 dark:[&_input]:placeholder:text-page-text-muted/60 [&_input]:autofill:shadow-[inset_0_0_0_100px_white] [&_input]:autofill:[-webkit-text-fill-color:#252525] dark:[&_input]:autofill:shadow-[inset_0_0_0_100px_var(--card-bg)] dark:[&_input]:autofill:[-webkit-text-fill-color:var(--page-text)] [&_button]:border-0 [&_button]:bg-transparent [&_button]:shadow-none [&_button]:rounded-none [&_button]:dark:hover:bg-transparent"
+              />}
             </div>
           </FormField>
         </div>
@@ -287,10 +310,10 @@ export function BusinessOnboardingTypeform({
                     : "border-[rgba(37,37,37,0.14)] shadow-[0_1px_0_#FFFFFF] dark:border-white/[0.08] dark:shadow-none",
                 )}
               >
-                <span className="font-inter text-sm font-semibold leading-[140%] tracking-[-0.05em] text-[#252525] dark:text-page-text">
+                <span className="font-inter text-[15px] font-semibold leading-[140%] tracking-[-0.05em] text-[#252525] dark:text-page-text">
                   Self-Serve
                 </span>
-                <span className="font-inter text-xs font-medium leading-[140%] text-[#878787]">
+                <span className="font-inter text-[13px] font-medium leading-[140%] text-[#878787]">
                   You're in control
                 </span>
               </button>
@@ -305,10 +328,10 @@ export function BusinessOnboardingTypeform({
                     : "border-[rgba(37,37,37,0.14)] shadow-[0_1px_0_#FFFFFF] dark:border-white/[0.08] dark:shadow-none",
                 )}
               >
-                <span className="font-inter text-sm font-semibold leading-[140%] tracking-[-0.05em] text-[#252525] dark:text-page-text">
+                <span className="font-inter text-[15px] font-semibold leading-[140%] tracking-[-0.05em] text-[#252525] dark:text-page-text">
                   Managed
                 </span>
-                <span className="font-inter text-xs font-medium leading-[140%] text-[#878787]">
+                <span className="font-inter text-[13px] font-medium leading-[140%] text-[#878787]">
                   We've got your back
                 </span>
               </button>
