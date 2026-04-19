@@ -43,7 +43,7 @@ function WalletCard({
   return (
     <div className="w-full max-w-[480px]" style={{ perspective: "800px" }}>
       <motion.div
-        className="relative flex aspect-[480/300] w-full max-w-[480px] flex-col items-center overflow-hidden rounded-[20px]"
+        className="relative flex aspect-[16/9] w-full max-w-[480px] flex-col items-center overflow-hidden rounded-[20px]"
         style={{
           background: "#131313",
           boxShadow: `

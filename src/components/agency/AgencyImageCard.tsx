@@ -32,7 +32,7 @@ export function AgencyImageCard({ campaigns }: AgencyImageCardProps) {
       <button
         type="button"
         onClick={advance}
-        className="relative aspect-[16/10] w-full overflow-hidden bg-[#f0f0f0] cursor-pointer"
+        className="relative aspect-[16/9] w-full overflow-hidden bg-[#f0f0f0] cursor-pointer"
       >
         {campaigns.map((campaign, i) => (
           <div

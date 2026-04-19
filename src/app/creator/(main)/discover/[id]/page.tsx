@@ -116,7 +116,7 @@ export default function CampaignPage() {
 
           {/* Right: thumbnail */}
           <div className="hidden min-w-0 flex-1 lg:block lg:max-w-[540px]">
-            <div className="aspect-[280/152] overflow-hidden rounded-2xl">
+            <div className="aspect-[16/9] overflow-hidden rounded-2xl">
               <div className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${campaign.thumbnail})` }} />
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function CampaignPage() {
 
         {/* Mobile thumbnail */}
         <div className="my-6 lg:hidden">
-          <div className="aspect-[280/152] overflow-hidden rounded-2xl">
+          <div className="aspect-[16/9] overflow-hidden rounded-2xl">
             <div className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${campaign.thumbnail})` }} />
           </div>
         </div>

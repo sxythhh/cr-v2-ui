@@ -1083,7 +1083,7 @@ function CaseStudyCard({
         <img
           src={study.image}
           alt=""
-          className="aspect-[561/314] w-full rounded-lg bg-[#F5F5F5] object-cover dark:bg-white/[0.03]"
+          className="aspect-[16/9] w-full rounded-lg bg-[#F5F5F5] object-cover dark:bg-white/[0.03]"
         />
       </div>
     </div>
