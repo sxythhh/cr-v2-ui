@@ -477,19 +477,33 @@ function ApplicationDetailsModal({
 // ── Animated Stars (completion) ──────────────────────────────────────
 
 function QuickReviewAnimatedStars({ className }: { className?: string }) {
+  // High-resolution path data from /public/images/cr-icon-gradient.svg so the
+  // stars render at full brand fidelity at any display size.
   const paths = [
-    "M2.51191 8.05756L3.9974 6.04528L4.52339 8.47863L6.92511 9.24876L4.7389 10.4939L4.7377 12.9818L2.85955 11.318L0.45721 12.0858L1.48365 9.81196L0 7.79846L2.51191 8.05756Z",
-    "M1.91955 17.6938L1.03009 15.7235L3.11218 16.3893L4.73952 14.9468L4.74012 17.1031L6.63533 18.1821L4.55383 18.8496L4.09784 20.9592L2.81082 19.2149L0.633758 19.4393L1.91955 17.6938Z",
-    "M9.86563 22.4849L8.19142 22.3109L9.44189 21.2001L9.09244 19.5778L10.5511 20.4066L12.0098 19.5778L11.6604 21.2001L12.9114 22.3109L11.2367 22.4849L10.5511 24L9.86563 22.4849Z",
-    "M18.2605 19.1795L16.9929 20.8967L16.5436 18.8196L14.4944 18.1629L16.3604 17.1L16.361 14.9768L17.9634 16.3971L20.0138 15.7415L19.1377 17.6818L20.404 19.4001L18.2605 19.1795Z",
-    "M19.6131 9.80894L20.6397 12.0827L18.2373 11.315L16.3598 12.9788L16.3586 10.4909L14.1718 9.24573L16.5735 8.4756L17.0995 6.04225L18.585 8.05454L21.0969 7.79543L19.6131 9.80894Z",
-    "M11.9185 3.03014L15.2675 3.37862L12.766 5.59965L13.4649 8.84511L10.5475 7.18729L7.63071 8.84511L8.32902 5.59965L5.82744 3.37862L9.17647 3.03014L10.5475 0L11.9185 3.03014Z",
+    "M12.9782 41.6308L20.6532 31.234L23.3708 43.8063L35.7797 47.7853L24.4843 54.2186L24.4781 67.0729L14.7743 58.4765L2.36225 62.4431L7.66551 50.6952L0 40.2921L12.9782 41.6308Z",
+    "M9.91767 91.418L5.32214 81.2381L16.0796 84.6779L24.4875 77.225L24.4906 88.3656L34.2825 93.9405L23.5281 97.3896L21.1722 108.289L14.5226 99.2769L3.27444 100.436L9.91767 91.418Z",
+    "M50.9724 116.172L42.3223 115.273L48.7831 109.534L46.9776 101.152L54.5142 105.434L62.0507 101.152L60.2452 109.534L66.7091 115.273L58.056 116.172L54.5142 124L50.9724 116.172Z",
+    "M94.3453 99.094L87.7964 107.966L85.475 97.2346L74.8874 93.8413L84.5282 88.3501L84.5314 77.3799L92.8103 84.7181L103.404 81.331L98.8779 91.356L105.42 100.234L94.3453 99.094Z",
+    "M101.334 50.6797L106.638 62.4276L94.2257 58.461L84.5251 67.0574L84.5188 54.2031L73.2203 47.7698L85.6292 43.7908L88.3468 31.2185L96.0218 41.6153L109 40.2766L101.334 50.6797Z",
+    "M61.5789 15.6557L78.8821 17.4562L65.9574 28.9315L69.5684 45.6997L54.4953 37.1343L39.4253 45.6997L43.0332 28.9315L30.1084 17.4562L47.4117 15.6557L54.4953 0L61.5789 15.6557Z",
   ];
+  // Burst-in order: top, top-left, top-right, bottom-left, bottom-right, bottom
   const order = [5, 0, 4, 1, 3, 2];
 
   return (
-    <div className={className}>
-      <svg viewBox="0 0 22 24" fill="none" width="128" height="140" className="size-full">
+    <div
+      className={className}
+      style={{
+        animation: "star-pop-pulse 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+      }}
+    >
+      <svg
+        viewBox="0 0 109 124"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="size-full"
+        shapeRendering="geometricPrecision"
+      >
         {paths.map((d, i) => (
           <path
             key={i}
@@ -497,9 +511,7 @@ function QuickReviewAnimatedStars({ className }: { className?: string }) {
             fill="currentColor"
             style={{
               opacity: 0,
-              transformOrigin: "center",
-              transformBox: "fill-box",
-              animation: `star-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) ${order[i] * 120}ms forwards`,
+              animation: `star-pop 0.32s ease-out ${order[i] * 100}ms forwards`,
             }}
           />
         ))}
@@ -776,7 +788,7 @@ function QuickReviewModal({
         {isDone ? (
           /* Done screen — inside card area */
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 px-8">
-            <QuickReviewAnimatedStars className="size-16 text-page-text" />
+            <QuickReviewAnimatedStars className="size-24 text-page-text" />
             <div className="flex flex-col items-center gap-2">
               <motion.h2
                 className="font-inter text-lg font-semibold tracking-[-0.02em] text-page-text"

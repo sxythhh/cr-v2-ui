@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
+  Area,
   Bar,
   BarChart,
   CartesianGrid,
+  ComposedChart,
   Line,
   LineChart,
   Tooltip as RechartsTooltip,
@@ -314,12 +316,10 @@ function buildPerformanceSeriesLine({
   return (
     <Line
       activeDot={false}
-      animationDuration={450}
-      animationEasing="ease-out"
       dataKey={series.key}
       dot={false}
       fill="none"
-      isAnimationActive
+      isAnimationActive={false}
       key={lineKey}
       stroke={stroke}
       strokeLinecap="round"
@@ -329,7 +329,7 @@ function buildPerformanceSeriesLine({
       style={{
         transition: `stroke-opacity ${transitionDurationMs}ms ${HOVER_OPACITY_TRANSITION_EASING}`,
       }}
-      type="monotone"
+      type="linear"
       yAxisId={series.axis}
     />
   );
@@ -711,25 +711,37 @@ function PerformanceMainLineChartBody({
     ],
   );
 
-  const primarySeries = lineChart.series.find((s) => activeMetricKeys.has(s.key));
+  // Primary LEFT-axis series drives left-axis labels, domain, and the left-axis tooltip.
+  // Falls back to the first configured left-axis series so the axis doesn't vanish
+  // when all left series are toggled off.
+  const primaryLeftSeries =
+    lineChart.series.find((s) => s.axis === "left" && activeMetricKeys.has(s.key)) ??
+    lineChart.series.find((s) => s.axis === "left") ??
+    lineChart.series.find((s) => activeMetricKeys.has(s.key));
+  const primarySeries = primaryLeftSeries;
   const primaryColor = primarySeries?.color ?? "rgba(0,0,0,0.4)";
   const primaryYLabels = primarySeries?.yLabels ?? lineChart.yLabels;
   const animatedYLabels = useAnimatedLabels(primaryYLabels);
 
+  // Primary RIGHT-axis series drives right-axis labels + domain.
+  const primaryRightSeries =
+    lineChart.series.find((s) => s.axis === "right" && activeMetricKeys.has(s.key)) ??
+    lineChart.series.find((s) => s.axis === "right");
+
   const leftDomain: [number, number] =
-    primarySeries?.axis === "left" && primarySeries.domain
-      ? (primarySeries.domain as [number, number])
+    primaryLeftSeries?.domain
+      ? (primaryLeftSeries.domain as [number, number])
       : (lineChart.leftDomain as [number, number]) ?? [0, 100000];
   const rightDomain: [number, number] =
-    primarySeries?.axis === "right" && primarySeries.domain
-      ? (primarySeries.domain as [number, number])
+    primaryRightSeries?.domain
+      ? (primaryRightSeries.domain as [number, number])
       : (lineChart.rightDomain as [number, number]) ?? [0, 8];
 
   return (
     <div className="absolute inset-0 chart-no-focus-ring" ref={chartHoverRootRef}>
       <div className="absolute inset-x-0 bottom-7 top-0 flex items-end gap-4">
         {/* Y-axis labels — left side (hidden on mobile) */}
-        <div className="relative hidden h-full w-5 shrink-0 sm:block">
+        <div className="group/yaxis relative hidden h-full w-5 shrink-0 cursor-help sm:block">
           <div className="absolute inset-0 flex flex-col items-end justify-between">
             {animatedYLabels.map((label, i) => (
               <span
@@ -740,11 +752,23 @@ function PerformanceMainLineChartBody({
               </span>
             ))}
           </div>
+          {(() => {
+            const label = primarySeries?.label ?? "values";
+            const max = animatedYLabels[0] ?? "";
+            const min = animatedYLabels[animatedYLabels.length - 1] ?? "0";
+            return (
+              <div
+                className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-md border border-foreground/[0.06] bg-card-bg px-2.5 py-1.5 font-inter text-[11px] leading-[1.4] tracking-[-0.02em] text-page-text opacity-0 transition-opacity duration-150 group-hover/yaxis:opacity-100 dark:border-transparent dark:bg-[#2a2a2a]"
+              >
+                Left axis — {label} per data point. Range {min} to {max}.
+              </div>
+            );
+          })()}
         </div>
 
         <div className="relative h-full min-h-0 min-w-0 flex-1" ref={chartPlotAreaRef}>
           <ResponsiveContainer height="100%" width="100%">
-            <LineChart
+            <ComposedChart
               data={dataset}
               margin={{ bottom: 2, left: 0, right: hasRightAxis ? 48 : 24, top: 0 }}
               onClick={handleLineChartClick}
@@ -785,8 +809,20 @@ function PerformanceMainLineChartBody({
                 {lineChart.series.map((series) => {
                   const startFadeGradientId = `${lineGradientIdPrefix}-${series.key}`;
                   const hoverFocusGradientId = `${hoverFocusGradientIdPrefix}-${series.key}`;
+                  const areaFillGradientId = `${lineGradientIdPrefix}-area-${series.key}`;
 
                   return [
+                    <linearGradient
+                      id={areaFillGradientId}
+                      key={areaFillGradientId}
+                      x1="0"
+                      x2="0"
+                      y1="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor={series.color} stopOpacity={0.18} />
+                      <stop offset="100%" stopColor={series.color} stopOpacity={0} />
+                    </linearGradient>,
                     <linearGradient
                       id={startFadeGradientId}
                       key={startFadeGradientId}
@@ -854,8 +890,37 @@ function PerformanceMainLineChartBody({
                 })}
               </defs>
 
+              {lineChart.series.map((series) => {
+                const isActive = activeMetricKeys.has(series.key);
+                const areaOpacity = isActive
+                  ? shouldRenderFocusWindow
+                    ? HOVER_DIM_OPACITY
+                    : 1
+                  : 0;
+                const areaTransitionMs = isActive
+                  ? HOVER_OPACITY_TRANSITION_MS
+                  : TOGGLE_OPACITY_TRANSITION_MS;
+                return (
+                  <Area
+                    key={`area-${series.key}`}
+                    dataKey={series.key}
+                    type="linear"
+                    yAxisId={series.axis}
+                    stroke="none"
+                    fill={`url(#${lineGradientIdPrefix}-area-${series.key})`}
+                    fillOpacity={areaOpacity}
+                    isAnimationActive={false}
+                    activeDot={false}
+                    dot={false}
+                    style={{
+                      transition: `fill-opacity ${areaTransitionMs}ms ${HOVER_OPACITY_TRANSITION_EASING}`,
+                    }}
+                  />
+                );
+              })}
+
               {renderedSeriesLines}
-            </LineChart>
+            </ComposedChart>
           </ResponsiveContainer>
 
           <div
@@ -891,7 +956,7 @@ function PerformanceMainLineChartBody({
 
       {/* Y-axis labels — right side (engagement %) — absolutely positioned */}
       {lineChart.rightYLabels && lineChart.rightYLabels.length > 0 && (
-        <div className="absolute right-0 top-0 bottom-7 hidden w-9 flex-col items-end justify-between sm:flex">
+        <div className="group/yaxisR absolute right-0 top-0 bottom-7 hidden w-9 cursor-help flex-col items-end justify-between sm:flex">
           {lineChart.rightYLabels.map((label, i) => {
             const rightSeries = lineChart.series.find((s) => s.axis === "right");
             return (
@@ -904,16 +969,27 @@ function PerformanceMainLineChartBody({
               </span>
             );
           })}
+          {(() => {
+            const rightSeries = lineChart.series.find((s) => s.axis === "right");
+            const label = rightSeries?.label ?? "values";
+            const labels = lineChart.rightYLabels ?? [];
+            const max = labels[0] ?? "";
+            const min = labels[labels.length - 1] ?? "0";
+            return (
+              <div
+                className="pointer-events-none absolute right-full top-1/2 z-50 mr-3 -translate-y-1/2 whitespace-nowrap rounded-md border border-foreground/[0.06] bg-card-bg px-2.5 py-1.5 font-inter text-[11px] leading-[1.4] tracking-[-0.02em] text-page-text opacity-0 transition-opacity duration-150 group-hover/yaxisR:opacity-100 dark:border-transparent dark:bg-[#2a2a2a]"
+              >
+                Right axis — {label} per data point. Range {min} to {max}.
+              </div>
+            );
+          })()}
         </div>
       )}
 
       {/* Hover crosshair line */}
       <div
-        className="pointer-events-none absolute top-0 right-0"
-        style={{
-          bottom: 24,
-          left: 36,
-        }}
+        className="pointer-events-none absolute top-0 right-0 left-0 sm:left-9"
+        style={{ bottom: 24 }}
       >
         {/* Dynamic hover line */}
         <div
@@ -933,24 +1009,46 @@ function PerformanceMainLineChartBody({
             right: hasRightAxis ? 47 : 24,
             width: 0,
             borderLeft: "1px solid var(--foreground)",
-            opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 0.2,
+            opacity: shouldShowHoverState && activeHoverX !== undefined && activeHoverX > chartPlotWidth - 20 ? 0 : 0.12,
           }}
         />
       </div>
 
       {/* X-axis labels + hover date pill */}
-      <div className="absolute bottom-0 right-0 flex h-6 items-center justify-between gap-2" style={{ left: 36 }}>
-        {lineChart.xTicks.map((tick, i) => (
-          <span
-            className={cn(
-              "font-inter text-[10px] font-normal leading-[1.2] tracking-[0.1px] text-[var(--ap-text-tertiary)]",
-              i === lineChart.xTicks.length - 1 && "invisible",
-            )}
-            key={`x-${tick.index}-${tick.label}`}
-          >
-            {tick.label}
-          </span>
-        ))}
+      <div className="absolute bottom-0 right-0 left-0 sm:left-9 h-6">
+        {/* Inner container spans exactly the data area so labels anchor to data points */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0"
+          style={{ right: hasRightAxis ? 48 : 24 }}
+        >
+          {(() => {
+            const ticks = lineChart.xTicks;
+            // On mobile, thin out ticks to avoid overlap. Keep first, last, and every 2nd middle
+            // (collapses ~11 ticks to ~6 for a 320px-wide chart).
+            const visibleTicks = isMobile
+              ? ticks.filter((_, i) => i % 2 === 0 || i === ticks.length - 1)
+              : ticks;
+            const lastOriginalIndex = ticks.length - 1;
+            return visibleTicks.map((tick) => {
+              const originalIdx = ticks.indexOf(tick);
+              const n = Math.max(dataset.length - 1, 1);
+              const pct = Math.max(0, Math.min(1, tick.index / n)) * 100;
+              const isLast = originalIdx === lastOriginalIndex;
+              return (
+                <span
+                  className={cn(
+                    "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-inter text-[10px] font-normal leading-[1.2] tracking-[0.1px] text-[var(--ap-text-tertiary)]",
+                    isLast && "invisible",
+                  )}
+                  style={{ left: `${pct}%` }}
+                  key={`x-${tick.index}-${tick.label}`}
+                >
+                  {tick.label}
+                </span>
+              );
+            });
+          })()}
+        </div>
 
         {/* Hover date pill */}
         <div

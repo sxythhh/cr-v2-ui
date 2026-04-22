@@ -136,6 +136,19 @@ function SubmissionTrendCard() {
   ];
   const weekLabels = ["12w ago", "11w", "10w", "9w", "8w", "7w", "6w", "5w", "4w", "3w", "2w", "This week"];
   const [hoveredBarIdx, setHoveredBarIdx] = useState<number | null>(null);
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
+    checkDark();
+    const obs = new MutationObserver(checkDark);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  const base = isDark ? "#1C1C1C" : "#FFFFFF";
+  const greenTint = isDark ? "rgba(52,211,153,0.3)" : "rgba(0,153,77,0.3)";
+  const purpleTint = isDark ? "rgba(192,132,252,0.3)" : "rgba(174,78,238,0.3)";
+  const redTint = isDark ? "rgba(251,113,133,0.3)" : "rgba(255,51,85,0.3)";
+  const blueTint = isDark ? "rgba(96,165,250,0.3)" : "rgba(26,103,229,0.3)";
   const platforms = [
     { platform: "instagram", label: "Instagram", pct: "42%", count: "345", barWidth: "50%", color: "rgba(192,132,252,0.1)", iconColor: "#C084FC" },
     { platform: "tiktok", label: "TikTok", pct: "35%", count: "289", barWidth: "42%", color: "rgba(52,211,153,0.08)", iconColor: "#34D399" },
@@ -163,10 +176,10 @@ function SubmissionTrendCard() {
               className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: bar.height,
-                background: "linear-gradient(0deg, rgba(0,153,77,0.3), rgba(0,153,77,0.3)), #FFFFFF",
+                background: `linear-gradient(0deg, ${greenTint}, ${greenTint}), ${base}`,
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
-                borderColor: "#FFFFFF",
+                borderColor: base,
                 borderRadius: 8,
               }}
             />
@@ -175,10 +188,10 @@ function SubmissionTrendCard() {
               className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: Math.round(bar.height * 0.47),
-                background: "linear-gradient(0deg, rgba(174,78,238,0.3), rgba(174,78,238,0.3)), #FFFFFF",
+                background: `linear-gradient(0deg, ${purpleTint}, ${purpleTint}), ${base}`,
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
-                borderColor: "#FFFFFF",
+                borderColor: base,
                 borderRadius: 8,
               }}
             />
@@ -187,10 +200,10 @@ function SubmissionTrendCard() {
               className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: Math.round(bar.height * 0.26),
-                background: "linear-gradient(0deg, rgba(255,51,85,0.3), rgba(255,51,85,0.3)), #FFFFFF",
+                background: `linear-gradient(0deg, ${redTint}, ${redTint}), ${base}`,
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
-                borderColor: "#FFFFFF",
+                borderColor: base,
                 borderRadius: 8,
               }}
             />
@@ -199,10 +212,10 @@ function SubmissionTrendCard() {
               className="absolute inset-x-0 bottom-0 transition-opacity duration-150 group-hover/chart:opacity-40 group-hover/bar:!opacity-100"
               style={{
                 height: Math.round(bar.height * 0.10),
-                background: "linear-gradient(0deg, rgba(26,103,229,0.3), rgba(26,103,229,0.3)), #FFFFFF",
+                background: `linear-gradient(0deg, ${blueTint}, ${blueTint}), ${base}`,
                 borderWidth: "1px 1px 0 1px",
                 borderStyle: "solid",
-                borderColor: "#FFFFFF",
+                borderColor: base,
                 borderRadius: 8,
               }}
             />
@@ -263,6 +276,7 @@ function SubmissionTrendCard() {
               <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">{p.pct}</span>
               <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">·</span>
               <span className="font-inter text-sm tracking-[-0.02em] text-page-text">{p.count}</span>
+              <span className="font-inter text-sm tracking-[-0.02em] text-page-text">Creators</span>
             </div>
           </div>
         ))}
@@ -289,13 +303,14 @@ const RANKED_CREATORS = [
   { rank: 10, name: "EditKing", subtitle: "Gaming · NCA signed · Last active 1w ago", earned: "$980.40", cpm: "$0.55 CPM" },
 ];
 
-function PodiumCard({ rank, name, earnings, height, bgColor, hoverBgColor, badgeColor, badgeContent }: {
+function PodiumCard({ rank, name, earnings, height, bgColor, hoverBgColor, badgeColor, badgeContent, onClick }: {
   rank: number; name: string; earnings: string; height: string;
   bgColor: string; hoverBgColor: string; badgeColor: string;
   badgeContent: React.ReactNode;
+  onClick?: () => void;
 }) {
   return (
-    <button type="button" className={cn("hidden cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] p-4 transition-colors sm:flex", `w-full`)} style={{ height, background: bgColor }} onMouseEnter={(e) => { e.currentTarget.style.background = hoverBgColor; }} onMouseLeave={(e) => { e.currentTarget.style.background = bgColor; }}>
+    <button type="button" onClick={onClick} className={cn("hidden cursor-pointer flex-col items-center justify-between rounded-2xl border border-foreground/[0.06] p-4 transition-colors sm:flex", `w-full`)} style={{ height, background: bgColor }} onMouseEnter={(e) => { e.currentTarget.style.background = hoverBgColor; }} onMouseLeave={(e) => { e.currentTarget.style.background = bgColor; }}>
       <div className="flex items-center justify-center rounded-full px-2" style={{ background: badgeColor, minHeight: 24, gap: 8 }}>
         {badgeContent}
       </div>
@@ -310,11 +325,12 @@ function PodiumCard({ rank, name, earnings, height, bgColor, hoverBgColor, badge
   );
 }
 
-function MobilePodiumRow({ rank, name, earnings, bgColor, badgeColor, badgeContent }: {
+function MobilePodiumRow({ rank, name, earnings, bgColor, badgeColor, badgeContent, onClick }: {
   rank: number; name: string; earnings: string; bgColor: string; badgeColor: string; badgeContent: React.ReactNode;
+  onClick?: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-foreground/[0.06] p-4 sm:hidden" style={{ background: bgColor }}>
+    <button type="button" onClick={onClick} className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border border-foreground/[0.06] p-4 transition-colors hover:brightness-[1.03] sm:hidden" style={{ background: bgColor }}>
       <div className="flex items-center justify-center rounded-full px-2" style={{ background: badgeColor, minHeight: 24, gap: 8 }}>
         {badgeContent}
       </div>
@@ -325,11 +341,64 @@ function MobilePodiumRow({ rank, name, earnings, bgColor, badgeColor, badgeConte
           <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{earnings}</span>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
+function topCreatorToDetails(c: { name: string; earnings?: string; earned?: string; cpm?: string }): CreatorDetailsData {
+  return {
+    name: c.name,
+    joinedDate: "Jan 2025",
+    lastActive: "2d ago",
+    videoCount: 34,
+    platforms: ["youtube", "tiktok"],
+    category: "Gaming",
+    followers: "124K",
+    rating: "Rising",
+    ratingStars: 3,
+    totalEarned: c.earnings ?? c.earned ?? "$0",
+    engagementScore: 78,
+    engagementRate: "6.2%",
+    sentiment: "Positive",
+    approvedVideos: 28,
+    approvalRate: "82%",
+    connectedAccounts: [
+      { platform: "youtube", handle: `@${c.name.toLowerCase().replace(/\s+/g, "")}`, followers: "98K" },
+      { platform: "tiktok", handle: `@${c.name.toLowerCase().replace(/\s+/g, "")}`, followers: "26K" },
+    ],
+    matchScore: 82,
+    scoreBreakdown: { niche: 90, audience: 78, pastPerformance: 74 },
+    campaigns: [
+      { name: "Summer Launch", cpm: c.cpm?.replace(" CPM", "") ?? "$0.84" },
+      { name: "Holiday Push", cpm: "$0.92" },
+    ],
+    performanceData: {
+      datasets: {
+        daily: Array.from({ length: 30 }, (_, i) => ({
+          index: i,
+          label: `Day ${i + 1}`,
+          views: Math.round(800 + Math.random() * 400),
+          engagement: Math.round(60 + Math.random() * 40),
+          likes: Math.round(40 + Math.random() * 30),
+          comments: Math.round(5 + Math.random() * 10),
+          shares: Math.round(2 + Math.random() * 5),
+        })),
+        cumulative: [],
+      },
+      leftDomain: [0, 1400],
+      rightDomain: [0, 100],
+      rightYLabels: ["100", "80", "60", "40", "20", "0"],
+      series: [
+        { axis: "left" as const, color: "#60A5FA", domain: [0, 1400], key: "views", label: "Views", tooltipValueType: "number" as const, yLabels: ["1.4k", "1k", "600", "200", "0"] },
+      ],
+      xTicks: Array.from({ length: 11 }, (_, i) => ({ index: i * 3, label: `Day ${i * 3 + 1}` })),
+      yLabels: ["1.4k", "1k", "600", "200", "0"],
+    },
+  };
+}
+
 function TopCreatorsCard() {
+  const [selectedCreator, setSelectedCreator] = useState<CreatorDetailsData | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showTopGradient, setShowTopGradient] = useState(false);
   const [showBottomGradient, setShowBottomGradient] = useState(true);
@@ -359,16 +428,16 @@ function TopCreatorsCard() {
 
       {/* Desktop podium */}
       <div className="hidden items-end justify-center gap-2 sm:flex">
-        <PodiumCard rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} height="197px" bgColor="rgba(131,159,185,0.04)" hoverBgColor="rgba(131,159,185,0.08)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} />
-        <PodiumCard rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} height="260px" bgColor="rgba(229,113,0,0.04)" hoverBgColor="rgba(229,113,0,0.08)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} />
-        <PodiumCard rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} height="160px" bgColor="rgba(158,82,0,0.04)" hoverBgColor="rgba(158,82,0,0.08)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} />
+        <PodiumCard rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} height="197px" bgColor="rgba(131,159,185,0.04)" hoverBgColor="rgba(131,159,185,0.08)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[1]))} />
+        <PodiumCard rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} height="260px" bgColor="rgba(229,113,0,0.04)" hoverBgColor="rgba(229,113,0,0.08)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[0]))} />
+        <PodiumCard rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} height="160px" bgColor="rgba(158,82,0,0.04)" hoverBgColor="rgba(158,82,0,0.08)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[2]))} />
       </div>
 
       {/* Mobile podium — horizontal rows */}
       <div className="flex flex-col gap-2 sm:hidden">
-        <MobilePodiumRow rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} bgColor="linear-gradient(0deg, rgba(229,113,0,0.08), rgba(229,113,0,0.08)), var(--card-bg)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} />
-        <MobilePodiumRow rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} bgColor="rgba(131,159,185,0.04)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} />
-        <MobilePodiumRow rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} bgColor="rgba(158,82,0,0.04)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} />
+        <MobilePodiumRow rank={1} name={TOP_CREATORS[0].name} earnings={TOP_CREATORS[0].earnings} bgColor="linear-gradient(0deg, rgba(229,113,0,0.08), rgba(229,113,0,0.08)), var(--card-bg)" badgeColor="#E57100" badgeContent={<>{crownIcon}<span className="font-inter text-[16px] font-medium text-white">1</span></>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[0]))} />
+        <MobilePodiumRow rank={2} name={TOP_CREATORS[1].name} earnings={TOP_CREATORS[1].earnings} bgColor="rgba(131,159,185,0.04)" badgeColor="#839FB9" badgeContent={<span className="font-inter text-[16px] font-medium text-white">2</span>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[1]))} />
+        <MobilePodiumRow rank={3} name={TOP_CREATORS[2].name} earnings={TOP_CREATORS[2].earnings} bgColor="rgba(158,82,0,0.04)" badgeColor="#9E5200" badgeContent={<span className="font-inter text-[16px] font-medium text-white">3</span>} onClick={() => setSelectedCreator(topCreatorToDetails(TOP_CREATORS[2]))} />
       </div>
 
       {/* Ranked list with floating Private Tier CTA */}
@@ -382,12 +451,20 @@ function TopCreatorsCard() {
           }}
         />
         <div ref={scrollRef} onScroll={handleScroll} className="scrollbar-hide flex flex-col overflow-y-auto" style={{ maxHeight: 231 }}>
-          {RANKED_CREATORS.map((c) => (
-            <div key={c.rank} className="flex items-center">
-              <div className="flex w-6 shrink-0 items-center justify-center py-3 pl-1 pr-3">
+          {RANKED_CREATORS.map((c, i) => (
+            <button
+              key={c.rank}
+              type="button"
+              onClick={() => setSelectedCreator(topCreatorToDetails(c))}
+              className={cn(
+                "flex w-full cursor-pointer items-center border-b border-foreground/[0.03] py-3 text-left transition-colors hover:bg-foreground/[0.04] dark:border-[rgba(255,255,255,0.04)] dark:hover:bg-[rgba(255,255,255,0.04)]",
+                i === RANKED_CREATORS.length - 1 && "border-b-0",
+              )}
+            >
+              <div className="flex w-6 shrink-0 items-center justify-center pl-1 pr-3">
                 <span className="font-inter text-xs font-medium tracking-[-0.02em] text-page-text-muted">{c.rank}</span>
               </div>
-              <div className="flex min-w-0 flex-1 items-center border-b border-foreground/[0.03] py-3">
+              <div className="flex min-w-0 flex-1 items-center">
                 <div className="flex min-w-0 flex-1 items-center gap-2 pr-3">
                   <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
                   <div className="flex min-w-0 flex-col gap-1.5">
@@ -402,7 +479,7 @@ function TopCreatorsCard() {
                   <span className="font-inter text-xs tracking-[-0.02em] text-page-text">{c.cpm}</span>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
         {/* Bottom scroll gradient */}
@@ -427,6 +504,14 @@ function TopCreatorsCard() {
           </div>
         </div>
       </div>
+
+      {selectedCreator && (
+        <CreatorDetailsPopup
+          open={!!selectedCreator}
+          onClose={() => setSelectedCreator(null)}
+          creator={selectedCreator}
+        />
+      )}
     </div>
   );
 }

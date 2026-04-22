@@ -41,17 +41,22 @@ export function TypeformShell({
 }: TypeformShellProps) {
   const isLast = currentStep === steps.length - 1;
   const progress = ((currentStep + 1) / steps.length) * 100;
+  const shouldFinish = !!onFinish && currentStep === steps.length - 2;
+  const handlePrimary = React.useCallback(() => {
+    if (shouldFinish) onFinish?.();
+    else onNext();
+  }, [shouldFinish, onFinish, onNext]);
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Enter" && canProceed && !loading && !isLast) {
         e.preventDefault();
-        onNext();
+        handlePrimary();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [canProceed, loading, isLast, onFinish, onNext]);
+  }, [canProceed, loading, isLast, handlePrimary]);
 
   if (isLast) {
     return (
@@ -73,7 +78,7 @@ export function TypeformShell({
   }
 
   return (
-    <div className="flex flex-col h-full min-h-[340px]">
+    <div className="flex h-full flex-col">
       <div className="px-6 pt-5">
         <FancyProgress value={progress} />
       </div>
@@ -116,7 +121,7 @@ export function TypeformShell({
         )}
         <button
           type="button"
-          onClick={onNext}
+          onClick={handlePrimary}
           disabled={!canProceed || loading}
           className={cn(
             "flex h-10 min-w-[120px] cursor-pointer items-center justify-center rounded-xl px-5 font-inter text-[14px] font-semibold tracking-[-0.02em] transition-all active:scale-[0.97]",
@@ -131,6 +136,8 @@ export function TypeformShell({
               animate={{ rotate: 360 }}
               transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
             />
+          ) : shouldFinish ? (
+            finishLabel
           ) : (
             "Continue"
           )}

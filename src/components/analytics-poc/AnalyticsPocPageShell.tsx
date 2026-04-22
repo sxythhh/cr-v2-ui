@@ -117,7 +117,7 @@ export function AnalyticsPocPageShell({
       <style>{AP_THEME_STYLES}</style>
       <div
         className={cn(
-          "min-h-screen select-none bg-page-bg",
+          "flex min-h-screen shrink-0 flex-col select-none bg-page-bg",
           className,
         )}
       >

@@ -8,16 +8,16 @@ export default function FormsDemo() {
   const [formKey, setFormKey] = useState(0);
 
   const resetOnboarding = () => {
-    localStorage.removeItem("business-onboarding-typeform-v3");
-    localStorage.removeItem("business-onboarding-typeform-v3_step");
+    localStorage.removeItem("creator-application-typeform-v1");
+    localStorage.removeItem("creator-application-typeform-v1_step");
     setFormKey((k) => k + 1);
-    toast.success("Onboarding progress reset");
+    toast.success("Application progress reset");
   };
 
   const copyEmbedCode = async () => {
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://your-domain.com";
-    const code = `<iframe src="${origin}/forms-demo/embed" width="100%" height="620" style="border:0;background:transparent;" allow="clipboard-write"></iframe>`;
+    const code = `<iframe src="${origin}/forms-demo/embed" width="100%" height="500" style="border:0;background:transparent;" allow="clipboard-write"></iframe>`;
     try {
       await navigator.clipboard.writeText(code);
       toast.success("Embed code copied");

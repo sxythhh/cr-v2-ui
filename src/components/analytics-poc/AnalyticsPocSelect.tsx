@@ -29,12 +29,13 @@ export function AnalyticsPocSelect({
   const selectedOption = options.find((o) => o.value === value);
   const displayLabel = selectedOption?.label ?? placeholder;
 
-  // Wrap options as a single-key filter for FilterSelect
+  // Wrap options as a single-key filter for FilterSelect.
+  // `label` drives the search input placeholder ("Search...") when drilled in.
   const filters: Filter[] = [
     {
       key: "__select",
       icon: null,
-      label: placeholder.replace("…", ""),
+      label: "Search",
       singleSelect: true,
       options: options.map((opt) => ({
         value: opt.value,

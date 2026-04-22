@@ -240,7 +240,13 @@ export default function OnboardingV2Page() {
 
     switch (currentStep.id) {
       case "welcome":
-        return <WelcomeStep variant={userType === "creator" ? "creator" : "brand"} />;
+        return (
+          <WelcomeStep
+            variant={userType === "creator" ? "creator" : "brand"}
+            onContinue={handleNext}
+            onSkip={() => router.push("/")}
+          />
+        );
       case "role-select":
         return <RoleSelectStep value={role} onChange={handleRoleSelect} />;
       case "agency-confirm":
@@ -315,6 +321,15 @@ export default function OnboardingV2Page() {
             </button>
           </div>
         </motion.div>
+      </div>
+    );
+  }
+
+  /* ── Welcome step renders its own full-bleed layout ── */
+  if (currentStep?.id === "welcome") {
+    return (
+      <div className="min-h-dvh w-full" onKeyDown={handleKeyDown}>
+        {renderStep()}
       </div>
     );
   }

@@ -204,18 +204,23 @@ export function AnalyticsPocView() {
   const campaignOptions = [
     {
       icon: (
-        <Image
-          alt="Campaign avatar"
-          className="size-4 rounded-full object-cover"
-          height={16}
+        <img
+          alt="Campaign thumbnail"
+          className="size-5 rounded-md object-cover"
           src="/logos/brand8.jpg"
-          width={16}
         />
       ),
       label: data.filters.campaignLabel,
       value: "fall-off",
     },
     {
+      icon: (
+        <img
+          alt="Campaign thumbnail"
+          className="size-5 rounded-md object-cover"
+          src="/logos/brand1.png"
+        />
+      ),
       label: "Creator Sprint Q1",
       value: "creator-sprint-q1",
     },

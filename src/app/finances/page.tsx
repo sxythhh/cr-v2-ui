@@ -8,7 +8,9 @@ import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
 import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/AnalyticsPocChartPlaceholder";
+import { AnalyticsPocChartTooltip } from "@/components/analytics-poc/AnalyticsPocChartTooltip";
 import { AnalyticsPocSelect } from "@/components/analytics-poc/AnalyticsPocSelect";
+import { PayoutTransactionModal, type PayoutTransactionData } from "@/components/finances/payout-transaction-modal";
 import type { AnalyticsPocPerformanceLineChartData } from "@/components/analytics-poc/types";
 import {
   DropdownMenu,
@@ -715,7 +717,7 @@ const REVENUE_CHART_DATA: AnalyticsPocPerformanceLineChartData = {
     ],
   },
   series: [
-    { key: "views", label: "Revenue", color: "#ED1285", axis: "left", tooltipValueType: "currency" },
+    { key: "views", label: "Revenue", color: "#FB923C", axis: "left", tooltipValueType: "currency" },
   ],
   xTicks: [
     { label: "Jan 5", index: 0 }, { label: "Jan 8", index: 1 }, { label: "Jan 11", index: 2 },
@@ -914,6 +916,54 @@ function FinanceOverview() {
   const [chartToggle, setChartToggle] = useState<"GMV" | "Total revenue">("GMV");
   const [activityTab, setActivityTab] = useState<"Withdrawals" | "Deposits" | "Deductions">("Withdrawals");
   const [timeframe, setTimeframe] = useState<typeof TIMEFRAME_OPTIONS[number]>("Last month");
+  const [isDark, setIsDark] = useState(false);
+  const [hoveredMonthBar, setHoveredMonthBar] = useState<number | null>(null);
+  const monthBarsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
+    checkDark();
+    const obs = new MutationObserver(checkDark);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  const barBase = isDark ? "#1C1C1C" : "#FFFFFF";
+  const pinkTint = isDark ? "rgba(244,114,182,0.3)" : "rgba(237,18,133,0.3)";
+  const greenTint = isDark ? "rgba(52,211,153,0.3)" : "rgba(0,153,77,0.3)";
+  const [payoutModalOpen, setPayoutModalOpen] = useState(false);
+  const samplePayout: PayoutTransactionData = {
+    amount: "-$3,240.00",
+    status: "Pending",
+    statusColor: "#E57100",
+    type: "Payout",
+    refNumber: "TXN-RB-041625-1184",
+    client: { name: "Rare Beauty", avatar: "/logos/brand1.png", badge: "gold" },
+    campaign: { name: "Soft Pinch Creator Program", avatar: "/logos/brand8.jpg" },
+    creatorAvatars: [
+      "https://i.pravatar.cc/36?u=c1",
+      "https://i.pravatar.cc/36?u=c2",
+      "https://i.pravatar.cc/36?u=c3",
+      "https://i.pravatar.cc/36?u=c4",
+      "https://i.pravatar.cc/36?u=c5",
+      "https://i.pravatar.cc/36?u=c6",
+    ],
+    creatorCount: 6,
+    description: "Batch payout for approved creator submissions from the April review cycle.",
+    balanceBefore: "$18,540.00",
+    transaction: "-$3,240.00",
+    balanceAfter: "$15,300.00",
+    creators: 6,
+    approvedSubmissions: 18,
+    breakdown: [
+      { label: "TikTok payouts", amount: "-$1,800.00" },
+      { label: "Instagram payouts", amount: "-$1,200.00" },
+      { label: "Platform fee (7%)", amount: "-$240.00" },
+    ],
+    total: "-$3,240.00",
+    batchId: "BATCH-APR-16-RB-07",
+    initiatedBy: "Finance Ops",
+    scheduledDate: "Apr 16, 2026",
+    expectedCompletion: "Apr 18, 2026",
+  };
   const activityRef = useRef<HTMLDivElement>(null);
   const activityHover = useProximityHover(activityRef);
   const activityRect = activityHover.activeIndex !== null ? activityHover.itemRects[activityHover.activeIndex] : null;
@@ -1173,9 +1223,9 @@ function FinanceOverview() {
       </div>
 
       {/* Two-column: Revenue bar chart + Revenue by campaign */}
-      <div className="flex flex-col items-stretch gap-2 lg:flex-row">
+      <div className="flex min-w-0 flex-col items-stretch gap-2 xl:flex-row">
         {/* Revenue/Profit bar chart */}
-        <div className={cn(cardBase, "flex-1 gap-4 p-4")}>
+        <div className={cn(cardBase, "min-w-0 flex-1 gap-4 p-4")}>
           <div className="flex flex-col gap-2">
             <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Avg revenue/profit by month</span>
             <div className="flex items-center gap-2">
@@ -1191,36 +1241,62 @@ function FinanceOverview() {
               </div>
             </div>
           </div>
-          {/* Bar chart */}
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-            {/* Y-axis */}
-            <div className="flex h-[212px] shrink-0 flex-col justify-between">
-              {["100k","75k","50k","25k","10k","0"].map((l) => (
-                <span key={l} className={cn("font-inter text-[10px] leading-[120%] text-right", muted)}>{l}</span>
-              ))}
-            </div>
-            {/* Bars */}
-            <div className="group/bars flex flex-1 items-end justify-between gap-2 sm:gap-6">
-              {BAR_MONTHS.map((m, i) => (
-                <div key={m} className="group/bar relative flex flex-col items-center gap-2 transition-opacity duration-150 group-hover/bars:opacity-40 hover:!opacity-100">
-                  {/* Tooltip */}
-                  <div className="pointer-events-none absolute -top-[68px] left-1/2 z-20 hidden -translate-x-1/2 flex-col gap-1 rounded-xl border border-foreground/[0.06] bg-white px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)] group-hover/bar:flex dark:border-[rgba(224,224,224,0.06)] dark:bg-[#232323]">
-                    <span className="whitespace-nowrap text-center font-inter text-[10px] font-medium tracking-[-0.02em] text-page-text-muted">{m}</span>
-                    <div className="flex items-center gap-1.5">
-                      <div className="size-1.5 rounded-full bg-[#ED1285]" />
-                      <span className="whitespace-nowrap font-inter text-[11px] font-medium tracking-[-0.02em] text-[#ED1285]">{BAR_REVENUE[i]}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="size-1.5 rounded-full bg-[#00994D]" />
-                      <span className="whitespace-nowrap font-inter text-[11px] font-medium tracking-[-0.02em] text-[#00994D]">{BAR_PROFIT[i]}</span>
-                    </div>
-                  </div>
-                  <div className="relative w-7 cursor-pointer transition-opacity group-hover/bar:opacity-100" style={{ height: BAR_HEIGHTS[i] }}>
-                    <div className="absolute inset-x-0 top-0" style={{ height: BAR_HEIGHTS[i], background: "linear-gradient(0deg, rgba(237,18,133,0.3), rgba(237,18,133,0.3)), #FFFFFF", borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: "#FFFFFF", borderRadius: 8 }} />
-                    <div className="absolute inset-x-0 bottom-0" style={{ height: PROFIT_HEIGHTS[i], background: "linear-gradient(0deg, rgba(0,153,77,0.3), rgba(0,153,77,0.3)), #FFFFFF", borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: "#FFFFFF", borderRadius: 8 }} />
-                  </div>
+          {/* Bar chart — outer has `relative` so the card-level tooltip (positioned off the hovered column) can escape the inner overflow viewport */}
+          <div className="relative">
+            {/* Tooltip — card-level, absolute over the hovered column, pt-20 reserved below for it */}
+            {hoveredMonthBar !== null && (() => {
+              const bars = monthBarsRef.current?.children;
+              if (!bars || !bars[hoveredMonthBar]) return null;
+              const bar = bars[hoveredMonthBar] as HTMLElement;
+              const parent = monthBarsRef.current!;
+              const parentRect = parent.getBoundingClientRect();
+              const barRect = bar.getBoundingClientRect();
+              const leftPct = ((barRect.left + barRect.width / 2 - parentRect.left) / parentRect.width) * 100;
+              const idx = hoveredMonthBar;
+              return (
+                <div
+                  className="pointer-events-none absolute left-0 top-0 z-50 flex justify-center"
+                  style={{ left: `calc(${leftPct}% + 52px)`, transform: "translateX(-50%)" }}
+                >
+                  <AnalyticsPocChartTooltip
+                    label={BAR_MONTHS[idx]}
+                    rows={[
+                      { key: "revenue", label: "Revenue", color: "#ED1285", value: BAR_REVENUE[idx] },
+                      { key: "profit", label: "Net profit", color: "#00994D", value: BAR_PROFIT[idx] },
+                    ]}
+                  />
                 </div>
-              ))}
+              );
+            })()}
+
+            <div
+              className="flex gap-4 overflow-x-auto scrollbar-hide pt-20"
+              onMouseLeave={() => setHoveredMonthBar(null)}
+            >
+              {/* Y-axis */}
+              <div className="flex h-[212px] shrink-0 flex-col justify-between">
+                {["100k","75k","50k","25k","10k","0"].map((l) => (
+                  <span key={l} className={cn("font-inter text-[10px] leading-[120%] text-right", muted)}>{l}</span>
+                ))}
+              </div>
+              {/* Bars — full-height columns so hover registers across the whole column, not only the bar */}
+              <div ref={monthBarsRef} className="group/bars flex h-[212px] flex-1 justify-between gap-2 sm:gap-6">
+                {BAR_MONTHS.map((m, i) => (
+                  <div
+                    key={m}
+                    onMouseEnter={() => setHoveredMonthBar(i)}
+                    className={cn(
+                      "group/bar relative flex h-full cursor-pointer flex-col items-center justify-end transition-opacity duration-150",
+                      hoveredMonthBar !== null && hoveredMonthBar !== i && "opacity-40",
+                    )}
+                  >
+                    <div className="relative w-7" style={{ height: BAR_HEIGHTS[i] }}>
+                      <div className="absolute inset-x-0 top-0" style={{ height: BAR_HEIGHTS[i], background: `linear-gradient(0deg, ${pinkTint}, ${pinkTint}), ${barBase}`, borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: barBase, borderRadius: 8 }} />
+                      <div className="absolute inset-x-0 bottom-0" style={{ height: PROFIT_HEIGHTS[i], background: `linear-gradient(0deg, ${greenTint}, ${greenTint}), ${barBase}`, borderWidth: "1px 1px 0 1px", borderStyle: "solid", borderColor: barBase, borderRadius: 8 }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           {/* X-axis labels */}
@@ -1232,20 +1308,20 @@ function FinanceOverview() {
         </div>
 
         {/* Revenue by campaign */}
-        <div className={cn(cardBase, "relative flex w-full shrink-0 flex-col gap-4 p-4 lg:w-[400px]")}>
-          <div className="flex items-center justify-between">
-            <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Revenue by campaign</span>
-            <div className="flex items-center gap-1">
+        <div className={cn(cardBase, "relative flex w-full min-w-0 flex-col gap-4 overflow-hidden p-4 xl:w-[360px] xl:shrink-0")}>
+          <div className="flex items-center justify-between gap-2">
+            <span className={cn("min-w-0 truncate font-inter text-[12px] leading-none tracking-[-0.02em]", muted)}>Revenue by campaign</span>
+            <div className="flex shrink-0 items-center gap-1">
               <span className={cn("font-inter text-[12px] tracking-[-0.02em]", muted)}>$836.50 fees</span>
               <svg width="12" height="12" viewBox="0 0 12 12" className="text-page-text-muted opacity-60"><circle cx="6" cy="6" r="5" fill="currentColor" fillRule="evenodd" clipRule="evenodd"/><path d="M6 5.5V8.5M6 3.5h.005" stroke="var(--card-bg, white)" strokeWidth="1" strokeLinecap="round"/></svg>
             </div>
           </div>
-          <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
+          <div className="scrollbar-hide flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-y-auto">
             {CAMPAIGN_REVENUE.map((c, i) => (
-              <div key={i} className={cn(cardBase, "gap-2 p-3")}>
-                <div className="flex items-start justify-between">
-                  <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
-                  <div className="flex items-baseline gap-2">
+              <div key={i} className={cn(cardBase, "min-w-0 gap-2 p-3")}>
+                <div className="flex items-start justify-between gap-2">
+                  <span className="min-w-0 truncate font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{c.name}</span>
+                  <div className="flex shrink-0 items-baseline gap-2">
                     <span className="font-inter text-[12px] font-medium tracking-[-0.02em] text-page-text">{c.amount}</span>
                     <span className={cn("font-inter text-[10px] font-medium tracking-[-0.02em]", muted)}>{c.pct}</span>
                   </div>
@@ -1253,7 +1329,7 @@ function FinanceOverview() {
                 <div className="h-1 w-full rounded-full bg-foreground/[0.06]">
                   <div className="h-full rounded-full bg-foreground" style={{ width: c.barWidth }} />
                 </div>
-                <span className="font-inter text-[12px] tracking-[-0.02em]" style={{ color: c.typeColor }}>{c.type}</span>
+                <span className="truncate font-inter text-[12px] tracking-[-0.02em]" style={{ color: c.typeColor }}>{c.type}</span>
               </div>
             ))}
           </div>
@@ -1275,7 +1351,7 @@ function FinanceOverview() {
               <span className={cn("font-inter text-[12px] font-medium tracking-[-0.02em]", muted)}>Client</span>
             </div>
             {RECENT_TX.map((tx, i) => (
-              <div key={i} className={cn("flex flex-col gap-4 px-4 py-3", i < RECENT_TX.length - 1 && "border-b border-foreground/[0.03]")}>
+              <div key={i} onClick={() => setPayoutModalOpen(true)} className={cn("flex cursor-pointer flex-col gap-4 px-4 py-3", i < RECENT_TX.length - 1 && "border-b border-foreground/[0.03]")}>
                 <div className="flex items-center justify-between">
                   <span className="font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{tx.desc}</span>
                   <span className="inline-flex items-center gap-1 rounded-full py-2 pl-1.5 pr-2" style={{ background: tx.statusBg }}>
@@ -1305,7 +1381,7 @@ function FinanceOverview() {
                 <motion.div className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.04]" initial={false} animate={{ top: txRect.top, height: txRect.height, opacity: 1 }} transition={springs.moderate} />
               )}
               {RECENT_TX.map((tx, i) => (
-                <div key={i} data-proximity-item className="relative z-10 flex items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
+                <div key={i} data-proximity-item onClick={() => setPayoutModalOpen(true)} className="relative z-10 flex cursor-pointer items-center border-b border-foreground/[0.03] px-1 last:border-b-0">
                   <div className="flex w-20 items-center px-3 py-3.5">
                     <span className={cn("font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em]", muted)}>{tx.date}</span>
                   </div>
@@ -1381,6 +1457,8 @@ function FinanceOverview() {
           ))}
         </div>
       </div>
+
+      <PayoutTransactionModal open={payoutModalOpen} onClose={() => setPayoutModalOpen(false)} data={samplePayout} />
     </div>
   );
 }

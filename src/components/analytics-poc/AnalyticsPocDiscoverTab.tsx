@@ -325,7 +325,7 @@ export function AnalyticsPocDiscoverTab() {
       {/* AI Insights Bar */}
       <div className="flex items-center gap-2">
         {/* Main insights card — hidden on mobile */}
-        <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2} className="hidden flex-1 md:block">
+        <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2 / 0.65} className="hidden flex-1 md:block">
         <div
           className={cn(
             ANALYTICS_POC_CARD_CONTAINER_CLASS,

@@ -222,8 +222,8 @@ export default function CreatorsTab() {
         </div>
       </div>
 
-      {/* ── Creator Cards Grid ───────────────────────────────────── */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {/* ── Creator Cards Grid (mobile / tablet) ────────────────── */}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:hidden">
         {filtered.map((creator) => (
           <CreatorCardItem
             key={creator.id}
@@ -233,6 +233,11 @@ export default function CreatorsTab() {
             onToggle={() => toggleSelect(creator.id)}
           />
         ))}
+      </div>
+
+      {/* ── Desktop table ──────────────────────────────────────── */}
+      <div className="hidden md:block">
+        <CreatorsTable creators={filtered} />
       </div>
 
       {/* ── Floating bulk action bar ───────────────────────────── */}
@@ -446,3 +451,129 @@ function CreatorCardItem({
     </div>
   );
 }
+
+// ── Desktop Table ─────────────────────────────────────────────────
+
+type RowStatusColor = "green" | "red" | "muted";
+
+interface TableRowData {
+  id: string;
+  name: string;
+  contractSince: string;
+  trustScore: number;
+  authRate: string;
+  submissions: string;
+  submissionsColor: RowStatusColor;
+  approved: string;
+  approvedColor: RowStatusColor;
+  statusLabel: string;
+  statusColor: RowStatusColor;
+  hasReview: boolean;
+}
+
+const TABLE_ROWS: TableRowData[] = [
+  { id: "1", name: "xKaizen",       contractSince: "Jan 12, 2026", trustScore: 92, authRate: "95%", submissions: "4/4", submissionsColor: "green", approved: "4/4", approvedColor: "green", statusLabel: "Completed",        statusColor: "green", hasReview: false },
+  { id: "2", name: "Cryptoclipz",   contractSince: "Jan 12, 2026", trustScore: 88, authRate: "91%", submissions: "4/4", submissionsColor: "green", approved: "3/4", approvedColor: "muted", statusLabel: "Ending soon",      statusColor: "red",   hasReview: true },
+  { id: "3", name: "ViralVince",    contractSince: "Jan 12, 2026", trustScore: 90, authRate: "88%", submissions: "3/4", submissionsColor: "muted", approved: "2/4", approvedColor: "muted", statusLabel: "Change requested", statusColor: "muted", hasReview: true },
+  { id: "4", name: "TechnoTrade",   contractSince: "Jan 12, 2026", trustScore: 85, authRate: "76%", submissions: "4/4", submissionsColor: "green", approved: "4/4", approvedColor: "green", statusLabel: "Completed",        statusColor: "green", hasReview: false },
+  { id: "5", name: "GamingGrace",   contractSince: "Jan 12, 2026", trustScore: 90, authRate: "56%", submissions: "2/4", submissionsColor: "muted", approved: "1/4", approvedColor: "muted", statusLabel: "Ending soon",      statusColor: "red",   hasReview: true },
+  { id: "6", name: "BetBoss",       contractSince: "Jan 12, 2026", trustScore: 87, authRate: "92%", submissions: "3/4", submissionsColor: "muted", approved: "2/4", approvedColor: "muted", statusLabel: "Change requested", statusColor: "muted", hasReview: true },
+];
+
+function colorClass(c: RowStatusColor): string {
+  if (c === "green") return "text-[#00994D] dark:text-[#34D399]";
+  if (c === "red") return "text-[#FF3355] dark:text-[#FB7185]";
+  return "text-page-text";
+}
+
+function TrustRing({ color }: { color: "green" | "red" | "muted" }) {
+  const stroke = color === "green" ? "#00994D" : color === "red" ? "#FF3355" : "rgba(37,37,37,0.5)";
+  const dim = color === "green" ? "rgba(0,153,77,0.2)" : color === "red" ? "rgba(255,51,85,0.2)" : "rgba(37,37,37,0.2)";
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
+      <circle cx="6" cy="6" r="4.67" stroke={dim} strokeWidth="1.33" />
+      <path d="M6 1.33a4.67 4.67 0 014.67 4.67" stroke={stroke} strokeWidth="1.33" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CreatorsTable({ creators: _creators }: { creators: CreatorCard[] }) {
+  return (
+    <div className="overflow-hidden rounded-[20px] border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+      {/* Header */}
+      <div className="flex items-center border-b border-[rgba(37,37,37,0.06)] px-1 dark:border-[rgba(224,224,224,0.06)]">
+        <div className="flex w-12 items-center justify-end px-3 py-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">#</span>
+        </div>
+        <div className="flex flex-1 items-center py-3 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Creator</span>
+        </div>
+        <div className="flex w-24 items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Trust score</span>
+        </div>
+        <div className="flex w-[88px] items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Auth.</span>
+        </div>
+        <div className="flex w-[104px] items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Submissions</span>
+        </div>
+        <div className="flex w-[88px] items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Approved</span>
+        </div>
+        <div className="flex w-[136px] items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Status</span>
+        </div>
+        <div className="flex w-[136px] items-center justify-end py-3 pl-5 pr-3">
+          <span className="font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">Actions</span>
+        </div>
+      </div>
+
+      {/* Body */}
+      {TABLE_ROWS.map((r, idx) => (
+        <div
+          key={r.id}
+          className="flex items-center border-b border-[rgba(37,37,37,0.03)] px-1 last:border-b-0 dark:border-[rgba(255,255,255,0.03)]"
+        >
+          <div className="flex w-12 items-center justify-end px-3 py-3.5">
+            <span className="font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] text-page-text-muted">{idx + 1}</span>
+          </div>
+          <div className="flex flex-1 items-center gap-2 py-3.5 pr-3">
+            <div className="size-6 shrink-0 rounded-full bg-foreground/[0.08]" />
+            <div className="flex items-center gap-1.5">
+              <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{r.name}</span>
+              <span className="font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] text-[rgba(37,37,37,0.2)] dark:text-[rgba(255,255,255,0.2)]">·</span>
+              <span className="font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-page-text-muted">contract since {r.contractSince}</span>
+            </div>
+          </div>
+          <div className="flex w-24 items-center justify-end gap-1.5 py-3.5 pl-5 pr-3">
+            <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", colorClass(r.trustScore >= 90 ? "green" : "muted"))}>{r.trustScore}</span>
+            <TrustRing color={r.trustScore >= 90 ? "green" : "muted"} />
+          </div>
+          <div className="flex w-[88px] items-center justify-end py-3.5 pl-5 pr-3">
+            <span className="font-inter text-[12px] leading-none tracking-[-0.02em] text-page-text">{r.authRate}</span>
+          </div>
+          <div className="flex w-[104px] items-center justify-end py-3.5 pl-5 pr-3">
+            <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", colorClass(r.submissionsColor))}>{r.submissions}</span>
+          </div>
+          <div className="flex w-[88px] items-center justify-end py-3.5 pl-5 pr-3">
+            <span className={cn("font-inter text-[12px] leading-none tracking-[-0.02em]", colorClass(r.approvedColor))}>{r.approved}</span>
+          </div>
+          <div className="flex w-[136px] items-center justify-end py-3.5 pl-5 pr-3">
+            <span className={cn("font-inter text-[12px] font-medium leading-none tracking-[-0.02em]", colorClass(r.statusColor))}>{r.statusLabel}</span>
+          </div>
+          <div className="flex w-[136px] items-center justify-end gap-2 py-3.5 pl-5 pr-3">
+            {r.hasReview && (
+              <button type="button" className="flex h-8 cursor-pointer items-center rounded-full bg-[rgba(37,37,37,0.06)] px-3 font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.10)]">
+                Review
+              </button>
+            )}
+            <button type="button" aria-label="Row menu" className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[rgba(37,37,37,0.06)] text-page-text transition-colors hover:bg-[rgba(37,37,37,0.10)] dark:bg-[rgba(255,255,255,0.06)] dark:hover:bg-[rgba(255,255,255,0.10)]">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="2" cy="6" r="1" fill="currentColor"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="10" cy="6" r="1" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+

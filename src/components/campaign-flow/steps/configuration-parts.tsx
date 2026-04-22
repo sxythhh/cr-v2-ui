@@ -137,7 +137,7 @@ export function ProjectedViewsBar({ rate, budget }: { rate: string; budget: stri
 
   return (
     <div className="mt-4">
-      <BorderBeam colorVariant="sunset" theme="auto" size="sm" borderRadius={14} strength={1} duration={2}>
+      <BorderBeam colorVariant="sunset" theme="auto" size="sm" borderRadius={14} strength={1} duration={2 / 0.65}>
         <div className="flex h-10 items-center justify-between gap-1.5 rounded-[14px] bg-white px-3 dark:bg-card-bg">
           <span className="font-inter text-sm tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">Projected views</span>
           <span className="font-inter text-sm font-medium tracking-[-0.02em] text-[#252525] dark:text-page-text">{display}</span>

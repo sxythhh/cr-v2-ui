@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -8,10 +9,16 @@ import { cn } from "@/lib/utils";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 
+export interface FormDropdownOption {
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+}
+
 interface FormDropdownProps {
   value?: string;
   onChange?: (value: string) => void;
-  options: { label: string; value: string }[];
+  options: FormDropdownOption[];
   placeholder?: string;
   className?: string;
 }
@@ -21,7 +28,7 @@ function DropdownList({
   value,
   onSelect,
 }: {
-  options: { label: string; value: string }[];
+  options: FormDropdownOption[];
   value?: string;
   onSelect: (value: string) => void;
 }) {
@@ -61,6 +68,7 @@ function DropdownList({
           key={opt.value}
           index={i}
           label={opt.label}
+          icon={opt.icon}
           checked={opt.value === value}
           onSelect={() => onSelect(opt.value)}
           registerItem={registerItem}
@@ -73,12 +81,14 @@ function DropdownList({
 function DropdownOption({
   index,
   label,
+  icon,
   checked,
   onSelect,
   registerItem,
 }: {
   index: number;
   label: string;
+  icon?: React.ReactNode;
   checked: boolean;
   onSelect: () => void;
   registerItem: (index: number, el: HTMLElement | null) => void;
@@ -97,10 +107,15 @@ function DropdownOption({
       onClick={onSelect}
       className="relative z-10 flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 font-inter text-[15px] tracking-[-0.05em]"
     >
-      <span className={cn("text-[#252525] dark:text-page-text", checked && "font-semibold")}>
-        {label}
+      <span className={cn("flex min-w-0 items-center gap-2 text-[#252525] dark:text-page-text", checked && "font-semibold")}>
+        {icon && (
+          <span className="flex size-4 shrink-0 items-center justify-center text-[#252525] dark:text-page-text">
+            {icon}
+          </span>
+        )}
+        <span className="truncate">{label}</span>
       </span>
-      {checked && <Check className="size-3.5 text-[#252525] dark:text-page-text" />}
+      {checked && <Check className="size-3.5 shrink-0 text-[#252525] dark:text-page-text" />}
     </div>
   );
 }
@@ -170,7 +185,14 @@ export function FormDropdown({
           open && "border-[#f97316] shadow-[0_0_0_1px_#f97316] dark:shadow-[0_0_0_1px_#f97316]",
         )}
       >
-        <span className="truncate">{selectedOption?.label ?? placeholder}</span>
+        <span className="flex min-w-0 items-center gap-2">
+          {selectedOption?.icon && (
+            <span className="flex size-4 shrink-0 items-center justify-center">
+              {selectedOption.icon}
+            </span>
+          )}
+          <span className="truncate">{selectedOption?.label ?? placeholder}</span>
+        </span>
         <ChevronDown
           className={cn(
             "size-4 shrink-0 text-[#878787] transition-transform",

@@ -15,6 +15,7 @@ import {
 import { AnalyticsPocChartPlaceholder } from "./AnalyticsPocChartPlaceholder";
 import { AnalyticsPocChartToggleChip } from "./AnalyticsPocChartToggleChip";
 import { AnalyticsPocDateRangePicker } from "./AnalyticsPocDateRangePicker";
+import { AnalyticsPocHealthCard } from "./AnalyticsPocHealthCard";
 import { AnalyticsPocSelect } from "./AnalyticsPocSelect";
 import { AnalyticsPocPlatformSelect, type PlatformOption } from "./AnalyticsPocPlatformSelect";
 import {
@@ -180,12 +181,20 @@ function FilterToolbar({ dateRange, setDateRange, platforms, onTogglePlatform, s
   selectedCampaign: string; setSelectedCampaign: (v: string) => void;
 }) {
   const campaignOptions = [
-    { value: "fall-off", label: "The Fall-Off x Superbowl" },
-    { value: "creator-sprint-q1", label: "Creator Sprint Q1" },
+    {
+      value: "fall-off",
+      label: "The Fall-Off x Superbowl",
+      icon: <img alt="Campaign thumbnail" className="size-5 rounded-md object-cover" src="/logos/brand8.jpg" />,
+    },
+    {
+      value: "creator-sprint-q1",
+      label: "Creator Sprint Q1",
+      icon: <img alt="Campaign thumbnail" className="size-5 rounded-md object-cover" src="/logos/brand1.png" />,
+    },
   ];
 
   return (
-    <div className="hidden flex-wrap items-center gap-2 sm:flex">
+    <div className="sticky top-[72px] z-20 hidden flex-wrap items-center gap-2 sm:flex [&_button]:!bg-[#ECECEC] [&_button]:hover:!bg-[#E4E4E4] dark:[&_button]:!bg-[#1B1B1B] dark:[&_button]:hover:!bg-[#222222]">
       <AnalyticsPocDateRangePicker value={dateRange} onValueChange={setDateRange} />
       <AnalyticsPocPlatformSelect platforms={platforms} onToggle={onTogglePlatform} />
       <AnalyticsPocSelect value={selectedCampaign} onValueChange={setSelectedCampaign} options={campaignOptions} />
@@ -221,95 +230,12 @@ function StatCard({ value, change, label, sublabel, changeColor = "#34D399", val
   );
 }
 
-/* ── Health Ring Gauge ────────────────────────────────────────────── */
-
-function HealthRing({ score, label, color }: { score: number; label: string; color: string }) {
-  const radius = 70;
-  const strokeWidth = 4;
-  const circumference = 2 * Math.PI * radius;
-  const progress = (score / 100) * circumference;
-
-  return (
-    <div className="relative flex size-[148px] items-center justify-center">
-      <svg width="148" height="148" viewBox="0 0 148 148" className="absolute">
-        <circle cx="74" cy="74" r={radius} fill="none" stroke={`${color}33`} strokeWidth={strokeWidth} />
-        <circle
-          cx="74" cy="74" r={radius} fill="none"
-          stroke={color} strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference - progress}
-          strokeLinecap="round"
-          transform="rotate(-90 74 74)"
-        />
-      </svg>
-      <div className="flex flex-col items-center">
-        <span className="font-inter text-5xl font-medium tracking-[-0.02em] text-page-text">{score}</span>
-        <span className="font-inter text-xs font-medium tracking-[-0.02em]" style={{ color }}>{label}</span>
-      </div>
-    </div>
-  );
-}
-
-/* ── Health Breakdown Row ─────────────────────────────────────────── */
-
-function HealthBreakdownRow({ name, weight, score, scoreColor }: {
-  name: string;
-  weight: string;
-  score: number;
-  scoreColor: string;
-}) {
-  return (
-    <div className="flex items-center gap-4">
-      <div className="flex flex-1 items-center gap-2">
-        <span className="font-inter text-sm tracking-[-0.02em] text-page-text">{name}</span>
-        <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">{weight}</span>
-        <span className="font-inter text-sm tracking-[-0.02em] text-page-text-muted">·</span>
-        <span className="font-inter text-sm tracking-[-0.02em]" style={{ color: scoreColor }}>{score}</span>
-      </div>
-    </div>
-  );
-}
-
-/* ── Health Score Card ────────────────────────────────────────────── */
-
-function HealthCard() {
-  const healthItems = [
-    { name: "Fill rate", weight: "20%", score: 68, color: "#FB923C" },
-    { name: "Engagement", weight: "25%", score: 82, color: "#34D399" },
-    { name: "Approval rate", weight: "20%", score: 80, color: "#34D399" },
-    { name: "CPM efficiency", weight: "20%", score: 84, color: "#34D399" },
-    { name: "Creator quality", weight: "15%", score: 71, color: "#FB923C" },
-  ];
-
-  return (
-    <div className={cn(CARD, "flex flex-col gap-4 p-4")}>
-      <div className="flex items-center gap-1.5">
-        <svg width="14" height="13" viewBox="0 0 14 13" fill="none" className="text-page-text-muted">
-          <path fillRule="evenodd" clipRule="evenodd" d="M13.0152 2.56385C14.0611 5.1781 12.7284 9.0031 6.91521 12.2693C6.76311 12.3548 6.57747 12.3548 6.42537 12.2693C0.612192 9.00312 -0.720565 5.17811 0.325298 2.56387C0.836732 1.28548 1.90854 0.372816 3.16845 0.0912035C4.31407 -0.164862 5.577 0.10875 6.67026 1.03304C7.7635 0.10875 9.02643 -0.164863 10.1721 0.0912005C11.432 0.372811 12.5038 1.28547 13.0152 2.56385ZM6.11648 3.77639C6.03336 3.61015 5.86489 3.50374 5.67907 3.5001C5.49324 3.49645 5.32073 3.59619 5.23116 3.75904L4.27364 5.5H3.16927C2.89313 5.5 2.66927 5.72386 2.66927 6C2.66927 6.27614 2.89313 6.5 3.16927 6.5H4.56927C4.75162 6.5 4.9195 6.40073 5.00738 6.24096L5.64818 5.07586L7.22206 8.22361C7.30518 8.38985 7.47365 8.49626 7.65947 8.4999C7.8453 8.50355 8.01781 8.40381 8.10738 8.24096L9.06491 6.5H10.1693C10.4454 6.5 10.6693 6.27614 10.6693 6C10.6693 5.72386 10.4454 5.5 10.1693 5.5H8.76927C8.58693 5.5 8.41904 5.59927 8.33116 5.75904L7.69036 6.92414L6.11648 3.77639Z" fill="currentColor" fillOpacity="0.7"/>
-        </svg>
-        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">Health</span>
-      </div>
-      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
-        <HealthRing score={76} label="Healthy" color="#34D399" />
-        <div className="flex w-full flex-1 flex-col gap-2">
-          {healthItems.map((item) => (
-            <div key={item.name}>
-              <HealthBreakdownRow name={item.name} weight={item.weight} score={item.score} scoreColor={item.color} />
-              <div className="mt-2 h-px bg-border" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Financials Card ──────────────────────────────────────────────── */
 
 function FinancialsCard() {
   const legendItems = [
     { label: "Paid out", color: "#34D399", value: "$3,241.50" },
-    { label: "Pending", color: "#FB923C", value: "$832" },
+    { label: "Pending", color: "#EAB308", value: "$832" },
     { label: "Clawed back", color: "#FF3355", value: "$145" },
     { label: "Net spend", color: "var(--page-text-muted)", value: "$3,928.50" },
   ];
@@ -331,20 +257,21 @@ function FinancialsCard() {
 
       {/* Budget amount */}
       <div className="flex w-full flex-col gap-1">
-        <div className="flex items-center justify-between">
-          <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">$4,218.50</span>
-          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">of $8,000</span>
+        <div className="flex items-baseline justify-between gap-2">
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-inter text-sm font-medium tracking-[-0.02em] text-page-text">$4,218.50</span>
+            <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">of $8,000</span>
+          </div>
+          <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$3,781.50 remaining</span>
         </div>
 
         {/* Stacked budget bar */}
-        <div className="flex h-10 w-full gap-[2px] overflow-hidden rounded-xl bg-foreground/[0.06]">
-          <div className="h-full" style={{ width: "53.7%", background: "var(--ap-hover)" }} />
+        <div className="flex h-10 w-full gap-[2px] overflow-hidden rounded-xl bg-[rgba(229,113,0,0.07)] dark:bg-[rgba(251,146,60,0.07)]">
+          <div className="h-full w-[53.7%] bg-[rgba(229,113,0,0.10)] dark:bg-[rgba(251,146,60,0.10)]" />
           <div className="h-full flex-1" style={{ background: "rgba(0,153,77,0.6)" }} />
-          <div className="h-full w-[5%]" style={{ background: "rgba(229,113,0,0.6)" }} />
+          <div className="h-full w-[5%]" style={{ background: "rgba(234,179,8,0.6)" }} />
           <div className="h-full w-[2.5%]" style={{ background: "rgba(255,51,85,0.6)" }} />
         </div>
-
-        <span className="font-inter text-xs tracking-[-0.02em] text-page-text-muted">$3,781.50 remaining</span>
       </div>
 
       {/* Legend pills */}
@@ -679,7 +606,13 @@ export function AnalyticsPocCampaignHealthTab({
 
       {/* 3. Health + Financials side by side */}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <HealthCard />
+        <AnalyticsPocHealthCard
+          title="Health Score"
+          score="76"
+          statusText="Looking healthy"
+          ctaLabel="View health"
+          progressPercent={75}
+        />
         <FinancialsCard />
       </div>
 

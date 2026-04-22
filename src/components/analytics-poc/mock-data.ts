@@ -17,16 +17,16 @@ import type {
 const TOTAL_POINTS = 30;
 
 const CHART_TICKS = [
-  { index: 0, label: "Jan 5" },
-  { index: 3, label: "Jan 8" },
-  { index: 6, label: "Jan 11" },
-  { index: 9, label: "Jan 14" },
-  { index: 12, label: "Jan 17" },
-  { index: 15, label: "Jan 20" },
-  { index: 18, label: "Jan 23" },
-  { index: 21, label: "Jan 27" },
-  { index: 24, label: "Jan 30" },
-  { index: 27, label: "Feb 2" },
+  { index: 0, label: "Jan 7" },
+  { index: 3, label: "Jan 10" },
+  { index: 6, label: "Jan 13" },
+  { index: 9, label: "Jan 16" },
+  { index: 12, label: "Jan 19" },
+  { index: 15, label: "Jan 22" },
+  { index: 18, label: "Jan 25" },
+  { index: 21, label: "Jan 28" },
+  { index: 24, label: "Jan 31" },
+  { index: 27, label: "Feb 3" },
   { index: 29, label: "Feb 5" },
 ];
 

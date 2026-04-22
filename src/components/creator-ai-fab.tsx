@@ -534,7 +534,7 @@ export function CreatorAiFab() {
         <div className="hidden md:block">
           <AiPopupAnimated open={open && mode === "floating"} skipEntry={fromMinimize}>
             <div className="fixed bottom-[72px] right-6 z-[9999] w-[440px] max-w-[calc(100vw-32px)]">
-          <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2}>
+          <BorderBeam colorVariant="sunset" theme="auto" size="md" borderRadius={16} strength={1} duration={2 / 0.65}>
         <div className="relative flex flex-col overflow-hidden rounded-2xl bg-[#FBFBFB] shadow-[0_2px_6px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.04)] dark:bg-[#161616] dark:shadow-[0_2px_6px_rgba(0,0,0,0.3),0_4px_12px_rgba(0,0,0,0.2)]">
           {/* Header */}
           <div className="relative flex items-center justify-center border-b border-foreground/[0.06] bg-white px-5 py-3 dark:border-white/[0.06] dark:bg-card-bg">

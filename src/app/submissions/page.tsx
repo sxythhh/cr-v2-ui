@@ -694,10 +694,10 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
           </button>
           <button
             onClick={() => onAction?.("approve")}
-            className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.03] transition-colors"
+            className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(52,211,153,0.08)] transition-colors hover:bg-[rgba(52,211,153,0.14)] dark:bg-[rgba(52,211,153,0.12)] dark:hover:bg-[rgba(52,211,153,0.18)]"
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#34D399"/><path d="M5 8L7 10L11 6" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#34D399]">
               Approve
             </span>
           </button>
@@ -750,29 +750,8 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
             </div>
           </div>
 
-          {/* AI Quality section / Action buttons when summary hidden */}
-          {aiSummaryHidden ? (
-            <div className="flex w-[200px] shrink-0 items-center gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[280px]">
-              <button
-                onClick={() => onAction?.("reject")}
-                className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg>
-                <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">
-                  Reject
-                </span>
-              </button>
-              <button
-                onClick={() => onAction?.("approve")}
-                className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">
-                  Approve
-                </span>
-              </button>
-            </div>
-          ) : (
+          {/* AI Quality section (only when AI panel is visible; when hidden, actions move to card footer) */}
+          {!aiSummaryHidden && (
             <div className="flex w-[280px] shrink-0 flex-col gap-2 border-l border-foreground/[0.06] px-3 py-3 lg:w-[360px]">
               <div className="flex items-center gap-2">
                 <div className="flex flex-1 items-center gap-1.5">
@@ -851,8 +830,8 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
               />
             </div>
 
-            {/* Bottom info row */}
-            <div className="flex gap-2">
+            {/* Bottom info row + inline actions when AI panel is hidden */}
+            <div className="-mx-3 flex items-stretch gap-2 border-t border-foreground/[0.06] px-3 pt-3 dark:border-card-inner-border">
               <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-foreground/[0.06] bg-card-bg px-3 py-3 dark:border-card-inner-border dark:bg-card-inner-bg">
                 <span className="shrink-0 font-inter text-xs leading-none tracking-[-0.02em] text-page-text-muted">
                   Top country
@@ -876,6 +855,27 @@ function SubmissionCard({ submission, onAction }: { submission: Submission; onAc
                   {submission.topAge}
                 </span>
               </div>
+              {aiSummaryHidden && (
+                <>
+                  <div className="-my-3 w-px self-stretch bg-foreground/[0.08] dark:bg-[rgba(224,224,224,0.08)]" />
+                  <div className="flex w-[256px] shrink-0 items-center gap-2 lg:w-[336px]">
+                    <button
+                      onClick={() => onAction?.("reject")}
+                      className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(251,113,133,0.08)] transition-colors hover:bg-[rgba(251,113,133,0.12)] dark:bg-[rgba(251,113,133,0.12)] dark:hover:bg-[rgba(251,113,133,0.18)]"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8ZM5.64645 5.64645C5.84171 5.45118 6.15829 5.45118 6.35355 5.64645L8 7.29289L9.64645 5.64645C9.84171 5.45118 10.1583 5.45118 10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355L8.70711 8L10.3536 9.64645C10.5488 9.84171 10.5488 10.1583 10.3536 10.3536C10.1583 10.5488 9.84171 10.5488 9.64645 10.3536L8 8.70711L6.35355 10.3536C6.15829 10.5488 5.84171 10.5488 5.64645 10.3536C5.45118 10.1583 5.45118 9.84171 5.64645 9.64645L7.29289 8L5.64645 6.35355C5.45118 6.15829 5.45118 5.84171 5.64645 5.64645Z" fill="#FB7185"/></svg>
+                      <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#FB7185]">Reject</span>
+                    </button>
+                    <button
+                      onClick={() => onAction?.("approve")}
+                      className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(52,211,153,0.08)] transition-colors hover:bg-[rgba(52,211,153,0.14)] dark:bg-[rgba(52,211,153,0.12)] dark:hover:bg-[rgba(52,211,153,0.18)]"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#34D399"/><path d="M5 8L7 10L11 6" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#34D399]">Approve</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
           </div>

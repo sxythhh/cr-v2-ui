@@ -109,10 +109,10 @@ export function AIReviewPanel({ submission, scoreColor, onAction }: { submission
         </button>
         <button
           onClick={() => onAction?.("approve")}
-          className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-foreground/[0.06] transition-colors hover:bg-foreground/[0.1]"
+          className="flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(52,211,153,0.08)] transition-colors hover:bg-[rgba(52,211,153,0.14)] dark:bg-[rgba(52,211,153,0.12)] dark:hover:bg-[rgba(52,211,153,0.18)]"
         >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" className="fill-foreground"/><path d="M5 8L7 10L11 6" className="stroke-white dark:stroke-black" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-page-text">Approve</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#34D399"/><path d="M5 8L7 10L11 6" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span className="font-inter text-xs font-medium leading-none tracking-[-0.02em] text-[#34D399]">Approve</span>
         </button>
       </div>
     </div>

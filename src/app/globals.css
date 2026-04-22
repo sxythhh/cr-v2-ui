@@ -23,6 +23,11 @@ html, body {
   cursor: default;
 }
 
+/* SF Pro Rounded fallback stack (used on /landing). Renders natively on Apple devices. */
+:root {
+  --font-sf-rounded: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, ui-rounded, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 /*
  * When AI sidebar is open, the content area loses ~400px.
  * Force responsive layouts to stack earlier so nothing gets crushed.
@@ -142,11 +147,26 @@ input, textarea, [contenteditable] {
 @keyframes star-pop {
   0% {
     opacity: 0;
-    transform: scale(0.3) rotate(-30deg);
+  }
+  55% {
+    opacity: 1;
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Separate "pulse" keyframe for the container — animates the whole SVG
+   so each star-path stays a crisp vector (no per-path compositing). */
+@keyframes star-pop-pulse {
+  0% {
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

@@ -15,7 +15,6 @@ import FinanceTab from "./FinanceTab";
 import SubmissionsTab from "./SubmissionsTab";
 import CreatorsTab from "./CreatorsTab";
 import EventsTab from "./EventsTab";
-import AnalyticsTab from "./AnalyticsTab";
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -47,6 +46,9 @@ const CAMPAIGN = {
     lastEdited: "2 days ago",
     submissionDeadline: "25th of each month",
     minEngagementRate: "1.0%",
+    cpm: "$1.50",
+    perPost: "$100",
+    postsPerMonth: "20/mo",
   },
   creatorRequirements: [
     { text: "Platforms", platforms: ["tiktok", "instagram"] },
@@ -64,6 +66,27 @@ const CAMPAIGN = {
     { text: "Mention brand at least 4 times" },
     { text: "Link to brand" },
   ],
+  bonuses: [
+    { title: "50K Views Bonus", description: "Receive an extra bonus if you hit 50K views!", amount: "$50", threshold: "50.000 views" },
+    { title: "100K Views Bonus", description: "Receive an extra bonus if you hit 100K views!", amount: "$125", threshold: "100.000 views" },
+  ],
+  sounds: {
+    platforms: ["TikTok", "Youtube"] as const,
+    items: [
+      { title: "Glue · BICEP", url: "https://sound.library.com/track" },
+      { title: "Too Tense · oskar med k", url: "https://sound.library.com/track" },
+    ],
+  },
+  referenceMaterials: {
+    tabs: ["Images", "Videos", "Assets"] as const,
+    items: [
+      { name: "moodboard_spring.jpg", size: "12.4 MB", kind: "image" as const },
+      { name: "product-shots-v2.zip", size: "12.4 MB", kind: "zip" as const },
+    ],
+  },
+  platformPayouts: [
+    { platform: "instagram" as const, label: "Instagram", subtitle: "$1.50 per 1k views", min: "$1.50 min", max: "$350 max" },
+  ],
 };
 
 const TABS = [
@@ -71,7 +94,6 @@ const TABS = [
   { key: "finance", label: "Finance" },
   { key: "submissions", label: "Submissions", count: 8 },
   { key: "creators", label: "Creators", count: 12 },
-  { key: "analytics", label: "Analytics" },
   { key: "events", label: "Events", count: 8 },
 ];
 
@@ -106,6 +128,172 @@ function BulletItem({ children }: { children: React.ReactNode }) {
       <span className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full bg-[rgba(37,37,37,0.25)] dark:bg-[rgba(255,255,255,0.25)]" />
       <span className="min-w-0">{children}</span>
     </li>
+  );
+}
+
+function GiftIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">
+      <path d="M6 4.66667C6 3.19391 7.19391 2 8.66667 2C10.007 2 11.2051 2.60849 12 3.56429C12.7949 2.60849 13.993 2 15.3333 2C16.8061 2 18 3.19391 18 4.66667C18 5.52576 17.75 6.32647 17.3188 7H19C20.1046 7 21 7.89543 21 9C21 10.1046 20.1046 11 19 11H13V7H13.6667C14.9553 7 16 5.95533 16 4.66667C16 4.29848 15.7015 4 15.3333 4C14.0447 4 13 5.04467 13 6.33333V7H11V6.33333C11 5.04467 9.95533 4 8.66667 4C8.29848 4 8 4.29848 8 4.66667C8 5.95533 9.04467 7 10.3333 7H11V11H5C3.89543 11 3 10.1046 3 9C3 7.89543 3.89543 7 5 7H6.68121C6.25 6.32647 6 5.52576 6 4.66667Z" fill="currentColor"/>
+      <path d="M13 13H20V18C20 19.6569 18.6569 21 17 21H13V13Z" fill="currentColor"/>
+      <path d="M11 13H4V18C4 19.6569 5.34315 21 7 21H11V13Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function ZipThumbnail() {
+  return (
+    <div className="relative size-9 shrink-0">
+      {/* Base file with folded corner */}
+      <div
+        className="absolute inset-0 overflow-hidden rounded-[5.625px] border border-[rgba(37,37,37,0.06)] bg-white dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg"
+        style={{ clipPath: "polygon(0 0, 70% 0, 100% 30%, 100% 100%, 0 100%)" }}
+      />
+      {/* Folded corner triangle */}
+      <div
+        className="absolute right-0 top-0 h-[30%] w-[30%]"
+        style={{
+          background: "linear-gradient(185.51deg, #FFFFFF 79.88%, #F2F2F2 95.6%)",
+          boxShadow: "inset 0.28px 0.28px 0.28px rgba(37,37,37,0.12)",
+          clipPath: "polygon(0 0, 100% 100%, 100% 0)",
+        }}
+      />
+      {/* Teeth rows (two columns) */}
+      <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="flex w-2.5">
+            <div className={cn("h-[3px] w-[5px] rounded-l-full bg-[#D9D9D9] dark:bg-[rgba(255,255,255,0.25)]", i % 2 === 0 ? "" : "translate-x-[5px]")} />
+            <div className={cn("h-[3px] w-[5px] rounded-r-full bg-[#D9D9D9] dark:bg-[rgba(255,255,255,0.25)]", i % 2 === 0 ? "translate-x-0" : "-translate-x-[5px]")} />
+          </div>
+        ))}
+      </div>
+      {/* ZIP pill label */}
+      <span className="absolute left-1/2 top-1/2 inline-flex h-4 -translate-x-1/2 -translate-y-1/2 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-1 font-inter text-[10px] font-medium leading-none tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:text-page-text-muted">
+        ZIP
+      </span>
+    </div>
+  );
+}
+
+function RequirementsCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+      <h3 className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">{title}</h3>
+      <div className="flex items-stretch gap-1">
+        <div className="w-[2px] shrink-0 self-stretch rounded-full bg-[rgba(37,37,37,0.12)] dark:bg-[rgba(255,255,255,0.12)]" />
+        <ul className="flex flex-1 flex-col gap-1 py-0.5">{children}</ul>
+      </div>
+    </div>
+  );
+}
+
+function RequirementRow({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-center gap-1.5">
+      <span className="flex size-4 shrink-0 items-center justify-center">
+        <span className="size-1 rounded-full bg-[#252525] dark:bg-white" />
+      </span>
+      <span className="min-w-0 flex-1 font-inter text-[14px] font-normal leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.7)] dark:text-[rgba(255,255,255,0.6)]">
+        {children}
+      </span>
+    </li>
+  );
+}
+
+function SoundRequirementsCard({ platforms, items }: { platforms: string[]; items: { title: string; url: string }[] }) {
+  const [active, setActive] = useState(platforms[0] ?? "");
+  return (
+    <div className="flex flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+      <div className="flex flex-col gap-1">
+        <h3 className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">Sound requirements</h3>
+        <p className="font-inter text-[14px] font-normal leading-[120%] tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">
+          Creator MUST use one of these sounds in their video and is therefore NOT allowed to use a sound of their own.
+        </p>
+      </div>
+      <div className="inline-flex shrink-0 items-center gap-0.5 self-start rounded-[10px] bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-[rgba(224,224,224,0.06)]">
+        {platforms.map((p) => (
+          <button
+            key={p}
+            type="button"
+            onClick={() => setActive(p)}
+            className={cn(
+              "flex h-7 cursor-pointer items-center rounded-lg px-3 font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] transition-all",
+              active === p
+                ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg"
+                : "text-[rgba(37,37,37,0.7)] dark:text-page-text-muted",
+            )}
+          >
+            {p}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-stretch gap-2">
+        {items.map((s, i) => (
+          <div key={i} className="flex min-w-0 flex-1 basis-[240px] items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+            <div className="relative size-9 shrink-0 overflow-hidden rounded-full border border-[rgba(37,37,37,0.06)] bg-gradient-to-br from-[rgba(37,37,37,0.08)] to-[rgba(37,37,37,0.12)] dark:border-[rgba(224,224,224,0.06)] dark:from-[rgba(255,255,255,0.04)] dark:to-[rgba(255,255,255,0.08)]">
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
+                  <svg width="8" height="10" viewBox="-1 0 16 18" fill="none">
+                    <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="white" />
+                  </svg>
+                </span>
+              </span>
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="truncate font-inter text-[14px] font-normal leading-none tracking-[-0.02em] text-page-text">{s.title}</span>
+              <span className="truncate font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-page-text-muted">{s.url}</span>
+            </div>
+            <a href={s.url} target="_blank" rel="noreferrer" className="flex size-4 shrink-0 items-center justify-center text-page-text-muted transition-colors hover:text-page-text">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9.33 2.67H13.33V6.67M13.33 2.67L7.33 8.67M12 9.33v3.34c0 .37-.3.66-.67.66H3.33A.67.67 0 012.67 12.67V4.67c0-.37.3-.67.66-.67h3.34" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReferenceMaterialsCard({ tabs, items }: { tabs: string[]; items: { name: string; size: string; kind: "image" | "zip" }[] }) {
+  const [active, setActive] = useState(tabs[0] ?? "");
+  return (
+    <div className="flex flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+      <h3 className="font-inter text-[14px] font-medium leading-[120%] tracking-[-0.02em] text-page-text">Reference materials</h3>
+      <div className="inline-flex shrink-0 items-center gap-0.5 self-start rounded-[10px] bg-[rgba(37,37,37,0.06)] p-0.5 dark:bg-[rgba(224,224,224,0.06)]">
+        {tabs.map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setActive(t)}
+            className={cn(
+              "flex h-7 cursor-pointer items-center rounded-lg px-3 font-inter text-[12px] font-medium leading-[120%] tracking-[-0.02em] transition-all",
+              active === t
+                ? "bg-white text-page-text shadow-[0_2px_4px_rgba(0,0,0,0.06)] dark:bg-card-bg"
+                : "text-[rgba(37,37,37,0.7)] dark:text-page-text-muted",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-stretch gap-2">
+        {items.map((f, i) => (
+          <div key={i} className="flex min-w-0 flex-1 basis-[240px] items-center gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+            {f.kind === "zip" ? (
+              <ZipThumbnail />
+            ) : (
+              <div className="size-9 shrink-0 overflow-hidden rounded-lg border border-[rgba(37,37,37,0.06)] bg-[#D9D9D9] dark:border-[rgba(224,224,224,0.06)] dark:bg-[rgba(255,255,255,0.08)]" />
+            )}
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="truncate font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{f.name}</span>
+              <span className="truncate font-inter text-[12px] font-normal leading-none tracking-[-0.02em] text-page-text-muted">{f.size}</span>
+            </div>
+            <button type="button" className="flex size-4 shrink-0 cursor-pointer items-center justify-center text-page-text-muted transition-colors hover:text-page-text" aria-label="Download">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2V10M8 10L4.67 6.67M8 10l3.33-3.33M3.33 13.33h9.34" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -243,48 +431,99 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
 
                   <Divider />
                   {/* Creator requirements */}
-                  <div className="flex flex-col gap-3">
-                    <h2 className="text-base font-medium tracking-[-0.02em] text-page-text">
-                      Creator requirements
-                    </h2>
-                    <ul className="flex flex-col gap-2">
-                      {c.creatorRequirements.map((req, i) => (
-                        <BulletItem key={i}>
-                          <span className="flex items-center gap-1.5 flex-wrap">
-                            {req.text}
-                            {req.platforms && (
-                              <span className="inline-flex items-center gap-1 ml-1">
-                                {req.platforms.map((p) => (
-                                  <PlatformCircle key={p} platform={p} />
-                                ))}
-                              </span>
-                            )}
-                          </span>
-                        </BulletItem>
-                      ))}
-                    </ul>
-                  </div>
+                  <RequirementsCard title="Creator requirements">
+                    {c.creatorRequirements.map((req, i) => (
+                      <RequirementRow key={i}>
+                        <span className="flex flex-wrap items-center gap-1.5">
+                          {req.text}
+                          {req.platforms && (
+                            <span className="ml-1 inline-flex items-center gap-1">
+                              {req.platforms.map((p) => (
+                                <PlatformCircle key={p} platform={p} />
+                              ))}
+                            </span>
+                          )}
+                        </span>
+                      </RequirementRow>
+                    ))}
+                  </RequirementsCard>
 
                   {/* Content requirements */}
-                  <div className="flex flex-col gap-3">
-                    <h2 className="text-base font-medium tracking-[-0.02em] text-page-text">
-                      Content Requirements
-                    </h2>
-                    <ul className="flex flex-col gap-2">
-                      {c.contentRequirements.map((req, i) => (
-                        <BulletItem key={i}>
-                          <span className="flex items-center gap-1.5 flex-wrap">
-                            {req.text}
-                            {req.badge && (
-                              <span className="inline-flex items-center rounded-full bg-[rgba(229,113,0,0.1)] px-2 py-0.5 text-xs font-medium text-[#E57100]">
-                                {req.badge}
-                              </span>
-                            )}
-                          </span>
-                        </BulletItem>
-                      ))}
-                    </ul>
+                  <RequirementsCard title="Content requirements">
+                    {c.contentRequirements.map((req, i) => (
+                      <RequirementRow key={i}>
+                        <span className="flex flex-wrap items-center gap-2">
+                          {req.text}
+                          {req.badge && (
+                            <span className="inline-flex h-6 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2 font-inter text-[12px] font-medium leading-none tracking-[-0.02em] text-page-text dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                              {req.badge}
+                            </span>
+                          )}
+                        </span>
+                      </RequirementRow>
+                    ))}
+                  </RequirementsCard>
+
+                  {/* Bonuses */}
+                  <div className="flex flex-col gap-2">
+                    {c.bonuses.map((b, i) => (
+                      <div key={i} className="flex flex-col gap-3 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                            <GiftIcon />
+                          </div>
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{b.title}</span>
+                            <span className="font-inter text-[14px] font-normal leading-[150%] tracking-[-0.02em] text-[rgba(37,37,37,0.5)] dark:text-page-text-muted">{b.description}</span>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-2">
+                            <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                              <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{b.amount}</span>
+                              <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text-muted">per</span>
+                            </span>
+                            <span className="inline-flex h-8 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                              <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{b.threshold}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+
+                  {/* Sound requirements */}
+                  <SoundRequirementsCard
+                    platforms={c.sounds.platforms as unknown as string[]}
+                    items={c.sounds.items}
+                  />
+
+                  {/* Per-platform payouts */}
+                  {c.platformPayouts.map((p, i) => (
+                    <div key={i} className="flex flex-col gap-4 rounded-2xl border border-[rgba(37,37,37,0.06)] bg-white p-4 shadow-[0px_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg dark:shadow-none">
+                      <div className="flex items-center gap-3">
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                          <PlatformIcon platform={p.platform} size={20} className="opacity-50" />
+                        </div>
+                        <div className="flex min-w-0 flex-1 flex-col gap-1">
+                          <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{p.label}</span>
+                          <span className="font-inter text-[14px] font-normal leading-[150%] tracking-[-0.02em] text-page-text-muted">{p.subtitle}</span>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <span className="inline-flex h-8 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                            <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{p.min}</span>
+                          </span>
+                          <span className="inline-flex h-8 items-center rounded-full border border-[rgba(37,37,37,0.06)] bg-white px-2.5 dark:border-[rgba(224,224,224,0.06)] dark:bg-card-bg">
+                            <span className="font-inter text-[14px] font-medium leading-none tracking-[-0.02em] text-page-text">{p.max}</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Reference materials */}
+                  <ReferenceMaterialsCard
+                    tabs={c.referenceMaterials.tabs as unknown as string[]}
+                    items={c.referenceMaterials.items}
+                  />
                 </div>
 
                 {/* Right column: sidebar */}
@@ -346,31 +585,60 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
                     </button>
                   </div>
 
-                  {/* Stats list */}
-                  <div className="flex flex-col">
-                    <StatRow label="Active creators" value={String(c.stats.activeCreators)} />
-                    <StatRow label="Videos" value={String(c.stats.videos)} />
-                    <StatRow label="Duration" value={c.stats.duration} />
-                    <StatRow label="Category" value={c.stats.category} />
-                    <StatRow
-                      label="Platforms"
-                      value={
-                        <span className="flex items-center gap-1">
-                          {c.stats.platforms.map((p) => (
-                            <PlatformCircle key={p} platform={p} />
-                          ))}
-                        </span>
-                      }
-                    />
-                    <StatRow label="Last edited" value={c.stats.lastEdited} />
-                    <StatRow label="Submission deadline" value={c.stats.submissionDeadline} />
-                    <StatRow
-                      label="Min. engagement rate"
-                      value={
-                        <span className="text-[#FF3355] dark:text-[#FB7185]">{c.stats.minEngagementRate}</span>
-                      }
-                    />
-                  </div>
+                  {/* Stats list — fields vary by campaign model (Retainer / CPM / Per post) */}
+                  {(() => {
+                    const model = (c.tags.find((t) => /retainer|cpm|per\s*post/i.test(t.label))?.label ?? "Retainer") as "Retainer" | "CPM" | "Per post";
+                    const platformsRow = (
+                      <StatRow
+                        label="Platforms"
+                        value={
+                          <span className="flex items-center gap-1">
+                            {c.stats.platforms.map((p) => (
+                              <PlatformCircle key={p} platform={p} />
+                            ))}
+                          </span>
+                        }
+                      />
+                    );
+                    return (
+                      <div className="flex flex-col">
+                        {model === "Retainer" && (
+                          <>
+                            <StatRow label="Active creators" value={String(c.stats.activeCreators)} />
+                            <StatRow label="Videos" value={String(c.stats.videos)} />
+                            <StatRow label="Duration" value={c.stats.duration} />
+                            <StatRow label="Category" value={c.stats.category} />
+                            {platformsRow}
+                            <StatRow label="Last edited" value={c.stats.lastEdited} />
+                            <StatRow label="Submission deadline" value={c.stats.submissionDeadline} />
+                            <StatRow
+                              label="Min. engagement rate"
+                              value={<span className="text-[#FF3355] dark:text-[#FB7185]">{c.stats.minEngagementRate}</span>}
+                            />
+                          </>
+                        )}
+                        {model === "CPM" && (
+                          <>
+                            <StatRow label="CPM" value={c.stats.cpm} />
+                            <StatRow label="Videos" value={String(c.stats.videos)} />
+                            <StatRow label="Category" value={c.stats.category} />
+                            {platformsRow}
+                            <StatRow label="Last edited" value={c.stats.lastEdited} />
+                          </>
+                        )}
+                        {model === "Per post" && (
+                          <>
+                            <StatRow label="Per post" value={c.stats.perPost} />
+                            <StatRow label="Posts" value={c.stats.postsPerMonth} />
+                            <StatRow label="Videos" value={String(c.stats.videos)} />
+                            <StatRow label="Category" value={c.stats.category} />
+                            {platformsRow}
+                            <StatRow label="Last edited" value={c.stats.lastEdited} />
+                          </>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
               </div>
@@ -390,10 +658,6 @@ export function CampaignDetailsView({ campaignId }: { campaignId: string }) {
           </div>
         ) : activeTab === "events" ? (
           <EventsTab />
-        ) : activeTab === "analytics" ? (
-          <div className="mx-auto max-w-[1200px] px-4 py-5 sm:px-5">
-            <AnalyticsTab />
-          </div>
         ) : (
           <div className="flex flex-1 items-center justify-center py-32">
             <span className="text-sm tracking-[-0.02em] text-page-text-muted">

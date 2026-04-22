@@ -1002,11 +1002,13 @@ function TopUpModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               type="button"
               onClick={handleDeposit}
               className={cn(
-                "flex h-10 cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white transition-colors dark:text-[#111111]",
-                numericAmount > 0
-                  ? "bg-foreground hover:bg-foreground/90 dark:bg-white dark:hover:bg-white/90"
-                  : "bg-foreground/60 cursor-not-allowed dark:bg-white/60",
+                "flex h-10 cursor-pointer items-center justify-center rounded-full px-4 font-inter text-sm font-medium tracking-[-0.02em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.24),0_1px_2px_rgba(229,113,0,0.32)] transition-[filter,opacity] hover:brightness-[1.06]",
+                numericAmount > 0 ? "" : "cursor-not-allowed opacity-50",
               )}
+              style={{
+                background:
+                  "radial-gradient(50% 64.33% at 50% 1.25%, #F59E0B 0%, rgba(245,158,11,0) 100%), linear-gradient(0deg, #FF6207, #FF6207), #E57100",
+              }}
               disabled={numericAmount <= 0}
             >
               Deposit funds

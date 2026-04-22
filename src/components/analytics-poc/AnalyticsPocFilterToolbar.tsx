@@ -28,7 +28,8 @@ export function AnalyticsPocFilterToolbar({
   return (
     <div
       className={cn(
-        "-mx-4 flex items-center gap-2 overflow-x-auto px-4 scrollbar-hide sm:mx-0 sm:flex-wrap sm:overflow-x-visible sm:px-0",
+        "sticky top-[72px] z-20 -mx-4 flex items-center gap-2 overflow-x-auto px-4 scrollbar-hide sm:mx-0 sm:flex-wrap sm:overflow-x-visible sm:px-0",
+        "[&_button]:!bg-[#ECECEC] [&_button]:hover:!bg-[#E4E4E4] dark:[&_button]:!bg-[#1B1B1B] dark:[&_button]:hover:!bg-[#222222]",
         className,
       )}
     >

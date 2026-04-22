@@ -17,7 +17,7 @@ export function MainNav({ children }: { children: ReactNode }) {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   // Routes that bypass the sidebar entirely
-  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/articles") || pathname?.startsWith("/discord") || pathname?.startsWith("/blog") || pathname?.startsWith("/affiliate") || pathname?.startsWith("/agencies") || pathname?.startsWith("/showcase") || pathname?.startsWith("/forms-demo")) {
+  if (pathname?.startsWith("/lander") || pathname?.startsWith("/case-studies") || pathname?.startsWith("/academy") || pathname?.startsWith("/product-lander") || pathname?.startsWith("/verified-agency") || pathname?.startsWith("/articles") || pathname?.startsWith("/discord") || pathname?.startsWith("/blog") || pathname?.startsWith("/affiliate") || pathname?.startsWith("/agencies") || pathname?.startsWith("/showcase") || pathname?.startsWith("/forms-demo") || pathname?.startsWith("/landing") || pathname?.startsWith("/onboarding")) {
     return <>{children}</>;
   }
 

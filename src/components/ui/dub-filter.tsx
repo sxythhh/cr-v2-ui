@@ -27,6 +27,8 @@ import {
   type Placement,
 } from "@floating-ui/react";
 import { motion, AnimatePresence } from "motion/react";
+import { useProximityHover } from "@/hooks/use-proximity-hover";
+import { springs } from "@/lib/springs";
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -117,6 +119,9 @@ function FilterButton({
   showCheckbox,
   isChecked,
   onSelect,
+  proximityIndex,
+  registerItem,
+  suppressHoverBg,
 }: {
   filter: Filter;
   option?: FilterOption;
@@ -124,16 +129,25 @@ function FilterButton({
   showCheckbox?: boolean;
   isChecked?: boolean;
   onSelect: () => void;
+  proximityIndex?: number;
+  registerItem?: (index: number, element: HTMLElement | null) => void;
+  suppressHoverBg?: boolean;
 }) {
   const Icon = option ? option.icon ?? filter.icon : filter.icon;
   const label = option ? option.label : filter.label;
 
   return (
     <Command.Item
+      ref={(el) => {
+        if (proximityIndex !== undefined && registerItem) {
+          registerItem(proximityIndex, el);
+        }
+      }}
+      data-proximity-index={proximityIndex}
       className={cn(
-        "flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-xl px-2.5 py-2 text-left text-[13px] tracking-[-0.09px]",
+        "relative z-10 flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-xl px-2.5 py-2 text-left text-[13px] tracking-[-0.09px]",
         "text-page-text outline-none transition-colors",
-        "data-[selected=true]:bg-foreground/[0.06]",
+        !suppressHoverBg && "data-[selected=true]:bg-foreground/[0.06]",
       )}
       onSelect={onSelect}
       value={label + (option?.value ?? "")}
@@ -192,6 +206,16 @@ function DropdownPanel({
   hideSearch?: boolean;
 }) {
   const listContainer = useRef<HTMLDivElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
+  const {
+    activeIndex,
+    itemRects,
+    sessionRef,
+    handlers: proximityHandlers,
+    registerItem,
+    measureItems,
+  } = useProximityHover(optionsRef);
+  const activeRect = activeIndex !== null ? itemRects[activeIndex] : null;
   const [search, setSearch] = useState("");
   const [selectedFilterKey, setSelectedFilterKey] = useState<string | null>(null);
 
@@ -290,19 +314,57 @@ function DropdownPanel({
             selectedFilter ? "min-w-[100px]" : "min-w-[180px]",
           )}
         >
-          {!selectedFilter
-            ? filters.map((filter) => (
-                <Fragment key={filter.key}>
-                  <FilterButton
-                    filter={filter}
-                    onSelect={() => openFilter(filter.key)}
+          {!selectedFilter ? (
+            filters.map((filter) => (
+              <Fragment key={filter.key}>
+                <FilterButton
+                  filter={filter}
+                  onSelect={() => openFilter(filter.key)}
+                />
+                {filter.separatorAfter && (
+                  <Command.Separator className="-mx-1 my-0.5 border-b border-border" />
+                )}
+              </Fragment>
+            ))
+          ) : (
+            <div
+              ref={optionsRef}
+              className="relative flex flex-col gap-0.5"
+              onMouseEnter={proximityHandlers.onMouseEnter}
+              onMouseMove={(e) => {
+                proximityHandlers.onMouseMove(e);
+                measureItems();
+              }}
+              onMouseLeave={proximityHandlers.onMouseLeave}
+            >
+              <AnimatePresence>
+                {activeRect && (
+                  <motion.div
+                    key={sessionRef.current}
+                    className="pointer-events-none absolute rounded-xl bg-foreground/[0.06]"
+                    initial={{
+                      opacity: 0,
+                      top: activeRect.top,
+                      left: activeRect.left,
+                      width: activeRect.width,
+                      height: activeRect.height,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      top: activeRect.top,
+                      left: activeRect.left,
+                      width: activeRect.width,
+                      height: activeRect.height,
+                    }}
+                    exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                    transition={{
+                      ...springs.moderate,
+                      opacity: { duration: 0.16 },
+                    }}
                   />
-                  {filter.separatorAfter && (
-                    <Command.Separator className="-mx-1 my-0.5 border-b border-border" />
-                  )}
-                </Fragment>
-              ))
-            : selectedFilter.options?.map((option) => {
+                )}
+              </AnimatePresence>
+              {selectedFilter.options?.map((option, i) => {
                 const isSingle =
                   selectedFilter.singleSelect || !selectedFilter.multiple;
                 const isSelected = isOptionSelected(option.value);
@@ -314,6 +376,9 @@ function DropdownPanel({
                     option={option}
                     showCheckbox={!isSingle && selectedFilter.multiple}
                     isChecked={isSelected}
+                    proximityIndex={i}
+                    registerItem={registerItem}
+                    suppressHoverBg
                     right={
                       isSingle ? (
                         isSelected ? (
@@ -329,6 +394,8 @@ function DropdownPanel({
                   />
                 );
               })}
+            </div>
+          )}
 
           <Command.Empty className="p-3 text-center font-inter text-sm text-page-text-muted">
             No matching options
