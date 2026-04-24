@@ -878,6 +878,10 @@ select:focus-visible,
   --color-tooltip-bg: var(--tooltip-bg);
   --color-tooltip-text: var(--tooltip-text);
   --color-tooltip-text-muted: var(--tooltip-text-muted);
+
+  /* ── Scope (Content Rewards competitor intel) ── */
+  --color-scope-accent: #f28218;
+  --color-scope-accent-soft: #ff9e47;
 }
 
 /* ── Admin dashboard: widget drag ── */
