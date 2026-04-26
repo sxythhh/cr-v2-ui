@@ -391,21 +391,19 @@ function NotificationsTab() {
         </div>
       </div>
 
-      {/* ── Preferences modal (full-screen on mobile, panel on desktop) ── */}
-      {prefsOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center md:items-start md:justify-end md:p-4">
-          <div className="absolute inset-0 bg-black/20" onClick={handleClose} />
-          <div className="relative flex h-full w-full flex-col bg-white font-inter tracking-[-0.02em] shadow-xl md:h-auto md:max-h-[90vh] md:w-[520px] md:rounded-2xl dark:bg-card-bg">
-            {/* Header */}
-            <div className="flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5">
-              <span className="text-sm font-medium text-page-text">Preferences</span>
-              <button onClick={handleClose} className="absolute right-4 top-3">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.52" strokeLinecap="round" /></svg>
-              </button>
-            </div>
+      {/* ── Preferences modal ── */}
+      <Modal open={prefsOpen} onClose={handleClose} size="md" showClose={false}>
+        <div className="flex max-h-[90dvh] flex-col font-inter tracking-[-0.02em]">
+          {/* Header */}
+          <div className="relative flex h-10 shrink-0 items-center justify-center border-b border-foreground/[0.06] px-5">
+            <span className="text-sm font-medium text-page-text">Preferences</span>
+            <button onClick={handleClose} className="absolute right-4 top-3 cursor-pointer text-foreground/50 transition-opacity hover:opacity-80">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.52" strokeLinecap="round" /></svg>
+            </button>
+          </div>
 
-            {/* Body */}
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4 scrollbar-hide">
+          {/* Body */}
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5 pt-4 scrollbar-hide">
               {/* Delivery channels */}
               <div className={cn(cardClass, "overflow-hidden p-0")}>
                 <div className="px-4 pb-2 pt-4">
@@ -464,31 +462,27 @@ function NotificationsTab() {
                   </div>
                 ))}
               </div>
-            </div>
           </div>
         </div>
-      )}
+      </Modal>
 
       {/* ── Exit confirmation dialog ── */}
-      {exitConfirmOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/30" onClick={() => setExitConfirmOpen(false)} />
-          <div className="relative flex w-[320px] flex-col gap-4 rounded-2xl bg-white p-5 shadow-xl dark:bg-card-bg">
-            <div className="flex flex-col gap-2">
-              <span className="text-base font-medium tracking-[-0.02em] text-page-text">Exit without saving?</span>
-              <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">You have unsaved changes. Are you sure you want to exit?</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button onClick={() => setExitConfirmOpen(false)} className="flex-1 rounded-full bg-foreground/[0.06] py-2.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06]">
-                Keep editing
-              </button>
-              <button onClick={() => { setExitConfirmOpen(false); setPrefsOpen(false); }} className="flex-1 rounded-full bg-[#FF3355] py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#FF3355]/90">
-                Discard
-              </button>
-            </div>
+      <Modal open={exitConfirmOpen} onClose={() => setExitConfirmOpen(false)} size="sm" showClose={false}>
+        <div className="flex flex-col gap-4 p-5 font-inter">
+          <div className="flex flex-col gap-2">
+            <span className="text-base font-medium tracking-[-0.02em] text-page-text">Exit without saving?</span>
+            <span className="text-sm leading-[150%] tracking-[-0.02em] text-page-text-subtle">You have unsaved changes. Are you sure you want to exit?</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setExitConfirmOpen(false)} className="flex-1 cursor-pointer rounded-full bg-foreground/[0.06] py-2.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06]">
+              Keep editing
+            </button>
+            <button onClick={() => { setExitConfirmOpen(false); setPrefsOpen(false); }} className="flex-1 cursor-pointer rounded-full bg-[#FF3355] py-2.5 text-sm font-medium tracking-[-0.02em] text-white transition-colors hover:bg-[#FF3355]/90">
+              Discard
+            </button>
           </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }
