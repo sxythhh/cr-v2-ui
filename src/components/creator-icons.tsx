@@ -1,25 +1,25 @@
 // Shared creator icon components — used across dashboard, analytics, submissions, etc.
 // Each icon renders at its natural size using currentColor or a specified fill.
 
-export function CheckCircleIcon({ color = "#00994D" }: { color?: string }) {
+export function CheckCircleIcon({ color = "#00994D", size = 20 }: { color?: string; size?: number }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M6.667 0C2.985 0 0 2.985 0 6.667c0 3.682 2.985 6.666 6.667 6.666 3.682 0 6.666-2.984 6.666-6.666C13.333 2.985 10.349 0 6.667 0Zm2.515 5.422a.667.667 0 0 0-1.032-.938L5.617 7.674l-.812-.812a.667.667 0 0 0-.943.943l1.333 1.333a.667.667 0 0 0 .987-.05l3-3.666Z" fill={color} />
     </svg>
   );
 }
 
-export function PendingClockIcon({ color = "#E57100" }: { color?: string }) {
+export function PendingClockIcon({ color = "#E57100", size = 20 }: { color?: string; size?: number }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 10 10" fill="none">
+    <svg width={size} height={size} viewBox="0 0 10 10" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M5 10C7.76142 10 10 7.76142 10 5C10 2.23858 7.76142 0 5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10ZM4.5 5.20711V2.5H5.5V4.79289L6.95711 6.25L6.25 6.95711L4.5 5.20711Z" fill={color} />
     </svg>
   );
 }
 
-export function XCircleIcon({ color = "#FF3355" }: { color?: string }) {
+export function XCircleIcon({ color = "#FF3355", size = 20 }: { color?: string; size?: number }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none">
       <path fillRule="evenodd" clipRule="evenodd" d="M7 0a7 7 0 1 0 0 14A7 7 0 0 0 7 0Zm2.475 4.525a.583.583 0 0 0-.825-.825L7 5.35 5.35 3.7a.583.583 0 1 0-.825.825L6.175 6.175 4.525 7.825a.583.583 0 0 0 .825.825L7 7.008l1.65 1.642a.583.583 0 0 0 .825-.825L7.825 6.175l1.65-1.65Z" fill={color} />
     </svg>
   );

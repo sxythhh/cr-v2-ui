@@ -39,6 +39,7 @@ import { AnalyticsPocMobileCarousel } from "@/components/analytics-poc/Analytics
 import type { AnalyticsPocDayDrilldownData } from "@/components/analytics-poc/AnalyticsPocDayDrilldown";
 import { cn } from "@/lib/utils";
 import { ProximityTabs } from "@/components/ui/proximity-tabs";
+import { ExportModal, type ExportModalGroup } from "@/components/ui/export-modal";
 
 const PAGE_TABS = ["Content", "Campaigns health", "Discover page"] as const;
 type PageTab = (typeof PAGE_TABS)[number];
@@ -49,9 +50,12 @@ const DRILLDOWN_TRANSITION = {
   transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] },
 } as const;
 
-function ExportButton() {
+function ExportButton({ onClick }: { onClick: () => void }) {
   return (
-    <button className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pr-3.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]">
+    <button
+      onClick={onClick}
+      className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-foreground/[0.06] px-4 pr-3.5 text-sm font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.1]"
+    >
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path
           d="M5.33 6.67L8 4l2.67 2.67M8 4v6.67M3.33 10.67v1.33a1.33 1.33 0 001.34 1.33h6.66a1.33 1.33 0 001.34-1.33v-1.33"
@@ -69,9 +73,11 @@ function ExportButton() {
 function PageTabBar({
   activeTab,
   onTabChange,
+  onExportClick,
 }: {
   activeTab: PageTab;
   onTabChange: (tab: PageTab) => void;
+  onExportClick: () => void;
 }) {
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-foreground/[0.06] bg-[var(--ap-bg)] pr-0 dark:border-foreground/[0.08] sm:pr-6">
@@ -83,11 +89,35 @@ function PageTabBar({
         />
       </div>
       <div className="hidden sm:block">
-        <ExportButton />
+        <ExportButton onClick={onExportClick} />
       </div>
     </header>
   );
 }
+
+const ANALYTICS_EXPORT_GROUPS: ExportModalGroup[] = [
+  {
+    columns: [
+      { id: "health-score", label: "Health score" },
+      { id: "performance", label: "Performance" },
+      { id: "views", label: "Views" },
+      { id: "posts", label: "Posts" },
+      { id: "engagement-rate", label: "Engagement rate" },
+      { id: "effective-cpm", label: "Effective CPM" },
+      { id: "content-clusters", label: "Content clusters" },
+      { id: "total-posts", label: "Total posts" },
+    ],
+  },
+  {
+    title: "Posting times",
+    columns: [
+      { id: "tiktok", label: "TikTok" },
+      { id: "instagram", label: "Instagram" },
+      { id: "youtube", label: "Youtube" },
+      { id: "facebook", label: "Facebook" },
+    ],
+  },
+];
 
 export function AnalyticsPocView() {
   const data = analyticsPocMockData;
@@ -131,6 +161,7 @@ export function AnalyticsPocView() {
   const [perfRange, setPerfRange] = useState("last-30-days");
   const [showViewsDetail, setShowViewsDetail] = useState(false);
   const [viewsDialogOpen, setViewsDialogOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [dayDrilldown, setDayDrilldown] =
     useState<AnalyticsPocDayDrilldownData | null>(null);
 
@@ -226,10 +257,20 @@ export function AnalyticsPocView() {
     },
   ];
 
+  const exportModal = (
+    <ExportModal
+      open={exportOpen}
+      onClose={() => setExportOpen(false)}
+      groups={ANALYTICS_EXPORT_GROUPS}
+      onExport={() => {}}
+    />
+  );
+
   if (showViewsDetail) {
     return (
+      <>
       <AnalyticsPocPageShell>
-        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} onExportClick={() => setExportOpen(true)} />
         <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocViewsDetail
             rows={analyticsPocViewsDetailMockData}
@@ -237,13 +278,16 @@ export function AnalyticsPocView() {
           />
         </motion.div>
       </AnalyticsPocPageShell>
+      {exportModal}
+      </>
     );
   }
 
   if (dayDrilldown) {
     return (
+      <>
       <AnalyticsPocPageShell>
-        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} onExportClick={() => setExportOpen(true)} />
         <motion.div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3" {...DRILLDOWN_TRANSITION}>
           <AnalyticsPocDayDrilldown
             data={dayDrilldown}
@@ -251,26 +295,32 @@ export function AnalyticsPocView() {
           />
         </motion.div>
       </AnalyticsPocPageShell>
+      {exportModal}
+      </>
     );
   }
 
   if (activePageTab === "Campaigns health") {
     return (
+      <>
       <AnalyticsPocPageShell>
-        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} onExportClick={() => setExportOpen(true)} />
         <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
           <AnalyticsPocCampaignHealthTab
             {...analyticsPocCampaignHealthMockData}
           />
         </div>
       </AnalyticsPocPageShell>
+      {exportModal}
+      </>
     );
   }
 
   if (activePageTab === "Discover page") {
     return (
+      <>
       <AnalyticsPocPageShell>
-        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+        <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} onExportClick={() => setExportOpen(true)} />
         <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
           <AnalyticsPocFilterToolbar
             campaignLabel={data.filters.campaignLabel}
@@ -299,12 +349,15 @@ export function AnalyticsPocView() {
           <AnalyticsPocDiscoverTab />
         </div>
       </AnalyticsPocPageShell>
+      {exportModal}
+      </>
     );
   }
 
   return (
+    <>
     <AnalyticsPocPageShell>
-      <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} />
+      <PageTabBar activeTab={activePageTab} onTabChange={setActivePageTab} onExportClick={() => setExportOpen(true)} />
 
       <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-4 sm:px-6 sm:py-5 md:gap-3">
       <AnalyticsPocFilterToolbar
@@ -528,5 +581,7 @@ export function AnalyticsPocView() {
       </AnalyticsPocDetailDialog>
       </div>
     </AnalyticsPocPageShell>
+    {exportModal}
+    </>
   );
 }

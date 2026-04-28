@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { Modal } from "@/components/ui/modal";
 import { Tabs, TabItem } from "@/components/ui/tabs";
+import { SelectionToolbar } from "@/components/ui/selection-toolbar";
 import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { springs } from "@/lib/springs";
 
@@ -1094,6 +1095,36 @@ export default function PayoutsPage() {
           </div>
         </div>
       </Modal>
+
+      {/* Floating selection toolbar */}
+      <SelectionToolbar
+        count={selectedIds.size}
+        onClear={() => setSelectedIds(new Set())}
+        actions={[
+          {
+            id: "clawback",
+            label: "Clawback selected",
+            variant: "danger",
+            onClick: () => {},
+          },
+          {
+            id: "export",
+            label: "Export",
+            icon: (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 2.667v6.666m0-6.666L5.333 5.333M8 2.667l2.667 2.666M3.333 10v1.333A1.333 1.333 0 0 0 4.667 12.667h6.666a1.333 1.333 0 0 0 1.334-1.334V10"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ),
+            onClick: () => {},
+          },
+        ]}
+      />
     </div>
   );
 }

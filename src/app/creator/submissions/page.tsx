@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { CreatorHeader } from "@/components/creator-header";
 import { Tabs, TabItem } from "@/components/ui/tabs";
@@ -10,7 +11,8 @@ import { AnalyticsPocChartPlaceholder } from "@/components/analytics-poc/Analyti
 import { Modal, ModalHeader, ModalBody } from "@/components/ui/modal";
 import { PlatformIcon } from "@/components/icons/PlatformIcon";
 import { TrustScoreModal } from "@/components/trust-score-modal";
-import { AdminTable, type AdminColumn } from "@/components/admin/admin-table";
+import { useProximityHover } from "@/hooks/use-proximity-hover";
+import { springs } from "@/lib/springs";
 
 const cardCls = "rounded-2xl border border-foreground/[0.06] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-[rgba(224,224,224,0.03)] dark:bg-[rgba(224,224,224,0.03)]";
 
@@ -203,55 +205,21 @@ export default function CreatorSubmissionsPage() {
     [metricState],
   );
 
-  const tableColumns: AdminColumn[] = [
-    { key: "title", label: "Clip", width: "minmax(180px, 1fr)" },
-    { key: "status", label: "Status", width: "100px" },
-    { key: "earned", label: "Earned", width: "80px", sortable: true },
-    { key: "received", label: "Received", width: "80px", sortable: true, hideMobile: true },
-    { key: "pending", label: "Pending", width: "80px", sortable: true, hideMobile: true },
-    { key: "views", label: "Views", width: "70px", sortable: true, hideMobile: true },
-    { key: "platform", label: "Platform", width: "70px", hideMobile: true },
-    { key: "date", label: "Date", width: "100px", sortable: true, hideMobile: true },
-  ];
+  // Proximity hover for the clip table rows
+  const tableRef = useRef<HTMLDivElement>(null);
+  const {
+    activeIndex: tableHoverIdx,
+    itemRects: tableHoverRects,
+    sessionRef: tableHoverSession,
+    handlers: tableHoverHandlers,
+    registerItem: registerTableHoverItem,
+    measureItems: measureTableHover,
+  } = useProximityHover(tableRef);
+  const tableHoverRect = tableHoverIdx !== null ? tableHoverRects[tableHoverIdx] : null;
 
-  const renderClipCell = useCallback((clip: typeof clips[0], colKey: string) => {
-    switch (colKey) {
-      case "title":
-        return (
-          <div className="flex items-center gap-2.5">
-            <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500" />
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <span className="truncate text-sm font-medium text-page-text">{clip.title}</span>
-              <span className="truncate text-xs text-page-text-muted">{clip.brand}</span>
-            </div>
-          </div>
-        );
-      case "status":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium" style={{ color: isDark ? clip.statusColorDark : clip.statusColor, backgroundColor: isDark ? clip.statusBgDark : clip.statusBg }}>
-            {clip.status}
-          </span>
-        );
-      case "earned":
-        return <span className="text-sm font-medium text-page-text">{clip.earned}</span>;
-      case "received":
-        return <span className="text-sm font-medium text-page-text">{clip.received}</span>;
-      case "pending":
-        return <span className="text-sm font-medium" style={{ color: isDark ? clip.pendingColorDark : clip.pendingColor }}>{clip.pending}</span>;
-      case "views":
-        return <span className="text-sm font-medium text-page-text">{clip.metrics.views}</span>;
-      case "platform":
-        return (
-          <div className="flex size-6 items-center justify-center rounded-full bg-foreground/[0.06] dark:bg-white/[0.04]">
-            <PlatformIcon platform={clip.platform} size={12} />
-          </div>
-        );
-      case "date":
-        return <span className="text-xs text-page-text-muted">{clip.date}</span>;
-      default:
-        return null;
-    }
-  }, [isDark]);
+  useEffect(() => {
+    if (viewMode === "table") measureTableHover();
+  }, [viewMode, measureTableHover]);
 
   return (
     <div className="flex min-h-screen flex-col font-inter tracking-[-0.02em]">
@@ -357,16 +325,47 @@ export default function CreatorSubmissionsPage() {
             {/* View mode toggle — 3 options */}
             <div className="hidden items-center rounded-xl bg-foreground/[0.04] p-0.5 md:flex dark:bg-white/[0.04]">
               {([
-                { mode: "card" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="8" y="1" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="1" y="8" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="8" y="8" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/></svg>, label: "Grid" },
-                { mode: "list" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 3h11M1.5 7h11M1.5 11h11" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>, label: "List" },
-                { mode: "table" as const, icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M1 5h12M1 9h12M5.5 5v8" stroke="currentColor" strokeWidth="1.2"/></svg>, label: "Table" },
+                {
+                  mode: "card" as const,
+                  label: "Grid",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 8.8C4 7.11984 4 6.27976 4.32698 5.63803C4.6146 5.07354 5.07354 4.6146 5.63803 4.32698C6.27976 4 7.11984 4 8.8 4H10V10H4V8.8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M14 4H15.2C16.8802 4 17.7202 4 18.362 4.32698C18.9265 4.6146 19.3854 5.07354 19.673 5.63803C20 6.27976 20 7.11984 20 8.8V10H14V4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M4 14H10V20H8.8C7.11984 20 6.27976 20 5.63803 19.673C5.07354 19.3854 4.6146 18.9265 4.32698 18.362C4 17.7202 4 16.8802 4 15.2V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M14 14H20V15.2C20 16.8802 20 17.7202 19.673 18.362C19.3854 18.9265 18.9265 19.3854 18.362 19.673C17.7202 20 16.8802 20 15.2 20H14V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ),
+                },
+                {
+                  mode: "list" as const,
+                  label: "List",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M19.673 5.63803L18.782 6.09202V6.09202L19.673 5.63803ZM18.362 4.32698L18.816 3.43597V3.43597L18.362 4.32698ZM5.63803 4.32698L6.09202 5.21799V5.21799L5.63803 4.32698ZM4.32698 5.63803L5.21799 6.09202H5.21799L4.32698 5.63803ZM4.32698 18.362L3.43597 18.816H3.43597L4.32698 18.362ZM5.63803 19.673L6.09202 18.782H6.09202L5.63803 19.673ZM18.362 19.673L17.908 18.782H17.908L18.362 19.673ZM19.673 18.362L18.782 17.908V17.908L19.673 18.362ZM20 8.8H19V15.2H20H21V8.8H20ZM20 8.8H21C21 7.97642 21.0008 7.2986 20.9558 6.74817C20.9099 6.18608 20.8113 5.66937 20.564 5.18404L19.673 5.63803L18.782 6.09202C18.8617 6.24842 18.9266 6.47262 18.9624 6.91104C18.9992 7.36113 19 7.94342 19 8.8H20ZM19.673 5.63803L20.564 5.18404C20.1805 4.43139 19.5686 3.81947 18.816 3.43597L18.362 4.32698L17.908 5.21799C18.2843 5.40973 18.5903 5.7157 18.782 6.09202L19.673 5.63803ZM15.2 4V5C16.0566 5 16.6389 5.00078 17.089 5.03755C17.5274 5.07337 17.7516 5.1383 17.908 5.21799L18.362 4.32698L18.816 3.43597C18.3306 3.18868 17.8139 3.09012 17.2518 3.04419C16.7014 2.99922 16.0236 3 15.2 3V4ZM8.8 4V5H15.2V4V3H8.8V4ZM8.8 4V3C7.97642 3 7.2986 2.99922 6.74817 3.04419C6.18608 3.09012 5.66937 3.18868 5.18404 3.43597L5.63803 4.32698L6.09202 5.21799C6.24842 5.1383 6.47262 5.07337 6.91104 5.03755C7.36113 5.00078 7.94342 5 8.8 5V4ZM4.32698 5.63803L5.21799 6.09202C5.40973 5.7157 5.71569 5.40973 6.09202 5.21799L5.63803 4.32698L5.18404 3.43597C4.43139 3.81947 3.81947 4.43139 3.43597 5.18404L4.32698 5.63803ZM4 8.8H5C5 7.94342 5.00078 7.36113 5.03755 6.91104C5.07337 6.47262 5.1383 6.24842 5.21799 6.09202L4.32698 5.63803L3.43597 5.18404C3.18868 5.66937 3.09012 6.18608 3.04419 6.74817C2.99922 7.2986 3 7.97642 3 8.8H4ZM4 15.2H5V8.8H4H3V15.2H4ZM4 15.2H3C3 16.0236 2.99922 16.7014 3.04419 17.2518C3.09012 17.8139 3.18868 18.3306 3.43597 18.816L4.32698 18.362L5.21799 17.908C5.1383 17.7516 5.07337 17.5274 5.03755 17.089C5.00078 16.6389 5 16.0566 5 15.2H4ZM5.63803 19.673L6.09202 18.782C5.7157 18.5903 5.40973 18.2843 5.21799 17.908L4.32698 18.362L3.43597 18.816C3.81947 19.5686 4.43139 20.1805 5.18404 20.564L5.63803 19.673ZM8.8 20V19C7.94342 19 7.36113 18.9992 6.91104 18.9624C6.47262 18.9266 6.24842 18.8617 6.09202 18.782L5.63803 19.673L5.18404 20.564C5.66937 20.8113 6.18608 20.9099 6.74817 20.9558C7.2986 21.0008 7.97642 21 8.8 21V20ZM15.2 20V19H8.8V20V21H15.2V20ZM15.2 20V21C16.0236 21 16.7014 21.0008 17.2518 20.9558C17.8139 20.9099 18.3306 20.8113 18.816 20.564L18.362 19.673L17.908 18.782C17.7516 18.8617 17.5274 18.9266 17.089 18.9624C16.6389 18.9992 16.0566 19 15.2 19V20ZM19.673 18.362L18.782 17.908C18.5903 18.2843 18.2843 18.5903 17.908 18.782L18.362 19.673L18.816 20.564C19.5686 20.1805 20.1805 19.5686 20.564 18.816L19.673 18.362ZM20 15.2H19C19 16.0566 18.9992 16.6389 18.9624 17.089C18.9266 17.5274 18.8617 17.7516 18.782 17.908L19.673 18.362L20.564 18.816C20.8113 18.3306 20.9099 17.8139 20.9558 17.2518C21.0008 16.7014 21 16.0236 21 15.2H20Z" fill="currentColor" />
+                      <path d="M10 4V10V20" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                      <path d="M4 10H10H20" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                    </svg>
+                  ),
+                },
+                {
+                  mode: "table" as const,
+                  label: "Table",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M4 3C4.55228 3 5 3.44772 5 4V14.5858L7.54289 12.0429C8.62377 10.962 10.3762 10.962 11.4571 12.0429C11.7569 12.3427 12.2431 12.3427 12.5429 12.0429L14.8787 9.70711C16.0503 8.53553 17.9497 8.53554 19.1213 9.70711L19.7071 10.2929C20.0976 10.6834 20.0976 11.3166 19.7071 11.7071C19.3166 12.0976 18.6834 12.0976 18.2929 11.7071L17.7071 11.1213C17.3166 10.7308 16.6834 10.7308 16.2929 11.1213L13.9571 13.4571C12.8762 14.538 11.1238 14.538 10.0429 13.4571C9.74306 13.1573 9.25694 13.1573 8.95711 13.4571L5 17.4142V18C5 18.5523 5.44772 19 6 19H20C20.5523 19 21 19.4477 21 20C21 20.5523 20.5523 21 20 21H6C4.34315 21 3 19.6569 3 18V4C3 3.44772 3.44772 3 4 3Z" fill="currentColor" />
+                    </svg>
+                  ),
+                },
               ]).map((v) => (
                 <button
                   key={v.mode}
                   onClick={() => setViewMode(v.mode)}
                   className={cn(
-                    "flex size-8 items-center justify-center rounded-[10px] text-page-text-muted transition-colors",
-                    viewMode === v.mode ? "bg-foreground/[0.08] text-page-text dark:bg-white/[0.08]" : "hover:text-page-text"
+                    "flex size-8 items-center justify-center rounded-[10px] transition-colors",
+                    viewMode === v.mode
+                      ? "bg-foreground/[0.08] text-page-text dark:bg-white/[0.08]"
+                      : "text-neutral-500 hover:text-page-text dark:text-neutral-400",
                   )}
                   title={v.label}
                 >
@@ -562,14 +561,141 @@ export default function CreatorSubmissionsPage() {
 
         {/* Clip table view */}
         {viewMode === "table" && (
-          <AdminTable
-            columns={tableColumns}
-            data={clips}
-            renderCell={renderClipCell}
-            rowKey={(clip) => `${clip.title}-${clip.status}`}
-            onRowClick={(clip) => { setPayoutClipIndex(clips.indexOf(clip)); setPayoutOpen(true); }}
-            pageSize={20}
-          />
+          <div className={cn(cardCls, "overflow-hidden")}>
+            {/* Header */}
+            <div className="flex items-center border-b border-foreground/[0.06] px-1 dark:border-[rgba(224,224,224,0.04)]">
+              <div className="flex h-9 flex-1 items-center px-3">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Campaign</span>
+              </div>
+              <div className="hidden h-9 w-24 items-center px-3 sm:flex">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Date</span>
+              </div>
+              <div className="hidden h-9 w-28 items-center px-3 sm:flex">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Status</span>
+              </div>
+              <div className="hidden h-9 w-24 items-center pl-3 pr-5 sm:flex">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Earned</span>
+              </div>
+              <div className="flex h-9 shrink-0 items-center px-3">
+                <span className="text-xs font-medium tracking-[-0.02em] text-page-text-muted">Actions</span>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div
+              ref={tableRef}
+              className="relative"
+              onMouseEnter={tableHoverHandlers.onMouseEnter}
+              onMouseMove={tableHoverHandlers.onMouseMove}
+              onMouseLeave={tableHoverHandlers.onMouseLeave}
+            >
+              <AnimatePresence>
+                {tableHoverRect && (
+                  <motion.div
+                    key={tableHoverSession.current}
+                    className="pointer-events-none absolute inset-x-0 z-0 bg-foreground/[0.02] dark:bg-white/[0.02]"
+                    initial={{ opacity: 0, ...tableHoverRect }}
+                    animate={{ opacity: 1, ...tableHoverRect }}
+                    exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                    transition={{ ...springs.moderate, opacity: { duration: 0.16 } }}
+                  />
+                )}
+              </AnimatePresence>
+              {clips.map((clip, idx) => {
+                const hideBorder = tableHoverIdx !== null && (idx === tableHoverIdx || idx === tableHoverIdx - 1);
+                return (
+                <div
+                  key={`${clip.title}-${clip.status}-${idx}`}
+                  ref={(el) => registerTableHoverItem(idx, el)}
+                  className={cn(
+                    "relative z-10 flex items-center border-b px-1 last:border-b-0",
+                    hideBorder ? "border-transparent" : "border-foreground/[0.03] dark:border-[rgba(224,224,224,0.03)]",
+                  )}
+                >
+                {/* Campaign cell */}
+                <div className="flex h-14 flex-1 min-w-0 items-center gap-2 py-3 pl-0 pr-3">
+                  <div className="relative h-12 w-[88px] shrink-0 overflow-hidden rounded-lg bg-cover bg-center" style={{ backgroundImage: "url(/creator-home/campaign-thumb-1.png)" }}>
+                    <div className="absolute left-8 top-3 flex size-6 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
+                      <svg width="8" height="10" viewBox="-1 0 16 18" fill="none">
+                        <path d="M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z" fill="rgba(255,255,255,0.88)" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="truncate text-xs font-medium tracking-[-0.02em] text-page-text">{clip.title}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="truncate text-xs font-medium tracking-[-0.02em] text-page-text-muted">{clip.brand}</span>
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                        <path d="M5.8.8C6.5.1 7.5.1 8.2.8L8.9 1.5l1-.2c.9-.2 1.8.4 2 1.3l.2 1 .9.5c.8.4 1.1 1.4.7 2.2l-.5.9.5.9c.4.8.1 1.8-.7 2.2l-.9.5-.2 1c-.2.9-1.1 1.5-2 1.3l-1-.2-.7.7c-.7.7-1.7.7-2.4 0l-.7-.7-1 .2c-.9.2-1.8-.4-2-1.3l-.2-1-.9-.5c-.8-.4-1.1-1.4-.7-2.2l.5-.9-.5-.9c-.4-.8-.1-1.8.7-2.2l.9-.5.2-1C2.3 1.7 3.2 1.1 4.1 1.3l1 .2.7-.7Z" fill="url(#tbl-vg)" />
+                        <path d="M5 7l1.5 1.5 3-3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                        <defs><linearGradient id="tbl-vg" x1="7" y1="0" x2="7" y2="14" gradientUnits="userSpaceOnUse"><stop stopColor="#FDDC87" /><stop offset="1" stopColor="#FCB02B" /></linearGradient></defs>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Date */}
+                <div className="hidden h-14 w-24 shrink-0 items-center px-3 sm:flex">
+                  <span className="text-xs tracking-[-0.02em] text-page-text-muted">{clip.date}</span>
+                </div>
+
+                {/* Status */}
+                <div className="hidden h-14 w-28 shrink-0 items-center px-3 sm:flex">
+                  {(() => {
+                    const status = clip.status as string;
+                    const color = isDark ? clip.statusColorDark : clip.statusColor;
+                    const bg = isDark ? clip.statusBgDark : clip.statusBg;
+                    const Icon = status === "Pending" ? PendingClockIcon : status === "Flagged" ? XCircleIcon : CheckCircleIcon;
+                    return (
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full pl-1.5 pr-2 py-1 text-xs font-medium tracking-[-0.02em]"
+                        style={{ color, backgroundColor: bg }}
+                      >
+                        <Icon size={12} color={color} />
+                        {status}
+                      </span>
+                    );
+                  })()}
+                </div>
+
+                {/* Earned */}
+                <div className="hidden h-14 w-24 shrink-0 items-center pl-3 pr-5 sm:flex">
+                  <span className="truncate text-xs tracking-[-0.02em] text-[#00994D] dark:text-[#34D399]">{clip.earned}</span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex h-14 shrink-0 items-center gap-2 px-3">
+                  {clip.hasViewPayout && (
+                    <button
+                      type="button"
+                      onClick={() => { setPayoutClipIndex(idx); setPayoutOpen(true); }}
+                      className="flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+                    >
+                      Payout
+                    </button>
+                  )}
+                  {clip.status === "Flagged" && (
+                    <button
+                      type="button"
+                      onClick={() => { setAppealStep("form"); setAppealOpen(true); }}
+                      className="flex h-8 cursor-pointer items-center rounded-full bg-[rgba(255,51,85,0.08)] px-3 text-xs font-medium tracking-[-0.02em] text-[#FF3355] transition-colors hover:bg-[rgba(255,51,85,0.14)] dark:bg-[rgba(255,102,128,0.08)] dark:text-[#FF6680] dark:hover:bg-[rgba(255,102,128,0.14)]"
+                    >
+                      Appeal
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setTimelineOpen(true)}
+                    className="flex h-8 cursor-pointer items-center rounded-full bg-foreground/[0.06] px-3 text-xs font-medium tracking-[-0.02em] text-page-text transition-colors hover:bg-foreground/[0.10] dark:bg-white/[0.06] dark:hover:bg-white/[0.10]"
+                  >
+                    Timeline
+                  </button>
+                </div>
+              </div>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
 
