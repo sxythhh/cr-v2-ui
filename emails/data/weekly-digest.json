@@ -60,7 +60,7 @@
     "views": "2.4M",
     "thumbnail_url": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&h=675&q=80",
     "thumbnail_gif_url": "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/featured.gif",
+    "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/featured-v2.gif",
     "video_url": "https://example.com/clips/featured-week-47",
     "save_url": "https://example.com/api/clips/featured-week-47/save?token=PLACEHOLDER_HMAC"
   },
