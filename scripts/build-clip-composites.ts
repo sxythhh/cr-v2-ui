@@ -113,9 +113,9 @@ async function main() {
       sourceUrl: featuredSource.url,
       // For animated GIFs target ~480px wide to keep file under 500KB.
       // Email displays at ~520-560px container so this is fine perceptually.
-      width: featuredSource.animated ? 400 : 1120,
-      height: featuredSource.animated ? 225 : 630,
-      playSize: featuredSource.animated ? 64 : 144,
+      width: featuredSource.animated ? 480 : 1120,
+      height: featuredSource.animated ? 270 : 630,
+      playSize: featuredSource.animated ? 76 : 144,
       animated: featuredSource.animated,
     },
     ...data.more_clips.map((c: ClipLike) => {
@@ -174,7 +174,8 @@ async function main() {
       outBuffer = await sharp(buffer, { animated: true, pages: FRAMES })
         .resize(job.width, job.height, { fit: "cover", position: "centre" })
         .composite([{ input: stampedOverlay, top: 0, left: 0 }])
-        .gif({ effort: 10, reuse: true, colours: 64, dither: 0.2 })
+        // 128-color palette + lower dither = crisper output at the cost of file size.
+        .gif({ effort: 10, reuse: true, colours: 128, dither: 0.4 })
         .toBuffer();
     } else {
       outBuffer = await sharp(buffer)
