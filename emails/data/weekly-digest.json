@@ -1,0 +1,103 @@
+{
+  "subject": "14.2M views · top campaigns + Case File #137",
+  "preview": "Sound Network's UGC drop, the operator letter you can't post, and one chart your CFO needs to see.",
+
+  "issue_number": 47,
+  "send_date": "Tuesday, April 29",
+  "asset_base": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets",
+
+  "cold_open": {
+    "byline": "Editor's note · Tuesday, April 29",
+    "body": "We almost killed this issue at 1am when one chart finally cracked — Sound Network's UGC drop crossed 2.4M views with a single creator running the lo-fi backstage angle. The studio cuts didn't come close. Here's what broke."
+  },
+
+  "subscriber_email": "you@example.com",
+  "preferences_url": "https://example.com/newsletter/preferences?email=you%40example.com&token=DEV_TOKEN",
+  "unsubscribe_url": "https://example.com/newsletter/unsubscribe?email=you%40example.com",
+
+  "company_address": "Outpace, Inc. · 548 Market St, PMB 12345, San Francisco, CA 94104",
+
+  "hero_views": "14.2M",
+  "hero_views_delta": "38",
+  "hero_payouts": "$42,108",
+
+  "top_campaigns": [
+    { "id": "snd",  "title": "Sound Network — All Platforms", "brand": "Sound Network",         "views": "1.2M",  "paid": "$8,400" },
+    { "id": "cnt",  "title": "Cantina — Creator Sprint Q1",   "brand": "Cantina",               "views": "920K",  "paid": "$6,200" },
+    { "id": "nfl",  "title": "NFL Superbowl UGC",             "brand": "NFL",                    "views": "780K",  "paid": "$5,800" },
+    { "id": "csa",  "title": "Caffeine vs Competitors",       "brand": "Caffeine",              "views": "640K",  "paid": "$3,900" },
+    { "id": "fll",  "title": "Fall-Off — Cult Drop",          "brand": "Fall-Off Records",      "views": "520K",  "paid": "$3,100" }
+  ],
+
+  "top_creators": [
+    { "id": "vlad",   "handle": "@vladclips",     "vertical": "TikTok",   "views": "1.2M" },
+    { "id": "kaiz",   "handle": "@xKaizen",       "vertical": "Reels",    "views": "880K" },
+    { "id": "cryp",   "handle": "@Cryptoclipz",   "vertical": "Shorts",   "views": "640K" },
+    { "id": "viral",  "handle": "@ViralVince",    "vertical": "TikTok",   "views": "510K" }
+  ],
+
+  "case_file": {
+    "number": 137,
+    "title": "How a $12M SaaS used 47 ghost creators to ship 14M views in 60 days",
+    "brand_redacted": "[Series-B SaaS · redacted]",
+    "summary": "$0.18 effective CPM at scale. 38% pipeline lift in 90 days. Full anonymized dossier inside the dashboard.",
+    "deck_url": "https://example.com/case-files/137"
+  },
+
+  "field_note": {
+    "creator_id": 4017,
+    "body": "What I actually charge a Series-B SaaS to ghost their CEO's TikTok: $4,800 per month, 12-clip floor, NDA on the brand list, no exceptions. The brief I refused last week and why? They wanted scripts approved before posting. Anyone who tells you that works is selling agency, not creator. Killed the deal."
+  },
+
+  "featured_clip": {
+    "id": "featured-week-47",
+    "title": "Sound Network's UGC drop crossed 2.4M views with one creator",
+    "summary": "@vladclips ran the lo-fi backstage angle and out-paced every studio cut in the cohort.",
+    "creator_handle": "@vladclips",
+    "platform": "tiktok",
+    "platform_label": "TikTok",
+    "duration": "0:47",
+    "views": "2.4M",
+    "thumbnail_url": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&h=675&q=80",
+    "thumbnail_gif_url": "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/featured.gif",
+    "video_url": "https://example.com/clips/featured-week-47",
+    "save_url": "https://example.com/api/clips/featured-week-47/save?token=PLACEHOLDER_HMAC"
+  },
+
+  "more_clips": [
+    {
+      "id": "c1",
+      "creator_handle": "@xKaizen",
+      "platform": "instagram",
+      "platform_label": "Reels",
+      "duration": "0:38",
+      "views": "880K",
+      "thumbnail_url": "https://images.unsplash.com/photo-1604537529428-15bcbeecfe4d?auto=format&fit=crop&w=600&h=750&q=80",
+      "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/c1.jpg",
+      "video_url": "https://example.com/clips/c1"
+    },
+    {
+      "id": "c2",
+      "creator_handle": "@Cryptoclipz",
+      "platform": "youtube",
+      "platform_label": "Shorts",
+      "duration": "0:52",
+      "views": "640K",
+      "thumbnail_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=600&h=750&q=80",
+      "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/c2.jpg",
+      "video_url": "https://example.com/clips/c2"
+    },
+    {
+      "id": "c3",
+      "creator_handle": "@ViralVince",
+      "platform": "tiktok",
+      "platform_label": "TikTok",
+      "duration": "0:29",
+      "views": "510K",
+      "thumbnail_url": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&h=750&q=80",
+      "thumbnail_composite_url": "https://cdn.jsdelivr.net/gh/sxythhh/cr-v2-ui@main/public/email-assets/composites/c3.jpg",
+      "video_url": "https://example.com/clips/c3"
+    }
+  ]
+}

@@ -3,14 +3,18 @@
  *
  *   pnpm email:composites
  *
- * Reads emails/data/weekly-digest.json, downloads each clip's source image,
- * composites a 64px white circle + dark play triangle in the center, and
- * writes JPGs to public/email-assets/composites/.
+ * Source priority per clip:
+ *   1. cloudflare_stream_uid → pulls from CF Stream's animated.gif endpoint
+ *   2. thumbnail_gif_url      → uses an arbitrary GIF URL
+ *   3. thumbnail_url          → uses a static JPG URL (fallback)
  *
- * The output filenames are: featured.jpg, c1.jpg, c2.jpg, c3.jpg.
+ * Outputs go to public/email-assets/composites/{filename}. When a clip has a
+ * Stream uid, the featured composite becomes an animated GIF; static clips
+ * stay as JPGs.
  *
- * Why: position:absolute play overlays are unreliable in iOS Mail. Single
- * composite images are what Wistia/Mux/Loom use — bulletproof cross-client.
+ * Why composite at all: position:absolute play overlays are unreliable in
+ * iOS Mail. Single composite images are what Wistia/Mux/Loom use —
+ * bulletproof cross-client.
  */
 
 import fs from "node:fs/promises";
@@ -30,6 +34,49 @@ interface Job {
   animated: boolean;
 }
 
+interface ClipLike {
+  id?: string;
+  cloudflare_stream_uid?: string;
+  thumbnail_url?: string;
+  thumbnail_gif_url?: string;
+}
+
+/**
+ * Pick the best source for a clip:
+ *   1. Cloudflare Stream `/thumbnails/thumbnail.gif` — gives us animation
+ *   2. arbitrary `thumbnail_gif_url`
+ *   3. `thumbnail_url` (JPG fallback)
+ *
+ * Returns { url, animated }.
+ */
+function pickSource(
+  clip: ClipLike,
+  forFeatured: boolean,
+): { url: string; animated: boolean } {
+  const subdomain = process.env.NEXT_PUBLIC_CLOUDFLARE_STREAM_SUBDOMAIN;
+  if (clip.cloudflare_stream_uid && subdomain) {
+    const host = subdomain.includes(".") ? subdomain : `${subdomain}.cloudflarestream.com`;
+    if (forFeatured) {
+      // Stream's animated.gif endpoint — a 4s loop matching Wistia/Mux.
+      return {
+        url: `https://${host}/${clip.cloudflare_stream_uid}/thumbnails/thumbnail.gif?duration=4s&height=315`,
+        animated: true,
+      };
+    }
+    return {
+      url: `https://${host}/${clip.cloudflare_stream_uid}/thumbnails/thumbnail.jpg?height=400&fit=crop`,
+      animated: false,
+    };
+  }
+  if (forFeatured && clip.thumbnail_gif_url) {
+    return { url: clip.thumbnail_gif_url, animated: true };
+  }
+  if (clip.thumbnail_url) {
+    return { url: clip.thumbnail_url, animated: false };
+  }
+  throw new Error("Clip has no usable source URL");
+}
+
 // The actual play icon path from src/components/submissions/VideoPlayer.tsx:735.
 // viewBox `-1 0 16 18` — width ≈ 16, height ≈ 18.
 const PLAY_ICON_PATH =
@@ -44,8 +91,11 @@ function buildPlayBadgeSvg(circleSize: number): string {
   const iconX = (circleSize - iconWidth) / 2 + circleSize * 0.03;
   const iconY = (circleSize - iconHeight) / 2;
 
+  // Solid white circle (no alpha) — GIF only supports 1-bit transparency, so
+  // any semi-transparent fill blends with the animated background and the
+  // badge disappears. Fully opaque keeps the button visibly punched on top.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${circleSize}" height="${circleSize}" viewBox="0 0 ${circleSize} ${circleSize}">
-    <circle cx="${circleSize / 2}" cy="${circleSize / 2}" r="${circleSize / 2 - 2}" fill="#FFFFFF" fill-opacity="0.96"/>
+    <circle cx="${circleSize / 2}" cy="${circleSize / 2}" r="${circleSize / 2 - 2}" fill="#FFFFFF"/>
     <svg x="${iconX}" y="${iconY}" width="${iconWidth}" height="${iconHeight}" viewBox="-1 0 16 18">
       <path d="${PLAY_ICON_PATH}" fill="#1A1A1A"/>
     </svg>
@@ -56,25 +106,29 @@ async function main() {
   const dataPath = path.join(ROOT, "emails", "data", "weekly-digest.json");
   const data = JSON.parse(await fs.readFile(dataPath, "utf8"));
 
+  const featuredSource = pickSource(data.featured_clip as ClipLike, /* forFeatured */ true);
   const jobs: Job[] = [
     {
-      // Static composite for now. Animation comes back automatically in
-      // Phase 2 when we wire Cloudflare Stream's animated.gif endpoint.
-      filename: "featured.jpg",
-      sourceUrl: data.featured_clip.thumbnail_url,
-      width: 1120, // 2× of 560 — retina sharpness
-      height: 630, // 2× of 315
-      playSize: 144, // 2× of 72
-      animated: false,
+      filename: featuredSource.animated ? "featured.gif" : "featured.jpg",
+      sourceUrl: featuredSource.url,
+      // For animated GIFs target ~480px wide to keep file under 500KB.
+      // Email displays at ~520-560px container so this is fine perceptually.
+      width: featuredSource.animated ? 400 : 1120,
+      height: featuredSource.animated ? 225 : 630,
+      playSize: featuredSource.animated ? 64 : 144,
+      animated: featuredSource.animated,
     },
-    ...data.more_clips.map((c: { id: string; thumbnail_url: string }) => ({
-      filename: `${c.id}.jpg`,
-      sourceUrl: c.thumbnail_url,
-      width: 320, // 2× of 160
-      height: 400, // 2× of 200
-      playSize: 84, // 2× of 42
-      animated: false,
-    })),
+    ...data.more_clips.map((c: ClipLike) => {
+      const src = pickSource(c, /* forFeatured */ false);
+      return {
+        filename: `${c.id}.jpg`,
+        sourceUrl: src.url,
+        width: 320, // 2× of 160
+        height: 400, // 2× of 200
+        playSize: 84, // 2× of 42
+        animated: false,
+      };
+    }),
   ];
 
   await fs.mkdir(OUT_DIR, { recursive: true });
@@ -93,13 +147,34 @@ async function main() {
 
     let outBuffer: Buffer;
     if (job.animated) {
-      // Animated input → per-frame composite → animated output.
-      // Sharp v0.34+ handles animated GIF input with { animated: true } and
-      // composites the overlay onto every frame automatically.
-      outBuffer = await sharp(buffer, { animated: true })
+      // Sharp treats animated input as one tall vertical tile (all frames
+      // stacked). Build a single full-tile-sized PNG overlay with the play
+      // badge stamped at every frame's center, then composite it once.
+      const FRAMES = 16;
+      const composites = [];
+      for (let i = 0; i < FRAMES; i++) {
+        composites.push({
+          input: playBuffer,
+          left: Math.round((job.width - job.playSize) / 2),
+          top: Math.round(i * job.height + (job.height - job.playSize) / 2),
+        });
+      }
+      const stampedOverlay = await sharp({
+        create: {
+          width: job.width,
+          height: job.height * FRAMES,
+          channels: 4,
+          background: { r: 0, g: 0, b: 0, alpha: 0 },
+        },
+      })
+        .composite(composites)
+        .png()
+        .toBuffer();
+
+      outBuffer = await sharp(buffer, { animated: true, pages: FRAMES })
         .resize(job.width, job.height, { fit: "cover", position: "centre" })
-        .composite([{ input: playBuffer, gravity: "centre" }])
-        .gif({ effort: 10, reuse: true, colours: 96 })
+        .composite([{ input: stampedOverlay, top: 0, left: 0 }])
+        .gif({ effort: 10, reuse: true, colours: 64, dither: 0.2 })
         .toBuffer();
     } else {
       outBuffer = await sharp(buffer)
