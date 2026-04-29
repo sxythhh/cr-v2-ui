@@ -36,32 +36,19 @@ const PLAY_ICON_PATH =
   "M8.50388 2.93386C5.11288 0.673856 3.41688 -0.457144 2.03088 -0.0661441C1.59618 0.0567154 1.19326 0.272331 0.849883 0.565856C-0.245117 1.50186 -0.245117 3.53986 -0.245117 7.61586V10.0999C-0.245117 14.1759 -0.245117 16.2139 0.849883 17.1499C1.19313 17.4428 1.59566 17.658 2.02988 17.7809C3.41688 18.1729 5.11188 17.0429 8.50388 14.7829L10.3659 13.5409C13.1659 11.6739 14.5659 10.7409 14.8199 9.46886C14.8999 9.06613 14.8999 8.65159 14.8199 8.24886C14.5669 6.97686 13.1669 6.04286 10.3669 4.17586L8.50388 2.93386Z";
 
 function buildPlayBadgeSvg(circleSize: number): string {
-  // Path is in a 16-wide × 18-tall coord system (viewBox `-1 0 16 18`).
-  // Render the icon at ~42% of circle diameter, optically centered.
-  const targetIconWidth = circleSize * 0.42;
-  const scale = targetIconWidth / 16;
-  const iconWidth = 16 * scale;
-  const iconHeight = 18 * scale;
-  // Optical center: shift right slightly so the triangle's mass looks centered.
-  const x = (circleSize - iconWidth) / 2 + circleSize * 0.025;
-  const y = (circleSize - iconHeight) / 2;
-  const shadowBlur = circleSize * 0.04;
-  const shadowOffsetY = circleSize * 0.06;
+  // Render the play icon via NESTED SVG with its native viewBox `-1 0 16 18`.
+  // Nested-SVG + viewBox is more reliable than chained transforms in librsvg.
+  const iconWidth = circleSize * 0.46;
+  const iconHeight = iconWidth * (18 / 16);
+  // Optical center — shift right so triangle's mass is centered.
+  const iconX = (circleSize - iconWidth) / 2 + circleSize * 0.03;
+  const iconY = (circleSize - iconHeight) / 2;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${circleSize}" height="${circleSize}" viewBox="0 0 ${circleSize} ${circleSize}">
-    <defs>
-      <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="${shadowBlur}" />
-        <feOffset dx="0" dy="${shadowOffsetY}" result="offsetblur"/>
-        <feFlood flood-color="#000" flood-opacity="0.35"/>
-        <feComposite in2="offsetblur" operator="in"/>
-        <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <circle cx="${circleSize / 2}" cy="${circleSize / 2}" r="${circleSize / 2 - 2}" fill="#FFFFFF" fill-opacity="0.96" filter="url(#shadow)"/>
-    <g transform="translate(${x} ${y}) scale(${scale}) translate(1 0)">
+    <circle cx="${circleSize / 2}" cy="${circleSize / 2}" r="${circleSize / 2 - 2}" fill="#FFFFFF" fill-opacity="0.96"/>
+    <svg x="${iconX}" y="${iconY}" width="${iconWidth}" height="${iconHeight}" viewBox="-1 0 16 18">
       <path d="${PLAY_ICON_PATH}" fill="#1A1A1A"/>
-    </g>
+    </svg>
   </svg>`;
 }
 
@@ -71,13 +58,14 @@ async function main() {
 
   const jobs: Job[] = [
     {
-      filename: "featured.gif",
-      sourceUrl: data.featured_clip.thumbnail_gif_url ?? data.featured_clip.thumbnail_url,
-      // Animated GIFs balloon if upscaled 2× — keep at display size.
-      width: 560,
-      height: 315,
-      playSize: 80,
-      animated: true,
+      // Static composite for now. Animation comes back automatically in
+      // Phase 2 when we wire Cloudflare Stream's animated.gif endpoint.
+      filename: "featured.jpg",
+      sourceUrl: data.featured_clip.thumbnail_url,
+      width: 1120, // 2× of 560 — retina sharpness
+      height: 630, // 2× of 315
+      playSize: 144, // 2× of 72
+      animated: false,
     },
     ...data.more_clips.map((c: { id: string; thumbnail_url: string }) => ({
       filename: `${c.id}.jpg`,
